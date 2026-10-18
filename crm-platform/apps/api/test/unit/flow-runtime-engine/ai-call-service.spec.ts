@@ -13,6 +13,8 @@ interface Setup {
   vendor?: FlowAiResult | Error;
   sources?: Array<Record<string, unknown>>;
   assistantExists?: boolean;
+  /** The AI agent's row as the profile query returns it; null = no such agent. */
+  agent?: Record<string, unknown> | null;
 }
 
 function build(s: Setup = {}) {
@@ -47,6 +49,7 @@ function build(s: Setup = {}) {
       fn({
         execute: async (q: { queryChunks?: unknown[] }) => {
           const text = JSON.stringify(q.queryChunks ?? []);
+          if (text.includes('system_prompt')) return { rows: s.agent ? [s.agent] : [] };
           if (text.includes('ai_chat_assistants'))
             return { rows: s.assistantExists === false ? [] : [{ id: 1 }] };
           return { rows: s.sources ?? [] };
@@ -170,5 +173,90 @@ describe('AI call service (the ai-call endpoint semantics, TW-FLR-030)', () => {
     });
     await svc.call({ ...base, assistantId: 4 });
     expect(sent[0]!.systemPrompt).toBe('Sys');
+  });
+
+  describe('running as an AI agent (Settings, AI Training)', () => {
+    const agent = {
+      system_prompt: 'You are Shivaa, the farm desk.',
+      tone: 'friendly',
+      language: 'hi',
+      ai_provider: 'anthropic',
+      ai_model: 'claude-sonnet-5-5',
+      reply_max_tokens: 250,
+      temperature: '0.30',
+    };
+
+    it("answers with the agent's own model, instructions, tone, length and temperature", async () => {
+      const { svc, sent, recorded } = build({ agent });
+      const out = await svc.call({ ...base, assistantId: 4, agentUse: 'full' });
+      expect(out).toEqual({ ok: true, reply: 'hello', provider: 'anthropic' });
+      expect(sent[0]).toMatchObject({
+        provider: 'anthropic',
+        model: 'claude-sonnet-5-5',
+        maxTokens: 250,
+        temperature: 0.3,
+      });
+      expect(sent[0]!.systemPrompt).toContain('You are Shivaa, the farm desk.');
+      expect(sent[0]!.systemPrompt).toContain('Speak in a friendly tone. Default language: hi.');
+      expect(sent[0]!.systemPrompt).not.toContain('Sys');
+      expect(recorded[0]).toMatchObject({ provider: 'anthropic', model: 'claude-sonnet-5-5' });
+    });
+
+    it("still adds the agent's knowledge, and keeps the node's big budget for a JSON extraction", async () => {
+      const { svc, sent } = build({
+        agent,
+        sources: [{ label: 'Hours', kind: 'text', content: 'Open 9 to 5' }],
+      });
+      await svc.call({
+        ...base,
+        assistantId: 4,
+        agentUse: 'full',
+        json: true,
+        fields: ['NAME'],
+        maxTokens: 4000,
+      });
+      expect(sent[0]).toMatchObject({ maxTokens: 1000, json: true });
+      expect(sent[0]!.systemPrompt).toContain('exactly these keys: NAME');
+      expect(sent[0]!.systemPrompt).toContain('[Hours]\nOpen 9 to 5');
+      expect(sent[0]!.systemPrompt).not.toContain('Keep replies short');
+    });
+
+    it("an agent with no instructions falls back to the step's prompt", async () => {
+      const { svc, sent } = build({ agent: { ...agent, system_prompt: '  ' } });
+      await svc.call({ ...base, assistantId: 4, agentUse: 'full' });
+      expect(sent[0]!.systemPrompt.startsWith('Sys\n')).toBe(true);
+    });
+
+    it("a hidden pass borrows only the agent's model: its own prompt, no knowledge", async () => {
+      const { svc, sent } = build({
+        agent,
+        sources: [{ label: 'Hours', kind: 'text', content: 'Open 9 to 5' }],
+      });
+      await svc.call({ ...base, assistantId: 4, agentUse: 'model', temperature: 0 });
+      expect(sent[0]).toMatchObject({
+        model: 'claude-sonnet-5-5',
+        provider: 'anthropic',
+        temperature: 0,
+      });
+      expect(sent[0]!.systemPrompt).toBe('Sys');
+    });
+
+    it("an agent that no longer exists gives agentMissing and the step's own settings", async () => {
+      const { svc, sent } = build({ agent: null });
+      const out = await svc.call({ ...base, assistantId: 4, agentUse: 'full' });
+      expect(out).toMatchObject({ ok: true, agentMissing: true });
+      expect(sent[0]).toMatchObject({
+        model: 'gpt-4o-mini',
+        provider: 'openai',
+        systemPrompt: 'Sys',
+      });
+    });
+
+    it('without agentUse the agent only lends its knowledge (a custom setup)', async () => {
+      const { svc, sent } = build({ agent });
+      const out = await svc.call({ ...base, assistantId: 4 });
+      expect(out).toEqual({ ok: true, reply: 'hello', provider: 'openai' });
+      expect(sent[0]).toMatchObject({ model: 'gpt-4o-mini', systemPrompt: 'Sys' });
+    });
   });
 });

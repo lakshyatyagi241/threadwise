@@ -1131,19 +1131,14 @@
           "aiModelPick": "— model seçin —",
           "aiModelNone": "Etkin yapay zekâ modeli yok — yöneticiden birini açmasını isteyin",
           "aiModelNotEnabled": "{value} (etkin değil)",
-          "aiAssistantNone": "— yok (yalnızca yukarıdaki istemi kullan) —",
           "aiAssistantOption": "{name} · {count, plural, one {# kaynak} other {# kaynak}}",
           "aiAssistantMissing": "(asistan {id})",
-          "aiAssistantHintNone": "Henüz bilgi tabanı yok. <link>Yapay zekâ eğitimi</link> bölümünde bir tane oluşturun, ardından burada seçmek için Listeyi yenile'ye basın.",
-          "aiAssistantHintEmpty": "Not: bu asistanın eğitilmiş 0 kaynağı var. <link>Yapay zekâ eğitimi</link> bölümünde ekleyin, aksi halde yanıt yalnızca istemi kullanır.",
-          "aiAssistantHint": "Seçilen asistanın eğitilmiş içeriğini bu yanıta çeker. <link>Bilgiyi yönet →</link>",
           "aiModelLabel": "Model",
           "aiModelHint": "Yöneticinin etkinleştirdiği modeller — ayrıca kendi anahtarınızı eklediğiniz sağlayıcılar (Ayarlar → Yapay zekâ anahtarları, BYOK planlarında).",
           "aiModelHintNone": "Henüz kullanılabilir sağlayıcı yok. <link>Ayarlar → Yapay zekâ anahtarları</link> bölümünde kendi anahtarınızı ekleyin (BYOK planları) veya yöneticinizden birini etkinleştirmesini isteyin.",
           "aiPrompt": "Sistem istemi",
           "aiSave": "Yanıtı şuraya kaydet",
           "aiSaveHint": "Sonraki düğümler bunu <v>{save}</v> olarak okur — çıkarma yapılırken <v>{path}</v> olarak.",
-          "aiAssistantLabel": "Bilgi tabanı (isteğe bağlı)",
           "aiExtract": "<strong>Yapılandırılmış veri çıkar (JSON)</strong> — mesajı alanlara dönüştürür",
           "aiFields": "Çıkarılacak alanlar",
           "aiFieldsHint": "Virgülle ayrılmış anahtarlar. Yapay zekâ TEK bir JSON nesnesi döndürür; her anahtar <v>{key}</v> olur (birden çok kayıt algılanırsa <v>{rows}</v> da olur — örn. bir Google E-Tablolar düğümü için).",
@@ -1156,7 +1151,25 @@
           "subflowMissing": "Akış {id} (çalışma alanında değil)",
           "subflowLabel": "Çalıştırılacak akış",
           "subflowHint": "Başka bir kayıtlı akış seçin. Bu düğme tetiklendiğinde, kontrol buradaki sonraki düğüme dönmeden önce o akış baştan sona çalışır.",
-          "endInfo": "Bu düğme akışı sonlandırır. Ardından bağlanan hiçbir şey çalışmaz."
+          "endInfo": "Bu düğme akışı sonlandırır. Ardından bağlanan hiçbir şey çalışmaz.",
+          "aiSetupLegend": "Bu adım nasıl yanıt vermeli?",
+          "aiSetupAgent": "Yapay zekâ ajanı",
+          "aiSetupAgentDesc": "Yapay zekâ eğitimindeki bir ajanın talimatlarını, modelini ve bilgisini kullanır.",
+          "aiSetupCustom": "Özel kurulum",
+          "aiSetupCustomDesc": "Modeli burada seçin ve talimatları yazın.",
+          "aiAgentLabel": "Yapay zekâ ajanı",
+          "aiAgentPick": "— yapay zekâ ajanı seçin —",
+          "aiAgentHint": "Ajan kendi talimatlarını, modelini ve bilgisini getirir. Bunları <link>Yapay zekâ eğitimi</link> bölümünde değiştirin.",
+          "aiAgentNone": "Henüz yapay zekâ ajanınız yok. <link>İlk yapay zekâ ajanınızı oluşturun</link>, ardından Listeyi yenile’ye basın.",
+          "aiAgentRequired": "Bir yapay zekâ ajanı seçin ya da özel kuruluma geçin.",
+          "aiAgentSummary": "Model {model} · {count, plural, one {# bilgi kaynağı} other {# bilgi kaynağı}}",
+          "aiAgentNoSources": "Bu ajanın henüz bilgisi yok, bu yüzden yalnızca talimatlarına göre yanıt verir. <link>Yapay zekâ eğitimi</link> bölümünden kaynak ekleyin.",
+          "aiPromptRequired": "Yapay zekâ için talimatları yazın.",
+          "aiKnowledgeLabel": "Bir yapay zekâ ajanından bilgi (isteğe bağlı)",
+          "aiKnowledgeNone": "— yok —",
+          "aiKnowledgeHint": "O ajanın eğitilmiş kaynaklarını yanıta ekler. Özel kurulumda ajanın kendi talimatları ve modeli kullanılmaz. <link>Yapay zekâ eğitiminde yönet →</link>",
+          "aiAdvanced": "Gelişmiş seçenekler",
+          "aiCreateAgent": "+ Yapay zekâ ajanı oluştur"
         },
         "options": {
           "prompt": "İstem",
@@ -2497,7 +2510,8 @@
         "noSenderFacebook": "Tetikleyici düğümünde bir Facebook Sayfası seçilmemiş — Tetikleyici adımında bir sayfa seçin.",
         "noSenderNumber": "Tetikleyici düğümünde bir numara seçilmemiş — Tetikleyici adımında bir numara seçin.",
         "faqMinScore": "\"{node}\" için en düşük puan 0.05 ile 0.99 aralığının dışında — düzeltin veya akış ayarını kullanmak için boş bırakın.",
-        "locationInvalid": "“{node}” adımında geçerli bir konum yok — bir Google Haritalar bağlantısı yapıştırın veya enlem (-90 ile 90) ve boylam (-180 ile 180) girin."
+        "locationInvalid": "“{node}” adımında geçerli bir konum yok — bir Google Haritalar bağlantısı yapıştırın veya enlem (-90 ile 90) ve boylam (-180 ile 180) girin.",
+        "aiNoAgent": "\"{node}\" için ne yapay zekâ ajanı ne de istem var — bir yapay zekâ ajanı seçin ya da Özel kurulum’u seçip talimatları yazın."
       }
     },
     "simpleModel": {
@@ -2663,7 +2677,9 @@
         "chooseFlow": "Adım {stage}: düğmenin başlattığı akışı seçin.",
         "chooseApi": "Adım {stage}: çağrılacak API'yi seçin.",
         "writeCode": "Adım {stage}: çalıştırılacak kodu yazın.",
-        "webhookUrl": "Adım {stage}: Çağrılacak adresi (URL) ekleyin."
+        "webhookUrl": "Adım {stage}: Çağrılacak adresi (URL) ekleyin.",
+        "chooseAiAgent": "Adım {stage}: Yanıt verecek yapay zekâ ajanını seçin ya da adımı özel kuruluma geçirin.",
+        "writeAiPrompt": "Adım {stage}: Yapay zekâ için talimatları yazın ya da bir yapay zekâ ajanı seçin."
       },
       "faqSummary": "{hasCategory, select, true {FAQ'larınızdan · {category}} other {FAQ'larınızdan}}"
     },

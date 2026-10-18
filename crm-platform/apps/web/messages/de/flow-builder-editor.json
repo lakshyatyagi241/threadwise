@@ -1131,19 +1131,14 @@
           "aiModelPick": "— Modell auswählen —",
           "aiModelNone": "Keine KI-Modelle aktiviert. Bitten Sie den Administrator, eines einzuschalten",
           "aiModelNotEnabled": "{value} (nicht aktiviert)",
-          "aiAssistantNone": "— keines (nur den obigen Prompt verwenden) —",
           "aiAssistantOption": "{name} · {count, plural, one {# Quelle} other {# Quellen}}",
           "aiAssistantMissing": "(Assistent {id})",
-          "aiAssistantHintNone": "Noch keine Wissensdatenbanken. Erstellen Sie eine unter <link>KI-Training</link> und drücken Sie dann Liste aktualisieren, um sie hier auszuwählen.",
-          "aiAssistantHintEmpty": "Hinweis: Dieser Assistent hat 0 trainierte Quellen. Fügen Sie unter <link>KI-Training</link> welche hinzu, sonst verwendet die Antwort nur den Prompt.",
-          "aiAssistantHint": "Übernimmt die trainierten Inhalte des gewählten Assistenten in diese Antwort. <link>Wissen verwalten →</link>",
           "aiModelLabel": "Modell",
           "aiModelHint": "Modelle, die der Administrator aktiviert hat, sowie jeder Anbieter, für den Sie einen eigenen Schlüssel hinzugefügt haben (Einstellungen → KI-Schlüssel, bei BYOK-Tarifen).",
           "aiModelHintNone": "Noch kein Anbieter verfügbar. Fügen Sie unter <link>Einstellungen → KI-Schlüssel</link> einen eigenen Schlüssel hinzu (BYOK-Tarife) oder bitten Sie Ihren Administrator, einen zu aktivieren.",
           "aiPrompt": "Systemprompt",
           "aiSave": "Antwort speichern in",
           "aiSaveHint": "Spätere Knoten lesen sie als <v>{save}</v> oder beim Extrahieren als <v>{path}</v>.",
-          "aiAssistantLabel": "Wissensdatenbank (optional)",
           "aiExtract": "<strong>Strukturierte Daten extrahieren (JSON)</strong>: Die Nachricht wird in Felder umgewandelt",
           "aiFields": "Zu extrahierende Felder",
           "aiFieldsHint": "Kommagetrennte Schlüssel. Die KI gibt EIN JSON-Objekt zurück; jeder Schlüssel wird zu <v>{key}</v> (und zu <v>{rows}</v>, wenn mehrere Datensätze erkannt werden, z. B. für einen Google-Sheets-Knoten).",
@@ -1156,7 +1151,25 @@
           "subflowMissing": "Flow {id} (nicht im Arbeitsbereich)",
           "subflowLabel": "Auszuführender Flow",
           "subflowHint": "Wählen Sie einen anderen gespeicherten Flow. Wenn dieser Knoten auslöst, läuft dieser Flow vollständig durch, bevor die Steuerung an den nächsten Knoten hier zurückgeht.",
-          "endInfo": "Dieser Knoten beendet den Flow. Alles, was danach verbunden ist, wird nicht ausgeführt."
+          "endInfo": "Dieser Knoten beendet den Flow. Alles, was danach verbunden ist, wird nicht ausgeführt.",
+          "aiSetupLegend": "Wie soll dieser Schritt antworten?",
+          "aiSetupAgent": "KI-Agent",
+          "aiSetupAgentDesc": "Nutzt Anweisungen, Modell und Wissen eines Agenten aus dem KI-Training.",
+          "aiSetupCustom": "Eigene Einrichtung",
+          "aiSetupCustomDesc": "Wähle hier ein Modell und schreibe die Anweisungen.",
+          "aiAgentLabel": "KI-Agent",
+          "aiAgentPick": "— KI-Agent wählen —",
+          "aiAgentHint": "Der Agent bringt eigene Anweisungen, ein eigenes Modell und eigenes Wissen mit. Ändere sie im <link>KI-Training</link>.",
+          "aiAgentNone": "Du hast noch keine KI-Agenten. <link>Erstelle deinen ersten KI-Agenten</link> und tippe dann auf Liste aktualisieren.",
+          "aiAgentRequired": "Wähle einen KI-Agenten oder wechsle zu einer eigenen Einrichtung.",
+          "aiAgentSummary": "Modell {model} · {count, plural, one {# Wissensquelle} other {# Wissensquellen}}",
+          "aiAgentNoSources": "Dieser Agent hat noch kein Wissen und antwortet nur nach seinen Anweisungen. Füge Quellen im <link>KI-Training</link> hinzu.",
+          "aiPromptRequired": "Schreibe die Anweisungen für die KI.",
+          "aiKnowledgeLabel": "Wissen eines KI-Agenten (optional)",
+          "aiKnowledgeNone": "— keins —",
+          "aiKnowledgeHint": "Fügt die trainierten Quellen dieses Agenten zur Antwort hinzu. Seine Anweisungen und sein Modell werden bei einer eigenen Einrichtung nicht verwendet. <link>Im KI-Training verwalten →</link>",
+          "aiAdvanced": "Erweiterte Optionen",
+          "aiCreateAgent": "+ KI-Agent erstellen"
         },
         "options": {
           "prompt": "Prompt",
@@ -2497,7 +2510,8 @@
         "noSenderFacebook": "Der Auslöser-Knoten hat keine Facebook-Seite ausgewählt. Wählen Sie eine im Auslöser-Schritt.",
         "noSenderNumber": "Der Auslöser-Knoten hat keine Nummer ausgewählt. Wählen Sie eine im Auslöser-Schritt.",
         "faqMinScore": "„{node}“ hat einen Mindestscore außerhalb von 0.05 bis 0.99. Korrigieren Sie ihn, oder lassen Sie das Feld leer, um die Einstellung des Flows zu verwenden.",
-        "locationInvalid": "„{node}“ hat keinen gültigen Standort – fügen Sie einen Google-Maps-Link ein oder geben Sie Breitengrad (-90 bis 90) und Längengrad (-180 bis 180) ein."
+        "locationInvalid": "„{node}“ hat keinen gültigen Standort – fügen Sie einen Google-Maps-Link ein oder geben Sie Breitengrad (-90 bis 90) und Längengrad (-180 bis 180) ein.",
+        "aiNoAgent": "„{node}“ hat weder einen KI-Agenten noch einen Prompt – wähle einen KI-Agenten oder „Eigene Einrichtung“ und schreibe die Anweisungen."
       }
     },
     "simpleModel": {
@@ -2663,7 +2677,9 @@
         "chooseFlow": "Schritt {stage}: Wähle den Flow, den die Schaltfläche startet.",
         "chooseApi": "Schritt {stage}: Wähle die API, die aufgerufen wird.",
         "writeCode": "Schritt {stage}: Schreibe den Code, der ausgeführt wird.",
-        "webhookUrl": "Schritt {stage}: Fügen Sie die aufzurufende Adresse (URL) hinzu."
+        "webhookUrl": "Schritt {stage}: Fügen Sie die aufzurufende Adresse (URL) hinzu.",
+        "chooseAiAgent": "Schritt {stage}: Wähle den KI-Agenten, der antwortet, oder stelle den Schritt auf eine eigene Einrichtung um.",
+        "writeAiPrompt": "Schritt {stage}: Schreibe die Anweisungen für die KI oder wähle einen KI-Agenten."
       },
       "faqSummary": "{hasCategory, select, true {Aus Ihren FAQs · {category}} other {Aus Ihren FAQs}}"
     },

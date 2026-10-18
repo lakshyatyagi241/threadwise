@@ -128,13 +128,18 @@ export const DEFAULT_JOB_OPTIONS = {
   removeOnFail: { count: 2_000, age: 3 * 24 * 3600 },
 };
 
-/** Queues that carry an inbound event the provider has already been told we have: retried for about 40 minutes, personal data dropped on success. */
-const INBOUND_RETRY_OPTIONS: JobsOptions = {
-  removeOnComplete: true,
+/**
+ * The retry window of work that exists nowhere else once the provider has our 200: 10 attempts from 5 s, about 40 minutes. A quarter
+ * of jitter keeps the shortest possible window above 30 minutes (32 to 43 minutes). Every queue in the failed-operation policy
+ * (`modules/failed-operations/failure-policy.ts`) uses it, wherever its producer sets its own options.
+ */
+export const INBOUND_RETRY = {
   attempts: 10,
-  // A quarter of jitter keeps the shortest possible window above 30 minutes (10 attempts from 5 s: 32 to 43 minutes).
-  backoff: { type: 'exponential', delay: 5_000, jitter: 0.25 },
-};
+  backoff: { type: 'exponential' as const, delay: 5_000, jitter: 0.25 },
+} satisfies JobsOptions;
+
+/** Queues that carry an inbound event the provider has already been told we have: retried for about 40 minutes, personal data dropped on success. */
+const INBOUND_RETRY_OPTIONS: JobsOptions = { removeOnComplete: true, ...INBOUND_RETRY };
 
 /**
  * Queues whose job data is personal (message text, phone numbers, the raw webhook body) drop a job the moment it completes. A failed
@@ -148,6 +153,9 @@ const QUEUE_JOB_OPTIONS: Partial<Record<QueueName, JobsOptions>> = {
   // Carries the raw channel event (message text, usernames), like the WhatsApp payload: dropped once it completes, kept when it failed.
   [QUEUES.WEBHOOK_RETRY]: INBOUND_RETRY_OPTIONS,
   [QUEUES.WEBHOOK_FORWARD]: { removeOnComplete: true },
+  // Inbound channel messages and receipts: the provider has our 200 and this job is the only copy (it kept the default 5 attempts, about 30 s,
+  // so a database blip longer than that lost a customer's message). Completed jobs keep the default bounded history; ingest is idempotent.
+  [QUEUES.WEBHOOK_INGEST]: INBOUND_RETRY,
 };
 
 /** The default job options of one queue. A queue-level setting replaces the module-level one whole, so this spreads the defaults. */

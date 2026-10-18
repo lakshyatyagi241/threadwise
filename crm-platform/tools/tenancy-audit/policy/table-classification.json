@@ -129,6 +129,16 @@
     "reason": "permission catalogue; no RLS, no tenant data",
     "reviewed": "2026-10-11 (policy text read in catalog)"
   },
+  "persona_versions": {
+    "class": "GLOBAL",
+    "reason": "persona catalogue; tenants read published versions only (read_published), write operator-only",
+    "reviewed": "2026-10-18 (policy text read in catalog)"
+  },
+  "personas": {
+    "class": "GLOBAL",
+    "reason": "persona catalogue, read_all, write operator-only",
+    "reviewed": "2026-10-18 (policy text read in catalog)"
+  },
   "plan_message_margins": {
     "class": "GLOBAL",
     "reason": "platform catalogue, read_all/catalogue_read, write operator-only",

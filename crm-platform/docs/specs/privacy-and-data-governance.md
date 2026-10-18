@@ -352,7 +352,8 @@ that runs every existing sweep as a "retention job" under one contract: plan wip
 (`apps/api/src/modules/notifications/notification-retention.service.ts`), push prune
 (`apps/api/src/modules/notifications/push-subscriptions-prune.service.ts`), webhook forward retention
 (`apps/api/src/modules/webhook-fanout/webhook-forward-retention.service.ts`), consent export sweep
-(`apps/api/src/modules/contact-consent/consent-export-sweep.service.ts`), and new ones (call recordings and transcripts, webhook delivery
+(`apps/api/src/modules/contact-consent/consent-export-sweep.service.ts`), revenue export sweep
+(`apps/api/src/modules/crm/revenue-report/revenue-export-sweep.service.ts`), and new ones (call recordings and transcripts, webhook delivery
 log, widget visitors, closed conversations if the tenant chooses, audit rows, sessions). Proposed platform defaults, all workspace
 overridable inside the bounds, all subject to decision D4:
 
@@ -367,6 +368,14 @@ overridable inside the bounds, all subject to decision D4:
 | Audit log                       | 13 months                            | 6 to 36 months                 |
 | Sessions / login IP             | 90 days                              | 30 to 365 days                 |
 | Inactive workspace              | per ADR-0028 (archive 90, erase 180) | operator override              |
+| Revenue report export files     | 7 days (daily sweep)                 | fixed; gone at erasure         |
+| Company briefs (AI summaries)   | cache: a day, then overwritten       | gone at erasure                |
+
+Derived copies (the last two rows) are not records of truth: they are built from invoices, payments, contacts, deals and tasks, which keep
+their own rules, so they do not outlive an erasure (GDPR Art. 17(1); Art. 17(3)(b) does not reach a copy) and a short fixed life keeps them
+inside the one-month "without undue delay" period. A buyer's erasure purges every unexpired export of the workspace because the row does not
+record whom a file lists. Both are registered holders (`revenue.exports`, `companies.briefs`), `audit_log` is untouched, and counsel should
+confirm the wording. See [api/privacy.md](../api/privacy.md) "Derived copies".
 
 Legal hold: a flag on a subject or a workspace that makes all retention jobs and erasures skip it and records why. It requires a
 distinct permission and is itself audited.

@@ -10,6 +10,7 @@ function build(
     results?: unknown[][];
     failedJobs?: Array<Record<string, unknown>>;
     retryJobs?: Array<Record<string, unknown>>;
+    refuse?: string[];
   } = {},
 ) {
   const results = [...(opts.results ?? [])];
@@ -24,13 +25,31 @@ function build(
   const audit = { record: vi.fn().mockResolvedValue(undefined) };
   const queue = { getFailed: vi.fn().mockResolvedValue(opts.failedJobs ?? []) };
   const retryQueue = { getFailed: vi.fn().mockResolvedValue(opts.retryJobs ?? []) };
+  // Every failed job is recorded under uuid-<job id>; a redrive succeeds unless the job id is in `refuse` (the eligibility check said no).
+  const recorder = {
+    record: vi.fn(async (_queue: string, job: { id: string }) => ({
+      recorded: true,
+      created: true,
+      uuid: `uuid-${job.id}`,
+    })),
+  };
+  const refuse = new Set(opts.refuse ?? []);
+  const failedOps = {
+    redrive: vi.fn(async (uuid: string) =>
+      refuse.has(uuid)
+        ? { redriven: false, code: 'NEEDS_ACKNOWLEDGEMENT', reason: 'x' }
+        : { redriven: true, code: 'OK', reason: 'ok', replay: 1 },
+    ),
+  };
   const svc = new AsyncOpsService(
     store as never,
     queue as never,
     retryQueue as never,
     audit as never,
+    recorder as never,
+    failedOps as never,
   );
-  return { svc, audit, queue, retryQueue, executed };
+  return { svc, audit, queue, retryQueue, executed, recorder, failedOps };
 }
 
 describe('AsyncOpsService.deadOutbox', () => {
@@ -91,6 +110,7 @@ describe('AsyncOpsService WhatsApp ingest jobs', () => {
     finishedOn: 1_800_000_000_000,
     data: { changes: [{ phone: '+911234567890', text: 'secret' }] },
     retry: vi.fn().mockResolvedValue(undefined),
+    remove: vi.fn().mockResolvedValue(undefined),
     ...over,
   });
 
@@ -108,35 +128,41 @@ describe('AsyncOpsService WhatsApp ingest jobs', () => {
     expect(JSON.stringify(out)).not.toContain('secret');
   });
 
-  it('retries each failed job under its own id and audits the replay', async () => {
+  it('records each failed job, redrives it through the eligibility check (never job.retry) and audits the record ids', async () => {
     const a = failed('a');
     const b = failed('b');
-    const { svc, audit, queue } = build({ failedJobs: [a, b] });
+    const { svc, audit, queue, recorder, failedOps } = build({ failedJobs: [a, b] });
     expect(await svc.replayWaba({ limit: 100 }, 42)).toEqual({ replayed: 2, skipped: 0 });
     expect(queue.getFailed).toHaveBeenCalledWith(0, 99);
-    // attemptsMade is already at the limit; without a reset the replayed job would get exactly one attempt and no backoff retries.
-    expect(a.retry).toHaveBeenCalledWith('failed', { resetAttemptsMade: true });
-    expect(b.retry).toHaveBeenCalledWith('failed', { resetAttemptsMade: true });
+    expect(recorder.record).toHaveBeenCalledTimes(2);
+    expect(failedOps.redrive).toHaveBeenCalledWith('uuid-a', 42, false);
+    expect(failedOps.redrive).toHaveBeenCalledWith('uuid-b', 42, false);
+    // The old retry reset the attempt count and skipped every check; it must not come back.
+    expect(a.retry).not.toHaveBeenCalled();
+    expect(a.remove).toHaveBeenCalled();
     expect(audit.record.mock.calls[0]![1]).toMatchObject({
       event: 'platform.async_ops.waba_ingest_replayed',
       actorId: 42,
-      payload: { replayed: 2, skipped: 0, limit: 100 },
+      payload: { replayed: 2, skipped: 0, limit: 100, failedOperations: ['uuid-a', 'uuid-b'] },
     });
   });
 
-  it('does not retry a job that failed before using its attempts (a rule the data broke)', async () => {
+  it('leaves a job the eligibility check refuses (failed on purpose, workspace suspended) in the queue and counts it skipped', async () => {
     const permanent = failed('p', { attemptsMade: 2 });
     const exhausted = failed('e');
-    const { svc } = build({ failedJobs: [permanent, exhausted] });
+    const { svc, recorder } = build({ failedJobs: [permanent, exhausted], refuse: ['uuid-p'] });
     expect(await svc.replayWaba({ limit: 100 }, 42)).toEqual({ replayed: 1, skipped: 1 });
-    expect(permanent.retry).not.toHaveBeenCalled();
-    expect(exhausted.retry).toHaveBeenCalled();
+    // A count below the limit is passed on as "unrecoverable" so the record starts BLOCKED.
+    expect(recorder.record).toHaveBeenCalledWith('waba-ingest', permanent, true);
+    expect(recorder.record).toHaveBeenCalledWith('waba-ingest', exhausted, false);
+    expect(permanent.remove).not.toHaveBeenCalled();
   });
 
-  it('counts a job that is no longer failed as skipped instead of failing the whole replay', async () => {
-    const a = failed('a', { retry: vi.fn().mockRejectedValue(new Error('not in failed state')) });
+  it('counts a job whose record cannot be written as skipped instead of failing the whole replay', async () => {
+    const a = failed('a');
     const b = failed('b');
-    const { svc } = build({ failedJobs: [a, b] });
+    const { svc, recorder } = build({ failedJobs: [a, b] });
+    recorder.record.mockRejectedValueOnce(new Error('db down'));
     expect(await svc.replayWaba({ limit: 100 }, 42)).toEqual({ replayed: 1, skipped: 1 });
   });
 });
@@ -150,6 +176,7 @@ describe('AsyncOpsService webhook retry jobs', () => {
     finishedOn: 1_800_000_000_000,
     data: { channel: 'telegram', payload: { update: { message: { text: 'secret' } } } },
     retry: vi.fn().mockResolvedValue(undefined),
+    remove: vi.fn().mockResolvedValue(undefined),
     ...over,
   });
 
@@ -161,18 +188,21 @@ describe('AsyncOpsService webhook retry jobs', () => {
     expect(JSON.stringify(out)).not.toContain('secret');
   });
 
-  it('replays exhausted jobs with a fresh budget, skips ones that failed on purpose, and audits it', async () => {
+  it('replays exhausted jobs through the record, skips ones that failed on purpose, and audits it', async () => {
     const exhausted = failed('e');
     const permanent = failed('p', { attemptsMade: 2 });
-    const { svc, audit, retryQueue } = build({ retryJobs: [exhausted, permanent] });
+    const { svc, audit, retryQueue, failedOps } = build({
+      retryJobs: [exhausted, permanent],
+      refuse: ['uuid-p'],
+    });
     expect(await svc.replayWebhookRetry({ limit: 100 }, 42)).toEqual({ replayed: 1, skipped: 1 });
     expect(retryQueue.getFailed).toHaveBeenCalledWith(0, 99);
-    expect(exhausted.retry).toHaveBeenCalledWith('failed', { resetAttemptsMade: true });
-    expect(permanent.retry).not.toHaveBeenCalled();
+    expect(failedOps.redrive).toHaveBeenCalledWith('uuid-e', 42, false);
+    expect(exhausted.retry).not.toHaveBeenCalled();
     expect(audit.record.mock.calls[0]![1]).toMatchObject({
       event: 'platform.async_ops.webhook_retry_replayed',
       actorId: 42,
-      payload: { replayed: 1, skipped: 1, limit: 100 },
+      payload: { replayed: 1, skipped: 1, limit: 100, failedOperations: ['uuid-e'] },
     });
   });
 });

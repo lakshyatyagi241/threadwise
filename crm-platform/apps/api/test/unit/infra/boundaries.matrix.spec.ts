@@ -158,7 +158,9 @@ describe('default job options', () => {
       if (
         queue === QUEUES.WABA_INGEST ||
         queue === QUEUES.WEBHOOK_RETRY ||
-        queue === QUEUES.WEBHOOK_FORWARD
+        queue === QUEUES.WEBHOOK_FORWARD ||
+        // The e-commerce webhook queue also retries longer than the default (same reason as the inbound WhatsApp queue).
+        queue === QUEUES.WEBHOOK_INGEST
       )
         continue;
       expect(jobOptionsFor(queue), queue).toEqual(DEFAULT_JOB_OPTIONS);

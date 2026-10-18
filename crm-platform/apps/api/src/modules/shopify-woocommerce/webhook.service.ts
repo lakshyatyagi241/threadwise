@@ -5,7 +5,7 @@ import type { Queue } from 'bullmq';
 import { sql } from 'drizzle-orm';
 import type { Redis } from 'ioredis';
 import { DatabaseService } from '../../infra/db/database.service';
-import { QUEUES } from '../../infra/queue/queues';
+import { INBOUND_RETRY, QUEUES } from '../../infra/queue/queues';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { verifyShopifyWebhook, verifyWooWebhook } from './event-rules';
 import { EventsRepository } from './events.repository';
@@ -26,6 +26,16 @@ export interface WebhookHeaders {
 }
 
 const REPLAY_SECONDS = 86_400;
+
+/**
+ * The store has our 200 and its own redelivery is blocked by the replay key for a day, so this job is the only copy of the delivery:
+ * the inbound window (about 40 minutes), not 3 attempts over a few seconds (DLQ audit DF-03).
+ */
+export const ECOM_DELIVERY_JOB_OPTIONS = {
+  ...INBOUND_RETRY,
+  removeOnComplete: true,
+  removeOnFail: 1000,
+};
 
 /**
  * The public door a store's webhooks knock on (TW-ECOM-008, 027). The address carries the store's secret, which only finds the
@@ -98,10 +108,7 @@ export class WebhookService {
           log: { id: log.id, createdAt: log.createdAt.toISOString() },
         },
         {
-          attempts: 3,
-          backoff: { type: 'exponential', delay: 5000, jitter: 0.5 },
-          removeOnComplete: true,
-          removeOnFail: 1000,
+          ...ECOM_DELIVERY_JOB_OPTIONS,
         },
       );
       return { status: 200, body: 'ok' };

@@ -56,6 +56,14 @@ describe('dashboard messages', () => {
       expect(has(`${base}.analytics.types.${k}`)).toBe(true);
     for (const g of ['morning', 'afternoon', 'evening'])
       expect(has(`${base}.dashboard.greeting.${g}`)).toBe(true);
+    // login devices card: every browser, system and kind the API can return, plus the group headings
+    const ld = `${base}.analytics.panels.loginDevices`;
+    for (const g of ['browser', 'os', 'kind']) expect(has(`${ld}.group.${g}`)).toBe(true);
+    for (const k of ['edge', 'chrome', 'firefox', 'safari', 'opera', 'other'])
+      expect(has(`${ld}.browser.${k}`)).toBe(true);
+    for (const k of ['android', 'iphone', 'ipad', 'windows', 'mac', 'linux', 'other'])
+      expect(has(`${ld}.os.${k}`)).toBe(true);
+    for (const k of ['desktop', 'mobile', 'unknown']) expect(has(`${ld}.kind.${k}`)).toBe(true);
   });
 
   it('dashboard-cards.tsx asks only for keys that exist (its namespaces are built from BASE)', () => {

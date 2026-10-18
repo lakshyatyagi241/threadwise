@@ -10,6 +10,7 @@
  */
 export * from './analytics';
 export * from './platform-async-ops';
+export * from './platform-failed-operations';
 export * from './common/ids';
 export * from './common/pagination';
 export * from './common/errors';
@@ -111,3 +112,4 @@ export * from './privacy';
 export * from './compliance';
 export * from './waboo-migration';
 export * from './channel-wechat';
+export * from './persona';

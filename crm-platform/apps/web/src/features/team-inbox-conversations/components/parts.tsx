@@ -51,14 +51,18 @@ export function ChannelTag({
   name,
   className,
   decorative = false,
+  full = false,
 }: {
   kind: string;
   name: string;
   className?: string;
+  /** Spell out the engine ("Official (WhatsApp Cloud API)", "Unofficial (QR / Baileys)") instead of the short word; for the thread header. */
+  full?: boolean;
   /** The name is written next to the tag: hide the tag from assistive technology instead of saying it twice. */
   decorative?: boolean;
 }) {
   const unofficial = useUnofficialWhatsapp();
+  const tType = useTranslations('team-inbox-conversations.channelType');
   // The QR badge marks a personal number: with the unofficial engine off it is not drawn (the conversation itself stays).
   if (isUnofficialChannelKind(kind) && !unofficial) return null;
   const whatsapp = kind === 'whatsapp_cloud';
@@ -70,15 +74,18 @@ export function ChannelTag({
         : kind === 'email'
           ? 'EML'
           : kind.slice(0, 3).toUpperCase();
+  // Only the two WhatsApp engines are told apart in words: the glyph / QR mark stays, the word says which engine it is.
+  const type = whatsapp ? 'official' : kind === 'whatsapp_qr' ? 'unofficial' : null;
   return (
     <span
       title={name}
       role={decorative ? undefined : 'img'}
-      aria-label={decorative ? undefined : name}
+      aria-label={decorative ? undefined : type ? `${name} (${tType(`${type}Full`)})` : name}
       aria-hidden={decorative || undefined}
       data-channel-kind={kind}
+      data-channel-type={type ?? undefined}
       className={cn(
-        'inline-flex h-4 items-center rounded px-1 text-[9px] font-semibold uppercase tracking-wide',
+        'inline-flex h-4 items-center gap-1 rounded px-1 text-[9px] font-semibold uppercase tracking-wide',
         whatsapp || kind === 'whatsapp_qr'
           ? 'bg-success/15 text-success'
           : kind === 'simulator'
@@ -88,6 +95,11 @@ export function ChannelTag({
       )}
     >
       {whatsapp ? <WhatsappGlyph className="size-3" /> : label}
+      {type && (
+        <span data-testid="inbox-channel-type" className="normal-case tracking-normal">
+          {tType(full ? `${type}Full` : type)}
+        </span>
+      )}
     </span>
   );
 }

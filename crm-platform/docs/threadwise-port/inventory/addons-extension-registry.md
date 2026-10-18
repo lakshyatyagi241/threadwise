@@ -1169,6 +1169,8 @@ Exposes:
 
 Hook points modules can use (complete list found in code): (1) `extension.json` `nav.admin[]` sidebar entries; (2) `plan_features` and `plan_limits` (package form, validation, mass assignment, add-on grants); (3) `routes[]` files required at route bootstrap; (4) `database/migrations` picked up by `migrate` and run on ZIP install; (5) `resources/views` added to the view finder; (6) `app/` classes overriding core classes of the same FQCN through the classmap; (7) the `migrate` flag. There is no event/listener registration, no permission/role registration and no scheduled-task registration hook in the loader; a module gets permissions, jobs and settings only by shipping its own migrations and route files.
 
+Port decision: Reference's manifest has no init or event hook, so ours does not add one (porting rule 2.4). The equivalents live in code: `AddonFulfilmentHooks.register()`, `@RequiresModule`, outbox subscribers and provider ports. They are documented for operators in the Help guide `extension-hooks` (`apps/web/src/features/addons-extension-registry/help/`).
+
 ## Open questions & quirks
 
 1. Licence gate is a stub: `verifyPurchase` always returns ok and stores the raw code in `system_settings` unencrypted; the original Envato round trip was removed by vendor decision. The port needs its own entitlement model for paid modules (INST decision).

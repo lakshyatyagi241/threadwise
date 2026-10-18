@@ -281,7 +281,9 @@
         "couldNotUndo": "Este cambio ya no se puede deshacer: el contacto avanzó o ya se deshizo."
       },
       "heldUntil": "En espera hasta {when}",
-      "heldWhy": "Este mensaje de marketing espera a que terminen tus horas de silencio. Se enviará entonces, si el contacto no se ha dado de baja mientras tanto."
+      "heldWhy": "Este mensaje de marketing espera a que terminen tus horas de silencio. Se enviará entonces, si el contacto no se ha dado de baja mientras tanto.",
+      "templateSent": "Plantilla «{name}» enviada por {channel}",
+      "templateSentPlain": "Plantilla «{name}» enviada"
     },
     "media": {
       "openImage": "Abrir imagen {name}",
@@ -1119,6 +1121,12 @@
       },
       "titleBreached": "{kind}: incumplido (vencía {time})",
       "titleOpen": "{kind}: vence {time}"
+    },
+    "channelType": {
+      "official": "Oficial",
+      "unofficial": "No oficial",
+      "officialFull": "Oficial (API de WhatsApp Cloud)",
+      "unofficialFull": "No oficial (QR / Baileys)"
     }
   }
 }

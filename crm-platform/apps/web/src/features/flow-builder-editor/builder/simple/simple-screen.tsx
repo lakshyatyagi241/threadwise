@@ -1727,13 +1727,16 @@ function StepCard(p: {
           </div>
         ) : null}
       </section>
+      {/* The transparent ps-2 is a hover bridge: it keeps the card's :hover alive across the gap between card and toolbar, so the cursor can reach the buttons. */}
       <div
         data-step-tools={s.id}
-        className={`absolute start-full top-0 ms-2 hidden flex-col gap-0.5 rounded-xl border border-border bg-background p-1 text-muted-foreground shadow-md ${
-          p.active ? 'lg:flex' : p.editing ? '' : 'group-hover:lg:flex'
+        className={`absolute start-full top-0 hidden ps-2 ${
+          p.active ? 'lg:block' : p.editing ? '' : 'group-hover:lg:block'
         }`}
       >
-        {tools()}
+        <div className="flex flex-col gap-0.5 rounded-xl border border-border bg-background p-1 text-muted-foreground shadow-md">
+          {tools()}
+        </div>
       </div>
       <Drawer
         open={actionsOpen}

@@ -281,7 +281,9 @@
         "couldNotUndo": "Không thể hoàn tác thay đổi này nữa: liên hệ đã chuyển tiếp hoặc đã được hoàn tác."
       },
       "heldUntil": "Tạm giữ đến {when}",
-      "heldWhy": "Tin nhắn tiếp thị này đang chờ giờ yên tĩnh của bạn kết thúc. Tin sẽ được gửi khi đó, nếu trong lúc chờ liên hệ chưa hủy đăng ký."
+      "heldWhy": "Tin nhắn tiếp thị này đang chờ giờ yên tĩnh của bạn kết thúc. Tin sẽ được gửi khi đó, nếu trong lúc chờ liên hệ chưa hủy đăng ký.",
+      "templateSent": "Mẫu “{name}” đã gửi qua {channel}",
+      "templateSentPlain": "Mẫu “{name}” đã gửi"
     },
     "media": {
       "openImage": "Mở hình ảnh {name}",
@@ -1119,6 +1121,12 @@
       },
       "titleBreached": "{kind}: đã lỡ (hạn là {time})",
       "titleOpen": "{kind}: hạn {time}"
+    },
+    "channelType": {
+      "official": "Chính thức",
+      "unofficial": "Không chính thức",
+      "officialFull": "Chính thức (WhatsApp Cloud API)",
+      "unofficialFull": "Không chính thức (QR / Baileys)"
     }
   }
 }

@@ -76,6 +76,8 @@ describe('outbox replay', () => {
       queue as never,
       queue as never,
       audit as never,
+      { record: vi.fn() } as never,
+      { redrive: vi.fn() } as never,
     );
   }, 180_000);
 
@@ -90,7 +92,7 @@ describe('outbox replay', () => {
     audit.record.mockClear();
   });
 
-  it('re-queues dead events of the named type only, reset for a fresh run', async () => {
+  it('re-queues dead events of the named type only, attempts reset for a fresh run, the last error kept', async () => {
     await seed(activeOrg, 'wallet.charge', 'dead', 3);
     await seed(activeOrg, 'other.event', 'dead', 2);
     await seed(activeOrg, 'wallet.charge', 'done', 4);
@@ -106,7 +108,8 @@ describe('outbox replay', () => {
         `SELECT attempts, last_error FROM event_outbox WHERE status = 'pending' LIMIT 1`,
       )
     ).rows[0]!;
-    expect(row).toEqual({ attempts: 0, last_error: null });
+    // The evidence of why the event died stays until the next failure overwrites it.
+    expect(row).toEqual({ attempts: 0, last_error: 'boom' });
   });
 
   it('honours the limit', async () => {
