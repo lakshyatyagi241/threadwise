@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-18T06:14:10.222Z",
+ "generatedAt": "2026-10-18T16:50:23.701Z",
  "node": "v22.17.0",
  "seconds": 4,
  "note": "Express + the app's JSON parser settings + the service's pre-acknowledgement CPU work (re-parse, HMAC for 2 platform secrets, SHA-256 job id). No database, Redis or queue in the path. Synthetic Meta-shaped payloads; this machine only.",
@@ -9,19 +9,19 @@
    "body": "0.1 MiB",
    "bodyBytes": 96882,
    "concurrency": 1,
-   "requests": 931,
+   "requests": 861,
    "failed": 0,
-   "acksPerSecond": 232.8,
+   "acksPerSecond": 215.3,
    "ackMs": {
-    "p50": 4,
-    "p95": 6.3,
-    "p99": 8,
-    "max": 21.8
+    "p50": 4.5,
+    "p95": 6.6,
+    "p99": 8.5,
+    "max": 14.1
    },
    "serverLoopDelayMs": {
-    "p50": 3.8,
-    "p99": 7.8,
-    "max": 11.2
+    "p50": 4.1,
+    "p99": 8.2,
+    "max": 14.3
    }
   },
   {
@@ -29,19 +29,19 @@
    "body": "0.1 MiB",
    "bodyBytes": 96882,
    "concurrency": 8,
-   "requests": 1519,
+   "requests": 1413,
    "failed": 0,
-   "acksPerSecond": 379.8,
+   "acksPerSecond": 353.3,
    "ackMs": {
-    "p50": 19.3,
-    "p95": 26.4,
-    "p99": 116.8,
-    "max": 241
+    "p50": 20.7,
+    "p95": 27.1,
+    "p99": 129.3,
+    "max": 245.5
    },
    "serverLoopDelayMs": {
-    "p50": 186.4,
-    "p99": 239.6,
-    "max": 239.6
+    "p50": 202.5,
+    "p99": 238.6,
+    "max": 238.6
    }
   },
   {
@@ -49,19 +49,19 @@
    "body": "1 MiB",
    "bodyBytes": 993383,
    "concurrency": 1,
-   "requests": 179,
+   "requests": 144,
    "failed": 0,
-   "acksPerSecond": 44.8,
+   "acksPerSecond": 36,
    "ackMs": {
-    "p50": 19.6,
-    "p95": 38.5,
-    "p99": 46.2,
-    "max": 48
+    "p50": 24.5,
+    "p95": 45.9,
+    "p99": 49.7,
+    "max": 57
    },
    "serverLoopDelayMs": {
-    "p50": 16.1,
-    "p99": 29.5,
-    "max": 33.2
+    "p50": 16.9,
+    "p99": 31.4,
+    "max": 34.8
    }
   },
   {
@@ -69,19 +69,19 @@
    "body": "1 MiB",
    "bodyBytes": 993383,
    "concurrency": 8,
-   "requests": 246,
+   "requests": 202,
    "failed": 0,
-   "acksPerSecond": 61.5,
+   "acksPerSecond": 50.5,
    "ackMs": {
-    "p50": 129,
-    "p95": 148.4,
-    "p99": 157.5,
-    "max": 1075.4
+    "p50": 158.1,
+    "p95": 179.2,
+    "p99": 1277.2,
+    "max": 1288
    },
    "serverLoopDelayMs": {
-    "p50": 21.5,
-    "p99": 1347.4,
-    "max": 1347.4
+    "p50": 1.4,
+    "p99": 1611.7,
+    "max": 1611.7
    }
   },
   {
@@ -89,19 +89,19 @@
    "body": "4 MiB (the cap)",
    "bodyBytes": 3881378,
    "concurrency": 1,
-   "requests": 53,
+   "requests": 45,
    "failed": 0,
-   "acksPerSecond": 13.3,
+   "acksPerSecond": 11.3,
    "ackMs": {
-    "p50": 72.5,
-    "p95": 100.7,
-    "p99": 119.6,
-    "max": 119.6
+    "p50": 87.7,
+    "p95": 107.8,
+    "p99": 110.2,
+    "max": 110.2
    },
    "serverLoopDelayMs": {
-    "p50": 5.4,
-    "p99": 88.4,
-    "max": 105.5
+    "p50": 6.1,
+    "p99": 98.7,
+    "max": 99.1
    }
   },
   {
@@ -109,139 +109,219 @@
    "body": "4 MiB (the cap)",
    "bodyBytes": 3881378,
    "concurrency": 8,
+   "requests": 54,
+   "failed": 0,
+   "acksPerSecond": 13.5,
+   "ackMs": {
+    "p50": 650.3,
+    "p95": 752.4,
+    "p99": 793.4,
+    "max": 793.4
+   },
+   "serverLoopDelayMs": {
+    "p50": 571.5,
+    "p99": 662.7,
+    "max": 662.7
+   }
+  },
+  {
+   "variant": "single-parse",
+   "body": "0.1 MiB",
+   "bodyBytes": 96807,
+   "concurrency": 1,
+   "requests": 1140,
+   "failed": 0,
+   "acksPerSecond": 285,
+   "ackMs": {
+    "p50": 3.3,
+    "p95": 5.1,
+    "p99": 6.8,
+    "max": 10.8
+   },
+   "serverLoopDelayMs": {
+    "p50": 3.2,
+    "p99": 6.3,
+    "max": 10.6
+   }
+  },
+  {
+   "variant": "single-parse",
+   "body": "0.1 MiB",
+   "bodyBytes": 96807,
+   "concurrency": 8,
+   "requests": 1648,
+   "failed": 0,
+   "acksPerSecond": 412,
+   "ackMs": {
+    "p50": 18,
+    "p95": 25.8,
+    "p99": 69.2,
+    "max": 211.4
+   },
+   "serverLoopDelayMs": {
+    "p50": 177.3,
+    "p99": 214.4,
+    "max": 214.4
+   }
+  },
+  {
+   "variant": "single-parse",
+   "body": "1 MiB",
+   "bodyBytes": 993478,
+   "concurrency": 1,
+   "requests": 201,
+   "failed": 0,
+   "acksPerSecond": 50.3,
+   "ackMs": {
+    "p50": 17,
+    "p95": 35.7,
+    "p99": 41.5,
+    "max": 43.3
+   },
+   "serverLoopDelayMs": {
+    "p50": 13.7,
+    "p99": 22.4,
+    "max": 25.8
+   }
+  },
+  {
+   "variant": "single-parse",
+   "body": "1 MiB",
+   "bodyBytes": 993478,
+   "concurrency": 8,
+   "requests": 293,
+   "failed": 0,
+   "acksPerSecond": 73.3,
+   "ackMs": {
+    "p50": 108,
+    "p95": 126.7,
+    "p99": 714.8,
+    "max": 720.5
+   },
+   "serverLoopDelayMs": {
+    "p50": 239.7,
+    "p99": 1137.7,
+    "max": 1137.7
+   }
+  },
+  {
+   "variant": "single-parse",
+   "body": "4 MiB (the cap)",
+   "bodyBytes": 3881549,
+   "concurrency": 1,
    "requests": 65,
    "failed": 0,
    "acksPerSecond": 16.3,
    "ackMs": {
-    "p50": 546.3,
-    "p95": 596.5,
-    "p99": 619,
-    "max": 619
+    "p50": 60,
+    "p95": 76.9,
+    "p99": 79,
+    "max": 79
    },
    "serverLoopDelayMs": {
-    "p50": 465.6,
-    "p99": 518.3,
-    "max": 518.3
-   }
-  },
-  {
-   "variant": "single-parse",
-   "body": "0.1 MiB",
-   "bodyBytes": 96807,
-   "concurrency": 1,
-   "requests": 992,
-   "failed": 0,
-   "acksPerSecond": 248,
-   "ackMs": {
-    "p50": 3.9,
-    "p95": 5.9,
-    "p99": 7.9,
-    "max": 19.8
-   },
-   "serverLoopDelayMs": {
-    "p50": 3.6,
-    "p99": 6.8,
-    "max": 20.5
-   }
-  },
-  {
-   "variant": "single-parse",
-   "body": "0.1 MiB",
-   "bodyBytes": 96807,
-   "concurrency": 8,
-   "requests": 2095,
-   "failed": 0,
-   "acksPerSecond": 523.8,
-   "ackMs": {
-    "p50": 13.4,
-    "p95": 20.5,
-    "p99": 108.5,
-    "max": 170.8
-   },
-   "serverLoopDelayMs": {
-    "p50": 135.5,
-    "p99": 184.8,
-    "max": 184.8
-   }
-  },
-  {
-   "variant": "single-parse",
-   "body": "1 MiB",
-   "bodyBytes": 993478,
-   "concurrency": 1,
-   "requests": 221,
-   "failed": 0,
-   "acksPerSecond": 55.3,
-   "ackMs": {
-    "p50": 15.8,
-    "p95": 33.6,
-    "p99": 37.3,
-    "max": 38.9
-   },
-   "serverLoopDelayMs": {
-    "p50": 12.8,
-    "p99": 23.6,
-    "max": 29.8
-   }
-  },
-  {
-   "variant": "single-parse",
-   "body": "1 MiB",
-   "bodyBytes": 993478,
-   "concurrency": 8,
-   "requests": 331,
-   "failed": 0,
-   "acksPerSecond": 82.8,
-   "ackMs": {
-    "p50": 93.8,
-    "p95": 120.7,
-    "p99": 135.5,
-    "max": 787.8
-   },
-   "serverLoopDelayMs": {
-    "p50": 472.4,
-    "p99": 1031.8,
-    "max": 1031.8
+    "p50": 9.3,
+    "p99": 67.3,
+    "max": 74.3
    }
   },
   {
    "variant": "single-parse",
    "body": "4 MiB (the cap)",
    "bodyBytes": 3881549,
-   "concurrency": 1,
-   "requests": 74,
+   "concurrency": 8,
+   "requests": 79,
    "failed": 0,
-   "acksPerSecond": 18.5,
+   "acksPerSecond": 19.8,
    "ackMs": {
-    "p50": 50.9,
-    "p95": 76.7,
-    "p99": 77.9,
-    "max": 77.9
+    "p50": 435.2,
+    "p95": 483.9,
+    "p99": 517.2,
+    "max": 517.2
    },
    "serverLoopDelayMs": {
-    "p50": 12,
-    "p99": 69.4,
-    "max": 71.8
+    "p50": 373,
+    "p99": 422.3,
+    "max": 422.3
    }
   },
   {
-   "variant": "single-parse",
+   "variant": "refused-bad-signature",
+   "body": "1 MiB",
+   "bodyBytes": 993422,
+   "concurrency": 1,
+   "requests": 183,
+   "refused": 183,
+   "refusalsPerSecond": 45.8,
+   "refuseMs": {
+    "p50": 18.4,
+    "p95": 37,
+    "p99": 43.6,
+    "max": 46.2
+   },
+   "serverLoopDelayMs": {
+    "p50": 11.4,
+    "p99": 20.8,
+    "max": 24
+   }
+  },
+  {
+   "variant": "refused-bad-signature",
+   "body": "1 MiB",
+   "bodyBytes": 993422,
+   "concurrency": 8,
+   "requests": 297,
+   "refused": 297,
+   "refusalsPerSecond": 74.3,
+   "refuseMs": {
+    "p50": 106.8,
+    "p95": 120.8,
+    "p99": 135.3,
+    "max": 922.1
+   },
+   "serverLoopDelayMs": {
+    "p50": 85.9,
+    "p99": 1144,
+    "max": 1144
+   }
+  },
+  {
+   "variant": "refused-bad-signature",
    "body": "4 MiB (the cap)",
-   "bodyBytes": 3881549,
+   "bodyBytes": 3881433,
+   "concurrency": 1,
+   "requests": 71,
+   "refused": 71,
+   "refusalsPerSecond": 17.8,
+   "refuseMs": {
+    "p50": 54.5,
+    "p95": 74.3,
+    "p99": 81.5,
+    "max": 81.5
+   },
+   "serverLoopDelayMs": {
+    "p50": 9.1,
+    "p99": 60.3,
+    "max": 63.5
+   }
+  },
+  {
+   "variant": "refused-bad-signature",
+   "body": "4 MiB (the cap)",
+   "bodyBytes": 3881433,
    "concurrency": 8,
    "requests": 84,
-   "failed": 0,
-   "acksPerSecond": 21,
-   "ackMs": {
-    "p50": 411.2,
-    "p95": 527.2,
-    "p99": 553.2,
-    "max": 553.2
+   "refused": 84,
+   "refusalsPerSecond": 21,
+   "refuseMs": {
+    "p50": 410.7,
+    "p95": 468.2,
+    "p99": 484.9,
+    "max": 484.9
    },
    "serverLoopDelayMs": {
-    "p50": 366.2,
-    "p99": 469.5,
-    "max": 469.5
+    "p50": 349.4,
+    "p99": 408.2,
+    "max": 408.2
    }
   }
  ]

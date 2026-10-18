@@ -1,0 +1,79 @@
+{
+ "generatedAt": "2026-10-18T16:41:23.693Z",
+ "what": "EL-B05: first run of the webhook profile (tools/event-loop-audit/load/run-load.mjs --profiles=webhook --seconds=40 --contacts=500 --settle-seconds=15): the normal 5 req/s mix with 30 % of requests replaced by unauthenticated WhatsApp deliveries of a 256 KB body carrying a bad signature (the refused path, EL-B22).",
+ "limits": "One 44 s run on a Windows laptop with Docker Desktop, 500 contacts, ~60 webhook requests. Indicative, not a baseline: no second run to compare, no dedicated host. The webhook share (30 %) and body size (256 KB, Meta batches are far smaller) are chosen, not observed.",
+ "result": {
+  "durationSeconds": 44,
+  "k6ExitCode": 0,
+  "api": {
+   "loopDelayMs": {
+    "p50": {
+     "median": 15.47,
+     "mean": 15.46,
+     "max": 15.56
+    },
+    "p95": {
+     "median": 18.12,
+     "mean": 17.8,
+     "max": 19.99
+    },
+    "p99": {
+     "median": 23.79,
+     "mean": 22.35,
+     "max": 25.69
+    },
+    "max": {
+     "median": 25.69,
+     "mean": 43.15,
+     "max": 195.56
+    }
+   },
+   "eventLoopUtilization": {
+    "median": 0.101,
+    "mean": 0.09,
+    "max": 0.152
+   },
+   "blockedWindows": {
+    "warn": 1,
+    "critical": 0
+   }
+  },
+  "client": {
+   "requests": 206,
+   "requestsPerSecond": 5.1,
+   "failedRate": 0,
+   "droppedIterations": 0,
+   "checkPassRate": 1,
+   "webhook_refused": {
+    "avgMs": 33.84,
+    "p50Ms": 30.69,
+    "p90Ms": 45.74,
+    "p95Ms": 49.32,
+    "p99Ms": 57.73,
+    "maxMs": 61.3
+   },
+   "list": {
+    "avgMs": 39.45,
+    "p50Ms": 36.58,
+    "p90Ms": 50.47,
+    "p95Ms": 58.37,
+    "p99Ms": 70.45,
+    "maxMs": 84.32
+   },
+   "health": {
+    "avgMs": 18.91,
+    "p50Ms": 18.91,
+    "p90Ms": 18.91,
+    "p95Ms": 18.91,
+    "p99Ms": 18.91,
+    "maxMs": 18.91
+   }
+  },
+  "serverRequestMs": {
+   "p50": 36.69,
+   "p95": 81.47,
+   "p99": 197,
+   "note": "timed from when the handler runs: excludes time queued behind a blocked loop"
+  }
+ }
+}

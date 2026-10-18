@@ -22,7 +22,8 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../..');
-const SECRET = 'platform-app-secret-for-the-bench';
+// A made-up HMAC key for this local benchmark only; it protects nothing.
+const BENCH_HMAC_KEY = 'bench-only-hmac-key-not-real';
 
 if (process.argv.includes('--server')) {
   // ---- the server side --------------------------------------------------------------------------------------------------------
@@ -55,7 +56,7 @@ if (process.argv.includes('--server')) {
     let ok = false;
     // the platform secrets are tried in turn: the wrong ones first when more than one is configured
     for (let i = 0; i < secrets; i++) {
-      const secret = i === secrets - 1 ? SECRET : `${SECRET}-other-${i}`;
+      const secret = i === secrets - 1 ? BENCH_HMAC_KEY : `${BENCH_HMAC_KEY}-other-${i}`;
       const expected = createHmac('sha256', secret).update(raw).digest();
       if (given.length === expected.length && timingSafeEqual(given, expected)) {
         ok = true;
@@ -147,7 +148,7 @@ if (process.argv.includes('--server')) {
       ['4 MiB (the cap)', 4000 * 1024],
     ]) {
       const body = payload(bytes);
-      const signature = `sha256=${createHmac('sha256', SECRET).update(body).digest('hex')}`;
+      const signature = `sha256=${createHmac('sha256', BENCH_HMAC_KEY).update(body).digest('hex')}`;
       for (const concurrency of [1, 8]) {
         const child = fork(fileURLToPath(import.meta.url), ['--server', variant, '2'], {
           stdio: ['ignore', 'inherit', 'inherit', 'ipc'],
@@ -193,6 +194,78 @@ if (process.argv.includes('--server')) {
         );
         await sleep(500);
       }
+    }
+  }
+  // The REFUSED path (EL-B22): a body with a wrong signature costs the parse and the HMAC for every platform secret before the 401. This is
+  // what an unauthenticated sender costs the server per request, so it is the flood cost. (The service's own-app-secret lookup, which
+  // reads the database when a body names numbers, is NOT in this number: it only adds.)
+  for (const [label, bytes] of [
+    ['1 MiB', 1024 * 1024],
+    ['4 MiB (the cap)', 4000 * 1024],
+  ]) {
+    const body = payload(bytes);
+    const headers = {
+      'content-type': 'application/json',
+      'x-hub-signature-256': 'sha256=' + '0'.repeat(64),
+    };
+    for (const concurrency of [1, 8]) {
+      const child = fork(fileURLToPath(import.meta.url), ['--server', 'single-parse', '2'], {
+        stdio: ['ignore', 'inherit', 'inherit', 'ipc'],
+      });
+      const { port } = await new Promise((r) => child.once('message', r));
+      const url = 'http://127.0.0.1:' + port;
+      await fetch(url + '/hook', { method: 'POST', headers, body });
+      await fetch(url + '/__stats').then((r) => r.json());
+      const lat = [];
+      let refused = 0;
+      const end = Date.now() + SECONDS * 1000;
+      const worker = async () => {
+        while (Date.now() < end) {
+          const t0 = performance.now();
+          const r = await fetch(url + '/hook', { method: 'POST', headers, body });
+          await r.arrayBuffer();
+          if (r.status === 401) refused += 1;
+          lat.push(performance.now() - t0);
+        }
+      };
+      await Promise.all(Array.from({ length: concurrency }, worker));
+      const loop = await fetch(url + '/__stats').then((r) => r.json());
+      child.send('stop');
+      const row = {
+        variant: 'refused-bad-signature',
+        body: label,
+        bodyBytes: body.length,
+        concurrency,
+        requests: lat.length,
+        refused,
+        refusalsPerSecond: Math.round((lat.length / SECONDS) * 10) / 10,
+        refuseMs: { p50: q(lat, 0.5), p95: q(lat, 0.95), p99: q(lat, 0.99), max: q(lat, 1) },
+        serverLoopDelayMs: {
+          p50: Math.round(loop.p50 * 10) / 10,
+          p99: Math.round(loop.p99 * 10) / 10,
+          max: Math.round(loop.max * 10) / 10,
+        },
+      };
+      rows.push(row);
+      console.log(
+        'refused      ' +
+          label.padEnd(16) +
+          ' c=' +
+          String(concurrency).padEnd(2) +
+          ' ' +
+          String(row.refusalsPerSecond).padStart(7) +
+          ' 401/s   p50 ' +
+          String(row.refuseMs.p50).padStart(7) +
+          ' p99 ' +
+          String(row.refuseMs.p99).padStart(7) +
+          ' ms   server loop p99 ' +
+          String(row.serverLoopDelayMs.p99).padStart(7) +
+          ' max ' +
+          String(row.serverLoopDelayMs.max).padStart(7) +
+          ' ms' +
+          (refused !== lat.length ? '   (only ' + refused + ' were 401)' : ''),
+      );
+      await sleep(500);
     }
   }
   const dir = join(root, 'reports/event-loop');

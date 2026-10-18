@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useRealtimeClient, useVisibilityReport } from '@/lib/realtime';
+import { useDeliveryReport, useRealtimeClient, useVisibilityReport } from '@/lib/realtime';
 import { useMarkRead, useUnreadCount } from '../api/hooks';
 import { NOTIFICATION_KEYS } from '../api/keys';
 import { usePreferences } from '../api/prefs-hooks';
@@ -52,6 +52,8 @@ export function LiveNotifications() {
   // Tell the server whether this tab is in front (a closed-tab browser push skips a person who can see the app), and answer the
   // service worker's requests (open a link, subscribe again).
   useVisibilityReport();
+  // How late events reach this tab, once a minute (two numbers, no content): the one thing about delivery the server cannot see itself.
+  useDeliveryReport();
   usePushWorkerMessages();
 
   const [toasts, setToasts] = useState<LiveToastView[]>([]);

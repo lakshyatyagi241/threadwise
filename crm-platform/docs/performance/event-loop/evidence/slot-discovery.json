@@ -1,0 +1,38 @@
+{
+ "generatedAt": "2026-10-18T16:32:56.589Z",
+ "image": "prom/prometheus:v2.55.0",
+ "results": [
+  {
+   "name": "both API slots are two targets, all up",
+   "ok": true,
+   "detail": "crm-api=up crm-api=up crm-probe=up crm-web=up crm-worker=up"
+  },
+  {
+   "name": "the web server, the worker and the probe are found by their names",
+   "ok": true
+  },
+  {
+   "name": "the stopped slot is not a target at all",
+   "ok": true
+  },
+  {
+   "name": "every remaining target is up",
+   "ok": true,
+   "detail": "crm-api=up crm-probe=up crm-web=up crm-worker=up"
+  },
+  {
+   "name": "\"up == 0\" (what RuntimeMetricsTargetDown watches) clears, well inside its 2 minute \"for\"",
+   "ok": true,
+   "detail": "6s after the targets list changed"
+  },
+  {
+   "name": "no alert is firing",
+   "ok": true,
+   "detail": "RuntimeMetricsTargetDown:pending"
+  },
+  {
+   "name": "a slot that comes back is found again, up",
+   "ok": true
+  }
+ ]
+}
