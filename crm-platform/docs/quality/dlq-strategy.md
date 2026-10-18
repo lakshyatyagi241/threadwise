@@ -52,10 +52,15 @@ reset attempts and skip every check.
 | `crm_dead_letter_open{queue}`                    | unresolved records                                         |
 | `crm_dead_letter_oldest_open_seconds{queue}`     | age of the oldest unresolved record                        |
 
+## Sends with an unknown outcome (DF-08)
+
+A broadcast recipient whose send timed out or was reset is still shown as failed and is never resent by the automatic retry. It now also gets a
+`RECONCILIATION_REQUIRED` record (queue `broadcast-send`, code `OUTCOME_UNKNOWN`, no payload, no redrive). An operator checks the provider's receipt and
+closes it (`terminate`) with a reason. Owner decision of 2026-10-18: keep it failed, no new customer-facing message state.
+
 ## Backlog (not done here)
 
 - Bulk redrive and an operator screen (the API is the interface for now).
-- Reconciliation state for outbound sends whose outcome is unknown (DF-08): needs an owner decision on the provider lookup per channel.
 - A tenant status gate for `waba-ingest` at capture (the workspace is not known until the payload is worked; the redrive checks it once known).
 - A completed original job after a provider redelivery does not close its record automatically.
 - Retention job for old records, the failed-operations count in the worker heartbeat and `/health`, a daily report, and CI gates.

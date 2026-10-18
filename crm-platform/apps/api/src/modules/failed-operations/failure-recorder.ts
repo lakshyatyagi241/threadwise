@@ -94,4 +94,49 @@ export class FailureRecorder {
     }
     return { recorded: true, ...result };
   }
+
+  /**
+   * A send whose outcome is unknown (a timeout or reset after the provider may have accepted it). The recipient stays shown as failed;
+   * this adds the reconciliation record so a person can check the provider's receipt before anything is sent again. It carries no
+   * payload and has no redrive policy, so it can only be looked at and closed. Idempotent per `ref`; never throws into the send path.
+   */
+  async recordUnknownOutcome(input: {
+    source: string;
+    orgId: number;
+    ref: string;
+    jobName: string;
+    reason: string;
+  }): Promise<RecordResult> {
+    try {
+      const now = new Date();
+      const result = await this.repo.capture({
+        orgId: input.orgId,
+        sourceQueue: input.source,
+        jobName: input.jobName,
+        originalJobId: input.ref,
+        status: 'RECONCILIATION_REQUIRED',
+        category: 'AMBIGUOUS',
+        errorCode: 'OUTCOME_UNKNOWN',
+        errorSummary: sanitizeErrorText(input.reason),
+        attemptsMade: 1,
+        maxAttempts: 1,
+        payloadHash: null,
+        payloadSealed: null,
+        payloadSchemaVersion: 1,
+        correlationId: null,
+        policyVersion: POLICY_VERSION,
+        firstFailedAt: now,
+        lastFailedAt: now,
+      });
+      if (result.created) getRuntimeMonitor()?.observeDeadLetter(input.source, 'AMBIGUOUS');
+      return { recorded: true, ...result };
+    } catch (err) {
+      getRuntimeMonitor()?.observeDeadLetterCaptureFailure(input.source);
+      this.logger.error(
+        { source: input.source, err: sanitizeErrorText(err) },
+        'could not record an unknown-outcome send',
+      );
+      return { recorded: false, created: false, uuid: null };
+    }
+  }
 }

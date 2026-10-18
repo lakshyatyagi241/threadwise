@@ -450,6 +450,36 @@ describe('failed operations', () => {
     expect((await records())[0]).toMatchObject({ status: 'ESCALATED', replay_count: 4 });
   }, 30_000);
 
+  it('a send with an unknown outcome gets a reconciliation record: no payload, never redriven, closed by a person', async () => {
+    const input = {
+      source: 'broadcast-send',
+      orgId: orgActive,
+      ref: '7:42',
+      jobName: 'broadcast-recipient',
+      reason: 'socket hang up for +919876543210',
+    };
+    const first = await recorder.recordUnknownOutcome(input);
+    expect(first).toMatchObject({ recorded: true, created: true });
+    // The same recipient reported again is one record.
+    expect(await recorder.recordUnknownOutcome(input)).toMatchObject({ created: false });
+    const row = (await records()).find((r) => r.original_job_id === '7:42')!;
+    expect(row).toMatchObject({
+      status: 'RECONCILIATION_REQUIRED',
+      failure_category: 'AMBIGUOUS',
+      error_code: 'OUTCOME_UNKNOWN',
+      payload_sealed: null,
+    });
+    expect(JSON.stringify(row)).not.toContain('919876543210');
+    // There is nothing to resend: the redrive says so, and only closing it is left.
+    expect(await ops.redrive(first.uuid!, 1, true)).toMatchObject({
+      redriven: false,
+      code: 'NOT_REPLAYABLE',
+    });
+    expect(await ops.terminate(first.uuid!, 1, 'checked the provider receipt: delivered')).toEqual({
+      closed: true,
+    });
+  });
+
   it('an enqueue that fails hands the claim back and does not use up the budget', async () => {
     const uuid = await failedRecord('enq-1', orgActive);
     const add = vi.spyOn(queue, 'add').mockRejectedValueOnce(new Error('Redis is down'));
