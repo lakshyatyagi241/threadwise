@@ -27,7 +27,12 @@ const shape = <T>(...required: string[]): z.ZodType<T, z.ZodTypeDef, unknown> =>
   );
 
 const settingsShape = shape<LeadHandlingSettings>('uncontacted');
-const uncontactedShape = shape<UncontactedSettings>('clearOn', 'markNew', 'onReassign', 'rowVersion');
+const uncontactedShape = shape<UncontactedSettings>(
+  'clearOn',
+  'markNew',
+  'onReassign',
+  'rowVersion',
+);
 const markShape = z.object({ uncontacted: z.boolean() });
 
 export const LEAD_HANDLING_KEYS = {

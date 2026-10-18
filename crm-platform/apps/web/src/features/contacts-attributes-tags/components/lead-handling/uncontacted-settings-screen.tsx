@@ -22,7 +22,9 @@ import {
 } from './settings-parts';
 
 /** The editable part of the section: every toggle, none of the bookkeeping. */
-export function valuesOf(s: UncontactedSettings | UncontactedSettingsValues): UncontactedSettingsValues {
+export function valuesOf(
+  s: UncontactedSettings | UncontactedSettingsValues,
+): UncontactedSettingsValues {
   return {
     clearOn: { ...s.clearOn },
     markNew: { ...s.markNew },
@@ -30,8 +32,10 @@ export function valuesOf(s: UncontactedSettings | UncontactedSettingsValues): Un
   };
 }
 
-export const sameUncontacted = (a: UncontactedSettingsValues, b: UncontactedSettingsValues): boolean =>
-  JSON.stringify(valuesOf(a)) === JSON.stringify(valuesOf(b));
+export const sameUncontacted = (
+  a: UncontactedSettingsValues,
+  b: UncontactedSettingsValues,
+): boolean => JSON.stringify(valuesOf(a)) === JSON.stringify(valuesOf(b));
 
 /** `/uncontacted-leads`: which actions count as reaching a lead, which new contacts start uncontacted, and what a reassignment does. */
 export function UncontactedSettingsScreen() {
@@ -89,10 +93,13 @@ function Body({
         ...(settings.rowVersion === null ? {} : { rowVersion: settings.rowVersion }),
       }),
     onSuccess: (saved) => {
-      qc.setQueryData(LEAD_HANDLING_KEYS.settings, (old: { uncontacted: UncontactedSettings } | undefined) => ({
-        ...(old ?? {}),
-        uncontacted: saved,
-      }));
+      qc.setQueryData(
+        LEAD_HANDLING_KEYS.settings,
+        (old: { uncontacted: UncontactedSettings } | undefined) => ({
+          ...(old ?? {}),
+          uncontacted: saved,
+        }),
+      );
       onSaved();
       toast(t('saved'), 'success');
     },
@@ -133,17 +140,45 @@ function Body({
       }
     >
       <SettingsSection title={tu('clear.title')} intro={tu('clear.intro')}>
-        <ToggleRow label={tu('clear.contactButton')} checked={form.clearOn.contactButton} onChange={clear('contactButton')} />
-        <ToggleRow label={tu('clear.message')} checked={form.clearOn.message} onChange={clear('message')} />
-        <ToggleRow label={tu('clear.automation')} checked={form.clearOn.automation} onChange={clear('automation')} />
-        <ToggleRow label={tu('clear.activity')} checked={form.clearOn.activity} onChange={clear('activity')} />
+        <ToggleRow
+          label={tu('clear.contactButton')}
+          checked={form.clearOn.contactButton}
+          onChange={clear('contactButton')}
+        />
+        <ToggleRow
+          label={tu('clear.message')}
+          checked={form.clearOn.message}
+          onChange={clear('message')}
+        />
+        <ToggleRow
+          label={tu('clear.automation')}
+          checked={form.clearOn.automation}
+          onChange={clear('automation')}
+        />
+        <ToggleRow
+          label={tu('clear.activity')}
+          checked={form.clearOn.activity}
+          onChange={clear('activity')}
+        />
         <p className="pt-1 text-xs text-muted-foreground">{tu('clear.manualHint')}</p>
       </SettingsSection>
 
       <SettingsSection title={tu('new.title')} intro={tu('new.intro')}>
-        <ToggleRow label={tu('new.manual')} checked={form.markNew.manual} onChange={mark('manual')} />
-        <ToggleRow label={tu('new.import')} checked={form.markNew.import} onChange={mark('import')} />
-        <ToggleRow label={tu('new.leadSource')} checked={form.markNew.leadSource} onChange={mark('leadSource')} />
+        <ToggleRow
+          label={tu('new.manual')}
+          checked={form.markNew.manual}
+          onChange={mark('manual')}
+        />
+        <ToggleRow
+          label={tu('new.import')}
+          checked={form.markNew.import}
+          onChange={mark('import')}
+        />
+        <ToggleRow
+          label={tu('new.leadSource')}
+          checked={form.markNew.leadSource}
+          onChange={mark('leadSource')}
+        />
       </SettingsSection>
 
       <SettingsSection title={tu('reassign.title')} intro={tu('reassign.intro')}>

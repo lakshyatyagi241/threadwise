@@ -61,10 +61,19 @@ export function ToggleRow({
   const id = useId();
   return (
     <div className="flex items-center justify-between gap-4 py-2">
-      <label htmlFor={id} className={cn('text-sm', checked ? 'font-medium' : 'text-muted-foreground')}>
+      <label
+        htmlFor={id}
+        className={cn('text-sm', checked ? 'font-medium' : 'text-muted-foreground')}
+      >
         {label}
       </label>
-      <Switch id={id} label={label} checked={checked} onCheckedChange={onChange} disabled={disabled} />
+      <Switch
+        id={id}
+        label={label}
+        checked={checked}
+        onCheckedChange={onChange}
+        disabled={disabled}
+      />
     </div>
   );
 }

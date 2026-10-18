@@ -536,7 +536,10 @@ export function ContactsScreen() {
     if (!out) return;
     dispatch({ type: 'clear' });
     await refresh();
-    report(tu(uncontacted ? 'bulkMarkedUncontacted' : 'bulkMarkedContacted', { count: out.changed }), out);
+    report(
+      tu(uncontacted ? 'bulkMarkedUncontacted' : 'bulkMarkedContacted', { count: out.changed }),
+      out,
+    );
   }
 
   async function onBulkGroup(action: 'add' | 'remove', groupId: string): Promise<boolean> {

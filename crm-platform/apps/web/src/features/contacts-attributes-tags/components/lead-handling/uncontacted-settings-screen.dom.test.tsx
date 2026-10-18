@@ -139,9 +139,7 @@ describe('Settings > Uncontacted leads', () => {
   });
 
   it('a stale version shows the conflict notice instead of an error', async () => {
-    state.save.mockRejectedValue(
-      new ApiError(409, 'ROW_VERSION_CONFLICT', 'conflict'),
-    );
+    state.save.mockRejectedValue(new ApiError(409, 'ROW_VERSION_CONFLICT', 'conflict'));
     await mountScreen();
     await click(sw(label('settings.uncontacted.new.manual')));
     await click(btn(label('settings.save')));
