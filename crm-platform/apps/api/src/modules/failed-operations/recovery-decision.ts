@@ -62,7 +62,7 @@ export function decideRecovery(i: RecoveryInput): RecoveryDecision {
   if (i.status === 'REDRIVING') {
     return block('BEING_REDRIVEN', 'A redrive of this operation is already running');
   }
-  if (i.status === 'ESCALATED') {
+  if (i.status === 'ESCALATED' && !i.acknowledgedRepair) {
     return block(
       'ESCALATED',
       'Redrive limit reached; a person decides (terminate it or repair and acknowledge)',
@@ -100,7 +100,8 @@ export function decideRecovery(i: RecoveryInput): RecoveryDecision {
       'A retry cannot fix this by itself; confirm the cause is repaired to redrive',
     );
   }
-  if (i.replayCount >= i.maxReplays) {
+  // An escalated record the operator confirms is repaired may go past the limit; it escalates again if it fails again.
+  if (i.replayCount >= i.maxReplays && i.status !== 'ESCALATED') {
     return block('REPLAY_LIMIT', 'Redriven the maximum number of times');
   }
   if (i.sinceLastReplayMs !== null && i.sinceLastReplayMs < i.cooldownMs) {

@@ -78,7 +78,7 @@ export class FailureCaptureService implements OnApplicationBootstrap {
     try {
       const replay = parseReplayJobId(job.id);
       if (replay) {
-        await this.onReplayFailed(replay.uuid, job, err);
+        await this.onReplayFailed(replay.uuid, job, err, replay.replay);
         return;
       }
       await this.captureWithRetry(
@@ -137,9 +137,12 @@ export class FailureCaptureService implements OnApplicationBootstrap {
     uuid: string,
     job: Pick<Job, 'attemptsMade' | 'opts' | 'failedReason'>,
     err?: Error,
+    replay?: number,
   ): Promise<void> {
     const row = await this.repo.byUuid(uuid);
     if (!row) return;
+    // A report from an earlier replay (it stays in the failed set for days) must not undo the replay that is running now.
+    if (replay !== undefined && replay !== row.replay_count) return;
     const policy = POLICY_BY_QUEUE.get(row.source_queue);
     if (!policy) return;
     const maxAttempts = Math.max(1, job.opts?.attempts ?? 1);
@@ -183,10 +186,15 @@ export class FailureCaptureService implements OnApplicationBootstrap {
     let recorded = 0;
     for (const policy of FAILURE_POLICIES) {
       const jobs = await this.ops.queue(policy.queue).getFailed(0, SWEEP_BATCH - 1);
+      const known = await this.repo.knownOriginalJobIds(
+        policy.queue,
+        jobs.filter((j) => !parseReplayJobId(j.id)).map((j) => String(j.id)),
+      );
       for (const job of jobs) {
         try {
+          if (known.has(String(job.id))) continue;
           const replay = parseReplayJobId(job.id);
-          if (replay) await this.onReplayFailed(replay.uuid, job);
+          if (replay) await this.onReplayFailed(replay.uuid, job, undefined, replay.replay);
           else {
             const r = await this.recorder.record(
               policy.queue,
@@ -219,7 +227,7 @@ export class FailureCaptureService implements OnApplicationBootstrap {
           id: null,
         });
       } else if (state === 'failed' && job) {
-        await this.onReplayFailed(stale.uuid, job);
+        await this.onReplayFailed(stale.uuid, job, undefined, stale.replay_count);
       } else if (state === 'unknown') {
         // The claim was taken and no job exists (the enqueuer died, or a completed job was already dropped): hand it back to a person.
         await this.repo.markStale(stale.uuid);

@@ -174,6 +174,23 @@ export class FailedOperationsRepository {
     });
   }
 
+  /** Of these original job ids, the ones that already have a record: the sweep skips them before it seals anything. */
+  async knownOriginalJobIds(queue: string, ids: string[]): Promise<Set<string>> {
+    if (ids.length === 0) return new Set();
+    return this.tx(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT original_job_id FROM failed_operations
+        WHERE source_queue = ${queue} AND original_job_id IN (${sql.join(
+          ids.map((id) => sql`${id}`),
+          sql`, `,
+        )})
+      `);
+      return new Set(
+        res.rows.map((r) => String((r as { original_job_id: string }).original_job_id)),
+      );
+    });
+  }
+
   async byUuid(uuid: string): Promise<FailedOperationRow | null> {
     return this.tx(async (tx) => {
       const res = await tx.execute(
@@ -268,11 +285,13 @@ export class FailedOperationsRepository {
     backTo: FailedOperationStatus,
     reason: string,
     actor: Actor,
+    previousReplayAt: Date | null,
   ): Promise<void> {
     await this.tx(async (tx) => {
       const res = await tx.execute(sql`
         UPDATE failed_operations
-        SET status = ${backTo}, replay_count = greatest(replay_count - 1, 0), claimed_at = NULL
+        SET status = ${backTo}, replay_count = greatest(replay_count - 1, 0), claimed_at = NULL,
+            last_replay_at = ${previousReplayAt}
         WHERE uuid = ${uuid} AND status = 'REDRIVING'
         RETURNING id
       `);

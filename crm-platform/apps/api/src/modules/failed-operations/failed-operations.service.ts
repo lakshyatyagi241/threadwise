@@ -79,6 +79,7 @@ export class FailedOperationsService {
         reason: 'This queue has no redrive policy',
       };
       await this.repo.reject(row, out.code, out.reason, actor);
+      await this.auditRedrive(operatorId, row, 'rejected', out.code);
       return out;
     }
     const decision = decideRecovery({
@@ -105,6 +106,8 @@ export class FailedOperationsService {
 
     const claimed = await this.repo.claim(row, actor);
     if (!claimed) {
+      await this.repo.reject(row, 'LOST_CLAIM', 'Another redrive took this operation first', actor);
+      await this.auditRedrive(operatorId, row, 'rejected', 'LOST_CLAIM');
       return {
         redriven: false,
         code: 'LOST_CLAIM',
@@ -122,7 +125,7 @@ export class FailedOperationsService {
       });
     } catch (err) {
       const reason = sanitizeErrorText(err);
-      await this.repo.revertClaim(uuid, row.status, reason, actor);
+      await this.repo.revertClaim(uuid, row.status, reason, actor, row.last_replay_at);
       this.logger.error(
         { uuid, queue: row.source_queue },
         'redrive could not enqueue; claim reverted',

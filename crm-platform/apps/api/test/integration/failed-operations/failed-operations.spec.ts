@@ -434,8 +434,20 @@ describe('failed operations', () => {
     const [rec] = await records();
     expect(rec).toMatchObject({ status: 'ESCALATED', replay_count: 3 });
     await noCooldown(uuid);
-    expect(await ops.redrive(uuid, 1, true)).toMatchObject({ redriven: false, code: 'ESCALATED' });
+    // Without the operator's confirmation that the cause is repaired it is refused.
+    expect(await ops.redrive(uuid, 1, false)).toMatchObject({ redriven: false, code: 'ESCALATED' });
     expect((await events(uuid)).filter((e) => e === 'REDRIVE_ENQUEUED')).toHaveLength(3);
+    // With it, one more run is allowed past the limit, and it escalates again if it fails again.
+    expect(await ops.redrive(uuid, 1, true)).toMatchObject({ redriven: true, replay: 4 });
+    await until(
+      async () =>
+        (
+          await q<{ status: string }>(`SELECT status FROM failed_operations WHERE uuid = $1`, [
+            uuid,
+          ])
+        )[0]!.status !== 'REDRIVING',
+    );
+    expect((await records())[0]).toMatchObject({ status: 'ESCALATED', replay_count: 4 });
   }, 30_000);
 
   it('an enqueue that fails hands the claim back and does not use up the budget', async () => {
@@ -445,8 +457,25 @@ describe('failed operations', () => {
     add.mockRestore();
     expect(out).toMatchObject({ redriven: false, code: 'ENQUEUE_FAILED' });
     expect((await records())[0]).toMatchObject({ status: 'OPEN', replay_count: 0 });
-    await noCooldown(uuid);
+    // Nothing ran, so the cooldown of the failed claim must not hold the next redrive back.
     expect((await ops.redrive(uuid, 1, false)).redriven).toBe(true);
+  });
+
+  it('a late failure report from an earlier replay does not undo the replay that is running now', async () => {
+    const uuid = await failedRecord('late-1', orgActive);
+    expect((await ops.redrive(uuid, 1, false)).redriven).toBe(true);
+    await queue.remove(`dlq-${uuid}-1`).catch(() => undefined);
+    // Replay 1 is long over; the operator started replay 2, which is running.
+    await owner.query(
+      `UPDATE failed_operations SET status = 'REDRIVING', replay_count = 2 WHERE uuid = $1`,
+      [uuid],
+    );
+    await capture.onFailed(
+      QUEUE,
+      { id: `dlq-${uuid}-1`, attemptsMade: 10, opts: { attempts: 10 } } as never,
+      new Error('boom'),
+    );
+    expect((await records())[0]).toMatchObject({ status: 'REDRIVING', replay_count: 2 });
   });
 
   it('the sweep settles a redrive whose process died: a completed replay is resolved, a missing one is handed back', async () => {

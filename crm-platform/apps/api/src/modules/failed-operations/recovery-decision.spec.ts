@@ -37,6 +37,12 @@ describe('decideRecovery', () => {
 
   it('refuses an escalated operation: a person decides', () => {
     expect(decide({ status: 'ESCALATED' })).toMatchObject({ action: 'BLOCK', code: 'ESCALATED' });
+    // Confirmed repaired: it may pass the replay limit once more (and escalates again if it fails again).
+    expect(decide({ status: 'ESCALATED', acknowledgedRepair: true, replayCount: 3 })).toMatchObject(
+      {
+        action: 'REDRIVE',
+      },
+    );
   });
 
   it('refuses a suspended or deleted workspace, but not one the record does not name', () => {
