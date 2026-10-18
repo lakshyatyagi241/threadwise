@@ -257,26 +257,41 @@ export const appointmentsHolder = defineHolder({
       ],
       disposition: 'anonymise',
       set: {
+        // NOT NULL, and built at booking time as "<booking type> — <invitee name>" (BookingService.book): a placeholder, not NULL.
+        title: 'tombstone',
         invitee_name: 'null',
         invitee_email: 'null',
         invitee_phone: 'null',
         notes: 'null',
         description: 'null',
+        // Staff can overwrite the booking type's address with the person's own (a home visit).
+        location: 'null',
         answers: 'null',
+        // Legacy Reference `meta` carried customer_name / customer_email / customer_phone (migration 20261012090000 copied them out).
+        meta: 'null',
         meet_url: 'null',
         manage_token_hash: 'null',
         manage_token_cipher: 'null',
+        // What the person typed on the cancel page, or staff typed about them.
+        cancel_reason: 'null',
+        // The invitee's e-mail address as last pushed to the calendar event (the echo guard of the drift check).
+        google_pushed_attendee: 'null',
       },
       tier: 'records',
       categories: ['identifier', 'contact', 'content', 'special_risk'],
       pii: [
+        'title',
         'invitee_name',
         'invitee_email',
         'invitee_phone',
         'notes',
         'description',
+        'location',
         'answers',
+        'meta',
         'meet_url',
+        'cancel_reason',
+        'google_pushed_attendee',
       ],
       retention: 'Forever; time, status and price stay for reporting.',
     },
