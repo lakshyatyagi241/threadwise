@@ -405,6 +405,43 @@
           "sent": "Отправлено → {peer}",
           "received": "Получено от {peer}",
           "empty": "За этот период недавней активности нет."
+        },
+        "loginDevices": {
+          "title": "Устройства входа",
+          "subtitle": "Входы в рабочее пространство за период по браузеру, системе и типу",
+          "active": "Активно сейчас: {n}",
+          "total": "{n, plural, one {# вход} few {# входа} many {# входов} other {# входа}}",
+          "empty": "За этот период входов нет.",
+          "activeLegend": "Активны сейчас",
+          "endedLegend": "Завершены или истекли",
+          "row": "Входов: {count}, активных сейчас: {active}",
+          "group": {
+            "browser": "Браузер",
+            "os": "Система",
+            "kind": "Тип"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "Другой браузер"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "Другая система"
+          },
+          "kind": {
+            "desktop": "Компьютер",
+            "mobile": "Мобильное",
+            "unknown": "Неизвестно"
+          }
         }
       }
     },

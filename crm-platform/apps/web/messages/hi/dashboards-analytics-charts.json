@@ -405,6 +405,43 @@
           "sent": "भेजा गया → {peer}",
           "received": "{peer} से प्राप्त",
           "empty": "इस अवधि में कोई हाल की गतिविधि नहीं।"
+        },
+        "loginDevices": {
+          "title": "लॉगिन डिवाइस",
+          "subtitle": "इस अवधि में वर्कस्पेस के साइन-इन, ब्राउज़र, सिस्टम और प्रकार के अनुसार",
+          "active": "{n} अभी सक्रिय",
+          "total": "{n, plural, one {# साइन-इन} other {# साइन-इन}}",
+          "empty": "इस अवधि में कोई साइन-इन नहीं है।",
+          "activeLegend": "अभी सक्रिय",
+          "endedLegend": "साइन-आउट या समाप्त",
+          "row": "{count} साइन-इन, {active} अभी सक्रिय",
+          "group": {
+            "browser": "ब्राउज़र",
+            "os": "सिस्टम",
+            "kind": "प्रकार"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "अन्य ब्राउज़र"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "अन्य सिस्टम"
+          },
+          "kind": {
+            "desktop": "डेस्कटॉप",
+            "mobile": "मोबाइल",
+            "unknown": "अज्ञात"
+          }
         }
       }
     },

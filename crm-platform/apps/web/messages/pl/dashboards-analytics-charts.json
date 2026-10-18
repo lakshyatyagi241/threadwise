@@ -405,6 +405,43 @@
           "sent": "Wysłano → {peer}",
           "received": "Odebrano od {peer}",
           "empty": "Brak ostatniej aktywności w tym okresie."
+        },
+        "loginDevices": {
+          "title": "Urządzenia logowania",
+          "subtitle": "Logowania do przestrzeni roboczej w tym okresie, według przeglądarki, systemu i typu",
+          "active": "Aktywne teraz: {n}",
+          "total": "{n, plural, one {# logowanie} few {# logowania} many {# logowań} other {# logowania}}",
+          "empty": "Brak logowań w tym okresie.",
+          "activeLegend": "Aktywne teraz",
+          "endedLegend": "Wylogowane lub wygasłe",
+          "row": "Logowań: {count}, aktywnych teraz: {active}",
+          "group": {
+            "browser": "Przeglądarka",
+            "os": "System",
+            "kind": "Typ"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "Inna przeglądarka"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "Inny system"
+          },
+          "kind": {
+            "desktop": "Komputer",
+            "mobile": "Telefon",
+            "unknown": "Nieznane"
+          }
         }
       }
     },

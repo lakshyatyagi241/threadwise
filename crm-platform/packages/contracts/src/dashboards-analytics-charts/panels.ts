@@ -64,5 +64,36 @@ export const analyticsPanelsSchema = z.object({
       at: z.string(),
     }),
   ),
+  /**
+   * Login devices: the workspace's sign-in sessions (`auth_sessions`) started in the window, counted by browser, operating
+   * system and device kind. Counts only: no user, IP, user agent or session id leaves the server.
+   */
+  loginDevices: z.object({
+    /** Sessions that are live right now (not revoked, not expired), regardless of the window. */
+    active: z.number().int(),
+    /** Sessions started in the window. */
+    total: z.number().int(),
+    byBrowser: z.array(
+      z.object({
+        key: z.enum(['edge', 'chrome', 'firefox', 'safari', 'opera', 'other']),
+        count: z.number().int(),
+        active: z.number().int(),
+      }),
+    ),
+    byOs: z.array(
+      z.object({
+        key: z.enum(['android', 'iphone', 'ipad', 'windows', 'mac', 'linux', 'other']),
+        count: z.number().int(),
+        active: z.number().int(),
+      }),
+    ),
+    byKind: z.array(
+      z.object({
+        key: z.enum(['desktop', 'mobile', 'unknown']),
+        count: z.number().int(),
+        active: z.number().int(),
+      }),
+    ),
+  }),
 });
 export type AnalyticsPanels = z.infer<typeof analyticsPanelsSchema>;

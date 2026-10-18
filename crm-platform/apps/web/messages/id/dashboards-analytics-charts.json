@@ -405,6 +405,43 @@
           "sent": "Dikirim → {peer}",
           "received": "Diterima dari {peer}",
           "empty": "Tidak ada aktivitas terbaru pada rentang ini."
+        },
+        "loginDevices": {
+          "title": "Perangkat login",
+          "subtitle": "Login ruang kerja pada periode ini, menurut browser, sistem, dan jenis",
+          "active": "{n} aktif sekarang",
+          "total": "{n, plural, other {# login}}",
+          "empty": "Tidak ada login pada periode ini.",
+          "activeLegend": "Aktif sekarang",
+          "endedLegend": "Keluar atau kedaluwarsa",
+          "row": "{count} login, {active} aktif sekarang",
+          "group": {
+            "browser": "Browser",
+            "os": "Sistem",
+            "kind": "Jenis"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "Browser lain"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "Sistem lain"
+          },
+          "kind": {
+            "desktop": "Desktop",
+            "mobile": "Seluler",
+            "unknown": "Tidak diketahui"
+          }
         }
       }
     },
