@@ -15,6 +15,7 @@ COPY apps/web/package.json          apps/web/
 COPY packages/config/package.json   packages/config/
 COPY packages/contracts/package.json packages/contracts/
 COPY packages/db/package.json       packages/db/
+COPY packages/observability/package.json packages/observability/
 COPY packages/tax/package.json      packages/tax/
 COPY packages/ui/package.json       packages/ui/
 RUN pnpm install --frozen-lockfile
@@ -22,7 +23,8 @@ RUN pnpm install --frozen-lockfile
 FROM deps AS build
 COPY . .
 RUN pnpm --filter @crm/tax build \
- && pnpm --filter @crm/contracts build
+ && pnpm --filter @crm/contracts build \
+ && pnpm --filter @crm/observability build
 # Error reporting (Sentry). The browser bundle can only know what was present at build time, so the DSN (public by design), the
 # release and the environment are build arguments. The auth token that uploads source maps is a BuildKit secret, never an argument
 # or a layer: `docker build --secret id=sentry_auth_token,env=SENTRY_AUTH_TOKEN`. All are optional; without a token nothing is uploaded.

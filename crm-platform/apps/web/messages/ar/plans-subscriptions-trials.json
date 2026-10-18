@@ -73,7 +73,8 @@
       "help_agent": "المساعد الذكي",
       "email_channel": "قناة البريد الإلكتروني (Gmail)",
       "personal_history_full": "استيراد السجل الكامل (WhatsApp الشخصي)",
-      "ai_crm_copilot": "AI CRM Copilot"
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "تقييم العملاء المحتملين بالذكاء الاصطناعي"
     },
     "limitGroups": {
       "messaging": "المراسلة",
@@ -564,7 +565,9 @@
       "continueFree": "المتابعة مجانًا",
       "choose": "اختيار {name}",
       "back": "رجوع",
-      "compare": "مقارنة كل الخطط"
+      "compare": "مقارنة كل الخطط",
+      "appHint": "يُباع {feature} أيضًا كتطبيق في سوق التطبيقات.",
+      "appLink": "عرض التطبيق"
     }
   }
 }

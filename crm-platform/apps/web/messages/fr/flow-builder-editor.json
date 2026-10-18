@@ -685,6 +685,7 @@
         "anotherPart": "Une autre partie de ce flux. Elle s’exécute quand un bouton ou une ligne de liste y mène{lost, select, true {: rien n’y mène encore, elle ne s’exécuterait donc jamais.} other {.}}",
         "addFirstStep": "Ajouter la première étape",
         "branchingEnds": "Cette {kind, select, list {liste} other {série de boutons}} termine cette partie : ce qui est envoyé ensuite dépend du choix du client.",
+        "optionsCarryOn": "Chaque {kind, select, list {ligne} other {bouton}} peut démarrer son propre parcours ou continuer avec l'étape suivante ci-dessous.",
         "thenGoTo": "Puis aller à",
         "confirmImport": {
           "title": "Remplacer ce flux par le fichier ?",
@@ -720,7 +721,7 @@
             "answer": "Réponse",
             "action": "Actions"
           },
-          "blockedTitle": "Les boutons et listes terminent un flux, ils ne peuvent donc être placés qu’en dernier.",
+          "blockedTitle": "Cette étape termine cette partie, elle ne peut donc venir qu'en dernier.",
           "blockedTitleFaq": "« Réponse depuis la FAQ » a deux sorties, elle ne peut donc venir qu'en dernier."
         },
         "card": {
@@ -752,7 +753,9 @@
         },
         "editors": {
           "linkLabel": "Où cela mène",
+          "linkChoose": "Choisissez où cela mène…",
           "linkEnds": "Se termine ici (plus rien n’est envoyé)",
+          "linkNext": "Continue avec l'étape suivante",
           "linkOption": "{stage} · {label}{self, select, true { (cette étape)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Mener à un nouveau flux…",
           "question": "Question",
@@ -852,17 +855,13 @@
             "hour": "heures",
             "day": "jours"
           },
-          "location": {
-            "placeName": "Nom du lieu",
-            "placePlaceholder": "Nos bureaux",
-            "address": "Adresse",
-            "latitude": "Latitude",
-            "longitude": "Longitude"
-          },
           "template": {
             "label": "Modèle approuvé",
             "hint": "Seuls les modèles approuvés pour votre numéro WhatsApp sont listés.",
-            "choose": "Choisir un modèle…"
+            "choose": "Choisir un modèle…",
+            "buttons": "Boutons",
+            "variables": "Rempli à partir du contact",
+            "variablesHint": "Chaque numéro est rempli à l'envoi du message avec l'information du contact indiquée ici. Modifiez-le dans le modèle."
           },
           "cta": {
             "buttonText": "Texte du bouton",
@@ -876,7 +875,12 @@
             "add": "Ajouter un autre bouton",
             "remove": "Retirer le bouton",
             "opensPhone": "Numéro de téléphone",
-            "opensEmail": "Adresse e-mail"
+            "opensEmail": "Adresse e-mail",
+            "errors": {
+              "url": "Saisissez une adresse web valide commençant par https://",
+              "phone": "Saisissez un numéro de téléphone valide, par exemple +91 98765 43210",
+              "email": "Saisissez une adresse e-mail valide, par exemple name@example.com"
+            }
           },
           "carousel": {
             "intro": "Message au-dessus des cartes",
@@ -1059,13 +1063,7 @@
           "info": "Ajoutez jusqu’à {max} boutons CTA dans un message : combinez Visiter le site web, Appeler et Copier le code comme vous voulez. Même limite que les boutons de modèles WhatsApp.",
           "buttonLabel": "Libellé du bouton",
           "addButton": "Ajouter un bouton",
-          "maxReached": "Maximum de {max} boutons atteint.",
-          "locationTitle": "Titre",
-          "locationTitlePlaceholder": "Nos bureaux",
-          "locationAddress": "Adresse",
-          "locationAddressPlaceholder": "Rue, ville, pays",
-          "locationLatitude": "Latitude",
-          "locationLongitude": "Longitude"
+          "maxReached": "Maximum de {max} boutons atteint."
         },
         "logic": {
           "operator": {
@@ -2031,6 +2029,41 @@
         "endTextHint": "Envoyée avant la fin du flow. Ne mentionnez pas l'âge. Si le champ est vide, « Nous ne pouvons pas continuer. » est utilisé.",
         "continueNote": "Les étapes suivantes peuvent lire la variable de la réponse suivie de _age_gate (par exemple answer_age_gate), qui vaut under ou adult. Ajoutez une Condition pour créer une branche, par exemple pour demander un parent ou un tuteur.",
         "note": "Ne demandez l'âge que là où vous en avez besoin. La réponse est écrite sur le contact : une date de naissance comme date de naissance, et une réponse inférieure à l'âge minimum marque le contact comme mineur."
+      },
+      "location": {
+        "modeLabel": "Comment définir l’emplacement",
+        "modeLink": "Lien Google Maps",
+        "modeCoords": "Latitude et longitude",
+        "linkLabel": "Lien Google Maps",
+        "linkPlaceholder": "Collez un lien, par ex. https://maps.app.goo.gl/…",
+        "linkHint": "Dans Google Maps, ouvrez le lieu, touchez Partager, puis Copier le lien. Les liens courts et longs fonctionnent.",
+        "finding": "Recherche du lien…",
+        "retry": "Réessayer",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "coordsHint": "La latitude va de -90 à 90 et la longitude de -180 à 180. Vous pouvez coller « lat, lng » dans l’un ou l’autre champ.",
+        "found": "Emplacement trouvé",
+        "openInMaps": "Ouvrir dans Google Maps",
+        "optionalHint": "Facultatif : affiché sur la carte reçue par le client. Vous pouvez laisser les deux vides.",
+        "optional": "(facultatif)",
+        "placeName": "Nom du lieu",
+        "placePlaceholder": "Notre bureau",
+        "address": "Adresse",
+        "problem": {
+          "empty": "Saisissez un lien Google Maps ou des coordonnées.",
+          "lat_missing": "Saisissez une latitude.",
+          "lng_missing": "Saisissez une longitude.",
+          "lat_nan": "La latitude doit être un nombre, par exemple 18.5204.",
+          "lng_nan": "La longitude doit être un nombre, par exemple 73.8567.",
+          "lat_range": "La latitude doit être comprise entre -90 et 90.",
+          "lng_range": "La longitude doit être comprise entre -180 et 180.",
+          "zero": "0, 0 n’est pas un vrai lieu. Saisissez les coordonnées réelles.",
+          "not_url": "Ceci ne ressemble pas à un lien. Collez le lien Google Maps complet.",
+          "not_maps": "Ce n’est pas un lien Google Maps.",
+          "no_coords": "Ce lien ne désigne pas un endroit précis. Ouvrez le lieu dans Google Maps, touchez Partager et copiez ce lien, ou saisissez les coordonnées.",
+          "unresolved": "Ce lien court n’a pas encore été consulté. Quittez le champ ou réessayez.",
+          "resolve_failed": "Impossible de lire ce lien. Vérifiez qu’il s’ouvre dans Google Maps, ou saisissez les coordonnées."
+        }
       }
     },
     "contracts": {
@@ -2463,7 +2496,8 @@
         "noSenderInstagram": "Le nœud Déclencheur n’a aucun compte Instagram sélectionné : choisissez-en un à l’étape Déclencheur.",
         "noSenderFacebook": "Le nœud Déclencheur n’a aucune Page Facebook sélectionnée : choisissez-en une à l’étape Déclencheur.",
         "noSenderNumber": "Le nœud Déclencheur n’a aucun numéro sélectionné : choisissez-en un à l’étape Déclencheur.",
-        "faqMinScore": "« {node} » a un score minimum hors de la plage 0.05 à 0.99. Corrigez-le ou laissez-le vide pour utiliser le réglage du flux."
+        "faqMinScore": "« {node} » a un score minimum hors de la plage 0.05 à 0.99. Corrigez-le ou laissez-le vide pour utiliser le réglage du flux.",
+        "locationInvalid": "« {node} » n’a pas d’emplacement valide : collez un lien Google Maps ou saisissez une latitude (-90 à 90) et une longitude (-180 à 180)."
       }
     },
     "simpleModel": {
@@ -2604,10 +2638,11 @@
         "writeQuestion": "Étape {stage} : rédigez la question.",
         "nameVariable": "Étape {stage} : nommez la variable dans laquelle la réponse est enregistrée.",
         "chooseAnswerProperty": "Étape {stage} : choisissez la propriété du contact dans laquelle la réponse est copiée.",
-        "setCoordinates": "Étape {stage} : renseignez la latitude et la longitude.",
+        "setCoordinates": "Étape {stage} : collez un lien Google Maps ou saisissez une latitude et une longitude valides.",
         "chooseTemplate": "Étape {stage} : choisissez un modèle.",
         "chooseTeam": "Étape {stage} : choisissez l’équipe à laquelle la conversation est transmise.",
         "ctaLabelLink": "Étape {stage} : donnez un nom et un lien au bouton.",
+        "ctaLinkInvalid": "Étape {stage} : la destination du bouton ne correspond pas à son type.",
         "choosePickedProperty": "Étape {stage} : choisissez la propriété du contact dans laquelle l’option choisie est copiée.",
         "buttonsPrompt": "Étape {stage} : rédigez le message au-dessus des boutons.",
         "addButton": "Étape {stage} : ajoutez au moins un bouton.",
@@ -2623,9 +2658,12 @@
         "carouselButtons": "Étape {stage} : donnez un nom à chaque bouton, et un lien, un numéro ou une adresse là où il ouvre quelque chose.",
         "conditionIncomplete": "Étape {stage} : terminez les règles de la condition (une variable et une valeur dans chacune).",
         "faqMinScore": "Étape {stage} : le score minimum doit être compris entre 0.05 et 0.99, ou utilisez le réglage du flux.",
+        "optionNotConnected": "Étape {stage} : {kind, select, row {la ligne} other {le bouton}} « {label} » ne mène nulle part. Ajoutez-lui une étape ou une action.",
+        "tooManyOptions": "Étape {stage} : {kind, select, row {une liste peut avoir au plus {max} lignes} other {un ensemble de boutons peut avoir au plus {max} boutons}}.",
         "chooseFlow": "Étape {stage} : choisissez le flow que le bouton lance.",
         "chooseApi": "Étape {stage} : choisissez l'API à appeler.",
-        "writeCode": "Étape {stage} : écrivez le code à exécuter."
+        "writeCode": "Étape {stage} : écrivez le code à exécuter.",
+        "webhookUrl": "Étape {stage} : ajoutez l'adresse (URL) à appeler."
       },
       "faqSummary": "{hasCategory, select, true {Depuis vos FAQ · {category}} other {Depuis vos FAQ}}"
     },
@@ -2740,7 +2778,8 @@
       "simPurchase": "Achat simulé : {name} → sortie « achetée »",
       "simAbandon": "Abandon simulé → sortie « abandonnée »",
       "faqAnswered": "(simulé) Réponse depuis la FAQ pour « {query} » : le chat de test ne consulte pas vos FAQ, donc rien n'est envoyé et {ref} reste vide. Sortie « Répondu » empruntée.",
-      "faqNoMatch": "(simulé) Réponse depuis la FAQ pour « {query} » : le chat de test ne consulte pas vos FAQ, et la sortie « Répondu » n'est pas connectée, donc sortie « Aucune correspondance » empruntée. {ref} reste vide."
+      "faqNoMatch": "(simulé) Réponse depuis la FAQ pour « {query} » : le chat de test ne consulte pas vos FAQ, et la sortie « Répondu » n'est pas connectée, donc sortie « Aucune correspondance » empruntée. {ref} reste vide.",
+      "locationSkipped": "(emplacement) ignoré : aucune coordonnée valide"
     }
   }
 }

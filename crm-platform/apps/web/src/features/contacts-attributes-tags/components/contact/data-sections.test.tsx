@@ -21,7 +21,7 @@ import { contactCallsKey, contactOpenTasksKey } from '../../api/stats';
 import type { ContactRow } from '../../api/schemas';
 import { ConversationsSection } from './conversations-section';
 import { DealsSection } from './deals-section';
-import { FieldHistoryButton, FieldHistoryPanel } from './field-history';
+import { FieldHistoryPanel } from './field-history';
 import { StatsSection } from './stats-section';
 
 /** Deals, conversations, field history and communication stats of a contact, rendered from a pre-seeded cache (no network). */
@@ -431,6 +431,33 @@ describe('FieldHistoryPanel', () => {
     expect(out).toContain('Load more');
   });
 
+  it('leaves the lead score changes out while lead scoring is off, and lists them when it is on', () => {
+    const entries = [
+      history({ fieldKey: 'leadScore', oldValue: 40, newValue: 91 }),
+      history({ fieldKey: 'name' }),
+    ];
+    const off = new QueryClient();
+    seedHistory(off, entries);
+    seedScoring(off, false);
+    const hidden = render(<FieldHistoryPanel contactId={CONTACT_ID} />, {
+      permissions: ['record.contacts.read'],
+      qc: off,
+    });
+    expect(hidden).not.toContain('Lead score');
+    expect(hidden).not.toContain('>91<');
+    expect(hidden).toContain('>Name<');
+
+    const on = new QueryClient();
+    seedHistory(on, entries);
+    seedScoring(on, true);
+    const shown = render(<FieldHistoryPanel contactId={CONTACT_ID} />, {
+      permissions: ['record.contacts.read'],
+      qc: on,
+    });
+    expect(shown).toContain('Lead score');
+    expect(shown).toContain('91');
+  });
+
   it('has no Load more on the last page, and says so when nothing was ever changed', () => {
     const qc = new QueryClient();
     seedHistory(qc, [history({})]);
@@ -449,15 +476,6 @@ describe('FieldHistoryPanel', () => {
         qc: empty,
       }),
     ).toContain('No field changes have been recorded for this contact yet.');
-  });
-
-  it('puts the history behind a "Contact Field History" button that is closed until it is pressed', () => {
-    const out = render(<FieldHistoryButton contactId={CONTACT_ID} />, {
-      permissions: ['record.contacts.read'],
-    });
-    expect(out).toContain('Contact Field History');
-    expect(out).toContain('<button');
-    expect(out).not.toContain('Loading the history');
   });
 });
 
@@ -483,8 +501,13 @@ const call = (over: Partial<CallLogRow>): CallLogRow => ({
   ...over,
 });
 
+/** `GET /lead-scoring/status`: whether the workspace has switched lead scoring on. Not seeded = not known yet = the score stays hidden. */
+const seedScoring = (qc: QueryClient, enabled: boolean) =>
+  qc.setQueryData(['lead-scoring', 'status'], { enabled });
+
 function seedStats(qc: QueryClient) {
   const c = contact();
+  seedScoring(qc, true);
   qc.setQueryData(contactConversationsKey(c), [
     conversation({ unreadCount: 3 }),
     conversation({
@@ -559,6 +582,15 @@ describe('StatsSection', () => {
     expect(none).toContain('Lead score');
     expect(none).toContain('Last activity');
     expect(none).toContain('Created');
+  });
+
+  it('leaves the Lead score tile out while lead scoring is off', () => {
+    const qc = new QueryClient();
+    const c = seedStats(qc);
+    seedScoring(qc, false);
+    const out = render(<StatsSection contact={c} variant="page" />, { permissions: ALL, qc });
+    expect(out).not.toContain('Lead score');
+    expect(out).toContain('Last activity');
   });
 
   it('hides the call tiles when the plan refuses the call log, and warns when the call figures may be short', () => {

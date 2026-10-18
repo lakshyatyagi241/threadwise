@@ -38,11 +38,11 @@ describe('file extraction (TW-AIAG-008)', () => {
     expect(text).toBe('First & foremost\nSecond <line>');
   });
 
-  it('DOCX stored (not deflated) entries are read too', () => {
+  it('DOCX stored (not deflated) entries are read too', async () => {
     const zip = makeZip([
       { name: 'word/document.xml', data: Buffer.from('<w:p>x</w:p>'), store: true },
     ]);
-    expect(readZipEntry(zip, 'word/document.xml')?.toString()).toBe('<w:p>x</w:p>');
+    expect((await readZipEntry(zip, 'word/document.xml'))?.toString()).toBe('<w:p>x</w:p>');
   });
 
   it('a .docx that is not a zip, or has no body, is unreadable or empty', async () => {

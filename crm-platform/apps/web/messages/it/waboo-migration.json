@@ -1,0 +1,208 @@
+{
+  "waboo-migration": {
+    "nav": {
+      "group": "Migrazione",
+      "panel": "Migrazione Waboo"
+    },
+    "common": {
+      "loading": "Caricamento",
+      "retry": "Riprova",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Non hai il permesso di eseguire questa operazione.",
+        "request": "Non è stato possibile completare la richiesta.",
+        "unexpected": "Si è verificato un problema da parte nostra. Riprova tra un momento.",
+        "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+        "validation": "Alcuni valori non sono validi. Controlla i campi evidenziati.",
+        "notFound": "Questa esecuzione o questo batch non esiste più.",
+        "active": "Un'esecuzione per una di queste organizzazioni è già in coda o in corso. Attendi che termini.",
+        "dryRequired": "Una migrazione richiede una prova riuscita nelle ultime 24 ore per ogni organizzazione. Esegui prima una prova.",
+        "confirm": "Quanto hai digitato non corrisponde.",
+        "notCancellable": "Si può annullare solo un'esecuzione in coda o pianificata. Una migrazione in corso non può essere interrotta.",
+        "collision": "Questo ID organizzazione genera una chiave client già usata da un'altra organizzazione, oppure compare due volte nell'elenco.",
+        "schedule": "Scegli un orario futuro, al massimo entro 90 giorni."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin / Sistema / Migrazione",
+      "title": "Migrazione Waboo",
+      "description": "Sposta le organizzazioni Waboo in WaDesk con la pipeline di migrazione esistente, subito o a un orario scelto, e seguile una per una da qui.",
+      "banner": "Questo pannello non collega mai WhatsApp e non scrive mai su Waboo. Una migrazione inizia sempre con una propria prova generale completa che non scrive nulla, e si ferma prima di caricare qualsiasi dato se la prova non è pulita. Le organizzazioni vengono eseguite una dopo l'altra.",
+      "superOnly": "Solo un super admin può eseguire le migrazioni.",
+      "tabSingle": "Una organizzazione",
+      "tabBulk": "Multiple"
+    },
+    "form": {
+      "title": "Avvia un'esecuzione",
+      "org": "ID organizzazione",
+      "orgHint": "L'ID dell'organizzazione (workspace) Waboo, che corrisponde al nome del database Waboo. Lettere, cifre, trattino basso e segno più.",
+      "orgInvalid": "Usa lettere, cifre, trattino basso o segno più (fino a 128).",
+      "derived": "Chiave client: {client} (derivata dall'ID).",
+      "dryRun": "Prova",
+      "dryRunning": "Avvio in corso",
+      "scheduleDry": "Pianifica prova",
+      "migrate": "Migra",
+      "scheduleMigrate": "Pianifica migrazione",
+      "catchUp": "Recupera",
+      "migrateHint": "La migrazione inizia con una prova generale completa e non carica nulla se non è pulita. Una prova separata è facoltativa.",
+      "queued": "Esecuzione messa in coda.",
+      "scheduled": "Esecuzione pianificata."
+    },
+    "confirm": {
+      "title": "Migra {org}",
+      "body": "Questa operazione carica l'organizzazione {org} in WaDesk. Inizia con una prova generale completa e non carica nulla se non è pulita; una volta avviato il caricamento vero e proprio, non può essere interrotto. Digita l'ID dell'organizzazione per confermare.",
+      "label": "Digita {org} per confermare",
+      "cancel": "Annulla",
+      "submit": "Migra",
+      "catchupTitle": "Recupera {org}",
+      "catchupBody": "Questa operazione aggiorna l'organizzazione {org}, già caricata: riesporta da Waboo, carica solo le nuove righe, sincronizza il wallet e verifica il risultato. Si ferma se la propria prova non è pulita e, una volta avviata, non può essere interrotta. Digita l'ID dell'organizzazione per confermare.",
+      "catchupSubmit": "Recupera"
+    },
+    "bulk": {
+      "title": "Migrazione multipla",
+      "ids": "ID organizzazioni",
+      "idsHint": "Un ID organizzazione per riga, al massimo {max}.",
+      "invalid": "ID non valido: {ids}.",
+      "duplicates": "Elencato due volte: {ids}.",
+      "collisions": "Stessa chiave client di un altro ID: {ids}.",
+      "tooMany": "Al massimo {max} organizzazioni alla volta.",
+      "count": "{count} di {max} organizzazioni",
+      "stopOnFailure": "Ferma al primo errore",
+      "stopHint": "Disattivato per impostazione predefinita: un'organizzazione in errore non ferma le altre.",
+      "sequential": "Le organizzazioni vengono eseguite una dopo l'altra, mai due insieme, perché il server di staging non può eseguire due migrazioni contemporaneamente.",
+      "notReady": "{count, plural, one {# organizzazione non ha} other {# organizzazioni non hanno}} una prova riuscita nelle ultime 24 ore, quindi «Migra tutte» è disattivato.",
+      "dryAll": "Prova tutte",
+      "dryRunning": "Avvio in corso",
+      "migrateAll": "Migra tutte",
+      "migrateHint": "Ogni organizzazione inizia con una propria prova generale completa e non carica nulla se non è pulita. Una prova separata è facoltativa.",
+      "queued": "Batch messo in coda.",
+      "scheduled": "Batch pianificato."
+    },
+    "bulkConfirm": {
+      "title": "Migra {count} organizzazioni",
+      "body": "Questa operazione carica {count} organizzazioni in WaDesk, una dopo l'altra. Ognuna inizia con una propria prova generale completa e non carica nulla se non è pulita; una volta avviato un caricamento, non può essere interrotto. Digita il numero di organizzazioni per confermare.",
+      "label": "Digita {count} per confermare",
+      "cancel": "Annulla",
+      "submit": "Migra tutte"
+    },
+    "readiness": {
+      "ok": "L'ultima prova è riuscita ed è recente. Puoi migrare.",
+      "okReview": "L'ultima prova è riuscita ma ha generato avvisi da controllare. Puoi migrare dopo averli esaminati.",
+      "no_dry": "Nessuna prova finora. Esegui prima una prova.",
+      "not_green": "L'ultima prova non è riuscita. Correggi il problema ed esegui di nuovo una prova.",
+      "stale": "L'ultima prova riuscita risale a più di 24 ore fa. Esegui una nuova prova."
+    },
+    "schedule": {
+      "label": "Esegui alle (facoltativo)",
+      "hint": "Il tuo fuso orario: {tz}. Lascia vuoto per avviare subito.",
+      "utc": "Il tuo fuso orario: {tz}. Corrisponde a {utc} UTC.",
+      "error": {
+        "invalid": "Inserisci una data e un'ora valide.",
+        "past": "Scegli un orario futuro.",
+        "tooFar": "Al massimo entro 90 giorni."
+      }
+    },
+    "runs": {
+      "title": "Esecuzioni",
+      "empty": "Nessuna esecuzione finora.",
+      "emptyHint": "Avvia una prova qui sopra.",
+      "open": "Apri",
+      "client": "Client",
+      "database": "Database",
+      "mode": "Modalità",
+      "status": "Stato",
+      "created": "Creata"
+    },
+    "batches": {
+      "title": "Batch multipli",
+      "empty": "Nessun batch finora.",
+      "emptyHint": "Usa la scheda Multiple qui sopra.",
+      "open": "Apri",
+      "orgs": "{count, plural, one {# organizzazione} other {# organizzazioni}}"
+    },
+    "batch": {
+      "title": "Batch di {count, plural, one {# organizzazione} other {# organizzazioni}}",
+      "back": "Chiudi",
+      "cancel": "Annulla batch",
+      "cancelling": "Annullamento",
+      "cancelled": "Batch annullato.",
+      "progress": "Completate",
+      "runAt": "Pianificato per",
+      "started": "Avviato",
+      "finished": "Terminato alle",
+      "stopOn": "Si ferma al primo errore.",
+      "stopOff": "Un'organizzazione in errore non ferma le altre.",
+      "polling": "Aggiornamento in corso finché il batch è attivo."
+    },
+    "batchStatus": {
+      "queued": "In coda",
+      "running": "In corso",
+      "completed": "Completato",
+      "failed": "Terminato con problemi",
+      "cancelled": "Annullato"
+    },
+    "detail": {
+      "title": "Esecuzione {org}",
+      "back": "Chiudi",
+      "cancel": "Annulla esecuzione",
+      "cancelling": "Annullamento",
+      "cancelled": "Esecuzione annullata.",
+      "clientKey": "Chiave client",
+      "runAt": "Pianificata per",
+      "started": "Avviata",
+      "finished": "Terminata",
+      "steps": "Passaggi",
+      "noSteps": "Nessun passaggio segnalato finora.",
+      "report": "Risultato del verificatore",
+      "error": "Errore",
+      "polling": "Aggiornamento in corso finché l'esecuzione è attiva.",
+      "counts": "Conteggi"
+    },
+    "verdict": {
+      "green": "Verde: nulla di non contabilizzato, nessun errore di integrità",
+      "amber": "Avvisi da controllare: non mancano dati, ma il verificatore ha generato avvisi da esaminare",
+      "red": "Rosso: richiede attenzione. Non considerare questa esecuzione conclusa",
+      "unaccounted": "Non contabilizzati",
+      "integrityErrors": "Errori di integrità",
+      "alarms": "Avvisi",
+      "short": {
+        "green": "Verde",
+        "amber": "Avvisi da controllare",
+        "red": "Rosso"
+      }
+    },
+    "mode": {
+      "dry": "Prova",
+      "load": "Migrazione",
+      "catchup": "Recupero"
+    },
+    "status": {
+      "queued": "In coda",
+      "scheduled": "Pianificata",
+      "running": "In corso",
+      "completed": "Completata",
+      "completedReview": "Completata, avvisi da controllare",
+      "completedRed": "Terminata con errori",
+      "failed": "Non riuscita",
+      "cancelled": "Annullata",
+      "blocked": "Bloccata, non caricata"
+    },
+    "step": {
+      "export": "Esportazione",
+      "preflight": "Controlli preliminari",
+      "backup": "Backup",
+      "dry": "Caricamento di prova",
+      "load": "Caricamento",
+      "core-load": "Caricamento principale",
+      "flow-state": "Stato dei flussi",
+      "reconcile": "Riconciliazione",
+      "report": "Report"
+    },
+    "stepStatus": {
+      "running": "In corso",
+      "done": "Completato",
+      "failed": "Non riuscito",
+      "skipped": "Saltato"
+    }
+  }
+}

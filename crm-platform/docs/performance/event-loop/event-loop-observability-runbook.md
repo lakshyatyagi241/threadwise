@@ -65,6 +65,10 @@ over a second, the server's request histogram sees 7 ms), a 600 ms worker stall 
 (`pnpm --filter @crm/api build`); about 10 minutes, 35 with `--stall`. `--phases=api,worker,long` picks phases. Results of the last
 run: `evidence/scrape-demo.json`.
 
+**Dashboards:** `deploy/observability/grafana/` (API, workers, realtime, release comparison; see its README for what each answers and does not show). `scrape-demo.mjs --grafana` starts a real Grafana next to the demo Prometheus, checks that it provisions the four dashboards and runs every panel query through Grafana's own API (last run: `evidence/scrape-demo-grafana.json`, 54 of 54). Edit `tools/event-loop-audit/dashboards/build.mjs`, never the JSON.
+
+**Regression gate:** `bash tools/event-loop-audit/ci-regression.sh` (or the manual `event-loop-regression` job in the Quality workflow) runs one load of the built API and compares it with `docs/performance/event-loop/ci-baseline.json` through `tools/event-loop-audit/regression-check.mjs`. Exit 0 no regression found, 1 regression, 2 cannot decide. **A 2 is not a pass:** no baseline, a baseline from another kind of machine, an aborted run, or a failure on a host whose round trips are far from the baseline's (rerun it on a quiet machine). Record a baseline with three separate runs (`--record`, header of the script). Do not record one on a laptop that is busy: the recorded spread is the tolerance. `run-load.mjs --inject-block-ms=300` proves the gate still trips. Evidence and its limits: `evidence/regression-gate-local.json`.
+
 Two things that differ from what the code emits, seen in the real scrape:
 
 - `instance` is the **scrape address** (`api:9464`), Prometheus's default; the process's own `host:pid` id arrives as

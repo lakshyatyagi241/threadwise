@@ -16,6 +16,7 @@ export interface ContactNoteRow {
   body: string;
   createdBy: number | null;
   createdByUuid: string | null;
+  createdByName: string | null;
   updatedBy: number | null;
   updatedByUuid: string | null;
   rowVersion: number;
@@ -35,6 +36,7 @@ export class ContactNotesRepository {
       body: contactNotes.body,
       createdBy: contactNotes.createdBy,
       createdByUuid: createdByUser.uuid,
+      createdByName: createdByUser.fullName,
       updatedBy: contactNotes.updatedBy,
       updatedByUuid: updatedByUser.uuid,
       rowVersion: contactNotes.rowVersion,

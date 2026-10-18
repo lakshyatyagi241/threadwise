@@ -250,6 +250,12 @@ function FieldSelect({ condition, label }: { condition: Condition; label: string
           {t('deletedField', { key: condition.field })}
         </option>
       )}
+      {/* A field that is not offered any more but is still in this rule (the lead score while scoring is off) reads as it did. */}
+      {known?.hidden && (
+        <option value={known.id} disabled>
+          {fieldLabel(known)}
+        </option>
+      )}
       {fieldsByGroup(catalog).map((g) => (
         <optgroup key={g.group} label={tg(g.group)}>
           {g.fields.map((f) => (

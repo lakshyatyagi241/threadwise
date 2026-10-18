@@ -41,6 +41,7 @@ import { AppointmentsIcon, PlusIcon, SettingsIcon, CalendarIcon } from './icons'
 import { ErrorLine, LinkButton, useAppointmentsCan, useNow } from './parts';
 import { RescheduleDialog } from './reschedule-dialog';
 import { useAppointmentActions } from './use-appointment-actions';
+import { PageFill } from '@/components/shell/page-fill';
 
 /**
  * `/appointments`, "Your bookings" (Reference's appointments page, extended): Upcoming and Past tabs with counts, status / type /
@@ -197,7 +198,7 @@ export function AppointmentsScreen() {
   const emptyKind = filtered ? 'filtered' : filters.tab;
 
   return (
-    <div className="space-y-3">
+    <PageFill minHeight="28rem" className="space-y-3">
       <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
         <div className="flex min-w-0 items-center gap-4">
           <span
@@ -284,7 +285,7 @@ export function AppointmentsScreen() {
         aria-label={t('tableLabel')}
         aria-busy={active.isFetching}
         // The card is as tall as the window allows: the rows scroll inside it and the footer stays pinned.
-        className="flex max-h-[max(26rem,calc(100dvh-19rem))] flex-col overflow-hidden rounded-xl border border-border bg-background"
+        className="flex min-h-0 shrink flex-col overflow-hidden rounded-xl border border-border bg-background"
       >
         <div
           className={cn(
@@ -451,7 +452,7 @@ export function AppointmentsScreen() {
         onClose={() => setDeclineTarget(null)}
         onConfirm={() => void confirmDecline()}
       />
-    </div>
+    </PageFill>
   );
 }
 

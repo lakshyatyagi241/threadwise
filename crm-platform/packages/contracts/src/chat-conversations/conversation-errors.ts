@@ -9,6 +9,8 @@ export const CONVERSATION_ERROR_CODES = {
   MESSAGE_NOT_FOUND: 'MESSAGE_NOT_FOUND',
   /** The requested status change is not allowed from the thread's current status (e.g. resolving a spam thread). */
   CONVERSATION_STATUS_INVALID: 'CONVERSATION_STATUS_INVALID',
+  /** An agent reply to a `resolved` or `closed` thread: reopen it first (422). */
+  CONVERSATION_RESOLVED: 'CONVERSATION_RESOLVED',
   /** The user to assign is not an active member of the workspace, or the caller may only claim for themselves. */
   CONVERSATION_ASSIGNEE_INVALID: 'CONVERSATION_ASSIGNEE_INVALID',
   /** Only a `failed` outbound message can be retried. */

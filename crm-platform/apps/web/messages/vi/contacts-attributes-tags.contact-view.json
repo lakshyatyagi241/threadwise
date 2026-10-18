@@ -44,8 +44,6 @@
         "editJobTitle": "Sửa chức danh",
         "jobTitleConflict": "Người khác đã đổi liên hệ này trước. Liên hệ đã được tải lại; hãy thử lại.",
         "jobTitleFailed": "Không thể lưu chức danh. Hãy thử lại.",
-        "leadScore": "Điểm khách hàng tiềm năng",
-        "leadScoreAria": "Điểm khách hàng tiềm năng {score}. Hiện chi tiết điểm.",
         "owner": "Người phụ trách"
       },
       "social": {
@@ -99,9 +97,7 @@
         "allowed": "Cho phép tiếp thị",
         "noFlags": "Không có cờ riêng tư"
       },
-      "overview": {
-        "information": "Liên hệ"
-      },
+      "overview": {},
       "tabs": {
         "info": "Thông tin liên hệ",
         "social": "Mạng xã hội",
@@ -147,7 +143,6 @@
       "nav": {
         "back": "Quay lại danh sách",
         "label": "Các phần của liên hệ",
-        "contactDetails": "Chi tiết liên hệ",
         "related": "Liên quan",
         "section": {
           "overview": "Tổng quan",
@@ -172,11 +167,8 @@
         "title": "Vòng đời",
         "stages": "Giai đoạn vòng đời",
         "status": "Trạng thái",
-        "noStatuses": "Giai đoạn này không có trạng thái.",
-        "statusChanged": "Đã đặt trạng thái thành {status}.",
         "conflict": "Người khác đã đổi liên hệ này trước. Liên hệ đã được tải lại; hãy thử lại.",
-        "forbidden": "Bạn không có quyền thay đổi liên hệ này.",
-        "statusFailed": "Không thể đổi trạng thái. Hãy thử lại."
+        "forbidden": "Bạn không có quyền thay đổi liên hệ này."
       }
     }
   }

@@ -165,6 +165,12 @@
         "titleNoName": "Notificação de teste",
         "bodyNoActor": "Se você consegue ler isto, as notificações em tempo real estão funcionando."
       },
+      "snooze_wake": {
+        "title": "{name} voltou para a sua lista",
+        "titleNoName": "Um chat adiado voltou para a sua lista",
+        "titleTeam": "{name} voltou para a sua equipe",
+        "titleTeamNoName": "Um chat adiado voltou para a sua equipe"
+      },
       "marketplace_renewal_due": {
         "titleAuto": "{name} renova em {date, date, medium}",
         "bodyAuto": "Seu cartão será cobrado automaticamente nessa data para renovar {name}. Cancele antes disso para evitar a cobrança.",
@@ -216,6 +222,7 @@
         "device_group_join_request": "Solicitação para entrar em um grupo",
         "device_group_removed": "Removido de um grupo do WhatsApp",
         "test": "Notificação de teste",
+        "snooze_wake": "Chat adiado voltou",
         "marketplace_renewal_due": "Renovação de app pago se aproximando",
         "marketplace_payment_failed": "Falha no pagamento de app pago",
         "marketplace_subscription_ended": "Assinatura de app pago encerrada"
@@ -406,6 +413,10 @@
         "appointment_calendar_drift": {
           "label": "Agendamento fora de sincronia com o Google Calendar",
           "hint": "O evento do Google Calendar de um agendamento futuro foi excluído, movido ou teve os convidados alterados. O agendamento não é alterado; você escolhe o que fazer."
+        },
+        "snooze_wake": {
+          "label": "Chat adiado volta",
+          "hint": "Um chat adiado reabre na hora marcada e é enviado a você ou à sua equipe."
         },
         "marketplace_renewal_due": {
           "label": "Lembrete de renovação de app pago",

@@ -15,7 +15,10 @@ import { WHATSAPP_HANDOFF_EVENT } from './social-handoff-node';
  * Direct hand-off from an Instagram or Messenger flow to a WhatsApp flow (TW-FLR-010 rule 6). Finds the workspace's contact that owns the
  * captured number, or creates a light one named "WhatsApp <digits>" like Reference, then starts the chosen flow for it with the Instagram
  * flow's variables. Reference only enrolled; a flow that is gone or switched off, a number the plan has no room for or a contact already
- * in that flow is logged and left alone (the launch itself reports an already-enrolled contact). Worker process only.
+ * in that flow is logged and left alone (the launch itself reports an already-enrolled contact). Worker process only. A redelivered
+ * event is harmless: the contact is found again by its phone identity (`findOrCreateByPhone`), and `FlowLaunchService.start` enrols
+ * through the unique (workspace, flow, contact) subscriber row, so a second delivery reports `already_enrolled` and starts no second
+ * run; only a subscriber row left `failed` is launched again.
  */
 @Injectable()
 export class SocialHandoffConsumer implements OutboxSubscriber, OnModuleInit {

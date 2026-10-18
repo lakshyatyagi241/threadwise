@@ -1,10 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
   hasRoutingConditions,
   ROUTING_BLOCKED_BY_LEAVE,
   ROUTING_FLOW_REQUESTED,
+  type ConversationPriority,
   type RoutingAssign,
+  type RoutingAutoReply,
   type RoutingConditions,
+  type RoutingTag,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { isOutsideBusinessHours } from '../../common/business-hours';
@@ -15,12 +18,25 @@ import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { MemberDirectory, PERM_CONVERSATION_READ } from '../../realtime';
 import { collectRuleRefs, compileRules, loadRuleContext } from '../crm';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
-import { ConversationsRepository, type LockedConversation } from '../team-inbox-conversations';
+import { AuditService } from '../../kernel/audit/audit.service';
+import {
+  ConversationEventsRepository,
+  ConversationsRepository,
+  type LockedConversation,
+} from '../team-inbox-conversations';
+import { CONVERSATIONS_FACADE, type ConversationsFacade } from '../chat-conversations';
+import { createHash } from 'node:crypto';
 import { AssignmentService, type AssignmentChange, type AssignmentHow } from './assignment.service';
 import { pickLeastBusy, pickRoundRobin } from './agent-picker';
 import { matchesFacts, type RoutingFacts } from './routing-matcher';
 import { decodeActions, decodeConditions, encodeActions } from './routing-rules.mapper';
 import { RoutingRulesRepository, type RuleRow } from './routing-rules.repository';
+
+/** A uuid derived from a seed (a SHA-1 shaped as a version 5 uuid), so the same seed always gives the same id. */
+const deterministicUuid = (seed: string): string => {
+  const h = createHash('sha1').update(seed).digest('hex');
+  return `${h.slice(0, 8)}-${h.slice(8, 12)}-5${h.slice(13, 16)}-8${h.slice(17, 20)}-${h.slice(20, 32)}`;
+};
 
 /** A new (or reopened) conversation, as the inbound pipeline reports it. */
 export interface RoutingInput {
@@ -94,10 +110,13 @@ export class RoutingEngine {
     private readonly db: DatabaseService,
     private readonly repo: RoutingRulesRepository,
     private readonly conversations: ConversationsRepository,
+    private readonly events: ConversationEventsRepository,
+    private readonly audit: AuditService,
     private readonly assignment: AssignmentService,
     private readonly directory: MemberDirectory,
     private readonly entitlements: PlanEntitlementService,
     private readonly outbox: OutboxService,
+    @Inject(CONVERSATIONS_FACADE) private readonly facade: ConversationsFacade,
   ) {}
 
   async route(input: RoutingInput, now: Date = new Date()): Promise<RoutingOutcome> {
@@ -107,6 +126,8 @@ export class RoutingEngine {
     }
     const canOpen = await this.inboxPeople(orgId);
 
+    // Automatic replies are sent once the transaction has committed (see sendReplies).
+    const replies: string[] = [];
     const done = await this.db.txAs({ orgId }, async (tx): Promise<Done> => {
       const locked = await this.conversations.lockByUuid(tx, orgId, input.conversationUuid);
       if (!locked) return { result: { outcome: 'skipped', reason: 'not_found' } };
@@ -183,6 +204,7 @@ export class RoutingEngine {
       };
       const fired: string[] = [];
       const run = async (rule: RuleRow): Promise<boolean> => {
+        const ruleId = rule.uuid as string;
         if (
           !(await this.matches(
             tx,
@@ -197,6 +219,25 @@ export class RoutingEngine {
         }
         const turn = await this.fire(tx, orgId, rule, canOpen, cal);
         if (!turn) return false;
+        // Reference's mark_spam: the thread leaves the open list; the rule's other actions still run.
+        if (turn.markSpam) await this.markSpamByRule(tx, orgId, current, ruleId);
+        // Priority and tags are written before the assignment: the assignment re-reads the row, so it sees both.
+        await this.decorateByRule(tx, orgId, current, ruleId, turn.priority, turn.addTags);
+        if (turn.autoReply) replies.push(turn.autoReply.body);
+        if (turn.escalation) {
+          await this.repo.setEscalation(
+            tx,
+            orgId,
+            locked.id,
+            new Date(now.getTime() + turn.escalation.minutes * 60_000),
+            {
+              ruleId,
+              ruleName: rule.name as string,
+              priority: turn.escalation.priority,
+              assign: turn.escalation.assign,
+            },
+          );
+        }
         if (turn.pick)
           await apply(turn.pick, {
             ruleId: rule.uuid as string,
@@ -252,7 +293,193 @@ export class RoutingEngine {
     });
 
     if (done.change) await this.assignment.afterCommit(orgId, done.change);
+    await this.sendReplies(orgId, input.conversationUuid, input.messageUuid, replies);
     return done.result;
+  }
+
+  /**
+   * A deferred action (Reference's escalation) whose time has come. Applies only if the conversation is still open with no reply from us
+   * (a reply cancelled it by the same test). Runs the priority and the reassignment, writes an `escalated` event and clears the schedule.
+   * Returns whether anything was applied; a conversation that changed meanwhile is left as it is.
+   */
+  async runDueEscalation(
+    orgId: number,
+    conversationUuid: string,
+    now: Date = new Date(),
+  ): Promise<boolean> {
+    if (!(await this.entitlements.featureEnabled(orgId, 'inbox_routing'))) return false;
+    const canOpen = await this.inboxPeople(orgId);
+    const done = await this.db.txAs({ orgId }, async (tx) => {
+      const locked = await this.conversations.lockByUuid(tx, orgId, conversationUuid);
+      if (!locked) return { applied: false, change: null as AssignmentChange | null };
+      const due = await this.repo.dueEscalation(tx, orgId, locked.id, now);
+      if (!due) return { applied: false, change: null as AssignmentChange | null };
+      const cal: Calendar = {
+        today: (await loadWorkspaceCalendar(tx, orgId, now)).today,
+        blocked: new Set<number>(),
+      };
+      await this.decorateByRule(tx, orgId, locked, due.ruleId, due.priority, []);
+      let change: AssignmentChange | null = null;
+      let reassigned = false;
+      if (due.assign) {
+        const pick = await this.choose(tx, orgId, due.assign, null, canOpen, cal);
+        if (pick) {
+          change = await this.assignment.assignInTx(
+            tx,
+            orgId,
+            locked,
+            {
+              userId: pick.userId,
+              teamId: pick.teamId,
+              userUuid: pick.userUuid,
+              teamUuid: pick.teamUuid,
+            },
+            { kind: 'system' },
+            pick.how,
+            { escalation: true, ruleId: due.ruleId, ruleName: due.ruleName },
+          );
+          reassigned = true;
+        }
+      }
+      await this.events.append(tx, orgId, {
+        conversationId: locked.id,
+        type: 'escalated',
+        actorKind: 'system',
+        actorUserId: null,
+        payload: {
+          ruleId: due.ruleId,
+          ruleName: due.ruleName,
+          ...(due.priority ? { priority: due.priority } : {}),
+          reassigned,
+        },
+      });
+      await this.repo.clearEscalation(tx, orgId, locked.id);
+      return { applied: true, change };
+    });
+    if (done.change) await this.assignment.afterCommit(orgId, done.change);
+    return done.applied;
+  }
+
+  /**
+   * A later message of a live conversation (Reference runs the per-message actions for every message: add_tag, auto_reply and
+   * trigger_flow). Only rules with such an action fire, once per matching message. Priority, spam and assignment are one-shot at the start
+   * of a conversation, so they are not applied here; the fallback rule does not run (it would answer every message). The rules are tried in
+   * the same order as for a new conversation, and a rule that stops on match ends the pass there too.
+   */
+  async routeFollowUp(input: RoutingInput, now: Date = new Date()): Promise<{ ruleIds: string[] }> {
+    const { orgId } = input;
+    if (!(await this.entitlements.featureEnabled(orgId, 'inbox_routing'))) return { ruleIds: [] };
+    const done = await this.db.txAs({ orgId }, async (tx) => {
+      const locked = await this.conversations.lockByUuid(tx, orgId, input.conversationUuid);
+      if (!locked) return { ruleIds: [] as string[], replies: [] as string[] };
+      const facts = await this.repo.conversationFacts(tx, orgId, locked.id);
+      if (
+        !facts ||
+        facts.archived ||
+        locked.channelOwnerUserId !== null ||
+        locked.status !== 'open'
+      ) {
+        return { ruleIds: [] as string[], replies: [] as string[] };
+      }
+      const rules = await this.repo.activeRules(tx, orgId);
+      const hours = await this.repo.businessHours(tx, orgId);
+      const rf: RoutingFacts = {
+        channelKind: facts.channelKind,
+        messageText: input.messageText,
+        language: facts.language,
+        outsideHours: isOutsideBusinessHours(hours.hours, hours.timezone, now),
+      };
+      const fired: string[] = [];
+      const replies: string[] = [];
+      for (const rule of rules.filter((r) => r.is_fallback !== true)) {
+        const ruleId = rule.uuid as string;
+        if (
+          !(await this.matches(
+            tx,
+            orgId,
+            decodeConditions(rule.conditions),
+            false,
+            rf,
+            facts.contactId,
+          ))
+        ) {
+          continue;
+        }
+        const turn = await this.firePerMessage(tx, orgId, rule);
+        if (!turn) continue;
+        if (turn.tags.length > 0)
+          await this.decorateByRule(tx, orgId, locked, ruleId, null, turn.tags);
+        if (turn.flowId) {
+          await this.outbox.emit(tx, {
+            aggregateModule: 'conversations',
+            aggregateId: locked.id,
+            orgId,
+            eventType: ROUTING_FLOW_REQUESTED,
+            payload: {
+              conversationId: locked.uuid,
+              flowId: turn.flowId,
+              ruleId,
+              ruleName: rule.name as string,
+              messageUuid: input.messageUuid,
+            },
+          });
+        }
+        if (turn.autoReply) replies.push(turn.autoReply.body);
+        fired.push(ruleId);
+        // The same order and stop rule as a new conversation: a rule that stops on match ends the pass.
+        if (rule.stop_on_match === true) break;
+      }
+      return { ruleIds: fired, replies };
+    });
+    await this.sendReplies(orgId, input.conversationUuid, input.messageUuid, done.replies);
+    return { ruleIds: done.ruleIds };
+  }
+
+  /** A rule's per-message actions for one message: counted as fired, the cursor and the one-shot actions untouched. Null if it has none. */
+  private async firePerMessage(
+    tx: Tx,
+    orgId: number,
+    rule: RuleRow,
+  ): Promise<{
+    tags: RoutingTag[];
+    flowId: string | null;
+    autoReply: RoutingAutoReply | null;
+  } | null> {
+    const ruleId = Number(rule.id);
+    const stored = decodeActions(await this.repo.lockActions(tx, orgId, ruleId));
+    const perMessage =
+      stored.addTags.length > 0 || stored.autoReply !== null || stored.triggerFlowId !== null;
+    if (!perMessage) return null;
+    await this.repo.markFired(tx, orgId, ruleId, encodeActions(stored));
+    return { tags: stored.addTags, flowId: stored.triggerFlowId, autoReply: stored.autoReply };
+  }
+
+  /**
+   * Sends the automatic replies as the business (a bot message through the normal outbound path, so the channel's rules apply). The id is
+   * derived from the message and the position, so a retried message does not send its reply twice. A reply that the channel refuses
+   * (outside the 24 hour window, plan limit) is logged and not sent; the rule still counts as fired.
+   */
+  private async sendReplies(
+    orgId: number,
+    conversationUuid: string,
+    messageUuid: string,
+    bodies: readonly string[],
+  ): Promise<void> {
+    for (const [i, body] of bodies.entries()) {
+      try {
+        await this.facade.enqueueOutbound({
+          conversationId: conversationUuid,
+          clientMessageId: deterministicUuid(`auto-reply:${messageUuid}:${i}`),
+          content: { kind: 'text', body },
+          sender: { kind: 'bot' },
+        });
+      } catch (err) {
+        this.logger.warn(
+          { err, orgId, conversation: conversationUuid },
+          'automatic reply not sent',
+        );
+      }
+    }
   }
 
   // --- matching ----------------------------------------------------------------------------------------------------------------
@@ -291,11 +518,37 @@ export class RoutingEngine {
     rule: RuleRow,
     canOpen: ReadonlySet<number>,
     cal: Calendar,
-  ): Promise<{ pick: Pick | null; flowId: string | null } | null> {
+  ): Promise<{
+    pick: Pick | null;
+    flowId: string | null;
+    markSpam: boolean;
+    priority: ConversationPriority | null;
+    addTags: RoutingTag[];
+    escalation: {
+      minutes: number;
+      priority: ConversationPriority | null;
+      assign: RoutingAssign | null;
+    } | null;
+    autoReply: RoutingAutoReply | null;
+  } | null> {
     const ruleId = Number(rule.id);
     const stored = decodeActions(await this.repo.lockActions(tx, orgId, ruleId));
-    const pick = await this.choose(tx, orgId, stored.assign, stored.cursor, canOpen, cal);
-    if (!pick && !stored.triggerFlowId) return null;
+    const pick = stored.assign
+      ? await this.choose(tx, orgId, stored.assign, stored.cursor, canOpen, cal)
+      : null;
+    const decorates = stored.priority !== null || stored.addTags.length > 0;
+    const escalates = stored.escalation !== null;
+    const replies = stored.autoReply !== null;
+    if (
+      !pick &&
+      !stored.triggerFlowId &&
+      !stored.markSpam &&
+      !decorates &&
+      !escalates &&
+      !replies
+    ) {
+      return null;
+    }
     await this.repo.markFired(
       tx,
       orgId,
@@ -305,7 +558,103 @@ export class RoutingEngine {
         cursor: pick && pick.userId !== null ? pick.cursor : stored.cursor,
       }),
     );
-    return { pick, flowId: stored.triggerFlowId };
+    return {
+      pick,
+      flowId: stored.triggerFlowId,
+      markSpam: stored.markSpam,
+      priority: stored.priority,
+      addTags: stored.addTags,
+      escalation: stored.escalation
+        ? {
+            minutes: stored.escalation.minutes,
+            priority: stored.escalation.priority,
+            // The agents as they are now: the escalation keeps them even if the rule is edited later.
+            assign: stored.escalation.reassign ? stored.assign : null,
+          }
+        : null,
+      autoReply: stored.autoReply,
+    };
+  }
+
+  /**
+   * The rule's priority and tags. A priority that is already set is left alone (no event); a tag the thread already has is no event.
+   * Each change is a timeline event that names the rule, and the priority change also goes to the outbox like a person's change does.
+   */
+  private async decorateByRule(
+    tx: Tx,
+    orgId: number,
+    locked: LockedConversation,
+    ruleId: string,
+    priority: ConversationPriority | null,
+    addTags: RoutingTag[],
+  ): Promise<void> {
+    if (priority !== null) {
+      const before = await this.conversations.byUuid(tx, orgId, locked.uuid);
+      const from = before?.priority ?? null;
+      if (from !== priority) {
+        await this.repo.setPriority(tx, orgId, locked.id, priority);
+        await this.events.append(tx, orgId, {
+          conversationId: locked.id,
+          type: 'priority_changed',
+          actorKind: 'system',
+          actorUserId: null,
+          payload: { from, to: priority, by: 'routing', ruleId },
+        });
+        await this.outbox.emit(tx, {
+          aggregateModule: 'conversations',
+          aggregateId: locked.id,
+          orgId,
+          eventType: 'conversation.priority_changed',
+          payload: { conversationId: locked.uuid, from, to: priority },
+        });
+        await this.audit.record(tx, {
+          module: 'conversations',
+          recordId: locked.id,
+          action: 'update',
+          delta: { priority: { old: from, new: priority } },
+        });
+      }
+    }
+    for (const tag of addTags) {
+      const tagId = await this.repo.findOrCreateTag(tx, orgId, tag.name, tag.color);
+      if (await this.repo.attachTag(tx, orgId, locked.id, tagId)) {
+        await this.repo.touchConversation(tx, orgId, locked.id);
+        await this.events.append(tx, orgId, {
+          conversationId: locked.id,
+          type: 'tag_added',
+          actorKind: 'system',
+          actorUserId: null,
+          payload: { tag: tag.name, by: 'routing', ruleId },
+        });
+      }
+    }
+  }
+
+  /**
+   * Marks the conversation as spam for a rule's mark_spam action: the same state the bulk "Mark as spam" writes (status spam, the wake
+   * time dropped), with a timeline event that names the rule and an audit row. A thread already spam is left alone.
+   */
+  private async markSpamByRule(
+    tx: Tx,
+    orgId: number,
+    locked: LockedConversation,
+    ruleId: string,
+  ): Promise<void> {
+    if (locked.status === 'spam') return;
+    await this.conversations.markSpam(tx, orgId, locked.id);
+    await this.events.append(tx, orgId, {
+      conversationId: locked.id,
+      type: 'spam_flagged',
+      actorKind: 'system',
+      actorUserId: null,
+      payload: { from: locked.status, by: 'routing', ruleId },
+    });
+    await this.audit.record(tx, {
+      module: 'conversations',
+      recordId: locked.id,
+      action: 'update',
+      delta: { status: { old: locked.status, new: 'spam' } },
+    });
   }
 
   /**

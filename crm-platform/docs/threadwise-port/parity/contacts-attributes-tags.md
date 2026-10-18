@@ -476,3 +476,130 @@ new place): [wiring/contacts-ui-refresh.md](../wiring/contacts-ui-refresh.md) se
 | A tooltip stayed on screen after a tap or a click (it showed on any focus)                                            | it shows on keyboard focus only                                               |
 | The date was cut by the frozen "+" column                                                                             | the column shows the day; widths re-set                                       |
 | Lint: state set inside effects (`?add=`, the task row)                                                                | derived while rendering; the effects only touch the address bar and the focus |
+
+## Contact record redesign (owner feedback 2026-10-17): Activity first, one action row, calls logged in place
+
+Not a "same UI as Reference" screen: an owner-requested extension on top of the redesign above, to make the contact page easy for small businesses. Reference's
+contact page is not the model here (the competitor patterns are: HubSpot, Freshsales, Bigin, Zoho, read in the owner's browser, layout only). Control mapping:
+[wiring/contacts-ui-refresh.md](../wiring/contacts-ui-refresh.md) section 8. Intended differences from the page of the previous round (all owner-requested):
+
+| Row | Before                                                                                  | Now (intended)                                                                                                    |
+| --- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| 1   | Two rows of buttons (Note, Task, Meeting, Add company, four round channel icons, "...") | One row: Note, Task, Call, Meeting, Message, "..." (Call and Message are split buttons)                           |
+| 2   | Big lifecycle block and big status block                                                | One thin stage line with a small Status menu                                                                      |
+| 3   | Activities: Meetings card, Time zone card, then a timeline of the activity feed only    | Compose box, then one timeline of nine sources: Up next, day groups, filter pills, search, Load more              |
+| 4   | Overview: tabs of fields and seven cards                                                | Key details (edit in place, Show all) and folded one-line cards; Recent activity                                  |
+| 5   | Sub-nav of two groups with long labels                                                  | Three groups, short labels, counts                                                                                |
+| 6   | Calls could only be logged on the Call logs screen                                      | Log a call inline on the contact (compose Call tab, Call button menu), "How did the call go?" after a phone click |
+| 7   | "Contact Field History" button in the header                                            | "..." menu and the History section (same drawer and panel)                                                        |
+
+- Verified here: `tsc --noEmit` of apps/web exit 0; ESLint of the 43 changed web files exit 0; Prettier check of the 71 changed files exit 0; the repo's 21-locale check
+  (`i18n-translate-sync/scripts/check.sh`) exit 0; vitest of the contacts, tasks, calling-voice, help-center, contact-consent and i18n folders: 98 files passed and the
+  one dead-strings failure that run showed was fixed (nine unused strings removed in 21 locales), then `messages.test.ts` 6 of 6. New tests: the timeline model
+  (merge horizon, up next, day groups on a zone, filters, search, one task counted once), the call prompt rules and storage, the timeline row, feed, compose box, action
+  row, key details, side cards and collapse card (English and Arabic, from the real messages), the prompt's behaviour in jsdom with fake timers, the section groups.
+  The calling-voice domain's own tests (log-call rules) stay green: the form reuses them.
+- Browser (Playwright, installed Chromium 1228) on a private stack (API :3410 from `origin/main` plus the call logging branch, web :3411, scratch Postgres :55921,
+  seeded through the real API: a showcase contact with 4 notes, 5 tasks, 2 meetings, 3 logged calls, a chat and 35 field changes, and a contact with no history).
+  Screenshots and scripts: `C:\project\wadesk-port\_work\parity\contact-record-redesign\` (`shots\NN-before|after-what-device.png`, `check.mjs`, `stack\`). 34 checks, all pass:
+  - Before and after of the Activities page (01 and 02): the first timeline entry now starts at 607 px of a 900 px window (before, at about 1,000 px: below the fold, after the header, two button rows, the lifecycle and status blocks, the Meetings card and the Time zone card).
+  - Overview, Key details expanded, a folded card opened, compose tabs (note, task, call, meeting), filter pill, search, empty state, quick view (Activity and Overview),
+    390 px (Activity, Overview, empty, quick view), dark, right-to-left (Arabic), each captured and looked at.
+  - Working, with the request seen on the wire: a note (Ctrl+Enter), a task added and then completed in place, a call logged with a follow-up task (`POST /v2/calls/log`)
+    and its line on the timeline, a meeting scheduled; the timeline grew each time.
+  - "How did the call go?": the click on **Call on your phone** is remembered, the line shows after 30 seconds, **Log it** opens the Call tab inline at the time of the click.
+  - Keyboard: arrow keys and End move between compose tabs and keep the focus on the strip, Space toggles a filter pill, Tab order of the action row, the Call menu opens with
+    Enter and closes with Escape, a folded card opens with Enter. No sideways page scroll at 390 px. No page errors.
+- Not verified (BL-272): a screen-reader pass; a workspace with a connected WhatsApp number (the stack has only the dev simulator channel, so Message showed its reason and
+  the chat path is covered by the route tests only); a real telephony provider (the framework's own parity note covers its side); native review of the 154 machine-drafted
+  strings per language. Headless Chromium leaves client-side navigation stuck after a `tel:` link (there is no phone app to hand it to), so the prompt check carries the
+  remembered click to a fresh tab, as a real person's tab would still hold it.
+
+### Defects found by those checks and fixed
+
+| Defect                                                                                      | Fix                                                                                          |
+| ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| The sub-nav's group headings touched the item above them                                    | a gap before each group                                                                      |
+| A logged call said "by Demo Admin" twice (the server's line already names the person)       | the person is left out of those lines                                                        |
+| A task just completed was in the open and the done list for a moment: two rows with one key | the timeline counts a task once, as done                                                     |
+| A busy edit made dozens of "N details updated" lines                                        | edits by the same person within five minutes are one line                                    |
+| The call form offered "They called me" before "I called them"                               | outgoing first                                                                               |
+| In dark mode the Message button and the open sub-nav item were unreadable                   | the primary colour in dark                                                                   |
+| "Save note" wrapped to two lines at 390 px                                                  | no wrap                                                                                      |
+| Arrow keys on the compose tabs moved the cursor into the form, so the next arrow was lost   | the focus is given back to the tab strip; clicking a tab is what puts the cursor in its form |
+| The active stage could be out of sight on a phone                                           | the stage line scrolls to it                                                                 |
+
+### Round 2 (owner review 2026-10-17): closer to HubSpot, Freshsales and Bigin, and one stage control everywhere
+
+The owner said round 1 was not close enough: too many items on the left (16 sections in three groups), a tall stack of cards on the right, a half-width "Recent activity" box with an
+empty page under it, and a stage row with a horizontal scrollbar; then asked for the stage control to be good everywhere. Control mapping: wiring section 8.5 (the page), 8.6 (the stage
+picker, every replaced control), 8.7 (gaps). Still no migration, endpoint or contract change. Browser run, scripts and screenshots: `C:\project\wadesk-port\_work\parity\contact-record-redesign\`
+(`shots\r2-*.png` and the renumbered 20 to 27; `shots\round1\` is round 1 for the before and after; `check.mjs`, `r2.mjs`).
+
+Side by side with the references (HubSpot's contact record and Freshsales' contact page, saved screenshots, and Bigin's):
+
+| What               | Reference                                                                                                                          | Ours now                                                                                                                    | Same / difference                                                                                                           |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Layout             | HubSpot: profile and About at the start, tabs in the middle, cards at the end                                                      | Same three columns (320 / flexible / 288 px), each scrolling on its own from 1280 px                                        | Same. HubSpot's left column is about 40 px narrower and its centre wider                                                    |
+| Tabs               | HubSpot: Overview, Activities, Intelligence + Customize; Bigin: a strip + Rearrange                                                | Overview, Activity, Conversations, Deals, Files, More (the other 11 sections)                                               | Same idea. No Customize / Rearrange (BL-271: needs a per-user server store)                                                 |
+| Profile card       | HubSpot: name, one row of round icons (Note, Email, Call, Task, Meeting, More)                                                     | Same row: Note, Message, Call, Task, Meeting, More, a label under each                                                      | Same. Ours adds the lead score and the Stage control in the card                                                            |
+| About this contact | HubSpot: a long property list with Actions; Freshsales: key fields + Show all                                                      | Eight rows, tags, groups, Show all details, Edit all, edit in place                                                         | Same idea. HubSpot lists more properties by default; ours keeps eight on purpose                                            |
+| Stage              | Freshsales: a segmented lifecycle and status bar; Bigin: a pipeline bar                                                            | "Stage Qualified" dropdown, Status menu, a thin segmented line                                                              | Different on purpose: no row of stages, so no scroll bar at any width                                                       |
+| Cards at the end   | HubSpot: Record summary (AI), Companies, Deals, Tickets ... each a card with a count and a +; Freshsales: deals                    | Open tasks, Deals, Company, Subscription, Lead score, Time zone, Privacy: one row each with count and + Add                 | Same pattern. No AI summary card (ours has none)                                                                            |
+| Middle             | HubSpot: filter tabs (All activities, Notes, Emails, Calls, Tasks, Meetings), search, date groups; Freshsales: an "Add a note" box | Summary strip, compose box (Note, Task, Call, Meeting), filter pills, search, Up next, Today, Yesterday, This week, Earlier | Same plus an inline compose box and a summary strip. HubSpot opens a note, call or meeting form as a pop-up; ours is inline |
+| Empty page area    | None: the timeline fills the middle                                                                                                | The timeline card stretches to the bottom; the empty state is centered in it                                                | Same                                                                                                                        |
+| Other differences  | HubSpot has a collapse-all, an activity-type filter menu and "all time" date filter; Freshsales has sub-tabs and a date filter     | Ours has none of these: the pills are the filter, the search is over what is loaded                                         | Not built: a date filter and "collapse all" (BL-273 covers the server feed they would need)                                 |
+
+- Verified here: `tsc --noEmit` of apps/web exit 0; ESLint of the 58 changed web files exit 0; Prettier check exit 0; the repo's 21-locale check and `apps/web/scripts/i18n-tool.mjs check`
+  exit 0 (34 new strings machine-translated into 20 locales after the round, two Arabic guides rewritten); vitest of the contacts, tasks, calling-voice, help-center, contact-consent,
+  privacy-requests and i18n folders: all passing. New tests: the stage picker (open, checked stage, dots, search only above 8 stages, statuses and "Move", keyboard, outside press,
+  read-only, "Keep", prefix and "n of m", bottom sheet, Arabic), the move (optimistic, linking rule previews, status in the same save, rollback of the record and of cached list rows,
+  conflict, Undo with the new row version, eight-second toast, no-op), the tab bar and its model, the association cards, About groups and fold, and the field-history bookkeeping filter.
+- Browser (Playwright, installed Chromium 1228, private stack): 82 checks, all passing.
+  - Layout at 1440, 1280, 1024 and 390 px, on a contact with a rich history, on the same contact's Activity tab and on an empty contact (Overview and Activity): no horizontal scroll
+    bar on the page at any width; at 1440 and 1280 px no empty band under the middle column (a rich history overflows and scrolls; the empty state's card reaches the bottom: band 0 px).
+  - Stage picker: opens as a vertical list with a search box (10 stages) and no horizontal scroll bar (270 of 270 px), the current stage checked, Enter opens a stage's statuses,
+    Escape closes and returns the focus, the search narrows, "Move to ..." saves (PATCH), the field changes, Undo moves it back (second PATCH), a refused save (the API answered 500)
+    puts the stage back and says why, the 390 px picker is a bottom sheet with no horizontal scroll bar. The same popover in the list (with Undo), in the quick view's drawer and in the
+    bulk "Change stage" form (the list opens inside the modal, picking sets the field).
+  - Everything from round 1 still works on the new layout: note, task add and complete, call log with a follow-up task, meeting, the "How did the call go?" prompt, keyboard order of the
+    round actions, the Call menu with Enter and Escape, arrow keys on the compose tabs; dark, right-to-left (Arabic) and 390 px screenshots of the Overview and Activity looked at.
+- Not verified (BL-272 still stands): a screen-reader pass of the picker, the tab bar and the cards; a workspace with a connected WhatsApp number; a real telephony provider; native review of
+  the machine-drafted strings (the 34 new ones too); the picker's bottom sheet on a real phone (only 390 px emulation); the stage board's drag and drop (unchanged code, only its card select
+  became the picker); the contact form's own stage select (unchanged, BL-277).
+- Remaining differences from the references, honestly: at 1280 px the middle column is about 500 px, so the filter pills wrap to two lines; the right column cards are fixed at 288 px;
+  a phone shows the profile card, the folded About list, the tab bar and the cards under the timeline (HubSpot's phone view is a separate app); no Customize / Rearrange tabs; no date filter
+  or "collapse all" on the timeline; no AI summary card; the Deals "+ Add" opens the Deals board (BL-276).
+
+### Defects found by the round 2 checks and fixed
+
+| Defect                                                                                                                                           | Fix                                                                                          |
+| ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| The six round actions wrapped to two rows in a 320 px column; "Message" was cut                                                                  | 44 px slots, 10 px labels                                                                    |
+| "Stage: Qualified" was cut in the field                                                                                                          | "Stage" as a small prefix and the progress as a thin line and a tooltip                      |
+| The stage list opened behind the quick view's drawer and the bulk form (a modal makes the rest inert)                                            | The list is drawn inside the dialog it was opened from                                       |
+| A toast raised in the quick view (and its Undo) was behind the drawer and could not be pressed                                                   | The drawer hosts its own toast region                                                        |
+| The timeline showed "... and 17 more details" for every stage move (the audit trail records `updatedAt`, `rowVersion`, `lifecycleStageDate` ...) | The row bookkeeping is left out of the timeline (the History section still shows everything) |
+| The groups of a contact lost their place when "Tags and groups" went away                                                                        | Groups are a line under the tags in About this contact                                       |
+| Lint: setState in an effect (picker position), `Date.now()` in render, a hook referring to itself                                                | Measured by hand on the element; `useNow`; the undo reaches the move through a ref           |
+
+### Lead score chip in the quick view and record headers (owner request 2026-10-17)
+
+The quick view header had empty space right of the name; the record page had a score chip that the quick view lacked. Now ONE shared chip (star and number, coloured cold, warm or hot by the lead-scoring thresholds, tooltip "Lead score 78 · Hot lead", a button that opens the Lead score card) sits on the name line of both. Control mapping: wiring section 8.8 (WIRE-CUI-198 to 202). Screenshots: `C:\project\wadesk-port\_work\parity\contact-record-redesign\shots\score-*.png` (record and quick view in light, dark, Arabic RTL and 390 px; the click opening the card on both; the contact without a score).
+
+- Hidden (no empty chip): no score yet, no `record.contacts.read`, or lead scoring off for the workspace. **Superseded 2026-10-17 (owner decision, `fix/lead-score-hidden-when-off`):** this section first kept a score a person typed visible with the app off; that is replaced by ONE rule, below.
+- Checks: tsc exit 0; ESLint on the changed files exit 0; vitest for the contacts, lead-scoring and help-center folders (see the report); 21 locales checked by `check.sh` and `i18n-tool.mjs check`; `gen-registry.mjs` exit 0 (guides updated, EN and AR); browser 31 checks on the scratch stack.
+- Not verified: the chip against a workspace that really lacks the `lead_scoring` plan feature (only unit-tested with the provider); native review of the two new strings in 20 languages; a screen-reader pass.
+- At 390 px the quick view's chip may drop under the name when the name is long (the header buttons take the width); it is never cut off and the drawer has no horizontal scrollbar.
+
+### The lead score is hidden everywhere while lead scoring is off (owner decision 2026-10-17)
+
+**Intended difference from Reference.** Reference stores a hand-typed `lead_score` and always shows it. Here, when lead scoring is OFF for the workspace the score is hidden everywhere, **a score a person typed included**; nothing is deleted (the columns keep their values, the API still returns them) and the values come back when scoring is switched on again. This replaces the earlier decision that kept a typed score visible with the app off (the chip section above).
+
+- **The one rule:** `useLeadScoringEnabled()` in `features/lead-scoring/lib/use-enabled.ts`. On = the plan feature `lead_scoring` (the Marketplace app; `useLeadScoringOn`, unknown counts as on) AND the workspace's own switch (`lead_scoring_settings.enabled`, the one the Settings > AI lead scoring screen saves), read from the new `GET /v2/lead-scoring/status` (`{enabled}`, permission `record.contacts.read`: the full settings need `lsc.runs.read`, which Agent and Viewer do not hold, and they must follow the rule too). The status is requested only when the workspace has the app. While it is loading or cannot be read the score stays hidden (never shown on a guess). The platform kill switch and the AI key are NOT part of the rule (they are operator and key matters, not the workspace's choice).
+- **Drawn nothing (no empty chip, card, tile or column) when off:** the chip in the record header and the quick view header (`useShowLeadScore`); the Lead score card in the record's right column and the Overview (`AssociationCards`) and the Inbox side panel's score card (`ScoreCard` draws nothing itself); the Lead score tile of the communication stats; the kanban card badge; the Lead score box of the contact form (an unchanged score is never sent, so saving leaves it alone); the lead score entries of the field history.
+- **List:** the Lead score column is left out of the table and the Columns/"+" picker (`omittedColumns`, with the company column's existing omission); a stored column choice or a saved view that lists it keeps the id and the column returns with the score (`restoreOmitted` keeps it in the view when the view is saved or compared). It was never one of the seven default columns.
+- **Filters:** the "Hot leads" quick chip and its row in the view picker are left out (`availablePresets`); the Lead score field is not offered for a new condition in the rules builder of the Contacts filter, segments and the view editor (`FieldDef.hidden`), but a rule that already uses it still reads as "Lead score" (it is not flagged as a deleted field) and keeps working.
+- **Not changed:** the contact API still returns `leadScore*` (asking for less would need a field projection in `GET /contacts`; not cheap); the "AI lead scoring" admin screens, the Growth propensity figure (its own AI figure, not the contact's lead score) and the lead-scoring settings stay as they were; the import of a `lead_score` column and the API are unchanged.
+- **Tests:** `lead-score-chip.dom.test.tsx`, `score-card.test.tsx`, `record.render.test.tsx` (AssociationCards), `data-sections.test.tsx` (stats tile, field history), `views-bar.render.test.tsx` (quick chips), `columns.test.ts`, `preset-views.test.ts`, `segments/lib/fields.test.ts`.
+- Not verified in a browser against a workspace with the switch off and a typed score; see the PR.

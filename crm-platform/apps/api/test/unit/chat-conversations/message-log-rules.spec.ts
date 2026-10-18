@@ -209,7 +209,7 @@ describe('reading one message out of an archive day', () => {
     gzipSync(`${rows.map((r) => JSON.stringify(r)).join('\n')}\n`);
   const base = { detail: {}, at: '2026-06-01T10:00:00.000Z' };
 
-  it('keeps only the events of that message (id and creation time), across gzip members', () => {
+  it('keeps only the events of that message (id and creation time), across gzip members', async () => {
     const mine = { id: 7, createdAtText: '2026-06-01 09:59:00.123456+00' };
     const day = Buffer.concat([
       lines(
@@ -227,7 +227,7 @@ describe('reading one message out of an archive day', () => {
         { ...base, id: 4, messageId: 7, messageCreatedAt: mine.createdAtText, event: 'sent' },
       ),
     ]);
-    const got = archivedEventsOf([day], mine);
+    const got = await archivedEventsOf([day], mine);
     expect(got.map((e) => e.event)).toEqual(['queued', 'sent']);
   });
 });

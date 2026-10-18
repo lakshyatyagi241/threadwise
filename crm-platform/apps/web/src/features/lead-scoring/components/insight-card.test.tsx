@@ -1,11 +1,13 @@
 // @vitest-environment jsdom
 import type { LscInsight } from '@crm/contracts';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { PlanFeaturesProvider } from '@/lib/plan-features';
 import { button, click, mount, text, type Mounted } from '../testing';
 
 const state = vi.hoisted(() => ({
   perms: new Set<string>(),
   insight: {} as Record<string, unknown>,
+  asked: [] as boolean[],
   read: vi.fn(),
   decide: vi.fn(),
 }));
@@ -13,7 +15,10 @@ vi.mock('@/features/auth-registration-security/shared/session-context', () => ({
   useCan: (p: string) => state.perms.has(p),
 }));
 vi.mock('../api/hooks', () => ({
-  useLscInsight: () => state.insight,
+  useLscInsight: (_id: string, enabled: boolean) => {
+    state.asked.push(enabled);
+    return state.insight;
+  },
   useDigestContact: () => ({ mutate: state.read, isPending: false, isError: false }),
   useDecideSuggestions: () => ({
     mutate: state.decide,
@@ -70,6 +75,7 @@ beforeEach(() => {
   state.read = vi.fn();
   state.decide = vi.fn();
   state.insight = loaded({});
+  state.asked = [];
 });
 afterEach(async () => {
   await m?.unmount();
@@ -162,5 +168,26 @@ describe('the suggested stage', () => {
       ),
     ).toBe(false);
     expect(host.textContent).toContain(text('insight.suggestion.noRight'));
+  });
+});
+
+describe('in a workspace that does not have the AI lead scoring app', () => {
+  it('does not even ask the API, and shows nothing', async () => {
+    m = await mount(
+      <PlanFeaturesProvider features={['marketplace']}>
+        <ChatInsightCard contactId="c1" />
+      </PlanFeaturesProvider>,
+    );
+    expect(state.asked.every((asked) => asked === false)).toBe(true);
+    expect(state.asked.length).toBeGreaterThan(0);
+  });
+
+  it('asks as usual when the workspace has it', async () => {
+    m = await mount(
+      <PlanFeaturesProvider features={['marketplace', 'lead_scoring']}>
+        <ChatInsightCard contactId="c1" />
+      </PlanFeaturesProvider>,
+    );
+    expect(state.asked.every((asked) => asked === true)).toBe(true);
   });
 });

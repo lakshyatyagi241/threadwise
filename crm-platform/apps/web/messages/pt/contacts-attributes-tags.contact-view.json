@@ -44,8 +44,6 @@
         "editJobTitle": "Editar cargo",
         "jobTitleConflict": "Outra pessoa alterou este contato antes. Ele foi recarregado; tente novamente.",
         "jobTitleFailed": "Não foi possível salvar o cargo. Tente novamente.",
-        "leadScore": "Pontuação do lead",
-        "leadScoreAria": "Pontuação do lead {score}. Mostrar os detalhes da pontuação.",
         "owner": "Responsável"
       },
       "social": {
@@ -99,9 +97,7 @@
         "allowed": "Marketing permitido",
         "noFlags": "Sem indicadores de privacidade"
       },
-      "overview": {
-        "information": "Contato"
-      },
+      "overview": {},
       "tabs": {
         "info": "Informações do contato",
         "social": "Redes sociais",
@@ -147,7 +143,6 @@
       "nav": {
         "back": "Voltar à lista",
         "label": "Seções do contato",
-        "contactDetails": "Detalhes do contato",
         "related": "Relacionados",
         "section": {
           "overview": "Visão geral",
@@ -172,11 +167,8 @@
         "title": "Ciclo de vida",
         "stages": "Estágio do ciclo de vida",
         "status": "Status",
-        "noStatuses": "Este estágio não tem status.",
-        "statusChanged": "Status alterado para {status}.",
         "conflict": "Outra pessoa alterou este contato antes. Ele foi recarregado; tente novamente.",
-        "forbidden": "Você não tem permissão para alterar este contato.",
-        "statusFailed": "Não foi possível alterar o status. Tente novamente."
+        "forbidden": "Você não tem permissão para alterar este contato."
       }
     }
   }

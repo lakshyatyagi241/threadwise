@@ -17,6 +17,11 @@ export interface OrgInputs {
   trialDays?: number | null;
   /** Mark the owner's email as verified (the app's orgsForVerifiedEmail only lists verified owners). Default: not verified. */
   ownerVerified?: boolean;
+  /**
+   * IANA zone written to organizations.settings.timezone, as signup does. Business hours, SLA clocks and quiet hours read it, so a
+   * workspace without one evaluates them in the server zone. Validated; null leaves it unset.
+   */
+  timezone?: string | null;
 }
 
 /** The login schema is 2..40 characters of [A-Za-z0-9_-] starting alphanumeric. */
@@ -92,7 +97,19 @@ export async function ensureOrg(env: OrgEnv): Promise<{ orgId: number; warnings:
         slugUsed = slugWithSuffix(slugWanted, `${orgUuid.slice(0, 6)}${n > 1 ? n : ''}`);
         env.log(`  org                slug "${slugWanted}" is taken, using "${slugUsed}"`);
       }
-      const settings = { legacy: { waboo: { client: env.client } } };
+      const tz = o.timezone?.trim();
+      if (tz) {
+        try {
+          new Intl.DateTimeFormat('en', { timeZone: tz });
+        } catch {
+          throw new Error(`--timezone "${tz}" is not an IANA time zone (e.g. Asia/Kolkata)`);
+        }
+      } else {
+        warnings.push(
+          'No --timezone given: business hours, SLA and quiet hours will use the server zone until the owner sets one in Settings.',
+        );
+      }
+      const settings = { legacy: { waboo: { client: env.client } }, ...(tz ? { timezone: tz } : {}) };
       // the app's 4-step default (pickDefaultPlan): the requested plan, else the first active plan flagged default, else the first
       // active free plan, else the literal 'starter'. A trial only starts on a free plan with --trial-days > 0 (trialFor).
       const plans = (

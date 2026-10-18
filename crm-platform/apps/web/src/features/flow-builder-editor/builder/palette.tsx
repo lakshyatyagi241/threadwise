@@ -33,6 +33,12 @@ function ModeBadge({ mode }: { mode: FlowType }) {
     );
   if (mode === 'email')
     return <span className={`${base} bg-[#E8F0FE] text-[#1A73E8]`}>{t('modeEmail')}</span>;
+  if (mode === 'web')
+    return (
+      <span className={`${base} bg-[var(--flb-rule)] text-[var(--flb-ink-700)]`}>
+        {flowTypeLabel(tf, 'web')}
+      </span>
+    );
   return (
     <span className={`${base} bg-[var(--flb-mint)] text-brand`}>{flowTypeLabel(tf, 'chat')}</span>
   );

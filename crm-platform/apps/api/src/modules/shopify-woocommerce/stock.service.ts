@@ -6,6 +6,8 @@ import {
   type CommerceSender,
   type EcomTemplates,
 } from './_shims/tokens';
+import { addSkips } from './commerce-consent.rules';
+import { CommerceConsentService } from './commerce-consent.service';
 import { matchOutOfStock, wantsStockAlert, type EventContext } from './event-rules';
 import { EventMessageService } from './event-message.service';
 import { EventsRepository } from './events.repository';
@@ -33,6 +35,7 @@ export class StockService {
     private readonly stores: StoresRepository,
     private readonly events: EventsRepository,
     private readonly message: EventMessageService,
+    private readonly consent: CommerceConsentService,
     private readonly mirror: MirrorRepository,
     private readonly stock: StockRepository,
     @Inject(ECOM_TEMPLATES) private readonly templates: EcomTemplates,
@@ -116,30 +119,52 @@ export class StockService {
       positional: ['there', name, url],
     };
 
-    let sent = 0;
-    for (const w of waiters) {
+    // The alert is a message to a customer who asked for it, but a MARKETING template is still a marketing message: the whole waitlist
+    // goes through the ConsentGate in one pass first (BL-141), and the refused are not messaged (they are still marked notified below,
+    // so a restock does not come back to them).
+    const recipients = waiters.map((w) => ({
+      id: w.id,
       // A WooCommerce waitlist row can hold a raw local number; an international one passes through unchanged.
-      const to = kind === 'woocommerce' ? (e164(w.phone) ?? w.phone) : w.phone;
-      try {
-        await this.sender.send(orgId, {
-          to,
-          template,
-          ctx,
-          reference: `ecom-stock-${kind}-${storeId}-${w.id}`,
-        });
-        sent += 1;
-      } catch (err) {
-        this.logger.warn({ orgId, kind, storeId, err }, 'back-in-stock message failed');
+      phone: kind === 'woocommerce' ? (e164(w.phone) ?? w.phone) : w.phone,
+    }));
+    const cleared = await this.consent.clearAudience(orgId, recipients, template.category);
+    const clearance = new Map(cleared.go.map((g) => [g.row.id, g.clearance]));
+
+    let sent = 0;
+    for (const r of recipients) {
+      const consent = clearance.get(r.id);
+      if (consent) {
+        try {
+          await this.sender.send(orgId, {
+            to: r.phone,
+            template,
+            ctx,
+            reference: `ecom-stock-${kind}-${storeId}-${r.id}`,
+            consent,
+          });
+          sent += 1;
+        } catch (err) {
+          this.logger.warn({ orgId, kind, storeId, err }, 'back-in-stock message failed');
+        }
       }
       // Marked notified whether or not the send worked, as Reference: a customer is told at most once per restock.
-      await this.db.txAs({ orgId }, (tx) => this.stock.markNotified(tx, orgId, kind, w.id));
+      await this.db.txAs({ orgId }, (tx) => this.stock.markNotified(tx, orgId, kind, r.id));
     }
+    const tally = addSkips(undefined, cleared.skipped);
+    await this.consent.recordSkips(orgId, kind, storeId, 'stock/back', cleared.skipped, 'waiting');
+    const failed = recipients.length - cleared.skipped.length - sent;
     await this.db.txAs({ orgId }, (tx) =>
       this.events.log(tx, orgId, kind, storeId, {
         eventType: 'stock/back',
-        status: sent > 0 ? 'sent' : 'failed',
+        status: sent > 0 ? 'sent' : failed === 0 && tally.skipped > 0 ? 'skipped' : 'failed',
         recipient: `${waiters.length} waiting`,
-        payload: { product: name, notified: sent },
+        payload: {
+          product: name,
+          notified: sent,
+          ...(tally.skipped > 0
+            ? { skipped: tally.skipped, skippedReasons: tally.skippedReasons }
+            : {}),
+        },
       }),
     );
   }

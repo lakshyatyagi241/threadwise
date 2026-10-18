@@ -144,7 +144,9 @@ export class LeadFirstMessageLookups {
   /** The workspace's business hours as saved and its time zone (`UTC` when none). */
   async businessHours(tx: Tx, orgId: number): Promise<{ hours: unknown; timezone: string }> {
     const res = await tx.execute(
-      sql`SELECT business_hours, timezone FROM workspace_settings WHERE org_id = ${orgId}`,
+      sql`SELECT ws.business_hours, COALESCE(o.settings ->> 'timezone', 'UTC') AS timezone
+            FROM organizations o LEFT JOIN workspace_settings ws ON ws.org_id = o.id
+           WHERE o.id = ${orgId}`,
     );
     const r = res.rows[0] as Raw | undefined;
     return { hours: r?.business_hours ?? null, timezone: (r?.timezone as string | null) ?? 'UTC' };

@@ -1,5 +1,5 @@
-# Prometheus for the API, the worker and the probe (deploy/hostinger/observability.compose.yml mounts this file).
-# Job names are the ones event-loop.rules.yml expects: RuntimeMetricsTargetDown matches up{job=~"crm-(api|worker|probe)"}.
+# Prometheus for the API, the worker, the web server and the probe (deploy/hostinger/observability.compose.yml mounts this file).
+# Job names are the ones event-loop.rules.yml expects: RuntimeMetricsTargetDown matches up{job=~"crm-(api|worker|web|probe)"}.
 # The token is read from a file (a compose secret), never written here. tools/event-loop-audit/scrape-demo.mjs runs this exact file,
 # rewriting only the addresses and the intervals, so what ships is what is tested.
 global:
@@ -30,6 +30,14 @@ scrape_configs:
       credentials_file: /run/secrets/obs_metrics_token
     static_configs:
       - targets: ['worker:9464']
+
+  - job_name: crm-web
+    metrics_path: /metrics
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/obs_metrics_token
+    static_configs:
+      - targets: ['web:9464']
 
   - job_name: crm-probe
     metrics_path: /metrics

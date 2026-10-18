@@ -1440,7 +1440,8 @@
             "help_agent": "O Assistente de ajuda do app: as pessoas pedem uma tarefa com palavras simples e ele orienta ou executa na própria sessão delas, perguntando antes de qualquer ação arriscada. Gasta tokens de IA.",
             "email_channel": "Conecte caixas do Gmail e do Google Workspace à caixa de entrada da equipe. O app pago E-mail controla este botão.",
             "personal_history_full": "Permite que um número pessoal de WhatsApp importe todo o histórico de conversas ao ser vinculado pela primeira vez. A importação das conversas recentes está disponível em todos os planos que incluem números pessoais.",
-            "ai_crm_copilot": "Encontra e pontua leads com IA a partir dos seus contatos."
+            "ai_crm_copilot": "Encontra e pontua leads com IA a partir dos seus contatos.",
+            "lead_scoring": "Pontua contatos com IA e alimenta o piloto de crescimento. O app Pontuação de leads com IA controla este botão."
           },
           "units": {
             "days": "Dias",
@@ -1626,7 +1627,8 @@
             "help_agent": "Assistente de ajuda (IA, gasta tokens)",
             "email_channel": "Canal de e-mail (Gmail)",
             "personal_history_full": "Importação do histórico completo de conversas (WhatsApp pessoal)",
-            "ai_crm_copilot": "AI CRM Copilot"
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "Pontuação de leads com IA"
           },
           "problems": {
             "required": "Este campo é obrigatório.",

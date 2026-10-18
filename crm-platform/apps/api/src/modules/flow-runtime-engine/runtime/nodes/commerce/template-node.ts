@@ -3,7 +3,13 @@ import { TemplatesService } from '../../../../message-templates';
 import { FlowRefResolver, parseFlowRef } from '../flow-refs';
 import type { NodeContext, NodeResult } from '../../types';
 import { sendFailed, str } from './send-failure';
-import { quickReplies, templateComponents, templateText, templateValues } from './template-rules';
+import {
+  quickReplies,
+  richComponents,
+  templateComponents,
+  templateText,
+  templateValues,
+} from './template-rules';
 
 const advance: NodeResult = { kind: 'advance', port: 1 };
 
@@ -65,7 +71,7 @@ export class TemplateNode {
     const text = templateText(tpl, header, body);
     const buttons = quickReplies(tpl, ctx.node.id);
     const wired = p.buttonsWired === true && buttons.length > 0;
-    const components = templateComponents(tpl, header, body);
+    const components = richComponents(tpl, ctx.render) ?? templateComponents(tpl, header, body);
 
     const out = await ctx.send({
       kind: 'template',

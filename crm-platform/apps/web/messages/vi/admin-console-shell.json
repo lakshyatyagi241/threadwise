@@ -232,12 +232,49 @@
         "loadFailed": "Không thể tải cài đặt.",
         "hours": {
           "title": "Giờ làm việc",
-          "note": "Chỉ hiển thị để tham khảo. Giờ làm việc chưa được áp dụng nên các mục này ở chế độ chỉ đọc.",
-          "weekdays": "Thứ 2 - Thứ 6",
-          "saturday": "Thứ Bảy",
-          "sunday": "Chủ Nhật",
           "from": "Từ",
-          "to": "Đến"
+          "to": "Đến",
+          "note": "Giờ mở cửa của nhóm bạn, theo múi giờ {timezone}. Quy tắc phân phối hộp thư, bộ đếm SLA, luồng tự động và phản hồi khách hàng tiềm năng phụ thuộc vào giờ làm việc đều dùng lịch này.",
+          "ownerOnly": "Chỉ chủ sở hữu không gian làm việc mới có thể chỉnh sửa các mục này.",
+          "loadFailed": "Không thể tải giờ làm việc.",
+          "day": {
+            "mon": "Thứ Hai",
+            "tue": "Thứ Ba",
+            "wed": "Thứ Tư",
+            "thu": "Thứ Năm",
+            "fri": "Thứ Sáu",
+            "sat": "Thứ Bảy",
+            "sun": "Chủ Nhật"
+          },
+          "closed": "Đóng cửa",
+          "openAllDay": "Mở cả ngày",
+          "allDay": "Mở cả ngày",
+          "overnight": "Đóng cửa vào sáng hôm sau",
+          "addWindow": "Thêm giờ",
+          "remove": "Xóa",
+          "removeWindow": "Xóa các khung giờ này của {day}",
+          "copyMonday": "Sao chép Thứ Hai sang Thứ Ba-Thứ Sáu",
+          "problem": {
+            "required": "Nhập cả hai mốc giờ.",
+            "same": "Giờ mở cửa và giờ đóng cửa phải khác nhau.",
+            "overlap": "Các khung giờ trong cùng một ngày không được chồng lấn."
+          },
+          "holidays": {
+            "title": "Ngày lễ",
+            "note": "Không gian làm việc được tính là đóng cửa cả ngày vào những ngày này, bất kể giờ hằng tuần thế nào.",
+            "none": "Chưa thêm ngày lễ nào.",
+            "date": "Ngày",
+            "label": "Tên (không bắt buộc)",
+            "add": "Thêm ngày lễ",
+            "removeFor": "Xóa ngày lễ vào {date}",
+            "problem": {
+              "date": "Không phải ngày hợp lệ.",
+              "duplicate": "Ngày này đã có trong danh sách."
+            }
+          },
+          "save": "Lưu giờ làm việc",
+          "saved": "Đã lưu giờ làm việc.",
+          "saveFailed": "Không thể lưu giờ làm việc."
         },
         "preferences": {
           "title": "Tự động tóm tắt bằng AI",

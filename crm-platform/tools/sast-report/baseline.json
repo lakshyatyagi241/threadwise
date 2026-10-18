@@ -22,5 +22,11 @@
     "file": "apps/web/src/features/help-agent/lib/mask.test.ts",
     "contains": "AKIAIOSFODNN7EXAMPLE",
     "reason": "AWS's documented example key, used as a masking test fixture; reviewed 2026-10-14"
+  },
+  {
+    "rule": "EVAL",
+    "file": "apps/api/src/infra/sandbox/code-sandbox.ts",
+    "contains": "new vm.Script",
+    "reason": "the flow Code node runs author JavaScript in a node:vm context inside a worker thread. No host object, require, process, fs, network, timers, SharedArrayBuffer, Atomics or WebAssembly is reachable; ten escape routes (constructor chains, generators, error constructors, prepareStackTrace getThis, captureStackTrace) are proven to land on the context's own global by test/unit/infra/code-sandbox.spec.ts and integrations-nodes.spec.ts; wall-clock timeout (not catchable from inside), heap cap and a cap on concurrent workers bound CPU and memory. node:vm is NOT a boundary against a V8 escape, which would land in a worker that shares the API's filesystem and network but holds no secrets or database handle; that residual risk is accepted and documented in the file header, with isolated-vm or a no-network sandbox process as the upgrade path. Needs reviewer sign-off; reviewed 2026-10-17"
   }
 ]

@@ -685,6 +685,7 @@
         "anotherPart": "Bu akışın başka bir bölümü. Bir düğme veya liste satırı buraya yönlendirdiğinde çalışır{lost, select, true {: henüz buraya hiçbir şey bağlı değil, bu yüzden hiç çalışmaz.} other {.}}",
         "addFirstStep": "İlk adımı ekleyin",
         "branchingEnds": "Bu {kind, select, list {liste} other {düğme seti}} bu bölümü sonlandırır: sonra ne gönderileceği müşterinin seçimine bağlıdır.",
+        "optionsCarryOn": "Her {kind, select, list {satır} other {düğme}} kendi akışını başlatabilir veya aşağıdaki sonraki adımla devam edebilir.",
         "thenGoTo": "Sonra şuraya git",
         "confirmImport": {
           "title": "Bu akış dosyayla değiştirilsin mi?",
@@ -720,7 +721,7 @@
             "answer": "Yanıt",
             "action": "Eylemler"
           },
-          "blockedTitle": "Düğmeler ve listeler akışı sonlandırır, bu yüzden yalnızca en sona konabilirler.",
+          "blockedTitle": "Bu adım bu bölümü bitirir, bu yüzden yalnızca en sona konabilir.",
           "blockedTitleFaq": "FAQ ile yanıtla adımının iki çıkışı vardır, bu yüzden yalnızca en sona konabilir."
         },
         "card": {
@@ -752,7 +753,9 @@
         },
         "editors": {
           "linkLabel": "Bu nereye gider",
+          "linkChoose": "Nereye gideceğini seçin…",
           "linkEnds": "Burada biter (başka bir şey gönderilmez)",
+          "linkNext": "Sonraki adımla devam eder",
           "linkOption": "{stage} · {label}{self, select, true { (bu adım)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Yeni bir akışa yönlendir…",
           "question": "Soru",
@@ -852,17 +855,13 @@
             "hour": "saat",
             "day": "gün"
           },
-          "location": {
-            "placeName": "Yer adı",
-            "placePlaceholder": "Ofisimiz",
-            "address": "Adres",
-            "latitude": "Enlem",
-            "longitude": "Boylam"
-          },
           "template": {
             "label": "Onaylı şablon",
             "hint": "Yalnızca WhatsApp numaranızın onayladığı şablonlar listelenir.",
-            "choose": "Bir şablon seçin…"
+            "choose": "Bir şablon seçin…",
+            "buttons": "Düğmeler",
+            "variables": "Kişi bilgisinden doldurulur",
+            "variablesHint": "Her numara, mesaj gönderilirken burada belirtilen kişi bilgisiyle doldurulur. Bunu şablonda değiştirin."
           },
           "cta": {
             "buttonText": "Düğme metni",
@@ -876,7 +875,12 @@
             "add": "Başka bir düğme ekle",
             "remove": "Düğmeyi kaldır",
             "opensPhone": "Telefon numarası",
-            "opensEmail": "E-posta adresi"
+            "opensEmail": "E-posta adresi",
+            "errors": {
+              "url": "https:// ile başlayan geçerli bir web adresi girin",
+              "phone": "Geçerli bir telefon numarası girin, örn. +91 98765 43210",
+              "email": "Geçerli bir e-posta adresi girin, örn. name@example.com"
+            }
           },
           "carousel": {
             "intro": "Kartların üstündeki mesaj",
@@ -1059,13 +1063,7 @@
           "info": "Tek bir mesajda en fazla {max} CTA düğmesi ekleyin — Web sitesini ziyaret et, Ara ve Kodu kopyala düğmelerini istediğiniz gibi karıştırın. WhatsApp şablon düğmelerindeki sınırın aynısıdır.",
           "buttonLabel": "Düğme etiketi",
           "addButton": "Düğme ekle",
-          "maxReached": "En fazla {max} düğme eklendi.",
-          "locationTitle": "Başlık",
-          "locationTitlePlaceholder": "Ofisimiz",
-          "locationAddress": "Adres",
-          "locationAddressPlaceholder": "Cadde, şehir, ülke",
-          "locationLatitude": "Enlem",
-          "locationLongitude": "Boylam"
+          "maxReached": "En fazla {max} düğme eklendi."
         },
         "logic": {
           "operator": {
@@ -2031,6 +2029,41 @@
         "endTextHint": "Akış bitmeden önce gönderilir. Yaştan söz etmeyin. Boş bırakılırsa “Devam edemiyoruz.” kullanılır.",
         "continueNote": "Sonraki adımlar, yanıtın değişkenini ve ardından _age_gate ekini (örneğin answer_age_gate) okuyabilir; değeri under veya adult olur. Dallanmak için bir Koşul ekleyin, örneğin ebeveyn veya vasi istemek için.",
         "note": "Yaşı yalnızca ihtiyaç duyduğunuz yerde sorun. Yanıt kişiye yazılır: doğum tarihi doğum tarihi olarak, yaş sınırının altındaki bir yanıt ise kişiyi reşit olmayan olarak işaretler."
+      },
+      "location": {
+        "modeLabel": "Konum nasıl ayarlanır",
+        "modeLink": "Google Haritalar bağlantısı",
+        "modeCoords": "Enlem ve boylam",
+        "linkLabel": "Google Haritalar bağlantısı",
+        "linkPlaceholder": "Bir bağlantı yapıştırın, örn. https://maps.app.goo.gl/…",
+        "linkHint": "Google Haritalar’da yeri açın, Paylaş’a ve ardından Bağlantıyı kopyala’ya dokunun. Kısa ve uzun bağlantılar çalışır.",
+        "finding": "Bağlantı aranıyor…",
+        "retry": "Tekrar dene",
+        "latitude": "Enlem",
+        "longitude": "Boylam",
+        "coordsHint": "Enlem -90 ile 90, boylam -180 ile 180 arasındadır. İki kutudan birine “enlem, boylam” yapıştırabilirsiniz.",
+        "found": "Konum bulundu",
+        "openInMaps": "Google Haritalar’da aç",
+        "optionalHint": "İsteğe bağlı: müşterinin aldığı harita kartında gösterilir. İkisini de boş bırakabilirsiniz.",
+        "optional": "(isteğe bağlı)",
+        "placeName": "Yer adı",
+        "placePlaceholder": "Ofisimiz",
+        "address": "Adres",
+        "problem": {
+          "empty": "Bir Google Haritalar bağlantısı veya koordinat girin.",
+          "lat_missing": "Bir enlem girin.",
+          "lng_missing": "Bir boylam girin.",
+          "lat_nan": "Enlem bir sayı olmalıdır, örneğin 18.5204.",
+          "lng_nan": "Boylam bir sayı olmalıdır, örneğin 73.8567.",
+          "lat_range": "Enlem -90 ile 90 arasında olmalıdır.",
+          "lng_range": "Boylam -180 ile 180 arasında olmalıdır.",
+          "zero": "0, 0 gerçek bir yer değildir. Gerçek koordinatları girin.",
+          "not_url": "Bu bir bağlantıya benzemiyor. Google Haritalar bağlantısının tamamını yapıştırın.",
+          "not_maps": "Bu bir Google Haritalar bağlantısı değil.",
+          "no_coords": "Bu bağlantı tam bir noktayı göstermiyor. Yeri Google Haritalar’da açın, Paylaş’a dokunup o bağlantıyı kopyalayın veya koordinatları girin.",
+          "unresolved": "Bu kısa bağlantı henüz aranmadı. Alandan çıkın veya tekrar deneyin.",
+          "resolve_failed": "Bu bağlantı okunamadı. Google Haritalar’da açıldığını kontrol edin veya koordinatları girin."
+        }
       }
     },
     "contracts": {
@@ -2463,7 +2496,8 @@
         "noSenderInstagram": "Tetikleyici düğümünde bir Instagram hesabı seçilmemiş — Tetikleyici adımında bir hesap seçin.",
         "noSenderFacebook": "Tetikleyici düğümünde bir Facebook Sayfası seçilmemiş — Tetikleyici adımında bir sayfa seçin.",
         "noSenderNumber": "Tetikleyici düğümünde bir numara seçilmemiş — Tetikleyici adımında bir numara seçin.",
-        "faqMinScore": "\"{node}\" için en düşük puan 0.05 ile 0.99 aralığının dışında — düzeltin veya akış ayarını kullanmak için boş bırakın."
+        "faqMinScore": "\"{node}\" için en düşük puan 0.05 ile 0.99 aralığının dışında — düzeltin veya akış ayarını kullanmak için boş bırakın.",
+        "locationInvalid": "“{node}” adımında geçerli bir konum yok — bir Google Haritalar bağlantısı yapıştırın veya enlem (-90 ile 90) ve boylam (-180 ile 180) girin."
       }
     },
     "simpleModel": {
@@ -2604,10 +2638,11 @@
         "writeQuestion": "Adım {stage}: soruyu yazın.",
         "nameVariable": "Adım {stage}: yanıtın kaydedileceği değişkene bir ad verin.",
         "chooseAnswerProperty": "Adım {stage}: yanıtın kopyalanacağı kişi özelliğini seçin.",
-        "setCoordinates": "Adım {stage}: enlem ve boylamı ayarlayın.",
+        "setCoordinates": "{stage}. adım: bir Google Haritalar bağlantısı yapıştırın veya geçerli bir enlem ve boylam girin.",
         "chooseTemplate": "Adım {stage}: bir şablon seçin.",
         "chooseTeam": "Adım {stage}: görüşmenin gideceği ekibi seçin.",
         "ctaLabelLink": "Adım {stage}: düğmeye bir ad ve bağlantı verin.",
+        "ctaLinkInvalid": "Adım {stage}: düğmenin hedefi türü için geçerli değil.",
         "choosePickedProperty": "Adım {stage}: seçilen seçeneğin kopyalanacağı kişi özelliğini seçin.",
         "buttonsPrompt": "Adım {stage}: düğmelerin üstündeki mesajı yazın.",
         "addButton": "Adım {stage}: en az bir düğme ekleyin.",
@@ -2623,9 +2658,12 @@
         "carouselButtons": "Adım {stage}: her düğmeye bir ad verin, bir şey açan düğmeye de bağlantı, numara veya adres girin.",
         "conditionIncomplete": "Adım {stage}: koşulun kurallarını tamamlayın (her birinde bir değişken ve bir değer).",
         "faqMinScore": "{stage}. adım: en düşük puan 0.05 ile 0.99 arasında olmalı veya akış ayarı kullanılmalı.",
+        "optionNotConnected": "Adım {stage}: {kind, select, row {\"{label}\" satırı} other {\"{label}\" düğmesi}} hiçbir yere gitmiyor. Ona bir adım ekleyin veya bir eylem verin.",
+        "tooManyOptions": "Adım {stage}: {kind, select, row {bir listede en fazla {max} satır olabilir} other {bir düğme grubunda en fazla {max} düğme olabilir}}.",
         "chooseFlow": "Adım {stage}: düğmenin başlattığı akışı seçin.",
         "chooseApi": "Adım {stage}: çağrılacak API'yi seçin.",
-        "writeCode": "Adım {stage}: çalıştırılacak kodu yazın."
+        "writeCode": "Adım {stage}: çalıştırılacak kodu yazın.",
+        "webhookUrl": "Adım {stage}: Çağrılacak adresi (URL) ekleyin."
       },
       "faqSummary": "{hasCategory, select, true {FAQ'larınızdan · {category}} other {FAQ'larınızdan}}"
     },
@@ -2740,7 +2778,8 @@
       "simPurchase": "Simüle satın alma: {name} → çıkış \"satın alındı\"",
       "simAbandon": "Simüle terk → çıkış \"terk edildi\"",
       "faqAnswered": "(simüle) \"{query}\" için FAQ ile yanıtla: test sohbeti FAQ'larınıza bakmaz, bu yüzden hiçbir şey gönderilmez ve {ref} boş kalır. \"Yanıtlandı\" çıkışı kullanılıyor.",
-      "faqNoMatch": "(simüle) \"{query}\" için FAQ ile yanıtla: test sohbeti FAQ'larınıza bakmaz ve \"yanıtlandı\" çıkışı bağlı değil, bu yüzden \"eşleşme yok\" çıkışı kullanılıyor. {ref} boş kalır."
+      "faqNoMatch": "(simüle) \"{query}\" için FAQ ile yanıtla: test sohbeti FAQ'larınıza bakmaz ve \"yanıtlandı\" çıkışı bağlı değil, bu yüzden \"eşleşme yok\" çıkışı kullanılıyor. {ref} boş kalır.",
+      "locationSkipped": "(konum) atlandı: geçerli koordinat yok"
     }
   }
 }

@@ -17,6 +17,7 @@ import { PlusIcon, RefreshIcon, SearchIcon } from './icons';
 import { ErrorLine, useInvoicingCan } from './parts';
 import { useRecurringActions } from './recurring-parts';
 import { RecurringTable } from './recurring-table';
+import { PageFill } from '@/components/shell/page-fill';
 
 /**
  * `/recurring-invoices`: every schedule that makes invoices by itself. Tabs filter by status on the server (no counts: the API has
@@ -75,7 +76,7 @@ export function RecurringInvoicesScreen() {
   ) : null;
 
   return (
-    <div className="space-y-3">
+    <PageFill minHeight="28rem" className="space-y-3">
       <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
         <div className="flex min-w-0 items-center gap-4">
           <span
@@ -160,7 +161,7 @@ export function RecurringInvoicesScreen() {
         role="tabpanel"
         aria-label={t('tableLabel')}
         aria-busy={list.isFetching}
-        className="flex max-h-[max(26rem,calc(100dvh-17rem))] flex-col overflow-hidden rounded-xl border border-border bg-background"
+        className="flex min-h-0 shrink flex-col overflow-hidden rounded-xl border border-border bg-background"
       >
         <div
           className={cn(
@@ -232,7 +233,7 @@ export function RecurringInvoicesScreen() {
         <p className="text-xs text-muted-foreground">{t('searchLoadedOnly')}</p>
       )}
       {actions.node}
-    </div>
+    </PageFill>
   );
 }
 

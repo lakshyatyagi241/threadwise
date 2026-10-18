@@ -5,6 +5,8 @@ import {
   dateWindowPredicate,
   escapeLike,
   groupsPredicate,
+  NON_DIGIT,
+  phoneDigits,
   tagsPredicate,
 } from './contact-predicates';
 
@@ -17,6 +19,12 @@ export function minorCondition(isMinor: boolean): SQL {
 }
 
 const { contacts, teamMembers } = schema;
+
+/**
+ * The digits of a contact's phone, written exactly as idx_contacts_phone_digits is (and as the broadcast CSV match writes it), so
+ * "+91 88751 37569", "+918875137569" and "918875137569" are one key and an equality on it can use the index.
+ */
+export const contactPhoneDigits: SQL = sql`regexp_replace(coalesce(${contacts.normalizedPhone}, ${contacts.phone}, ''), ${NON_DIGIT}, '', 'g')`;
 
 /**
  * A contact filter with every uuid already turned into the internal id the SQL needs. Producing one
@@ -91,7 +99,8 @@ export function searchTokens(q: string): string[] {
 
 /**
  * One word matches when it is in the name, first or last name, the email or the phone, or, for a
- * word that looks like a number, in the digits of the phone ("9812" finds "+91 98123 45678").
+ * word that looks like a number, in the digits of the phone ("9812" finds "+91 98123 45678"; "+91" finds every number that
+ * starts with 91).
  * Every word has to match: "Sharma Aarav" finds "Aarav Sharma".
  */
 export function tokenCondition(token: string): SQL {
@@ -106,8 +115,25 @@ export function tokenCondition(token: string): SQL {
   const digits = token.replace(/\D/g, '');
   if (digits.length >= 3 && /^[\d+\-().]+$/.test(token)) {
     parts.push(sql`${contacts.normalizedPhone} ILIKE ${`%${digits}%`}`);
+  } else if (digits.length > 0 && token.startsWith('+') && /^[\d+\-().]+$/.test(token)) {
+    // "+91" is a country code: the digits of the phone start with it, with or without the "+" in the stored text.
+    parts.push(sql`${contactPhoneDigits} LIKE ${`${digits}%`}`);
   }
   return sql`(${sql.join(parts, sql` OR `)})`;
+}
+
+/**
+ * The search box: every word has to match (`tokenCondition`). A search that is a phone number as it is printed on screen
+ * ("+91 88751 37569") is also compared as a whole against the digits of the phone, because its words alone cannot find
+ * a number stored without spaces: "+91" is two digits (too short to match on digits) and "88751" is not in "+918875137569" as text.
+ */
+export function searchCondition(q: string): SQL {
+  const words = sql`(${sql.join(searchTokens(q).map(tokenCondition), sql` AND `)})`;
+  const typed = phoneDigits(q);
+  if (typed.length >= 3 && /^[\d\s+\-().]+$/.test(q.trim()) && searchTokens(q).length > 1) {
+    return sql`(${words} OR ${contactPhoneDigits} LIKE ${`%${typed}%`})`;
+  }
+  return words;
 }
 
 export function contactConditions(
@@ -130,7 +156,7 @@ export function contactConditions(
   if (f.source) c.push(eq(contacts.source, f.source));
   if (f.timezone) c.push(eq(contacts.timezone, f.timezone));
   if (f.noTimezone === true) c.push(isNull(contacts.timezone));
-  if (f.q) for (const token of searchTokens(f.q)) c.push(tokenCondition(token));
+  if (f.q && searchTokens(f.q).length > 0) c.push(searchCondition(f.q));
 
   if (f.groupId !== undefined)
     c.push(groupsPredicate(orgId, sql`${contacts.id}`, 'has_any', [f.groupId]));

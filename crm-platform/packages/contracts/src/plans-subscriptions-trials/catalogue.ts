@@ -165,6 +165,9 @@ export const PLAN_FEATURE_DEFS = [
   // so the owner hands it to chosen plans. Reference's `access_ai_agents` column — deliberately NOT `ai_assistants` (Reference's own, different,
   // `access_ai_chat_assistant` flag already mapped to that key for the AI Training/chat-assistants domain).
   { key: 'ai_crm_copilot', group: 'aiCalling', default: false },
+  // AI lead scoring and the growth pilot built on it (Marketplace app `lead-scoring`). Default FALSE: the app owns this key (`grants_plan_features`).
+  // The workspaces that already used scoring keep it through a per-workspace override written by migration 20261228090000, then the operator's comp.
+  { key: 'lead_scoring', group: 'aiCalling', default: false },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -205,6 +208,7 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   email_channel: 'Email (Gmail) channel',
   personal_history_full: 'Full history import (personal WhatsApp)',
   ai_crm_copilot: 'AI CRM Copilot',
+  lead_scoring: 'AI lead scoring',
 };
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
@@ -248,6 +252,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'email_channel',
   'personal_history_full',
   'ai_crm_copilot',
+  'lead_scoring',
 ];
 export const PLAN_CHIP_MAX = 3;
 

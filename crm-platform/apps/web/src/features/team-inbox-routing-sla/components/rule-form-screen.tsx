@@ -44,6 +44,7 @@ import { leaveDayText } from '../lib/leave-mark';
 import { ContactConditions } from './contact-conditions';
 
 const STRATEGIES: readonly RoutingStrategy[] = ['round_robin', 'least_busy', 'specific'];
+const PRIORITIES = ['low', 'normal', 'high', 'urgent'] as const;
 
 const isCode = (e: unknown, code: string) => e instanceof ApiError && e.code === code;
 const reason = (e: unknown, fallback: string) =>
@@ -105,6 +106,7 @@ export function RuleFormBody({ rule }: { rule?: RoutingRule }) {
   const t = useTranslations('team-inbox-routing-sla.form');
   const ts = useTranslations('team-inbox-routing-sla.rules.strategy');
   const tc = useTranslations('team-inbox-routing-sla.channels');
+  const tp = useTranslations('team-inbox-conversations.list');
   const router = useRouter();
   const qc = useQueryClient();
   const { toast } = useToast();
@@ -317,106 +319,256 @@ export function RuleFormBody({ rule }: { rule?: RoutingRule }) {
       </Card>
 
       <Card title={t('thenTitle')} hint={t('thenHint')}>
-        <Field
-          label={t('strategy')}
-          htmlFor={`${uid}-strategy`}
-          hint={t(`strategyHint.${form.strategy}`)}
-        >
-          <Select
-            id={`${uid}-strategy`}
-            value={form.strategy}
-            onChange={(e) => {
-              const strategy = e.target.value as RoutingStrategy;
-              setForm((f) => ({
-                ...f,
-                strategy,
-                // "A specific agent" is one person: keep the first pick and drop the teams
-                ...(strategy === 'specific' ? { userIds: f.userIds.slice(0, 1), teamIds: [] } : {}),
-              }));
-            }}
-          >
-            {STRATEGIES.map((s) => (
-              <option key={s} value={s}>
-                {ts(s)}
-              </option>
-            ))}
-          </Select>
-        </Field>
-
         <fieldset className="space-y-2">
-          <legend className="text-sm font-medium">{t('agents')} *</legend>
-          <p className="text-xs text-muted-foreground">{t('agentsHint')}</p>
-          {assignees.isPending ? (
-            <p className="text-sm text-muted-foreground" role="status">
-              {t('loadingAgents')}
+          <legend className="text-sm font-medium">{t('actions')}</legend>
+          <p className="text-xs text-muted-foreground">{t('actionsHint')}</p>
+          <Checkbox
+            id={`${uid}-assigns`}
+            label={t('actionAssign')}
+            checked={form.assigns}
+            onChange={() => set('assigns', !form.assigns)}
+          />
+          <Checkbox
+            id={`${uid}-markSpam`}
+            label={t('actionMarkSpam')}
+            checked={form.markSpam}
+            onChange={() => set('markSpam', !form.markSpam)}
+          />
+          <Field label={t('setPriority')} htmlFor={`${uid}-priority`}>
+            <Select
+              id={`${uid}-priority`}
+              value={form.priority}
+              onChange={(e) => set('priority', e.target.value as RuleForm['priority'])}
+            >
+              <option value="">{t('priorityKeep')}</option>
+              {PRIORITIES.map((p) => (
+                <option key={p} value={p}>
+                  {tp(`priority.${p}`)}
+                </option>
+              ))}
+            </Select>
+          </Field>
+          <Field label={t('addTags')} htmlFor={`${uid}-tags`} hint={t('addTagsHint')}>
+            <Input
+              id={`${uid}-tags`}
+              value={form.tags}
+              onChange={(e) => set('tags', e.target.value)}
+            />
+          </Field>
+          {has('actions') && (
+            <p role="alert" className="text-xs text-danger">
+              {t('problem.actions')}
             </p>
-          ) : assignees.isError ? (
-            <Alert tone="warning">{t('agentsFailed')}</Alert>
-          ) : rows.length === 0 ? (
-            <Alert tone="info">{t('noAgents')}</Alert>
-          ) : (
-            <ul className="max-h-72 space-y-1 overflow-y-auto rounded-md border border-border p-2">
-              {rows
-                .filter((r) => !specific || r.kind === 'user')
-                .map((r) => {
-                  const list = r.kind === 'user' ? form.userIds : form.teamIds;
-                  const checked = list.includes(r.id);
-                  return (
-                    <li key={r.id} className="flex items-center justify-between gap-3 px-1 py-1">
-                      <Checkbox
-                        id={`${uid}-t-${r.id}`}
-                        label={
-                          <span>
-                            {r.label}{' '}
-                            {r.kind === 'team' && <Badge tone="neutral">{t('teamBadge')}</Badge>}
-                          </span>
-                        }
-                        checked={checked}
-                        onChange={() => {
-                          if (specific) {
-                            set('userIds', checked ? [] : [r.id]);
-                          } else if (r.kind === 'user') {
-                            set('userIds', toggleId(form.userIds, r.id));
-                          } else {
-                            set('teamIds', toggleId(form.teamIds, r.id));
-                          }
-                        }}
-                      />
-                      <span className="text-xs text-muted-foreground">{r.note}</span>
-                    </li>
-                  );
-                })}
-            </ul>
           )}
-          {stale.length > 0 && (
-            <Alert tone="warning">
-              {t('stale', { count: stale.length })}{' '}
-              <button
-                type="button"
-                className="font-semibold underline"
-                onClick={() =>
-                  setForm((f) => ({
-                    ...f,
-                    userIds: f.userIds.filter((x) => known.has(x)),
-                    teamIds: f.teamIds.filter((x) => known.has(x)),
-                  }))
-                }
+          {has('tagsMany') && (
+            <p role="alert" className="text-xs text-danger">
+              {t('problem.tagsMany')}
+            </p>
+          )}
+          <Checkbox
+            id={`${uid}-escalates`}
+            label={t('escalate')}
+            checked={form.escalates}
+            onChange={() => set('escalates', !form.escalates)}
+          />
+          {form.escalates && (
+            <div className="space-y-2 pl-6">
+              <Field
+                label={t('escalateMinutes')}
+                htmlFor={`${uid}-minutes`}
+                hint={t('escalateHint')}
               >
-                {t('removeStale')}
-              </button>
-            </Alert>
+                <Input
+                  id={`${uid}-minutes`}
+                  inputMode="numeric"
+                  value={form.escalateMinutes}
+                  onChange={(e) => set('escalateMinutes', e.target.value)}
+                />
+              </Field>
+              <Checkbox
+                id={`${uid}-reassign`}
+                label={t('escalateReassign')}
+                checked={form.escalateReassign}
+                onChange={() => set('escalateReassign', !form.escalateReassign)}
+              />
+              <Field label={t('escalatePriority')} htmlFor={`${uid}-escalate-priority`}>
+                <Select
+                  id={`${uid}-escalate-priority`}
+                  value={form.escalatePriority}
+                  onChange={(e) =>
+                    set('escalatePriority', e.target.value as RuleForm['escalatePriority'])
+                  }
+                >
+                  <option value="">{t('priorityKeep')}</option>
+                  {PRIORITIES.map((p) => (
+                    <option key={p} value={p}>
+                      {tp(`priority.${p}`)}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+            </div>
           )}
-          {has('targets') && (
+          {has('escalationMinutes') && (
             <p role="alert" className="text-xs text-danger">
-              {t('problem.targets')}
+              {t('problem.escalationMinutes')}
             </p>
           )}
-          {has('specific') && (
+          {has('escalationAction') && (
             <p role="alert" className="text-xs text-danger">
-              {t('problem.specific')}
+              {t('problem.escalationAction')}
+            </p>
+          )}
+          {has('escalationAgents') && (
+            <p role="alert" className="text-xs text-danger">
+              {t('problem.escalationAgents')}
+            </p>
+          )}
+          <Checkbox
+            id={`${uid}-autoreply`}
+            label={t('autoReply')}
+            checked={form.autoReplies}
+            onChange={() => set('autoReplies', !form.autoReplies)}
+          />
+          {form.autoReplies && (
+            <div className="space-y-2 pl-6">
+              <Field
+                label={t('autoReplyBody')}
+                htmlFor={`${uid}-autoreply-body`}
+                hint={t('autoReplyHint')}
+              >
+                <Textarea
+                  id={`${uid}-autoreply-body`}
+                  rows={3}
+                  value={form.autoReplyBody}
+                  onChange={(e) => set('autoReplyBody', e.target.value)}
+                />
+              </Field>
+            </div>
+          )}
+          {has('autoReplyEmpty') && (
+            <p role="alert" className="text-xs text-danger">
+              {t('problem.autoReplyEmpty')}
+            </p>
+          )}
+          {has('autoReplyLong') && (
+            <p role="alert" className="text-xs text-danger">
+              {t('problem.autoReplyLong')}
             </p>
           )}
         </fieldset>
+
+        {form.assigns && (
+          <>
+            <Field
+              label={t('strategy')}
+              htmlFor={`${uid}-strategy`}
+              hint={t(`strategyHint.${form.strategy}`)}
+            >
+              <Select
+                id={`${uid}-strategy`}
+                value={form.strategy}
+                onChange={(e) => {
+                  const strategy = e.target.value as RoutingStrategy;
+                  setForm((f) => ({
+                    ...f,
+                    strategy,
+                    // "A specific agent" is one person: keep the first pick and drop the teams
+                    ...(strategy === 'specific'
+                      ? { userIds: f.userIds.slice(0, 1), teamIds: [] }
+                      : {}),
+                  }));
+                }}
+              >
+                {STRATEGIES.map((s) => (
+                  <option key={s} value={s}>
+                    {ts(s)}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+
+            <fieldset className="space-y-2">
+              <legend className="text-sm font-medium">{t('agents')} *</legend>
+              <p className="text-xs text-muted-foreground">{t('agentsHint')}</p>
+              {assignees.isPending ? (
+                <p className="text-sm text-muted-foreground" role="status">
+                  {t('loadingAgents')}
+                </p>
+              ) : assignees.isError ? (
+                <Alert tone="warning">{t('agentsFailed')}</Alert>
+              ) : rows.length === 0 ? (
+                <Alert tone="info">{t('noAgents')}</Alert>
+              ) : (
+                <ul className="max-h-72 space-y-1 overflow-y-auto rounded-md border border-border p-2">
+                  {rows
+                    .filter((r) => !specific || r.kind === 'user')
+                    .map((r) => {
+                      const list = r.kind === 'user' ? form.userIds : form.teamIds;
+                      const checked = list.includes(r.id);
+                      return (
+                        <li
+                          key={r.id}
+                          className="flex items-center justify-between gap-3 px-1 py-1"
+                        >
+                          <Checkbox
+                            id={`${uid}-t-${r.id}`}
+                            label={
+                              <span>
+                                {r.label}{' '}
+                                {r.kind === 'team' && (
+                                  <Badge tone="neutral">{t('teamBadge')}</Badge>
+                                )}
+                              </span>
+                            }
+                            checked={checked}
+                            onChange={() => {
+                              if (specific) {
+                                set('userIds', checked ? [] : [r.id]);
+                              } else if (r.kind === 'user') {
+                                set('userIds', toggleId(form.userIds, r.id));
+                              } else {
+                                set('teamIds', toggleId(form.teamIds, r.id));
+                              }
+                            }}
+                          />
+                          <span className="text-xs text-muted-foreground">{r.note}</span>
+                        </li>
+                      );
+                    })}
+                </ul>
+              )}
+              {stale.length > 0 && (
+                <Alert tone="warning">
+                  {t('stale', { count: stale.length })}{' '}
+                  <button
+                    type="button"
+                    className="font-semibold underline"
+                    onClick={() =>
+                      setForm((f) => ({
+                        ...f,
+                        userIds: f.userIds.filter((x) => known.has(x)),
+                        teamIds: f.teamIds.filter((x) => known.has(x)),
+                      }))
+                    }
+                  >
+                    {t('removeStale')}
+                  </button>
+                </Alert>
+              )}
+              {has('targets') && (
+                <p role="alert" className="text-xs text-danger">
+                  {t('problem.targets')}
+                </p>
+              )}
+              {has('specific') && (
+                <p role="alert" className="text-xs text-danger">
+                  {t('problem.specific')}
+                </p>
+              )}
+            </fieldset>
+          </>
+        )}
 
         <Field label={t('flow.title')} htmlFor={`${uid}-flow`} hint={t('flow.hint')}>
           <Select
@@ -499,6 +651,11 @@ async function saveEdit(rule: RoutingRule, payload: ReturnType<typeof payloadFro
     description: payload.description,
     conditions: payload.conditions,
     assign: payload.assign,
+    markSpam: payload.markSpam,
+    priority: payload.priority,
+    addTags: payload.addTags,
+    escalation: payload.escalation,
+    autoReply: payload.autoReply,
     triggerFlowId: payload.triggerFlowId,
     stopOnMatch: payload.stopOnMatch,
     isFallback: payload.isFallback,

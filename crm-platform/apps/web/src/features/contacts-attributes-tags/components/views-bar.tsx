@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useMemo, useState, type FormEvent } from 'react';
 import { useTranslations } from 'next-intl';
+import { useLeadScoringEnabled } from '@/features/lead-scoring';
 import { useStoredValue } from '@/lib/use-stored-value';
 import type { ContactViewResponse } from '@crm/contracts';
 import { Button, ConfirmDialog, Drawer, Input, Popover, cn, useToast } from '@crm/ui';
@@ -14,6 +15,7 @@ import { RowMenu, RowMenuItem, RowMenuSeparator } from './row-menu';
 
 import {
   activePreset,
+  availablePresets,
   parsePresetFavorites,
   PRESET_FAVORITES_KEY,
   PRESET_VIEWS,
@@ -70,6 +72,9 @@ export function ViewsBar({
   const [pickerOpen, setPickerOpen] = useState(false);
   const [drawing, setDrawing] = useState<Drawing>(null);
   const [deleting, setDeleting] = useState<ContactViewResponse | null>(null);
+  // Without lead scoring there is no "Hot leads" to choose: it filters by the score.
+  const scoringOn = useLeadScoringEnabled();
+  const quick = useMemo(() => availablePresets(QUICK_PRESETS, scoringOn), [scoringOn]);
 
   const all = useMemo(() => views.data ?? [], [views.data]);
   const preset = useMemo(
@@ -147,7 +152,7 @@ export function ViewsBar({
         aria-label={t('quick.label')}
         className="flex flex-wrap items-center gap-1.5"
       >
-        {QUICK_PRESETS.map((p) => {
+        {quick.map((p) => {
           const on = activeId === '' && preset === p;
           return (
             <button
@@ -334,7 +339,8 @@ function Picker({
   const [q, setQ] = useState('');
   const shown = pickerViews(views, q, 'all');
   const favorites = shown.filter((v) => v.isFavorite);
-  const presets = PRESET_VIEWS.filter(
+  const scoringOn = useLeadScoringEnabled();
+  const presets = availablePresets(PRESET_VIEWS, scoringOn).filter(
     (p) => q.trim() === '' || t(`presets.${p}`).toLowerCase().includes(q.trim().toLowerCase()),
   );
   const favPresetsShown = presets.filter((p) => favPresets.includes(p));

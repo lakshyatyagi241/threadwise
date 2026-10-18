@@ -275,6 +275,57 @@ describe('a reply from the inbox', () => {
   }, 60_000);
 });
 
+describe('an agent reply reopens a finished or spam thread', () => {
+  const reopenedEvents = async (conversationId: number) =>
+    (
+      await p.h.owner.query(
+        `SELECT type, payload FROM conversation_events WHERE conversation_id = $1 AND type = 'reopened'`,
+        [conversationId],
+      )
+    ).rows as Array<{ type: string; payload: { from: string; by: string } }>;
+
+  it('a reply to a resolved thread puts it back in the open list and records who reopened it', async () => {
+    const t = await p.api.signup('rpr');
+    const ch = await simChannel(p, t);
+    const th = await thread(t, ch, '919900000101');
+    await p.h.owner.query(`UPDATE conversations SET status = 'resolved' WHERE id = $1`, [th.id]);
+    await send(t, th, text('Back with you'));
+    expect((await conv(th.id)).status).toBe('open');
+    expect(await reopenedEvents(th.id)).toEqual([
+      expect.objectContaining({
+        payload: expect.objectContaining({ from: 'resolved', by: 'agent' }),
+      }),
+    ]);
+  });
+
+  it('a reply to a closed thread reopens it too', async () => {
+    const t = await p.api.signup('rpc');
+    const ch = await simChannel(p, t);
+    const th = await thread(t, ch, '919900000102');
+    await p.h.owner.query(`UPDATE conversations SET status = 'closed' WHERE id = $1`, [th.id]);
+    await send(t, th, text('Closed, but one more thing'));
+    expect((await conv(th.id)).status).toBe('open');
+  });
+
+  it('a reply to a spam thread takes it off spam (Reference: a reply reopens it)', async () => {
+    const t = await p.api.signup('rps');
+    const ch = await simChannel(p, t);
+    const th = await thread(t, ch, '919900000103');
+    await p.h.owner.query(`UPDATE conversations SET status = 'spam' WHERE id = $1`, [th.id]);
+    await send(t, th, text('This one is real'));
+    expect((await conv(th.id)).status).toBe('open');
+  });
+
+  it('a reply to an open thread changes nothing and writes no reopened event', async () => {
+    const t = await p.api.signup('rpo');
+    const ch = await simChannel(p, t);
+    const th = await thread(t, ch, '919900000104');
+    await send(t, th, text('Still open'));
+    expect((await conv(th.id)).status).toBe('open');
+    expect(await reopenedEvents(th.id)).toEqual([]);
+  });
+});
+
 describe('receipts', () => {
   it('out of order (read, then delivered, then sent) the status never goes backwards and the log still holds all three', async () => {
     const t = await p.api.signup('ooo');

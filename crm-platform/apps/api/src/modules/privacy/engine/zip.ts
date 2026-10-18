@@ -1,4 +1,5 @@
-import { deflateRawSync } from 'node:zlib';
+import { crc32 } from 'node:zlib';
+import { deflateRawAsync } from '../../../common/async-zlib';
 
 /**
  * A small ZIP writer (deflate, one pass, no zip64): the export of one person is a few megabytes of JSON and CSV, never a whole
@@ -11,22 +12,6 @@ export interface ZipEntry {
   data: Buffer;
 }
 
-const CRC_TABLE = (() => {
-  const t = new Uint32Array(256);
-  for (let n = 0; n < 256; n++) {
-    let c = n;
-    for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
-    t[n] = c >>> 0;
-  }
-  return t;
-})();
-
-export function crc32(buf: Buffer): number {
-  let c = 0xffffffff;
-  for (let i = 0; i < buf.length; i++) c = CRC_TABLE[(c ^ buf[i]!) & 0xff]! ^ (c >>> 8);
-  return (c ^ 0xffffffff) >>> 0;
-}
-
 function dosDateTime(d: Date): { time: number; date: number } {
   const year = Math.max(1980, d.getUTCFullYear());
   return {
@@ -35,7 +20,10 @@ function dosDateTime(d: Date): { time: number; date: number } {
   };
 }
 
-export function buildZip(entries: readonly ZipEntry[], now: Date = new Date()): Buffer {
+export async function buildZip(
+  entries: readonly ZipEntry[],
+  now: Date = new Date(),
+): Promise<Buffer> {
   if (entries.length > 65_535) throw new Error('too many entries for a plain zip');
   const { time, date } = dosDateTime(now);
   const parts: Buffer[] = [];
@@ -45,7 +33,7 @@ export function buildZip(entries: readonly ZipEntry[], now: Date = new Date()): 
   for (const e of entries) {
     const name = Buffer.from(e.name, 'utf8');
     const raw = e.data;
-    const packed = deflateRawSync(raw);
+    const packed = await deflateRawAsync(raw);
     const useDeflate = packed.length < raw.length;
     const body = useDeflate ? packed : raw;
     const crc = crc32(raw);

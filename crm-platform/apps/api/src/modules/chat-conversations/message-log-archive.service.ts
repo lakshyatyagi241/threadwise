@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { gzipSync } from 'node:zlib';
+import { gzipAsync } from '../../common/async-zlib';
 import { DatabaseService } from '../../infra/db/database.service';
 import { MessageLogRepository } from './message-log.repository';
 import { addDays, dayOf, dayStart, hotCutoff, retentionCutoff } from './message-log-rules';
@@ -106,7 +106,7 @@ export class MessageLogArchiveService {
         for (;;) {
           const batch = await this.repo.dueBatch(tx, orgId, from, to, afterId, BATCH);
           if (batch.length === 0) break;
-          members.push(gzipSync(`${batch.map((b) => JSON.stringify(b.line)).join('\n')}\n`));
+          members.push(await gzipAsync(`${batch.map((b) => JSON.stringify(b.line)).join('\n')}\n`));
           count += batch.length;
           afterId = batch[batch.length - 1]!.id;
           if (batch.length < BATCH) break;

@@ -1,6 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Readable } from 'node:stream';
-import { gunzipSync, createGunzip } from 'node:zlib';
+import { createGunzip } from 'node:zlib';
+import { forEachLine, gunzipAsync } from '../../common/async-zlib';
 import {
   ERROR_CODES,
   type CreateMessageLogExportInput,
@@ -38,14 +39,15 @@ const RANGE_MESSAGES = {
 } as const;
 
 /** The archive's lines of one message: every line of the day objects that names it. */
-export function archivedEventsOf(
+export async function archivedEventsOf(
   payloads: Buffer[],
   message: { id: number; createdAtText: string },
-): Array<StoredEvent & { sortId: number }> {
+): Promise<Array<StoredEvent & { sortId: number }>> {
   const out: Array<StoredEvent & { sortId: number }> = [];
   for (const payload of payloads) {
-    for (const line of gunzipSync(payload).toString('utf8').split('\n')) {
-      if (line === '') continue;
+    // A day's object for one workspace is tens of MB at volume: decompressed off the event loop, parsed in slices that let it breathe.
+    const text = (await gunzipAsync(payload)).toString('utf8');
+    await forEachLine(text, (line) => {
       const e = JSON.parse(line) as {
         id: number;
         messageId: number;
@@ -54,10 +56,10 @@ export function archivedEventsOf(
         detail: Record<string, unknown>;
         at: string;
       };
-      if (e.messageId !== message.id) continue;
-      if (e.messageCreatedAt !== message.createdAtText) continue;
+      if (e.messageId !== message.id) return;
+      if (e.messageCreatedAt !== message.createdAtText) return;
       out.push({ event: e.event, detail: e.detail ?? {}, at: new Date(e.at), sortId: e.id });
-    }
+    });
   }
   return out;
 }
@@ -103,7 +105,7 @@ export class MessageLogService implements MessageLogFacade {
             ? addDays(from, ARCHIVE_LOOKAHEAD_DAYS)
             : lastArchivedDay;
         const objects = await this.repo.archivesBetween(tx, ctx.orgId, from, to);
-        archived = archivedEventsOf(
+        archived = await archivedEventsOf(
           objects.map((o) => o.payload),
           row,
         );

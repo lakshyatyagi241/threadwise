@@ -3,6 +3,7 @@ import {
   flbCleanAgeWhenUnder,
   flbCleanAskInputType,
   flbCleanMinAge,
+  flbParseCoordinate,
   flbSanitizeConditionGroup,
   flbToRuntimeData,
   flbCleanCarouselCards,
@@ -350,8 +351,8 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
       };
     case 'location':
       return {
-        latitude: Number(data.latitude) || 0,
-        longitude: Number(data.longitude) || 0,
+        latitude: flbParseCoordinate(data.latitude),
+        longitude: flbParseCoordinate(data.longitude),
         title: str(data.title ?? data.locationName ?? data.name),
         address: str(data.address),
       };

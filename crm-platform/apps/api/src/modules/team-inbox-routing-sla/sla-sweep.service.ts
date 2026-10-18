@@ -35,7 +35,7 @@ export interface SweepResult {
  *
  *  1. A first-response clock whose customer has been answered (`waiting_since` is clear) is closed: the due time is cleared and a
  *     `first_response` event records whether the answer came in time. An answer after the due time is a breach (flagged, announced).
- *  2. A live conversation (open, or pending unless the policy pauses while waiting on the customer) whose first-response clock (customer
+ *  2. A live conversation (open) whose first-response clock (customer
  *     still waiting) or resolution clock ran out, and is not flagged yet, is flagged `sla_breached`, gets a `sla_breach` event
  *     (`kind`, `dueAt`) and the outbox event `conversation.sla_breached`, which the notification consumer turns into bell rows. A snoozed,
  *     resolved, closed or spam conversation is skipped: a snoozed one is checked after it wakes.
@@ -150,9 +150,7 @@ export class SlaSweepService {
              (c.sla_first_response_due <= now() AND c.waiting_since IS NOT NULL) AS first_due,
              c.sla_first_response_due AS first_at, c.sla_resolution_due AS resolution_at
       FROM conversations c
-      LEFT JOIN sla_policies p ON p.org_id = c.org_id AND p.id = c.sla_policy_id
-      WHERE c.org_id IN (${inOrgs}) AND NOT c.sla_breached AND c.status IN ('open', 'pending')
-        AND NOT (c.status = 'pending' AND COALESCE(p.pause_when_waiting_on_customer, false))
+      WHERE c.org_id IN (${inOrgs}) AND NOT c.sla_breached AND c.status = 'open'
         AND ((c.sla_first_response_due <= now() AND c.waiting_since IS NOT NULL) OR c.sla_resolution_due <= now())
       ORDER BY c.id LIMIT ${BATCH} FOR UPDATE OF c SKIP LOCKED`);
     let n = 0;

@@ -1,21 +1,23 @@
 'use client';
 
-import { useState } from 'react';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { FieldHistoryEntry } from '@crm/contracts';
 import { Button, Drawer, Spinner } from '@crm/ui';
+import { useLeadScoringEnabled } from '@/features/lead-scoring';
 import { useFieldHistory } from '../../api/field-history';
 import { fallbackFieldLabel, historyEntryKey, historyValueText } from '../../lib/contact-data';
 import { titleCaseKey } from '../../lib/contact-model';
 import { formatDateTime } from '../../lib/format';
 import { ErrorLine } from '../error-line';
-import { HistoryIcon } from '../icons';
 import { EmptyLine, Panel } from './shared';
 
-type Translate = ReturnType<typeof useTranslations>;
+/** The history keys of the lead score and the fields that describe it (who set it, when, why). */
+const SCORE_KEY = /^lead_?score/i;
+
+export type Translate = ReturnType<typeof useTranslations>;
 
 /** The well-known keys through their messages (literal keys, so each is visibly used); anything else is title-cased. */
-function fieldLabel(t: Translate, key: string): string {
+export function fieldLabel(t: Translate, key: string): string {
   switch (key) {
     case 'name':
       return t('fields.name');
@@ -76,6 +78,9 @@ export function FieldHistoryPanel({
 }) {
   const t = useTranslations('contacts-attributes-tags.contact.history');
   const list = useFieldHistory(contactId);
+  // Lead scoring off: the score is not shown anywhere, so its changes are left out of the history too (they are still stored).
+  const scoringOn = useLeadScoringEnabled();
+  const items = scoringOn ? list.items : list.items.filter((e) => !SCORE_KEY.test(e.fieldKey));
 
   return (
     <Panel id="contact-field-history" title={showTitle ? t('title') : undefined}>
@@ -85,12 +90,12 @@ export function FieldHistoryPanel({
         </div>
       ) : list.isError ? (
         <ErrorLine error={list.error} onRetry={() => void list.refetch()} />
-      ) : list.items.length === 0 ? (
+      ) : items.length === 0 && !list.hasNextPage ? (
         <EmptyLine>{t('empty')}</EmptyLine>
       ) : (
         <div className="space-y-3">
           <ul className="divide-y divide-border">
-            {list.items.map((e, i) => (
+            {items.map((e, i) => (
               <HistoryRow key={historyEntryKey(e, i)} entry={e} />
             ))}
           </ul>
@@ -157,19 +162,20 @@ function HistoryRow({ entry }: { entry: FieldHistoryEntry }) {
   );
 }
 
-/** A secondary button "Contact Field History" that opens the history in a drawer on the end edge. */
-export function FieldHistoryButton({ contactId }: { contactId: string }) {
+/** The contact's field history in a drawer on the end edge (the action bar's "..." menu and the history button open it). */
+export function FieldHistoryDrawer({
+  open,
+  onClose,
+  contactId,
+}: {
+  open: boolean;
+  onClose: () => void;
+  contactId: string;
+}) {
   const t = useTranslations('contacts-attributes-tags.contact.history');
-  const [open, setOpen] = useState(false);
   return (
-    <>
-      <Button variant="secondary" size="sm" onClick={() => setOpen(true)}>
-        <HistoryIcon />
-        {t('button')}
-      </Button>
-      <Drawer open={open} onClose={() => setOpen(false)} title={t('title')} closeLabel={t('close')}>
-        <FieldHistoryPanel contactId={contactId} showTitle={false} />
-      </Drawer>
-    </>
+    <Drawer open={open} onClose={onClose} title={t('title')} closeLabel={t('close')}>
+      <FieldHistoryPanel contactId={contactId} showTitle={false} />
+    </Drawer>
   );
 }

@@ -1,0 +1,91 @@
+{
+ "generatedAt": "2026-10-18T05:10:59.845Z",
+ "node": "v22.17.0",
+ "results": [
+  {
+   "name": "the web server answers GET /robots.txt (the probe target)",
+   "ok": true,
+   "detail": 200
+  },
+  {
+   "name": "GET /metrics answers 200 on loopback without a token",
+   "ok": true,
+   "detail": 200
+  },
+  {
+   "name": "series carry service=\"web\"",
+   "ok": true
+  },
+  {
+   "name": "crm_event_loop_delay_p99_seconds is exported",
+   "ok": true
+  },
+  {
+   "name": "crm_event_loop_delay_max_seconds is exported",
+   "ok": true
+  },
+  {
+   "name": "crm_event_loop_utilization_ratio is exported",
+   "ok": true
+  },
+  {
+   "name": "crm_process_heap_used_bytes is exported",
+   "ok": true
+  },
+  {
+   "name": "crm_process_rss_bytes is exported",
+   "ok": true
+  },
+  {
+   "name": "crm_process_active_resources is exported",
+   "ok": true
+  },
+  {
+   "name": "crm_runtime_last_report_timestamp_seconds is exported",
+   "ok": true
+  },
+  {
+   "name": "crm_process_start_time_seconds is exported",
+   "ok": true
+  },
+  {
+   "name": "an idle web loop reads in a sane range (under 0.5 s)",
+   "ok": true,
+   "detail": "p99 0.016842751 s"
+  },
+  {
+   "name": "only /metrics answers (404 elsewhere)",
+   "ok": true,
+   "detail": 404
+  },
+  {
+   "name": "nothing listens on the metrics port",
+   "ok": true
+  },
+  {
+   "name": "a warning says why",
+   "ok": true,
+   "detail": "metrics listener stays closed rather than serve unauthenticated"
+  },
+  {
+   "name": "no token: 401",
+   "ok": true
+  },
+  {
+   "name": "wrong token: 401",
+   "ok": true
+  },
+  {
+   "name": "right token: 200",
+   "ok": true
+  },
+  {
+   "name": "nothing listens",
+   "ok": true
+  },
+  {
+   "name": "OBS_RUNTIME_MONITOR=false: nothing listens",
+   "ok": true
+  }
+ ]
+}

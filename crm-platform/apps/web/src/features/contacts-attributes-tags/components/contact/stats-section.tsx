@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { useFormatter, useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { Spinner } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useLeadScoringEnabled } from '@/features/lead-scoring';
 import { useContactConversations } from '../../api/conversations';
 import { useContactCalls, useContactOpenTaskCount } from '../../api/stats';
 import { callFigures, conversationFigures } from '../../lib/contact-data';
@@ -46,6 +47,7 @@ export function StatsSection({ contact, variant }: SectionProps) {
   const canConversations = useCan('inbox.conversation.read');
   const canCalls = useCan('call.logs.read');
   const canTasks = useCan('record.tasks.read');
+  const scoringOn = useLeadScoringEnabled();
 
   const conversations = useContactConversations(contact, canConversations);
   const calls = useContactCalls(contact, canCalls);
@@ -101,7 +103,7 @@ export function StatsSection({ contact, variant }: SectionProps) {
               : format.number(tasks.count)}
           </Tile>
         )}
-        {contact.leadScore !== null && (
+        {scoringOn && contact.leadScore !== null && (
           <Tile label={t('leadScore')}>{format.number(contact.leadScore)}</Tile>
         )}
         <Tile label={t('lastActivity')} wide>

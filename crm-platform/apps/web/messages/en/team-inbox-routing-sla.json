@@ -89,7 +89,14 @@
       "delete": "Delete",
       "startsFlow": "Also starts the flow {name}",
       "flowOff": "Flow is switched off",
-      "flowGone": "Also starts a flow that was deleted"
+      "flowGone": "Also starts a flow that was deleted",
+      "markSpamSummary": "Marks the conversation as spam",
+      "prioritySummary": "Sets the priority to {priority}",
+      "tagsSummary": "Adds the tags {tags}",
+      "escalationSummary": "If nobody replies within {minutes} minutes:",
+      "escalationReassign": "reassign it to this rule's agents",
+      "escalationPriority": "set the priority to {priority}",
+      "autoReplySummary": "Sends the reply: {body}"
     },
     "form": {
       "back": "Auto-assignment",
@@ -118,7 +125,14 @@
         "contactIncomplete": "Finish or remove the contact conditions that are not complete.",
         "keywordsMany": "Use at most 20 words.",
         "targets": "Choose at least one agent or team.",
-        "specific": "Choose exactly one agent for a specific agent."
+        "specific": "Choose exactly one agent for a specific agent.",
+        "actions": "Choose what the rule does.",
+        "tagsMany": "Use at most 5 tags.",
+        "escalationMinutes": "Use a whole number of minutes from 1 to 1440.",
+        "escalationAction": "Reassign it, set a priority, or both.",
+        "escalationAgents": "Reassigning needs agents in this rule: choose them above.",
+        "autoReplyEmpty": "Write the reply, or untick the option.",
+        "autoReplyLong": "The reply is too long (at most 1024 characters)."
       },
       "whenTitle": "When a new conversation arrives",
       "whenHint": "Every condition you set must match. Leave a part empty to ignore it.",
@@ -188,7 +202,23 @@
         "loadFailed": "The flows could not be loaded, so the choice may be incomplete."
       },
       "onLeave": "on leave",
-      "onLeaveUntil": "on leave until {date}"
+      "onLeaveUntil": "on leave until {date}",
+      "actions": "What the rule does",
+      "actionsHint": "Pick one or both. A rule can assign the conversation, mark it as spam, or do both.",
+      "actionAssign": "Assign to agents or teams",
+      "actionMarkSpam": "Mark the conversation as spam",
+      "setPriority": "Set the priority",
+      "priorityKeep": "Leave the priority as it is",
+      "addTags": "Add tags",
+      "addTagsHint": "Separate with commas. A tag that does not exist yet is created.",
+      "escalate": "If nobody replies in time, escalate",
+      "escalateHint": "Minutes from when the rule fires, up to 1440 (one day). A reply from us first cancels it.",
+      "escalateMinutes": "Minutes without a reply",
+      "escalateReassign": "Reassign it to this rule's agents",
+      "escalatePriority": "Then set the priority",
+      "autoReply": "Send an automatic reply",
+      "autoReplyBody": "Reply text",
+      "autoReplyHint": "Sent as the business to the customer. Outside the 24-hour window a free reply is not sent."
     },
     "sla": {
       "back": "Back to Settings",
@@ -206,8 +236,6 @@
       "resolution": "Resolve within (minutes)",
       "minutesHint": "Leave empty for no target. 60 is one hour, 1440 is one day.",
       "minutesInvalid": "Use whole numbers from 1.",
-      "pause": "Pause while waiting on the customer",
-      "pauseHint": "A conversation set to pending is not flagged.",
       "businessHours": "Count business hours only",
       "businessHoursHint": "Uses the hours and time zone from your workspace settings.",
       "makeDefault": "Make this the default policy",
@@ -423,9 +451,9 @@
       "to": "To",
       "problem": {
         "required": "Enter both times.",
-        "order": "The closing time must be after the opening time."
+        "same": "The opening and closing times must differ."
       },
-      "note": "A day that is switched off is closed all day. Until you save, the workspace counts as open all the time.",
+      "note": "A day that is switched off is closed all day. Until you save, the workspace counts as open all the time. Breaks, overnight hours and holidays are set in Settings > General > Working hours.",
       "cancel": "Cancel",
       "save": "Save hours",
       "saved": "Business hours saved",

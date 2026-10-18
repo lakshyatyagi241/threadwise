@@ -20,3 +20,16 @@ export { CallingToggleCard } from './components/calling-settings-screen';
 export { IncomingCallToast } from './components/incoming-call-toast';
 export { OnCallPanel } from './components/on-call-panel';
 export { useCallEligibility } from './api/calling';
+
+/**
+ * Logging a call from another screen (the contact page's compose box): the request, the form rules and the call. The Log a call dialog
+ * of the Call logs screen uses the same three, so both forms accept and refuse the same things.
+ */
+export { useLogCall } from './api/call-logging';
+export {
+  buildLogCallInput,
+  localDateTimeValue,
+  tomorrowMorning,
+  type LogCallForm,
+  type LogCallProblem,
+} from './lib/log-call';

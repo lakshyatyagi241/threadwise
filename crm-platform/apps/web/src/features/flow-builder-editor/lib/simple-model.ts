@@ -9,8 +9,10 @@ import {
   flbCarouselReplies,
   flbCleanCarouselCards,
   flbCondProblems,
+  flbReadLocation,
 } from '@crm/contracts';
 import { conditionTreeOf } from './condition-tree';
+import { ctaLinkProblem } from './cta-link';
 import { askInputLabelMsg, nodeLabelMsg } from './contract-text';
 import { minScoreOutOfRange } from './faq-node';
 import { dedupeMsgs, msg, renderMsg, type Msg, type Translate } from './msg';
@@ -42,6 +44,7 @@ export const SIMPLE_TYPES = [
   'assign',
   'faq',
   'api_library',
+  'webhook',
   'code',
   'ai',
 ] as const;
@@ -63,6 +66,20 @@ export const BRANCHING: ReadonlySet<string> = new Set([
  * A branching step whose exits are fixed by the step, not written by the author: the graph port each exit leaves by, in the order of
  * the step's `links`. The other branching steps have one exit per button / row, on ports `p0`, `p1`, ...
  */
+/**
+ * Buttons and list: the customer's tap picks the exit, and an exit that leads nowhere in particular can carry on with the step
+ * that follows in the same chain (`LINK_NEXT`). The other branching steps end their chain: nothing follows them.
+ */
+export const OPTION_STEPS: ReadonlySet<string> = new Set(['buttons', 'list']);
+export const endsChain = (type: string): boolean => BRANCHING.has(type) && !OPTION_STEPS.has(type);
+/** A button / row link that means "carry on with the next step of this chain" (never a step id). */
+export const LINK_NEXT = '__next';
+/**
+ * A button / row link that means "the conversation ends here", chosen on purpose. A link that is `null` is not decided yet: the
+ * button is shown to the customer but does nothing, so the flow cannot be published like that.
+ */
+export const LINK_END = '__end';
+
 export const FIXED_EXITS: Readonly<Record<string, readonly string[]>> = {
   faq: ['matched', 'no_match'],
   condition: ['yes', 'no'],
@@ -88,7 +105,10 @@ export interface SimpleStep {
   id: string;
   type: SimpleType;
   data: Record<string, unknown>;
-  /** For buttons and list steps: the step each button / row leads to (a step id), `null` = the conversation ends there. */
+  /**
+   * For buttons and list steps: the step each button / row leads to (a step id), `LINK_NEXT` = carry on with the step after this one,
+   * `null` = the conversation ends there.
+   */
   links: (string | null)[];
   /**
    * For the last step of a part that is not buttons or a list: the step it carries on with, anywhere in the flow (a "node to node"
@@ -282,13 +302,23 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
 
   // Journeys: the trigger's chain first, then every other chain by where its first step sits on the canvas. A step continues its
   // chain only when it is reached by that one wire and does not start a named flow; any other `out` wire is a "carry on at" jump.
+  /** The step a buttons / list node carries on with (the one after it in its chain), when it is there. */
+  const carryOf = (n: FlowNode): string | undefined => {
+    const id = n.data.carryOn;
+    return OPTION_STEPS.has(n.type) && typeof id === 'string' && id !== n.id && nodes.has(id)
+      ? id
+      : undefined;
+  };
+  const carried = new Set(graph.flowNodes.map(carryOf).filter((id): id is string => !!id));
   const mainHead = next.get(trigger.id);
   const continues = (id: string): boolean =>
     id !== mainHead &&
     nodes.get(id)!.data.journeyName === undefined &&
     (feeders.get(id)?.length ?? 0) === 1;
   const others = graph.flowNodes
-    .filter((n) => n.type !== 'trigger' && n.id !== mainHead && !continues(n.id))
+    .filter(
+      (n) => n.type !== 'trigger' && n.id !== mainHead && !continues(n.id) && !carried.has(n.id),
+    )
     .sort((a, b) => a.x - b.x || a.y - b.y);
 
   const seen = new Set<string>();
@@ -299,14 +329,26 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
       seen.add(cur);
       const n = nodes.get(cur)!;
       const links: (string | null)[] = [];
+      const carry = carryOf(n);
       if (BRANCHING.has(n.type)) {
         const wired = option.get(n.id) ?? [];
         for (let i = 0; i < optionCount({ type: n.type as SimpleType, data: n.data }); i++)
-          links.push(wired[i] ?? null);
+          links.push(carry && wired[i] === carry ? LINK_NEXT : (wired[i] ?? null));
       }
+      // Buttons / rows the author chose to end on ride on the node too (an ended exit has no edge, like an undecided one).
+      const ended = new Set(arr(n.data.endOptions).map(Number));
+      links.forEach((l, i) => {
+        if (l === null && ended.has(i)) links[i] = LINK_END;
+      });
       const step: SimpleStep = { id: n.id, type: n.type as SimpleType, data: { ...n.data }, links };
+      delete step.data.carryOn;
+      delete step.data.endOptions;
       if (errorEnds.has(n.id)) step.data.errorEnds = true;
       steps.push(step);
+      if (carry && !seen.has(carry)) {
+        cur = carry;
+        continue;
+      }
       const nx = next.get(cur);
       if (!nx) break;
       if (continues(nx) && !seen.has(nx)) cur = nx;
@@ -338,7 +380,9 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
   const ids = new Set(journeys.flatMap((j) => j.steps.map((s) => s.id)));
   for (const j of journeys)
     for (const s of j.steps) {
-      s.links = s.links.map((l) => (l && ids.has(l) ? l : null));
+      s.links = s.links.map((l) =>
+        l === LINK_NEXT || l === LINK_END || (l && ids.has(l)) ? l : null,
+      );
       if (s.goto && !ids.has(s.goto)) delete s.goto;
     }
 
@@ -375,6 +419,15 @@ export function toGraph(doc: SimpleDoc): FlowGraph {
       // The journey's name rides on its first step (the graph has no place for it); the main flow's is fixed.
       if (si === 0 && ji > 0) data.journeyName = j.name.trim();
       else delete data.journeyName;
+      // The step a buttons / list step carries on with rides on its node (the graph has only the tapped exits).
+      const following = j.steps[si + 1];
+      if (OPTION_STEPS.has(s.type) && following) data.carryOn = following.id;
+      else delete data.carryOn;
+      const ends = BRANCHING.has(s.type)
+        ? s.links.flatMap((l, i) => (l === LINK_END ? [i] : []))
+        : [];
+      if (ends.length > 0) data.endOptions = ends;
+      else delete data.endOptions;
       nodes.push({
         id: s.id,
         type: s.type,
@@ -395,7 +448,8 @@ export function toGraph(doc: SimpleDoc): FlowGraph {
       else if (!BRANCHING.has(s.type) && s.goto && known.has(s.goto))
         for (const h of exits) edge(s.id, h, s.goto);
       if (BRANCHING.has(s.type)) {
-        s.links.forEach((target, i) => {
+        s.links.forEach((link, i) => {
+          const target = link === LINK_NEXT ? following?.id : link;
           if (target && known.has(target)) edge(s.id, exitHandle(s.type, i), target);
         });
       }
@@ -481,8 +535,9 @@ export const STEP_KINDS: readonly StepKind[] = [
   kind('cta', 'cta', 'send'),
   kind('template', 'template', 'send'),
   kind('location', 'location', 'send'),
-  kind('delay', 'delay', 'send'),
+  kind('delay', 'delay', 'action'),
   kind('api-library', 'api_library', 'action'),
+  nodeKind('webhook', 'webhook', 'action'),
   kind('code', 'code', 'action'),
   kind('ask', 'ask', 'ask', 'text'),
   kind('ask-name', 'ask', 'ask', 'name'),
@@ -506,6 +561,7 @@ const WEB_STEP_TYPES: ReadonlySet<SimpleType> = new Set([
   'ask_file',
   'delay',
   'cta',
+  'webhook',
 ]);
 
 /** The "+" menu entries for a channel: a website chat bot only offers what the widget can render. */
@@ -573,10 +629,12 @@ export function newStep(
   }
   if (type === 'message') data.text = '';
   if (type === 'api_library') data.save = fresh('api_response');
+  if (type === 'webhook') data.save = fresh('webhook_response');
   if (type === 'code') data.save = fresh('result');
   if (type === 'ai') data.save = fresh('reply');
   // `faq` keeps the catalogue defaults: the customer's last message, every FAQ, the workspace's score, answer sent, saved as `faq`.
-  if (type === 'location') Object.assign(data, { lat: '', lng: '', title: '', address: '' });
+  if (type === 'location')
+    Object.assign(data, { locMode: 'link', mapsUrl: '', lat: '', lng: '', title: '', address: '' });
   if (type === 'cta') data.actions = [{ type: 'url', label: 'Visit website', value: '' }];
   if (type === 'condition')
     data.conditionGroup = { op: 'and', items: [{ variable: '', operator: 'equals', value: '' }] };
@@ -597,16 +655,25 @@ const mapJourney = (
   journeys: doc.journeys.map((j, i) => (i === ji ? f(j) : j)),
 });
 
-/** Insert a step into a journey at `at` (a step may not follow a buttons or list step: they end the journey). */
+/**
+ * Insert a step into a journey at `at`. A step may not follow a condition, carousel or FAQ step (they end the journey), and those
+ * can only go last. After buttons or a list the new step is what every button that leads nowhere carries on with.
+ */
 export function insertStep(doc: SimpleDoc, ji: number, at: number, step: SimpleStep): SimpleDoc {
   const j = doc.journeys[ji];
   if (!j) return doc;
   const prev = j.steps[at - 1];
-  if (prev && BRANCHING.has(prev.type)) return doc;
-  // A branching step inserted before others would cut them off from the journey: it has to be the last one.
-  if (BRANCHING.has(step.type) && at < j.steps.length) return doc;
+  if (prev && endsChain(prev.type)) return doc;
+  // A step that ends the journey inserted before others would cut them off from it: it has to be the last one.
+  if (endsChain(step.type) && at < j.steps.length) return doc;
   return mapJourney(doc, ji, (jj) => {
-    const steps = [...jj.steps.slice(0, at), step, ...jj.steps.slice(at)];
+    let steps = [...jj.steps.slice(0, at), step, ...jj.steps.slice(at)];
+    // A step added after the buttons / list step at the end of the journey is what every button that leads nowhere carries on with.
+    if (prev && OPTION_STEPS.has(prev.type) && at === jj.steps.length) {
+      steps = steps.map((x) =>
+        x.id === prev.id ? { ...x, links: x.links.map((l) => l ?? LINK_NEXT) } : x,
+      );
+    }
     // The jump ("carry on at") belongs to the last step: a step added at the end takes it over.
     if (at === jj.steps.length && prev?.goto && !BRANCHING.has(step.type)) {
       return {
@@ -669,7 +736,18 @@ export function removeStep(doc: SimpleDoc, id: string): SimpleDoc {
         }),
       };
     })
-    .filter((j, i) => i === 0 || j.steps.length > 0);
+    .filter((j, i) => i === 0 || j.steps.length > 0)
+    // A buttons / list step left last has nothing to carry on with.
+    .map((j) => {
+      const last = j.steps[j.steps.length - 1];
+      if (!last || !OPTION_STEPS.has(last.type) || !last.links.includes(LINK_NEXT)) return j;
+      return {
+        ...j,
+        steps: j.steps.map((x) =>
+          x.id === last.id ? { ...x, links: x.links.map((l) => (l === LINK_NEXT ? null : l)) } : x,
+        ),
+      };
+    });
   return { ...doc, journeys };
 }
 
@@ -678,13 +756,13 @@ export function duplicateStep(doc: SimpleDoc, id: string): SimpleDoc {
     const si = doc.journeys[ji]!.steps.findIndex((s) => s.id === id);
     if (si < 0) continue;
     const src = doc.journeys[ji]!.steps[si]!;
-    // A copy of a buttons / list step is only allowed at the end, which is where the original is.
-    if (BRANCHING.has(src.type)) return doc;
+    // A copy of a step that ends its journey is only allowed at the end, which is where the original is.
+    if (endsChain(src.type)) return doc;
     const copy: SimpleStep = {
       ...src,
       id: flbNewNodeId(),
       data: structuredClone(src.data),
-      links: [],
+      links: src.links.map(() => null),
       goto: null,
     };
     return insertStep(doc, ji, si + 1, copy);
@@ -701,8 +779,8 @@ export function moveStep(doc: SimpleDoc, id: string, dir: -1 | 1): SimpleDoc {
     if (to < 0 || to >= steps.length) return doc;
     const next = steps.slice();
     [next[si], next[to]] = [next[to]!, next[si]!];
-    // A branching step has to stay last.
-    if (next.some((s, i) => BRANCHING.has(s.type) && i < next.length - 1)) return doc;
+    // A step that ends the journey has to stay last.
+    if (next.some((s, i) => endsChain(s.type) && i < next.length - 1)) return doc;
     // The jump belongs to whichever step is now last.
     const oldLast = steps[steps.length - 1]!;
     const newLast = next[next.length - 1]!;
@@ -802,6 +880,47 @@ export interface SimpleProblem {
 
 const cut = (s: string, n: number) => s.length > n;
 
+/**
+ * The buttons, rows and carousel reply buttons of a step that lead nowhere: no step of their own, not "carry on" with a step that is
+ * there, and no action (hand over to a person, start a flow, opt in / out), and not set to end there. The customer sees them, taps one and gets no answer, so
+ * the flow is not published like that (ending there is a choice: `LINK_END`). A condition or FAQ exit left open is fine: the customer never sees it, it just stops there.
+ * Returns the position and label of each (a nameless one reads `#n`).
+ */
+export function deadOptions(
+  s: SimpleStep,
+  following: SimpleStep | undefined,
+): { index: number; label: string }[] {
+  if (s.type !== 'buttons' && s.type !== 'list' && s.type !== 'carousel') return [];
+  const d = s.data;
+  const labels: string[] = [];
+  const agent = new Set<number>();
+  if (s.type === 'carousel') {
+    let i = 0;
+    for (const c of flbCleanCarouselCards(d.cards))
+      for (const b of c.buttons)
+        if (b.type === 'reply' || b.type === 'agent') {
+          if (b.type === 'agent') agent.add(i);
+          labels.push(b.label);
+          i++;
+        }
+  } else {
+    for (const o of arr(d.options)) labels.push(typeof o === 'string' ? o : str(rec(o).title));
+  }
+  const handoffs = rec(d.handoffs);
+  const actions = rec(d.optionActions);
+  const out: { index: number; label: string }[] = [];
+  labels.forEach((label, i) => {
+    const link = s.links[i];
+    if (link === LINK_END || (link === LINK_NEXT ? following : link)) return;
+    if (agent.has(i) || rec(handoffs[String(i)]).team !== undefined) return;
+    const a = rec(actions[String(i)]);
+    if (a.type === 'opt_in' || a.type === 'opt_out' || (a.type === 'flow' && str(a.flow).trim()))
+      return;
+    out.push({ index: i, label: label.trim() || `#${i + 1}` });
+  });
+  return out;
+}
+
 export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): SimpleProblem[] {
   const out: SimpleProblem[] = [];
   const t = doc.trigger.data;
@@ -826,19 +945,13 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
       if (s.type === 'media' && !str(d.url).trim()) bad('addFileLink');
       if (s.type === 'api_library' && !str(d.apiId).trim()) bad('chooseApi');
       if (s.type === 'code' && !str(d.code).trim()) bad('writeCode');
+      if (s.type === 'webhook' && !str(d.url).trim()) bad('webhookUrl');
       if (s.type === 'ask' || s.type === 'ask_file' || s.type === 'ask_location') {
         if (!str(d.prompt).trim()) bad('writeQuestion');
         if (!str(d.var).trim()) bad('nameVariable');
         if (d.saveProperty === true && !str(d.propertyKey).trim()) bad('chooseAnswerProperty');
       }
-      if (
-        s.type === 'location' &&
-        (Number.isNaN(Number(d.lat)) ||
-          str(d.lat).trim() === '' ||
-          Number.isNaN(Number(d.lng)) ||
-          str(d.lng).trim() === '')
-      )
-        bad('setCoordinates');
+      if (s.type === 'location' && !flbReadLocation(d).ok) bad('setCoordinates');
       if (s.type === 'template' && !str(d.tpl).trim()) bad('chooseTemplate');
       if (s.type === 'assign' && !str(d.team).trim()) bad('chooseTeam');
       if (
@@ -884,6 +997,8 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
         const list = arr(d.actions) as Array<Record<string, unknown>>;
         if (list.length === 0 || list.some((a) => !str(a.label).trim() || !str(a.value).trim()))
           bad('ctaLabelLink');
+        else if (list.some((a) => ctaLinkProblem(str(a.type) || 'url', a.value)))
+          bad('ctaLinkInvalid');
       }
       if (
         (s.type === 'buttons' || s.type === 'list') &&
@@ -910,6 +1025,20 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
         if (rows.some((r) => cut(str(r.description), LIMITS.rowDescription)))
           bad('rowDescriptionTooLong', { max: LIMITS.rowDescription });
       }
+      for (const dead of deadOptions(s, j.steps[si + 1])) {
+        out.push({
+          stepId: s.id,
+          message: msg('simpleModel.problems.optionNotConnected', {
+            stage,
+            kind: s.type === 'list' ? 'row' : 'button',
+            label: dead.label,
+          }),
+        });
+      }
+      if (s.type === 'buttons' && arr(d.options).length > LIMITS.buttons)
+        bad('tooManyOptions', { kind: 'button', max: LIMITS.buttons });
+      if (s.type === 'list' && arr(d.options).length > LIMITS.rows)
+        bad('tooManyOptions', { kind: 'row', max: LIMITS.rows });
       const v = str(d.var).trim();
       if (
         v &&
@@ -979,7 +1108,7 @@ export function stepSummary(s: SimpleStep, t: Translate): string {
           : s.type === 'media'
             ? str(d.caption) || str(d.url)
             : s.type === 'location'
-              ? str(d.title) || str(d.address)
+              ? str(d.title) || str(d.address) || coordsSummary(d)
               : s.type === 'template'
                 ? str(d.tpl)
                 : s.type === 'condition'
@@ -1002,11 +1131,13 @@ export function stepSummary(s: SimpleStep, t: Translate): string {
                               })
                             : s.type === 'api_library'
                               ? str(d.apiName)
-                              : s.type === 'code'
-                                ? str(d.save)
-                                : s.type === 'ai'
-                                  ? str(d.prompt)
-                                  : '';
+                              : s.type === 'webhook'
+                                ? str(d.url)
+                                : s.type === 'code'
+                                  ? str(d.save)
+                                  : s.type === 'ai'
+                                    ? str(d.prompt)
+                                    : '';
   const one = raw.replace(/\s+/g, ' ').trim();
   return one.length > 40 ? `${one.slice(0, 40)}…` : one;
 }
@@ -1029,5 +1160,13 @@ export const TYPE_LABEL: Record<SimpleType, Msg> = {
   faq: msg('simpleModel.typeLabel.faq'),
   api_library: msg('simpleModel.typeLabel.api_library'),
   ai: nodeLabelMsg('ai'),
+  webhook: nodeLabelMsg('webhook'),
   code: msg('simpleModel.typeLabel.code'),
 };
+
+/** A Location step with no name or address is summarised by its coordinates. */
+function coordsSummary(d: Record<string, unknown>): string {
+  const lat = str(d.lat).trim();
+  const lng = str(d.lng).trim();
+  return lat && lng ? `${lat}, ${lng}` : '';
+}

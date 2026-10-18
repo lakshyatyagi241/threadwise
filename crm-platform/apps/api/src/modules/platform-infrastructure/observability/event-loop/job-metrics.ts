@@ -1,4 +1,4 @@
-import type { RuntimeMonitor } from './runtime-monitor';
+import type { RuntimeMonitor } from '@crm/observability';
 
 /** The BullMQ `Job` fields the timing needs. Structural, so the hook is testable without Redis. */
 export interface JobTimingFields {

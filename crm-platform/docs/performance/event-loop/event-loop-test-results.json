@@ -3,6 +3,106 @@
   "commit": "604c1db95bac5efb2245506552f95f4801b63461 + uncommitted working tree",
   "results": [
     {
+      "suite": "measure-zlib-sites.mjs (20 sync zlib sites, synthetic payloads at two compressibilities, sync against thread-pool) and measure-zlib-real.mjs (the real compiled functions after EL-B08)",
+      "status": "RAN",
+      "ranOn": "2026-10-18, branch claude/event-loop-zlib-profile",
+      "rawData": "evidence/zlib-sites-before.json, evidence/zlib-real-after.json",
+      "observed": {
+        "before": "export page of 5,000 rows 80 to 600 ms (4 runners); archive batch of 20,000 events 190 ms to 1 s; privacy zip 117 ms (1 MB) and 705 ms (10 MB); archivedEventsOf 303 ms (30 MB) and 1.9 s (120 MB); extension entry 90 to 100 ms (20 MB); DOCX inflate 245 to 340 ms (64 MiB cap)",
+        "after": "async rows 15 ms (the timer floor); archivedEventsOf 27 / 45 / 174 ms at 6 / 30 / 120 MB; privacy buildZip 15 ms (10 MB), 51 ms (50 MB); readEntryAsync 28 ms (20 MB); docxToText 219 ms at 2 MB (regex clean-up, not zlib: EL-B21)"
+      },
+      "caveat": "Synthetic payloads and assumed row sizes, one laptop, Windows timer tick about 15 ms. Hold figures moved by up to 10 ms between repeat runs (archivedEventsOf at 30 MB read 36 and 45 ms). The runners themselves were not called."
+    },
+    {
+      "suite": "apps/api unit: 84 files across audit-log, contact-consent, chat-conversations, ai-agents-training, addons-extension-registry, platform-infrastructure, shopify-woocommerce",
+      "status": "PASSED",
+      "tests": 1285,
+      "passed": 1285,
+      "ranOn": "2026-10-18",
+      "note": "New: async-zlib.spec.ts (8), privacy-zip.spec.ts (4), an async-reader case in package.spec.ts. Updated for the async signatures: file-extract.spec.ts, message-log-rules.spec.ts. tsc and nest build clean (a wrong import depth in the revenue runner was caught by the build, not by a unit test: no unit test imports that file)."
+    },
+    {
+      "suite": "built apps/web (next build, then next start) with the runtime monitor: scrape, listener rule, switches",
+      "status": "PASSED (20 of 20 checks)",
+      "ranOn": "2026-10-18, branch claude/event-loop-web-instrumentation",
+      "rawData": "evidence/web-metrics.json",
+      "observed": {
+        "series": "GET /metrics 200 with service=\"web\": loop delay (p99, max), utilization, heap, rss, active resources, report timestamp, start time; idle p99 17 ms",
+        "listenerRule": "non-loopback host without a token: nothing listens and a warning says why; with a token: 401 without, 401 wrong, 200 right",
+        "switches": "no OBS_METRICS_PORT or OBS_RUNTIME_MONITOR=false: nothing listens",
+        "probeTarget": "GET /robots.txt answers 200"
+      },
+      "caveat": "Idle server on one laptop, no real traffic. Start-up took several minutes on this OneDrive checkout (next.config.ts alone 3.1 min), which says nothing about the image. Prometheus scraping the web container and the probe against it in the stack were not run."
+    },
+    {
+      "suite": "shared package move: apps/api tsc, platform-infrastructure unit (13 files, 218 tests), web unit (7), promtool check and test with the new web cases, dashboards.spec (7), docker build --target deps for both images",
+      "status": "PASSED",
+      "ranOn": "2026-10-18",
+      "note": "The full image builds (build stage) and the five-dashboard Grafana run were not run. The API tests still import the moved classes through the API re-exports, so they now need packages/observability built (pnpm --filter @crm/observability build)."
+    },
+    {
+      "suite": "regression-check.mjs on real run-load.mjs runs (profile normal, 90 s, 300 contacts): 3 baseline recordings, a clean run, a run with a 300 ms block injected every 5 s, a run on a starved host",
+      "status": "RAN: clean passes, injected block fails, starved host is exit 2",
+      "ranOn": "2026-10-17, branch claude/event-loop-regression-check",
+      "rawData": "evidence/regression-gate-local.json",
+      "observed": {
+        "baseline": "worst delay per window 83 / 36 / 53 ms, allowance 148 ms; p99 45 / 27 / 34 ms, allowance 69 ms; share of windows over 250 ms 0.03 / 0 / 0.05, allowance 0.18",
+        "clean": "p99 34 ms, worst 64 ms, no window over 250 ms: exit 0",
+        "injected": "worst 316 ms, 96 % of windows over 250 ms (22 critical windows): exit 1; p99 37 ms, not moved by one block per window",
+        "starvedHost": "worst 155 ms (allowance 148) with Postgres round trip p50 131 ms against 8 to 34 ms: exit 2 (it read as a regression before the gate learned to compare round trips)"
+      },
+      "caveat": "One noisy laptop. Two clean runs beyond the three recorded (the second through ci-regression.sh, exit 0), so the false-alarm rate is NOT measured. One injected shape. The caller p95 was not judged (recorded runs 0.8 s to 6.1 s). The CI job and a CI baseline do not exist yet (EL-B19)."
+    },
+    {
+      "suite": "apps/api unit: regression-check.spec.ts (4) and the gate self-test (16 cases)",
+      "status": "PASSED",
+      "tests": 4,
+      "passed": 4,
+      "ranOn": "2026-10-17",
+      "note": "Allowance from spread with floors; a 300 ms block in most windows fails and the recorded runs pass; no baseline, aborted run, a baseline too noisy for 300 ms are exit 2; failures on a host with far-off round trips are exit 2; a caller p95 whose recorded runs disagree by more than their median is not judged."
+    },
+    {
+      "suite": "scrape-demo.mjs --grafana (real API, worker and probe, real Prometheus 2.55 and Alertmanager 0.27, real Grafana 11.3.0)",
+      "status": "PASSED (54 of 54 checks)",
+      "ranOn": "2026-10-17, branch claude/event-loop-dashboards",
+      "rawData": "evidence/scrape-demo-grafana.json",
+      "observed": {
+        "provisioned": "crm-api, crm-realtime, crm-release-comparison, crm-workers; data source crm-prometheus healthy",
+        "panelQueries": "70 run through Grafana /api/ds/query (the release dashboard once for api, once for worker), 0 errors",
+        "panelsWithData": "every panel in the must-have list (loop, utilization, heap, memory, GC, CPU, probe latency, target, report age, open handles) returned points",
+        "panelsWithoutData": "7 panels, 8 queries, all needing failures this demo does not make: 5xx share (two on the API dashboard, one on the release dashboard), failed share, retries stat, failed jobs per second, retries per second"
+      },
+      "caveat": "Layout and legibility were not viewed in a browser. The demo has two routes (/health, /ready) and one queue (tpl-sweep), so route and queue tables are only shown with those. Idle 5xx panels read \"no data\", not 0."
+    },
+    {
+      "suite": "apps/api unit: dashboards.spec.ts",
+      "status": "PASSED",
+      "tests": 7,
+      "passed": 7,
+      "ranOn": "2026-10-17",
+      "note": "Mutation-checked: a metric renamed to crm_event_loop_utilisation_ratio and an offset placed after a closing paren each failed the matching test; the file was restored and build.mjs --check is clean. eslint clean."
+    },
+    {
+      "suite": "run-load.mjs --trace with and without the guard prefetch (--no-prefetch), same build, normal profile 5 req/s, 300 contacts, contacts list",
+      "status": "RAN",
+      "ranOn": "2026-10-17, branch claude/event-loop-auth-prefetch",
+      "rawData": "evidence/auth-prefetch-on.json, evidence/auth-prefetch-off.json",
+      "observed": {
+        "awaitedRedisWaits": "redisSequentialGroups 3.1 (off) to 2.1 (on); the remaining group is the fire-and-forget activity SET. Whole-request average 2.7 to 1.9",
+        "redisCommands": "5.1 both: the same reads, sent together instead of one after another",
+        "redisInFlightWallVsSum": "an earlier 120 s peak A/B: 37 to 41 % of the summed round trips with the prefetch, 64 to 68 % without"
+      },
+      "caveat": "Not a latency comparison. Back-to-back runs on this laptop swung between host round trips of 0.5 ms and 80 ms (p95 over 1 s), so milliseconds between runs mean nothing here; the group count does not depend on the host's speed."
+    },
+    {
+      "suite": "apps/api unit: auth-prefetch.spec.ts (14) plus the auth-registration-security, workspaces-teams-tenancy, rbac and roles-permissions suites",
+      "status": "PASSED",
+      "tests": 664,
+      "passed": 664,
+      "ranOn": "2026-10-17",
+      "note": "New: who gets a prefetch (workspace member only; not partner agent, operator or act-as), consumed once and only for the same org and user, a failed read becomes a fresh read, a miss goes to the service's own path without a second Redis read, the prefetch never changes a revoked-session refusal, works without the RBAC service and with a redis double that has no get(). eslint and tsc clean; dependency-cruiser 0 errors. verify-rbac-read.ts now 15/15 against a real Redis (adds: the early read returns the same version and grants). A broader name filter (realtime, chat-conversations) also matched e2e directories needing Docker and was discarded as a measurement; the unit files that reference the changed classes are the seven listed in the PR."
+    },
+    {
       "suite": "apps/api/test/integration/with-tenant.spec.ts (new) and rls.spec.ts, real Postgres 16 via testcontainers, restricted application role",
       "status": "PASSED (7 and 8)",
       "ranOn": "2026-10-17",
@@ -224,7 +324,10 @@
       "passed": 9350,
       "failed": 8,
       "skipped": 2,
-      "files": { "passed": 598, "failed": 2 },
+      "files": {
+        "passed": 598,
+        "failed": 2
+      },
       "failures": [
         {
           "file": "test/unit/infra/boundaries.matrix.spec.ts",
@@ -250,7 +353,10 @@
       "status": "FAILED elsewhere",
       "note": "Two errors in test/integration/catalog-products/variant-channels.spec.ts and test/unit/chrome-extension-sheets-addon/addon-source.spec.ts, neither touched here. No error in the files of this change."
     },
-    { "suite": "eslint on changed API files", "status": "PASSED" },
+    {
+      "suite": "eslint on changed API files",
+      "status": "PASSED"
+    },
     {
       "suite": "dependency-cruiser (pnpm --filter @crm/api arch)",
       "status": "PASSED",
@@ -294,8 +400,11 @@
   "notVerified": [
     "a Prometheus/Alertmanager/probe stack on a real server",
     "delivery to a real chat or pager destination",
-    "dashboards",
+    "dashboards on a real server, viewed in a browser, or used during an incident (they load and every query runs against a real Grafana in the demo)",
     "a 12 h or 24 h soak, or any load test on a dedicated host",
-    "the quality.yml event-loop job on GitHub (the workflow only runs manually and never has)"
+    "the quality.yml event-loop job on GitHub (the workflow only runs manually and never has)",
+    "the regression gate on a GitHub runner, a CI baseline, or its false-alarm rate (EL-B19)",
+    "Prometheus scraping the web container, the probe against web, and the full desk-web and desk-api image builds with @crm/observability",
+    "the export runners and the archive sweep end to end after EL-B08 (no database run), and any of the zlib figures on production-shaped data"
   ]
 }

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   barHeights,
   durationText,
+  forPlan,
   heatGrid,
   heatLevel,
   knownReason,
@@ -11,8 +12,10 @@ import {
   parseLogParams,
   percentText,
   phoneText,
+  sourcesFor,
   toAnalyticsQuery,
   toListQuery,
+  WHATSAPP_CALLING,
 } from './call-logs';
 
 const sp = (s: string) => new URLSearchParams(s);
@@ -183,5 +186,38 @@ describe('what the analytics draws', () => {
     expect(barHeights([1, 2, 4])).toEqual([0.25, 0.5, 1]);
     expect(barHeights([0, 0])).toEqual([0, 0]);
     expect(barHeights([])).toEqual([]);
+  });
+});
+
+describe('a workspace without WhatsApp calling (BL-257)', () => {
+  const stale = parseLogParams(sp(`numberId=${ID}&source=whatsapp&status=failed&agentId=${ID}`));
+
+  it('names the plan feature the API gates the WhatsApp parts with', () => {
+    expect(WHATSAPP_CALLING).toBe('waba_calling');
+  });
+
+  it('drops the WhatsApp number and the WhatsApp source from the address, and keeps the rest', () => {
+    const p = forPlan(stale, false);
+    expect(p.numberId).toBeUndefined();
+    expect(p.source).toBeUndefined();
+    expect(p.status).toBe('failed');
+    expect(p.agentId).toBe(ID);
+    expect(toListQuery(p, 'UTC')).toMatchObject({ numberId: undefined, source: undefined });
+    expect(toAnalyticsQuery(p, 'UTC')).toMatchObject({ numberId: undefined, source: undefined });
+  });
+
+  it('keeps a source that is not WhatsApp’s', () => {
+    expect(forPlan(parseLogParams(sp('source=telephony')), false).source).toBe('telephony');
+  });
+
+  it('changes nothing with WhatsApp calling', () => {
+    expect(forPlan(stale, true)).toBe(stale);
+  });
+
+  it('offers the four ways a call is logged without it, and all five with it', () => {
+    expect(sourcesFor(false)).toEqual(['manual', 'telephony', 'mobile_app', 'web_click_to_call']);
+    expect([...sourcesFor(true)].sort()).toEqual(
+      ['manual', 'mobile_app', 'telephony', 'web_click_to_call', 'whatsapp'].sort(),
+    );
   });
 });

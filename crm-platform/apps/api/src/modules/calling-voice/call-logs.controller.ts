@@ -27,9 +27,10 @@ import { CallRecordingsService } from './call-recordings.service';
 
 /**
  * Call logs and call analytics (TW-CALL-022 onward). `call.logs.read` opens them and its record scope says whose calls a person sees
- * (all, their team's, or only the ones they handled); playing a recording needs `call.recordings.play` as well. The plan feature
- * `waba_calling` gates every route, in the service, like the dial routes. Ids are uuids of the caller's workspace: another workspace's
- * call, or one outside the person's scope, is a 404.
+ * (all, their team's, or only the ones they handled); playing a recording needs `call.recordings.play` as well. The log is not
+ * plan-gated (BL-257): a workspace that only logs calls has it. The plan feature `waba_calling` gates what is WhatsApp's, in the
+ * service: playing a recording and the filter by WhatsApp number. Ids are uuids of the caller's workspace: another workspace's call,
+ * or one outside the person's scope, is a 404.
  */
 @ApiTags('calling')
 @ActorKinds('user')
@@ -46,7 +47,7 @@ export class CallLogsController {
     summary:
       'The call log: a page of calls, Reference’s four totals and the totals of the selection',
     description:
-      'Filters: range (24h, 7d, 30d) or from/to days in tz, status, direction, numberId, agentId, q (a phone number or part of the contact name).',
+      'Filters: range (24h, 7d, 30d) or from/to days in tz, status, direction, source, numberId, agentId, q (a phone number or part of the contact name). Every source is read without the plan feature waba_calling; numberId (a WhatsApp number) needs it, else 422 PLAN_FEATURE_LOCKED.',
   })
   list(
     @Query(zodPipe(callLogListQuerySchema)) q: CallLogListQuery,
@@ -57,7 +58,11 @@ export class CallLogsController {
 
   @Get('filters')
   @RequirePermission('call.logs.read')
-  @ApiOperation({ summary: 'The numbers and teammates the filter bar offers' })
+  @ApiOperation({
+    summary: 'The numbers and teammates the filter bar offers',
+    description:
+      'The WhatsApp numbers are listed only when the workspace has the plan feature waba_calling (else an empty list); the teammates are those of every source.',
+  })
   filters(@GrantedScope('call.logs.read') scope: RecordScope) {
     return this.logs.filters(scope);
   }
@@ -90,7 +95,8 @@ export class CallLogsController {
   @RequirePermission('call.logs.read')
   @ApiOperation({
     summary: 'A link that plays the recording for a few minutes (audited each time)',
-    description: 'Needs call.recordings.play as well. 404 when the call has no recording.',
+    description:
+      'Needs call.recordings.play as well and the plan feature waba_calling (422 PLAN_FEATURE_LOCKED without it). 404 when the call has no recording.',
   })
   playback(
     @Param('id', ParseUUIDPipe) id: string,

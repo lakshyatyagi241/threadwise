@@ -14,11 +14,13 @@ export const FILE_KEYS = {
  * The files recorded against a contact. The API only stores a caller-supplied storage key (upload is not built yet),
  * so this is a read-only list.
  */
-export function useContactFiles(contactId: string) {
+export function useContactFiles(contactId: string, enabled = true) {
   return useCursorList(
     FILE_KEYS.list(contactId),
     `/contacts/${contactId}/files`,
     contactFileResponseSchema,
+    {},
+    { enabled },
   );
 }
 

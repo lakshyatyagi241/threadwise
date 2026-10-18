@@ -4,6 +4,7 @@ import {
   FLB_COND_MAX_DEPTH,
   FLB_COND_MAX_RULES,
   flbCondProblems,
+  flbLinkableFlows,
   flbIsCondGroup,
   type FlbCondGroup,
   type FlbCondRule,
@@ -717,9 +718,11 @@ export function SubflowForm({ data: d, set, env }: FormProps) {
     [
       { v: '', l: env.loading ? t('subflowLoading') : t('subflowPick') },
       // A flow cannot run itself: the flow being edited is not offered.
-      ...env.ctx.flows
-        .filter((f) => f.id !== env.flowId)
-        .map((f) => ({ v: f.id, l: subflowLabel(th, f.name, f.isPublished) })),
+      // Only bots of this channel: a conversation cannot move to a bot of another channel.
+      ...flbLinkableFlows(env.ctx.flows, env.mode, env.flowId).map((f) => ({
+        v: f.id,
+        l: subflowLabel(th, f.name, f.isPublished),
+      })),
     ],
     d.flow,
     (v) => t('subflowMissing', { id: v.slice(0, 8) }),

@@ -352,6 +352,8 @@ export class InboxThreadService {
         );
       }
       await this.access.assertCan(tx, ctx, PERM.reply, record);
+      this.assertNotResolved(record);
+      this.access.assertNotAssignedToOther(ctx, record);
     });
     return (
       await this.withTemplatePreviews([await this.conversations.retryOutbound(messageUuid)])
@@ -368,5 +370,18 @@ export class InboxThreadService {
     if (!record) throw conversationNotFound();
     this.access.assertVisible(viewer, record);
     await this.access.assertCan(tx, ctx, PERM.reply, record);
+    this.assertNotResolved(record);
+    this.access.assertNotAssignedToOther(ctx, record);
+  }
+
+  /** A resolved or closed thread takes no agent message (text, media, template, share, reaction, retry): reopen it first. */
+  private assertNotResolved(record: { status: string }): void {
+    if (record.status === 'resolved' || record.status === 'closed') {
+      throw new AppError(
+        ERROR_CODES.CONVERSATION_RESOLVED,
+        'This conversation is resolved. Reopen it to reply.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
   }
 }

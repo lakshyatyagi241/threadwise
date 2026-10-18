@@ -32,23 +32,23 @@ assignment shape through both and fails if they ever differ.
 
 ## Routes
 
-| Method and path                                 | Permission                                    | Purpose                                                                                                                                                                                 |
-| ----------------------------------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /inbox/conversations`                      | `inbox.conversation.read`                     | The list, keyset cursor. `tab` all, mine, unassigned, unread; `status` (default open and pending, `all` for no filter); `channelId`; `q`; `archived`. `meta.counts` carries the badges. |
-| `GET /inbox/counts`                             | `inbox.conversation.read`                     | `{ all, mine, unassigned, unread, archived }`: the badges and the 60 second safety poll.                                                                                                |
-| `GET /inbox/conversations/:id`                  | `inbox.conversation.read`                     | Header: the list row plus capabilities, the service window (`open`, `expiresAt`), SLA placeholder, contact summary, up to 20 past conversations.                                        |
-| `GET /inbox/conversations/:id/messages`         | `inbox.conversation.read`                     | The thread by `seq`, gap-free (below).                                                                                                                                                  |
-| `POST /inbox/conversations/:id/messages`        | `inbox.conversation.reply`                    | Send text or an uploaded attachment. `202`, stored `queued`, sent by the worker (below).                                                                                                |
-| `POST /inbox/messages/:id/retry`                | `inbox.conversation.reply`                    | A `failed` outbound message goes back to `queued` (`202`).                                                                                                                              |
-| `POST /inbox/conversations/:id/read`            | `inbox.conversation.read`                     | `{ upToSeq }`: clears unread up to a message.                                                                                                                                           |
-| `POST /inbox/conversations/:id/status`          | `inbox.conversation.resolve`                  | `{ rowVersion, status }`: resolve, close, reopen, pending. Guarded transitions (below).                                                                                                 |
-| `POST /inbox/conversations/:id/assign`          | `inbox.conversation.assign` or `.assign_self` | Assign, claim or unassign (below). Routing domain.                                                                                                                                      |
-| `GET /inbox/assignees`                          | `inbox.conversation.read`                     | The people and teams a conversation can be given to. Routing domain.                                                                                                                    |
-| `GET /inbox/conversations/:id/notes`            | `inbox.conversation.read`                     | Internal notes, newest first, cursor.                                                                                                                                                   |
-| `POST /inbox/conversations/:id/notes`           | `inbox.conversation.note`                     | `{ body, mentions[] }` (user uuids). `201`.                                                                                                                                             |
-| `DELETE /inbox/conversations/:id/notes/:noteId` | `inbox.conversation.note`                     | The author, or anyone holding `inbox.conversation.assign`. `204`.                                                                                                                       |
-| `GET /inbox/conversations/:id/events`           | `inbox.conversation.read`                     | The activity timeline, newest first, cursor.                                                                                                                                            |
-| `POST /inbox/media`                             | `inbox.conversation.reply`                    | Upload an attachment before sending (multipart field `file`). `201`.                                                                                                                    |
+| Method and path                                 | Permission                                    | Purpose                                                                                                                                                                     |
+| ----------------------------------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /inbox/conversations`                      | `inbox.conversation.read`                     | The list, keyset cursor. `tab` all, mine, unassigned, unread; `status` (default open, `all` for no filter); `channelId`; `q`; `archived`. `meta.counts` carries the badges. |
+| `GET /inbox/counts`                             | `inbox.conversation.read`                     | `{ all, mine, unassigned, unread, archived }`: the badges and the 60 second safety poll.                                                                                    |
+| `GET /inbox/conversations/:id`                  | `inbox.conversation.read`                     | Header: the list row plus capabilities, the service window (`open`, `expiresAt`), SLA placeholder, contact summary, up to 20 past conversations.                            |
+| `GET /inbox/conversations/:id/messages`         | `inbox.conversation.read`                     | The thread by `seq`, gap-free (below).                                                                                                                                      |
+| `POST /inbox/conversations/:id/messages`        | `inbox.conversation.reply`                    | Send text or an uploaded attachment. `202`, stored `queued`, sent by the worker (below).                                                                                    |
+| `POST /inbox/messages/:id/retry`                | `inbox.conversation.reply`                    | A `failed` outbound message goes back to `queued` (`202`).                                                                                                                  |
+| `POST /inbox/conversations/:id/read`            | `inbox.conversation.read`                     | `{ upToSeq }`: clears unread up to a message.                                                                                                                               |
+| `POST /inbox/conversations/:id/status`          | `inbox.conversation.resolve`                  | `{ rowVersion, status }`: resolve, close, reopen. Guarded transitions (below).                                                                                              |
+| `POST /inbox/conversations/:id/assign`          | `inbox.conversation.assign` or `.assign_self` | Assign, claim or unassign (below). Routing domain.                                                                                                                          |
+| `GET /inbox/assignees`                          | `inbox.conversation.read`                     | The people and teams a conversation can be given to. Routing domain.                                                                                                        |
+| `GET /inbox/conversations/:id/notes`            | `inbox.conversation.read`                     | Internal notes, newest first, cursor.                                                                                                                                       |
+| `POST /inbox/conversations/:id/notes`           | `inbox.conversation.note`                     | `{ body, mentions[] }` (user uuids). `201`.                                                                                                                                 |
+| `DELETE /inbox/conversations/:id/notes/:noteId` | `inbox.conversation.note`                     | The author, or anyone holding `inbox.conversation.assign`. `204`.                                                                                                           |
+| `GET /inbox/conversations/:id/events`           | `inbox.conversation.read`                     | The activity timeline, newest first, cursor.                                                                                                                                |
+| `POST /inbox/media`                             | `inbox.conversation.reply`                    | Upload an attachment before sending (multipart field `file`). `201`.                                                                                                        |
 
 Every mutation takes an `Idempotency-Key` header (the stored answer is replayed for 24 hours); `rowVersion` is required on the two that edit
 the conversation row (`status`, `assign`).
@@ -61,9 +61,9 @@ the conversation row (`status`, `assign`).
 - A conversation with no message yet is not listed (it has nothing to answer); a new thread appears with its first message.
 - **Tabs** (Reference rules): `mine` is assigned to the caller; `unassigned` has no human assignee (a thread held by an AI agent counts as
   unassigned); `unread` has unread messages. `archived=true` shows every archived thread and ignores the tab and status. The default status
-  filter is open and pending; `status=all` removes it.
+  filter is open; `status=all` removes it.
 - **Counts** are one aggregate over the same visible set, narrowed by `channelId` only, so a badge equals what its tab lists. They cover open and
-  pending, non-archived threads; `archived` counts the archive.
+  non-archived threads; `archived` counts the archive.
 - **Search `q`**: case-insensitive substring of the thread title, the peer's name, the number, the last message, and the linked contact's name
   (a contact can be renamed after the thread was created). `%` and `_` search for themselves. A number is matched by its digits, so
   `+91 98765-43210` finds `919876543210`. Four trigram indexes serve it. Searching inside older messages is a later phase.
@@ -161,16 +161,22 @@ learn by `inbox.unread`.
 
 | From       | Allowed to                        |
 | ---------- | --------------------------------- |
-| `open`     | pending, resolved, closed         |
-| `pending`  | open, resolved, closed            |
+| `open`     | resolved, closed                  |
 | `snoozed`  | open (wake now), resolved, closed |
 | `resolved` | open (reopen), closed             |
 | `closed`   | open (reopen), resolved           |
 | `spam`     | open                              |
 
-Anything else is `422 CONVERSATION_STATUS_INVALID`. `snoozed` and `spam` are never a target here (they carry a time and a reason: their own routes
-later). A move to the status the thread already has is a **no-op** (`200`, no event, no outbox event; Reference re-ran every side effect and counted the
-resolution twice). Otherwise the version must match (`409 ROW_VERSION_CONFLICT`).
+Anything else is `422 CONVERSATION_STATUS_INVALID`. An agent's reply (`POST .../messages`) to a `resolved`, `closed` or `spam` thread moves it to `open` (Reference: a reply reopens), with a `reopened` event (`by: agent`). `snoozed` and `spam` are never a target here: they have their own routes.
+
+- `POST /v2/inbox/conversations/:id/snooze` `{ rowVersion, until }` parks the thread from **any** status (Reference: any status) until `until`
+  (1 minute to 365 days ahead). It comes back to `open` by the wake-up sweep (every 30 seconds in the worker) or by a move to `open`. Snoozing to
+  the time already set is a no-op.
+- `POST /v2/inbox/conversations/:id/spam` `{ rowVersion }` marks the thread as spam from **any** status (permission `inbox.conversation.resolve`).
+  The thread leaves every live list and its wake time is dropped. Taking it off spam is the status route (`spam` to `open`). Marking a spam thread
+  again is a no-op. The bulk route takes the same action as `{ "type": "spam" }`.
+  A move to the status the thread already has is a **no-op** (`200`, no event, no outbox event; Reference re-ran every side effect and counted the
+  resolution twice). Otherwise the version must match (`409 ROW_VERSION_CONFLICT`).
 
 Resolving or closing from a live status stamps `resolved_at` and `resolved_by`; resolved to closed (and back) keeps them; reopening clears them; waking
 a snoozed thread clears `snoozed_until`. One transaction writes the row, the timeline event (`resolved`, `closed`, `reopened`, `status_changed`), the
@@ -225,7 +231,7 @@ same for `teamId`. At least one of the two must be present.
 - The response is the conversation row as the list shows it.
 
 `GET /inbox/assignees` returns `{ users, teams }`: the **active members who may open the inbox**, each with `availability` (`online`, `away`, `busy`,
-`offline`; no status row means offline, as Reference), `openConversations` (a live count of open and pending conversations, not a stored counter that
+`offline`; no status row means offline, as Reference), `openConversations` (a live count of open conversations, not a stored counter that
 drifts), `isMe`; and the workspace's teams with `memberCount` and `assignmentStrategy` (every assignment to a team is manual until Phase 3).
 
 ## Realtime this domain publishes (after the commit, never inside it)
@@ -235,7 +241,7 @@ conversation's room). Message events and `inbox.unread` are the core's. Events a
 
 ## Not built here (later phases, recorded not dropped)
 
-Template send (TPL), snooze and spam routes, priority, tags (built, see above), bulk, saved replies, saved views, SLA, routing rules and strategies, mention
+Template send (TPL), priority, tags (built, see above), bulk, saved replies, saved views, SLA, routing rules and strategies, mention
 notifications, presence and typing, the AI hand-off hooks (AIAG), compose-to-many, the sweep of expired uploads. Reference's inbox deep link
 `/inbox?c=<uuid>` is the web's.
 

@@ -11,6 +11,7 @@ cp .env.example .env          # adjust ports if others are taken — see below
 pnpm infra:up                 # postgres, redis, minio, mailpit
 pnpm --filter @crm/contracts build
 pnpm --filter @crm/db build
+pnpm --filter @crm/observability build
 pnpm db:migrate
 pnpm db:seed
 

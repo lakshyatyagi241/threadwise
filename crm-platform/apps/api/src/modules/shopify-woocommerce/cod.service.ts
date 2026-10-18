@@ -18,6 +18,7 @@ import {
   wooRecipient,
   type StoreFacts,
 } from './event-rules';
+import { CommerceConsentService } from './commerce-consent.service';
 import { EventMessageService } from './event-message.service';
 import { EventsRepository } from './events.repository';
 import { MirrorRepository } from './mirror.repository';
@@ -48,6 +49,7 @@ export class CodService {
     private readonly stores: StoresRepository,
     private readonly events: EventsRepository,
     private readonly message: EventMessageService,
+    private readonly consent: CommerceConsentService,
     private readonly cod: CodRepository,
     private readonly mirror: MirrorRepository,
     @Inject(ECOM_TEMPLATES) private readonly templates: EcomTemplates,
@@ -100,17 +102,25 @@ export class CodService {
 
     let error: string | null = null;
     let response: unknown = null;
-    try {
-      const out = await this.sender.send(orgId, {
-        to: phone,
-        template,
-        ctx,
-        reference: `ecom-cod-${kind}-${storeId}-${String(data.id ?? '')}`,
-      });
-      response = { to: phone, id: out.providerMessageId };
-    } catch (err) {
-      error = err instanceof Error ? err.message : 'The message was not sent.';
-      this.logger.warn({ orgId, kind, storeId, err }, 'COD confirmation not sent');
+    // The confirmation is a notice about an order the customer placed (UTILITY) and is not asked about; a store that sends it with a
+    // MARKETING template is asked like any marketing message, and a refusal is logged `skipped` with the gate's reason (BL-141).
+    const verdict = await this.consent.clearCustomer(orgId, template.category, phone);
+    if (!verdict.ok) {
+      error = verdict.note;
+    } else {
+      try {
+        const out = await this.sender.send(orgId, {
+          to: phone,
+          template,
+          ctx,
+          reference: `ecom-cod-${kind}-${storeId}-${String(data.id ?? '')}`,
+          consent: verdict.clearance,
+        });
+        response = { to: phone, id: out.providerMessageId };
+      } catch (err) {
+        error = err instanceof Error ? err.message : 'The message was not sent.';
+        this.logger.warn({ orgId, kind, storeId, err }, 'COD confirmation not sent');
+      }
     }
 
     await this.db.txAs({ orgId }, async (tx) => {
@@ -121,7 +131,7 @@ export class CodService {
       });
       const log = await this.events.log(tx, orgId, kind, storeId, {
         eventType: 'cod/confirm',
-        status: error === null ? 'sent' : 'failed',
+        status: error === null ? 'sent' : verdict.ok ? 'failed' : 'skipped',
         recipient: phone,
         payload: { order: orderName },
         error,

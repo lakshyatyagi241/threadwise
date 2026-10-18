@@ -1,9 +1,16 @@
 import {
   routingAssignSchema,
+  routingAutoReplySchema,
   routingConditionsSchema,
+  routingEscalationSchema,
+  routingTagSchema,
+  type ConversationPriority,
   type RoutingAssign,
+  type RoutingAutoReply,
   type RoutingConditions,
+  type RoutingEscalation,
   type RoutingRule,
+  type RoutingTag,
   type RoutingTriggerFlow,
 } from '@crm/contracts';
 
@@ -11,7 +18,18 @@ type Raw = Record<string, unknown>;
 
 /** `routing_rules.actions`, as stored: Reference's list of action dicts. The assign action carries the private round robin cursor. */
 export interface StoredActions {
-  assign: RoutingAssign;
+  /** Null when the rule has no assignment (it only marks spam or starts a flow). */
+  assign: RoutingAssign | null;
+  /** Whether the rule marks the conversation as spam when it fires. */
+  markSpam: boolean;
+  /** The priority the rule sets when it fires, or none. */
+  priority: ConversationPriority | null;
+  /** The tags the rule adds when it fires. */
+  addTags: RoutingTag[];
+  /** The deferred reassignment or priority the rule schedules when it fires, or none. */
+  escalation: RoutingEscalation | null;
+  /** The automatic reply the rule sends, or none. */
+  autoReply: RoutingAutoReply | null;
   /** The uuid of the flow to start for the conversation when the rule fires, or none. */
   triggerFlowId: string | null;
   description: string;
@@ -20,15 +38,48 @@ export interface StoredActions {
 }
 
 export function encodeActions(a: StoredActions): unknown[] {
-  const out: unknown[] = [{ type: 'assign', ...a.assign, rrCursor: a.cursor }];
+  const out: unknown[] = [];
+  if (a.assign) out.push({ type: 'assign', ...a.assign, rrCursor: a.cursor });
+  if (a.markSpam) out.push({ type: 'mark_spam' });
+  if (a.priority) out.push({ type: 'set_priority', priority: a.priority });
+  for (const t of a.addTags) out.push({ type: 'add_tag', name: t.name, color: t.color });
+  if (a.autoReply) out.push({ type: 'auto_reply', body: a.autoReply.body });
+  if (a.escalation)
+    out.push({
+      type: 'set_escalation',
+      minutes: a.escalation.minutes,
+      reassign: a.escalation.reassign,
+      priority: a.escalation.priority,
+    });
   if (a.triggerFlowId) out.push({ type: 'trigger_flow', flowId: a.triggerFlowId });
   if (a.description) out.push({ type: 'note', description: a.description });
   return out;
 }
 
-const EMPTY_ASSIGN: RoutingAssign = { strategy: 'round_robin', userIds: [], teamIds: [] };
+function autoReplyOf(list: Raw[]): RoutingAutoReply | null {
+  const r = list.find((x) => x?.type === 'auto_reply');
+  if (!r) return null;
+  const parsed = routingAutoReplySchema.safeParse({ body: r.body });
+  return parsed.success ? parsed.data : null;
+}
 
-/** Reads what was stored; anything that does not parse (a hand-edited row) becomes an empty assign that does nothing. */
+function escalationOf(list: Raw[]): RoutingEscalation | null {
+  const e = list.find((x) => x?.type === 'set_escalation');
+  if (!e) return null;
+  const parsed = routingEscalationSchema.safeParse({
+    minutes: e.minutes,
+    reassign: e.reassign === true,
+    priority: e.priority ?? null,
+  });
+  return parsed.success ? parsed.data : null;
+}
+
+function priorityOf(list: Raw[]): ConversationPriority | null {
+  const p = list.find((x) => x?.type === 'set_priority')?.priority;
+  return p === 'low' || p === 'normal' || p === 'high' || p === 'urgent' ? p : null;
+}
+
+/** Reads what was stored; anything that does not parse (a hand-edited row) becomes no assignment, which does nothing. */
 export function decodeActions(raw: unknown): StoredActions {
   const list = Array.isArray(raw) ? (raw as Raw[]) : [];
   const a = list.find((x) => x?.type === 'assign');
@@ -43,7 +94,16 @@ export function decodeActions(raw: unknown): StoredActions {
     : null;
   const cursor = a && typeof a.rrCursor === 'number' ? a.rrCursor : null;
   return {
-    assign: parsed?.success ? parsed.data : EMPTY_ASSIGN,
+    assign: parsed?.success ? parsed.data : null,
+    markSpam: list.some((x) => x?.type === 'mark_spam'),
+    priority: priorityOf(list),
+    escalation: escalationOf(list),
+    autoReply: autoReplyOf(list),
+    addTags: list.flatMap((x) => {
+      if (x?.type !== 'add_tag') return [];
+      const tag = routingTagSchema.safeParse({ name: x.name, color: x.color ?? null });
+      return tag.success ? [tag.data] : [];
+    }),
     triggerFlowId: typeof trigger?.flowId === 'string' ? trigger.flowId : null,
     description: typeof note?.description === 'string' ? note.description : '',
     cursor,
@@ -80,6 +140,11 @@ export function toRoutingRule(
     description: actions.description,
     conditions: decodeConditions(r.conditions),
     assign: actions.assign,
+    markSpam: actions.markSpam,
+    priority: actions.priority,
+    addTags: actions.addTags,
+    escalation: actions.escalation,
+    autoReply: actions.autoReply,
     triggerFlow: triggerFlowOf(actions.triggerFlowId, flows),
     stopOnMatch: r.stop_on_match === true,
     isActive: r.is_active === true,

@@ -471,7 +471,6 @@
       },
       "status": {
         "open": "Đang mở",
-        "pending": "Đang chờ",
         "resolved": "Đã xử lý",
         "closed": "Đã đóng",
         "snoozed": "Đã tạm ẩn"

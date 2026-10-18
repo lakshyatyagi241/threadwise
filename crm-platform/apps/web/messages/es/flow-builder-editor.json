@@ -685,6 +685,7 @@
         "anotherPart": "Otra parte de este flujo. Se ejecuta cuando un botón o fila de lista lleva aquí{lost, select, true {: aún no lleva nada aquí, así que nunca se ejecutaría.} other {.}}",
         "addFirstStep": "Añade el primer paso",
         "branchingEnds": "Este {kind, select, list {lista} other {conjunto de botones}} cierra esta parte: lo que se envíe después depende de lo que elija el cliente.",
+        "optionsCarryOn": "Cada {kind, select, list {fila} other {botón}} puede iniciar su propio flujo o continuar con el siguiente paso de abajo.",
         "thenGoTo": "Luego ir a",
         "confirmImport": {
           "title": "¿Reemplazar este flujo con el archivo?",
@@ -720,7 +721,7 @@
             "answer": "Responder",
             "action": "Acciones"
           },
-          "blockedTitle": "Los botones y las listas cierran un flujo, así que solo pueden ir al final.",
+          "blockedTitle": "Este paso termina esta parte, por lo que solo puede ir al final.",
           "blockedTitleFaq": "Responder con FAQ tiene dos salidas, por lo que solo puede ir al final."
         },
         "card": {
@@ -752,7 +753,9 @@
         },
         "editors": {
           "linkLabel": "A dónde lleva",
+          "linkChoose": "Elige a dónde lleva…",
           "linkEnds": "Termina aquí (no se envía nada más)",
+          "linkNext": "Continúa con el siguiente paso",
           "linkOption": "{stage} · {label}{self, select, true { (este paso)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Llevar a un flujo nuevo…",
           "question": "Pregunta",
@@ -852,17 +855,13 @@
             "hour": "horas",
             "day": "días"
           },
-          "location": {
-            "placeName": "Nombre del lugar",
-            "placePlaceholder": "Nuestra oficina",
-            "address": "Dirección",
-            "latitude": "Latitud",
-            "longitude": "Longitud"
-          },
           "template": {
             "label": "Plantilla aprobada",
             "hint": "Solo se listan las plantillas que tu número de WhatsApp tiene aprobadas.",
-            "choose": "Elige una plantilla…"
+            "choose": "Elige una plantilla…",
+            "buttons": "Botones",
+            "variables": "Se rellena con datos del contacto",
+            "variablesHint": "Cada número se rellena al enviar el mensaje con el dato del contacto indicado aquí. Cámbialo en la plantilla."
           },
           "cta": {
             "buttonText": "Texto del botón",
@@ -876,7 +875,12 @@
             "add": "Añadir otro botón",
             "remove": "Quitar botón",
             "opensPhone": "Número de teléfono",
-            "opensEmail": "Dirección de correo"
+            "opensEmail": "Dirección de correo",
+            "errors": {
+              "url": "Introduce una dirección web válida que empiece por https://",
+              "phone": "Introduce un número de teléfono válido, por ejemplo +91 98765 43210",
+              "email": "Introduce un correo electrónico válido, por ejemplo name@example.com"
+            }
           },
           "carousel": {
             "intro": "Mensaje sobre las tarjetas",
@@ -1059,13 +1063,7 @@
           "info": "Añade hasta {max} botones CTA en un mensaje: combina Visitar sitio web, Llamar y Copiar código como quieras. Es el mismo límite que tienen los botones de las plantillas de WhatsApp.",
           "buttonLabel": "Etiqueta del botón",
           "addButton": "Añadir botón",
-          "maxReached": "Se alcanzó el máximo de {max} botones.",
-          "locationTitle": "Título",
-          "locationTitlePlaceholder": "Nuestra oficina",
-          "locationAddress": "Dirección",
-          "locationAddressPlaceholder": "Calle, ciudad, país",
-          "locationLatitude": "Latitud",
-          "locationLongitude": "Longitud"
+          "maxReached": "Se alcanzó el máximo de {max} botones."
         },
         "logic": {
           "operator": {
@@ -2031,6 +2029,41 @@
         "endTextHint": "Se envía antes de que termine el flujo. No menciones la edad. Si está vacío, usa \"No podemos continuar.\"",
         "continueNote": "Los pasos siguientes pueden leer la variable de la respuesta seguida de _age_gate (por ejemplo answer_age_gate), que vale under o adult. Agrega una Condición para ramificar, por ejemplo para pedir un padre, madre o tutor.",
         "note": "Pide la edad solo donde la necesites. La respuesta se escribe en el contacto: una fecha de nacimiento como fecha de nacimiento, y una respuesta de menor de edad marca el contacto como menor."
+      },
+      "location": {
+        "modeLabel": "Cómo definir la ubicación",
+        "modeLink": "Enlace de Google Maps",
+        "modeCoords": "Latitud y longitud",
+        "linkLabel": "Enlace de Google Maps",
+        "linkPlaceholder": "Pega un enlace, p. ej. https://maps.app.goo.gl/…",
+        "linkHint": "En Google Maps, abre el lugar, toca Compartir y luego Copiar enlace. Sirven los enlaces cortos y largos.",
+        "finding": "Buscando el enlace…",
+        "retry": "Reintentar",
+        "latitude": "Latitud",
+        "longitude": "Longitud",
+        "coordsHint": "La latitud va de -90 a 90 y la longitud de -180 a 180. Puedes pegar «lat, lng» en cualquiera de las casillas.",
+        "found": "Ubicación encontrada",
+        "openInMaps": "Abrir en Google Maps",
+        "optionalHint": "Opcional: se muestra en la tarjeta de mapa que recibe el cliente. Puedes dejar ambos vacíos.",
+        "optional": "(opcional)",
+        "placeName": "Nombre del lugar",
+        "placePlaceholder": "Nuestra oficina",
+        "address": "Dirección",
+        "problem": {
+          "empty": "Introduce un enlace de Google Maps o unas coordenadas.",
+          "lat_missing": "Introduce una latitud.",
+          "lng_missing": "Introduce una longitud.",
+          "lat_nan": "La latitud debe ser un número, por ejemplo 18.5204.",
+          "lng_nan": "La longitud debe ser un número, por ejemplo 73.8567.",
+          "lat_range": "La latitud debe estar entre -90 y 90.",
+          "lng_range": "La longitud debe estar entre -180 y 180.",
+          "zero": "0, 0 no es un lugar real. Introduce las coordenadas reales.",
+          "not_url": "Esto no parece un enlace. Pega el enlace completo de Google Maps.",
+          "not_maps": "Este no es un enlace de Google Maps.",
+          "no_coords": "Este enlace no apunta a un lugar exacto. Abre el lugar en Google Maps, toca Compartir y copia ese enlace, o introduce las coordenadas.",
+          "unresolved": "Este enlace corto aún no se ha consultado. Sal del campo o vuelve a intentarlo.",
+          "resolve_failed": "No se pudo leer este enlace. Comprueba que se abre en Google Maps o introduce las coordenadas."
+        }
       }
     },
     "contracts": {
@@ -2463,7 +2496,8 @@
         "noSenderInstagram": "El nodo Disparador no tiene ninguna cuenta de Instagram seleccionada: elige una en el paso Disparador.",
         "noSenderFacebook": "El nodo Disparador no tiene ninguna página de Facebook seleccionada: elige una en el paso Disparador.",
         "noSenderNumber": "El nodo Disparador no tiene ningún número seleccionado: elige uno en el paso Disparador.",
-        "faqMinScore": "“{node}” tiene una puntuación mínima fuera del rango de 0.05 a 0.99. Corrígela o déjala en blanco para usar la configuración del flujo."
+        "faqMinScore": "“{node}” tiene una puntuación mínima fuera del rango de 0.05 a 0.99. Corrígela o déjala en blanco para usar la configuración del flujo.",
+        "locationInvalid": "«{node}» no tiene una ubicación válida: pega un enlace de Google Maps o introduce una latitud (-90 a 90) y una longitud (-180 a 180)."
       }
     },
     "simpleModel": {
@@ -2604,10 +2638,11 @@
         "writeQuestion": "Paso {stage}: escribe la pregunta.",
         "nameVariable": "Paso {stage}: pon nombre a la variable donde se guarda la respuesta.",
         "chooseAnswerProperty": "Paso {stage}: elige la propiedad del contacto a la que se copia la respuesta.",
-        "setCoordinates": "Paso {stage}: define la latitud y la longitud.",
+        "setCoordinates": "Paso {stage}: pega un enlace de Google Maps o introduce una latitud y una longitud válidas.",
         "chooseTemplate": "Paso {stage}: elige una plantilla.",
         "chooseTeam": "Paso {stage}: elige el equipo al que va la conversación.",
         "ctaLabelLink": "Paso {stage}: ponle un nombre y un enlace al botón.",
+        "ctaLinkInvalid": "Paso {stage}: el destino del botón no es válido para su tipo.",
         "choosePickedProperty": "Paso {stage}: elige la propiedad del contacto a la que se copia la opción elegida.",
         "buttonsPrompt": "Paso {stage}: escribe el mensaje que va encima de los botones.",
         "addButton": "Paso {stage}: añade al menos un botón.",
@@ -2623,9 +2658,12 @@
         "carouselButtons": "Paso {stage}: dale un nombre a cada botón, y un enlace, número o dirección donde abra algo.",
         "conditionIncomplete": "Paso {stage}: completa las reglas de la condición (una variable y un valor en cada una).",
         "faqMinScore": "Paso {stage}: la puntuación mínima debe estar entre 0.05 y 0.99, o usa la configuración del flujo.",
+        "optionNotConnected": "Paso {stage}: {kind, select, row {la fila} other {el botón}} \"{label}\" no lleva a ningún sitio. Añade un paso para ello o asígnale una acción.",
+        "tooManyOptions": "Paso {stage}: {kind, select, row {una lista puede tener como máximo {max} filas} other {un conjunto de botones puede tener como máximo {max} botones}}.",
         "chooseFlow": "Paso {stage}: elige el flujo que inicia el botón.",
         "chooseApi": "Paso {stage}: elige la API a la que llamar.",
-        "writeCode": "Paso {stage}: escribe el código que se ejecutará."
+        "writeCode": "Paso {stage}: escribe el código que se ejecutará.",
+        "webhookUrl": "Paso {stage}: añade la dirección (URL) a la que llamar."
       },
       "faqSummary": "{hasCategory, select, true {De tus FAQ · {category}} other {De tus FAQ}}"
     },
@@ -2740,7 +2778,8 @@
       "simPurchase": "Compra simulada: {name} → puerto «purchased»",
       "simAbandon": "Abandono simulado → puerto «abandoned»",
       "faqAnswered": "(simulado) Responder con FAQ para “{query}”: el chat de prueba no consulta tus FAQ, así que no se envía nada y {ref} queda vacío. Se toma la salida “respondida”.",
-      "faqNoMatch": "(simulado) Responder con FAQ para “{query}”: el chat de prueba no consulta tus FAQ y la salida “respondida” no está conectada, así que se toma “sin coincidencia”. {ref} queda vacío."
+      "faqNoMatch": "(simulado) Responder con FAQ para “{query}”: el chat de prueba no consulta tus FAQ y la salida “respondida” no está conectada, así que se toma “sin coincidencia”. {ref} queda vacío.",
+      "locationSkipped": "(ubicación) omitida: no hay coordenadas válidas"
     }
   }
 }

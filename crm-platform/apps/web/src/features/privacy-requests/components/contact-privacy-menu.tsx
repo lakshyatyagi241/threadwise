@@ -4,17 +4,17 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import type { PrivacyRequestType } from '@crm/contracts';
-import { Menu, MenuItem, useToast } from '@crm/ui';
+import { MenuItem, MenuSeparator, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { KEYS } from '../api/hooks';
 import { privacyApi } from '../api/service';
 
 /**
- * The "Privacy" menu of a contact profile: export this person's data, or erase them. Each opens a data request for the contact (channel
- * "entered by staff") and goes to it, where identity is checked and the work is previewed and confirmed. Shown only to people who may
- * manage data requests; erasing also needs the erase permission.
+ * The privacy items of a contact profile's "..." menu: export this person's data, or erase them. Each opens a data request for the
+ * contact (channel "entered by staff") and goes to it, where identity is checked and the work is previewed and confirmed. Shown only
+ * to people who may manage data requests; erasing also needs the erase permission. Mount it inside a `Menu`.
  */
-export function ContactPrivacyMenu({ contactId }: { contactId: string }) {
+export function ContactPrivacyMenuItems({ contactId }: { contactId: string }) {
   const t = useTranslations('privacy-requests.contactMenu');
   const canManage = useCan('privacy.requests.manage');
   const canErase = useCan('privacy.erase.execute');
@@ -38,13 +38,16 @@ export function ContactPrivacyMenu({ contactId }: { contactId: string }) {
   });
   if (!canManage) return null;
   return (
-    <Menu label={t('group')} trigger={t('group')} align="end" disabled={create.isPending}>
-      <MenuItem onSelect={() => create.mutate('export')}>{t('export')}</MenuItem>
+    <>
+      <MenuSeparator />
+      <MenuItem disabled={create.isPending} onSelect={() => create.mutate('export')}>
+        {t('export')}
+      </MenuItem>
       {canErase && (
-        <MenuItem danger onSelect={() => create.mutate('erasure')}>
+        <MenuItem danger disabled={create.isPending} onSelect={() => create.mutate('erasure')}>
           {t('erase')}
         </MenuItem>
       )}
-    </Menu>
+    </>
   );
 }

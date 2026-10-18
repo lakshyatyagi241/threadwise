@@ -76,7 +76,7 @@ export class LeaveSweepService {
              coalesce(o.settings ->> 'timezone', 'UTC') AS timezone,
              (SELECT count(*)::int FROM contacts c WHERE c.org_id = f.org_id AND c.owner_id = f.user_id) AS contacts,
              (SELECT count(*)::int FROM conversations c WHERE c.org_id = f.org_id AND c.assignee_user_id = f.user_id
-                AND c.archived = FALSE AND c.status IN ('open', 'pending')) AS conversations,
+                AND c.archived = FALSE AND c.status = 'open') AS conversations,
              (SELECT du.uuid FROM member_delegates d JOIN users du ON du.org_id = d.org_id AND du.id = d.delegate_user_id
                WHERE d.org_id = f.org_id AND d.user_id = f.user_id) AS delegate_uuid
       FROM flipped f JOIN users u ON u.org_id = f.org_id AND u.id = f.user_id

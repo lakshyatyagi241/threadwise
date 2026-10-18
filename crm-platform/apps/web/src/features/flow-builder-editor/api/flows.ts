@@ -9,6 +9,7 @@ import {
   flbGoogleFilesResponseSchema,
   googleAccountSummarySchema,
   listFlowsResponseSchema,
+  flbResolveMapsResponseSchema,
   flbTestWebhookResponseSchema,
   toggleFlowResponseSchema,
   flbAiGenerateResponseSchema,
@@ -22,6 +23,7 @@ import {
   type ListFlowsQuery,
   type SaveFlowRequest,
   type SetBuilderModeRequest,
+  type FlbResolveMapsRequest,
   type FlbTestWebhookRequest,
   type UpdateAdminFlowTemplateInput,
   type UpdateFlowRequest,
@@ -85,6 +87,12 @@ export const flowsApi = {
     }),
   testWebhook: (body: FlbTestWebhookRequest) =>
     apiFetch('/flows/test-webhook', { method: 'POST', body, schema: flbTestWebhookResponseSchema }),
+  resolveMapsLink: (body: FlbResolveMapsRequest) =>
+    apiFetch('/flows/location/resolve', {
+      method: 'POST',
+      body,
+      schema: flbResolveMapsResponseSchema,
+    }),
   aiGenerate,
 };
 

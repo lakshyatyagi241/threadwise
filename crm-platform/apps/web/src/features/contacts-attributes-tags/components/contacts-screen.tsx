@@ -8,10 +8,12 @@ import { useTranslations } from 'next-intl';
 import { Alert, Button, ConfirmDialog, EmptyState, StatTile, cn, useToast } from '@crm/ui';
 import type { ContactViewResponse } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
+import { PageFill } from '@/components/shell/page-fill';
 import { CallingProvider, OnCallPanel } from '@/features/calling-voice';
+import { useLeadScoringEnabled } from '@/features/lead-scoring';
 import { invalidateSegments, useSegments, appliedConditionCount } from '@/features/segments';
 import { useStoredValue } from '@/lib/use-stored-value';
-import { useAttributes, useStatusOptions } from '../api/attributes';
+import { useAttributes, useContactFilterValues, useStatusOptions } from '../api/attributes';
 import {
   bulkDelete,
   bulkGroupMembership,
@@ -31,7 +33,6 @@ import {
   KEYS,
   useContactsPage,
   useContactStats,
-  updateContact,
   type ContactFilters,
 } from '../api/contacts';
 import { useGroups } from '../api/groups';
@@ -50,6 +51,8 @@ import {
   ORDER_STORAGE_KEY as COLUMN_ORDER_KEY,
   moveColumn,
   nudgeColumn,
+  omittedColumns,
+  restoreOmitted,
   visibleColumns,
   type ColumnId,
 } from '../lib/columns';
@@ -96,9 +99,8 @@ import type { SegmentOption, SegmentsState } from './segment-picker';
 import { SelectionBar } from './selection-bar';
 import { DedupeDialog } from './dedupe-dialog';
 import { ErrorLine } from './error-line';
-import { LostReasonDialog, type LostPrompt } from './lost-reason';
-import { isLostStage } from '../lib/stage-flow';
-import { statusAfterMove, statusNotice } from '../lib/status-scope';
+import { useStageMove } from './use-stage-move';
+import { statusAfterMove } from '../lib/status-scope';
 import { GroupModal } from './group-modal';
 import { SingleSendDrawer, type SingleSendTarget } from './single-send-drawer';
 import { ViewsBar } from './views-bar';
@@ -178,7 +180,8 @@ export function ContactsScreen() {
   /** A request to put the cursor in an inline composer of the quick view (the row's quick add, the action bar's buttons). */
   const [focus, setFocus] = useState<FocusRequest | null>(null);
   const askFocus = useCallback(
-    (target: AddTarget | null) => setFocus(target ? { target, n: Date.now() } : null),
+    (target: AddTarget | null, clickedAt?: number) =>
+      setFocus(target ? { target, n: Date.now(), ...(clickedAt ? { clickedAt } : {}) } : null),
     [],
   );
   /** Changing any filter, the sort or the page size starts again from page 1 and closes the quick view; only `page` keeps the position. */
@@ -281,10 +284,22 @@ export function ContactsScreen() {
     () => new Map((attributes.data ?? []).map((a) => [a.key, a.name])),
     [attributes.data],
   );
-  const stages = useMemo(() => stageChoices(statusOptions.data), [statusOptions.data]);
+  // The filters also offer the stages and statuses contacts hold that the workspace never listed (e.g. the default stage `new`).
+  const filterValues = useContactFilterValues();
+  const stages = useMemo(
+    () => stageChoices(statusOptions.data, undefined, filterValues.data?.lifecycleStages),
+    [statusOptions.data, filterValues.data],
+  );
   const statuses = useMemo(
-    () => statusChoices(statusOptions.data, (v) => tf(`statuses.${v}`)),
-    [statusOptions.data, tf],
+    () =>
+      statusChoices(
+        statusOptions.data,
+        (v) => tf(`statuses.${v}`),
+        undefined,
+        undefined,
+        filterValues.data?.statuses,
+      ),
+    [statusOptions.data, filterValues.data, tf],
   );
   const views = useMemo(() => rows.map((r) => rowView(r, attrLabels)), [rows, attrLabels]);
 
@@ -318,9 +333,11 @@ export function ContactsScreen() {
       (attributes.data ?? []).filter((a) => a.active).map((a) => ({ key: a.key, name: a.name })),
     [attributes.data],
   );
+  // Lead scoring off: no Lead score column, and none in the picker (the choice is kept; it comes back when scoring is switched on).
+  const scoringOn = useLeadScoringEnabled();
   const omitted = useMemo(
-    () => new Set<ColumnId>(canReadCompanies ? [] : ['company']),
-    [canReadCompanies],
+    () => omittedColumns({ canCompany: canReadCompanies, scoringOn }),
+    [canReadCompanies, scoringOn],
   );
   const stored = useMemo(() => parseStoredColumns(storedColumns), [storedColumns]);
   // A saved view can keep its own columns: while it is open they replace the person's, and edits to them stay on this
@@ -364,6 +381,11 @@ export function ContactsScreen() {
     [viewCols, stored, attributeColumns, storedOrder, omitted],
   );
   const columnIds = useMemo(() => columns.map((c) => c.id), [columns]);
+  /** What the views bar compares with and saves into the open view: the view's own columns left out only for now are kept in it. */
+  const viewColumnIds = useMemo(
+    () => (savedViewCols ? restoreOmitted(columnIds, savedViewCols, omitted) : columnIds),
+    [columnIds, savedViewCols, omitted],
+  );
   /** Where a column change goes: the open view's draft, or the person's own stored columns. */
   const chooseColumns = (ids: ColumnId[], order: boolean) => {
     if (viewCols) setColDraft({ viewId, ids });
@@ -431,8 +453,9 @@ export function ContactsScreen() {
     setPickerRow(null);
   };
   const [busy, setBusy] = useState(false);
-  const [stageBusy, setStageBusy] = useState<string | null>(null);
-  const [lostPrompt, setLostPrompt] = useState<LostPrompt | null>(null);
+  // Every stage move of the list and the board (the cell's picker, a dragged card) is the shared one: optimistic, with undo.
+  const stageMove = useStageMove();
+  const stageBusy = stageMove.busyId;
   const [exporting, setExporting] = useState(false);
   const deleteTarget = rows.find((r) => r.id === deleteId);
 
@@ -547,57 +570,20 @@ export function ContactsScreen() {
     return true;
   }
 
-  /** The stage cell's menu: saves the new stage of one contact, with the row version the table last read. */
-  async function changeStage(
-    id: string,
-    stage: string,
-    reason?: { lostReason?: string | null; otherLostReason?: string | null },
-  ) {
+  /** The stage cell's picker and the board: moves one contact, with the row version the table last read. */
+  function changeStage(id: string, stage: string, status?: string | null) {
     const row = rows.find((r) => r.id === id);
     if (!row) return;
-    // A lost stage asks why first; nothing is saved until the dialog gives a reason.
-    if (!reason && isLostStage(stages, stage)) {
-      setLostPrompt({
-        contactId: id,
-        contactName: row.name ?? '',
-        stageValue: stage,
-        stageLabel: stages.find((x) => x.value === stage)?.label ?? stage,
-      });
-      return;
-    }
-    setStageBusy(id);
-    try {
-      const saved = await updateContact(id, {
-        lifecycleStage: stage,
-        ...reason,
+    void stageMove.move(
+      {
+        id,
+        name: row.name ?? '',
         rowVersion: row.rowVersion,
-      });
-      setLostPrompt(null);
-      await refresh();
-      // The API keeps the status valid for the stage: say what happened to it, from its answer.
-      const stageName = stages.find((x) => x.value === stage)?.label ?? stage;
-      const notice = statusNotice(row.status, saved.status);
-      toast(
-        notice.kind === 'none'
-          ? ts('changed', { stage: stageName })
-          : notice.kind === 'cleared'
-            ? ts('changedStatusCleared', { stage: stageName })
-            : ts(notice.kind === 'reset' ? 'changedStatusReset' : 'changedStatusSet', {
-                stage: stageName,
-                status: statuses.find((x) => x.value === notice.status)?.label ?? notice.status,
-              }),
-        'success',
-      );
-    } catch (e) {
-      const kind = errorKind(e);
-      toast(
-        ts(kind === 'conflict' ? 'conflict' : kind === 'forbidden' ? 'forbidden' : 'failed'),
-        'danger',
-      );
-      if (kind === 'conflict') await refresh();
-    } finally {
-      setStageBusy(null);
-    }
+        stage: row.lifecycleStage || null,
+        status: row.status || null,
+      },
+      { stage, status },
+    );
   }
 
   async function onDeleteOne() {
@@ -704,9 +690,11 @@ export function ContactsScreen() {
     stageLabel: (v: string) => stages.find((x) => x.value === v)?.label ?? v,
     stageChoices: stages,
     onStageChange: canUpdate
-      ? (id: string, stage: string) => void changeStage(id, stage)
+      ? (id: string, stage: string, status?: string | null) => changeStage(id, stage, status)
       : undefined,
     stageBusyId: stageBusy,
+    stageStatusesOf: stageMove.statusesOf,
+    stageDefaultStatusOf: stageMove.defaultStatusOf,
     // Under each stage of the menu: what moving there would do to the contact's status.
     stageStatusHint: (status: string, stage: string) => {
       const move = statusAfterMove(statusOptions.data, status || null, stage);
@@ -755,8 +743,8 @@ export function ContactsScreen() {
 
   return (
     <CallingProvider>
-      {/* The content area is exactly as tall as the window under the top bar: the rows scroll inside the card and its footer stays put. */}
-      <div className="flex min-h-[34rem] flex-col gap-3 md:h-[calc(100dvh-3.5rem-3rem)] h-[calc(100dvh-3.5rem-2rem)]">
+      {/* The content area fills the window under the top bar and any notice bars (the shell subtracts them): the rows scroll inside the card and its footer stays put. */}
+      <PageFill minHeight="26rem" className="gap-3">
         <div className="shrink-0 space-y-3">
           <nav aria-label={t('breadcrumb')} className="text-sm text-muted-foreground">
             <ol className="flex items-center gap-1.5">
@@ -875,7 +863,7 @@ export function ContactsScreen() {
                   filters={filters}
                   defaultLimit={sizeDefault}
                   activeId={viewId}
-                  columnIds={columnIds}
+                  columnIds={viewColumnIds}
                   keepsColumns={savedViewCols !== null}
                   onSelect={selectView}
                   onPreset={selectPreset}
@@ -1115,7 +1103,7 @@ export function ContactsScreen() {
             goQuick(id, quickPanel, 'replace');
           }}
           onPanel={(section, opts) => {
-            askFocus(opts?.focus ?? null);
+            askFocus(opts?.focus ?? null, opts?.clickedAt);
             goQuick(quickId, section, 'replace');
           }}
           onClose={() => {
@@ -1129,12 +1117,7 @@ export function ContactsScreen() {
           contact={formFor === 'new' || formFor === null ? undefined : formFor}
           onClose={() => setFormFor(null)}
         />
-        <LostReasonDialog
-          prompt={lostPrompt}
-          busy={stageBusy !== null}
-          onConfirm={(p, fields) => void changeStage(p.contactId, p.stageValue, fields)}
-          onClose={() => setLostPrompt(null)}
-        />
+        <>{stageMove.dialog}</>
         <BulkUpdateDialog
           open={updateOpen !== null}
           count={sel.allMatching ? (total ?? null) : sel.ids.size}
@@ -1192,7 +1175,7 @@ export function ContactsScreen() {
           }}
           onConfirm={() => void onBulkDelete()}
         />
-      </div>
+      </PageFill>
     </CallingProvider>
   );
 }

@@ -44,8 +44,6 @@
         "editJobTitle": "직함 수정",
         "jobTitleConflict": "다른 사용자가 먼저 이 연락처를 변경했습니다. 다시 불러왔으니 다시 시도하세요.",
         "jobTitleFailed": "직함을 저장하지 못했습니다. 다시 시도하세요.",
-        "leadScore": "리드 점수",
-        "leadScoreAria": "리드 점수 {score}. 점수 세부 정보를 표시합니다.",
         "owner": "담당자"
       },
       "social": {
@@ -99,9 +97,7 @@
         "allowed": "마케팅 허용",
         "noFlags": "개인정보 플래그 없음"
       },
-      "overview": {
-        "information": "연락처"
-      },
+      "overview": {},
       "tabs": {
         "info": "연락처 정보",
         "social": "소셜 미디어",
@@ -147,7 +143,6 @@
       "nav": {
         "back": "목록으로 돌아가기",
         "label": "연락처 섹션",
-        "contactDetails": "연락처 세부 정보",
         "related": "관련 항목",
         "section": {
           "overview": "개요",
@@ -172,11 +167,8 @@
         "title": "라이프사이클",
         "stages": "라이프사이클 단계",
         "status": "상태",
-        "noStatuses": "이 단계에는 상태가 없습니다.",
-        "statusChanged": "상태를 {status}(으)로 설정했습니다.",
         "conflict": "다른 사용자가 먼저 이 연락처를 변경했습니다. 다시 불러왔으니 다시 시도하세요.",
-        "forbidden": "이 연락처를 변경할 권한이 없습니다.",
-        "statusFailed": "상태를 변경하지 못했습니다. 다시 시도하세요."
+        "forbidden": "이 연락처를 변경할 권한이 없습니다."
       }
     }
   }

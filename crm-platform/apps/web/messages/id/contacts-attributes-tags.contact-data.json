@@ -35,7 +35,6 @@
         "footnote": "Ditemukan berdasarkan nomor telepon, alamat email, atau nama kontak. Percakapan yang diarsipkan tidak ditampilkan.",
         "status": {
           "open": "Terbuka",
-          "pending": "Tertunda",
           "snoozed": "Ditunda",
           "resolved": "Selesai",
           "closed": "Ditutup",

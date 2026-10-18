@@ -4,14 +4,10 @@ import Link from 'next/link';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { Badge, Button, Select, Spinner, Textarea, cn } from '@crm/ui';
-import {
-  NOTE_BODY_MAX,
-  type ConversationEvent,
-  type ConversationNote,
-  type InboxConversationDetail,
-} from '@crm/contracts';
+import { Badge, Button, Select, Spinner, cn } from '@crm/ui';
+import { type ConversationEvent, type InboxConversationDetail } from '@crm/contracts';
 import { LinkedAppointments } from '@/features/appointments';
+import { ContactNotesSection } from '@/features/contacts-attributes-tags';
 import { ChatInsightCard, ScoreCard } from '@/features/lead-scoring';
 import { LinkedTasks } from '@/features/tasks';
 import { KEYS, useAssignees, useTimeline } from '../api/hooks';
@@ -24,29 +20,21 @@ import {
   ClockIcon,
   ExternalIcon,
   NoteIcon,
-  TrashIcon,
   UserPlusIcon,
 } from './icons';
-import { Avatar, ChannelTag, useErrorText } from './parts';
+import { Avatar, ChannelTag } from './parts';
 import { TagGroups, type TagGroupsProps } from './tag-groups';
 
 export interface ContactPanelProps {
   detail: InboxConversationDetail;
   meId: string;
-  can: { assign: boolean; assignSelf: boolean; resolve: boolean; note: boolean };
+  can: { assign: boolean; assignSelf: boolean; resolve: boolean };
   presence: ReadonlyMap<string, string>;
-  /** Oldest first. */
-  notes: ConversationNote[];
-  notesLoading: boolean;
-  notesError: boolean;
   nowMs: number;
   assigning: boolean;
   resolving: boolean;
   onAssign: (change: { userId?: string | null; teamId?: string | null }) => void;
   onToggleResolved: () => void;
-  onAddNote: (body: string) => Promise<boolean>;
-  onDeleteNote: (id: string) => void;
-  canDeleteNote: (note: ConversationNote) => boolean;
   onOpenConversation: (id: string) => void;
   /** May the person edit the contact (`record.contacts.update`): the contact tags then link to it. */
   canEditContact?: boolean;
@@ -75,9 +63,9 @@ export function ContactPanel(props: ContactPanelProps) {
   }> = [
     {
       id: 'notes',
-      title: props.notes.length > 0 ? `${t('notes.tab')} (${props.notes.length})` : t('notes.tab'),
+      title: t('notes.tab'),
       icon: <NoteIcon className="size-4" />,
-      content: <NotesTab {...props} />,
+      content: <ContactNotesTab contactId={contactId} />,
     },
     {
       id: 'timeline',
@@ -420,118 +408,14 @@ function AssigneeSection(props: ContactPanelProps) {
   );
 }
 
-function NotesTab(props: ContactPanelProps) {
+/**
+ * The contact's own notes: the same list the contact page has, shared by every conversation with this person. They are not the
+ * conversation's internal notes, which are written in the composer and sit in the thread.
+ */
+function ContactNotesTab({ contactId }: { contactId: string | null }) {
   const t = useTranslations('team-inbox-conversations.panel.notes');
-  const errorText = useErrorText();
-  const locale = useLocale();
-  const timeZone = useTimeZone();
-  const [text, setText] = useState('');
-  const [busy, setBusy] = useState(false);
-  const [failed, setFailed] = useState(false);
-  const trimmed = text.trim();
-
-  async function add() {
-    if (!trimmed || busy) return;
-    setBusy(true);
-    setFailed(false);
-    const ok = await props.onAddNote(trimmed);
-    setBusy(false);
-    if (ok) setText('');
-    else setFailed(true);
-  }
-
-  return (
-    <div className="space-y-3">
-      {props.can.note && (
-        <div className="space-y-2">
-          <label htmlFor="inbox-note-input" className="sr-only">
-            {t('label')}
-          </label>
-          <Textarea
-            id="inbox-note-input"
-            data-testid="inbox-note-input"
-            rows={3}
-            value={text}
-            maxLength={NOTE_BODY_MAX}
-            placeholder={t('placeholder')}
-            onChange={(e) => setText(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-                e.preventDefault();
-                void add();
-              }
-            }}
-          />
-          <div className="flex items-center justify-between gap-2">
-            <p className="min-w-0 flex-1 text-[11px] text-muted-foreground">{t('hint')}</p>
-            <Button
-              size="sm"
-              className="shrink-0 whitespace-nowrap"
-              data-testid="inbox-note-add"
-              disabled={!trimmed || busy}
-              onClick={() => void add()}
-            >
-              {busy && <Spinner />}
-              {t('add')}
-            </Button>
-          </div>
-          {failed && (
-            <p role="alert" className="text-xs text-danger">
-              {t('addFailed')}
-            </p>
-          )}
-        </div>
-      )}
-
-      {props.notesLoading && (
-        <p role="status" className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Spinner /> {t('loading')}
-        </p>
-      )}
-      {props.notesError && (
-        <p role="alert" className="text-xs text-danger">
-          {errorText('NETWORK')}
-        </p>
-      )}
-      {!props.notesLoading && !props.notesError && props.notes.length === 0 && (
-        <p className="text-sm text-muted-foreground">{t('empty')}</p>
-      )}
-      <ul className="space-y-2">
-        {props.notes
-          .slice()
-          .reverse()
-          .map((n) => (
-            <li
-              key={n.id}
-              data-testid="inbox-panel-note"
-              className="rounded-md border border-warning/30 bg-warning/10 p-2.5 text-sm"
-            >
-              <div className="mb-1 flex items-center gap-1.5 text-[11px] text-muted-foreground">
-                <NoteIcon width={11} height={11} className="text-warning" />
-                <span className="font-medium text-foreground">
-                  {n.author.name ?? t('unknownAuthor')}
-                </span>
-                <span>· {fullStamp(n.createdAt, locale, timeZone)}</span>
-                {props.canDeleteNote(n) && (
-                  <button
-                    type="button"
-                    aria-label={t('delete')}
-                    title={t('delete')}
-                    onClick={() => props.onDeleteNote(n.id)}
-                    className="ms-auto rounded p-0.5 hover:text-danger focus-visible:ring-2 focus-visible:ring-primary"
-                  >
-                    <TrashIcon width={12} height={12} />
-                  </button>
-                )}
-              </div>
-              <p dir="auto" className="whitespace-pre-wrap break-words">
-                {n.body}
-              </p>
-            </li>
-          ))}
-      </ul>
-    </div>
-  );
+  if (!contactId) return <p className="text-sm text-muted-foreground">{t('noContact')}</p>;
+  return <ContactNotesSection contact={{ id: contactId }} variant="drawer" bare />;
 }
 
 function TimelineTab({ conversationId }: { conversationId: string }) {

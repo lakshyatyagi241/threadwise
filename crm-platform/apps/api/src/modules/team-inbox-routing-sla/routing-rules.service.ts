@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
+  hasRoutingActions,
   hasRoutingConditions,
   type CreateRoutingRuleInput,
   type ListRoutingRulesQuery,
@@ -79,13 +80,29 @@ export class RoutingRulesService {
     // The plan's row limit counts every rule, switched off ones too (TW-TIB2-005 rule 4), and is checked before anything else.
     await this.usage.assertCanAdd(orgId, 'routing_rules');
     return this.db.tx(async (tx) => {
-      await this.assertTargets(tx, orgId, input.assign);
+      if (input.assign) await this.assertTargets(tx, orgId, input.assign);
+      if (input.escalation?.reassign && !input.assign) {
+        throw AppError.validation(
+          'Reassigning after a delay needs the agents this rule assigns to.',
+          [
+            {
+              path: 'escalation',
+              message: 'Reassigning after a delay needs the agents this rule assigns to.',
+            },
+          ],
+        );
+      }
       await this.assertFlow(tx, orgId, input.triggerFlowId);
       const created = await this.repo.insert(tx, orgId, {
         name: input.name,
         conditions: input.conditions,
         actions: encodeActions({
           assign: input.assign,
+          markSpam: input.markSpam,
+          priority: input.priority,
+          addTags: input.addTags,
+          escalation: input.escalation,
+          autoReply: input.autoReply,
           triggerFlowId: input.triggerFlowId,
           description: input.description,
           cursor: null,
@@ -117,14 +134,51 @@ export class RoutingRulesService {
 
       const before = toRoutingRule(row, 0);
       const stored = decodeActions(row.actions);
-      // The form sends the whole assign action; the cursor is the server's and survives an edit of the same agents.
-      const assign = input.assign ?? stored.assign;
+      // The form sends the whole assign action (or `null` to drop it); the cursor is the server's and survives an edit of the same agents.
+      const assign = input.assign !== undefined ? input.assign : stored.assign;
+      const markSpam = input.markSpam ?? stored.markSpam;
+      const priority = input.priority !== undefined ? input.priority : stored.priority;
+      const addTags = input.addTags ?? stored.addTags;
+      const escalation = input.escalation !== undefined ? input.escalation : stored.escalation;
+      const autoReply = input.autoReply !== undefined ? input.autoReply : stored.autoReply;
+      if (escalation?.reassign && !assign) {
+        throw AppError.validation(
+          'Reassigning after a delay needs the agents this rule assigns to.',
+          [
+            {
+              path: 'escalation',
+              message: 'Reassigning after a delay needs the agents this rule assigns to.',
+            },
+          ],
+        );
+      }
       if (input.assign) await this.assertTargets(tx, orgId, input.assign);
       // `null` takes the flow off the rule; absent keeps it.
       const triggerFlowId =
         input.triggerFlowId === undefined ? stored.triggerFlowId : input.triggerFlowId;
       if (input.triggerFlowId && input.triggerFlowId !== stored.triggerFlowId)
         await this.assertFlow(tx, orgId, input.triggerFlowId);
+      if (
+        !hasRoutingActions({
+          assign,
+          markSpam,
+          priority,
+          addTags,
+          escalation,
+          autoReply,
+          triggerFlowId,
+        })
+      ) {
+        throw AppError.validation(
+          'Choose what the rule does: assign it, mark it as spam, or start a flow.',
+          [
+            {
+              path: 'assign',
+              message: 'Choose what the rule does: assign it, mark it as spam, or start a flow.',
+            },
+          ],
+        );
+      }
       const nextConditions = input.conditions ?? before.conditions;
       const isFallback = input.isFallback ?? before.isFallback;
       // The fallback is the catch-all: a normal rule without any condition would catch everything, so it is refused here too.
@@ -143,15 +197,29 @@ export class RoutingRulesService {
         ...(input.name !== undefined ? { name: input.name } : {}),
         ...(input.conditions !== undefined ? { conditions: input.conditions } : {}),
         ...(input.assign !== undefined ||
+        input.markSpam !== undefined ||
+        input.priority !== undefined ||
+        input.addTags !== undefined ||
+        input.escalation !== undefined ||
+        input.autoReply !== undefined ||
         input.description !== undefined ||
         input.triggerFlowId !== undefined
           ? {
               actions: encodeActions({
                 assign,
+                markSpam,
+                priority,
+                addTags,
+                escalation,
+                autoReply,
                 triggerFlowId,
                 description: input.description ?? stored.description,
                 cursor:
-                  input.assign && !sameTargets(input.assign, stored.assign) ? null : stored.cursor,
+                  input.assign && stored.assign && !sameTargets(input.assign, stored.assign)
+                    ? null
+                    : input.assign === null
+                      ? null
+                      : stored.cursor,
               }),
             }
           : {}),
@@ -172,6 +240,11 @@ export class RoutingRulesService {
           stopOnMatch: before.stopOnMatch,
           conditions: before.conditions,
           assign: before.assign,
+          markSpam: before.markSpam,
+          priority: before.priority,
+          addTags: before.addTags,
+          escalation: before.escalation,
+          autoReply: before.autoReply,
           triggerFlowId: stored.triggerFlowId,
         },
         {
@@ -182,6 +255,11 @@ export class RoutingRulesService {
           stopOnMatch: after.stopOnMatch,
           conditions: after.conditions,
           assign: after.assign,
+          markSpam: after.markSpam,
+          priority: after.priority,
+          addTags: after.addTags,
+          escalation: after.escalation,
+          autoReply: after.autoReply,
           triggerFlowId: after.triggerFlow?.id ?? null,
         },
       );
@@ -234,6 +312,11 @@ export class RoutingRulesService {
         conditions: src.conditions,
         actions: encodeActions({
           assign: src.assign,
+          markSpam: src.markSpam,
+          priority: src.priority,
+          addTags: src.addTags,
+          escalation: src.escalation,
+          autoReply: src.autoReply,
           triggerFlowId: src.triggerFlow?.id ?? null,
           description: src.description,
           cursor: null,
@@ -330,7 +413,9 @@ export class RoutingRulesService {
   /** Rows as the API returns them, with how many of each rule's targets can no longer take a conversation (one lookup for the page). */
   private async present(tx: Tx, orgId: number, rows: RuleRow[]): Promise<RoutingRule[]> {
     const decoded = rows.map((r) => decodeActions(r.actions));
-    const actions = decoded.map((d) => d.assign);
+    const actions = decoded.map(
+      (d) => d.assign ?? { strategy: 'round_robin' as const, userIds: [], teamIds: [] },
+    );
     const flows = await this.repo.flowsByUuid(tx, orgId, [
       ...new Set(decoded.flatMap((d) => (d.triggerFlowId ? [d.triggerFlowId] : []))),
     ]);

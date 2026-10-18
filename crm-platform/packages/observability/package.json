@@ -1,0 +1,28 @@
+{
+  "name": "@crm/observability",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Event-loop and runtime monitoring shared by the API, the worker and the web server: loop delay and utilization, heap, GC, CPU, a hand-rolled Prometheus registry and the /metrics listener. Node only, no dependencies",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "typescript": "^6.0.3",
+    "vitest": "^2.1.8"
+  }
+}

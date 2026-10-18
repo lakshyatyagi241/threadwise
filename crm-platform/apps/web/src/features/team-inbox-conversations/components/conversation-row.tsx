@@ -9,7 +9,7 @@ import {
   type ConversationSummary,
 } from '@crm/contracts';
 import { badgeText } from '../lib/list';
-import { fullStamp, listTime } from '../lib/time';
+import { fullStamp, listTime, snoozeLeft, snoozeLeftMessage } from '../lib/time';
 import { formatWindowLeft, rowWindowChip } from '../lib/window';
 import { TagChip } from './tag-chip';
 import { SlaBadge } from './sla-badge';
@@ -204,6 +204,20 @@ export const ConversationRow = memo(function ConversationRow({
             {row.status !== 'open' && (
               <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
                 {t(`status.${row.status}`)}
+              </span>
+            )}
+            {row.status === 'snoozed' && row.snoozedUntil && (
+              <span
+                data-testid="inbox-row-snoozed"
+                title={t('unsnoozesAt', { time: fullStamp(row.snoozedUntil, locale, timeZone) })}
+                className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-warning"
+              >
+                {t('snoozedFor', {
+                  left: (() => {
+                    const m = snoozeLeftMessage(snoozeLeft(row.snoozedUntil, nowMs));
+                    return t(m.key, m.values);
+                  })(),
+                })}
               </span>
             )}
             {row.priority !== 'normal' && (

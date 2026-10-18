@@ -49,13 +49,14 @@ const fail = (msg, code = 2) => {
 
 const db = flag('db');
 // --client is optional: default to the lower-case slug of the Waboo organization (workspace) id, same rule as the admin panel
-const client = flag('client') || (db ? db.toLowerCase().slice(0, 64) : undefined);
+const client =
+  flag('client') || (db ? db.toLowerCase().replace(/\+/g, '-').slice(0, 64) : undefined);
 const mode = flag('mode') || 'dry';
 const name = flag('name');
 if (!client || !/^[a-z0-9_-]{1,64}$/.test(client))
   fail('--client must be a key like "iskm" (a-z, 0-9, _ or -)');
-if (!db || !/^[A-Za-z0-9_]{1,128}$/.test(db))
-  fail('--db must be a Waboo database name (letters, digits, _)');
+if (!db || !/^[A-Za-z0-9_+]{1,128}$/.test(db))
+  fail('--db must be a Waboo database name (letters, digits, _ or +)');
 if (!['dry', 'load', 'catchup'].includes(mode)) fail('--mode must be dry, load or catchup');
 
 const clientsDir = process.env.CYCLE_CLIENTS_DIR || path.join(HERE, 'clients');

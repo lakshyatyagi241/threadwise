@@ -24,9 +24,13 @@ export function NotesSection({
   contact,
   variant,
   focusSignal,
-}: SectionProps & {
+  bare,
+}: Pick<SectionProps, 'variant'> & {
+  contact: Pick<SectionProps['contact'], 'id'>;
   /** Changes whenever something outside (the "Note" button, the row's quick add) wants the cursor in the composer. */
   focusSignal?: number;
+  /** No card and title of its own: the notes sit inside a section another screen already titles (the inbox's side panel). */
+  bare?: boolean;
 }) {
   const t = useTranslations('contacts-attributes-tags.contact.notes');
   const format = useFormatter();
@@ -64,12 +68,13 @@ export function NotesSection({
   return (
     <Panel
       id={titleId}
-      title={t('title')}
-      bodyClassName={variant === 'drawer' ? 'px-3' : undefined}
+      title={bare ? undefined : t('title')}
+      className={bare ? 'rounded-none border-0 bg-transparent' : undefined}
+      bodyClassName={variant === 'drawer' && !bare ? 'px-3' : undefined}
     >
       <div className="space-y-4">
         {canUpdate && (
-          <Composer
+          <NoteComposer
             focusSignal={focusSignal}
             pending={create.isPending}
             onSave={(body, done) =>
@@ -158,7 +163,8 @@ export function NotesSection({
   );
 }
 
-function Composer({
+/** The note box: grows to three lines, Ctrl/Cmd + Enter saves, the counter shows near the limit. Used by the Notes section and the compose box. */
+export function NoteComposer({
   focusSignal,
   pending,
   onSave,
@@ -215,7 +221,12 @@ function Composer({
         <p id={hintId} className="text-xs text-muted-foreground" aria-live="polite">
           {left <= COUNTER_FROM ? t('charsLeft', { count: left }) : t('composerHint')}
         </p>
-        <Button size="sm" disabled={empty || pending} onClick={save}>
+        <Button
+          size="sm"
+          className="shrink-0 whitespace-nowrap"
+          disabled={empty || pending}
+          onClick={save}
+        >
           {pending && <Spinner />}
           {t('save')}
         </Button>
@@ -310,7 +321,9 @@ function NoteItem({
           </p>
           <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
             <p className="text-xs text-muted-foreground">
-              {t('added', { when: added })}
+              {note.createdByName
+                ? t('addedBy', { when: added, name: note.createdByName })
+                : t('added', { when: added })}
               {wasEdited && <> &middot; {t('edited', { when: when(note.updatedAt) })}</>}
             </p>
             {canUpdate && (

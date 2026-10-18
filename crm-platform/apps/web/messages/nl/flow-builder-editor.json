@@ -1078,6 +1078,7 @@
         "anotherPart": "Een ander onderdeel van deze flow. Het draait wanneer een knop of lijstrij hier naartoe leidt{lost, select, true {: er leidt nog niets hierheen, dus het zou nooit draaien.} other {.}}",
         "addFirstStep": "Voeg de eerste stap toe",
         "branchingEnds": "Deze {kind, select, list {lijst} other {set knoppen}} beëindigt dit onderdeel: wat daarna wordt verzonden, hangt af van wat de klant kiest.",
+        "optionsCarryOn": "Elke {kind, select, list {rij} other {knop}} kan een eigen flow starten of doorgaan met de volgende stap hieronder.",
         "thenGoTo": "Ga daarna naar",
         "confirmImport": {
           "title": "Deze flow vervangen door het bestand?",
@@ -1113,7 +1114,7 @@
             "answer": "Antwoord",
             "action": "Acties"
           },
-          "blockedTitle": "Knoppen en lijsten beëindigen een flow, dus ze kunnen alleen als laatste komen.",
+          "blockedTitle": "Deze stap sluit dit deel af, dus hij kan alleen als laatste staan.",
           "blockedTitleFaq": "Antwoord uit FAQ heeft twee uitgangen en kan daarom alleen als laatste staan."
         },
         "card": {
@@ -1145,7 +1146,9 @@
         },
         "editors": {
           "linkLabel": "Waarheen dit leidt",
+          "linkChoose": "Kies waar dit naartoe leidt…",
           "linkEnds": "Eindigt hier (er wordt niets meer verzonden)",
+          "linkNext": "Gaat verder met de volgende stap",
           "linkOption": "{stage} · {label}{self, select, true { (deze stap)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Leiden naar een nieuwe flow…",
           "question": "Vraag",
@@ -1245,17 +1248,13 @@
             "hour": "uren",
             "day": "dagen"
           },
-          "location": {
-            "placeName": "Plaatsnaam",
-            "placePlaceholder": "Ons kantoor",
-            "address": "Adres",
-            "latitude": "Breedtegraad",
-            "longitude": "Lengtegraad"
-          },
           "template": {
             "label": "Goedgekeurd sjabloon",
             "hint": "Alleen sjablonen die je WhatsApp-nummer heeft goedgekeurd, worden getoond.",
-            "choose": "Kies een sjabloon…"
+            "choose": "Kies een sjabloon…",
+            "buttons": "Knoppen",
+            "variables": "Ingevuld vanuit het contact",
+            "variablesHint": "Elk nummer wordt bij het verzenden van het bericht ingevuld met het hier genoemde contactgegeven. Wijzig dit in de sjabloon."
           },
           "cta": {
             "buttonText": "Knoptekst",
@@ -1269,7 +1268,12 @@
             "add": "Nog een knop toevoegen",
             "remove": "Knop verwijderen",
             "opensPhone": "Telefoonnummer",
-            "opensEmail": "E-mailadres"
+            "opensEmail": "E-mailadres",
+            "errors": {
+              "url": "Voer een geldig webadres in dat begint met https://",
+              "phone": "Voer een geldig telefoonnummer in, bijvoorbeeld +91 98765 43210",
+              "email": "Voer een geldig e-mailadres in, bijvoorbeeld name@example.com"
+            }
           },
           "carousel": {
             "intro": "Bericht boven de kaarten",
@@ -1452,13 +1456,7 @@
           "info": "Voeg maximaal {max} CTA-knoppen toe aan één bericht — combineer Website bezoeken, Bellen en Code kopiëren in elke volgorde. Dezelfde limiet als WhatsApp-sjabloonknoppen.",
           "buttonLabel": "Knoptekst",
           "addButton": "Knop toevoegen",
-          "maxReached": "Maximaal {max} knoppen bereikt.",
-          "locationTitle": "Titel",
-          "locationTitlePlaceholder": "Ons kantoor",
-          "locationAddress": "Adres",
-          "locationAddressPlaceholder": "Straat, plaats, land",
-          "locationLatitude": "Breedtegraad",
-          "locationLongitude": "Lengtegraad"
+          "maxReached": "Maximaal {max} knoppen bereikt."
         },
         "logic": {
           "operator": {
@@ -1889,6 +1887,41 @@
         "endTextHint": "Verzonden voordat de flow eindigt. Noem de leeftijd niet. Leeg gebruikt “We kunnen niet verder.”",
         "continueNote": "De volgende stappen kunnen de variabele van het antwoord gevolgd door _age_gate lezen (bijvoorbeeld answer_age_gate), die under of adult is. Voeg een Voorwaarde toe om te vertakken, bijvoorbeeld om een ouder of voogd te vragen.",
         "note": "Vraag alleen naar de leeftijd waar je die nodig hebt. Het antwoord wordt naar het contact geschreven: een geboortedatum als geboortedatum, en een antwoord onder de leeftijd markeert het contact als minderjarig."
+      },
+      "location": {
+        "modeLabel": "Hoe stel je de locatie in",
+        "modeLink": "Google Maps-link",
+        "modeCoords": "Breedte- en lengtegraad",
+        "linkLabel": "Google Maps-link",
+        "linkPlaceholder": "Plak een link, bijv. https://maps.app.goo.gl/…",
+        "linkHint": "Open de plek in Google Maps, tik op Delen en daarna op Link kopiëren. Korte en lange links werken allebei.",
+        "finding": "Link opzoeken…",
+        "retry": "Opnieuw proberen",
+        "latitude": "Breedtegraad",
+        "longitude": "Lengtegraad",
+        "coordsHint": "De breedtegraad loopt van -90 tot 90 en de lengtegraad van -180 tot 180. Je kunt „breedte, lengte” in een van beide velden plakken.",
+        "found": "Locatie gevonden",
+        "openInMaps": "Openen in Google Maps",
+        "optionalHint": "Optioneel: wordt getoond op de kaartkaart die de klant ontvangt. Je kunt beide leeg laten.",
+        "optional": "(optioneel)",
+        "placeName": "Naam van de plek",
+        "placePlaceholder": "Ons kantoor",
+        "address": "Adres",
+        "problem": {
+          "empty": "Voer een Google Maps-link of coördinaten in.",
+          "lat_missing": "Voer een breedtegraad in.",
+          "lng_missing": "Voer een lengtegraad in.",
+          "lat_nan": "De breedtegraad moet een getal zijn, bijvoorbeeld 18.5204.",
+          "lng_nan": "De lengtegraad moet een getal zijn, bijvoorbeeld 73.8567.",
+          "lat_range": "De breedtegraad moet tussen -90 en 90 liggen.",
+          "lng_range": "De lengtegraad moet tussen -180 en 180 liggen.",
+          "zero": "0, 0 is geen echte plek. Voer de werkelijke coördinaten in.",
+          "not_url": "Dit lijkt geen link. Plak de volledige Google Maps-link.",
+          "not_maps": "Dit is geen Google Maps-link.",
+          "no_coords": "Deze link wijst niet naar een exacte plek. Open de plek in Google Maps, tik op Delen en kopieer die link, of voer de coördinaten in.",
+          "unresolved": "Deze korte link is nog niet opgezocht. Verlaat het veld of probeer opnieuw.",
+          "resolve_failed": "Deze link kon niet worden gelezen. Controleer of hij opent in Google Maps, of voer de coördinaten in."
+        }
       }
     },
     "contracts": {
@@ -2321,7 +2354,8 @@
         "noSenderInstagram": "De Trigger-node heeft geen Instagram-account geselecteerd — kies er een in de triggerstap.",
         "noSenderFacebook": "De Trigger-node heeft geen Facebook-pagina geselecteerd — kies er een in de triggerstap.",
         "noSenderNumber": "De Trigger-node heeft geen nummer geselecteerd — kies er een in de triggerstap.",
-        "faqMinScore": "\"{node}\" heeft een minimumscore buiten 0.05 tot 0.99 — corrigeer dit of laat het leeg om de instelling van de flow te gebruiken."
+        "faqMinScore": "\"{node}\" heeft een minimumscore buiten 0.05 tot 0.99 — corrigeer dit of laat het leeg om de instelling van de flow te gebruiken.",
+        "locationInvalid": "„{node}” heeft geen geldige locatie: plak een Google Maps-link of voer een breedtegraad (-90 tot 90) en lengtegraad (-180 tot 180) in."
       }
     },
     "simpleModel": {
@@ -2462,10 +2496,11 @@
         "writeQuestion": "Stap {stage}: schrijf de vraag.",
         "nameVariable": "Stap {stage}: geef de variabele een naam waarin het antwoord wordt opgeslagen.",
         "chooseAnswerProperty": "Stap {stage}: kies de contacteigenschap waarnaar het antwoord wordt gekopieerd.",
-        "setCoordinates": "Stap {stage}: stel de breedte- en lengtegraad in.",
+        "setCoordinates": "Stap {stage}: plak een Google Maps-link of voer een geldige breedte- en lengtegraad in.",
         "chooseTemplate": "Stap {stage}: kies een sjabloon.",
         "chooseTeam": "Stap {stage}: kies het team waar het gesprek naartoe gaat.",
         "ctaLabelLink": "Stap {stage}: geef de knop een naam en een link.",
+        "ctaLinkInvalid": "Stap {stage}: het doel van de knop is ongeldig voor het type.",
         "choosePickedProperty": "Stap {stage}: kies de contacteigenschap waarnaar de gekozen optie wordt gekopieerd.",
         "buttonsPrompt": "Stap {stage}: schrijf het bericht boven de knoppen.",
         "addButton": "Stap {stage}: voeg minstens één knop toe.",
@@ -2481,9 +2516,12 @@
         "carouselButtons": "Stap {stage}: geef elke knop een naam, en een link, nummer of adres waar hij iets opent.",
         "conditionIncomplete": "Stap {stage}: maak de regels van de voorwaarde af (in elk een variabele en een waarde).",
         "faqMinScore": "Stap {stage}: de minimumscore moet tussen 0.05 en 0.99 liggen, of gebruik de instelling van de flow.",
+        "optionNotConnected": "Stap {stage}: {kind, select, row {de rij} other {de knop}} \"{label}\" leidt nergens heen. Voeg er een stap voor toe of geef er een actie aan.",
+        "tooManyOptions": "Stap {stage}: {kind, select, row {een lijst kan maximaal {max} rijen hebben} other {een set knoppen kan maximaal {max} knoppen hebben}}.",
         "chooseFlow": "Stap {stage}: kies de flow die de knop start.",
         "chooseApi": "Stap {stage}: kies de API die wordt aangeroepen.",
-        "writeCode": "Stap {stage}: schrijf de code die wordt uitgevoerd."
+        "writeCode": "Stap {stage}: schrijf de code die wordt uitgevoerd.",
+        "webhookUrl": "Stap {stage}: voeg het aan te roepen adres (URL) toe."
       },
       "faqSummary": "{hasCategory, select, true {Uit je FAQ's · {category}} other {Uit je FAQ's}}"
     },
@@ -2740,7 +2778,8 @@
       "simPurchase": "Gesimuleerde aankoop: {name} → uitgang “gekocht”",
       "simAbandon": "Gesimuleerd verlaten → uitgang “verlaten”",
       "faqAnswered": "(gesimuleerd) Antwoord uit FAQ voor \"{query}\": de testchat zoekt je FAQ's niet op, dus er wordt niets verzonden en {ref} blijft leeg. Uitgang \"beantwoord\" wordt genomen.",
-      "faqNoMatch": "(gesimuleerd) Antwoord uit FAQ voor \"{query}\": de testchat zoekt je FAQ's niet op en de uitgang \"beantwoord\" is niet verbonden, dus \"geen match\" wordt genomen. {ref} blijft leeg."
+      "faqNoMatch": "(gesimuleerd) Antwoord uit FAQ voor \"{query}\": de testchat zoekt je FAQ's niet op en de uitgang \"beantwoord\" is niet verbonden, dus \"geen match\" wordt genomen. {ref} blijft leeg.",
+      "locationSkipped": "(locatie) overgeslagen: geen geldige coördinaten"
     }
   }
 }

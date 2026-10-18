@@ -581,7 +581,9 @@ function BuilderInner({
   );
 
   return (
-    <FlowEditorContext.Provider value={{ flowId, web: mode === 'web' }}>
+    <FlowEditorContext.Provider
+      value={{ flowId, web: mode === 'web', channel: mode, whatsapp: mode === 'chat' }}
+    >
       <div
         className="flb-root fixed inset-0 z-40 flex flex-col bg-background text-foreground"
         data-testid="flow-builder"
@@ -827,9 +829,14 @@ function BuilderInner({
         {validationItems ? (
           <ValidationPopup
             items={validationItems}
-            nodes={[...invalid].flatMap((id) => {
-              const n = state.nodes.find((x) => x.id === id);
-              return n ? [{ id, label: nodeLabel(tf, n.type) }] : [];
+            nodes={state.nodes.flatMap((n) => {
+              if (!invalid.has(n.id)) return [];
+              // Several nodes of one kind would read the same, so each is numbered by its place among them on the canvas.
+              const same = state.nodes.filter((x) => x.type === n.type);
+              const label = nodeLabel(tf, n.type);
+              return [
+                { id: n.id, label: same.length > 1 ? `${label} ${same.indexOf(n) + 1}` : label },
+              ];
             })}
             onGoTo={focusNode}
             onClose={() => setVres((v) => (v ? { ...v, popup: false } : v))}

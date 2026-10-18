@@ -4,8 +4,9 @@ Spec: [specs/call-logging.md](../specs/call-logging.md) (the model, the sources,
 (`calling-voice/call-logging`, `calling-voice/logs`). Session auth, ids are uuids. The WhatsApp calling routes are in [calling-voice.md](calling-voice.md).
 
 Keys: `call.logs.create` (log, edit your own, check, click-to-call, ingest), `call.logging.manage` (settings, telephony connections, any manual entry),
-`call.logs.read` (existing; its record scope says whose calls a person sees, by who handled them). These routes are **not plan-gated**; the Call logs routes
-still need `waba_calling`.
+`call.logs.read` (existing; its record scope says whose calls a person sees, by who handled them). These routes are **not plan-gated**, and neither are the
+Call logs routes below (BL-257): a workspace without the plan feature `waba_calling` reads the calls it logged. Only what is WhatsApp's keeps the gate (see
+"What `waba_calling` still gates").
 
 ## Log a call
 
@@ -47,7 +48,7 @@ Each row is the Call logs row (below) with `source`, `outcome` and `notesPreview
 
 ## The Call logs, with both sources
 
-Base `/v2/calling/call-logs` (needs `waba_calling` and `call.logs.read`, as before). What changed, all additive:
+Base `/v2/calling/call-logs` (needs `call.logs.read`; **no plan feature** for the list, filters, analytics and detail). What changed, all additive:
 
 - `GET /` accepts `source` (`whatsapp | manual | telephony | mobile_app | web_click_to_call`). Rows carry `source` (absent from an older server means `whatsapp`), `outcome` (null for a WhatsApp call)
   and `notesPreview`. `kpis.workspace` and `kpis.selection` count both sources. `numberId` selects WhatsApp numbers, so it leaves logged calls out. `status` reads a logged call as in the spec (connected = `completed`,
@@ -55,6 +56,21 @@ Base `/v2/calling/call-logs` (needs `waba_calling` and `call.logs.read`, as befo
 - `GET /analytics` accepts `source` and returns `bySource: [{ source, calls, answered, missed }]`.
 - `GET /:id` answers for a logged call too: `call.notes`, `call.followUpTaskId`, a one-step `timeline` (`logged`), and `recording.available: false` (a reference on a provider is never returned or played here). `POST /:id/playback` is 404 for it.
 - The WhatsApp calls read exactly as before; the integration spec for the existing log runs unchanged.
+
+### What `waba_calling` still gates (BL-257)
+
+Without the plan feature the list, `/filters`, `/analytics` and `/:id` answer 200 for the calls the person may see, whatever their source. Calls already in
+`wa_calls` from the time the workspace had the feature are listed and openable too (read only). These keep the existing `422 PLAN_FEATURE_LOCKED` problem:
+
+| Request                                                                                                 | Without the feature                                                        |
+| ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `GET /` or `GET /analytics` with `numberId`                                                             | `422 PLAN_FEATURE_LOCKED` (a WhatsApp number is a WhatsApp calling filter) |
+| `POST /:id/playback`                                                                                    | `422 PLAN_FEATURE_LOCKED` (checked before the call is looked up)           |
+| `GET /filters`                                                                                          | 200 with `numbers: []`; `agents` are the teammates of every source         |
+| `GET /v2/calling/numbers`, `/readiness`, `/settings`, `/recording-settings`, the dial and answer routes | `422 PLAN_FEATURE_LOCKED`, as before                                       |
+
+`source=whatsapp` is not an error without the feature: it selects nothing. Permission and scope are unchanged: no `call.logs.read` is 403, and a call
+outside the person's record scope or in another workspace is 404.
 
 ## The mobile app's batch: `POST /v2/calls/ingest`
 

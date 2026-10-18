@@ -15,6 +15,30 @@
     {
       "key": "apps/api/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.ts .query( `DECLARE rot NO SCROLL CURSOR FOR SELECT tableoid::regclass::text AS tbl, ctid::te",
       "reason": "identifiers go through quote(); batch is a number; maintenance CLI, not reachable from a request; reviewed 2026-10-14"
+    },
+    {
+      "key": "apps/api/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.ts .query(`FETCH ${batch} FROM rot`",
+      "reason": "batch comes from rotationBatchSize(), which accepts only an integer from 1 to 10000 and throws on anything else (a cursor FETCH cannot take a bound parameter); proven by test/unit/platform-infrastructure/rotation-batch.spec.ts; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.ts .query( `UPDATE ${table} SET ${col} = $3 WHERE ctid = $1::tid AND ${col} = $2 RETURNING 1`",
+      "reason": "table and col are the identifiers built by quote() from the pg_class / pg_attribute catalog names (double quotes doubled), never request data; row values are bound as $1..$3; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.ts .query( `UPDATE ${table} SET ${col} = $3::jsonb WHERE ctid = $1::tid AND ${col} = $2::json",
+      "reason": "same quoted catalog identifiers as the text-column update above; row values are bound; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/storefront-builder/cli/demo-seeder.ts .query(`ALTER TABLE ${table} DISABLE TRIGGER ${trg}`",
+      "reason": "table and trigger names come from a hard-coded list in a dev-only demo seeder CLI, never request data; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/storefront-builder/cli/demo-seeder.ts .query(`ALTER TABLE ${table} ENABLE TRIGGER ${trg}`",
+      "reason": "same hard-coded list as DISABLE TRIGGER, in a dev-only demo seeder CLI; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/storefront-builder/cli/demo-seeder.ts .query( `SELECT ${col} AS k, count(*)::int AS n FROM wa_orders WHERE org_id = $1 AND meta_",
+      "reason": "col is only ever the literals 'status' and 'source' passed by countDemo in the same dev-only demo seeder CLI; org id and marker are bound; reviewed 2026-10-17"
     }
   ],
   "43": [
@@ -101,12 +125,126 @@
     {
       "key": "apps/api/src/modules/campaigns/campaign-sweeper.service.ts await this.settings.get(",
       "reason": "read once per workspace and memoised for the rest of the sweep (attemptsByOrg), so the call count is the number of workspaces, not campaigns; fixed and reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/catalog-products/catalog-sync.service.ts await this.repo.findByRetailerIds(",
+      "reason": "the only per-item lookup left in the import: it runs only when the same retailer id appears twice in one Meta listing and the first copy was created in this run (a few rows at most), so the second can update it; every other product is read once for the whole listing (findByRetailerIds + one variants read); proven by test/unit/catalog-products/catalog-import-lookup.spec.ts; reviewed 2026-10-17"
     }
   ],
   "36": [
     {
       "key": "google-account: 4 mutating route(s), 0 audit calls (apps/api/src/modules/google-account/google-account.controller.ts)",
       "reason": "the controller only delegates to GoogleCalendarConnectService / GoogleConsentService in appointments-booking, which write the audit rows: disconnect (google-calendar-connect.service.ts, audit.record action delete), confirm (google-consent.service.ts, audit.record), calendar select; connect/begin only returns a consent URL and changes no state; reviewed 2026-10-16"
+    }
+  ],
+  "31": [
+    {
+      "key": "apps/web/src/app/(site)/blog/[slug]/page.tsx dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\\\u003c') }}",
+      "reason": "JSON-LD built from server data and passed through .replace(/</g, '\\\\u003c'), so no </script> can end the tag; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/app/(site)/blog/[slug]/page.tsx dangerouslySetInnerHTML={{ __html: post.body }}",
+      "reason": "post.body is sanitised by HtmlSanitizerService on create, update and read (blog.service.ts); safe while that stays in every write path; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/app/(site)/legal/[slug]/page.tsx dangerouslySetInnerHTML={{ __html: s.body }}",
+      "reason": "legal sections are sanitised on save (legal.service.ts normaliseSections with the sanitiser); safe while that stays in every write path; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/admin-console-shell/branding/workspace-brand.tsx return css ? <style data-workspace-brand dangerouslySetInnerHTML={{ __html: css }} /> : null;",
+      "reason": "css is built by brandCss(), which writes only #RRGGBB values (brand-css.test.ts), so nothing else can reach the style rule; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/channel-email/components/signature-picker.tsx dangerouslySetInnerHTML={{ __html: signaturePreviewHtml(signature, variablesOf(user)) }}",
+      "reason": "rebuilt by the allow-list sanitiser (no scripts, handlers, styles or unknown tags; links web, mail and phone only), per the code comment; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/email-templates/components/template-preview.tsx dangerouslySetInnerHTML={{ __html: sanitizeHtml(q.data.html) }}",
+      "reason": "wrapped in sanitizeHtml; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/email-templates/components/template-row.tsx dangerouslySetInnerHTML={{ __html: sanitizeHtml(template.bodyHtml) }}",
+      "reason": "wrapped in sanitizeHtml; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/flow-builder-editor/builder/inspector/forms-core/previews.tsx dangerouslySetInnerHTML={{ __html: renderWaText(t.header) }}",
+      "reason": "renderWaText HTML-escapes the text first and adds only b, i, s, code and br; pinned by kit-wa-text.test.ts; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/flow-builder-editor/builder/inspector/forms-core/previews.tsx {t.body ? <div dangerouslySetInnerHTML={{ __html: renderWaText(t.body) }} /> : null}",
+      "reason": "renderWaText, same as the header; pinned by kit-wa-text.test.ts; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/flow-builder-editor/builder/inspector/kit.tsx dangerouslySetInnerHTML={{ __html: html }}",
+      "reason": "traced: every WaBubble html argument is renderWaText(...) output (escaped, pinned by kit-wa-text.test.ts) or a constant translated <i> placeholder (previews.tsx); reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/marketing-site-cms/site/site-frame.tsx dangerouslySetInnerHTML={{ __html: SOCIAL_ICONS[name.toLowerCase()] ?? '' }}",
+      "reason": "a lookup in a constant table of SVG icons; the key never reaches the HTML; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/marketing-site-cms/site/site-ui.tsx <Tag className={className} {...attrs} dangerouslySetInnerHTML={{ __html: value }} />",
+      "reason": "CMS rich text is sanitised on write and on read (content.service.ts); safe while that stays in every write path; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/platform-settings-branding-storage/site/site-head.tsx <style id=\"set-theme\" dangerouslySetInnerHTML={{ __html: cfg.themeCss }} />",
+      "reason": "traced: themeCss() writes only colours validated as #[0-9A-Fa-f]{3,8} at save (contracts.spec.ts breakout test) and clamped numbers, so nothing can leave the style rule; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/platform-settings-branding-storage/site/site-head.tsx <style id=\"set-font\" dangerouslySetInnerHTML={{ __html: font.css }} />",
+      "reason": "traced: font.css comes from the constant FONT_CATALOGUE keyed by an allow-listed font key; no setting text reaches it; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/platform-settings-branding-storage/site/site-head.tsx {css !== '' && <style id=\"tw-custom-css\" dangerouslySetInnerHTML={{ __html: css }} />}",
+      "reason": "ACCEPTED RISK: public custom CSS is raw by design and only a super admin can save it (code comment); a compromised super-admin account is site-wide injection, so keep MFA and audit on that setting; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/platform-settings-branding-storage/site/site-head.tsx {js !== '' && <script id=\"tw-custom-js\" dangerouslySetInnerHTML={{ __html: js }} />}",
+      "reason": "ACCEPTED RISK: public custom JavaScript is raw by design and only a super admin can save it; a compromised super-admin account is site-wide script execution, so keep MFA and audit on that setting; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/storefront-builder/public/components/footer.tsx <p className=\"sf-foot-blurb\" dangerouslySetInnerHTML={{ __html: custom }} />",
+      "reason": "footerParts() runs sanitizeHtml(text, 'inline'); reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/storefront-builder/public/components/footer.tsx <span dangerouslySetInnerHTML={{ __html: bottom }} />",
+      "reason": "footerParts() runs sanitizeHtml(text, 'inline'); reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/storefront-builder/public/components/hero.tsx <h1 id=\"sf-hero-title\" dangerouslySetInnerHTML={{ __html: heading }} />",
+      "reason": "traced: heading = sanitizeHtml(shop.heroText, 'inline'); the API also sanitises it (the file's own comment); reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/storefront-builder/public/components/order-tracking.tsx <p className=\"sf-ot-muted sf-ot-foot\" dangerouslySetInnerHTML={{ __html: footer }} />",
+      "reason": "footer comes from footerParts(), sanitised; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/storefront-builder/public/components/product-detail.tsx <div className=\"sf-richtext\" dangerouslySetInnerHTML={{ __html: body }} />",
+      "reason": "traced: body = sanitizeHtml(product.bodyHtml, 'rich') at the top of the component; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/storefront-builder/public/pages/product.tsx dangerouslySetInnerHTML={{ __html: jsonLdString(productJsonLd(page, url)) }}",
+      "reason": "jsonLdString escapes < (seo.ts; pinned by misc.test.ts); reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/web-forms/components/form-renderer.tsx return <div className={className} dangerouslySetInnerHTML={{ __html: safeHtml(html) }} />;",
+      "reason": "wrapped in safeHtml; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/web-forms/public/pay-return.tsx <div dangerouslySetInnerHTML={{ __html: safeHtml(view.next.message) }} />",
+      "reason": "wrapped in safeHtml; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/auth-registration-security/guest/captcha.tsx if (mount) mount.innerHTML = '';",
+      "reason": "innerHTML = '' only clears the node; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/channel-email/components/rich-editor.tsx if (box.current) box.current.innerHTML = sanitizeHtml(initialHtml);",
+      "reason": "wrapped in sanitizeHtml; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/marketing-site-cms/site/preview-bridge.tsx if (type === 'richtext') el.innerHTML = before;",
+      "reason": "restores the element's own earlier content; reviewed 2026-10-17"
     }
   ]
 }

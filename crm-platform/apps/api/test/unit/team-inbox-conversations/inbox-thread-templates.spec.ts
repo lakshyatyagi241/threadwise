@@ -58,6 +58,7 @@ function setup(
       viewer: async () => ({}),
       assertVisible: () => undefined,
       assertCan: async () => undefined,
+      assertNotAssignedToOther: () => undefined,
     } as never,
     {} as never,
     {

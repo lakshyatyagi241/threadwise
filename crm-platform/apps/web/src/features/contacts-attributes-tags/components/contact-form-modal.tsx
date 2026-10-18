@@ -21,7 +21,7 @@ import {
 } from '@/features/auth-registration-security/shared/phone-field';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { CompanyPicker, useCanPickCompany } from '@/features/companies';
-import { LeadScoreField, isScoreInvalid } from '@/features/lead-scoring';
+import { LeadScoreField, isScoreInvalid, useLeadScoringEnabled } from '@/features/lead-scoring';
 import {
   createContact,
   fetchContact,
@@ -149,6 +149,8 @@ function ContactForm({
   const [pendingTags, setPendingTags] = useState<TagLite[]>([]);
   const [lostProblem, setLostProblem] = useState<'pick' | 'text' | null>(null);
   const [scoreProblem, setScoreProblem] = useState(false);
+  // Lead scoring off: the form has no score box (the stored score is left as it is: an unchanged score is never sent).
+  const scoringOn = useLeadScoringEnabled();
   /** What changing the stage just did to the status field (shown under it until the person picks a status). */
   const [statusMove, setStatusMove] = useState<StatusNotice>({ kind: 'none' });
 
@@ -380,7 +382,7 @@ function ContactForm({
     setFieldProblems(fp);
     const lostFound = isLost ? lostReasonProblem(lostAnswer, lostChoices.length > 0) : null;
     setLostProblem(lostFound);
-    const scoreBad = isScoreInvalid(merged.leadScore);
+    const scoreBad = scoringOn && isScoreInvalid(merged.leadScore);
     setScoreProblem(scoreBad);
     if (Object.keys(next).length > 0) {
       const first = Object.keys(next)[0];
@@ -563,17 +565,19 @@ function ContactForm({
         </Field>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        <LeadScoreField
-          id={id('lead-score')}
-          value={values.leadScore}
-          invalid={scoreProblem}
-          onChange={(v) => {
-            set('leadScore', v);
-            setScoreProblem(false);
-          }}
-        />
-      </div>
+      {scoringOn && (
+        <div className="grid gap-3 sm:grid-cols-2">
+          <LeadScoreField
+            id={id('lead-score')}
+            value={values.leadScore}
+            invalid={scoreProblem}
+            onChange={(v) => {
+              set('leadScore', v);
+              setScoreProblem(false);
+            }}
+          />
+        </div>
+      )}
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Field label={t('stage')} htmlFor={id('stage')}>

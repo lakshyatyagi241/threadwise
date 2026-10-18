@@ -2,13 +2,14 @@ import { readFile } from 'node:fs/promises';
 import { hostname } from 'node:os';
 import { PerformanceObserver, constants as perfConstants } from 'node:perf_hooks';
 import { getHeapStatistics } from 'node:v8';
-import type { ServiceName } from '../sentry';
-import { instanceId } from '../worker-heartbeat';
 import { EventLoopSampler, classifySnapshot, type EventLoopSnapshot } from './event-loop-sampler';
 import { Registry, type Counter, type Gauge, type Histogram } from './prometheus-text';
 
-/** The same two process names Sentry uses, so a worker is the same worker in both. */
-export type RuntimeService = ServiceName;
+/** The process kinds that report. `api` and `worker` are the names Sentry uses, so a worker is the same worker in both. */
+export type RuntimeService = 'api' | 'worker' | 'web';
+
+/** Identifies one process. The hostname is the container id in Docker, which is what the container healthcheck knows. */
+export const instanceId = (host: string, pid: number): string => `${host}:${pid}`;
 
 /** Seconds, Prometheus convention. Fine below 10 ms (a healthy API) and up to 30 s (a webhook ack that missed its window). */
 const HTTP_BUCKETS = [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10, 30];

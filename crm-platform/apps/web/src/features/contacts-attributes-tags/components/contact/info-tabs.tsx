@@ -1,7 +1,6 @@
 'use client';
 
 import { useFormatter, useNow, useTranslations } from 'next-intl';
-import { Tabs, type TabItem } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { CompanyLink } from '@/features/companies';
 import { attributionView, useContactAttribution, type TouchView } from '@/features/lead-sources';
@@ -105,7 +104,7 @@ export function useCustomGroups(contact: ContactRow) {
   );
 }
 
-function CustomFields({ contact }: { contact: ContactRow }) {
+export function CustomFields({ contact }: { contact: ContactRow }) {
   const t = useTranslations('contacts-attributes-tags.contact.info');
   const groups = useCustomGroups(contact);
   if (groups.length === 0) return <EmptyLine>{t('noCustomFields')}</EmptyLine>;
@@ -188,7 +187,7 @@ export function LeadSourceRows({ contact }: { contact: ContactRow }) {
   );
 }
 
-function SocialRows({ contact }: { contact: ContactRow }) {
+export function SocialRows({ contact }: { contact: ContactRow }) {
   const t = useTranslations('contacts-attributes-tags.contact.social');
   const links = socialLinks(contact.customFields);
   return (
@@ -210,23 +209,4 @@ function SocialRows({ contact }: { contact: ContactRow }) {
       }))}
     />
   );
-}
-
-/**
- * The tabs of the overview: Contact information, Social media (only when the contact has a profile link), Lead source and
- * Custom fields. Web analytics is not here on purpose: no visit or page-view data exists for a contact.
- */
-export function ContactInfoTabs({ contact }: { contact: ContactRow }) {
-  const t = useTranslations('contacts-attributes-tags.contact.tabs');
-  const info = useInfoRows(contact);
-  const hasSocial = socialLinks(contact.customFields).length > 0;
-  const items: TabItem[] = [
-    { id: 'info', label: t('info'), content: <KeyValueList rows={info} /> },
-    ...(hasSocial
-      ? [{ id: 'social', label: t('social'), content: <SocialRows contact={contact} /> }]
-      : []),
-    { id: 'source', label: t('source'), content: <LeadSourceRows contact={contact} /> },
-    { id: 'custom', label: t('custom'), content: <CustomFields contact={contact} /> },
-  ];
-  return <Tabs items={items} />;
 }

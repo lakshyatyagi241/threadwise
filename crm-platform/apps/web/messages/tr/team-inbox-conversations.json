@@ -29,7 +29,8 @@
       "priorityChanged": "Öncelik güncellendi",
       "snoozed": "Konuşma ertelendi",
       "tagAdded": "Etiket eklendi",
-      "tagRemoved": "Etiket kaldırıldı"
+      "tagRemoved": "Etiket kaldırıldı",
+      "spammed": "Konuşma spam olarak işaretlendi."
     },
     "list": {
       "title": "Gelen kutusu",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "Açık",
-        "pending": "Beklemede",
         "snoozed": "Ertelendi",
         "resolved": "Çözüldü",
         "closed": "Çözüldü",
@@ -113,7 +113,7 @@
         "cancel": "İptal",
         "apply": "Uygula",
         "status": "Sohbet durumu",
-        "statusHint": "Seçim yapılmazsa açık ve bekleyen sohbetler görünür.",
+        "statusHint": "Hiçbir şey seçilmezse açık sohbetler gösterilir.",
         "conversation": "Konuşma",
         "any": "Herhangi",
         "assigned": "Atanmış",
@@ -145,7 +145,15 @@
       "statusOpen": "Açık",
       "statusAll": "Tüm durumlar",
       "channelFilter": "Kanal",
-      "selectRow": "{name} seç"
+      "selectRow": "{name} seç",
+      "snoozedFor": "Ertelendi · {left}",
+      "snoozeLeft": {
+        "due": "şimdi",
+        "minutes": "{count} dakika",
+        "hours": "{count} saat",
+        "days": "{count} gün"
+      },
+      "unsnoozesAt": "{time} için yeniden açılır"
     },
     "status": {
       "received": "Alındı",
@@ -166,6 +174,7 @@
       "mediaNotFound": "Ekin süresi doldu veya kaldırıldı. Yeniden ekleyin.",
       "statusInvalid": "Bu değişikliğe konuşmanın mevcut durumundan izin verilmiyor.",
       "assigneeInvalid": "Bu kişiye bu konuşma atanamaz.",
+      "assignedToOther": "Bu sohbet başka bir temsilciye atanmış. Yanıtlamak için önce kendinize atayın.",
       "forbidden": "Bunu yapmak için yetkiniz yok.",
       "rateLimited": "Çok fazla istek. Biraz bekleyip yeniden deneyin.",
       "simulatorDisabled": "Kanal simülatörü bu sunucuda kapalı.",
@@ -316,6 +325,8 @@
         "sendTemplate": "Şablon gönder"
       },
       "readOnly": "Bu konuşmayı okuyabilirsiniz ancak yanıtlama yetkiniz yok.",
+      "resolvedBanner": "Bu konuşma çözüldü. Yanıtlamak için yeniden açın.",
+      "assignedToOther": "Bu sohbet başka bir temsilciye atanmış. Yanıtlamak için önce kendinize atayın.",
       "typing": "{count, plural, other {# ekip arkadaşı yazıyor}}",
       "messagesLabel": "Mesajlar",
       "loadOlder": "Önceki mesajları yükle",
@@ -542,16 +553,8 @@
         "offline": "Çevrimdışı"
       },
       "notes": {
-        "tab": "Notlar",
-        "label": "Yeni dahili not",
-        "placeholder": "Yalnızca ekibinizin görebileceği bir not yazın",
-        "hint": "Ctrl+Enter notu ekler.",
-        "add": "Not ekle",
-        "addFailed": "Not kaydedilemedi.",
-        "loading": "Notlar yükleniyor",
-        "empty": "Henüz not yok.",
-        "unknownAuthor": "Bir ekip arkadaşı",
-        "delete": "Bu notu sil"
+        "tab": "Kişi notları",
+        "noContact": "Bu konuşmada not eklenecek bir kişi yok."
       },
       "timeline": {
         "tab": "Zaman çizelgesi",
@@ -577,6 +580,8 @@
           "tag_removed": "Etiket {actor} tarafından kaldırıldı",
           "first_response": "İlk yanıt gönderildi",
           "sla_breach": "Yanıt süresi kaçırıldı",
+          "spam_flagged": "{actor} tarafından spam olarak işaretlendi",
+          "escalated": "Yükseltildi",
           "unknown": "{actor} tarafından: {what}"
         },
         "actors": {
@@ -593,7 +598,6 @@
         "noMessages": "Mesaj yok",
         "status": {
           "open": "Açık",
-          "pending": "Beklemede",
           "snoozed": "Ertelendi",
           "resolved": "Çözüldü",
           "closed": "Kapalı",
@@ -1012,7 +1016,9 @@
     "triage": {
       "priority": "Öncelik",
       "snooze": "Ertele",
-      "wake": "Şimdi göster"
+      "wake": "Şimdi göster",
+      "markSpam": "Spam olarak işaretle",
+      "notSpam": "Spam değil"
     },
     "bulk": {
       "barLabel": "Toplu işlemler",
@@ -1045,7 +1051,8 @@
       "tagAdd": "Etiket ekle",
       "tagRemove": "Etiketi kaldır",
       "onLeave": "izinli",
-      "onLeaveUntil": "{date} tarihine kadar izinli"
+      "onLeaveUntil": "{date} tarihine kadar izinli",
+      "spam": "Spam olarak işaretle"
     },
     "tags": {
       "tag": "Etiket",

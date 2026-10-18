@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  snoozeLeft,
+  snoozeLeftMessage,
   avatarColor,
   clockTime,
   dayKey,
@@ -101,5 +103,30 @@ describe('small helpers', () => {
 
   it('gives the same person the same colour', () => {
     expect(avatarColor('abc')).toBe(avatarColor('abc'));
+  });
+});
+
+describe('snoozeLeft: how long a snooze still has', () => {
+  const now = Date.parse('2026-10-16T10:00:00.000Z');
+  const at = (ms: number) => new Date(now + ms).toISOString();
+
+  it('is due when the time has come or passed', () => {
+    expect(snoozeLeft(at(0), now)).toEqual({ kind: 'due' });
+    expect(snoozeLeft(at(-60_000), now)).toEqual({ kind: 'due' });
+  });
+
+  it('counts minutes under an hour, hours under a day, then days', () => {
+    expect(snoozeLeft(at(20_000), now)).toEqual({ kind: 'minutes', count: 1 });
+    expect(snoozeLeft(at(45 * 60_000), now)).toEqual({ kind: 'minutes', count: 45 });
+    expect(snoozeLeft(at(2 * 3_600_000), now)).toEqual({ kind: 'hours', count: 2 });
+    expect(snoozeLeft(at(5 * 86_400_000), now)).toEqual({ kind: 'days', count: 5 });
+  });
+
+  it('maps to the message key and count the row and the header translate', () => {
+    expect(snoozeLeftMessage({ kind: 'due' })).toEqual({ key: 'snoozeLeft.due', values: {} });
+    expect(snoozeLeftMessage({ kind: 'hours', count: 3 })).toEqual({
+      key: 'snoozeLeft.hours',
+      values: { count: 3 },
+    });
   });
 });

@@ -9,8 +9,7 @@ For other domains: assign only through `AssignmentService` (barrel `modules/team
 inside your transaction (lock the conversation first with `ConversationsRepository.lockByUuid` from the team-inbox-conversations barrel) and returns an
 `AssignmentChange`; call `afterCommit(orgId, change)` once the transaction has committed. The actor is a person or `system`, `bot` or `flow`.
 
-Not built yet: sticky and team-strategy assignment, agent availability changes and capacity, the routing actions other than assign (priority, tag,
-spam, SLA, AI agent, auto-reply, flow, escalation), business hours settings, SLA policies and sweeps, escalation, snooze. The contract already carries the
+Not built yet: sticky and team-strategy assignment, agent availability changes and capacity, the routing actions SLA and AI agent (`set_sla`, `assign_agent`), business hours settings, SLA policies and sweeps, escalation, snooze. The contract already carries the
 picker's `availability` and each team's `assignmentStrategy`. Routing rules and auto-assignment are below.
 
 ## Auto-assignment: routing rules (TW-TIB2-004 to 011, 020, assign action only)
@@ -39,7 +38,16 @@ Mutations accept `Idempotency-Key`; errors are problem+json; every write is audi
 
 - `routing_rules.conditions` = `RoutingConditions`: `contact` (the segments rule tree, evaluated with the segments compiler against the contact),
   `channelKinds`, `keywords {mode, words}`, `languages`, `businessHours`. A set part must hold (AND); no condition is a catch-all and only the fallback may be one.
-- `routing_rules.actions` = list of action dicts: `{type:'assign', strategy, userIds, teamIds, rrCursor}` and optionally `{type:'note', description}`
+- `routing_rules.actions` = list of action dicts: `{type:'assign', strategy, userIds, teamIds, rrCursor}` (optional: a rule may only mark spam, set a
+  priority, add tags, schedule an escalation, auto-reply or start a flow), optionally `{type:'mark_spam'}` (the conversation becomes spam when the rule fires:
+  the same state as the bulk "Mark as spam", a `spam_flagged` event with `by: routing` and the rule id, and an audit row; the rule's other actions still run),
+  `{type:'set_priority', priority}` (one-shot: a new conversation only; a `priority_changed` event with `by: routing`), `{type:'add_tag', name, color}` per
+  tag (found by name, case-insensitive, or created; per message: it also runs on a later message of a live conversation, as in Reference; a `tag_added`
+  event), `{type:'set_escalation', minutes, reassign, priority}` (on fire it schedules `escalation_due_at`; the sweep every 30 seconds applies it if the
+  thread is still open and we have not replied: reassigns to the rule's agents as they were when it fired and/or sets the priority, then an `escalated`
+  event; a reply from us first cancels it), `{type:'auto_reply', body}` (per message: the reply is sent as the business, a bot message through the normal
+  outbound path; the channel's rules apply, so a free reply outside the 24 hour window is refused and logged, not sent; the id is derived from the message,
+  so a retry does not send twice), and `{type:'note', description}`
   (the rule's **description**; unknown action types are ignored, as in Reference). `rrCursor` is the **round robin cursor**: the internal id of the person who
   took the last turn, saved under a row lock on the rule when it fires; never sent to clients; kept through an edit that leaves the same people and teams.
 - **Priority** is `routing_rules.sort` (list shows `position`, 1 = first); new rules take `max(sort)+1`.
@@ -58,7 +66,7 @@ message committed and never in a request. It reacts to the first message of a ne
    (`conversations.assignee_user_id`, latest `last_message_at`)**, if an active member who can open the inbox (availability is not checked). Strategy recorded: `contact_agent`.
 3. Active rules by `sort, id`. A rule matches by its conditions and _fires_ when it also finds a person: people = listed users + members of listed teams, active, able to open the
    inbox (`inbox.conversation.read`), and not `offline`/`busy` in `agent_statuses` (no row = available; nobody writes a status yet). `round_robin` = next id after the cursor, wrapping;
-   `least_busy` = fewest open/pending, ties by the rotation; `specific` = the one person. Nobody available: the first listed team's queue (no person); no team: the rule does not fire.
+   `least_busy` = fewest open, ties by the rotation; `specific` = the one person. Nobody available: the first listed team's queue (no person); no team: the rule does not fire.
    A person drawn through a team brings that team. `stop_on_match` (default on) ends evaluation; off, a later firing rule takes over (reassigns).
 4. No primary rule fired: the fallback rule (its conditions, if any, apply). Otherwise the conversation stays unassigned.
 
@@ -83,8 +91,16 @@ Create and update accept `triggerFlowId` (a flow uuid of the workspace, `null` c
   "since": "2026-10-13T00:00:00.000Z",
   "totals": { "replies": 3, "resolved": 1, "inbounds": 4, "avgFirstResponseMin": 6 },
   "agents": [
-    { "userId": "…", "name": "Dana", "replies": 2, "resolved": 1, "avgResponseMin": null,
-      "status": "online", "currentLoad": 2, "lastSeenAt": "2026-10-13T08:55:00.000Z" }
+    {
+      "userId": "…",
+      "name": "Dana",
+      "replies": 2,
+      "resolved": 1,
+      "avgResponseMin": null,
+      "status": "online",
+      "currentLoad": 2,
+      "lastSeenAt": "2026-10-13T08:55:00.000Z"
+    }
   ]
 }
 ```
@@ -93,5 +109,5 @@ Create and update accept `triggerFlowId` (a flow uuid of the workspace, `null` c
 - **Agents listed** = people with at least one reply in the window (Reference rule, kept): someone who only resolved or was assigned is not listed.
 - **resolved** per person = conversations `resolved` with `resolved_at` in the window, grouped by `resolved_by`; the total counts all of them.
 - **avgResponseMin** = mean minutes from `created_at` to `first_response_at` over conversations resolved in the window, credited to the **assignee**; `avgFirstResponseMin` is the same mean over all of them (one decimal, `null` when none).
-- **currentLoad** = live count of open and pending, unarchived conversations assigned to the person (Reference used a counter that drifted); `status` is the stored availability or `offline`.
+- **currentLoad** = live count of open, unarchived conversations assigned to the person (Reference used a counter that drifted); `status` is the stored availability or `offline`.
 - No pagination, export or CSAT here (Reference has none either).

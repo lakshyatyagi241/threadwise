@@ -471,7 +471,6 @@
       },
       "status": {
         "open": "Open",
-        "pending": "In behandeling",
         "resolved": "Afgehandeld",
         "closed": "Gesloten",
         "snoozed": "Uitgesteld"

@@ -98,7 +98,7 @@ WADEV (connect-device flow inside the popover), AIADM (BYOK key model and shared
 | TW-ASHELL-031 | UI kit: progress bar, toaster, modals, hints, skeleton, list/grid toggle | implemented | P1       | M      | TW-ASHELL-012                |
 | TW-ASHELL-032 | Customer Settings hub and tab shell (`/settings`)                        | implemented | P1       | M      | TW-ASHELL-012                |
 | TW-ASHELL-033 | Settings General: workspace name, timezone, currency                     | implemented | P1       | S      | TW-ASHELL-032, WSP           |
-| TW-ASHELL-034 | Settings General: working hours card (static)                            | docs-only   | P2       | S      | TW-ASHELL-033                |
+| TW-ASHELL-034 | Settings General: working hours card (now real, owner decision)          | implemented | P2       | S      | TW-ASHELL-033                |
 | TW-ASHELL-035 | Settings: personal preferences (auto AI summarize)                       | implemented | P2       | S      | TW-ASHELL-032, AICRM         |
 | TW-ASHELL-036 | Settings Branding: logo, favicon, brand colours                          | partial     | P2       | M      | TW-ASHELL-032                |
 | TW-ASHELL-037 | Settings Team and roles tab (read-only roster)                           | implemented | P2       | S      | TW-ASHELL-032, TIB2          |
@@ -1110,9 +1110,9 @@ WADEV (connect-device flow inside the popover), AIADM (BYOK key model and shared
 - **Source refs:** app/Http/Controllers/UserPagesController.php (`settingsUpdate`), app/Support/FormatSettings.php.
 - **Port notes:** timezone must be an IANA zone from a fixed list; currency FK to the platform currency table.
 
-### TW-ASHELL-034 — Settings General: working hours card (static)
+### TW-ASHELL-034 — Settings General: working hours card (static in Reference; real here)
 
-- **Status:** docs-only
+- **Status:** implemented (deliberate change: the owner asked for working hours that work and are configurable; Reference saved nothing. It edits the TIB2 business hours, see WIRE-TIB-BH-07 and -08.)
 - **Priority:** P2
 - **Effort:** S
 - **Depends on:** TW-ASHELL-033

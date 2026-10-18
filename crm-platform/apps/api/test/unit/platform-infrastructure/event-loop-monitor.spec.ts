@@ -17,7 +17,7 @@ import {
   stopRuntimeMonitor,
   type EventLoopSnapshot,
 } from '../../../src/modules/platform-infrastructure';
-import { Registry } from '../../../src/modules/platform-infrastructure/observability/event-loop/prometheus-text';
+import { Registry } from '@crm/observability';
 
 const NS = 1_000_000;
 

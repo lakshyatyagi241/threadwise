@@ -1,5 +1,5 @@
 import { hostname } from 'node:os';
-import { Registry, type Gauge, type Histogram } from './prometheus-text';
+import { Registry, type Gauge, type Histogram } from '@crm/observability';
 
 /**
  * A prober that runs in its OWN process and measures how long a caller waits, from outside the API's event loop.

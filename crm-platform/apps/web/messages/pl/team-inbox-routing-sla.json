@@ -89,7 +89,14 @@
       "delete": "Usuń",
       "startsFlow": "Uruchamia także przepływ {name}",
       "flowOff": "Przepływ jest wyłączony",
-      "flowGone": "Uruchamia także usunięty przepływ"
+      "flowGone": "Uruchamia także usunięty przepływ",
+      "markSpamSummary": "Oznacza rozmowę jako spam",
+      "prioritySummary": "Ustawia priorytet na {priority}",
+      "tagsSummary": "Dodaje tagi: {tags}",
+      "escalationSummary": "Jeśli nikt nie odpowie w ciągu {minutes} min:",
+      "escalationReassign": "przypisz ponownie do konsultantów tej reguły",
+      "escalationPriority": "ustaw priorytet na {priority}",
+      "autoReplySummary": "Wysyła odpowiedź: {body}"
     },
     "form": {
       "back": "Automatyczne przypisywanie",
@@ -118,7 +125,14 @@
         "contactIncomplete": "Dokończ lub usuń niekompletne warunki kontaktu.",
         "keywordsMany": "Użyj najwyżej 20 słów.",
         "targets": "Wybierz co najmniej jednego agenta lub zespół.",
-        "specific": "Dla konkretnego agenta wybierz dokładnie jednego agenta."
+        "specific": "Dla konkretnego agenta wybierz dokładnie jednego agenta.",
+        "actions": "Wybierz, co robi reguła.",
+        "tagsMany": "Użyj co najwyżej 5 tagów.",
+        "escalationMinutes": "Liczba całkowita minut od 1 do 1440.",
+        "escalationAction": "Przypisz ponownie, ustaw priorytet lub oba.",
+        "escalationAgents": "Ponowne przypisanie wymaga konsultantów w tej regule: wybierz ich powyżej.",
+        "autoReplyEmpty": "Napisz odpowiedź lub odznacz opcję.",
+        "autoReplyLong": "Odpowiedź jest za długa (najwyżej 1024 znaki)."
       },
       "whenTitle": "Gdy nadejdzie nowa rozmowa",
       "whenHint": "Każdy ustawiony warunek musi być spełniony. Pozostaw część pustą, aby ją zignorować.",
@@ -188,7 +202,23 @@
         "loadFailed": "Nie udało się wczytać przepływów, więc lista może być niepełna."
       },
       "onLeave": "na urlopie",
-      "onLeaveUntil": "na urlopie do {date}"
+      "onLeaveUntil": "na urlopie do {date}",
+      "actions": "Co robi reguła",
+      "actionsHint": "Wybierz jedno lub oba. Reguła może przypisać rozmowę, oznaczyć ją jako spam albo zrobić obie rzeczy.",
+      "actionAssign": "Przypisz do konsultantów lub zespołów",
+      "actionMarkSpam": "Oznacz rozmowę jako spam",
+      "setPriority": "Ustaw priorytet",
+      "priorityKeep": "Zostaw priorytet bez zmian",
+      "addTags": "Dodaj tagi",
+      "addTagsHint": "Oddziel przecinkami. Tag, którego jeszcze nie ma, zostanie utworzony.",
+      "escalate": "Jeśli nikt nie odpowie na czas, eskaluj",
+      "escalateHint": "Minuty od uruchomienia reguły, do 1440 (doba). Nasza wcześniejsza odpowiedź to anuluje.",
+      "escalateMinutes": "Minuty bez odpowiedzi",
+      "escalateReassign": "Przypisz ponownie do konsultantów tej reguły",
+      "escalatePriority": "Następnie ustaw priorytet",
+      "autoReply": "Wyślij automatyczną odpowiedź",
+      "autoReplyBody": "Treść odpowiedzi",
+      "autoReplyHint": "Wysyłana do klienta w imieniu firmy. Poza 24-godzinnym oknem wolna odpowiedź nie jest wysyłana."
     },
     "sla": {
       "back": "Wróć do ustawień",
@@ -206,8 +236,6 @@
       "resolution": "Rozwiązanie w ciągu (minuty)",
       "minutesHint": "Zostaw puste, aby nie ustawiać celu. 60 to godzina, 1440 to doba.",
       "minutesInvalid": "Użyj liczb całkowitych od 1.",
-      "pause": "Wstrzymaj w czasie oczekiwania na klienta",
-      "pauseHint": "Rozmowa oczekująca nie jest oznaczana.",
       "businessHours": "Licz tylko godziny pracy",
       "businessHoursHint": "Używa godzin i strefy czasowej z ustawień przestrzeni roboczej.",
       "makeDefault": "Ustaw jako zasadę domyślną",
@@ -423,13 +451,13 @@
       "to": "Do",
       "problem": {
         "required": "Podaj obie godziny.",
-        "order": "Godzina zamknięcia musi być późniejsza niż godzina otwarcia."
+        "same": "Godziny otwarcia i zamknięcia muszą się różnić."
       },
-      "note": "Wyłączony dzień jest zamknięty przez cały dzień. Dopóki nie zapiszesz, obszar roboczy jest uznawany za otwarty non stop.",
       "cancel": "Anuluj",
       "save": "Zapisz godziny",
       "saved": "Zapisano godziny pracy",
-      "saveFailed": "Nie udało się zapisać"
+      "saveFailed": "Nie udało się zapisać",
+      "note": "Wyłączony dzień jest zamknięty przez cały dzień. Dopóki nie zapiszesz, przestrzeń robocza jest uznawana za otwartą cały czas. Przerwy, godziny nocne i dni wolne ustawisz w Ustawienia > Ogólne > Godziny pracy."
     }
   }
 }

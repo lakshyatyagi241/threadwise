@@ -229,6 +229,17 @@ export const contactSelectQuerySchema = z.object({
 export type ContactSelectQuery = z.infer<typeof contactSelectQuerySchema>;
 
 /**
+ * The stage and status values contacts of the caller's scope actually hold, for the filter dropdowns. A workspace can
+ * configure stages and statuses (status_options) and still have contacts on a value it does not list (the platform's
+ * default stage `new`, a status that predates the configuration); a filter must be able to pick those too.
+ */
+export const contactFilterValuesSchema = z.object({
+  lifecycleStages: z.array(z.string()),
+  statuses: z.array(z.string()),
+});
+export type ContactFilterValues = z.infer<typeof contactFilterValuesSchema>;
+
+/**
  * Bulk operations — Phase 11 exit criteria requires these be transactional
  * per row with partial-failure reporting, never all-or-nothing across the
  * whole batch (one bad id in a 200-row bulk-edit must not sink the other 199).

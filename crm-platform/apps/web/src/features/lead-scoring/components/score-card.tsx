@@ -6,6 +6,7 @@ import { Alert, Badge, Button, Spinner, cn } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useLscRuns, useScoreContact } from '../api/hooks';
 import { formatCostUsd, formatCount } from '../lib/cost';
+import { useLeadScoringEnabled, useLeadScoringOn } from '../lib/use-enabled';
 import { errorKey, type ErrorKey } from '../lib/errors';
 import { bandOf, isManualScore, type ScoreFields } from '../lib/score';
 import { LinkButton, SparkleIcon, useFormatDate } from './parts';
@@ -25,13 +26,21 @@ export interface ScoreCardProps {
 /**
  * The lead score on a contact's page: the number and who set it, the reasons the AI gave, the Score with AI button (with the
  * cost of the last run), and the contact's scoring history. A score a person typed is theirs: the button is disabled and says
- * how to hand it back to the AI.
+ * how to hand it back to the AI. While lead scoring is off for the workspace the card is not drawn at all, a typed score
+ * included (`useLeadScoringEnabled`).
  */
-export function ScoreCard({ contactId, contact, onScored, className }: ScoreCardProps) {
+export function ScoreCard(props: ScoreCardProps) {
+  const enabled = useLeadScoringEnabled();
+  return enabled ? <ScoreCardBody {...props} /> : null;
+}
+
+function ScoreCardBody({ contactId, contact, onScored, className }: ScoreCardProps) {
   const t = useTranslations('lead-scoring.card');
   const locale = useLocale();
   const fmt = useFormatDate();
-  const canScore = useCan('lsc.contacts.score');
+  // The card is only drawn while scoring is on; the AI side (the button, the log, the settings link) still checks the app itself.
+  const on = useLeadScoringOn();
+  const canScore = useCan('lsc.contacts.score') && on;
   const score = useScoreContact(contactId, onScored);
   const manualId = useId();
   const manual = isManualScore(contact);
@@ -150,7 +159,8 @@ export function ScoreCard({ contactId, contact, onScored, className }: ScoreCard
 /** One precise message per failure; the ones the person can fix come with the screen that fixes them. */
 function ScoreError({ error }: { error: unknown }) {
   const t = useTranslations('lead-scoring.scoreErrors');
-  const canSettings = useCan('lsc.runs.read');
+  const on = useLeadScoringOn();
+  const canSettings = useCan('lsc.runs.read') && on;
   const canKeys = useCan('aiadm.keys.read');
   const key: ErrorKey = errorKey(error);
   const tone =
@@ -169,7 +179,8 @@ function ScoreError({ error }: { error: unknown }) {
 /** The contact's own scoring log: when, the score change, what triggered it, tokens and cost. Needs `lsc.runs.read`. */
 function History({ contactId }: { contactId: string }) {
   const t = useTranslations('lead-scoring.card');
-  const canRead = useCan('lsc.runs.read');
+  const on = useLeadScoringOn();
+  const canRead = useCan('lsc.runs.read') && on;
   const [open, setOpen] = useState(false);
   const regionId = useId();
   const runs = useLscRuns({ contactId }, canRead && open, HISTORY_SIZE);

@@ -243,6 +243,10 @@ export const flowTemplateOptionSchema = z.object({
   attachmentFile: z.string().nullable(),
   buttons: z.array(z.record(z.unknown())),
   carousel: z.array(z.record(z.unknown())),
+  /** What fills each placeholder of the header and body when the template goes out: the contact detail (or flow variable) it reads. */
+  variables: z
+    .array(z.object({ section: z.enum(['header', 'body']), slot: z.string(), field: z.string() }))
+    .optional(),
 });
 
 /** A connected store a commerce node can sell from. `currency` is null for a WhatsApp catalog (mixed currencies). */

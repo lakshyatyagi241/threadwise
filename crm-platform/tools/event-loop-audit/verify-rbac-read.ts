@@ -111,6 +111,16 @@ async function main(): Promise<void> {
     delta(before),
   );
 
+  // The read JwtAuthGuard starts early is the same read: same version, same grant set.
+  const early = await svc.startCachedRead(ORG, 1);
+  check(
+    'the early read returns the cached version and grant set',
+    early?.version === 3 && early.grants === (await redis.get(`rbac:${ORG}:v3:u1`)),
+    early && { version: early.version },
+  );
+  const none = await svc.startCachedRead(ORG, 99);
+  check('and no grant set for a user nobody cached', none?.version === 3 && none.grants === null);
+
   // The original reads and the script agree on every key.
   const viaScript = (await redis.eval(
     "local v = redis.call('GET', KEYS[1]) if not v then return {false, false} end return {v, redis.call('GET', 'rbac:' .. ARGV[1] .. ':v' .. v .. ':u' .. ARGV[2])}",

@@ -82,7 +82,8 @@
       "help_agent": "Yardım asistanı",
       "email_channel": "E-posta (Gmail) kanalı",
       "personal_history_full": "Tam geçmişi içe aktarma (kişisel WhatsApp)",
-      "ai_crm_copilot": "AI CRM Copilot"
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "Yapay zeka ile potansiyel müşteri puanlama"
     },
     "limitGroups": {
       "messaging": "Mesajlaşma",
@@ -564,7 +565,9 @@
       "continueFree": "Ücretsiz devam et",
       "choose": "{name} seç",
       "back": "Geri dön",
-      "compare": "Tüm planları karşılaştır"
+      "compare": "Tüm planları karşılaştır",
+      "appHint": "{feature}, Pazar yerinde uygulama olarak da satılır.",
+      "appLink": "Uygulamayı gör"
     }
   }
 }

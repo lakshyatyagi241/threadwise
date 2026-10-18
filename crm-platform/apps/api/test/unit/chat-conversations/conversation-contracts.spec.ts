@@ -72,7 +72,6 @@ describe('conversation statuses', () => {
   it('is the lifecycle the database allows, closed included', () => {
     expect(conversationStatusSchema.options).toEqual([
       'open',
-      'pending',
       'snoozed',
       'resolved',
       'closed',

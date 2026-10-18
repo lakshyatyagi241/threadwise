@@ -1440,7 +1440,8 @@
             "help_agent": "アプリ内のヘルプアシスタント。やりたいことを普通の言葉で伝えると、本人のセッションで案内または代行し、リスクのある操作の前には必ず確認します。AIトークンを消費します。",
             "email_channel": "GmailとGoogle Workspaceのメールボックスをチームの受信箱に接続します。このスイッチは有料のメールアプリが管理します。",
             "personal_history_full": "個人用WhatsApp番号を初めて連携する際に、チャット履歴をすべてインポートできます。最近のチャットのインポートは、個人用番号を含むすべてのプランで利用できます。",
-            "ai_crm_copilot": "連絡先から AI で見込み顧客を見つけてスコアを付けます。"
+            "ai_crm_copilot": "連絡先から AI で見込み顧客を見つけてスコアを付けます。",
+            "lead_scoring": "AIで連絡先をスコアリングし、グロースパイロットを支えます。このスイッチはAIリードスコアリングアプリが管理します。"
           },
           "units": {
             "days": "日",
@@ -1626,7 +1627,8 @@
             "help_agent": "ヘルプアシスタント（AI、トークンを消費）",
             "email_channel": "メール(Gmail)チャネル",
             "personal_history_full": "チャット全履歴のインポート(個人用WhatsApp)",
-            "ai_crm_copilot": "AI CRM Copilot"
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "AIリードスコアリング"
           },
           "problems": {
             "required": "この項目は必須です。",

@@ -471,7 +471,6 @@
       },
       "status": {
         "open": "진행 중",
-        "pending": "대기 중",
         "resolved": "해결됨",
         "closed": "종료됨",
         "snoozed": "보류됨"

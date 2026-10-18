@@ -292,7 +292,6 @@
       "firstLabel": "初回返信（分）",
       "resolveLabel": "解決（分）",
       "bizOnly": "営業時間内のみ",
-      "pause": "お客様の返信待ちで一時停止",
       "setDefault": "デフォルトに設定",
       "addPolicy": "ポリシーを追加",
       "savePolicy": "ポリシーを保存",

@@ -39,7 +39,7 @@ jobs:
           key: pnpm-${{ hashFiles('crm-platform/pnpm-lock.yaml') }}
           restore-keys: pnpm-
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @crm/tax build && pnpm --filter @crm/contracts build && pnpm --filter @crm/db build
+      - run: pnpm --filter @crm/tax build && pnpm --filter @crm/contracts build && pnpm --filter @crm/db build && pnpm --filter @crm/observability build
       - run: pnpm --filter @crm/api test
 
   deploy:

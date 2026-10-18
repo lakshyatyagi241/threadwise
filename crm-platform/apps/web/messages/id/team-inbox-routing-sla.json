@@ -89,7 +89,14 @@
       "delete": "Hapus",
       "startsFlow": "Juga memulai alur {name}",
       "flowOff": "Alur dinonaktifkan",
-      "flowGone": "Juga memulai alur yang sudah dihapus"
+      "flowGone": "Juga memulai alur yang sudah dihapus",
+      "markSpamSummary": "Menandai percakapan sebagai spam",
+      "prioritySummary": "Mengatur prioritas ke {priority}",
+      "tagsSummary": "Menambahkan tag {tags}",
+      "escalationSummary": "Jika tidak ada yang membalas dalam {minutes} menit:",
+      "escalationReassign": "tugaskan ulang ke agen aturan ini",
+      "escalationPriority": "atur prioritas ke {priority}",
+      "autoReplySummary": "Mengirim balasan: {body}"
     },
     "form": {
       "back": "Penugasan otomatis",
@@ -118,7 +125,14 @@
         "contactIncomplete": "Selesaikan atau hapus kondisi kontak yang belum lengkap.",
         "keywordsMany": "Gunakan paling banyak 20 kata.",
         "targets": "Pilih minimal satu agen atau tim.",
-        "specific": "Pilih tepat satu agen untuk agen tertentu."
+        "specific": "Pilih tepat satu agen untuk agen tertentu.",
+        "actions": "Pilih apa yang dilakukan aturan.",
+        "tagsMany": "Gunakan paling banyak 5 tag.",
+        "escalationMinutes": "Angka menit bulat dari 1 sampai 1440.",
+        "escalationAction": "Tugaskan ulang, atur prioritas, atau keduanya.",
+        "escalationAgents": "Tugaskan ulang perlu agen di aturan ini: pilih di atas.",
+        "autoReplyEmpty": "Tulis balasannya, atau hapus centang opsinya.",
+        "autoReplyLong": "Balasan terlalu panjang (maksimal 1024 karakter)."
       },
       "whenTitle": "Saat percakapan baru masuk",
       "whenHint": "Setiap kondisi yang Anda atur harus cocok. Kosongkan bagian untuk mengabaikannya.",
@@ -188,7 +202,23 @@
         "loadFailed": "Alur tidak dapat dimuat, jadi daftar mungkin tidak lengkap."
       },
       "onLeave": "sedang cuti",
-      "onLeaveUntil": "cuti hingga {date}"
+      "onLeaveUntil": "cuti hingga {date}",
+      "actions": "Yang dilakukan aturan",
+      "actionsHint": "Pilih satu atau keduanya. Aturan dapat menugaskan percakapan, menandainya sebagai spam, atau keduanya.",
+      "actionAssign": "Tugaskan ke agen atau tim",
+      "actionMarkSpam": "Tandai percakapan sebagai spam",
+      "setPriority": "Atur prioritas",
+      "priorityKeep": "Biarkan prioritas seperti sekarang",
+      "addTags": "Tambahkan tag",
+      "addTagsHint": "Pisahkan dengan koma. Tag yang belum ada akan dibuat.",
+      "escalate": "Jika tidak ada yang membalas tepat waktu, eskalasi",
+      "escalateHint": "Menit sejak aturan berjalan, hingga 1440 (sehari). Balasan dari kami lebih dulu membatalkannya.",
+      "escalateMinutes": "Menit tanpa balasan",
+      "escalateReassign": "Tugaskan ulang ke agen aturan ini",
+      "escalatePriority": "Lalu atur prioritas",
+      "autoReply": "Kirim balasan otomatis",
+      "autoReplyBody": "Teks balasan",
+      "autoReplyHint": "Dikirim kepada pelanggan atas nama bisnis. Di luar jendela 24 jam, balasan bebas tidak dikirim."
     },
     "sla": {
       "back": "Kembali ke Pengaturan",
@@ -206,8 +236,6 @@
       "resolution": "Selesaikan dalam (menit)",
       "minutesHint": "Kosongkan jika tanpa target. 60 adalah satu jam, 1440 adalah satu hari.",
       "minutesInvalid": "Gunakan bilangan bulat mulai dari 1.",
-      "pause": "Jeda saat menunggu pelanggan",
-      "pauseHint": "Percakapan berstatus tertunda tidak ditandai.",
       "businessHours": "Hitung jam kerja saja",
       "businessHoursHint": "Menggunakan jam dan zona waktu dari pengaturan ruang kerja Anda.",
       "makeDefault": "Jadikan kebijakan default",
@@ -423,13 +451,13 @@
       "to": "Sampai",
       "problem": {
         "required": "Isi kedua jam.",
-        "order": "Jam tutup harus setelah jam buka."
+        "same": "Waktu buka dan waktu tutup harus berbeda."
       },
-      "note": "Hari yang dinonaktifkan tutup sepanjang hari. Sampai Anda menyimpan, ruang kerja dianggap buka sepanjang waktu.",
       "cancel": "Batal",
       "save": "Simpan jam",
       "saved": "Jam kerja disimpan",
-      "saveFailed": "Gagal menyimpan"
+      "saveFailed": "Gagal menyimpan",
+      "note": "Hari yang dinonaktifkan berarti tutup sepanjang hari. Sebelum Anda menyimpan, workspace dianggap buka setiap saat. Istirahat, jam lintas tengah malam, dan hari libur diatur di Pengaturan > Umum > Jam kerja."
     }
   }
 }

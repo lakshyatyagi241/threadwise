@@ -9,6 +9,7 @@ import {
   EMPTY_PARAMETER,
   fillText,
   quickReplies,
+  richComponents,
   templateComponents,
   templateText,
   templateValues,
@@ -98,6 +99,47 @@ describe('template rules (TW-FLR-026)', () => {
 
   it('only quick replies can branch; url, call and copy buttons never reply', () => {
     expect(quickReplies(tpl(), 'n1').map((b) => b.text)).toEqual(['Track', 'Cancel']);
+  });
+});
+
+describe('a template with a media header or a button value', () => {
+  const r = render({ name: 'Asha', order_id: 'A12', ship_date: 'Fri' });
+
+  it('a plain template needs no extra components', () => {
+    expect(
+      richComponents(tpl({ header: null, buttons: [], variableMap: { body: [] } }), r),
+    ).toBeNull();
+  });
+
+  it('an image header goes out as a header component with the sample link', () => {
+    const t = tpl({
+      header: null,
+      attachmentType: 'image',
+      headerMediaUrl: 'https://cdn.example.com/promo.png',
+      variableMap: {
+        body: [
+          { num: 1, key: 'order_id' },
+          { num: 2, key: 'ship_date' },
+        ],
+      },
+    });
+    const parts = richComponents(t, r);
+    expect(parts?.[0]).toEqual({
+      type: 'header',
+      parameters: [{ type: 'image', image: { link: 'https://cdn.example.com/promo.png' } }],
+    });
+    expect(parts?.[1]).toMatchObject({
+      type: 'body',
+      parameters: [
+        { type: 'text', text: 'A12' },
+        { type: 'text', text: 'Fri' },
+      ],
+    });
+  });
+
+  it('an image header with no public link sends no header rather than a broken one', () => {
+    const t = tpl({ header: null, attachmentType: 'image', headerMediaUrl: null });
+    expect((richComponents(t, r) ?? []).some((c) => c.type === 'header')).toBe(false);
   });
 });
 

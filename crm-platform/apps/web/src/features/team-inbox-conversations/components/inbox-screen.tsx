@@ -166,7 +166,7 @@ export function InboxScreen() {
     onSent: () => list.refreshCounts(),
   });
   const notesQ = useNotes(selectedId);
-  // The API answers newest first; the thread and the panel both want oldest first (the panel flips it again).
+  // The API answers newest first; the thread wants oldest first.
   const notes = useMemo(
     () =>
       (notesQ.data?.data ?? [])
@@ -378,6 +378,17 @@ export function InboxScreen() {
     if (ok) toast(t('reopened'));
   }, [detail.detail, can.resolve, guarded, toast, t]);
 
+  const markSpam = useCallback(async () => {
+    const d = detail.detail;
+    if (!d || !can.resolve || d.status === 'spam') return;
+    setTriaging(true);
+    const ok = await guarded(async () => {
+      list.placeRow(await inboxApi.markSpam(d.id, d.rowVersion));
+    });
+    setTriaging(false);
+    if (ok) toast(t('spammed'));
+  }, [detail.detail, can.resolve, guarded, list, toast, t]);
+
   const [tagging, setTagging] = useState(false);
   const applyTag = useCallback(
     async (input: { tagId: string } | { name: string }) => {
@@ -549,20 +560,13 @@ export function InboxScreen() {
         assign: can.assign,
         assignSelf: can.assignSelf,
         resolve: can.resolve,
-        note: can.note,
       }}
       presence={presence}
-      notes={notes}
-      notesLoading={notesQ.isPending && selectedId !== null}
-      notesError={notesQ.isError}
       nowMs={nowMs}
       assigning={assigning}
       resolving={resolving}
       onAssign={(change) => void assign(change)}
       onToggleResolved={() => void toggleResolved()}
-      onAddNote={addNote}
-      onDeleteNote={setNoteToDelete}
-      canDeleteNote={canDeleteNote}
       onOpenConversation={(id) => open(id, { focus: false })}
       canEditContact={can.editContact}
       tags={
@@ -682,6 +686,7 @@ export function InboxScreen() {
                 onPriority: (p) => void setPriority(p),
                 onSnooze: (p) => void snooze(p),
                 onWake: () => void wake(),
+                onSpam: () => void markSpam(),
               }}
               mode={mode}
               onMode={setMode}

@@ -33,7 +33,8 @@
       "browse": "Jelajahi Marketplace",
       "back": "Kembali ke dasbor",
       "unofficialTitle": "{app} tidak tersedia",
-      "unofficialBody": "{app} hanya digunakan dengan nomor WhatsApp pribadi yang dipasangkan lewat kode QR, yang tidak diaktifkan untuk workspace Anda. WhatsApp terhubung melalui WhatsApp Business API resmi."
+      "unofficialBody": "{app} hanya digunakan dengan nomor WhatsApp pribadi yang dipasangkan lewat kode QR, yang tidak diaktifkan untuk workspace Anda. WhatsApp terhubung melalui WhatsApp Business API resmi.",
+      "viewApp": "Lihat {app} di Marketplace"
     },
     "closeMenu": "Tutup menu",
     "mainMenu": "Menu utama",

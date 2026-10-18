@@ -321,7 +321,11 @@ export function privacyActionFor(
   };
 }
 
-/** Hears `whatsapp.order.received` (TW-WABA-042) and hands the cart to `CommerceResume`. Worker only, like the resume itself. */
+/**
+ * Hears `whatsapp.order.received` (TW-WABA-042) and hands the cart to `CommerceResume`. Worker only, like the resume itself. A redelivered
+ * event is harmless: the cart resumes a run only while it is `waiting` at the commerce step, and `deliverExternal` checks that again
+ * before it routes, so a second delivery finds the run already moved on and does nothing.
+ */
 @Injectable()
 export class CatalogCartResume implements OutboxSubscriber, OnModuleInit {
   readonly name = 'commerce-cart-resume';

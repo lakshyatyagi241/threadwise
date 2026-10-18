@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@crm/contracts": "workspace:*",
+    "@crm/observability": "workspace:*",
     "@crm/tax": "workspace:*",
     "@crm/ui": "workspace:*",
     "@emotion/react": "^11.14.0",

@@ -74,6 +74,15 @@ describe('Deploy tab', () => {
       'visitors will not get answers',
     );
   });
+
+  it('does not offer a Preview link to an unpublished bot, whose chat page would answer "Page not found"', () => {
+    state.value = { isPending: false, data: { widget } };
+    const draft = renderIntl(<FlowWidgetDeploy flowId="f1" channel="web" published={false} />);
+    expect(draft).toContain('deploy-preview-disabled');
+    expect(draft).not.toContain(widget.previewUrl);
+    const live = renderIntl(<FlowWidgetDeploy flowId="f1" channel="web" published />);
+    expect(live).toContain(widget.previewUrl);
+  });
 });
 
 describe('isLocalAddress', () => {

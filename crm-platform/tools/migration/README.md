@@ -186,6 +186,7 @@ $CLI reconcile --client iskm --out out   # writes out/<client>/reconcile.{json,m
 | `--confirm-db-name=<name>`                 | `run`              | the exact database name, required to WRITE to any non-local host                  |
 | `--allow-extra-rows`                       | `reconcile`        | rows added to the target after cutover are not an error                           |
 | `--allow-docker-host N[,N]`                | all                | accept this docker-compose service name as local                                  |
+| `--timezone ZONE`                          | `run`              | IANA zone for `organizations.settings.timezone` (business hours, SLA, quiet hours read it) |
 | `--owner-verified` / `--trial-days N`      | `run`              | mark the owner's email verified / start a trial on a free plan                    |
 | `--lock-wait-seconds N`                    | `run`              | how long to wait for another run of the same client (default 120)                 |
 

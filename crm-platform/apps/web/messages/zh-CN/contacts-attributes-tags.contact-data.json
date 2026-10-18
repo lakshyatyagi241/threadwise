@@ -35,7 +35,6 @@
         "footnote": "根据联系人的电话号码、电子邮件地址或姓名查找。不显示已归档的会话。",
         "status": {
           "open": "进行中",
-          "pending": "待处理",
           "snoozed": "已暂停",
           "resolved": "已解决",
           "closed": "已关闭",

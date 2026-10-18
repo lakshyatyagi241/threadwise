@@ -16,8 +16,8 @@ import { DateRangePicker } from './date-range-picker';
 import { MultiSelect } from './multi-select';
 import { TagChip } from './tag-chip';
 
-/** The statuses the window offers: Resolved stands for resolved and closed, as everywhere else in the inbox. Spam is not offered: nothing in the inbox marks a thread as spam. */
-const STATUS_CHOICES = CONVERSATION_STATUSES.filter((s) => s !== 'closed' && s !== 'spam');
+/** The statuses the window offers: Resolved stands for resolved and closed, as everywhere else in the inbox. Spam is offered so an agent can find what was marked. */
+const STATUS_CHOICES = CONVERSATION_STATUSES.filter((s) => s !== 'closed');
 
 /** What the window edits: the filters it owns (not the search text, the tab or the archive view). */
 type Draft = Pick<

@@ -46,3 +46,7 @@ live yet, so the toggle currently has no effect.
 - It can create and move deals, contacts, companies, tasks, invoices, payments, proposals and estimates, and send a
   WhatsApp message or a quote's link to a contact. It cannot (yet) generate a client brief/deck or create delivery
   projects — those features don't exist in this product yet.
+
+## Get it as an app
+
+The AI CRM Copilot is also sold as an app in the **Marketplace**. A workspace whose plan already includes it keeps it as it is, with nothing to buy or install. A workspace without it can subscribe to the app and install it to switch it on. See [Marketplace](help:marketplace-overview).

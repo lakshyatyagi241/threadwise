@@ -306,6 +306,19 @@ export class CatalogSyncService {
         orgId,
         listed.map((r) => r.retailerId.trim()),
       );
+      // One read for every product Meta lists that we already hold, and one for their variants, not two queries per item.
+      const held = await this.repo.findByRetailerIds(
+        tx,
+        orgId,
+        listed.map((r) => r.retailerId.trim()).filter((id) => id !== ''),
+      );
+      const heldWithVariants = new Map(
+        (await this.products.withVariants(tx, orgId, [...held.values()])).map((p) => [
+          p.metaRetailerId ?? '',
+          p,
+        ]),
+      );
+      const created = new Set<string>(); // retailer ids this run inserted: a repeat of one reads the row we just made
       for (const r of listed) {
         const retailer = r.retailerId.trim();
         const name = r.name.trim();
@@ -335,10 +348,12 @@ export class CatalogSyncService {
           skipped++;
           continue;
         }
-        const found = await this.repo.findByRetailerId(tx, orgId, retailer);
-        const existing = found
-          ? (await this.products.withVariants(tx, orgId, [found]))[0]
-          : undefined;
+        let existing = heldWithVariants.get(retailer);
+        if (!existing && created.has(retailer)) {
+          // The same retailer id twice in one listing: the first made the product, so the second updates it.
+          const again = (await this.repo.findByRetailerIds(tx, orgId, [retailer])).get(retailer);
+          existing = again ? (await this.products.withVariants(tx, orgId, [again]))[0] : undefined;
+        }
         if (existing && ownItems.withVariants.has(existing.id)) {
           skipped++;
           continue;
@@ -366,6 +381,7 @@ export class CatalogSyncService {
             price_minor: priceMinor ?? 0,
             ...(r.currency ? { currency_code: r.currency } : {}),
           });
+          created.add(retailer);
           imported++;
         }
       }

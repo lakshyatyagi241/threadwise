@@ -72,7 +72,7 @@ export function AppShell({
   const settingsLink = nav.find((i) => i.id === SETTINGS_NAV_ID);
 
   return (
-    <div className="flex min-h-dvh">
+    <div className="app-shell flex min-h-dvh">
       <NavRail sections={sections} activeId={activeId} footer={navFooter} />
       <NavDrawer
         open={drawer}
@@ -82,7 +82,7 @@ export function AppShell({
         returnFocusTo={menuButton}
         footer={navFooter}
       />
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="app-shell-col flex min-w-0 flex-1 flex-col">
         <TopBar
           user={user}
           theme={theme}
@@ -100,8 +100,9 @@ export function AppShell({
           helpItems={help}
         />
         {banners}
-        {/* `relative overflow-x-clip`: a visually hidden label that escaped a wide table must never widen the page. */}
-        <main className="relative min-w-0 flex-1 overflow-x-clip p-4 md:p-6">
+        {/* `relative overflow-x-clip`: a visually hidden label that escaped a wide table must never widen the page.
+            A screen wrapped in <PageFill> turns the shell into a one-window-tall column (rules in globals.css). */}
+        <main className="app-shell-main relative min-w-0 flex-1 overflow-x-clip p-4 md:p-6">
           <SettingsTilesProvider tiles={settings}>
             <SettingsBack />
             {children}

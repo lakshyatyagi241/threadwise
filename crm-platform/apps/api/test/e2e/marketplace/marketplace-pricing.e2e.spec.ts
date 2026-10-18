@@ -399,9 +399,18 @@ describe('the operator decides what an app costs', () => {
       packSlug: null,
       purchasable: true,
     });
-    // only the seeded Appointments listing is paid (draft, price unset)
+    // the seeded paid listings are all drafts with the price unset (Appointments, Forms, Email, AI lead scoring and the optional tools of the
+    // listings audit); nothing else is paid yet
+    const paidAtSeed = (await ops().get('/apps?pricing=paid&limit=100')).body.data as Array<{
+      slug: string;
+      status: string;
+    }>;
+    expect(paidAtSeed.every((a) => a.status === 'draft')).toBe(true);
+    expect(paidAtSeed.map((a) => a.slug)).toEqual(
+      expect.arrayContaining(['forms', 'appointments', 'lead-scoring', 'ai-crm-copilot', 'sms']),
+    );
     expect(
-      (await ops().get('/apps?pricing=paid')).body.data.map((a: { slug: string }) => a.slug),
+      paidAtSeed.map((a) => a.slug).filter((s) => ['forms', 'appointments'].includes(s)),
     ).toEqual(['forms', 'appointments']);
     const cardFree = await detail(A, 'quote-pro');
     expect(cardFree.pricing).toMatchObject({
@@ -555,9 +564,15 @@ describe('the operator decides what an app costs', () => {
     expect(op.body.manifest.pricing).toEqual({ model: 'addon', note: 'Developer proposes 5 USD' });
     expect(op.body.pricing.model).toBe('paid_monthly');
     // the filter follows
-    expect(
-      (await ops().get('/apps?pricing=paid')).body.data.map((a: { slug: string }) => a.slug),
-    ).toEqual(['quote-pro', 'forms', 'appointments']);
+    const paidNow = (await ops().get('/apps?pricing=paid&limit=100')).body.data.map(
+      (a: { slug: string }) => a.slug,
+    ) as string[];
+    expect(paidNow).toContain('quote-pro');
+    expect(paidNow.filter((s) => ['quote-pro', 'forms', 'appointments'].includes(s))).toEqual([
+      'quote-pro',
+      'forms',
+      'appointments',
+    ]);
     expect(
       (await ops().get('/apps?pricing=free&limit=100')).body.data.map(
         (a: { slug: string }) => a.slug,

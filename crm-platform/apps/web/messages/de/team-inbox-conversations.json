@@ -29,7 +29,8 @@
       "priorityChanged": "Priorität aktualisiert",
       "snoozed": "Unterhaltung zurückgestellt",
       "tagAdded": "Tag hinzugefügt",
-      "tagRemoved": "Tag entfernt"
+      "tagRemoved": "Tag entfernt",
+      "spammed": "Unterhaltung als Spam markiert."
     },
     "list": {
       "title": "Posteingang",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "Offen",
-        "pending": "Ausstehend",
         "snoozed": "Zurückgestellt",
         "resolved": "Gelöst",
         "closed": "Gelöst",
@@ -113,7 +113,7 @@
         "cancel": "Abbrechen",
         "apply": "Anwenden",
         "status": "Chat-Status",
-        "statusHint": "Ohne Auswahl erscheinen offene und ausstehende Chats.",
+        "statusHint": "Ohne Auswahl werden offene Chats angezeigt.",
         "conversation": "Konversation",
         "any": "Beliebig",
         "assigned": "Zugewiesen",
@@ -145,7 +145,15 @@
       "statusOpen": "Offen",
       "statusAll": "Alle Status",
       "channelFilter": "Kanal",
-      "selectRow": "{name} auswählen"
+      "selectRow": "{name} auswählen",
+      "snoozedFor": "Zurückgestellt · {left}",
+      "snoozeLeft": {
+        "due": "jetzt fällig",
+        "minutes": "{count, plural, one {# Minute} other {# Minuten}}",
+        "hours": "{count, plural, one {# Stunde} other {# Stunden}}",
+        "days": "{count, plural, one {# Tag} other {# Tage}}"
+      },
+      "unsnoozesAt": "Wird um {time} wieder geöffnet"
     },
     "status": {
       "received": "Empfangen",
@@ -166,6 +174,7 @@
       "mediaNotFound": "Der Anhang ist abgelaufen oder wurde entfernt. Hängen Sie ihn erneut an.",
       "statusInvalid": "Diese Änderung ist im aktuellen Status der Unterhaltung nicht zulässig.",
       "assigneeInvalid": "Dieser Person kann die Unterhaltung nicht zugewiesen werden.",
+      "assignedToOther": "Dieser Chat ist einem anderen Agenten zugewiesen. Weisen Sie ihn zuerst sich selbst zu, um zu antworten.",
       "forbidden": "Sie sind nicht berechtigt, diese Aktion auszuführen.",
       "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
       "simulatorDisabled": "Der Kanal-Simulator ist auf diesem Server deaktiviert.",
@@ -316,6 +325,8 @@
         "sendTemplate": "Vorlage senden"
       },
       "readOnly": "Sie können diese Unterhaltung lesen, aber Sie sind nicht berechtigt zu antworten.",
+      "resolvedBanner": "Diese Unterhaltung ist gelöst. Öffnen Sie sie erneut, um zu antworten.",
+      "assignedToOther": "Dieser Chat ist einem anderen Agenten zugewiesen. Weisen Sie ihn zuerst sich selbst zu, um zu antworten.",
       "typing": "{count, plural, one {Ein Teammitglied schreibt} other {# Teammitglieder schreiben}}",
       "messagesLabel": "Nachrichten",
       "loadOlder": "Frühere Nachrichten laden",
@@ -542,16 +553,8 @@
         "offline": "Offline"
       },
       "notes": {
-        "tab": "Notizen",
-        "label": "Neue interne Notiz",
-        "placeholder": "Notiz schreiben, die nur Ihr Team sehen kann",
-        "hint": "Strg+Enter fügt die Notiz hinzu.",
-        "add": "Notiz hinzufügen",
-        "addFailed": "Die Notiz konnte nicht gespeichert werden.",
-        "loading": "Notizen werden geladen",
-        "empty": "Noch keine Notizen.",
-        "unknownAuthor": "Ein Teammitglied",
-        "delete": "Diese Notiz löschen"
+        "tab": "Kontaktnotizen",
+        "noContact": "Diese Unterhaltung hat keinen Kontakt, dem Notizen zugeordnet werden könnten."
       },
       "timeline": {
         "tab": "Verlauf",
@@ -577,6 +580,8 @@
           "tag_removed": "Tag entfernt von {actor}",
           "first_response": "Erste Antwort gesendet",
           "sla_breach": "Antwortfrist verpasst",
+          "spam_flagged": "Von {actor} als Spam markiert",
+          "escalated": "Eskaliert",
           "unknown": "{what} von {actor}"
         },
         "actors": {
@@ -593,7 +598,6 @@
         "noMessages": "Keine Nachrichten",
         "status": {
           "open": "Offen",
-          "pending": "Ausstehend",
           "snoozed": "Zurückgestellt",
           "resolved": "Gelöst",
           "closed": "Geschlossen",
@@ -1012,7 +1016,9 @@
     "triage": {
       "priority": "Priorität",
       "snooze": "Zurückstellen",
-      "wake": "Jetzt reaktivieren"
+      "wake": "Jetzt reaktivieren",
+      "markSpam": "Als Spam markieren",
+      "notSpam": "Kein Spam"
     },
     "bulk": {
       "barLabel": "Massenaktionen",
@@ -1045,7 +1051,8 @@
       "tagAdd": "Tag hinzufügen",
       "tagRemove": "Tag entfernen",
       "onLeave": "abwesend",
-      "onLeaveUntil": "abwesend bis {date}"
+      "onLeaveUntil": "abwesend bis {date}",
+      "spam": "Als Spam markieren"
     },
     "tags": {
       "tag": "Tag",

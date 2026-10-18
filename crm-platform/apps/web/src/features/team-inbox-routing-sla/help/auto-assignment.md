@@ -38,7 +38,7 @@ Rules never take a conversation away from someone. A conversation that already h
 1. Open **Settings**, go to **Automation** and select **Auto-assignment**.
 2. Select **Create rule**. Give it a **Rule name** and, if you like, a **Description** for your team.
 3. Under **When a new conversation arrives**, set the conditions. Every part you fill in must match; a part you leave empty is ignored.
-4. Under **Assign to**, choose **How to choose** and tick the agents or teams.
+4. Under **What the rule does**, tick what it should do: **Assign to agents or teams** (then choose **How to choose** and tick the agents or teams), **Mark the conversation as spam**, a priority, tags to add, an automatic reply, or an escalation (after the minutes you choose with no reply from us, it is reassigned to this rule's agents and/or its priority is raised). A rule must do at least one of these.
 5. Select **Save** to keep the rule switched off, or **Save and activate** to start using it at once.
 6. On the list, use the arrows to change the order, the switch to turn a rule on or off, and **Edit**, **Duplicate** or **Delete**.
 
@@ -54,7 +54,7 @@ A rule needs at least one condition, unless it is the fallback.
 
 ## Business hours
 
-Select **Business hours** at the top of the page to set when your team is open. Each day of the week has a switch, an opening time and a closing time. A day that is switched off is closed all day. The closing time must be after the opening time, so a day cannot run past midnight. A shift that does needs two days.
+Select **Business hours** at the top of the page to set when your team is open. Each day of the week has a switch, an opening time and a closing time. A day that is switched off is closed all day. The closing time must differ from the opening time; a closing time before the opening time is a night shift that runs into the next morning. Breaks (more than one set of hours a day) and holidays are not shown here: set them under **Settings > General > Working hours**, which edits this same schedule, and they are kept when you save here.
 
 The **Time zone** is the one your workspace uses for every day and time. Only the workspace owner can change it; for anyone else the field is shown but cannot be changed. The same hours and time zone are used for the **Outside business hours** condition here and for the response targets of an SLA policy that respects business hours.
 

@@ -99,7 +99,10 @@ export class ExportBuilder {
     }
 
     const csv = await this.messagesCsv(tx, params.orgId, params.subject);
-    entries.push({ name: 'messages.csv', data: Buffer.from(`${String.fromCharCode(0xfeff)}${csv.text}`, 'utf8') });
+    entries.push({
+      name: 'messages.csv',
+      data: Buffer.from(`${String.fromCharCode(0xfeff)}${csv.text}`, 'utf8'),
+    });
     if (csv.truncated) truncated.push('messages.csv');
 
     const files = await this.files(tx, params, now);
@@ -130,7 +133,7 @@ export class ExportBuilder {
       },
     );
 
-    return { zip: buildZip(entries, now), sections, truncated };
+    return { zip: await buildZip(entries, now), sections, truncated };
   }
 
   private async messagesCsv(

@@ -28,6 +28,7 @@
     "audit:sast": "node tools/sast-report/run.mjs",
     "audit:event-loop": "node tools/event-loop-audit/scan.mjs --check",
     "qa": "node tools/qa-suite/run.mjs",
+    "qa:reports": "node tools/qa-suite/report/generate.mjs",
     "infra:up": "docker compose up -d",
     "infra:down": "docker compose down",
     "infra:nuke": "docker compose down -v",

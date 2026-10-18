@@ -305,7 +305,8 @@
         "terms": "Условия",
         "status": "Страница статуса",
         "email": "Поддержка по email"
-      }
+      },
+      "open": "Открыть"
     },
     "install": {
       "backToMarketplace": "Назад в маркетплейс",

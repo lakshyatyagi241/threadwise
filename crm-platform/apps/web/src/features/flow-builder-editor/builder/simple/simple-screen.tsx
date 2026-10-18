@@ -14,7 +14,11 @@ import { flowsApi } from '../../api/flows';
 import { FLB_KEYS, useBuilderContext } from '../../api/hooks';
 import {
   BRANCHING,
+  endsChain,
   FIXED_EXITS,
+  deadOptions,
+  LINK_NEXT,
+  OPTION_STEPS,
   stepKindsFor,
   stepLabel,
   addJourney,
@@ -58,6 +62,8 @@ import {
   type BuilderTab,
 } from '../web-bot-tabs';
 import { LinkSelect, NEW_JOURNEY, StepEditor } from './step-editors';
+import { StepPreview } from './step-preview';
+import { variableNames } from '../../lib/stored-names';
 import '../builder.css';
 import { lookOf } from '../../lib/node-ui';
 
@@ -126,7 +132,7 @@ function SimpleInner({
 }) {
   const t = useTranslations('flb.builder.simple');
   const m = useMsg();
-  const { toast } = useToast();
+  const { toast, dismiss } = useToast();
   // A bot is built for one channel, chosen when it is created; it never changes afterwards. It is read once: the first save rewrites
   // the address from `?type=web` to the saved bot's, and the channel must not follow that.
   const [channel] = useState<'chat' | 'web'>(() =>
@@ -225,10 +231,20 @@ function Editor({
   const [doc, setDoc] = useState<SimpleDoc>(initialDoc);
   const [name, setName] = useState(initial?.name ?? defaultName);
   const [flowId, setFlowId] = useState<string | null>(initial?.id ?? null);
-  const [rowVersion, setRowVersion] = useState(initial?.rowVersion ?? 1);
   const [published, setPublished] = useState(initial?.isPublished ?? false);
   const [dirty, setDirty] = useState(!initial);
   const [busy, setBusy] = useState(false);
+  // Saves run one at a time and always read the newest version / flow id / content from refs, never from the render that started them:
+  // two quick clicks outside the step, or an edit made while a save is in flight, must not send a stale version (that is a false
+  // "modified by someone else") nor wipe the unsaved mark of an edit the save did not carry.
+  const rowVersionRef = useRef(initial?.rowVersion ?? 1);
+  const flowIdRef = useRef<string | null>(initial?.id ?? null);
+  const editSeq = useRef(0);
+  const dirtyRef = useRef(!initial);
+  const saveQueue = useRef<Promise<unknown>>(Promise.resolve());
+  const queuedSave = useRef<Promise<FlowDetail> | null>(null);
+  const inFlight = useRef(0);
+  const failToast = useRef<number | null>(null);
   // Every saved flow has FAQs beside Build (for a person who may read them); a website chat or WhatsApp bot also has Customize and Deploy.
   const canFaqs = useCan('faq.entries.read');
   const tabSet = useMemo(() => ({ faqs: canFaqs, web: true }), [canFaqs]);
@@ -265,6 +281,8 @@ function Editor({
 
   const change = useCallback((next: SimpleDoc) => {
     setDoc(next);
+    editSeq.current += 1;
+    dirtyRef.current = true;
     setDirty(true);
   }, []);
 
@@ -362,7 +380,7 @@ function Editor({
     const step = allSteps(doc).find((x) => x.id === stepId);
     if (!step) return;
     const options = Array.isArray(step.data.options) ? (step.data.options as unknown[]) : [];
-    let idx = options.findIndex((_, i) => !step.links[i]);
+    let idx = options.findIndex((_, i) => !step.links[i] || step.links[i] === LINK_NEXT);
     let data: Record<string, unknown> | undefined;
     if (idx < 0) {
       const max = step.type === 'list' ? LIMITS.rows : LIMITS.buttons;
@@ -445,10 +463,14 @@ function Editor({
   const testGraph = useMemo(() => toGraph(doc), [doc]);
 
   // --- save / publish -------------------------------------------------------------------------------------------------
+  const docRef = useRef(doc);
+  docRef.current = doc;
+  const nameRef = useRef(name);
+  nameRef.current = name;
   const payload = () => {
-    const g = toGraph(doc);
+    const g = toGraph(docRef.current);
     return {
-      name: name.trim() || defaultName,
+      name: nameRef.current.trim() || defaultName,
       category: initial?.category ?? null,
       flowType: channel,
       graph: {
@@ -464,30 +486,77 @@ function Editor({
     };
   };
 
-  const persist = async () => {
-    const saved = flowId
-      ? await flowsApi.save(flowId, { ...payload(), rowVersion })
-      : await flowsApi.create(payload());
-    if (!flowId) {
+  /** Run a job after every earlier save or publish has finished, whether those worked or not. */
+  const enqueue = <T,>(job: () => Promise<T>): Promise<T> => {
+    inFlight.current += 1;
+    setBusy(true);
+    const run = saveQueue.current.catch(() => undefined).then(job);
+    saveQueue.current = run;
+    const done = () => {
+      inFlight.current -= 1;
+      if (inFlight.current === 0) setBusy(false);
+    };
+    run.then(done, done);
+    return run;
+  };
+
+  /** The save itself, for a job that already holds its turn in the queue. */
+  const persistNow = async (): Promise<FlowDetail> => {
+    const seq = editSeq.current;
+    const body = payload();
+    const id = flowIdRef.current;
+    const saved = id
+      ? await flowsApi.save(id, { ...body, rowVersion: rowVersionRef.current })
+      : await flowsApi.create(body);
+    rowVersionRef.current = saved.rowVersion;
+    if (!id) {
+      flowIdRef.current = saved.id;
       setFlowId(saved.id);
       window.history.replaceState({}, '', `/flows/simple/${saved.id}`);
     }
-    setRowVersion(saved.rowVersion);
-    setName(saved.name);
-    setDirty(false);
+    // An edit made while this save was running is not in it: stay unsaved and keep the name as typed.
+    if (editSeq.current === seq) {
+      setName(saved.name);
+      dirtyRef.current = false;
+      setDirty(false);
+    }
     return saved;
   };
 
+  /** Save the screen as it is when the save starts. A save already waiting its turn covers the same state, so it is shared. */
+  const persist = (): Promise<FlowDetail> => {
+    if (queuedSave.current) return queuedSave.current;
+    const job = enqueue(() => {
+      queuedSave.current = null;
+      return persistNow();
+    });
+    queuedSave.current = job;
+    job.then(
+      () => {
+        if (queuedSave.current === job) queuedSave.current = null;
+      },
+      () => {
+        if (queuedSave.current === job) queuedSave.current = null;
+      },
+    );
+    return job;
+  };
+
+  /** One failure toast at a time: a new one replaces the one still on screen. */
+  const saveFailed = (e: unknown) => {
+    if (failToast.current !== null) dismiss(failToast.current);
+    failToast.current = toast(
+      t('saveFailed', { error: errMessage(e, t('genericError')) }),
+      'danger',
+    );
+  };
+
   const onSave = async () => {
-    if (busy) return;
-    setBusy(true);
     try {
       const saved = await persist();
       toast(t('saved', { name: saved.name }), 'success');
     } catch (e) {
-      toast(t('saveFailed', { error: errMessage(e, t('genericError')) }), 'danger');
-    } finally {
-      setBusy(false);
+      saveFailed(e);
     }
   };
 
@@ -497,13 +566,8 @@ function Editor({
   useEffect(() => {
     closeAndSave.current = () => {
       setActiveId(null);
-      if (!dirty || busy || !canEditFlow) return;
-      setBusy(true);
-      persist()
-        .catch((e: unknown) =>
-          toast(t('saveFailed', { error: errMessage(e, t('genericError')) }), 'danger'),
-        )
-        .finally(() => setBusy(false));
+      if (!dirtyRef.current || !canEditFlow) return;
+      persist().catch(saveFailed);
     };
   });
 
@@ -533,13 +597,14 @@ function Editor({
       setShowProblems(true);
       return;
     }
-    setBusy(true);
-    try {
-      const saved = dirty || !flowId ? await persist() : null;
-      {
+    // Publishing waits for any save still running, then saves what is left, so it always sees the newest version.
+    await enqueue(async () => {
+      try {
+        const saved = dirtyRef.current || !flowIdRef.current ? await persistNow() : null;
         // A bot goes live with the widget its owner chose (the chat window, or the WhatsApp button), so Customize has to be saved
         // once first. A bot saved just now has no widget yet; for a saved one, ask if the page has not loaded the answer.
-        const widget = !flowId
+        const id = saved?.id ?? flowIdRef.current;
+        const widget = !id
           ? null
           : ((widgetQuery.data ?? (await widgetQuery.refetch()).data)?.widget ?? null);
         if (!widget) {
@@ -547,16 +612,14 @@ function Editor({
           toast(tw(channel === 'web' ? 'customizeFirst' : 'customizeFirstWhatsapp'), 'danger');
           return;
         }
+        const pub = await flowsApi.publish(id!);
+        rowVersionRef.current = pub.rowVersion;
+        setPublished(true);
+        toast(t('publishedToast'), 'success');
+      } catch (e) {
+        toast(t('publishFailed', { error: errMessage(e, t('genericError')) }), 'danger');
       }
-      const pub = await flowsApi.publish(saved?.id ?? flowId!);
-      setRowVersion(pub.rowVersion);
-      setPublished(true);
-      toast(t('publishedToast'), 'success');
-    } catch (e) {
-      toast(t('publishFailed', { error: errMessage(e, t('genericError')) }), 'danger');
-    } finally {
-      setBusy(false);
-    }
+    });
   };
 
   const status = published
@@ -568,7 +631,9 @@ function Editor({
       : t('status.draft');
 
   return (
-    <FlowEditorContext.Provider value={{ flowId, web: channel === 'web' }}>
+    <FlowEditorContext.Provider
+      value={{ flowId, web: channel === 'web', channel, whatsapp: channel === 'chat' }}
+    >
       <div className="flb-root fixed inset-0 z-40 flex flex-col bg-muted text-foreground">
         <BuilderFonts />
         <header className="relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-background px-4">
@@ -586,6 +651,8 @@ function Editor({
             maxLength={120}
             onChange={(e) => {
               setName(e.target.value);
+              editSeq.current += 1;
+              dirtyRef.current = true;
               setDirty(true);
             }}
             className="h-9 min-w-0 max-w-sm flex-1 rounded-lg border border-transparent bg-transparent px-2 font-serif text-[18px] hover:border-border focus:border-border focus:outline-none"
@@ -940,6 +1007,7 @@ function Editor({
                           flowId={flowId}
                           stage={stageIn(doc, ci, si)}
                           active={activeId === s.id}
+                          editing={activeId !== null}
                           bad={badSteps.has(s.id)}
                           first={si === 0}
                           last={si === journey.steps.length - 1}
@@ -971,9 +1039,13 @@ function Editor({
                           <p className="my-3 text-center text-[11.5px] text-muted-foreground">
                             {s.type === 'faq'
                               ? t('faqEnds')
-                              : t('branchingEnds', {
-                                  kind: s.type === 'list' ? 'list' : 'buttons',
-                                })}
+                              : OPTION_STEPS.has(s.type)
+                                ? t('optionsCarryOn', {
+                                    kind: s.type === 'list' ? 'list' : 'buttons',
+                                  })
+                                : t('branchingEnds', {
+                                    kind: s.type === 'list' ? 'list' : 'buttons',
+                                  })}
                           </p>
                         ) : null}
                         {s.type === 'buttons' || s.type === 'list' ? (
@@ -985,7 +1057,7 @@ function Editor({
                               {(Array.isArray(s.data.options) ? s.data.options : []).map(
                                 (o: unknown, i: number) => {
                                   // A button that already leads somewhere has its step; one that ends gets a quick way to start one.
-                                  if (s.links[i]) return null;
+                                  if (s.links[i] && s.links[i] !== LINK_NEXT) return null;
                                   const label =
                                     typeof o === 'string'
                                       ? o
@@ -1004,6 +1076,11 @@ function Editor({
                               )}
                             </div>
                             <AddMenu channel={channel} onPick={(k) => addBranch(s.id, k)} atEnd />
+                            <AddMenu
+                              channel={channel}
+                              onPick={(k) => add(ci, si + 1, k)}
+                              atEnd={si === journey.steps.length - 1}
+                            />
                           </>
                         ) : BRANCHING.has(s.type) ? null : (
                           <>
@@ -1227,7 +1304,7 @@ function TriggerCard({
 }
 
 /** The steps the ⚡ Actions list offers: what can run right after a step. */
-const ACTION_KINDS: readonly string[] = ['api-library', 'code', 'delay'];
+const ACTION_KINDS: readonly string[] = ['api-library', 'webhook', 'code', 'delay'];
 
 function AddMenu({
   onPick,
@@ -1357,7 +1434,7 @@ function AddMenu({
                   </div>
                   <div className="grid grid-cols-1 gap-x-3 gap-y-1 sm:grid-cols-2">
                     {kinds.map((k) => {
-                      const blocked = BRANCHING.has(k.type) && !atEnd;
+                      const blocked = endsChain(k.type) && !atEnd;
                       const look = lookOf(k.type);
                       return (
                         <button
@@ -1418,6 +1495,8 @@ function StepCard(p: {
   flowId: string | null;
   stage: string;
   active: boolean;
+  /** A step is open somewhere: only that one shows its tools, hovering the others does not add theirs beside it. */
+  editing: boolean;
   bad: boolean;
   first: boolean;
   last: boolean;
@@ -1447,22 +1526,36 @@ function StepCard(p: {
   const stageOf = (id: string | null) => {
     if (!id) return null;
     for (let a = 0; a < p.doc.journeys.length; a++) {
-      const b = p.doc.journeys[a]!.steps.findIndex((x) => x.id === id);
+      const steps = p.doc.journeys[a]!.steps;
+      if (id === LINK_NEXT) {
+        const own = steps.findIndex((x) => x.id === s.id);
+        return own >= 0 && steps[own + 1] ? stageIn(p.doc, a, own + 1) : null;
+      }
+      const b = steps.findIndex((x) => x.id === id);
       if (b >= 0) return stageIn(p.doc, a, b);
     }
     return null;
   };
   const fixed = FIXED_EXITS[s.type];
   /** What each exit of a branching step leads to: the stage number of the step it reaches, or null (the conversation ends). */
-  const exits: Array<{ title: string; target: string | null }> = fixed
+  const chain = p.doc.journeys.find((j) => j.steps.some((x) => x.id === s.id))?.steps ?? [];
+  const dead = new Set(
+    deadOptions(s, chain[chain.findIndex((x) => x.id === s.id) + 1]).map((d) => d.index),
+  );
+  const exits: Array<{ title: string; target: string | null; open: boolean }> = fixed
     ? fixed.map((handle, i) => ({
         title: t(`faqExits.${handle}`),
         target: stageOf(s.links[i] ?? null),
+        open: !s.links[i],
       }))
     : BRANCHING.has(s.type)
       ? (Array.isArray(s.data.options) ? s.data.options : []).map((o: unknown, i: number) => {
           const label = typeof o === 'string' ? o : str((o as Record<string, unknown>).title);
-          return { title: label || `#${i + 1}`, target: stageOf(s.links[i] ?? null) };
+          return {
+            title: label || `#${i + 1}`,
+            target: stageOf(s.links[i] ?? null),
+            open: dead.has(i),
+          };
         })
       : [];
   const look = lookOf(s.type);
@@ -1492,7 +1585,7 @@ function StepCard(p: {
       <IconBtn label={t('moveDown')} disabled={p.last} onClick={() => p.onMove(1)}>
         <Glyph d="M8 3v10M4 9l4 4 4-4" />
       </IconBtn>
-      {!BRANCHING.has(s.type) ? (
+      {!endsChain(s.type) ? (
         <IconBtn label={t('duplicate')} onClick={() => setConfirm('duplicate')}>
           <Glyph d="M5.5 5.5h7v7h-7zM3.5 10.5v-7h7" />
         </IconBtn>
@@ -1581,7 +1674,7 @@ function StepCard(p: {
                   <div
                     key={i}
                     className={`flex items-center gap-2 rounded-full border bg-background px-4 py-1.5 text-[13px] font-semibold ${
-                      e.target ? 'border-brand text-brand' : 'border-orange-400 text-orange-600'
+                      e.open ? 'border-orange-400 text-orange-600' : 'border-brand text-brand'
                     }`}
                   >
                     <span className="min-w-0 flex-1 truncate">{e.title}</span>
@@ -1602,14 +1695,24 @@ function StepCard(p: {
                 })}
               </p>
             ) : null}
-            {str(s.data.var).trim() ? (
-              <p className="mt-2">
-                <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-brand">
-                  {`{{${str(s.data.var).trim()}}}`}
-                </code>
+            {variableNames(s.data).length > 0 ? (
+              <p className="mt-2 flex flex-wrap gap-1">
+                {variableNames(s.data).map((v) => (
+                  <code
+                    key={v}
+                    className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-brand"
+                  >
+                    {v}
+                  </code>
+                ))}
               </p>
             ) : null}
           </button>
+        ) : null}
+        {!p.active ? (
+          <div className="px-4 pb-4 empty:hidden">
+            <StepPreview step={s} />
+          </div>
         ) : null}
         {p.active ? (
           <div className="border-t border-border p-4">
@@ -1626,8 +1729,8 @@ function StepCard(p: {
       </section>
       <div
         data-step-tools={s.id}
-        className={`absolute start-full top-0 ms-2 hidden flex-col gap-0.5 rounded-xl border border-border bg-background p-1 text-muted-foreground shadow-md group-hover:lg:flex ${
-          p.active ? 'lg:flex' : ''
+        className={`absolute start-full top-0 ms-2 hidden flex-col gap-0.5 rounded-xl border border-border bg-background p-1 text-muted-foreground shadow-md ${
+          p.active ? 'lg:flex' : p.editing ? '' : 'group-hover:lg:flex'
         }`}
       >
         {tools()}

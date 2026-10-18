@@ -12,6 +12,6 @@ export const settings = [
     href: '/growth',
     icon: 'bot',
     order: 9,
-    gates: { permission: 'lsc.runs.read' },
+    gates: { permission: 'lsc.runs.read', app: 'lead_scoring' },
   }),
 ];

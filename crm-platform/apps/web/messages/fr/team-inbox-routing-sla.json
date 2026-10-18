@@ -89,7 +89,14 @@
       "delete": "Supprimer",
       "startsFlow": "Démarre aussi le flux {name}",
       "flowOff": "Le flux est désactivé",
-      "flowGone": "Démarre aussi un flux supprimé"
+      "flowGone": "Démarre aussi un flux supprimé",
+      "markSpamSummary": "Marque la conversation comme spam",
+      "prioritySummary": "Définit la priorité sur {priority}",
+      "tagsSummary": "Ajoute les étiquettes {tags}",
+      "escalationSummary": "Si personne ne répond dans {minutes} minutes :",
+      "escalationReassign": "la réattribuer aux agents de cette règle",
+      "escalationPriority": "définir la priorité sur {priority}",
+      "autoReplySummary": "Envoie la réponse : {body}"
     },
     "form": {
       "back": "Attribution automatique",
@@ -118,7 +125,14 @@
         "contactIncomplete": "Terminez ou retirez les conditions sur le contact qui sont incomplètes.",
         "keywordsMany": "Utilisez 20 mots au maximum.",
         "targets": "Choisissez au moins un agent ou une équipe.",
-        "specific": "Choisissez exactement un agent pour un agent précis."
+        "specific": "Choisissez exactement un agent pour un agent précis.",
+        "actions": "Choisissez ce que fait la règle.",
+        "tagsMany": "Utilisez 5 étiquettes au maximum.",
+        "escalationMinutes": "Un nombre entier de minutes entre 1 et 1440.",
+        "escalationAction": "La réattribuer, définir une priorité, ou les deux.",
+        "escalationAgents": "La réattribution demande des agents dans cette règle : choisissez-les ci-dessus.",
+        "autoReplyEmpty": "Rédigez la réponse, ou décochez l'option.",
+        "autoReplyLong": "La réponse est trop longue (1024 caractères au maximum)."
       },
       "whenTitle": "Lorsqu’une nouvelle conversation arrive",
       "whenHint": "Chaque condition définie doit être remplie. Laissez une partie vide pour l’ignorer.",
@@ -188,7 +202,23 @@
         "loadFailed": "Les flux n’ont pas pu être chargés, la liste est peut-être incomplète."
       },
       "onLeave": "en congé",
-      "onLeaveUntil": "en congé jusqu’au {date}"
+      "onLeaveUntil": "en congé jusqu’au {date}",
+      "actions": "Ce que fait la règle",
+      "actionsHint": "Choisissez une ou les deux actions. Une règle peut attribuer la conversation, la marquer comme spam, ou faire les deux.",
+      "actionAssign": "Attribuer à des agents ou des équipes",
+      "actionMarkSpam": "Marquer la conversation comme spam",
+      "setPriority": "Définir la priorité",
+      "priorityKeep": "Laisser la priorité telle quelle",
+      "addTags": "Ajouter des étiquettes",
+      "addTagsHint": "Séparez-les par des virgules. Une étiquette qui n'existe pas encore est créée.",
+      "escalate": "Si personne ne répond à temps, escalader",
+      "escalateHint": "Minutes après le déclenchement de la règle, jusqu'à 1440 (un jour). Une réponse de notre part annule.",
+      "escalateMinutes": "Minutes sans réponse",
+      "escalateReassign": "La réattribuer aux agents de cette règle",
+      "escalatePriority": "Puis définir la priorité",
+      "autoReply": "Envoyer une réponse automatique",
+      "autoReplyBody": "Texte de la réponse",
+      "autoReplyHint": "Envoyée au nom de l'entreprise au client. Hors de la fenêtre de 24 heures, une réponse libre n'est pas envoyée."
     },
     "sla": {
       "back": "Retour aux paramètres",
@@ -206,8 +236,6 @@
       "resolution": "Résolution sous (minutes)",
       "minutesHint": "Laissez vide pour ne pas fixer d'objectif. 60 correspond à une heure, 1440 à un jour.",
       "minutesInvalid": "Utilisez des nombres entiers à partir de 1.",
-      "pause": "Mettre en pause en attendant le client",
-      "pauseHint": "Une conversation en attente n'est pas signalée.",
       "businessHours": "Compter uniquement les heures ouvrables",
       "businessHoursHint": "Utilise les horaires et le fuseau horaire des paramètres de votre espace de travail.",
       "makeDefault": "Définir comme politique par défaut",
@@ -423,13 +451,13 @@
       "to": "À",
       "problem": {
         "required": "Saisissez les deux heures.",
-        "order": "L'heure de fermeture doit être après l'heure d'ouverture."
+        "same": "Les heures d'ouverture et de fermeture doivent être différentes."
       },
-      "note": "Un jour désactivé est fermé toute la journée. Tant que vous n'avez pas enregistré, l'espace de travail est considéré comme ouvert en permanence.",
       "cancel": "Annuler",
       "save": "Enregistrer les heures",
       "saved": "Heures d'ouverture enregistrées",
-      "saveFailed": "Échec de l'enregistrement"
+      "saveFailed": "Échec de l'enregistrement",
+      "note": "Un jour désactivé est fermé toute la journée. Tant que vous n'enregistrez pas, l'espace de travail est considéré comme ouvert en permanence. Les pauses, les horaires de nuit et les jours fériés se règlent dans Paramètres > Général > Horaires de travail."
     }
   }
 }

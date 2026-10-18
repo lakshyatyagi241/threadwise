@@ -685,6 +685,7 @@
         "anotherPart": "このフローの別の部分です。ボタンまたはリスト行がここに誘導したときに実行されます{lost, select, true {(まだどこからも誘導されていないため、実行されません)。} other {。}}",
         "addFirstStep": "最初のステップを追加",
         "branchingEnds": "この{kind, select, list {リスト} other {ボタン群}}でこの部分は終わります。次に送信される内容は、顧客が選んだものによって決まります。",
+        "optionsCarryOn": "各{kind, select, list {行} other {ボタン}}は、独自のフローを開始するか、下の次のステップに進めます。",
         "thenGoTo": "次の移動先",
         "confirmImport": {
           "title": "このフローをファイルで置き換えますか?",
@@ -720,7 +721,7 @@
             "answer": "回答",
             "action": "アクション"
           },
-          "blockedTitle": "ボタンとリストはフローを終了させるため、最後にのみ置けます。",
+          "blockedTitle": "このステップはこのパートを終了するため、最後にのみ配置できます。",
           "blockedTitleFaq": "「FAQから回答」には出口が2つあるため、最後にのみ配置できます。"
         },
         "card": {
@@ -752,7 +753,9 @@
         },
         "editors": {
           "linkLabel": "この後の移動先",
+          "linkChoose": "移動先を選択…",
           "linkEnds": "ここで終了(これ以上は送信されません)",
+          "linkNext": "次のステップに進む",
           "linkOption": "{stage} · {label}{self, select, true {(このステップ)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ 新しいフローへ誘導…",
           "question": "質問",
@@ -852,17 +855,13 @@
             "hour": "時間",
             "day": "日"
           },
-          "location": {
-            "placeName": "場所の名前",
-            "placePlaceholder": "当社オフィス",
-            "address": "住所",
-            "latitude": "緯度",
-            "longitude": "経度"
-          },
           "template": {
             "label": "承認済みテンプレート",
             "hint": "お使いのWhatsApp番号で承認されたテンプレートのみ表示されます。",
-            "choose": "テンプレートを選択…"
+            "choose": "テンプレートを選択…",
+            "buttons": "ボタン",
+            "variables": "連絡先の情報で入力されます",
+            "variablesHint": "各番号はメッセージの送信時に、ここに示された連絡先の情報で入力されます。変更はテンプレートで行ってください。"
           },
           "cta": {
             "buttonText": "ボタンのテキスト",
@@ -876,7 +875,12 @@
             "add": "ボタンを追加",
             "remove": "ボタンを削除",
             "opensPhone": "電話番号",
-            "opensEmail": "メールアドレス"
+            "opensEmail": "メールアドレス",
+            "errors": {
+              "url": "https:// で始まる有効なウェブアドレスを入力してください",
+              "phone": "有効な電話番号を入力してください（例: +91 98765 43210）",
+              "email": "有効なメールアドレスを入力してください（例: name@example.com）"
+            }
           },
           "carousel": {
             "intro": "カードの上のメッセージ",
@@ -1059,13 +1063,7 @@
           "info": "1つのメッセージにCTAボタンを最大{max}個追加できます。ウェブサイトを開く、電話、コードをコピーを自由に組み合わせられます。WhatsAppテンプレートのボタンと同じ上限です。",
           "buttonLabel": "ボタンのラベル",
           "addButton": "ボタンを追加",
-          "maxReached": "ボタンは最大{max}個です。",
-          "locationTitle": "タイトル",
-          "locationTitlePlaceholder": "当社オフィス",
-          "locationAddress": "住所",
-          "locationAddressPlaceholder": "番地、市区町村、国",
-          "locationLatitude": "緯度",
-          "locationLongitude": "経度"
+          "maxReached": "ボタンは最大{max}個です。"
         },
         "logic": {
           "operator": {
@@ -2031,6 +2029,41 @@
         "endTextHint": "フローの終了前に送信されます。年齢には触れないでください。空欄の場合は「続行できません。」が使用されます。",
         "continueNote": "後続のステップでは、回答の変数名に _age_gate を付けた変数(例: answer_age_gate)を参照できます。値は under または adult です。条件を追加して分岐できます(例: 親または保護者の情報を尋ねる)。",
         "note": "年齢は必要な場合にのみ尋ねてください。回答は連絡先に書き込まれます。生年月日は生年月日として、年齢未満の回答は連絡先を未成年として設定します。"
+      },
+      "location": {
+        "modeLabel": "位置情報の設定方法",
+        "modeLink": "Google マップのリンク",
+        "modeCoords": "緯度と経度",
+        "linkLabel": "Google マップのリンク",
+        "linkPlaceholder": "リンクを貼り付け（例：https://maps.app.goo.gl/…）",
+        "linkHint": "Google マップで場所を開き、［共有］→［リンクをコピー］をタップします。短いリンクも長いリンクも使えます。",
+        "finding": "リンクを確認中…",
+        "retry": "再試行",
+        "latitude": "緯度",
+        "longitude": "経度",
+        "coordsHint": "緯度は -90～90、経度は -180～180 です。どちらの欄にも「緯度, 経度」を貼り付けられます。",
+        "found": "位置情報が見つかりました",
+        "openInMaps": "Google マップで開く",
+        "optionalHint": "任意：お客様に届く地図カードに表示されます。どちらも空のままで構いません。",
+        "optional": "（任意）",
+        "placeName": "場所の名前",
+        "placePlaceholder": "当社オフィス",
+        "address": "住所",
+        "problem": {
+          "empty": "Google マップのリンクまたは座標を入力してください。",
+          "lat_missing": "緯度を入力してください。",
+          "lng_missing": "経度を入力してください。",
+          "lat_nan": "緯度は数値で入力してください（例：18.5204）。",
+          "lng_nan": "経度は数値で入力してください（例：73.8567）。",
+          "lat_range": "緯度は -90 から 90 の間で入力してください。",
+          "lng_range": "経度は -180 から 180 の間で入力してください。",
+          "zero": "0, 0 は実在の場所ではありません。実際の座標を入力してください。",
+          "not_url": "リンクではないようです。Google マップのリンク全体を貼り付けてください。",
+          "not_maps": "Google マップのリンクではありません。",
+          "no_coords": "このリンクは特定の地点を指していません。Google マップで場所を開き、［共有］からリンクをコピーするか、座標を入力してください。",
+          "unresolved": "この短縮リンクはまだ確認されていません。入力欄から移動するか、再試行してください。",
+          "resolve_failed": "このリンクを読み取れませんでした。Google マップで開けるか確認するか、座標を入力してください。"
+        }
       }
     },
     "contracts": {
@@ -2463,7 +2496,8 @@
         "noSenderInstagram": "トリガーノードにInstagramアカウントが選択されていません。トリガーの手順で選択してください。",
         "noSenderFacebook": "トリガーノードにFacebookページが選択されていません。トリガーの手順で選択してください。",
         "noSenderNumber": "トリガーノードに番号が選択されていません。トリガーの手順で選択してください。",
-        "faqMinScore": "「{node}」の最小スコアが0.05~0.99の範囲外です。修正するか、空欄にしてフローの設定を使用してください。"
+        "faqMinScore": "「{node}」の最小スコアが0.05~0.99の範囲外です。修正するか、空欄にしてフローの設定を使用してください。",
+        "locationInvalid": "「{node}」に有効な位置情報がありません。Google マップのリンクを貼り付けるか、緯度（-90～90）と経度（-180～180）を入力してください。"
       }
     },
     "simpleModel": {
@@ -2604,10 +2638,11 @@
         "writeQuestion": "ステップ {stage}: 質問を入力してください。",
         "nameVariable": "ステップ {stage}: 回答の保存先となる変数名を入力してください。",
         "chooseAnswerProperty": "ステップ {stage}: 回答のコピー先となる連絡先の項目を選択してください。",
-        "setCoordinates": "ステップ {stage}: 緯度と経度を設定してください。",
+        "setCoordinates": "ステップ {stage}：Google マップのリンクを貼り付けるか、有効な緯度と経度を入力してください。",
         "chooseTemplate": "ステップ {stage}: テンプレートを選択してください。",
         "chooseTeam": "ステップ {stage}: 会話の振り分け先のチームを選択してください。",
         "ctaLabelLink": "ステップ {stage}: ボタンの名前とリンクを設定してください。",
+        "ctaLinkInvalid": "ステップ {stage}: ボタンのリンク先が種類に合っていません。",
         "choosePickedProperty": "ステップ {stage}: 選択された項目のコピー先となる連絡先の項目を選択してください。",
         "buttonsPrompt": "ステップ {stage}: ボタンの上のメッセージを入力してください。",
         "addButton": "ステップ {stage}: ボタンを1つ以上追加してください。",
@@ -2623,9 +2658,12 @@
         "carouselButtons": "ステップ {stage}: すべてのボタンに名前を付け、何かを開くボタンにはリンク、番号、またはアドレスを入力してください。",
         "conditionIncomplete": "ステップ {stage}: 条件のルールを完成させてください（各ルールに変数と値）。",
         "faqMinScore": "ステップ {stage}: 最小スコアは0.05~0.99にするか、フローの設定を使用してください。",
+        "optionNotConnected": "ステップ {stage}: {kind, select, row {行} other {ボタン}}「{label}」の行き先がありません。ステップを追加するか、アクションを設定してください。",
+        "tooManyOptions": "ステップ {stage}: {kind, select, row {リストの行は最大 {max} 件までです} other {ボタンは最大 {max} 個までです}}。",
         "chooseFlow": "ステップ {stage}: ボタンが開始するフローを選んでください。",
         "chooseApi": "ステップ {stage}: 呼び出す API を選んでください。",
-        "writeCode": "ステップ {stage}: 実行するコードを書いてください。"
+        "writeCode": "ステップ {stage}: 実行するコードを書いてください。",
+        "webhookUrl": "ステップ {stage}: 呼び出すアドレス(URL)を追加してください。"
       },
       "faqSummary": "{hasCategory, select, true {FAQから · {category}} other {FAQから}}"
     },
@@ -2740,7 +2778,8 @@
       "simPurchase": "購入をシミュレート: {name} → 「purchased」ポート",
       "simAbandon": "カゴ落ちをシミュレート → 「abandoned」ポート",
       "faqAnswered": "(シミュレーション) 「{query}」のFAQから回答: テストチャットではFAQを検索しないため、何も送信されず、{ref} は空のままです。「回答済み」の出口に進みます。",
-      "faqNoMatch": "(シミュレーション) 「{query}」のFAQから回答: テストチャットではFAQを検索せず、「回答済み」の出口も接続されていないため、「一致なし」に進みます。{ref} は空のままです。"
+      "faqNoMatch": "(シミュレーション) 「{query}」のFAQから回答: テストチャットではFAQを検索せず、「回答済み」の出口も接続されていないため、「一致なし」に進みます。{ref} は空のままです。",
+      "locationSkipped": "（位置情報）スキップ：有効な座標がありません"
     }
   }
 }
