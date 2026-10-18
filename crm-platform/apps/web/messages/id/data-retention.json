@@ -1,0 +1,117 @@
+{
+  "data-retention": {
+    "nav": {
+      "group": "Data",
+      "item": "Retensi data"
+    },
+    "page": {
+      "title": "Retensi data",
+      "eyebrow": "platform · retensi data",
+      "description": "Untuk setiap jenis data, pilih berapa hari data disimpan di database dan berapa hari lagi arsip dingin menyimpannya sebelum dihapus permanen. Tidak ada yang berubah untuk suatu item sampai Anda menyimpan nilai untuknya.",
+      "superOnly": "Hanya super admin yang dapat mengubah retensi. Anda dapat melihat nilai yang tersimpan dan apa yang dilakukan proses terakhir.",
+      "loading": "Memuat kebijakan retensi…",
+      "retry": "Coba lagi"
+    },
+    "engine": {
+      "offTitle": "Job arsip dimatikan",
+      "offBody": "Nilai yang disimpan untuk event analitik dan log audit tersimpan, tetapi tidak ada yang diarsipkan atau dihapus sampai job diaktifkan (RETENTION_ENABLED). Sampai saat itu keduanya tetap berjalan seperti biasa.",
+      "dryRunTitle": "Job arsip hanya mencatat apa yang akan dilakukannya",
+      "dryRunBody": "Job aktif tetapi dalam mode dry-run (RETENTION_DRY_RUN). Nilai yang disimpan untuk event analitik dan log audit belum dijalankan.",
+      "notDurableTitle": "Arsip tidak tahan lama",
+      "notDurableBody": "Arsip berupa folder di disk server itu sendiri, yang terhapus saat deploy ulang. Job menolak menghapus data apa pun sampai diarahkan ke S3 atau R2 (ARCHIVE_DRIVER=s3).",
+      "liveTitle": "Job arsip sedang berjalan",
+      "liveBody": "Nilai yang disimpan dijalankan oleh proses malam. Data yang diarsipkan disimpan di {driver}."
+    },
+    "items": {
+      "an_events": {
+        "title": "Event analitik",
+        "description": "Aliran event di balik laporan. Data per bulan penuh dipindahkan ke arsip setelah lebih lama dari hari aktif."
+      },
+      "audit_log": {
+        "title": "Log audit",
+        "description": "Siapa melakukan apa di setiap workspace, termasuk tindakan yang dilakukan saat bertindak sebagai pengguna. Sebelum Anda menyimpan nilai, log dihapus setelah jumlah hari kebijakan keamanan platform dan tidak pernah diarsipkan. Nilai yang disimpan mengarsipkan lebih dulu dan menghapus kemudian, dan ekspor tetap dapat membaca bulan yang diarsipkan."
+      },
+      "security_events": {
+        "title": "Log keamanan",
+        "description": "Login, perubahan keamanan, dan setiap perubahan retensi yang dibuat di sini. Dihapus setelah hari aktif dan tidak memiliki arsip."
+      },
+      "audit_log_exports": {
+        "title": "File ekspor audit",
+        "description": "CSV yang diminta workspace dari log auditnya. Peminta menerima email berisi tautan untuk masuk dan mengunduhnya; file dihapus setelah hari aktif."
+      }
+    },
+    "fields": {
+      "liveDays": "Hari aktif",
+      "liveDaysHint": "Jumlah hari data tetap berada di database. Diizinkan: {min} sampai {max}.",
+      "keepForever": "Simpan arsip selamanya",
+      "archiveDays": "Hari arsip",
+      "archiveDaysHint": "Jumlah hari tambahan arsip menyimpannya, lalu dihapus. Diizinkan: {min} sampai {max}."
+    },
+    "summary": {
+      "noArchive": "Dihapus permanen {live, plural, other {# hari}} setelah ditulis.",
+      "archiveForever": "Disimpan aktif selama {live, plural, other {# hari}}, lalu diarsipkan dan disimpan selamanya.",
+      "archiveThenDelete": "Disimpan aktif selama {live, plural, other {# hari}}, diarsipkan selama {archive, plural, other {# hari}}, lalu dihapus permanen {total, plural, other {# hari}} setelah ditulis.",
+      "defaultForever": "Saat ini disimpan selamanya (kebijakan keamanan tidak memiliki batas).",
+      "defaultNote": "Perilaku saat ini, tidak ada yang disimpan."
+    },
+    "status": {
+      "default": "Perilaku saat ini",
+      "custom": "Disimpan oleh Anda",
+      "notApplied": "Belum dijalankan",
+      "updated": "Disimpan {when}"
+    },
+    "stats": {
+      "live": "Di database",
+      "liveValue": "{size}, sekitar {rows} baris",
+      "liveValueNoRows": "{size}",
+      "months": "{count, plural, other {# partisi bulanan}}, terlama {oldest}",
+      "archive": "Di arsip",
+      "archiveValue": "{size} dalam {count, plural, other {# objek}}",
+      "archiveNone": "Belum ada yang diukur",
+      "archiveMeasured": "diukur {when}",
+      "lastRun": "Proses terakhir",
+      "neverRun": "Belum pernah berjalan",
+      "runLive": "{when}: {months, plural, other {# bulan}} diarsipkan ({rows} baris, {size}), {expired} dihapus dari arsip, {deleted} baris atau file dihapus",
+      "runDry": "{when}: dry run, tidak ada yang diubah",
+      "runFailed": "Proses terakhir mengalami masalah: {error}"
+    },
+    "actions": {
+      "save": "Simpan",
+      "checking": "Memeriksa…",
+      "saving": "Menyimpan…",
+      "reset": "Kembali ke perilaku saat ini",
+      "resetting": "Mereset…",
+      "cancel": "Batal",
+      "confirmSave": "Simpan dan terapkan",
+      "resetTitle": "Kembalikan {item} ke perilaku saat ini?",
+      "resetBody": "Nilai yang disimpan dihapus. Job malam kembali ke aturan bawaan untuk item ini. Data yang sudah diarsipkan tetap berada di arsip.",
+      "confirmReset": "Kembali ke perilaku saat ini"
+    },
+    "preview": {
+      "title": "Simpan retensi untuk {item}?",
+      "intro": "Pada proses malam berikutnya:",
+      "toArchive": "{count, plural, other {# bulan}} ({rows} baris, {size}) akan dipindahkan ke arsip dan keluar dari database.",
+      "toDeleteFromArchive": "{count, plural, other {# bulan arsip}} akan dihapus permanen dari arsip.",
+      "rowsToDelete": "{count, plural, other {# baris atau file}} akan dihapus permanen.",
+      "notApplied": "Job arsip belum menjalankan nilai yang disimpan, jadi tidak ada yang terjadi sampai job diaktifkan.",
+      "permanent": "Penghapusan bersifat permanen dan tidak dapat dibatalkan."
+    },
+    "saved": "Retensi disimpan.",
+    "resetDone": "Kembali ke perilaku saat ini.",
+    "validation": {
+      "live_out_of_range": "Hari aktif harus berupa bilangan bulat dari {min} sampai {max}.",
+      "archive_out_of_range": "Hari arsip harus berupa bilangan bulat dari {min} sampai {max}.",
+      "archive_not_supported": "Item ini tidak dapat diarsipkan.",
+      "delete_before_archive": "Data tidak dapat dihapus sebelum diarsipkan.",
+      "not_a_number": "Masukkan jumlah hari berupa bilangan bulat."
+    },
+    "errors": {
+      "forbidden": "Anda tidak diizinkan melakukan itu.",
+      "conflict": "Orang lain mengubah item ini. Nilai terbaru telah dimuat; periksa dan simpan lagi.",
+      "validation": "Nilai tersebut tidak diizinkan.",
+      "request": "Permintaan ditolak.",
+      "unexpected": "Terjadi kesalahan di server. Coba lagi.",
+      "network": "Tidak dapat menjangkau server. Periksa koneksi Anda dan coba lagi."
+    }
+  }
+}

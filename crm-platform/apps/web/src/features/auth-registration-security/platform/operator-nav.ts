@@ -25,6 +25,7 @@ import { MARKET_OPERATOR_NAV } from '../../marketplace/operator-nav';
 import { SUPP_OPERATOR_NAV } from '../../platform-support-desk/operator-nav';
 import { FAQ_OPERATOR_NAV } from '../../faq-knowledge/platform/operator-nav';
 import { LSC_OPERATOR_NAV } from '../../lead-scoring/platform/operator-nav';
+import { RETENTION_OPERATOR_NAV } from '../../data-retention/operator-nav';
 
 const NS = 'auth-registration-security.platform.nav';
 const BSP = 'bsp-billing-engine.nav';
@@ -89,6 +90,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   ...CAT_OPERATOR_NAV,
   // Marketplace catalogue (MKT): listings, versions and review, categories, requests, usage
   ...MARKET_OPERATOR_NAV,
+  // Data retention (platform): live days and archive days per data item
+  ...RETENTION_OPERATOR_NAV,
   {
     id: 'i18n-languages',
     href: '/admin/i18n/languages',

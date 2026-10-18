@@ -1,0 +1,117 @@
+{
+  "data-retention": {
+    "nav": {
+      "group": "Données",
+      "item": "Conservation des données"
+    },
+    "page": {
+      "title": "Conservation des données",
+      "eyebrow": "plateforme · conservation des données",
+      "description": "Pour chaque type de données, choisissez combien de jours elles restent dans la base de données et combien de jours supplémentaires l'archive à froid les conserve avant leur suppression définitive. Rien ne change pour un élément tant que vous n'enregistrez pas de valeurs pour lui.",
+      "superOnly": "Seul un super administrateur peut modifier la conservation. Vous pouvez voir les valeurs enregistrées et ce qu'a fait la dernière exécution.",
+      "loading": "Chargement des politiques de conservation…",
+      "retry": "Réessayer"
+    },
+    "engine": {
+      "offTitle": "La tâche d'archivage est désactivée",
+      "offBody": "Les valeurs enregistrées pour les événements analytiques et le journal d'audit sont stockées, mais rien n'est archivé ni supprimé tant que la tâche n'est pas activée (RETENTION_ENABLED). D'ici là, les deux conservent leur comportement actuel.",
+      "dryRunTitle": "La tâche d'archivage se contente de consigner ce qu'elle ferait",
+      "dryRunBody": "Elle est activée, mais en mode simulation (RETENTION_DRY_RUN). Les valeurs enregistrées pour les événements analytiques et le journal d'audit ne sont pas encore appliquées.",
+      "notDurableTitle": "L'archive n'est pas durable",
+      "notDurableBody": "L'archive est un dossier sur le disque propre du serveur, qu'un redéploiement efface. La tâche refuse de supprimer des données tant qu'elle ne pointe pas vers S3 ou R2 (ARCHIVE_DRIVER=s3).",
+      "liveTitle": "La tâche d'archivage est en cours",
+      "liveBody": "Les valeurs enregistrées sont appliquées par l'exécution nocturne. Les données archivées sont conservées dans {driver}."
+    },
+    "items": {
+      "an_events": {
+        "title": "Événements analytiques",
+        "description": "Le flux d'événements derrière les rapports. Des mois entiers passent dans l'archive une fois plus anciens que les jours actifs."
+      },
+      "audit_log": {
+        "title": "Journal d'audit",
+        "description": "Qui a fait quoi dans chaque espace de travail, y compris les actions effectuées en agissant comme un utilisateur. Tant que vous n'enregistrez pas de valeurs, il est supprimé après le nombre de jours de la politique de sécurité de la plateforme et jamais archivé. Les valeurs enregistrées archivent d'abord puis suppriment ensuite, et les exports peuvent encore lire les mois archivés."
+      },
+      "security_events": {
+        "title": "Journal de sécurité",
+        "description": "Connexions, modifications de sécurité et chaque changement de conservation effectué ici. Il est supprimé après les jours actifs et n'a pas d'archive."
+      },
+      "audit_log_exports": {
+        "title": "Fichiers d'export d'audit",
+        "description": "Le CSV qu'un espace de travail demande à partir de son journal d'audit. Le demandeur reçoit un e-mail avec un lien pour se connecter et le télécharger ; le fichier est supprimé après les jours actifs."
+      }
+    },
+    "fields": {
+      "liveDays": "Jours actifs",
+      "liveDaysHint": "Jours pendant lesquels les données restent dans la base de données. Valeurs autorisées : de {min} à {max}.",
+      "keepForever": "Conserver l'archive indéfiniment",
+      "archiveDays": "Jours d'archive",
+      "archiveDaysHint": "Jours supplémentaires pendant lesquels l'archive les conserve avant leur suppression. Valeurs autorisées : de {min} à {max}."
+    },
+    "summary": {
+      "noArchive": "Supprimé définitivement {live, plural, one {# jour} many {# de jours} other {# jours}} après son écriture.",
+      "archiveForever": "Conservé en actif pendant {live, plural, one {# jour} many {# de jours} other {# jours}}, puis archivé et conservé indéfiniment.",
+      "archiveThenDelete": "Conservé en actif pendant {live, plural, one {# jour} many {# de jours} other {# jours}}, archivé pendant {archive, plural, one {# jour} many {# de jours} other {# jours}}, puis supprimé définitivement {total, plural, one {# jour} many {# de jours} other {# jours}} après son écriture.",
+      "defaultForever": "Actuellement conservé indéfiniment (la politique de sécurité n'a pas de limite).",
+      "defaultNote": "Comportement actuel, rien d'enregistré."
+    },
+    "status": {
+      "default": "Comportement actuel",
+      "custom": "Enregistré par vous",
+      "notApplied": "Pas encore appliqué",
+      "updated": "Enregistré {when}"
+    },
+    "stats": {
+      "live": "Dans la base de données",
+      "liveValue": "{size}, environ {rows} lignes",
+      "liveValueNoRows": "{size}",
+      "months": "{count, plural, one {# partition mensuelle} many {# de partitions mensuelles} other {# partitions mensuelles}}, la plus ancienne {oldest}",
+      "archive": "Dans l'archive",
+      "archiveValue": "{size} dans {count, plural, one {# objet} many {# d'objets} other {# objets}}",
+      "archiveNone": "Rien n'a encore été mesuré",
+      "archiveMeasured": "mesuré {when}",
+      "lastRun": "Dernière exécution",
+      "neverRun": "Pas encore exécuté",
+      "runLive": "{when} : {months, plural, one {# mois archivé} many {# de mois archivés} other {# mois archivés}} ({rows} lignes, {size}), {expired} supprimés de l'archive, {deleted} lignes ou fichiers supprimés",
+      "runDry": "{when} : simulation, rien n'a été modifié",
+      "runFailed": "La dernière exécution a rencontré un problème : {error}"
+    },
+    "actions": {
+      "save": "Enregistrer",
+      "checking": "Vérification…",
+      "saving": "Enregistrement…",
+      "reset": "Revenir au comportement actuel",
+      "resetting": "Réinitialisation…",
+      "cancel": "Annuler",
+      "confirmSave": "Enregistrer et appliquer",
+      "resetTitle": "Rétablir le comportement actuel pour {item} ?",
+      "resetBody": "Les valeurs enregistrées sont supprimées. Les tâches nocturnes reviennent aux règles intégrées pour cet élément. Les données déjà archivées restent dans l'archive.",
+      "confirmReset": "Revenir au comportement actuel"
+    },
+    "preview": {
+      "title": "Enregistrer la conservation pour {item} ?",
+      "intro": "Lors de la prochaine exécution nocturne :",
+      "toArchive": "{count, plural, one {# mois} many {# de mois} other {# mois}} ({rows} lignes, {size}) passeront dans l'archive et quitteront la base de données.",
+      "toDeleteFromArchive": "{count, plural, one {# mois archivé} many {# de mois archivés} other {# mois archivés}} seront supprimés définitivement de l'archive.",
+      "rowsToDelete": "{count, plural, one {# ligne ou fichier} many {# de lignes ou fichiers} other {# lignes ou fichiers}} seront supprimés définitivement.",
+      "notApplied": "La tâche d'archivage n'applique pas encore les valeurs enregistrées, donc rien de tout cela n'a lieu tant qu'elle n'est pas activée.",
+      "permanent": "La suppression est définitive et ne peut pas être annulée."
+    },
+    "saved": "Conservation enregistrée.",
+    "resetDone": "Retour au comportement actuel.",
+    "validation": {
+      "live_out_of_range": "Les jours actifs doivent être un nombre entier de {min} à {max}.",
+      "archive_out_of_range": "Les jours d'archive doivent être un nombre entier de {min} à {max}.",
+      "archive_not_supported": "Cet élément ne peut pas être archivé.",
+      "delete_before_archive": "Les données ne peuvent pas être supprimées avant d'être archivées.",
+      "not_a_number": "Saisissez un nombre entier de jours."
+    },
+    "errors": {
+      "forbidden": "Vous n'êtes pas autorisé à effectuer cette action.",
+      "conflict": "Quelqu'un d'autre a modifié cet élément. Les dernières valeurs ont été chargées ; vérifiez-les et enregistrez à nouveau.",
+      "validation": "Ces valeurs ne sont pas autorisées.",
+      "request": "La requête a été refusée.",
+      "unexpected": "Une erreur s'est produite sur le serveur. Réessayez.",
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez."
+    }
+  }
+}
