@@ -409,7 +409,14 @@
       "learned": "Zu „{question}“ hinzugefügt. Sie wird ab jetzt beantwortet.",
       "pickTitle": "Zu welcher FAQ soll diese Nachricht hinzugefügt werden?",
       "loadMore": "Mehr laden",
-      "loadingMore": "Wird geladen"
+      "loadingMore": "Wird geladen",
+      "fallback": {
+        "title": "Wenn keine FAQ antwortet",
+        "hint": "Diese Antwort erhält ein Kunde, auf dessen Nachricht keine FAQ antwortet. Die Nachricht erscheint weiterhin unten, damit Sie die FAQ ergänzen können.",
+        "placeholder": "Entschuldigung, das habe ich nicht verstanden. Ein Teammitglied meldet sich bei Ihnen.",
+        "save": "Ersatzantwort speichern",
+        "saved": "Ersatzantwort gespeichert"
+      }
     },
     "picker": {
       "close": "Schließen",

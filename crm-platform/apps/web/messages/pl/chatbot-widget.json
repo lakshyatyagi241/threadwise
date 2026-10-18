@@ -586,6 +586,19 @@
             "placeholder": "example.com",
             "add": "Dodaj stronę",
             "remove": "Usuń stronę"
+          },
+          "feedback": {
+            "label": "Pozwól odwiedzającym oceniać odpowiedzi",
+            "hint": "Kciuki w górę i w dół pod każdą odpowiedzią bota.",
+            "message": "Wiadomość po ocenie",
+            "keptWhenOff": "Opinie są wyłączone. Ta wiadomość jest zachowana i pojawi się ponownie po ich włączeniu."
+          },
+          "languages": {
+            "primary": "Język główny",
+            "follow": "Zgodnie z przeglądarką odwiedzającego",
+            "primaryHint": "Język własnych tekstów okna czatu.",
+            "additional": "Inne języki",
+            "additionalHint": "Odwiedzający, którego przeglądarka używa jednego z nich, zobaczy okno w tym języku. Pozostali zobaczą język główny."
           }
         },
         "rail": {

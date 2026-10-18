@@ -409,7 +409,14 @@
       "learned": "Toegevoegd aan \"{question}\". Dit wordt voortaan beantwoord.",
       "pickTitle": "Aan welke FAQ wil je dit bericht toevoegen?",
       "loadMore": "Meer laden",
-      "loadingMore": "Laden"
+      "loadingMore": "Laden",
+      "fallback": {
+        "title": "Wanneer geen FAQ antwoordt",
+        "hint": "Dit antwoord gaat naar een klant op wiens bericht geen enkele FAQ antwoordt. Het bericht blijft hieronder staan, zodat je de FAQ kunt aanvullen.",
+        "placeholder": "Sorry, dat heb ik niet begrepen. Een teamlid neemt contact met je op.",
+        "save": "Terugvalbericht opslaan",
+        "saved": "Terugvalbericht opgeslagen"
+      }
     },
     "picker": {
       "close": "Sluiten",

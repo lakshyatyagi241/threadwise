@@ -586,6 +586,19 @@
             "placeholder": "example.com",
             "add": "Web sitesi ekle",
             "remove": "Web sitesini kaldır"
+          },
+          "feedback": {
+            "label": "Ziyaretçilerin yanıtları puanlamasına izin ver",
+            "hint": "Her bot yanıtının altında beğen ve beğenme düğmeleri.",
+            "message": "Puanlamadan sonra gösterilen mesaj",
+            "keptWhenOff": "Geri bildirim kapalı. Bu mesaj saklanır ve yeniden açarsanız tekrar görünür."
+          },
+          "languages": {
+            "primary": "Ana dil",
+            "follow": "Ziyaretçinin tarayıcısını izle",
+            "primaryHint": "Sohbet penceresinin kendi metinlerinin dili.",
+            "additional": "Diğer diller",
+            "additionalHint": "Tarayıcısı bunlardan birini kullanan ziyaretçi pencereyi o dilde görür. Diğer herkes ana dili görür."
           }
         },
         "rail": {

@@ -586,6 +586,19 @@
             "placeholder": "example.com",
             "add": "添加网站",
             "remove": "移除网站"
+          },
+          "feedback": {
+            "label": "允许访客为回复评分",
+            "hint": "在机器人的每条回复下显示点赞和点踩。",
+            "message": "评分后显示的消息",
+            "keptWhenOff": "反馈已关闭。此消息会保留，重新开启后会再次显示。"
+          },
+          "languages": {
+            "primary": "主要语言",
+            "follow": "跟随访客的浏览器",
+            "primaryHint": "聊天窗口自身文字的语言。",
+            "additional": "其他语言",
+            "additionalHint": "浏览器使用其中某种语言的访客会看到该语言的窗口，其他访客看到主要语言。"
           }
         },
         "rail": {

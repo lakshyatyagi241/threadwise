@@ -115,6 +115,18 @@ export class FaqAnswerService {
       }
     }
 
+    // Nothing answered and the owner set a fallback: the customer hears it, once, through the same send path. The log keeps the real
+    // outcome (below_threshold ...), so the message still shows on the Unanswered screen for the team to teach the FAQ.
+    if (
+      !consumed &&
+      s.fallbackMessage &&
+      (outcome === 'below_threshold' || outcome === 'low_margin' || outcome === 'no_faqs')
+    ) {
+      const sent = await this.sendText(e, s.fallbackMessage);
+      consumed = sent.ok;
+      if (!sent.ok) error = `The fallback message could not be sent: ${sent.error}`;
+    }
+
     const write: LogWrite = {
       flowId,
       origin: 'inbound',

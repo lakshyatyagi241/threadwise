@@ -409,7 +409,14 @@
       "learned": "Adicionada a \"{question}\". A partir de agora ela será respondida.",
       "pickTitle": "Adicionar esta mensagem a qual FAQ?",
       "loadMore": "Carregar mais",
-      "loadingMore": "Carregando"
+      "loadingMore": "Carregando",
+      "fallback": {
+        "title": "Quando nenhuma FAQ responde",
+        "hint": "Esta resposta vai para o cliente cuja mensagem nenhuma FAQ responde. A mensagem continua aparecendo abaixo, para você ensinar a FAQ.",
+        "placeholder": "Desculpe, não entendi. Um membro da equipe vai retornar.",
+        "save": "Salvar resposta padrão",
+        "saved": "Resposta padrão salva"
+      }
     },
     "picker": {
       "close": "Fechar",

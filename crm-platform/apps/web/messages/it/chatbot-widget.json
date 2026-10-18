@@ -586,6 +586,19 @@
             "placeholder": "example.com",
             "add": "Aggiungi un sito web",
             "remove": "Rimuovi sito web"
+          },
+          "feedback": {
+            "label": "Consenti ai visitatori di valutare le risposte",
+            "hint": "Pollice su e giù sotto ogni risposta del bot.",
+            "message": "Messaggio mostrato dopo una valutazione",
+            "keptWhenOff": "Il feedback è disattivato. Questo messaggio viene conservato e riappare se lo riattivi."
+          },
+          "languages": {
+            "primary": "Lingua principale",
+            "follow": "Segui il browser del visitatore",
+            "primaryHint": "La lingua dei testi propri della finestra di chat.",
+            "additional": "Altre lingue",
+            "additionalHint": "Un visitatore il cui browser usa una di queste vede la finestra in quella lingua. Gli altri vedono la lingua principale."
           }
         },
         "rail": {

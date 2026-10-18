@@ -31,6 +31,8 @@ export const FAQ_LIMITS = {
   /** The borderline band the screens offer for the LLM check. */
   verifyBandMin: 0.01,
   verifyBandMax: 0.3,
+  /** The fallback reply, in characters (faq_settings.fallback_message). */
+  fallbackMessage: 1024,
   /** The threshold the screens offer. */
   thresholdMin: 0.05,
   thresholdMax: 0.99,
