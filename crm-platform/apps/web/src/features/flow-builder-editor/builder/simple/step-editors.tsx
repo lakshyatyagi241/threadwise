@@ -11,7 +11,7 @@ import {
   buttonActionPatch,
   buttonActionsWithout,
 } from '../../lib/button-actions';
-import { useState, type ReactNode } from 'react';
+import { useContext, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   FLB_AGE_END_TEXT,
@@ -19,6 +19,7 @@ import {
   FLB_CAROUSEL_MAX_BUTTONS,
   FLB_CAROUSEL_MAX_CARDS,
   FLB_ASK_FILE_GROUPS,
+  FLB_WA_LIMITS,
   FLB_ASK_INPUT_TYPES,
   FLB_DATE_FORMATS,
   flbCleanAskFileExtensions,
@@ -53,6 +54,7 @@ import { ApiLibraryForm } from '../inspector/forms-channels/api-library';
 import { TemplatePreview } from '../inspector/forms-core/previews';
 import type { FormComponent, FormEnv } from '../inspector/types';
 import { MediaUpload } from './media-upload';
+import { FlowEditorContext } from '../../lib/flow-editor-context';
 import {
   BRANCHING,
   LINK_END,
@@ -554,6 +556,8 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
 
 function ButtonsEditor({ step, doc, ctx, flowId, set, link }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
+  // A WhatsApp button name stops at 20 characters (typing and pasting); a website bot only warns.
+  const { whatsapp } = useContext(FlowEditorContext);
   const opts = arr(step.data.options).map(str);
   // The small picture of each button (website chat bots only), by position.
   const icons = opts.map((_, j) => str(arr(step.data.optionIcons)[j]));
@@ -582,7 +586,7 @@ function ButtonsEditor({ step, doc, ctx, flowId, set, link }: EditorProps) {
             <div className="mb-2 flex items-center gap-2">
               <Input
                 value={o}
-                maxLength={LIMITS.buttonLabel + 20}
+                maxLength={whatsapp ? LIMITS.buttonLabel : LIMITS.buttonLabel + 20}
                 placeholder={t('buttons.placeholder', { n: i + 1 })}
                 invalid={o.length > LIMITS.buttonLabel}
                 onChange={(e) =>
@@ -657,6 +661,7 @@ function ButtonsEditor({ step, doc, ctx, flowId, set, link }: EditorProps) {
 
 function ListEditor({ step, doc, set, link }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
+  const { whatsapp } = useContext(FlowEditorContext);
   const rows = arr(step.data.options).map(rec);
   const prompt = str(step.data.prompt);
   const button = str(step.data.button);
@@ -669,7 +674,7 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
           rows={4}
           label={t('list.above')}
           value={prompt}
-          max={LIMITS.body}
+          max={FLB_WA_LIMITS.listBody}
           variables={flowVariables(doc)}
           onChange={(v) => set({ prompt: v })}
         />
@@ -683,6 +688,7 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
       >
         <Input
           value={button}
+          maxLength={whatsapp ? LIMITS.listButton : undefined}
           invalid={button.length > LIMITS.listButton}
           onChange={(e) => set({ button: e.target.value })}
         />
@@ -699,6 +705,7 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
             <div className="mb-2 flex items-center gap-2">
               <Input
                 value={str(r.title)}
+                maxLength={whatsapp ? LIMITS.rowTitle : undefined}
                 placeholder={t('list.rowPlaceholder', { n: i + 1 })}
                 invalid={str(r.title).length > LIMITS.rowTitle}
                 onChange={(e) => setRow(i, { title: e.target.value })}
@@ -713,6 +720,7 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
             <Input
               className="mb-2 h-9 text-[12.5px]"
               value={str(r.description)}
+              maxLength={whatsapp ? LIMITS.rowDescription : undefined}
               placeholder={t('list.description')}
               invalid={str(r.description).length > LIMITS.rowDescription}
               onChange={(e) => setRow(i, { description: e.target.value })}
@@ -1391,6 +1399,7 @@ const CTA_DEFAULT_LABEL: Record<string, string> = {
  */
 function CtaEditor({ step, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
+  const { whatsapp } = useContext(FlowEditorContext);
   const raw = arr(step.data.actions).map(rec);
   const actions = raw.length ? raw : [{ type: 'url', label: '', value: '' }];
   const setAll = (next: Array<Record<string, unknown>>) => set({ actions: next });
@@ -1421,6 +1430,7 @@ function CtaEditor({ step, set }: EditorProps) {
         <Textarea
           rows={3}
           value={str(step.data.bodyText)}
+          maxLength={whatsapp ? FLB_WA_LIMITS.body : undefined}
           onChange={(e) => set({ bodyText: e.target.value })}
         />
       </Field>
@@ -1453,7 +1463,7 @@ function CtaEditor({ step, set }: EditorProps) {
               <Field label={t('cta.buttonText')}>
                 <Input
                   value={str(a.label)}
-                  maxLength={20}
+                  maxLength={whatsapp ? FLB_WA_LIMITS.ctaText : 20}
                   onChange={(e) => patch(i, { label: e.target.value })}
                 />
               </Field>
@@ -1469,6 +1479,7 @@ function CtaEditor({ step, set }: EditorProps) {
               >
                 <Input
                   value={str(a.value)}
+                  maxLength={whatsapp && kind === 'url' ? FLB_WA_LIMITS.ctaUrl : undefined}
                   placeholder={holder(kind)}
                   type={kind === 'email' ? 'email' : kind === 'phone' ? 'tel' : 'url'}
                   inputMode={kind === 'email' ? 'email' : kind === 'phone' ? 'tel' : 'url'}

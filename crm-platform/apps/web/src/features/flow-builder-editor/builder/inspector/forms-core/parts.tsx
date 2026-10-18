@@ -132,11 +132,14 @@ export function OptionRow({
   value,
   onChange,
   onRemove,
+  maxLength,
 }: {
   index: number;
   value: unknown;
   onChange: (v: string) => void;
   onRemove: () => void;
+  /** A hard stop for typing and pasting, with a live count (WhatsApp button titles). */
+  maxLength?: number;
 }) {
   const t = useTranslations('flb.builder.formsCore.parts');
   return (
@@ -145,9 +148,15 @@ export function OptionRow({
       <input
         type="text"
         value={typeof value === 'string' ? value : String(value ?? '')}
+        maxLength={maxLength}
         onChange={(e) => onChange(e.target.value)}
         className={cn(controlClass, 'flex-1 !w-auto')}
       />
+      {maxLength !== undefined ? (
+        <span className="shrink-0 font-mono text-[9.5px] tabular-nums text-muted-foreground">
+          {(typeof value === 'string' ? value : String(value ?? '')).length}/{maxLength}
+        </span>
+      ) : null}
       <button
         type="button"
         onClick={onRemove}

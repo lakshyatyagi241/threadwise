@@ -1,7 +1,10 @@
 'use client';
 
 import { ButtonIcon } from '../../button-icon';
+import { useContext } from 'react';
 import { useTranslations } from 'next-intl';
+import { FLB_WA_LIMITS } from '@crm/contracts';
+import { FlowEditorContext } from '../../../lib/flow-editor-context';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { Field, RowCard, TextArea, TextInput } from '../kit';
 import type { FormProps } from '../types';
@@ -31,6 +34,7 @@ export function CtaForm({ data: d, set, env }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.engage');
   const th = useTranslations('flb.builder.formsCore.helpers');
   const unofficial = useUnofficialWhatsapp();
+  const { whatsapp } = useContext(FlowEditorContext);
   const actions = ctaActions(d);
   const setActions = (next: CtaAction[]) => set('actions', next);
   const patch = (i: number, p: Partial<CtaAction>) => setActions(patchItem(actions, i, p));
@@ -75,11 +79,13 @@ export function CtaForm({ data: d, set, env }: FormProps) {
             <div className="space-y-2 p-3">
               <TextInput
                 value={a.label}
+                maxLength={whatsapp ? FLB_WA_LIMITS.ctaText : undefined}
                 onChange={(v) => patch(i, { label: v })}
                 placeholder={t('buttonLabel')}
               />
               <TextInput
                 value={a.value}
+                maxLength={whatsapp && type === 'url' ? FLB_WA_LIMITS.ctaUrl : undefined}
                 onChange={(v) => patch(i, { value: v })}
                 placeholder={ctaPlaceholder(type)}
                 mono

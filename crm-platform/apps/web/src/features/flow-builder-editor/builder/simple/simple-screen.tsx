@@ -574,7 +574,9 @@ function Editor({
       : t('status.draft');
 
   return (
-    <FlowEditorContext.Provider value={{ flowId, web: channel === 'web', channel }}>
+    <FlowEditorContext.Provider
+      value={{ flowId, web: channel === 'web', channel, whatsapp: channel === 'chat' }}
+    >
       <div className="flb-root fixed inset-0 z-40 flex flex-col bg-muted text-foreground">
         <BuilderFonts />
         <header className="relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-background px-4">

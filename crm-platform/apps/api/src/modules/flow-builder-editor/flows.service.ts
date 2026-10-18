@@ -11,6 +11,7 @@ import {
   type FlowDetail,
   type FlowExport,
   type FlowGraph,
+  flbWhatsappLimitProblems,
   type FlowSummary,
   type FlowTemplateCard,
   type FlowType,
@@ -224,6 +225,7 @@ export class FlowsService {
       await this.assertRoom(tx, ctx.orgId);
       const graph = flbNormalizeGraph(input.graph);
       await this.assertFlowLinks(tx, ctx.orgId, graph, input.flowType ?? 'chat', null, false);
+      this.assertWhatsappLimits(input.flowType ?? 'chat', graph);
       const id = await this.insertFlow(tx, ctx.orgId, ctx.userId, {
         name: input.name,
         graph,
@@ -243,6 +245,7 @@ export class FlowsService {
       const graph = flbNormalizeGraph(input.graph);
       const flowType = input.flowType ?? (row.flowType as FlowType) ?? 'chat';
       await this.assertFlowLinks(tx, ctx.orgId, graph, flowType, row.uuid, false);
+      this.assertWhatsappLimits(flowType, graph);
       const update: FlowUpdate = {
         name: input.name,
         graph,
@@ -485,6 +488,21 @@ export class FlowsService {
       if (published) await this.geta.onPublished(tx, ctx.orgId, after);
       return { ...toFlowDetail(after), getaSync: await this.geta.status(tx, ctx.orgId, after) };
     });
+  }
+
+  /**
+   * A WhatsApp flow (`chat`) may not store text WhatsApp would refuse: button titles, list rows, link buttons and the rest are held to
+   * Meta's limits (`flbWhatsappLimitProblems`). The builder stops typing at the same limits; this keeps API clients, imports and
+   * pasted JSON inside them. Website chat bots and the other channels are not checked.
+   */
+  private assertWhatsappLimits(flowType: FlowType, graph: FlowGraph): void {
+    if (flowType !== 'chat') return;
+    const problems = flbWhatsappLimitProblems(graph.flowNodes);
+    if (problems.length === 0) return;
+    throw AppError.validation(
+      'Some text is longer than WhatsApp allows. Shorten it and save again.',
+      problems.map((p) => ({ path: `graph.flowNodes.${p.nodeId}`, message: p.message })),
+    );
   }
 
   private async require(tx: Tx, orgId: number, uuid: string): Promise<FlowRow> {

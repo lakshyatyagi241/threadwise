@@ -13,6 +13,11 @@ vi.mock('next-intl', () => ({
     return t;
   },
 }));
+// The inline new-property form toasts; there is no ToastProvider in a static render.
+vi.mock('@crm/ui', async (orig) => ({
+  ...(await orig<typeof import('@crm/ui')>()),
+  useToast: () => () => undefined,
+}));
 vi.mock('@/lib/use-unofficial-whatsapp', () => ({ useUnofficialWhatsapp: () => false }));
 vi.mock('@/features/contacts-attributes-tags', () => ({
   usePickerFeed: () => ({

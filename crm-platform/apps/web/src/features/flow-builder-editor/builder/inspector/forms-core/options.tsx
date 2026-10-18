@@ -11,7 +11,11 @@ import {
   flbCleanAskInputType,
   flbCleanDateFormat,
   flbIsAgeInput,
+  FLB_WA_LIMITS,
+  flbAskOptionMax,
 } from '@crm/contracts';
+import { FlowEditorContext } from '../../../lib/flow-editor-context';
+import { useContext } from 'react';
 import { useTranslations } from 'next-intl';
 import { askInputLabel, askInputWrongText, dateFormatLabel } from '../../../lib/contract-text';
 import { useFlb } from '../../../lib/msg';
@@ -58,11 +62,17 @@ export function ButtonsForm({
   removeOption,
 }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.options');
+  const { whatsapp } = useContext(FlowEditorContext);
   return (
     <>
       <ButtonsPreview d={d} />
       <Field label={t('prompt')}>
-        <TextArea value={d.prompt} rows={3} onChange={(v) => set('prompt', v)} />
+        <TextArea
+          value={d.prompt}
+          rows={3}
+          maxLength={whatsapp ? FLB_WA_LIMITS.body : undefined}
+          onChange={(v) => set('prompt', v)}
+        />
       </Field>
       <Field label={t('buttonsOptions')} hint={t('buttonsOptionsHint', { max: 3 })}>
         {asArray(d.options).map((o, i) => (
@@ -70,6 +80,7 @@ export function ButtonsForm({
             <OptionRow
               index={i}
               value={o}
+              maxLength={whatsapp ? FLB_WA_LIMITS.buttonTitle : undefined}
               onChange={(v) => set('options', setStringOption(d.options, i, v))}
               onRemove={() => removeOption(i)}
             />
@@ -123,6 +134,7 @@ const subInput = `${controlClass} !w-auto min-w-0 flex-1 !py-1.5 !text-[11.5px]`
 export function ListForm({ node, data: d, set, addOption, removeOption }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.options');
   const unofficial = useUnofficialWhatsapp();
+  const { whatsapp } = useContext(FlowEditorContext);
   const items = listItems(d.options);
   const setItem = (i: number, patch: Partial<ListItem>) =>
     set('options', patchItem(items, i, patch));
@@ -133,11 +145,17 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
     <>
       <ListPreview d={d} />
       <Field label={t('prompt')}>
-        <TextArea value={d.prompt} rows={3} onChange={(v) => set('prompt', v)} />
+        <TextArea
+          value={d.prompt}
+          rows={3}
+          maxLength={whatsapp ? FLB_WA_LIMITS.listBody : undefined}
+          onChange={(v) => set('prompt', v)}
+        />
       </Field>
       <Field label={t('listButtonLabel')} hint={t('listButtonHint', { max: 20 })}>
         <TextInput
           value={d.button}
+          maxLength={whatsapp ? FLB_WA_LIMITS.listButton : undefined}
           placeholder={t('listButtonPlaceholder')}
           onChange={(v) => set('button', v)}
         />
@@ -223,6 +241,7 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
   const ta = useTranslations('flb.builder.askAge');
   const tf = useFlb();
   const unofficial = useUnofficialWhatsapp();
+  const { whatsapp } = useContext(FlowEditorContext);
   const options = asArray(d.options);
   // A checked answer applies to a free reply: with fixed answers or a file upload the plain Ask runs.
   const checked =
@@ -230,7 +249,14 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
   return (
     <>
       <Field label={t('askQuestion')}>
-        <TextArea value={d.prompt} rows={3} onChange={(v) => set('prompt', v)} />
+        <TextArea
+          value={d.prompt}
+          rows={3}
+          maxLength={
+            whatsapp ? (options.length ? FLB_WA_LIMITS.body : FLB_WA_LIMITS.text) : undefined
+          }
+          onChange={(v) => set('prompt', v)}
+        />
       </Field>
       <Field
         label={t('askValidate')}
@@ -360,6 +386,7 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
             key={`${node.id}-ans-${i}`}
             index={i}
             value={o}
+            maxLength={whatsapp ? flbAskOptionMax(options.length) : undefined}
             onChange={(v) => set('options', setStringOption(d.options, i, v))}
             onRemove={() => removeOption(i)}
           />
