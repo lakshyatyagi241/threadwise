@@ -11,6 +11,7 @@ import {
   type RealtimeEventType,
 } from '@crm/contracts';
 import { REDIS_CLIENT } from '../infra/redis/redis.module';
+import { realtimeMetrics } from './realtime-metrics';
 import { roomKeyFor, roomName, type RoomRef } from './rooms';
 
 /** A room's counter is kept this long after its last event; a cold room starts again at 1, which clients treat as a gap. */
@@ -111,6 +112,7 @@ export class RealtimeEmitter {
     type: string,
     payload: unknown,
   ): Promise<EmitReport> {
+    const startedAt = process.hrtime.bigint();
     const permission = RESTRICTED_EVENT_PERMISSION[type];
     const unique = new Map<string, RoomRef>();
     for (const ref of rooms) {
@@ -147,8 +149,14 @@ export class RealtimeEmitter {
         this.io.to(name).emit(type, envelope);
         report.rooms.push({ room: envelope.room, seq });
       });
+      realtimeMetrics.published(
+        type,
+        report.rooms.length,
+        Number(process.hrtime.bigint() - startedAt) / 1e9,
+      );
       return report;
     } catch (err) {
+      realtimeMetrics.publishFailed(type);
       this.logger.warn({ err, type, orgId }, 'realtime emit failed');
       return { rooms: [] };
     }

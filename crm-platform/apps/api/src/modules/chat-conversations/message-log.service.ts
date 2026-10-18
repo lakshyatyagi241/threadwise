@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Readable } from 'node:stream';
 import { createGunzip } from 'node:zlib';
-import { forEachLine, gunzipAsync } from '../../common/async-zlib';
+import { forEachGzipLine } from '../../common/async-zlib';
 import {
   ERROR_CODES,
   type CreateMessageLogExportInput,
@@ -45,9 +45,8 @@ export async function archivedEventsOf(
 ): Promise<Array<StoredEvent & { sortId: number }>> {
   const out: Array<StoredEvent & { sortId: number }> = [];
   for (const payload of payloads) {
-    // A day's object for one workspace is tens of MB at volume: decompressed off the event loop, parsed in slices that let it breathe.
-    const text = (await gunzipAsync(payload)).toString('utf8');
-    await forEachLine(text, (line) => {
+    // A day's object for one workspace is tens of MB at volume: streamed through gunzip, a chunk at a time, never as one string.
+    await forEachGzipLine(payload, (line) => {
       const e = JSON.parse(line) as {
         id: number;
         messageId: number;

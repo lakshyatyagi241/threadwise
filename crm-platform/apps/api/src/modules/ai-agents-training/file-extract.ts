@@ -1,4 +1,4 @@
-import { inflateRawAsync } from '../../common/async-zlib';
+import { inflateRawAsync, yieldToLoop } from '../../common/async-zlib';
 import { AppError } from '../../common/errors/app-error';
 import { ERROR_CODES } from '@crm/contracts';
 import { HttpStatus } from '@nestjs/common';
@@ -65,18 +65,50 @@ export async function readZipEntry(zip: Buffer, name: string): Promise<Buffer | 
   return null;
 }
 
-/** Paragraph ends and line breaks become newlines, tabs stay tabs, every other tag goes; runs of blank lines collapse. */
-export async function docxToText(file: Buffer): Promise<string> {
-  const xml = (await readZipEntry(file, 'word/document.xml'))?.toString('utf8');
-  if (!xml) return '';
-  const text = decodeEntities(
+/** How much XML one pass of the clean-up handles before the event loop gets a turn. A 2 MB part held it about 170 ms in one go. */
+const DOCX_SLICE_CHARS = 256 * 1024;
+
+/** The clean-up of one slice of document.xml: paragraph ends and line breaks become newlines, tabs stay tabs, every other tag goes. */
+const docxSlice = (xml: string): string =>
+  decodeEntities(
     xml
       .replace(/<\/w:p>/g, '\n')
       .replace(/<w:tab\b[^>]*\/?>/g, '\t')
       .replace(/<w:br\b[^>]*\/?>/g, '\n')
       .replace(/<[^>]*>/g, ''),
   );
-  return text.replace(/\n{3,}/g, '\n\n').trim();
+
+/**
+ * Paragraph ends and line breaks become newlines, tabs stay tabs, every other tag goes; runs of blank lines collapse. The XML is cut
+ * only right after a `</w:p>`, where no tag and no entity can be open, so each slice cleans up exactly as the whole would; a run of
+ * newlines that straddles a cut is collapsed across it. The result is identical to cleaning the whole part at once. `sliceChars` is
+ * a parameter for the tests.
+ */
+export async function docxToText(file: Buffer, sliceChars = DOCX_SLICE_CHARS): Promise<string> {
+  const xml = (await readZipEntry(file, 'word/document.xml'))?.toString('utf8');
+  if (!xml) return '';
+  const parts: string[] = [];
+  // How many newlines end what is collected so far (at most 2): kept as a number, never found by scanning the growing output.
+  let t = 0;
+  let from = 0;
+  while (from < xml.length) {
+    const close = xml.indexOf('</w:p>', from + sliceChars);
+    const to = close === -1 ? xml.length : close + '</w:p>'.length;
+    let part = docxSlice(xml.slice(from, to)).replace(/\n{3,}/g, '\n\n');
+    // Blank-line runs of 3 or more become exactly 2, also across a cut: with t newlines already at the end of the output and l at the
+    // start of `part` (both at most 2 here), t + l >= 3 means the run must total 2.
+    let l = 0;
+    while (l < part.length && part.charCodeAt(l) === 10) l += 1;
+    if (t + l >= 3) part = '\n'.repeat(2 - t) + part.slice(l);
+    parts.push(part);
+    let trailing = 0;
+    while (trailing < part.length && part.charCodeAt(part.length - 1 - trailing) === 10)
+      trailing += 1;
+    t = trailing === part.length ? Math.min(2, t + trailing) : trailing;
+    from = to;
+    if (from < xml.length) await yieldToLoop();
+  }
+  return parts.join('').trim();
 }
 
 async function pdfToText(file: Buffer): Promise<string> {

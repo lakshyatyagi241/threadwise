@@ -20,6 +20,11 @@ export interface EventLoopSnapshot {
 export interface EventLoopSamplerDeps {
   /** Histogram resolution in ms. 10 matches the monitoring standard; the timer floor makes smaller values meaningless. */
   resolutionMs?: number;
+  /**
+   * How long a window is expected to last, so the next histogram can be armed shortly before the window ends (see the class comment).
+   * The monitor passes its reporting interval. Ignored when `histogram` is injected.
+   */
+  windowHintMs?: number;
   histogram?: Pick<
     IntervalHistogram,
     'enable' | 'disable' | 'reset' | 'percentile' | 'mean' | 'max' | 'count'
@@ -42,20 +47,45 @@ function finiteMs(ns: number): number | null {
  * Delay is the scheduling lag the histogram measures with its own timer; the resolution is a floor, not microsecond accuracy:
  * a healthy loop reads about the resolution itself (10 ms) at p50, because the histogram records the time between its ticks.
  *
- * Known blind spot (measured on Node 22.17, win32): `histogram.reset()` discards the next tick, so a stall that begins before the
- * first tick after a reset is not recorded. With a 10 s window and a 10 ms resolution that is about 0.1 to 0.2 % of the time.
+ * The blind spot and how it is closed (measured on Node 22.17, win32): `histogram.reset()` discards the next tick, so with ONE
+ * histogram a stall that begins before the first tick after a reset is not recorded, about 0.1 to 0.2 % of the time at a 10 s window
+ * and a 10 ms resolution (EL-B10). So there are two. The one for the next window is enabled and reset a few ticks BEFORE the current
+ * window ends (a short unref'd timer), so its discarded tick is long gone by the boundary; at the boundary the sampler reads the
+ * current one and switches. The price is that the last few ticks (about 30 ms) of a window are also at the start of the next one, so a
+ * stall in that sliver counts in both windows. If the arming timer has not run by the boundary (the loop was blocked), it falls back
+ * to reset in place, i.e. to the old single-histogram behaviour for that one window. An injected `histogram` (tests) keeps that
+ * single-histogram mode.
  */
+const DEFAULT_WINDOW_MS = 10_000;
+/** How many ticks before the boundary the next histogram is armed. The first tick after a reset is discarded; the second is kept. */
+const ARM_LEAD_TICKS = 3;
+
+type Histogram = NonNullable<EventLoopSamplerDeps['histogram']>;
+
 export class EventLoopSampler {
-  private readonly histogram: NonNullable<EventLoopSamplerDeps['histogram']>;
+  private histogram: Histogram;
+  /** The histogram for the next window (real mode only): armed shortly before the boundary, swapped in at it. */
+  private spare: Histogram | undefined;
+  private spareArmed = false;
+  private armTimer: NodeJS.Timeout | undefined;
+  private readonly resolutionMs: number;
+  private readonly windowHintMs: number;
   private readonly elu: NonNullable<EventLoopSamplerDeps['elu']>;
   private readonly now: () => number;
   private previousElu: EventLoopUtilization;
   private windowStartedAt: number;
+  private lastWindowMs: number | undefined;
   private running = false;
 
   constructor(deps: EventLoopSamplerDeps = {}) {
-    this.histogram =
-      deps.histogram ?? monitorEventLoopDelay({ resolution: deps.resolutionMs ?? 10 });
+    this.resolutionMs = deps.resolutionMs ?? 10;
+    this.windowHintMs = deps.windowHintMs ?? DEFAULT_WINDOW_MS;
+    if (deps.histogram) {
+      this.histogram = deps.histogram;
+    } else {
+      this.histogram = monitorEventLoopDelay({ resolution: this.resolutionMs });
+      this.spare = monitorEventLoopDelay({ resolution: this.resolutionMs });
+    }
     // Both arguments must be forwarded: (current, previous) is the interval delta, one argument is "since that reading".
     this.elu =
       deps.elu ?? ((current, previous) => performance.eventLoopUtilization(current, previous));
@@ -71,12 +101,35 @@ export class EventLoopSampler {
     this.histogram.reset();
     this.previousElu = this.elu();
     this.windowStartedAt = this.now();
+    this.scheduleArm();
   }
 
   stop(): void {
     if (!this.running) return;
     this.running = false;
+    if (this.armTimer) clearTimeout(this.armTimer);
+    this.armTimer = undefined;
     this.histogram.disable();
+    if (this.spare) {
+      this.spare.disable();
+      this.spareArmed = false;
+    }
+  }
+
+  /** Arms the spare histogram a few ticks before this window is expected to end. Real mode only. */
+  private scheduleArm(): void {
+    if (!this.spare) return;
+    if (this.armTimer) clearTimeout(this.armTimer);
+    const expected = this.lastWindowMs ?? this.windowHintMs;
+    const delay = Math.max(0, expected - ARM_LEAD_TICKS * this.resolutionMs);
+    this.armTimer = setTimeout(() => {
+      this.armTimer = undefined;
+      if (!this.running || !this.spare) return;
+      this.spare.enable();
+      this.spare.reset();
+      this.spareArmed = true;
+    }, delay);
+    this.armTimer.unref();
   }
 
   /** The window since the last call, or null when the histogram holds no valid sample yet. */
@@ -94,7 +147,18 @@ export class EventLoopSampler {
     const p95 = finiteMs(this.histogram.percentile(95));
     const p99 = finiteMs(this.histogram.percentile(99));
     const max = finiteMs(this.histogram.max);
-    this.histogram.reset();
+    if (this.spare && this.spareArmed) {
+      // The next window's histogram has been recording for a few ticks already: switch to it, and stop the one just read.
+      const finished = this.histogram;
+      this.histogram = this.spare;
+      this.spare = finished;
+      finished.disable();
+      this.spareArmed = false;
+    } else {
+      this.histogram.reset(); // single-histogram mode, or the arming timer did not run in time
+    }
+    this.lastWindowMs = windowMs > 0 ? windowMs : this.lastWindowMs;
+    if (this.running) this.scheduleArm();
 
     if (
       samples === 0 ||

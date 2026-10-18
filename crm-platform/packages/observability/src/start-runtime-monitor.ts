@@ -39,6 +39,8 @@ export interface RuntimeMonitorConfig {
   metricsPort: number;
   metricsHost: string;
   metricsToken?: string | undefined;
+  /** Stamped on every series as `release` (see `releaseFromEnv`). */
+  release?: string | undefined;
 }
 
 /** The process's monitor, or undefined when none was started (tests, CLIs). */
@@ -60,6 +62,7 @@ export function startRuntimeMonitorWith(
     service,
     intervalMs: cfg.intervalSeconds * 1000,
     blockedLogThresholdMs: cfg.blockedLogThresholdMs,
+    ...(cfg.release ? { release: cfg.release } : {}),
   });
   monitor.start();
   const log = (line: Record<string, unknown>) =>

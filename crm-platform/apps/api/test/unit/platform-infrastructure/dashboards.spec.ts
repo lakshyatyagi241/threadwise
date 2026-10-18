@@ -11,6 +11,7 @@ const dashDir = join(repo, 'deploy/observability/grafana/dashboards');
 const obsDirs = [
   join(repo, 'packages/observability/src'),
   join(repo, 'apps/api/src/modules/platform-infrastructure/observability/event-loop'),
+  join(repo, 'apps/api/src/realtime'), // crm_realtime_* (realtime-metrics.ts)
 ];
 
 interface Target {
@@ -154,10 +155,8 @@ describe('Grafana dashboards (EL-B04)', () => {
   it('says plainly what the realtime and release dashboards do not measure', () => {
     const rt = dashboards.find((x) => x.d.uid === 'crm-realtime')!.d;
     const note = rt.panels.find((p) => p.type === 'text')!;
-    expect(JSON.stringify(note)).toMatch(/Not measured today/);
+    expect(JSON.stringify(note)).toMatch(/Still not measured/);
     const rel = dashboards.find((x) => x.d.uid === 'crm-release-comparison')!.d;
-    expect(JSON.stringify(rel.panels.find((p) => p.type === 'text'))).toMatch(
-      /no release or version label/,
-    );
+    expect(JSON.stringify(rel.panels.find((p) => p.type === 'text'))).toMatch(/By release/);
   });
 });
