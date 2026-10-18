@@ -1,6 +1,4 @@
-import { execSync } from 'node:child_process';
-import { GenericContainer, Wait, type StartedTestContainer } from 'testcontainers';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import {
   S3ArchiveError,
   S3ArchiveStorage,
@@ -9,55 +7,37 @@ import {
 import { archiveStorageContract } from '../../unit/data-retention/archive-storage.contract';
 
 /**
- * The S3 adapter against a real S3 server (MinIO), which verifies every request signature itself: a signing bug cannot pass here the
- * way it could against a fake that shares our code. Cloudflare R2 and AWS S3 speak the same protocol (SigV4, path-style, list v2).
+ * The S3 adapter against a real S3-compatible server, which verifies every request signature itself: a signing bug cannot pass here the
+ * way it could against a fake that shares our code. Cloudflare R2 and AWS S3 speak the same protocol (SigV4, list v2).
+ * Runs only when S3_TEST_ENDPOINT, S3_TEST_ACCESS_KEY_ID and S3_TEST_SECRET_ACCESS_KEY name a test account whose token may create buckets
+ * (optional S3_TEST_REGION, default `auto`; S3_TEST_PATH_STYLE=true for a store that wants path-style).
  */
-// Docker Desktop can be slow to answer right after another container-heavy run, so ask twice before giving up.
-const dockerUp = (() => {
-  for (let attempt = 0; attempt < 2; attempt += 1) {
-    try {
-      execSync('docker info', { stdio: 'ignore', timeout: 60_000 });
-      return true;
-    } catch {
-      // try again
-    }
-  }
-  return false;
-})();
-if (!dockerUp) {
-  console.warn('s3-archive-storage.spec: Docker is not available, the MinIO tests are skipped');
+const env = process.env;
+const enabled = Boolean(
+  env.S3_TEST_ENDPOINT && env.S3_TEST_ACCESS_KEY_ID && env.S3_TEST_SECRET_ACCESS_KEY,
+);
+if (!enabled) {
+  console.warn('s3-archive-storage.spec: no S3_TEST_* credentials, the real-server tests are skipped');
 }
 
-const IMAGE = 'minio/minio:RELEASE.2024-10-13T13-34-11Z';
-let minio: StartedTestContainer | undefined;
 let base: Omit<S3ArchiveConfig, 'bucket'>;
 
-const maybe = dockerUp ? describe : describe.skip;
+const maybe = enabled ? describe : describe.skip;
 
 maybe('S3ArchiveStorage setup', () => {
-  beforeAll(async () => {
-    minio = await new GenericContainer(IMAGE)
-      .withCommand(['server', '/data'])
-      .withEnvironment({ MINIO_ROOT_USER: 'testkey', MINIO_ROOT_PASSWORD: 'testsecret-1234' })
-      .withExposedPorts(9000)
-      .withWaitStrategy(Wait.forHttp('/minio/health/ready', 9000))
-      .start();
+  beforeAll(() => {
     base = {
-      endpoint: `http://${minio.getHost()}:${minio.getMappedPort(9000)}`,
-      region: 'us-east-1',
-      accessKeyId: 'testkey',
-      secretAccessKey: 'testsecret-1234',
-      pathStyle: true,
+      endpoint: env.S3_TEST_ENDPOINT!,
+      region: env.S3_TEST_REGION ?? 'auto',
+      accessKeyId: env.S3_TEST_ACCESS_KEY_ID!,
+      secretAccessKey: env.S3_TEST_SECRET_ACCESS_KEY!,
+      pathStyle: env.S3_TEST_PATH_STYLE === 'true',
     };
-  }, 180_000);
-
-  afterAll(async () => {
-    await minio?.stop();
   });
 
   // The contract's own `beforeAll` runs after this one (suites run in declaration order), so `base` is set by then.
   archiveStorageContract(
-    'S3 (MinIO)',
+    'S3-compatible server',
     async () => ({ storage: new S3ArchiveStorage({ ...base, bucket: 'crm-archive-contract' }) }),
     { manyKeys: 1010 },
   );

@@ -29,7 +29,7 @@ describe('storage presets (TW-SET-039, 040)', () => {
     expect(resolveStorageTarget(base({ provider: 'bunny', storageZone: 'z' }))).toBeNull();
   });
 
-  it('S3 and Wasabi derive their host from the region; Spaces, R2 and MinIO need an endpoint', () => {
+  it('S3 and Wasabi derive their host from the region; Spaces and R2 need an endpoint', () => {
     expect(resolveStorageTarget(base({ region: 'eu-west-1' }))!.endpoint).toBe(
       'https://s3.eu-west-1.amazonaws.com',
     );
@@ -38,7 +38,7 @@ describe('storage presets (TW-SET-039, 040)', () => {
     );
     expect(resolveStorageTarget(base({ provider: 'r2' }))).toBeNull();
     expect(
-      resolveStorageTarget(base({ provider: 'minio', endpoint: 'http://minio:9000' })),
+      resolveStorageTarget(base({ provider: 'r2', endpoint: 'http://objects.internal:9000' })),
     ).not.toBeNull();
   });
 
@@ -68,7 +68,7 @@ describe('storage presets (TW-SET-039, 040)', () => {
 
 describe('SigV4 signing', () => {
   const target = resolveStorageTarget(
-    base({ provider: 'minio', endpoint: 'http://127.0.0.1:9000' }),
+    base({ provider: 'r2', endpoint: 'http://127.0.0.1:9000' }),
   )!;
 
   it('is deterministic and puts the key under the bucket (path style) or the host (virtual style)', () => {
@@ -133,7 +133,7 @@ describe('ObjectStorageProbe', () => {
   it('writes a probe object under the base path, deletes it, and says so', async () => {
     const { url, seen } = await stub((m) => [m === 'PUT' ? 200 : 204, '']);
     const r = await new ObjectStorageProbe().probe(
-      base({ provider: 'minio', endpoint: url, basePath: '/platform/' }),
+      base({ provider: 'r2', endpoint: url, basePath: '/platform/' }),
     );
     expect(r).toEqual({
       ok: true,
@@ -150,7 +150,7 @@ describe('ObjectStorageProbe', () => {
       403,
       '<Error><Code>SignatureDoesNotMatch</Code><Message>secret=zzz</Message></Error>',
     ]);
-    const r = await new ObjectStorageProbe().probe(base({ provider: 'minio', endpoint: url }));
+    const r = await new ObjectStorageProbe().probe(base({ provider: 'r2', endpoint: url }));
     expect(r.ok).toBe(false);
     expect(r.message).toBe('Connection failed: HTTP 403 SignatureDoesNotMatch');
     expect(r.message).not.toContain('zzz');
@@ -166,7 +166,7 @@ describe('ObjectStorageProbe', () => {
 
   it('reports an unreachable host', async () => {
     const r = await new ObjectStorageProbe().probe(
-      base({ provider: 'minio', endpoint: 'http://127.0.0.1:1' }),
+      base({ provider: 'r2', endpoint: 'http://127.0.0.1:1' }),
     );
     expect(r.ok).toBe(false);
     expect(r.message).toMatch(/^Connection failed: /);

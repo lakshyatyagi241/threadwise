@@ -138,7 +138,7 @@ describe('the Interakt route: no upload endpoint, so the file goes by public lin
 
   it('refuses early, with the cause, when the store makes links on a private address', async () => {
     const store = bucketStore({
-      url: 'http://minio:9000/crm-media/chat/11/e.png?X-Amz-Signature=abc',
+      url: 'http://objects.internal:9000/crm-media/chat/11/e.png?X-Amz-Signature=abc',
       expiresAt: new Date(Date.now() + 900_000),
     });
     await expect(

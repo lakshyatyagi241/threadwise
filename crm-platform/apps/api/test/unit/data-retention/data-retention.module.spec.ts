@@ -73,7 +73,7 @@ describe('data-retention modules', () => {
   it('binds the bucket adapter when ARCHIVE_DRIVER=s3', async () => {
     const ref = await build({
       ARCHIVE_DRIVER: 's3',
-      S3_ENDPOINT: 'http://minio:9000',
+      S3_ENDPOINT: 'http://objects.internal:9000',
       S3_ACCESS_KEY_ID: 'k',
       S3_SECRET_ACCESS_KEY: 's',
       S3_BUCKET_ARCHIVE: 'my-archive',

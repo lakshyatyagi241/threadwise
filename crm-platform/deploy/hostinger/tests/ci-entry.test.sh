@@ -79,7 +79,7 @@ check "the migration happens before the blue slot starts" test "$(line_of 'run -
 check "the blue slot starts before the worker is restarted" test "$(line_of 'up -d --no-deps api-blue')" -lt "$(line_of 'up -d --no-deps worker')"
 check "the public check runs" has "curl -fsSk"
 check "the legacy containers are stopped after the switch" has "stop -t 30 desk-api-1 desk-web-1"
-check "shared services are only started, never recreated" has "up -d --no-recreate postgres redis minio"
+check "shared services are only started, never recreated" has "up -d --no-recreate postgres redis"
 
 echo "release: second release, blue is live, so green becomes live"
 unset_stubs; new_dir blue bbbbbbb; release ccccccc

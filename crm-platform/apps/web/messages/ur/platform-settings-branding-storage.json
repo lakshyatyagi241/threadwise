@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "Endpoint",
-            "hint": "Spaces، R2 اور MinIO کے لیے ضروری۔ آخر میں آنے والا /bucket ہٹا دیا جاتا ہے۔",
-            "placeholder": "https://… (Spaces / R2 / MinIO کے لیے ضروری؛ Wasabi اور Bunny کے لیے خودکار)"
+            "hint": "Spaces اور R2 کے لیے ضروری۔ آخر میں آنے والا /bucket ہٹا دیا جاتا ہے۔",
+            "placeholder": "https://… (Spaces / R2 کے لیے ضروری؛ Wasabi اور Bunny کے لیے خودکار)"
           },
           "cdnUrl": {
             "label": "عوامی / CDN URL (اختیاری)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "path-style endpoint استعمال کریں (MinIO / کچھ S3 سے مطابقت رکھنے والے اسٹورز)"
+            "label": "path-style endpoint استعمال کریں (کچھ S3 سے مطابقت رکھنے والے اسٹورز)"
           },
           "storageZone": {
             "label": "اسٹوریج زون",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3 سے مطابقت رکھنے والا"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "نجی (دستخط شدہ URLs)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "کلاؤڈ اسٹوریج",
-        "description": "کلائنٹ میڈیا کو اپنے بکٹ میں بھیجیں: Amazon S3، Wasabi، Bunny.net، DigitalOcean Spaces، Cloudflare R2 یا MinIO۔",
+        "description": "کلائنٹ میڈیا کو اپنے بکٹ میں بھیجیں: Amazon S3، Wasabi، Bunny.net، DigitalOcean Spaces، Cloudflare R2۔",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "Bunny فیلڈز استعمال کریں: اسٹوریج زون اور پاس ورڈ۔ ریجن زون کا ریجن ہے (de، ny، la...)۔"
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "S3 فیلڈز بھریں اور Endpoint URL چسپاں کریں۔ MinIO کے لیے path-style پر نشان لگائیں۔"
+              "title": "Spaces / R2",
+              "body": "S3 فیلڈز بھریں اور Endpoint URL چسپاں کریں۔"
             },
             "test": {
               "title": "ہمیشہ پہلے جانچیں",

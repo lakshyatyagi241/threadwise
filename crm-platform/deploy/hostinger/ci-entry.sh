@@ -130,8 +130,8 @@ case "$action" in
       exit 1
     fi
 
-    # Shared services are only started if missing: a release never recreates Postgres, Redis or MinIO.
-    compose up -d --no-recreate postgres redis minio
+    # Shared services are only started if missing: a release never recreates Postgres or Redis.
+    compose up -d --no-recreate postgres redis
     # The backup service runs its own nightly schedule; failing to start it must not block a release.
     compose up -d backup || echo "warning: the backup service did not start" >&2
     compose up -d offsite || echo "warning: the offsite copier did not start" >&2

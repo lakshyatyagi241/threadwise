@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "エンドポイント",
-            "hint": "Spaces、R2、MinIO では必須です。末尾の /bucket は削除されます。",
-            "placeholder": "https://… (Spaces / R2 / MinIO では必須。Wasabi と Bunny は自動)"
+            "hint": "Spaces、R2 では必須です。末尾の /bucket は削除されます。",
+            "placeholder": "https://… (Spaces / R2 では必須。Wasabi と Bunny は自動)"
           },
           "cdnUrl": {
             "label": "公開 / CDN URL(任意)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "パススタイルのエンドポイントを使用(MinIO / 一部の S3 互換ストア)"
+            "label": "パススタイルのエンドポイントを使用(一部の S3 互換ストア)"
           },
           "storageZone": {
             "label": "ストレージゾーン",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3-compatible"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "非公開(署名付き URL)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "クラウドストレージ",
-        "description": "顧客のメディアを独自のバケットに保存します: Amazon S3、Wasabi、Bunny.net、DigitalOcean Spaces、Cloudflare R2、MinIO。",
+        "description": "顧客のメディアを独自のバケットに保存します: Amazon S3、Wasabi、Bunny.net、DigitalOcean Spaces、Cloudflare R2。",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "Bunny の項目(ストレージゾーンとパスワード)を使用してください。リージョンはゾーンのリージョン(de、ny、la など)です。"
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "S3 の項目を入力し、エンドポイント URL を貼り付けてください。MinIO の場合はパススタイルにチェックを入れてください。"
+              "title": "Spaces / R2",
+              "body": "S3 の項目を入力し、エンドポイント URL を貼り付けてください。"
             },
             "test": {
               "title": "必ず先にテストする",

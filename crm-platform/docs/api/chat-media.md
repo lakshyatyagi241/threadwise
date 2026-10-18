@@ -20,7 +20,7 @@ const stored = await media.storeInbound({ orgId, buffer, declaredMime, filename 
   (`name`: path and control characters removed, 120 characters). Keys are stored, never URLs, so a provider change rewrites no data.
 - **Where the bytes go**: to the cloud bucket when the platform storage settings enable one (`MediaStorageService.put`), otherwise to local disk under
   `MEDIA_LOCAL_DIR` (default `~/.crm-platform/media`, outside the repository). Never to Postgres. Local disk is for development, tests and small self-hosted
-  installs (MinIO is not available locally); `LocalDiskMediaStore` accepts only keys of lower-case segments (no `..`, no `.` prefix, no backslash, no drive letter),
+  installs (object storage is not available locally); `LocalDiskMediaStore` accepts only keys of lower-case segments (no `..`, no `.` prefix, no backslash, no drive letter),
   resolves them under the real root, refuses links, and writes atomically (temp file then rename).
 
 ## Reading

@@ -13,7 +13,7 @@ import {
   type ArchiveStorage,
 } from './archive-storage.port';
 
-/** Where the bucket is and how to sign for it. `pathStyle` is `endpoint/bucket/key` (MinIO, R2) rather than `bucket.endpoint/key`. */
+/** Where the bucket is and how to sign for it. `pathStyle` is `endpoint/bucket/key` (some S3-compatible stores) rather than `bucket.endpoint/key`. */
 export type S3ArchiveConfig = S3SigningConfig;
 
 const sha256 = (data: string | Buffer) => createHash('sha256').update(data).digest('hex');
@@ -35,7 +35,7 @@ export class S3ArchiveError extends Error {
 type Body =
   { kind: 'none' } | { kind: 'bytes'; data: Buffer } | { kind: 'file'; path: string; size: number };
 
-/** Archive objects in an S3-compatible bucket (MinIO, S3, R2), signed with SigV4 and no SDK. The bucket is created on first write. */
+/** Archive objects in an S3-compatible bucket (S3, R2), signed with SigV4 and no SDK. The bucket is created on first write. */
 export class S3ArchiveStorage implements ArchiveStorage {
   private bucketReady: Promise<void> | null = null;
 

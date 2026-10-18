@@ -11,7 +11,7 @@ import {
 
 /**
  * The behaviour every ArchiveStorage adapter must have. Run against the local adapter in a unit test and against the S3 adapter in an
- * integration test with a real MinIO, so the two cannot drift apart.
+ * integration test with a real S3-compatible server, so the two cannot drift apart.
  */
 export function archiveStorageContract(
   name: string,

@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "נקודת קצה",
-            "hint": "נדרש עבור Spaces, R2 ו-MinIO. הסיומת /bucket מוסרת.",
-            "placeholder": "https://… (נדרש עבור Spaces / R2 / MinIO; אוטומטי עבור Wasabi ו-Bunny)"
+            "hint": "נדרש עבור Spaces ו-R2. הסיומת /bucket מוסרת.",
+            "placeholder": "https://… (נדרש עבור Spaces / R2; אוטומטי עבור Wasabi ו-Bunny)"
           },
           "cdnUrl": {
             "label": "כתובת ציבורית / CDN (אופציונלי)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "שימוש בנקודת קצה בסגנון נתיב (MinIO / חלק מאחסוני S3 תואמים)"
+            "label": "שימוש בנקודת קצה בסגנון נתיב (חלק מאחסוני S3 תואמים)"
           },
           "storageZone": {
             "label": "אזור אחסון",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3-compatible"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "פרטי (כתובות חתומות)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "אחסון בענן",
-        "description": "שליחת מדיה של לקוחות לדלי שלכם: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 או MinIO.",
+        "description": "שליחת מדיה של לקוחות לדלי שלכם: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "השתמשו בשדות Bunny: אזור אחסון וסיסמה. האזור הוא אזור ה-zone (de, ny, la...)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "מלאו את שדות S3 והדביקו את כתובת נקודת הקצה. סמנו path-style עבור MinIO."
+              "title": "Spaces / R2",
+              "body": "מלאו את שדות S3 והדביקו את כתובת נקודת הקצה."
             },
             "test": {
               "title": "בדקו תמיד קודם",

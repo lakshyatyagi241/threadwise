@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "Эндпоинт",
-            "hint": "Обязателен для Spaces, R2 и MinIO. Завершающий /bucket удаляется.",
-            "placeholder": "https://… (обязателен для Spaces / R2 / MinIO; автоматически для Wasabi и Bunny)"
+            "hint": "Обязателен для Spaces и R2. Завершающий /bucket удаляется.",
+            "placeholder": "https://… (обязателен для Spaces / R2; автоматически для Wasabi и Bunny)"
           },
           "cdnUrl": {
             "label": "Публичный URL / URL CDN (необязательно)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "Использовать path-style эндпоинт (MinIO / некоторые S3-совместимые хранилища)"
+            "label": "Использовать path-style эндпоинт (некоторые S3-совместимые хранилища)"
           },
           "storageZone": {
             "label": "Зона хранения",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3-compatible"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "Закрытый (подписанные URL)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "Облачное хранилище",
-        "description": "Отправляйте медиа клиентов в собственный бакет: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 или MinIO.",
+        "description": "Отправляйте медиа клиентов в собственный бакет: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "Используйте поля Bunny: зона хранения и пароль. Регион — регион зоны (de, ny, la...)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "Заполните поля S3 и вставьте URL эндпоинта. Для MinIO отметьте path-style."
+              "title": "Spaces / R2",
+              "body": "Заполните поля S3 и вставьте URL эндпоинта."
             },
             "test": {
               "title": "Сначала всегда проверяйте",

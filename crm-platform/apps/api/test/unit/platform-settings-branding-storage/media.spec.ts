@@ -82,8 +82,8 @@ describe('media destination and URLs (TW-SET-040)', () => {
     } as never);
   const complete = {
     enabled: true,
-    provider: 'minio',
-    endpoint: 'http://minio.test:9000',
+    provider: 'r2',
+    endpoint: 'http://objects.test:9000',
     bucket: 'media',
     accessKeyId: 'AK',
     visibility: 'public',
@@ -121,7 +121,7 @@ describe('media destination and URLs (TW-SET-040)', () => {
   it('a private bucket without a CDN gets a time-limited signed link', async () => {
     const m = make({ ...complete, visibility: 'private' }, { secret: 's' });
     const url = await m.url('x/y.png', 600);
-    expect(url).toContain('http://minio.test:9000/media/x/y.png?');
+    expect(url).toContain('http://objects.test:9000/media/x/y.png?');
     expect(url).toContain('X-Amz-Expires=600');
     expect(url).toMatch(/X-Amz-Signature=[0-9a-f]{64}$/);
   });
@@ -212,7 +212,7 @@ describe('media destination env fallback', () => {
   } as never;
   const env = (driver: string): Record<string, unknown> => ({
     MEDIA_STORAGE_DRIVER: driver,
-    S3_ENDPOINT: 'http://minio:9000/',
+    S3_ENDPOINT: 'http://objects.internal:9000/',
     S3_REGION: 'us-east-1',
     S3_BUCKET_MEDIA: 'crm-media',
     S3_ACCESS_KEY_ID: 'AK',
@@ -225,7 +225,7 @@ describe('media destination env fallback', () => {
     const on = await new MediaStorageService(settings, config(env('s3'))).destination();
     expect(on.disk).toBe('cloud');
     expect(on.target?.bucket).toBe('crm-media');
-    expect(on.target?.endpoint).toBe('http://minio:9000');
+    expect(on.target?.endpoint).toBe('http://objects.internal:9000');
     expect(on.visibility).toBe('private');
     const off = await new MediaStorageService(settings, config(env('local'))).destination();
     expect(off.disk).toBe('local');

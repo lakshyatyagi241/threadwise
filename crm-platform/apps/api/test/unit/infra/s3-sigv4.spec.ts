@@ -4,7 +4,7 @@ import { signRequest } from '../../../src/modules/platform-infrastructure/offsit
 
 /**
  * The expected values were produced by the off-host backup client's own signer before it was moved here, and the signature was accepted by a
- * real MinIO (offsite-backup and s3-archive-storage integration specs). They pin the algorithm: any change to canonicalisation or
+ * real S3-compatible server (offsite-backup and s3-archive-storage integration specs). They pin the algorithm: any change to canonicalisation or
  * encoding changes a signature and fails this.
  */
 const now = new Date('2026-10-04T12:00:00Z');
@@ -53,9 +53,9 @@ const cases = [
   },
   {
     name: 'a DELETE addressed by virtual host',
-    config: { ...cfg, pathStyle: false, endpoint: 'http://minio.local:9000' },
+    config: { ...cfg, pathStyle: false, endpoint: 'http://objects.local:9000' },
     input: { method: 'DELETE' as const, key: 'a b/c', payloadSha256: 'x', now },
-    url: 'http://bk.minio.local:9000/a%20b/c',
+    url: 'http://bk.objects.local:9000/a%20b/c',
     payload: 'x',
     signature: '1eca441fd63272dc17a0236a1663faf8b24b022cf56d898af38bfea8f332bfa0',
   },

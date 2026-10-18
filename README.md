@@ -38,7 +38,7 @@ Prerequisites: Git, Node 22+, Docker running, `corepack enable pnpm`, and [Claud
    cd threadwise-port/crm-platform
    ```
 
-2. **Bring up crm-platform** (idempotent: installs, starts Postgres/Redis/MinIO/Mailpit, builds packages, migrates, seeds, boots the API to check `/health`)
+2. **Bring up crm-platform** (idempotent: installs, starts Postgres/Redis/Mailpit, builds packages, migrates, seeds, boots the API to check `/health`)
 
    ```bash
    bash .claude/skills/setup/scripts/setup.sh

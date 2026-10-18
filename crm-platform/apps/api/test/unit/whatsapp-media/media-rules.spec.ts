@@ -211,7 +211,7 @@ describe('privateLinkHost: a link the provider can never fetch', () => {
   it.each([
     'http://localhost:9000/b/k',
     'http://127.0.0.1:9000/b/k',
-    'http://minio:9000/b/k',
+    'http://objects.internal:9000/b/k',
     'http://10.0.3.4/b/k',
     'http://172.20.0.2:9000/b/k',
     'http://192.168.1.10/b/k',

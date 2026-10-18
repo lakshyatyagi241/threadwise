@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "Point de terminaison",
-            "hint": "Requis pour Spaces, R2 et MinIO. Un /bucket final est supprimé.",
-            "placeholder": "https://… (requis pour Spaces / R2 / MinIO ; automatique pour Wasabi et Bunny)"
+            "hint": "Requis pour Spaces et R2. Un /bucket final est supprimé.",
+            "placeholder": "https://… (requis pour Spaces / R2 ; automatique pour Wasabi et Bunny)"
           },
           "cdnUrl": {
             "label": "URL publique / CDN (facultatif)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "Utiliser un point de terminaison en chemin (MinIO / certains stockages compatibles S3)"
+            "label": "Utiliser un point de terminaison en chemin (certains stockages compatibles S3)"
           },
           "storageZone": {
             "label": "Zone de stockage",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Stockage Bunny.net",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / compatible S3"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "Privé (URL signées)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "Stockage cloud",
-        "description": "Envoyez les médias des clients vers votre propre compartiment : Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 ou MinIO.",
+        "description": "Envoyez les médias des clients vers votre propre compartiment : Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "Utilisez les champs Bunny : zone de stockage et mot de passe. La région correspond à celle de la zone (de, ny, la…)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "Remplissez les champs S3 et collez l’URL du point de terminaison. Cochez le chemin de style pour MinIO."
+              "title": "Spaces / R2",
+              "body": "Remplissez les champs S3 et collez l’URL du point de terminaison."
             },
             "test": {
               "title": "Toujours tester d’abord",

@@ -8,7 +8,7 @@ name: desk
 
 # Docker's json-file driver keeps every log line forever unless told otherwise, on a host shared with many other apps. Every
 # container has this block. The app containers are recreated on every release, so it cost nothing there; postgres, redis and
-# minio were first left without it so that adding it would not restart the database. They have it now (the slow-query log and
+# the object store were first left without it so that adding it would not restart the database. They have it now (the slow-query log and
 # pg_stat_statements make postgres the chattiest container): the FIRST `docker compose up -d` after this change recreates them
 # (a few seconds of downtime, data is on the named volumes), so take that release at a quiet hour. Later releases do not touch them.
 x-app-logging: &app-logging
@@ -43,16 +43,18 @@ x-api-env: &api-env
   # Error reporting. The DSN is public by design (it only lets events in), so it is the default here; set SENTRY_DSN= (empty) in .env to turn reporting off.
   SENTRY_DSN: ${SENTRY_DSN-https://7a686f169d4a7b804e5eb7b6fdd9e806@o4507446172188672.ingest.us.sentry.io/4512202246324224}
   CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
-  # api and worker are separate containers: media must live in the bucket, not on a container's own disk.
+  # api and worker are separate containers: media must live in the bucket, not on a container's own disk. The bucket is Cloudflare R2
+  # (any S3-compatible store works); every value comes from .env and a release refuses to start without them.
   MEDIA_STORAGE_DRIVER: s3
-  S3_ENDPOINT: http://minio:9000
-  S3_REGION: us-east-1
-  S3_BUCKET_MEDIA: crm-media
-  S3_BUCKET_DOCUMENTS: crm-documents
-  S3_BUCKET_EXPORTS: crm-exports
-  S3_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
-  S3_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
-  S3_FORCE_PATH_STYLE: 'true'
+  S3_ENDPOINT: ${S3_ENDPOINT:?set S3_ENDPOINT (https://<account id>.r2.cloudflarestorage.com) in .env}
+  S3_REGION: ${S3_REGION:-auto}
+  S3_BUCKET_MEDIA: ${S3_BUCKET_MEDIA:?set S3_BUCKET_MEDIA in .env}
+  S3_BUCKET_DOCUMENTS: ${S3_BUCKET_DOCUMENTS:?set S3_BUCKET_DOCUMENTS in .env}
+  S3_BUCKET_EXPORTS: ${S3_BUCKET_EXPORTS:?set S3_BUCKET_EXPORTS in .env}
+  S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:?set S3_ACCESS_KEY_ID in .env}
+  S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:?set S3_SECRET_ACCESS_KEY in .env}
+  S3_FORCE_PATH_STYLE: ${S3_FORCE_PATH_STYLE:-false}
+  S3_PUBLIC_ENDPOINT: ${S3_PUBLIC_ENDPOINT:-}
   SMTP_HOST: ${SMTP_HOST}
   SMTP_PORT: ${SMTP_PORT}
   SMTP_FROM: ${SMTP_FROM}
@@ -115,7 +117,6 @@ x-api-slot: &api-slot
     postgres: { condition: service_healthy }
     redis: { condition: service_healthy }
     migrate: { condition: service_completed_successfully }
-    minio: { condition: service_started }
 
 # Slot settings shared by web-blue and web-green.
 x-web-slot: &web-slot
@@ -201,20 +202,6 @@ services:
       interval: 10s
       timeout: 3s
       retries: 5
-
-  minio:
-    # The registry no longer serves this image; the host has it locally. The API only probes S3 (no bucket access yet).
-    image: minio/minio:latest
-    pull_policy: never
-    restart: unless-stopped
-    mem_limit: 256m
-    logging: *app-logging
-    command: ['server', '/data']
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-    volumes:
-      - miniodata:/data
 
   # Nightly pg_dump with a verified archive, kept on the host in ./backups (14 days, never fewer than the newest 3), plus a dump on
   # demand that the release takes before it migrates. The script is written out here rather than shipped as a file because the
@@ -428,4 +415,3 @@ networks:
 volumes:
   pgdata:
   redisdata:
-  miniodata:
