@@ -46,8 +46,10 @@ export const META_FAILURE = {
   REQUEST_INVALID: 'PROVIDER_REQUEST_INVALID',
   /** HTTP 5xx and Meta's own transient codes (1, 2, 131000, 131016, 131057). */
   PROVIDER_ERROR: 'PROVIDER_ERROR',
-  /** The connection failed, or nothing answered in time. */
+  /** The connection failed before anything was sent: safe to try again. */
   PROVIDER_UNREACHABLE: 'PROVIDER_UNREACHABLE',
+  /** The request may have been accepted although no answer came back (timeout, reset, unreadable 200): never resent by itself. */
+  OUTCOME_UNKNOWN: 'PROVIDER_OUTCOME_UNKNOWN',
   /** Any other 4xx the table has no row for. */
   PROVIDER_REJECTED: 'PROVIDER_REJECTED',
   /** Meta accepted the call but the answer had no message id: it may or may not have sent, so it is not retried. */
@@ -361,12 +363,20 @@ export function classifyMetaCode(
  * Order of decisions: (1) Meta's own code through the table; (2) Meta saying the failure is transient; (3) the HTTP status
  * (401 and 403 are about the token, 429 and 5xx are worth another try, other 4xx are not). The reason carries Meta's words
  * (`describeMetaError`) because they are usually more specific than ours; the access token is scrubbed out of it. A connection that
- * failed before any answer (status 0) is retryable: the message may not have left.
+ * failed before any answer (status 0) is retryable only when it provably never left (refused, unresolved name); a timeout or reset is `OUTCOME_UNKNOWN`.
  */
 export function metaFailure(
   err: WabaApiError,
   secrets: readonly (string | undefined)[] = [],
 ): ChannelError {
+  if (err.status === 0 && err.outcomeMayHaveCommitted) {
+    return new ChannelError(
+      META_FAILURE.OUTCOME_UNKNOWN,
+      `${scrub(err.message, secrets)}. The message may still have been delivered: check the conversation before sending it again.`,
+      false,
+      { outcomeMayHaveCommitted: true },
+    );
+  }
   if (err.status === 0) {
     return new ChannelError(META_FAILURE.PROVIDER_UNREACHABLE, scrub(err.message, secrets), true, {
       retryAfterMs: 10_000,

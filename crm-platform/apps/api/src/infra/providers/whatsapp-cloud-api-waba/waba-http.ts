@@ -174,7 +174,8 @@ export class WabaHttp {
       readFailure = cause;
       return '';
     });
-    if (readFailure !== undefined && res.ok) throw WabaApiError.network(readFailure);
+    if (readFailure !== undefined && res.ok)
+      throw WabaApiError.network(readFailure, { bodyUnreadable: true });
     let body: unknown = {};
     if (text) {
       try {

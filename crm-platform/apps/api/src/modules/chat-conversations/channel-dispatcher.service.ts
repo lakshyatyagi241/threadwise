@@ -225,7 +225,11 @@ export class ChannelDispatcher {
         )
         .catch((err: Error) =>
           this.logger.error(
-            { orgId: req.channel.orgId, clientReference: envelope.clientReference, err: err.message },
+            {
+              orgId: req.channel.orgId,
+              clientReference: envelope.clientReference,
+              err: err.message,
+            },
             'provider accepted the message but its result could not be stored',
           ),
         );

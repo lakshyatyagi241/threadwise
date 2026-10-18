@@ -315,6 +315,11 @@ export class ChannelError extends Error {
   readonly retryAfterMs: number | null;
   /** The provider's own code, kept beside ours for the event log (`131047`). */
   readonly providerCode: string | null;
+  /**
+   * The call may have reached the provider and been acted on although no usable answer came back (a timeout, a reset). Such an error
+   * is never retried by itself: a second send could reach the customer twice. A person decides with the Retry button.
+   */
+  readonly outcomeMayHaveCommitted: boolean;
 
   constructor(
     readonly code: string,
@@ -325,6 +330,7 @@ export class ChannelError extends Error {
       providerFault?: boolean;
       retryAfterMs?: number | null;
       providerCode?: string | null;
+      outcomeMayHaveCommitted?: boolean;
     } = {},
   ) {
     super(message);
@@ -333,6 +339,7 @@ export class ChannelError extends Error {
     this.providerFault = options.providerFault ?? false;
     this.retryAfterMs = options.retryAfterMs ?? null;
     this.providerCode = options.providerCode ?? null;
+    this.outcomeMayHaveCommitted = options.outcomeMayHaveCommitted ?? false;
   }
 }
 
