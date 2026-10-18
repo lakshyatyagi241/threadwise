@@ -281,7 +281,8 @@
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
       "use": [
-        "inbox.settings.read"
+        "inbox.settings.read",
+        "inbox.routing.manage"
       ]
     },
     "search_contacts": {

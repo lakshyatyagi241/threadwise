@@ -2,13 +2,14 @@
  * VENDORED COPY of apps/web/src/features/flow-builder-editor/lib/wabo-import.ts (the converter of the web importer), so the migration
  * tool can run it on the server side. DO NOT EDIT BELOW THE MARKER LINE: test/flows.spec.ts compares everything under it, byte for
  * byte, with the original and FAILS when the original changes (then re-copy the body and re-read the diff). Only the import block
- * and the two constants above the marker differ from the original: "@crm/contracts" is not resolvable from this tool, so the three
- * contract helpers are imported by relative path (the same way transform/contacts.ts imports the phone canonicaliser), and
- * LIMITS / MAIN_NAME (apps/web .../lib/simple-model.ts) are copied; the test pins those too.
- * The original has no DOM or React dependency; it is a pure function of the records.
+ * and the constants above the marker differ from the original: "@crm/contracts" is not resolvable from this tool, so the contract
+ * helpers are imported by relative path (the same way transform/contacts.ts imports the phone canonicaliser); LIMITS / MAIN_NAME
+ * (apps/web .../lib/simple-model.ts) are copied; `Msg`, `msg` and `dedupeMsgs` (lib/msg.ts, which imports React) are copied without
+ * the hooks. The test pins the constants too. The original has no DOM or React dependency; it is a pure function of the records.
  */
 import { flbCleanAskFileExtensions } from '../../../packages/contracts/src/flow-builder-editor/ask-media';
 import { flbDefaultNodeData } from '../../../packages/contracts/src/flow-builder-editor/node-catalogue';
+import { FLB_WA_LIMITS } from '../../../packages/contracts/src/flow-builder-editor/whatsapp-limits';
 import type {
   FlowEdge,
   FlowGraph,
@@ -23,8 +24,29 @@ export const LIMITS = {
   rowDescription: 72,
   listButton: 20,
   body: 1024,
+  /** A plain text message: WhatsApp allows 4096 characters (the body of a buttons or list message, 1024). */
+  message: 4096,
 } as const;
 export const MAIN_NAME = 'Main flow';
+
+export type MsgValue = string | number | Msg;
+export interface Msg {
+  key: string;
+  values?: Record<string, MsgValue>;
+  fallback?: string;
+}
+const msg = (key: string, values?: Record<string, MsgValue>, fallback?: string): Msg => ({
+  key,
+  ...(values ? { values } : {}),
+  ...(fallback !== undefined ? { fallback } : {}),
+});
+function dedupeMsgs(list: readonly Msg[]): Msg[] {
+  const seen = new Set<string>();
+  return list.filter((m) => {
+    const k = JSON.stringify(m);
+    return seen.has(k) ? false : (seen.add(k), true);
+  });
+}
 
 // ---- vendored body: byte-for-byte from wabo-import.ts below this line ----
 
@@ -43,8 +65,10 @@ export const MAIN_NAME = 'Main flow';
 
 export interface WaboImport {
   graph: FlowGraph;
+  /** The channel the file was built for: a website chat bot's records (buttons with links, carousels, a phone question) or WhatsApp's. */
+  channel: 'chat' | 'web';
   /** What did not come across, in words for the person importing. */
-  notes: string[];
+  notes: Msg[];
   /** Words that start the flow, from the file's Intent / FAQ records. */
   keywords: string;
 }
@@ -103,6 +127,39 @@ const ASK_TYPES: Record<string, string> = {
   textfield: 'text',
 };
 
+/** The record kinds only a website chat bot has (a WhatsApp bot's buttons are `interactive-message`). */
+const WEB_SUBTYPES = new Set(['button', 'carousel', 'phone-number', 'date', 'textfield', 'otp']);
+
+/** The records only a WhatsApp bot has: a file with any of them is a WhatsApp bot, whatever else it holds. */
+const WHATSAPP_SUBTYPES = new Set([
+  'interactive-message',
+  'interactive-message-list',
+  'whatsapp-template',
+  'flow-list',
+  'interactive-button-url',
+  'share-location',
+]);
+/** The record kinds a website chat bot reads that a WhatsApp import has no step for. */
+const WEB_ONLY_CASES = new Set(['phone-number', 'otp', 'date', 'button', 'carousel']);
+
+const BUTTON_ACTIONS = ['flow', 'mobile', 'email', 'link', 'live_agent'];
+
+/** A web chat bot's button row (`{type, value:{text,url,nodeId}}`) as a link button of the Link button / Carousel steps, or null. */
+const linkKind = (type: string): 'url' | 'phone' | 'email' | null =>
+  type === 'link' ? 'url' : type === 'mobile' ? 'phone' : type === 'email' ? 'email' : null;
+
+/** WhatsApp needs each button name to be different: a repeat (after clipping too) gets " (2)", " (3)"... inside the 20 characters. */
+function uniqueLabels(labels: string[]): string[] {
+  const taken = new Set<string>();
+  return labels.map((label) => {
+    let out = label;
+    for (let n = 2; taken.has(out.trim().toLowerCase()); n++)
+      out = `${clip(label, LIMITS.buttonLabel - ` (${n})`.length)} (${n})`;
+    taken.add(out.trim().toLowerCase());
+    return out;
+  });
+}
+
 const VIDEO_PAGE = /(youtube\.com|youtu\.be|vimeo\.com)/i;
 
 export interface WaboOptions {
@@ -114,21 +171,26 @@ export interface WaboOptions {
 }
 
 export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
-  const notes: string[] = [];
+  const notes: Msg[] = [];
   const records = waboRecords(raw);
   const seen = new Set<string>();
   const all = records.filter((r) => {
     if (!isFlowNode(r) || seen.has(str(r.nodeId))) return false;
     // The console's built-in opt-in / opt-out messages are not in its list of flows (they belong to subscription settings).
     if (/^OPT-(IN|OUT)\b/i.test(str(r.qid))) {
-      notes.push(
-        'Left out the opt-in / opt-out messages: the console keeps them outside its list of flows.',
-      );
+      notes.push(msg('waboImport.notes.optInOut'));
       return false;
     }
     seen.add(str(r.nodeId));
     return true;
   });
+
+  // A website chat bot's file has records only a web bot has and none only WhatsApp has.
+  const channel: 'chat' | 'web' =
+    all.some((r) => WEB_SUBTYPES.has(str(r.subType))) &&
+    !all.some((r) => WHATSAPP_SUBTYPES.has(str(r.subType)))
+      ? 'web'
+      : 'chat';
 
   // Names and trigger words from the Intent / FAQ records that point at a flow.
   const qidName = new Map<string, string>();
@@ -210,12 +272,23 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
   };
 
   /** One wabo node as an editor node, or null with a note when the editor has no such step. */
-  const convert = (r: Rec): { type: string; data: Record<string, unknown> } | null => {
+  const convert = (
+    r: Rec,
+  ): {
+    type: string;
+    data: Record<string, unknown>;
+    exits?: Array<string | null>;
+    pre?: { type: string; data: Record<string, unknown> };
+  } | null => {
     const first = rec(arr(r.response)[0]);
     const sub = str(r.subType);
     const id8 = str(r.nodeId).slice(0, 8);
     const inter = rec(first.interactive);
     const action = rec(inter.action);
+    if (channel !== 'web' && WEB_ONLY_CASES.has(sub)) {
+      notes.push(msg('waboImport.notes.skippedStep', { sub }));
+      return null;
+    }
     switch (sub) {
       case 'text': {
         // A text step normally holds a string; one that holds a video or image holds `{ text, url }`.
@@ -280,14 +353,14 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
         return {
           type: 'cta',
           data: {
-            actions: buttons.map((b) => ({
+            actions: buttons.slice(0, FLB_WA_LIMITS.ctaActions).map((b) => ({
               type: 'url',
-              label: clip(str(rec(b.value).text), 25),
+              label: clip(str(rec(b.value).text), FLB_WA_LIMITS.ctaText),
               value: str(rec(b.value).url),
             })),
             bodyText: body(inter.body, ''),
-            headerText: str(rec(inter.header).text),
-            footerText: plain(inter.footer),
+            headerText: clip(str(rec(inter.header).text), FLB_WA_LIMITS.header),
+            footerText: clip(plain(inter.footer), FLB_WA_LIMITS.footer),
             ...(inter.header ? { header: inter.header } : {}),
           },
         };
@@ -297,15 +370,21 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
         for (const b of buttons)
           if (b.type !== 'flow' && !(opts.exact && b.type === 'live_agent'))
             notes.push(
-              `A "${str(b.type)}" button ("${str(rec(b.value).text)}") has no target in Simple.`,
+              msg('waboImport.notes.buttonNoTarget', {
+                type: str(b.type),
+                text: str(rec(b.value).text),
+              }),
             );
+        if (buttons.length > LIMITS.buttons) notes.push(msg('waboImport.notes.tooManyButtons'));
         return {
           type: 'buttons',
           data: {
             prompt: body(inter.body, inter.footer) || '…',
-            options: buttons
-              .slice(0, LIMITS.buttons)
-              .map((b) => clip(str(rec(b.value).text).trim() || 'Button', LIMITS.buttonLabel)),
+            options: uniqueLabels(
+              buttons
+                .slice(0, LIMITS.buttons)
+                .map((b) => clip(str(rec(b.value).text).trim() || 'Button', LIMITS.buttonLabel)),
+            ),
             var: claimVar(r, `choice_${id8}`),
             ...(inter.header ? { header: inter.header } : {}),
           },
@@ -319,7 +398,7 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
             rows.push({
               title: clip(str(rec(row.value).text).trim() || 'Option', LIMITS.rowTitle),
               description: '',
-              section: str(s.title),
+              section: clip(str(s.title), FLB_WA_LIMITS.sectionTitle),
             });
         return {
           type: 'list',
@@ -330,6 +409,125 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
             options: rows.slice(0, LIMITS.rows),
             ...(inter.header ? { header: inter.header } : {}),
           },
+        };
+      }
+      case 'phone-number': {
+        const key = str(rec(rec(r.property).property).value);
+        return {
+          type: 'ask',
+          data: {
+            ...flbDefaultNodeData('ask'),
+            prompt: plain(first.value) || 'Please reply',
+            var: claimVar(r, `phone_${id8}`),
+            validate: 'phone',
+            saveProperty: key !== '',
+            propertyKey: key,
+            ...(r.hasOTPVarification === true ? { verifyOtp: true } : {}),
+          },
+        };
+      }
+      case 'otp':
+        // The code question that follows a phone question is part of that question here (its "verify" switch).
+        if (!str(r.parentId)) notes.push(msg('waboImport.notes.skippedStep', { sub }));
+        return null;
+      case 'date': {
+        const key = str(rec(rec(r.property).property).value);
+        notes.push(msg('waboImport.notes.dateLimits'));
+        return {
+          type: 'ask',
+          data: {
+            ...flbDefaultNodeData('ask'),
+            prompt: plain(first.value) || 'Please reply',
+            var: claimVar(r, `date_${id8}`),
+            validate: 'date',
+            dateFormat: 'dd/mm/yyyy',
+            saveProperty: key !== '',
+            propertyKey: key,
+          },
+        };
+      }
+      case 'button': {
+        // A website chat bot's button message: the prompt, then one row per button (flow, call, email, link, live agent).
+        const prompt = plain(first.value) || '…';
+        const rows = arr(r.response)
+          .map(rec)
+          .filter((b) => BUTTON_ACTIONS.includes(str(b.type)));
+        const replies = rows.filter((b) => b.type === 'flow' || b.type === 'live_agent');
+        const links = rows
+          .filter((b) => linkKind(str(b.type)) !== null)
+          .slice(0, 3)
+          .map((b) => ({
+            type: linkKind(str(b.type))!,
+            label: clip(str(rec(b.value).text).trim() || 'Open', 20),
+            value: str(rec(b.value).url),
+          }));
+        if (rows.length === 0) return { type: 'message', data: { text: clip(prompt, 4096) } };
+        if (replies.length === 0)
+          return { type: 'cta', data: { bodyText: clip(prompt, 1024), actions: links } };
+        const handoffs: Record<string, { team: string; message: string }> = {};
+        const kept = replies.slice(0, LIMITS.buttons);
+        kept.forEach((b, i) => {
+          if (b.type === 'live_agent')
+            handoffs[String(i)] = { team: '', message: 'The visitor asked for a person' };
+        });
+        if (replies.length > kept.length) notes.push(msg('waboImport.notes.tooManyButtons'));
+        if (kept.some((b) => b.type === 'live_agent'))
+          notes.push(msg('waboImport.notes.agentTeam'));
+        return {
+          type: 'buttons',
+          data: {
+            prompt: links.length ? '…' : clip(prompt, LIMITS.body),
+            options: kept.map((b) =>
+              clip(str(rec(b.value).text).trim() || 'Button', LIMITS.buttonLabel),
+            ),
+            var: claimVar(r, `choice_${id8}`),
+            handoffs,
+          },
+          exits: kept.map((b) => (b.type === 'flow' ? str(rec(b.value).nodeId) || null : null)),
+          ...(links.length
+            ? { pre: { type: 'cta', data: { bodyText: clip(prompt, 1024), actions: links } } }
+            : {}),
+        };
+      }
+      case 'carousel': {
+        const slides = arr(first.value).map(rec).slice(0, 10);
+        if (arr(first.value).length > slides.length)
+          notes.push(msg('waboImport.notes.tooManySlides'));
+        const exits: Array<string | null> = [];
+        const cards = slides.map((s) => {
+          const buttons = arr(s.buttons).map(rec).slice(0, 2);
+          const out: Array<Record<string, unknown>> = [];
+          for (const b of buttons) {
+            const kind = str(b.type);
+            const label = clip(str(rec(b.value).text).trim() || 'Open', 20);
+            if (kind === 'flow') {
+              out.push({ type: 'reply', label, value: '' });
+              exits.push(str(rec(b.value).nodeId) || null);
+            } else if (kind === 'live_agent') {
+              out.push({
+                type: 'agent',
+                label,
+                value: '',
+                team: '',
+                note: 'The visitor asked for a person',
+              });
+              exits.push(null);
+              notes.push(msg('waboImport.notes.agentTeam'));
+            } else if (linkKind(kind))
+              out.push({ type: linkKind(kind)!, label, value: str(rec(b.value).url) });
+          }
+          const image = str(s.image).trim();
+          return {
+            image: /^https?:\/\/\S+$/i.test(image) ? image : '',
+            title: clip(plain(s.title) || plain(s.text) || '…', 60),
+            text: clip(plain(s.text) || plain(s.subTitle), 200),
+            buttons: out,
+          };
+        });
+        return {
+          type: 'carousel',
+          data: { text: '', cards, var: claimVar(r, `choice_${id8}`) },
+          exits,
         };
       }
       case 'img-file': {
@@ -349,7 +547,7 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
       default: {
         const validate = ASK_TYPES[sub];
         if (!validate) {
-          notes.push(`Skipped a "${sub}" step: Simple has nothing like it.`);
+          notes.push(msg('waboImport.notes.skippedStep', { sub }));
           return null;
         }
         const key = str(rec(rec(r.property).property).value);
@@ -369,7 +567,17 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
   };
 
   // Convert every node, then chain each flow's nodes and link each button / row.
-  const converted = new Map<string, { type: string; data: Record<string, unknown> }>();
+  const converted = new Map<
+    string,
+    {
+      type: string;
+      data: Record<string, unknown>;
+      /** A branching step's exits in order: the node each leads to (null for none). */
+      exits?: Array<string | null>;
+      /** A step that goes right before this one (the link buttons of a button message). */
+      pre?: { type: string; data: Record<string, unknown> };
+    }
+  >();
   const chains: Array<{ qid: string; ids: string[] }> = [];
   for (const q of order) {
     let current: string[] = [];
@@ -381,11 +589,17 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
       const c = convert(r);
       if (!c) continue;
       const id = idOf(r);
-      idByNode.set(str(r.nodeId), id);
+      // The link buttons of a button message come first; a button that leads here lands on them.
+      const entry = c.pre ? `${id}_links` : id;
+      if (c.pre) {
+        converted.set(entry, c.pre);
+        current.push(entry);
+      }
+      idByNode.set(str(r.nodeId), entry);
       converted.set(id, c);
       current.push(id);
       // A buttons or list step ends its chain: what follows starts another.
-      if (c.type === 'buttons' || c.type === 'list') flush();
+      if (c.type === 'buttons' || c.type === 'list' || c.type === 'carousel') flush();
     }
     flush();
   }
@@ -426,16 +640,32 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
       c.type === 'buttons'
         ? arr(action.buttons)
         : arr(action.sections).flatMap((s) => arr(rec(s).rows));
+    // A button or row that leads nowhere in the file ends the conversation there, as it did in wabo; saying so keeps the Simple builder
+    // from refusing to publish it (`endOptions`). A live-agent button of an exact import leads to its Assign step instead.
+    const ends: number[] = [];
     targets.slice(0, arr(c.data.options).length).forEach((t, i) => {
       const v = rec(rec(t).value);
       const to = idByNode.get(str(v.nodeId));
       if (rec(t).type === 'flow' && to) {
         edge(id, `p${i}`, to);
         if (!leadTitle.has(to)) leadTitle.set(to, str(v.text).trim());
-      } else if (rec(t).type === 'flow' && str(v.nodeId))
-        notes.push(
-          `"${str(v.text).trim()}" leads to a flow that is not in this file; it ends there until you link it.`,
-        );
+        return;
+      }
+      if (rec(t).type === 'flow' && str(v.nodeId))
+        notes.push(msg('waboImport.notes.leadsOutside', { text: str(v.text).trim() }));
+      if (!(opts.exact && c.type === 'buttons' && rec(t).type === 'live_agent')) ends.push(i);
+    });
+    const node = nodes.find((n) => n.id === id);
+    if (node && ends.length > 0) node.data.endOptions = ends;
+  }
+
+  // A website chat bot's buttons and carousel cards lead where their `nodeId` says, when that node is in the file.
+  for (const [id, c] of converted) {
+    (c.exits ?? []).forEach((target, i) => {
+      if (!target) return;
+      const to = idByNode.get(target);
+      if (to) edge(id, `p${i}`, to);
+      else notes.push(msg('waboImport.notes.leadsOutside', { text: `${i + 1}` }));
     });
   }
 
@@ -480,9 +710,7 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
         if (a.type !== 'connect_node') continue;
         const to = idByNode.get(str(a.nodeId));
         if (!to) {
-          notes.push(
-            `A step connects to a node that is not in this file (${str(a.nodeId).slice(0, 8)}); it stays unlinked.`,
-          );
+          notes.push(msg('waboImport.notes.connectsOutside', { id: str(a.nodeId).slice(0, 8) }));
           continue;
         }
         if (c.type === 'buttons' || c.type === 'list') continue;
@@ -546,6 +774,8 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
     data: {
       ...flbDefaultNodeData('trigger'),
       keywords,
+      // A website visitor opening the chat starts the bot: there are no trigger words.
+      ...(channel === 'web' ? { keywordMode: 'any' } : {}),
       ...(mainName !== MAIN_NAME ? { journeyName: mainName } : {}),
     },
   } as FlowNode;
@@ -554,7 +784,8 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
 
   return {
     graph: { flowNodes: [trigger, ...nodes], flowEdges: edges, vars },
-    notes: Array.from(new Set(notes)),
+    channel,
+    notes: dedupeMsgs(notes),
     keywords,
   };
 }
