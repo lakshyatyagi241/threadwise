@@ -37,7 +37,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await h?.stop();
-});
+}, 120_000);
 
 interface Meeting {
   id: string;
