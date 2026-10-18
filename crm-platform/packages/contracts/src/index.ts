@@ -113,3 +113,4 @@ export * from './compliance';
 export * from './waboo-migration';
 export * from './channel-wechat';
 export * from './persona';
+export * from './storage-quota';
