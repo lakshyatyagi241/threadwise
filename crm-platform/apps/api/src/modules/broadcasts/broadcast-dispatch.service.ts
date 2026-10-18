@@ -451,31 +451,8 @@ export class BroadcastDispatchService {
                 ...(built ? { components: built.components } : {}),
               });
             }
-<<<<<<< HEAD
-            await this.db.tx(async (tx) => {
-              const from = await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
-                status: 'sent',
-                providerMessageId: sent.providerMessageId,
-              });
-              await this.mirror.mirror(
-                orgId,
-                broadcastId,
-                contactId,
-                'sent',
-                sent.providerMessageId,
-              );
-              if (from !== null) {
-                await this.progress.emitMessage(tx, orgId, broadcastId, contactId, 'sent', 'send', {
-                  providerMessageId: sent.providerMessageId,
-                });
-                // The broadcast reached the contact: lead handling (the uncontacted marker, BL-290). Never throws.
-                await this.leadHandling.touch(tx, orgId, contactId, 'automation');
-              }
-            });
-=======
             // The provider has accepted the message. Nothing below may turn that into a failed recipient: a failed one is sent again.
             await this.recordSent(orgId, broadcastId, contactId, sent.providerMessageId);
->>>>>>> origin/main
             if (sender.engine === 'baileys') await this.cap.bump(orgId, sender.engine, sender.id);
           } catch (err) {
             if (err instanceof AppError && err.code === ERROR_CODES.AUTH_SEND_HALTED) {
@@ -589,10 +566,13 @@ export class BroadcastDispatchService {
             status: 'sent',
             providerMessageId,
           });
-          if (from !== null)
+          if (from !== null) {
             await this.progress.emitMessage(tx, orgId, broadcastId, contactId, 'sent', 'send', {
               providerMessageId,
             });
+            // The broadcast reached the contact: lead handling (the uncontacted marker, BL-290). Never throws.
+            await this.leadHandling.touch(tx, orgId, contactId, 'automation');
+          }
         });
         // The inbox bubble is best effort and has its own transaction: it never undoes the recorded send.
         await this.mirror
