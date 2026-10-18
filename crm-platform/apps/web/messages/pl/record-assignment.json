@@ -1,0 +1,301 @@
+{
+  "record-assignment": {
+    "back": "Automatyzacja",
+    "title": "Reguły przypisywania rekordów",
+    "intro": "Automatycznie przypisuj nowe rekordy (moduły: {contacts}, firmy, {deals}) właściwemu opiekunowi sprzedaży.",
+    "crossNote": "Tu przypisywane są: {contacts}, firmy i {deals}. Aby przypisywać rozmowy do agentów, zobacz <link>Automatyczne przypisywanie</link>.",
+    "master": {
+      "title": "Włącz przypisywanie rekordów",
+      "hint": "Wyłączone, dopóki go nie włączysz. Po włączeniu poniższe reguły przypisują nowy rekord (moduły: {contact}, firma, {deal}) bez opiekuna do kogoś z Twojego zespołu.",
+      "on": "Przypisywanie rekordów jest włączone.",
+      "off": "Przypisywanie rekordów jest wyłączone."
+    },
+    "imports": {
+      "title": "Przypisuj także zaimportowane rekordy",
+      "hint": "Domyślnie wyłączone, aby duży import nie zmieniał przypisań opiekunów."
+    },
+    "ownerRule": {
+      "title": "Przypisywane są tylko rekordy bez opiekuna",
+      "body": "Opiekun ustawiony przez osobę nigdy nie jest zastępowany, podobnie jak opiekun celowo usunięty. Silnik uzupełnia pusty opiekun w nowym rekordzie. Jeśli w regule włączysz Przypisz ponownie przy aktualizacji, może on też przenieść rekord, który sam wcześniej przypisał, o ile nikt od tego czasu nie zmienił opiekuna."
+    },
+    "tabs": {
+      "contact": "{Contacts}",
+      "company": "{Companies}",
+      "deal": "{Deals}",
+      "label": "Moduł"
+    },
+    "views": {
+      "rules": "Reguły",
+      "log": "Dziennik uruchomień"
+    },
+    "how": {
+      "title": "Jak działa priorytet",
+      "p1": "Reguły są sprawdzane od priorytetu 1 w dół. Rekord otrzymuje pierwsza reguła, która pasuje i znajdzie dostępną osobę.",
+      "p2": "Priorytet mają tylko aktywne reguły. Wstrzymana reguła zachowuje miejsce na liście, ale nigdy nie jest uruchamiana.",
+      "p3": "Reguła bez warunków pasuje do każdego rekordu i działa po wszystkich pozostałych, niezależnie od miejsca na liście. To reguła zapasowa (fallback).",
+      "p4": "Rekord pasujący do kilku reguł trafia do tej o najwyższym priorytecie.",
+      "p5": "Przeciągnij wiersz lub użyj jego przycisków strzałek, aby zmienić kolejność. Reguły zapasowe i wstrzymane pozostają w swojej grupie na dole."
+    },
+    "list": {
+      "title": {
+        "contact": "Reguły dla: {contacts}",
+        "company": "Reguły dla firm",
+        "deal": "Reguły dla: {deals}"
+      },
+      "create": "Utwórz regułę",
+      "loading": "Wczytywanie reguł…",
+      "loadFailed": "Nie udało się wczytać reguł.",
+      "retry": "Spróbuj ponownie",
+      "readOnly": "Możesz zobaczyć te reguły, ale nie możesz ich zmieniać. Zmiana wymaga uprawnienia do zarządzania przypisywaniem rekordów.",
+      "empty": {
+        "title": "Brak reguł",
+        "contact": "Nowe rekordy ({contacts}) zachowują opiekuna ustawionego przy tworzeniu.",
+        "company": "Nowe firmy zachowują opiekuna ustawionego przy tworzeniu.",
+        "deal": "Nowe rekordy ({deals}) zachowują opiekuna ustawionego przy tworzeniu.",
+        "create": "Utwórz pierwszą regułę"
+      },
+      "col": {
+        "priority": "Priorytet",
+        "rule": "Reguła",
+        "assignTo": "Przypisz do",
+        "method": "Metoda",
+        "active": "Aktywna",
+        "used": "Użycia",
+        "modified": "Ostatnia zmiana"
+      },
+      "fallback": "Zapasowa",
+      "fallbackHint": "Reguła bez warunków pasuje do każdego rekordu i działa po wszystkich pozostałych.",
+      "notPrioritised": "Wstrzymana",
+      "noConditions": "Brak warunków: pasuje do każdego rekordu",
+      "brokenConditions": "{count, plural, one {# uszkodzony warunek} few {# uszkodzone warunki} many {# uszkodzonych warunków} other {# uszkodzonego warunku}}",
+      "brokenHint": "Warunek wskazuje coś, co zostało usunięte. Nie pasuje do niczego, dopóki go nie naprawisz.",
+      "usedCount": "{count, plural, =0 {Nieużywana} one {Użyta # raz} few {Użyta # razy} many {Użyta # razy} other {Użyta # razy}}",
+      "lastUsed": "Ostatnio użyta {when}",
+      "modifiedBy": "{name}, {when}",
+      "nobody": "Nikt",
+      "unknownPerson": "Były członek",
+      "unknownTeam": "Usunięty zespół",
+      "teamName": "Zespół: {name}",
+      "skipsOffline": "Pomija osoby offline",
+      "reassigns": "Przypisuje ponownie przy aktualizacji",
+      "activeFor": "Reguła {name} jest aktywna",
+      "dragHandle": "Przeciągnij {name}, aby zmienić priorytet",
+      "moveUp": "Przesuń {name} w górę",
+      "moveDown": "Przesuń {name} w dół",
+      "moved": "{name} przeniesiono na pozycję {place}.",
+      "actions": "Akcje dla: {name}",
+      "edit": "Edytuj",
+      "clone": "Duplikuj",
+      "delete": "Usuń"
+    },
+    "strategy": {
+      "round_robin": "Round robin (po kolei)",
+      "least_busy": "Najmniej otwartych zadań",
+      "fixed": "Konkretny użytkownik",
+      "hint": {
+        "round_robin": "Osoby przejmują rekordy po kolei, w stałej kolejności.",
+        "least_busy": {
+          "contact": "Przypisuje osobie, która ma obecnie najmniej rekordów ({contacts}).",
+          "company": "Przypisuje osobie, która ma obecnie najmniej firm.",
+          "deal": "Przypisuje osobie, która ma obecnie najmniej otwartych rekordów ({deals})."
+        },
+        "fixed": "Zawsze ta sama osoba. Gdy jest na urlopie, przejmuje jej zastępca."
+      }
+    },
+    "editor": {
+      "titleNew": "Nowa reguła",
+      "titleEdit": "Edytuj regułę",
+      "name": "Nazwa reguły",
+      "description": "Opis (opcjonalnie)",
+      "module": "Moduł",
+      "moduleLocked": "Modułu reguły nie można zmienić. Utwórz nową regułę dla innego modułu.",
+      "conditions": {
+        "title": "Warunki",
+        "hint": "Rekord pasuje, gdy jego pola spełniają warunki. Wybierz pole, potem sposób porównania, a na końcu wartość.",
+        "emptyTitle": "Brak warunków: pasuje do każdego rekordu, działa jako ostatnia (zapasowa)",
+        "emptyBody": "Ta reguła przejmuje każdy rekord, którego nie przejęła żadna inna. Dodaj warunek, aby ją zawęzić.",
+        "add": "Dodaj warunek",
+        "counts": "Warunki: {conditions} z {max}",
+        "loading": "Wczytywanie pól…",
+        "partial": "Nie udało się wczytać niektórych pól. Nadal możesz tworzyć reguły z polami, które się wczytały."
+      },
+      "group": {
+        "company": "Pola firmy",
+        "deal": "Pola: {Deal}"
+      },
+      "assign": {
+        "title": "Przypisz do",
+        "method": "Metoda",
+        "people": "Osoby",
+        "person": "Osoba",
+        "peoplePlaceholder": "Wybierz osoby",
+        "personPlaceholder": "Wybierz osobę",
+        "teams": "Zespoły",
+        "teamsPlaceholder": "Wybierz zespoły",
+        "teamsNote": "Zespół to tutaj pula osób do wyboru. Rekord nie należy do zespołu: jego opiekunem jest jeden z członków zespołu.",
+        "noPeople": "Brak pasujących osób.",
+        "removePerson": "Usuń: {name}",
+        "onLeave": "na urlopie",
+        "skipOffline": "Pomijaj osoby offline",
+        "skipOfflineHint": "Osoby na urlopie są zawsze pomijane.",
+        "reassign": "Przypisz ponownie, gdy aktualizacja sprawi, że ta reguła zacznie pasować",
+        "reassignHint": "Dotyczy tylko rekordów przypisanych wcześniej przez ten silnik i tylko dopóki nikt nie zmienił opiekuna. Domyślnie wyłączone: rekord jest przypisywany raz."
+      },
+      "problems": {
+        "name": "Nadaj regule nazwę.",
+        "people": "Wybierz co najmniej jedną osobę lub zespół.",
+        "fixedOne": "Reguła konkretnego użytkownika wymaga dokładnie jednej osoby i żadnych zespołów.",
+        "conditions": "Przed zapisaniem popraw wyróżnione warunki.",
+        "server": "Serwer odrzucił reguły."
+      },
+      "saveActivate": "Zapisz i aktywuj",
+      "savePaused": "Zapisz jako wstrzymaną",
+      "save": "Zapisz zmiany",
+      "cancel": "Anuluj",
+      "unsavedTitle": "Wyjść bez zapisywania?",
+      "unsavedMessage": "Twoje zmiany w tej regule nie zostały zapisane.",
+      "stay": "Kontynuuj edycję",
+      "leave": "Wyjdź"
+    },
+    "fields": {
+      "origin": "Źródło wejścia",
+      "company": {
+        "name": "Nazwa",
+        "email": "E-mail",
+        "phone": "Telefon",
+        "domain": "Domena strony internetowej",
+        "industry": "Branża",
+        "sizeRange": "Wielkość",
+        "address": "Adres",
+        "status": "Status",
+        "createdAt": "Utworzono",
+        "updatedAt": "Ostatnia aktualizacja"
+      },
+      "deal": {
+        "title": "Tytuł",
+        "value": "Wartość",
+        "currency": "Waluta",
+        "pipeline": "Pipeline",
+        "stage": "Etap",
+        "status": "Status",
+        "source": "Źródło",
+        "expectedCloseDate": "Oczekiwana data zamknięcia",
+        "createdAt": "Utworzono",
+        "hasContact": "Ma rekord ({contact})",
+        "hasCompany": "Ma firmę"
+      },
+      "dealStatus": {
+        "open": "Otwarta",
+        "won": "Wygrana",
+        "lost": "Przegrana"
+      }
+    },
+    "origin": {
+      "manual": "Dodane przez osobę",
+      "import": "Import",
+      "inbound": "Pierwsza wiadomość",
+      "form": "Formularz",
+      "lead": "Źródło leada",
+      "api": "API"
+    },
+    "test": {
+      "title": "Testuj na rekordzie",
+      "hint": "Wybierz prawdziwy rekord i zobacz, która reguła by go przejęła i kto by go dostał. Nic nie jest zmieniane, a test działa także przy wyłączonym przełączniku.",
+      "search": {
+        "contact": "Szukaj ({contacts}) po nazwie, e-mailu lub telefonie",
+        "company": "Szukaj firm po nazwie",
+        "deal": "Szukaj ({deals}) po tytule"
+      },
+      "searchLabel": "Rekord do testu",
+      "searching": "Szukanie…",
+      "noMatches": "Nie znaleziono rekordu.",
+      "searchFailed": "Wyszukiwanie nie powiodło się. Możesz nie mieć uprawnień do tych rekordów.",
+      "clear": "Wybierz inny rekord",
+      "run": "Testuj",
+      "running": "Testowanie…",
+      "failed": "Test się nie uruchomił. Spróbuj ponownie.",
+      "off": "Przypisywanie rekordów jest wyłączone, więc to pokazuje, co by się stało po jego włączeniu.",
+      "outcome": {
+        "would_assign": "{record} trafiłby do: {owner} przez regułę {rule}.",
+        "disabled": "Przypisywanie rekordów jest wyłączone dla tego obszaru roboczego, więc nic by się nie stało.",
+        "has_owner": "{record} ma już opiekuna, więc żadna reguła by się nie uruchomiła. Opiekun ustawiony przez osobę nigdy nie jest zastępowany.",
+        "no_rule": "Żadna aktywna reguła nie pasuje do: {record}.",
+        "nobody_available": "Reguła pasuje do: {record}, ale wszyscy wskazani w niej są na urlopie, offline lub już ich tu nie ma.",
+        "plan": "Twój plan nie obejmuje reguł przypisywania rekordów.",
+        "not_found": "Nie znaleziono tego rekordu. Mógł zostać usunięty lub jest poza tym, co możesz zobaczyć."
+      },
+      "traceTitle": "Sprawdzone reguły, w kolejności",
+      "traceEmpty": "Nie sprawdzono żadnych aktywnych reguł.",
+      "trace": {
+        "winner": "Pasuje i przejmuje rekord",
+        "matched": "Pasuje",
+        "not_matched": "Nie pasuje",
+        "nobody": "Pasuje, ale nikt nie był dostępny",
+        "broken": "Ma uszkodzony warunek"
+      },
+      "skipped": "Pominięto, bo nikt nie był dostępny: {names}"
+    },
+    "log": {
+      "title": "Dziennik uruchomień",
+      "intro": "Co silnik zrobił z każdym rekordem, od najnowszych. Wpisy są przechowywane przez {days} dni i zawierają tylko identyfikatory, nigdy treść rekordu.",
+      "filterOutcome": "Wynik",
+      "filterRule": "Reguła",
+      "allOutcomes": "Wszystkie wyniki",
+      "allRules": "Wszystkie reguły",
+      "loading": "Wczytywanie dziennika uruchomień…",
+      "loadFailed": "Nie udało się wczytać dziennika uruchomień.",
+      "empty": "Nic jeszcze nie zostało przypisane.",
+      "emptyFiltered": "Żadne wpisy nie pasują do tych filtrów.",
+      "loadMore": "Wczytaj więcej",
+      "col": {
+        "when": "Kiedy",
+        "record": "Rekord",
+        "outcome": "Wynik",
+        "reason": "Powód",
+        "rule": "Reguła",
+        "assignedTo": "Przypisano do",
+        "method": "Metoda",
+        "arrived": "Źródło wejścia"
+      },
+      "deletedRecord": "Usunięta",
+      "noRule": "Brak reguły",
+      "outcome": {
+        "assigned": "Przypisano",
+        "reassigned": "Przypisano ponownie",
+        "skipped": "Pozostawiono bez zmian"
+      },
+      "reason": {
+        "matched": "Reguła pasowała",
+        "has_owner": "Miał już opiekuna",
+        "no_rule": "Żadna reguła nie pasowała",
+        "nobody_available": "Nikt nie był dostępny",
+        "raced": "Opiekun zmienił się w trakcie przypisywania",
+        "unchanged": "Jest już przy właściwej regule"
+      },
+      "trigger": {
+        "created": "Nowy rekord",
+        "updated": "Zaktualizowany rekord"
+      },
+      "showTrace": "Pokaż, jak podjęto decyzję",
+      "hideTrace": "Ukryj, jak podjęto decyzję",
+      "traceFor": "Jak podjęto decyzję dla: {record}"
+    },
+    "toast": {
+      "created": "Utworzono regułę.",
+      "saved": "Zapisano regułę.",
+      "deleted": "Usunięto regułę.",
+      "cloned": "Skopiowano regułę. Kopia jest wstrzymana.",
+      "activated": "Aktywowano regułę.",
+      "paused": "Wstrzymano regułę.",
+      "reordered": "Zapisano kolejność.",
+      "conflict": "Ktoś inny zmienił tę regułę. Wczytano najnowszą wersję. Sprawdź ją i zastosuj swoją zmianę ponownie.",
+      "failed": "Coś poszło nie tak. Spróbuj ponownie."
+    },
+    "delete": {
+      "title": "Usunąć tę regułę?",
+      "message": "Reguła {name} przestanie przypisywać. Rekordy, które już przypisała, zachowają opiekuna.",
+      "confirm": "Usuń",
+      "cancel": "Anuluj"
+    }
+  }
+}

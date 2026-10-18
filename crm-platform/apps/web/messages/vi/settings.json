@@ -355,11 +355,6 @@
         "description": "Xem từng nhân viên phản hồi và giải quyết nhanh thế nào hôm nay, tuần này hoặc tháng này.",
         "keywords": "báo cáo, phân tích, nhân viên, thời gian phản hồi, phản hồi đầu tiên, đã giải quyết, khối lượng, hiệu suất"
       },
-      "contact-assignment": {
-        "label": "Phân công liên hệ",
-        "description": "Tự động giao liên hệ và deal mới cho đúng người, bỏ qua những người đang nghỉ phép.",
-        "keywords": "phân công, người phụ trách, xoay vòng, liên hệ mới, deal mới, nghỉ phép, định tuyến lead"
-      },
       "privacy-requests": {
         "label": "Yêu cầu dữ liệu",
         "description": "Trả lời những người hỏi bạn đang giữ gì về họ: kiểm tra danh tính, xuất, xóa có xem trước và bằng chứng bạn có thể lưu giữ.",
@@ -379,6 +374,11 @@
         "label": "Khách hàng tiềm năng chưa liên hệ",
         "description": "Chọn hành động nào được tính là đã liên hệ với khách hàng tiềm năng, và liên hệ mới nào bắt đầu ở trạng thái chưa liên hệ.",
         "keywords": "chưa liên hệ, đã liên hệ, khách hàng tiềm năng, khách hàng tiềm năng mới, liên hệ đầu tiên, theo dõi, giao lại, dấu đánh dấu"
+      },
+      "record-assignment": {
+        "label": "Quy tắc phân công bản ghi",
+        "description": "Tự động giao liên hệ, công ty và giao dịch mới cho người phụ trách bán hàng của bạn theo các quy tắc ưu tiên.",
+        "keywords": "phân công, người phụ trách, xoay vòng, liên hệ mới, giao dịch mới, công ty, nghỉ phép, điều phối khách hàng tiềm năng, khối lượng công việc, khu vực"
       }
     },
     "backToMarketplace": "Quay lại Marketplace"

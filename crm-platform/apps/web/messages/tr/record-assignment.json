@@ -1,0 +1,301 @@
+{
+  "record-assignment": {
+    "back": "Otomasyon",
+    "title": "Kayıt atama kuralları",
+    "intro": "Yeni {contacts}, şirketleri ve {deals} otomatik olarak doğru satış sahibine atayın.",
+    "crossNote": "Bu özellik {contacts}, şirketleri ve {deals} atar. Konuşmaları temsilcilere atamak için <link>Otomatik atama</link> sayfasına bakın.",
+    "master": {
+      "title": "Kayıt atamayı aç",
+      "hint": "Siz açana kadar kapalıdır. Açıldığında aşağıdaki kurallar, sahibi olmayan yeni bir {contact}, şirket veya {deal} kaydını ekibinizden birine atar.",
+      "on": "Kayıt atama açık.",
+      "off": "Kayıt atama kapalı."
+    },
+    "imports": {
+      "title": "İçe aktarılan kayıtları da ata",
+      "hint": "Büyük bir içe aktarma kimin neye sahip olduğunu değiştirmesin diye varsayılan olarak kapalıdır."
+    },
+    "ownerRule": {
+      "title": "Yalnızca sahibi olmayan kayıtlar atanır",
+      "body": "Bir kişinin belirlediği sahip hiçbir zaman değiştirilmez; bilerek kaldırılan sahip de değiştirilmez. Motor, yeni bir kayıtta boş olan sahibi doldurur. Bir kural için Güncellemede yeniden ata seçeneğini açarsanız, sahibi o ana kadar kimse tarafından değiştirilmediyse, motorun daha önce kendisinin atadığı bir kaydı da taşıyabilir."
+    },
+    "tabs": {
+      "contact": "{Contacts}",
+      "company": "{Companies}",
+      "deal": "{Deals}",
+      "label": "Modül"
+    },
+    "views": {
+      "rules": "Kurallar",
+      "log": "Çalıştırma günlüğü"
+    },
+    "how": {
+      "title": "Öncelik nasıl çalışır",
+      "p1": "Kurallar 1. öncelikten başlayarak denenir. Eşleşen ve uygun birini bulan ilk kural kaydı alır.",
+      "p2": "Yalnızca etkin kurallara öncelik verilir. Duraklatılmış bir kural listedeki yerini korur ama hiç çalışmaz.",
+      "p3": "Koşulu olmayan bir kural her kayıtla eşleşir ve listede nerede olursa olsun diğer tüm kurallardan sonra çalışır. Bu, yedek kuraldır.",
+      "p4": "Birden çok kuralla eşleşen kayıt, önceliği en yüksek olan kurala gider.",
+      "p5": "Sırayı değiştirmek için bir satırı sürükleyin veya ok düğmelerini kullanın. Yedek kurallar ve duraklatılmış kurallar en altta kendi gruplarında kalır."
+    },
+    "list": {
+      "title": {
+        "contact": "{contacts} kuralları",
+        "company": "Şirket kuralları",
+        "deal": "{deals} kuralları"
+      },
+      "create": "Kural oluştur",
+      "loading": "Kurallar yükleniyor…",
+      "loadFailed": "Kurallar yüklenemedi.",
+      "retry": "Tekrar dene",
+      "readOnly": "Bu kuralları görebilirsiniz ama değiştiremezsiniz. Değiştirmek için kayıt atamayı yönetme izni gerekir.",
+      "empty": {
+        "title": "Henüz kural yok",
+        "contact": "Yeni {contacts}, oluşturuldukları sahiple kalır.",
+        "company": "Yeni şirketler, oluşturuldukları sahiple kalır.",
+        "deal": "Yeni {deals}, oluşturuldukları sahiple kalır.",
+        "create": "İlk kuralı oluştur"
+      },
+      "col": {
+        "priority": "Öncelik",
+        "rule": "Kural",
+        "assignTo": "Atanacak kişi",
+        "method": "Yöntem",
+        "active": "Etkin",
+        "used": "Kullanım",
+        "modified": "Son değiştirilme"
+      },
+      "fallback": "Yedek",
+      "fallbackHint": "Koşulu olmayan bir kural her kayıtla eşleşir ve diğer tüm kurallardan sonra çalışır.",
+      "notPrioritised": "Duraklatıldı",
+      "noConditions": "Koşul yok: her kayıtla eşleşir",
+      "brokenConditions": "{count, plural, one {# bozuk koşul} other {# bozuk koşul}}",
+      "brokenHint": "Bir koşul silinmiş bir öğeye işaret ediyor. Siz düzeltene kadar hiçbir şeyle eşleşmez.",
+      "usedCount": "{count, plural, =0 {Hiç kullanılmadı} one {# kez kullanıldı} other {# kez kullanıldı}}",
+      "lastUsed": "Son kullanım: {when}",
+      "modifiedBy": "{name}, {when}",
+      "nobody": "Kimse",
+      "unknownPerson": "Eski üye",
+      "unknownTeam": "Kaldırılan ekip",
+      "teamName": "Ekip: {name}",
+      "skipsOffline": "Çevrimdışı kişileri atlar",
+      "reassigns": "Güncellemede yeniden atar",
+      "activeFor": "{name} kuralı etkin",
+      "dragHandle": "Önceliğini değiştirmek için {name} kuralını sürükleyin",
+      "moveUp": "{name} kuralını yukarı taşı",
+      "moveDown": "{name} kuralını aşağı taşı",
+      "moved": "{name} kuralı {place}. sıraya taşındı.",
+      "actions": "{name} için eylemler",
+      "edit": "Düzenle",
+      "clone": "Kopyala",
+      "delete": "Sil"
+    },
+    "strategy": {
+      "round_robin": "Döngüsel dağıtım (round robin)",
+      "least_busy": "En az açık iş yükü",
+      "fixed": "Belirli kullanıcı",
+      "hint": {
+        "round_robin": "Kişiler arasında sabit bir sırayla nöbetleşe atar.",
+        "least_busy": {
+          "contact": "Şu anda en az {contacts} sahibi olan kişiye verir.",
+          "company": "Şu anda en az şirkete sahip olan kişiye verir.",
+          "deal": "Şu anda en az açık {deals} sahibi olan kişiye verir."
+        },
+        "fixed": "Her zaman aynı kişi. İzindeyken vekili devralır."
+      }
+    },
+    "editor": {
+      "titleNew": "Yeni kural",
+      "titleEdit": "Kuralı düzenle",
+      "name": "Kural adı",
+      "description": "Açıklama (isteğe bağlı)",
+      "module": "Modül",
+      "moduleLocked": "Bir kuralın modülü değiştirilemez. Başka bir modül için yeni bir kural oluşturun.",
+      "conditions": {
+        "title": "Koşullar",
+        "hint": "Bir kaydın alanları koşulları karşıladığında kayıt eşleşir. Bir alan seçin, sonra nasıl karşılaştırılacağını, sonra bir değer seçin.",
+        "emptyTitle": "Koşul yok: her kayıtla eşleşir, en son çalışır (yedek)",
+        "emptyBody": "Bu kural, başka hiçbir kuralın almadığı her kaydı alır. Daraltmak için bir koşul ekleyin.",
+        "add": "Koşul ekle",
+        "counts": "{conditions} / {max} koşul",
+        "loading": "Alanlar yükleniyor…",
+        "partial": "Bazı alanlar yüklenemedi. Yüklenenlerle yine de kural oluşturabilirsiniz."
+      },
+      "group": {
+        "company": "Şirket alanları",
+        "deal": "{Deal} alanları"
+      },
+      "assign": {
+        "title": "Atanacak kişi",
+        "method": "Yöntem",
+        "people": "Kişiler",
+        "person": "Kişi",
+        "peoplePlaceholder": "Kişileri seçin",
+        "personPlaceholder": "Bir kişi seçin",
+        "teams": "Ekipler",
+        "teamsPlaceholder": "Ekipleri seçin",
+        "teamsNote": "Burada ekip, aralarından seçim yapılacak bir kişi havuzudur. Bir kayıt ekibe ait değildir: sahibi ekibin üyelerinden biridir.",
+        "noPeople": "Eşleşen kişi yok.",
+        "removePerson": "{name} kişisini kaldır",
+        "onLeave": "izinde",
+        "skipOffline": "Çevrimdışı kişileri atla",
+        "skipOfflineHint": "İzindeki kişiler her zaman atlanır.",
+        "reassign": "Bir güncelleme bu kuralla eşleşmeyi başlattığında yeniden ata",
+        "reassignHint": "Yalnızca bu motorun kendisinin atadığı kayıtlar için ve yalnızca sahibi o zamandan beri kimse tarafından değiştirilmemişse geçerlidir. Varsayılan olarak kapalıdır: bir kayıt yalnızca bir kez atanır."
+      },
+      "problems": {
+        "name": "Kurala bir ad verin.",
+        "people": "En az bir kişi veya ekip seçin.",
+        "fixedOne": "Belirli kullanıcı kuralı tam olarak bir kişi gerektirir ve ekip içeremez.",
+        "conditions": "Kaydetmeden önce vurgulanan koşulları düzeltin.",
+        "server": "Sunucu kuralları reddetti."
+      },
+      "saveActivate": "Kaydet ve etkinleştir",
+      "savePaused": "Duraklatılmış olarak kaydet",
+      "save": "Değişiklikleri kaydet",
+      "cancel": "İptal",
+      "unsavedTitle": "Kaydetmeden çıkılsın mı?",
+      "unsavedMessage": "Bu kurala yaptığınız değişiklikler kaydedilmedi.",
+      "stay": "Düzenlemeye devam et",
+      "leave": "Çık"
+    },
+    "fields": {
+      "origin": "Geliş kaynağı",
+      "company": {
+        "name": "Ad",
+        "email": "E-posta",
+        "phone": "Telefon",
+        "domain": "Web sitesi alan adı",
+        "industry": "Sektör",
+        "sizeRange": "Büyüklük",
+        "address": "Adres",
+        "status": "Durum",
+        "createdAt": "Oluşturulma",
+        "updatedAt": "Son güncelleme"
+      },
+      "deal": {
+        "title": "Başlık",
+        "value": "Değer",
+        "currency": "Para birimi",
+        "pipeline": "Satış hattı (pipeline)",
+        "stage": "Aşama",
+        "status": "Durum",
+        "source": "Kaynak",
+        "expectedCloseDate": "Beklenen kapanış tarihi",
+        "createdAt": "Oluşturulma",
+        "hasContact": "Bir {contact} var",
+        "hasCompany": "Bir şirket var"
+      },
+      "dealStatus": {
+        "open": "Açık",
+        "won": "Kazanıldı",
+        "lost": "Kaybedildi"
+      }
+    },
+    "origin": {
+      "manual": "Bir kişi tarafından eklendi",
+      "import": "İçe aktarma",
+      "inbound": "İlk mesaj",
+      "form": "Form",
+      "lead": "Potansiyel müşteri kaynağı",
+      "api": "API"
+    },
+    "test": {
+      "title": "Bir kayıtla test et",
+      "hint": "Gerçek bir kayıt seçin ve hangi kuralın onu alacağını ve kime atanacağını görün. Hiçbir şey değişmez ve anahtar kapalıyken de çalışır.",
+      "search": {
+        "contact": "{contacts} içinde ad, e-posta veya telefona göre ara",
+        "company": "Şirketleri ada göre ara",
+        "deal": "{deals} içinde başlığa göre ara"
+      },
+      "searchLabel": "Test edilecek kayıt",
+      "searching": "Aranıyor…",
+      "noMatches": "Kayıt bulunamadı.",
+      "searchFailed": "Arama çalışmadı. Bu kayıtları görme izniniz olmayabilir.",
+      "clear": "Başka bir kayıt seç",
+      "run": "Test et",
+      "running": "Test ediliyor…",
+      "failed": "Test çalışmadı. Tekrar deneyin.",
+      "off": "Kayıt atama kapalı, bu yüzden burada açık olsaydı ne olacağı gösterilir.",
+      "outcome": {
+        "would_assign": "{record}, {rule} kuralı aracılığıyla {owner} kişisine atanır.",
+        "disabled": "Kayıt atama bu çalışma alanı için kapalı, bu yüzden hiçbir şey olmaz.",
+        "has_owner": "{record} zaten bir sahibe sahip, bu yüzden hiçbir kural çalışmaz. Bir kişinin belirlediği sahip hiçbir zaman değiştirilmez.",
+        "no_rule": "{record} ile eşleşen etkin kural yok.",
+        "nobody_available": "Bir kural {record} ile eşleşiyor ama adı geçen herkes izinde, çevrimdışı veya artık burada değil.",
+        "plan": "Planınız kayıt atama kurallarını içermiyor.",
+        "not_found": "Bu kayıt bulunamadı. Silinmiş olabilir veya görebildiklerinizin dışında olabilir."
+      },
+      "traceTitle": "Denenen kurallar, sırasıyla",
+      "traceEmpty": "Hiçbir etkin kural denenmedi.",
+      "trace": {
+        "winner": "Eşleşti ve kaydı alıyor",
+        "matched": "Eşleşti",
+        "not_matched": "Eşleşmedi",
+        "nobody": "Eşleşti ama uygun kimse yoktu",
+        "broken": "Bozuk bir koşulu var"
+      },
+      "skipped": "Uygun kimse olmadığı için atlandı: {names}"
+    },
+    "log": {
+      "title": "Çalıştırma günlüğü",
+      "intro": "Motorun her kayıtla ne yaptığı, en yeniden başlayarak. Girdiler {days} gün saklanır ve yalnızca kimlikleri içerir, kaydın içeriğini asla içermez.",
+      "filterOutcome": "Sonuç",
+      "filterRule": "Kural",
+      "allOutcomes": "Tüm sonuçlar",
+      "allRules": "Tüm kurallar",
+      "loading": "Çalıştırma günlüğü yükleniyor…",
+      "loadFailed": "Çalıştırma günlüğü yüklenemedi.",
+      "empty": "Henüz hiçbir şey atanmadı.",
+      "emptyFiltered": "Bu filtrelerle eşleşen girdi yok.",
+      "loadMore": "Daha fazla yükle",
+      "col": {
+        "when": "Zaman",
+        "record": "Kayıt",
+        "outcome": "Sonuç",
+        "reason": "Neden",
+        "rule": "Kural",
+        "assignedTo": "Atanan kişi",
+        "method": "Yöntem",
+        "arrived": "Geliş kaynağı"
+      },
+      "deletedRecord": "Silindi",
+      "noRule": "Kural yok",
+      "outcome": {
+        "assigned": "Atandı",
+        "reassigned": "Yeniden atandı",
+        "skipped": "Dokunulmadı"
+      },
+      "reason": {
+        "matched": "Bir kural eşleşti",
+        "has_owner": "Zaten bir sahibi vardı",
+        "no_rule": "Hiçbir kural eşleşmedi",
+        "nobody_available": "Uygun kimse yoktu",
+        "raced": "Atama sırasında sahip değişti",
+        "unchanged": "Zaten doğru kuralda"
+      },
+      "trigger": {
+        "created": "Yeni kayıt",
+        "updated": "Güncellenen kayıt"
+      },
+      "showTrace": "Nasıl karar verildiğini göster",
+      "hideTrace": "Nasıl karar verildiğini gizle",
+      "traceFor": "{record} için nasıl karar verildi"
+    },
+    "toast": {
+      "created": "Kural oluşturuldu.",
+      "saved": "Kural kaydedildi.",
+      "deleted": "Kural silindi.",
+      "cloned": "Kural kopyalandı. Kopya duraklatılmış durumda.",
+      "activated": "Kural etkinleştirildi.",
+      "paused": "Kural duraklatıldı.",
+      "reordered": "Sıra kaydedildi.",
+      "conflict": "Bu kuralı başka biri değiştirdi. En son sürüm yüklendi. Kontrol edin ve değişikliğinizi yeniden uygulayın.",
+      "failed": "Bir şeyler ters gitti. Tekrar deneyin."
+    },
+    "delete": {
+      "title": "Bu kural silinsin mi?",
+      "message": "{name} kuralı atama yapmayı bırakacak. Daha önce atadığı kayıtlar sahiplerini korur.",
+      "confirm": "Sil",
+      "cancel": "İptal"
+    }
+  }
+}

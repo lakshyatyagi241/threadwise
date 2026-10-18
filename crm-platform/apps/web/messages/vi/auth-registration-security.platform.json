@@ -1441,7 +1441,8 @@
             "email_channel": "Kết nối hộp thư Gmail và Google Workspace với hộp thư đến của nhóm. Ứng dụng Email trả phí điều khiển công tắc này.",
             "personal_history_full": "Cho phép số WhatsApp cá nhân nhập toàn bộ lịch sử trò chuyện khi liên kết lần đầu. Tính năng nhập các cuộc trò chuyện gần đây có sẵn cho mọi gói có số cá nhân.",
             "ai_crm_copilot": "Tìm và chấm điểm khách hàng tiềm năng bằng AI từ danh bạ của bạn.",
-            "lead_scoring": "Chấm điểm liên hệ bằng AI và vận hành chương trình thử nghiệm tăng trưởng. Ứng dụng Chấm điểm khách hàng tiềm năng bằng AI quản lý công tắc này."
+            "lead_scoring": "Chấm điểm liên hệ bằng AI và vận hành chương trình thử nghiệm tăng trưởng. Ứng dụng Chấm điểm khách hàng tiềm năng bằng AI quản lý công tắc này.",
+            "record_assignment": "Giao liên hệ, công ty và giao dịch mới cho đúng người phụ trách bán hàng theo các quy tắc ưu tiên."
           },
           "units": {
             "days": "Ngày",
@@ -1629,7 +1630,8 @@
             "email_channel": "Kênh email (Gmail)",
             "personal_history_full": "Nhập toàn bộ lịch sử trò chuyện (WhatsApp cá nhân)",
             "ai_crm_copilot": "AI CRM Copilot",
-            "lead_scoring": "Chấm điểm khách hàng tiềm năng bằng AI"
+            "lead_scoring": "Chấm điểm khách hàng tiềm năng bằng AI",
+            "record_assignment": "Quy tắc phân công bản ghi (tự động phân công liên hệ, công ty và giao dịch)"
           },
           "problems": {
             "required": "Trường này là bắt buộc.",

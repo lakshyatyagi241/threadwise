@@ -1441,7 +1441,8 @@
             "email_channel": "Gmail ve Google Workspace posta kutularını ekip gelen kutusuna bağlayın. Bu anahtarı ücretli E-posta uygulaması yönetir.",
             "personal_history_full": "Kişisel bir WhatsApp numarasının ilk bağlanışta tüm sohbet geçmişini içe aktarmasını sağlar. Son sohbetlerin içe aktarılması, kişisel numara içeren tüm planlarda kullanılabilir.",
             "ai_crm_copilot": "Kişilerinizden yapay zekâyla potansiyel müşterileri bulur ve puanlar.",
-            "lead_scoring": "Kişileri yapay zekayla puanlar ve büyüme pilotunu çalıştırır. Bu anahtarın sahibi Yapay zeka ile potansiyel müşteri puanlama uygulamasıdır."
+            "lead_scoring": "Kişileri yapay zekayla puanlar ve büyüme pilotunu çalıştırır. Bu anahtarın sahibi Yapay zeka ile potansiyel müşteri puanlama uygulamasıdır.",
+            "record_assignment": "Yeni kişileri, şirketleri ve fırsatları öncelik kurallarına göre doğru satış sahibine atar."
           },
           "units": {
             "days": "Gün",
@@ -1629,7 +1630,8 @@
             "email_channel": "E-posta (Gmail) kanalı",
             "personal_history_full": "Tam sohbet geçmişini içe aktarma (kişisel WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
-            "lead_scoring": "Yapay zeka ile potansiyel müşteri puanlama"
+            "lead_scoring": "Yapay zeka ile potansiyel müşteri puanlama",
+            "record_assignment": "Kayıt atama kuralları (kişileri, şirketleri ve fırsatları otomatik atayın)"
           },
           "problems": {
             "required": "Bu alan zorunludur.",

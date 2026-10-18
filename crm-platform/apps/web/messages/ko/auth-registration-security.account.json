@@ -560,7 +560,8 @@
             "email_channel": "이메일(Gmail) 채널",
             "personal_history_full": "전체 기록 가져오기 (개인 WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
-            "lead_scoring": "AI 리드 스코어링"
+            "lead_scoring": "AI 리드 스코어링",
+            "record_assignment": "레코드 배정 규칙"
           },
           "cta": {
             "continueFree": "무료로 계속",

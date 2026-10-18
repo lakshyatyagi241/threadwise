@@ -339,11 +339,6 @@
         "description": "Zie hoe snel elke agent vandaag, deze week of deze maand reageerde en oploste.",
         "keywords": "rapporten, analyses, agenten, reactietijd, eerste antwoord, opgelost, werkdruk, prestaties"
       },
-      "contact-assignment": {
-        "label": "Contacttoewijzing",
-        "description": "Geef nieuwe contacten en deals automatisch aan de juiste persoon, en sla mensen met verlof over.",
-        "keywords": "toewijzen, eigenaar, round robin, nieuw contact, nieuwe deal, verlof, leadroutering"
-      },
       "privacy-requests": {
         "label": "Gegevensverzoeken",
         "description": "Beantwoord mensen die vragen wat je van hen bewaart: identiteitscontrole, export, wissen met voorvertoning en een bewijs dat je kunt bewaren.",
@@ -363,6 +358,11 @@
         "label": "Niet-benaderde leads",
         "description": "Kies welke acties tellen als het benaderen van een lead en welke nieuwe contacten als niet benaderd beginnen.",
         "keywords": "niet benaderd, benaderd, lead, nieuwe lead, eerste contact, opvolgen, opnieuw toewijzen, markering"
+      },
+      "record-assignment": {
+        "label": "Regels voor recordtoewijzing",
+        "description": "Wijs nieuwe contacten, bedrijven en deals automatisch toe aan uw verkoopeigenaren, via prioriteitsregels.",
+        "keywords": "toewijzen, eigenaar, round robin, nieuw contact, nieuwe deal, bedrijf, verlof, leadroutering, werkdruk, territorium"
       }
     },
     "title": "Instellingen",
