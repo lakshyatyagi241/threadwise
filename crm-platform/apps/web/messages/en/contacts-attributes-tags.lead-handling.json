@@ -2,7 +2,10 @@
   "contacts-attributes-tags": {
     "views": {
       "presets": {
-        "uncontacted": "Uncontacted"
+        "uncontacted": "Uncontacted",
+        "followUpToday": "Follow-up today",
+        "followUpOverdue": "Follow-up overdue",
+        "followUpSomeday": "Someday follow-ups"
       }
     },
     "leadHandling": {
@@ -58,8 +61,77 @@
             "keep": "Don't change the Uncontacted marker",
             "mark": "Mark as uncontacted when reassigned"
           }
+        },
+        "followUps": {
+          "title": "Follow-ups",
+          "subtitle": "Keep every lead moving: when a team member gets in touch with a person, their next follow-up can be set or moved for them. Nothing changes until you switch an option on.",
+          "when": {
+            "title": "Automatically set follow-ups",
+            "intro": "Whenever a team member contacts a person or sends them content, update their follow-up if:",
+            "none": "The contact has no follow-up",
+            "overdue": "The follow-up is overdue",
+            "today": "The follow-up is due today",
+            "future": "The follow-up is due later"
+          },
+          "date": {
+            "title": "Default follow-up date",
+            "intro": "When a follow-up is updated automatically, set it to:",
+            "day": "1 day later",
+            "three_days": "3 days later",
+            "week": "1 week later",
+            "month": "1 month later",
+            "custom": "Custom",
+            "someday": "Someday",
+            "none": "No follow-up",
+            "somedayHint": "The follow-up has no date and waits in the Someday list. It is never reminded.",
+            "noneHint": "The open follow-up is marked done and no new one is made.",
+            "customDays": "Number of days",
+            "daysLater": "days later"
+          },
+          "time": {
+            "title": "Default follow-up time",
+            "intro": "Whenever a new follow-up is created, set the alert time to:",
+            "hint": "Read on your workspace's time zone."
+          }
+        }
+      },
+      "followUp": {
+        "title": "Next follow-up",
+        "somedayLabel": "Someday",
+        "overdue": "Overdue",
+        "done": "Done",
+        "snooze": "Snooze",
+        "snoozeDay": "1 day",
+        "snoozeThreeDays": "3 days",
+        "snoozeWeek": "Next week",
+        "change": "Change date",
+        "set": "Set follow-up",
+        "edit": "Change follow-up",
+        "remove": "Remove follow-up",
+        "dialogTitle": "Follow-up",
+        "someday": "Someday (no date)",
+        "dateTime": "Date and time",
+        "cancel": "Cancel",
+        "save": "Save",
+        "savedFor": "Follow-up saved",
+        "savedSomeday": "Follow-up set to someday",
+        "snoozed": "Follow-up moved",
+        "doneMessage": "Follow-up marked as done",
+        "clearedMessage": "Follow-up removed",
+        "failed": "Could not change the follow-up. Try again.",
+        "filterLabel": "Follow-up",
+        "filter": {
+          "any": "Any",
+          "overdue": "Overdue",
+          "today": "Due today",
+          "upcoming": "Upcoming",
+          "someday": "Someday",
+          "none": "No follow-up"
         }
       }
+    },
+    "list": {
+      "colNextFollowUp": "Next follow-up"
     }
   }
 }

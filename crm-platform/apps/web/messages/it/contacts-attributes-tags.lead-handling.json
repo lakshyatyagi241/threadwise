@@ -2,7 +2,10 @@
   "contacts-attributes-tags": {
     "views": {
       "presets": {
-        "uncontacted": "Non contattati"
+        "uncontacted": "Non contattati",
+        "followUpToday": "Ricontatti di oggi",
+        "followUpOverdue": "Ricontatti scaduti",
+        "followUpSomeday": "Ricontatti senza data"
       }
     },
     "leadHandling": {
@@ -58,8 +61,77 @@
             "keep": "Non modificare il contrassegno Non contattato",
             "mark": "Segna come non contattato alla riassegnazione"
           }
+        },
+        "followUps": {
+          "title": "Ricontatti",
+          "subtitle": "Mantieni ogni lead in movimento: quando un membro del team contatta una persona, il suo prossimo ricontatto può essere impostato o spostato automaticamente. Non cambia nulla finché non attivi un'opzione.",
+          "when": {
+            "title": "Imposta i ricontatti automaticamente",
+            "intro": "Ogni volta che un membro del team contatta una persona o le invia un contenuto, aggiorna il ricontatto se:",
+            "none": "Il contatto non ha un ricontatto",
+            "overdue": "Il ricontatto è scaduto",
+            "today": "Il ricontatto è previsto per oggi",
+            "future": "Il ricontatto è previsto più avanti"
+          },
+          "date": {
+            "title": "Data predefinita del ricontatto",
+            "intro": "Quando un ricontatto viene aggiornato automaticamente, impostalo a:",
+            "day": "1 giorno dopo",
+            "three_days": "3 giorni dopo",
+            "week": "1 settimana dopo",
+            "month": "1 mese dopo",
+            "custom": "Personalizzato",
+            "someday": "Prima o poi",
+            "none": "Nessun ricontatto",
+            "somedayHint": "Il ricontatto non ha una data e resta nell'elenco «Prima o poi». Non viene mai notificato.",
+            "noneHint": "Il ricontatto aperto viene segnato come completato e non ne viene creato uno nuovo.",
+            "customDays": "Numero di giorni",
+            "daysLater": "giorni dopo"
+          },
+          "time": {
+            "title": "Ora predefinita del ricontatto",
+            "intro": "Ogni volta che viene creato un nuovo ricontatto, imposta l'orario di avviso a:",
+            "hint": "Basato sul fuso orario del tuo workspace."
+          }
+        }
+      },
+      "followUp": {
+        "title": "Prossimo ricontatto",
+        "somedayLabel": "Prima o poi",
+        "overdue": "Scaduto",
+        "done": "Fatto",
+        "snooze": "Posticipa",
+        "snoozeDay": "1 giorno",
+        "snoozeThreeDays": "3 giorni",
+        "snoozeWeek": "Prossima settimana",
+        "change": "Cambia data",
+        "set": "Imposta ricontatto",
+        "edit": "Modifica ricontatto",
+        "remove": "Rimuovi ricontatto",
+        "dialogTitle": "Ricontatto",
+        "someday": "Prima o poi (senza data)",
+        "dateTime": "Data e ora",
+        "cancel": "Annulla",
+        "save": "Salva",
+        "savedFor": "Ricontatto salvato",
+        "savedSomeday": "Ricontatto impostato su «prima o poi»",
+        "snoozed": "Ricontatto spostato",
+        "doneMessage": "Ricontatto segnato come completato",
+        "clearedMessage": "Ricontatto rimosso",
+        "failed": "Impossibile modificare il ricontatto. Riprova.",
+        "filterLabel": "Ricontatto",
+        "filter": {
+          "any": "Qualsiasi",
+          "overdue": "Scaduto",
+          "today": "In scadenza oggi",
+          "upcoming": "In arrivo",
+          "someday": "Prima o poi",
+          "none": "Nessun ricontatto"
         }
       }
+    },
+    "list": {
+      "colNextFollowUp": "Prossimo ricontatto"
     }
   }
 }

@@ -127,7 +127,8 @@
       "open": "Ouvrir",
       "edit": "Modifier",
       "delete": "Supprimer",
-      "unassigned": "Non assignée"
+      "unassigned": "Non assignée",
+      "followUpBadge": "Relance"
     },
     "bulk": {
       "label": "Actions pour les tâches sélectionnées",

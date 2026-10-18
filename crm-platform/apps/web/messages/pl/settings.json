@@ -379,6 +379,11 @@
         "label": "Potencjalni klienci bez kontaktu",
         "description": "Wybierz, które działania uznawane są za kontakt z potencjalnym klientem oraz które nowe kontakty zaczynają jako nieskontaktowane.",
         "keywords": "bez kontaktu, skontaktowany, potencjalny klient, nowy potencjalny klient, pierwszy kontakt, kontakt zwrotny, przypisanie, oznaczenie"
+      },
+      "follow-ups": {
+        "label": "Ponowne kontakty",
+        "description": "Automatycznie ustawiaj następny ponowny kontakt, gdy zespół odezwie się do kontaktu, i wybierz datę oraz godzinę przypomnienia.",
+        "keywords": "ponowny kontakt, przypomnienie, następne działanie, zadanie, harmonogram, odłożenie, kiedyś"
       }
     },
     "backToMarketplace": "Wróć do Marketplace"

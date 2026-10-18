@@ -2,7 +2,10 @@
   "contacts-attributes-tags": {
     "views": {
       "presets": {
-        "uncontacted": "Sin contactar"
+        "uncontacted": "Sin contactar",
+        "followUpToday": "Seguimiento hoy",
+        "followUpOverdue": "Seguimiento vencido",
+        "followUpSomeday": "Seguimientos sin fecha"
       }
     },
     "leadHandling": {
@@ -58,8 +61,77 @@
             "keep": "No cambiar la marca «Sin contactar»",
             "mark": "Marcar como sin contactar al reasignar"
           }
+        },
+        "followUps": {
+          "title": "Seguimientos",
+          "subtitle": "Mantén en marcha a cada cliente potencial: cuando alguien del equipo se pone en contacto con una persona, su próximo seguimiento puede fijarse o moverse automáticamente. No cambia nada hasta que actives una opción.",
+          "when": {
+            "title": "Fijar seguimientos automáticamente",
+            "intro": "Cada vez que un miembro del equipo contacta a una persona o le envía contenido, actualizar su seguimiento si:",
+            "none": "El contacto no tiene seguimiento",
+            "overdue": "El seguimiento está vencido",
+            "today": "El seguimiento vence hoy",
+            "future": "El seguimiento vence más adelante"
+          },
+          "date": {
+            "title": "Fecha de seguimiento predeterminada",
+            "intro": "Cuando un seguimiento se actualiza automáticamente, fijarlo para:",
+            "day": "Dentro de 1 día",
+            "three_days": "Dentro de 3 días",
+            "week": "Dentro de 1 semana",
+            "month": "Dentro de 1 mes",
+            "custom": "Personalizada",
+            "someday": "Algún día",
+            "none": "Sin seguimiento",
+            "somedayHint": "El seguimiento no tiene fecha y espera en la lista «Algún día». Nunca se recuerda.",
+            "noneHint": "El seguimiento abierto se marca como hecho y no se crea uno nuevo.",
+            "customDays": "Número de días",
+            "daysLater": "días después"
+          },
+          "time": {
+            "title": "Hora de seguimiento predeterminada",
+            "intro": "Cada vez que se crea un seguimiento nuevo, fijar la hora de alerta a las:",
+            "hint": "Se interpreta según la zona horaria de tu espacio de trabajo."
+          }
+        }
+      },
+      "followUp": {
+        "title": "Próximo seguimiento",
+        "somedayLabel": "Algún día",
+        "overdue": "Vencido",
+        "done": "Hecho",
+        "snooze": "Posponer",
+        "snoozeDay": "1 día",
+        "snoozeThreeDays": "3 días",
+        "snoozeWeek": "La próxima semana",
+        "change": "Cambiar fecha",
+        "set": "Fijar seguimiento",
+        "edit": "Cambiar seguimiento",
+        "remove": "Quitar seguimiento",
+        "dialogTitle": "Seguimiento",
+        "someday": "Algún día (sin fecha)",
+        "dateTime": "Fecha y hora",
+        "cancel": "Cancelar",
+        "save": "Guardar",
+        "savedFor": "Seguimiento guardado",
+        "savedSomeday": "Seguimiento fijado para algún día",
+        "snoozed": "Seguimiento movido",
+        "doneMessage": "Seguimiento marcado como hecho",
+        "clearedMessage": "Seguimiento eliminado",
+        "failed": "No se pudo cambiar el seguimiento. Inténtalo de nuevo.",
+        "filterLabel": "Seguimiento",
+        "filter": {
+          "any": "Cualquiera",
+          "overdue": "Vencidos",
+          "today": "Vencen hoy",
+          "upcoming": "Próximos",
+          "someday": "Algún día",
+          "none": "Sin seguimiento"
         }
       }
+    },
+    "list": {
+      "colNextFollowUp": "Próximo seguimiento"
     }
   }
 }

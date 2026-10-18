@@ -127,7 +127,8 @@
       "open": "Buka",
       "edit": "Edit",
       "delete": "Hapus",
-      "unassigned": "Belum ditetapkan"
+      "unassigned": "Belum ditetapkan",
+      "followUpBadge": "Tindak lanjut"
     },
     "bulk": {
       "label": "Tindakan untuk tugas yang dipilih",

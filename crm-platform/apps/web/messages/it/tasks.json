@@ -127,7 +127,8 @@
       "open": "Apri",
       "edit": "Modifica",
       "delete": "Elimina",
-      "unassigned": "Non assegnato"
+      "unassigned": "Non assegnato",
+      "followUpBadge": "Ricontatto"
     },
     "bulk": {
       "label": "Azioni per i task selezionati",

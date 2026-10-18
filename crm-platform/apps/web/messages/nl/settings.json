@@ -363,6 +363,11 @@
         "label": "Niet-benaderde leads",
         "description": "Kies welke acties tellen als het benaderen van een lead en welke nieuwe contacten als niet benaderd beginnen.",
         "keywords": "niet benaderd, benaderd, lead, nieuwe lead, eerste contact, opvolgen, opnieuw toewijzen, markering"
+      },
+      "follow-ups": {
+        "label": "Opvolgingen",
+        "description": "Stel de volgende opvolging van een contact automatisch in wanneer je team contact opneemt, en kies de datum en meldingstijd.",
+        "keywords": "opvolging, follow-up, herinnering, volgende actie, taak, plannen, uitstellen, ooit"
       }
     },
     "title": "Instellingen",

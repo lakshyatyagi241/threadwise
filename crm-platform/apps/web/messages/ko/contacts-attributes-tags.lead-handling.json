@@ -2,7 +2,10 @@
   "contacts-attributes-tags": {
     "views": {
       "presets": {
-        "uncontacted": "미연락"
+        "uncontacted": "미연락",
+        "followUpToday": "오늘 팔로업",
+        "followUpOverdue": "기한이 지난 팔로업",
+        "followUpSomeday": "날짜 미정 팔로업"
       }
     },
     "leadHandling": {
@@ -58,8 +61,77 @@
             "keep": "미연락 표시를 변경하지 않음",
             "mark": "재배정 시 미연락으로 표시"
           }
+        },
+        "followUps": {
+          "title": "팔로업",
+          "subtitle": "모든 잠재 고객이 멈추지 않도록, 팀원이 연락처에 연락하면 다음 팔로업이 자동으로 설정되거나 변경됩니다. 옵션을 켜기 전에는 아무것도 바뀌지 않습니다.",
+          "when": {
+            "title": "팔로업 자동 설정",
+            "intro": "팀원이 연락처에 연락하거나 콘텐츠를 보낼 때마다 다음 경우 팔로업을 업데이트합니다.",
+            "none": "연락처에 팔로업이 없음",
+            "overdue": "팔로업 기한이 지남",
+            "today": "팔로업이 오늘 예정됨",
+            "future": "팔로업이 이후에 예정됨"
+          },
+          "date": {
+            "title": "기본 팔로업 날짜",
+            "intro": "팔로업이 자동으로 업데이트될 때 다음으로 설정합니다.",
+            "day": "1일 후",
+            "three_days": "3일 후",
+            "week": "1주 후",
+            "month": "1개월 후",
+            "custom": "직접 설정",
+            "someday": "언젠가",
+            "none": "팔로업 없음",
+            "somedayHint": "팔로업에 날짜가 없으며 ‘언젠가’ 목록에서 대기합니다. 알림은 전송되지 않습니다.",
+            "noneHint": "진행 중인 팔로업은 완료 처리되고 새 팔로업은 만들어지지 않습니다.",
+            "customDays": "일수",
+            "daysLater": "일 후"
+          },
+          "time": {
+            "title": "기본 팔로업 시간",
+            "intro": "새 팔로업이 만들어질 때마다 알림 시간을 다음으로 설정합니다.",
+            "hint": "워크스페이스 시간대 기준입니다."
+          }
+        }
+      },
+      "followUp": {
+        "title": "다음 팔로업",
+        "somedayLabel": "언젠가",
+        "overdue": "기한 지남",
+        "done": "완료",
+        "snooze": "다시 알림",
+        "snoozeDay": "1일",
+        "snoozeThreeDays": "3일",
+        "snoozeWeek": "다음 주",
+        "change": "날짜 변경",
+        "set": "팔로업 설정",
+        "edit": "팔로업 변경",
+        "remove": "팔로업 삭제",
+        "dialogTitle": "팔로업",
+        "someday": "언젠가 (날짜 없음)",
+        "dateTime": "날짜 및 시간",
+        "cancel": "취소",
+        "save": "저장",
+        "savedFor": "팔로업이 저장되었습니다",
+        "savedSomeday": "팔로업이 ‘언젠가’로 설정되었습니다",
+        "snoozed": "팔로업이 미뤄졌습니다",
+        "doneMessage": "팔로업이 완료 처리되었습니다",
+        "clearedMessage": "팔로업이 삭제되었습니다",
+        "failed": "팔로업을 변경하지 못했습니다. 다시 시도해 주세요.",
+        "filterLabel": "팔로업",
+        "filter": {
+          "any": "전체",
+          "overdue": "기한 지남",
+          "today": "오늘 마감",
+          "upcoming": "예정",
+          "someday": "언젠가",
+          "none": "팔로업 없음"
         }
       }
+    },
+    "list": {
+      "colNextFollowUp": "다음 팔로업"
     }
   }
 }
