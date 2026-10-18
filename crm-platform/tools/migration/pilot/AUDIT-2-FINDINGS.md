@@ -41,3 +41,8 @@ or the app answers 404 for the copied keys. Rows already copied to S3 under `cha
 
 ### Content-less customer turns
 A customer turn with a typed query object but no text, file or reply payload (the 2 EMPTY_MESSAGE rows of the demo workspace) is now imported as an inbound placeholder "(message content not available)" with `meta.legacy.contentUnavailable = true` and a CONTENT_UNAVAILABLE soft issue; the independent check in `reconcile/oracle-chat.ts` follows the same rule. Re-run the chat step (append) to pick up already-quarantined turns; find the placeholders with `meta->'legacy'->>'contentUnavailable' = 'true'`.
+
+### Chat widget images (added)
+`copy-files` also copies Waboo-host images of `chatbot_widgets` (`button_image_url`, `body_bg_image_url`, `launcher.avatar`) to `widget-media/<org id>/waboo/...` in the media bucket and rewrites them to
+`<flowMediaPublicBase>/<object key>` (same config line as flows; visitors' browsers load these). `verify` counts widget links still on a Waboo host. Checked and needing no copy: broadcast
+(`custom_image/video/document` are not carried), templates (media stays with Meta), knowledge file sources (no bytes in the dump: quarantined NEEDS_REUPLOAD, re-upload in WaDesk), contacts (`image_url` null).
