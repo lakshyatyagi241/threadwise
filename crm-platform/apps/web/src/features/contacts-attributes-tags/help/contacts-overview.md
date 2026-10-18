@@ -57,6 +57,7 @@ Every contact can have one **owner**, the person who looks after it. A contact y
 - **Remove duplicates** merges contacts sharing a phone number into the oldest one. It cannot be undone.
 - **Save as segment** turns the current filters into a [segment](help:segments-overview).
 - The list and board buttons switch between the table and a board with one column per lifecycle stage. The refresh button reloads the list and the counts.
+- A contact can carry a quiet **Uncontacted** marker (a dot beside the name, a chip in its header): nobody on the team has reached out yet. The **Uncontacted** view and chip appear once any contact has it. Mark or unmark contacts from the **More** menu, and choose when it is set or cleared in [Uncontacted leads](help:uncontacted-leads).
 
 ## Tags: contact tags vs conversation tags
 
