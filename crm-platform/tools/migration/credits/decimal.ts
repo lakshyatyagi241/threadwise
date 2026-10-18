@@ -61,6 +61,9 @@ export function toMinor(plain: string): bigint {
   return neg ? -n : n;
 }
 
+/** Hundredths of a number, rounded half away from zero on its exact decimal text (a float product is wrong: 1.005 * 100 is 100.49999...). */
+export const centsOf = (n: number): bigint => toMinor(plainDecimal(n) ?? '0');
+
 /** Hundredths as `-123.45`. */
 export function minorText(m: bigint): string {
   const neg = m < 0n;

@@ -43,7 +43,7 @@ export function dateOf(v: unknown): Date | null {
     const t = v.trim();
     const d = /^\d{9,13}$/.test(t)
       ? new Date(Number(t) < 1e11 ? Number(t) * 1000 : Number(t))
-      : new Date(t);
+      : new Date(/^\d{4}-\d\d-\d\d[T ]\d\d:\d\d(:\d\d(\.\d+)?)?$/.test(t) ? `${t.replace(' ', 'T')}Z` : t);
     return Number.isNaN(d.getTime()) ? null : d;
   }
   return null;
