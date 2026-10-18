@@ -27,7 +27,8 @@
       "minor": "Gemarkeerd als minderjarig",
       "dateOfBirth": "Geboortedatum",
       "age": "Leeftijd (jaren)",
-      "timezone": "Tijdzone"
+      "timezone": "Tijdzone",
+      "uncontacted": "Niet benaderd"
     },
     "fieldGroups": {
       "journey": "Traject",

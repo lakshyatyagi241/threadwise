@@ -86,7 +86,6 @@ import { StorefrontProductsReader } from './storefront-reader';
     // CatalogsRepository: the worker's resync sweep (CatalogProductsWorkerModule) reads the catalogs directly.
     CatalogsRepository,
     StorefrontProductsReader,
-    // Products written by an outside list (the Sheets add-on) go through the form's own create and update.
     ProductsService,
     ProductsRepository,
     InventoryService,

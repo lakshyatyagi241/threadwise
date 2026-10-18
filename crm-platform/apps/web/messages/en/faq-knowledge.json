@@ -409,7 +409,14 @@
       "learned": "Added to \"{question}\". It will be answered from now on.",
       "pickTitle": "Add this message to which FAQ?",
       "loadMore": "Load more",
-      "loadingMore": "Loading"
+      "loadingMore": "Loading",
+      "fallback": {
+        "title": "When no FAQ answers",
+        "hint": "This reply goes to a customer whose message no FAQ answers. The message still appears below, so you can teach the FAQ.",
+        "placeholder": "Sorry, I did not get that. A team member will get back to you.",
+        "save": "Save fallback",
+        "saved": "Fallback message saved"
+      }
     },
     "picker": {
       "close": "Close",

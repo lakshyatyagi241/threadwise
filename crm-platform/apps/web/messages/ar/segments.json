@@ -27,7 +27,8 @@
       "minor": "مصنّف كقاصر",
       "dateOfBirth": "تاريخ الميلاد",
       "age": "العمر (بالسنوات)",
-      "timezone": "المنطقة الزمنية"
+      "timezone": "المنطقة الزمنية",
+      "uncontacted": "لم يتم التواصل"
     },
     "fieldGroups": {
       "journey": "الرحلة",

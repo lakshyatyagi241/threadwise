@@ -409,7 +409,14 @@
       "learned": "Ditambahkan ke “{question}”. Mulai sekarang akan dijawab.",
       "pickTitle": "Tambahkan pesan ini ke FAQ mana?",
       "loadMore": "Muat lainnya",
-      "loadingMore": "Memuat"
+      "loadingMore": "Memuat",
+      "fallback": {
+        "title": "Saat tidak ada FAQ yang menjawab",
+        "hint": "Balasan ini dikirim ke pelanggan yang pesannya tidak dijawab FAQ mana pun. Pesan tetap muncul di bawah agar Anda bisa melatih FAQ.",
+        "placeholder": "Maaf, saya tidak mengerti. Anggota tim akan menghubungi Anda.",
+        "save": "Simpan balasan cadangan",
+        "saved": "Balasan cadangan disimpan"
+      }
     },
     "picker": {
       "close": "Tutup",

@@ -4,7 +4,9 @@ import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFormatter, useTimeZone, useTranslations } from 'next-intl';
 import type { ContactMeetingResponse } from '@crm/contracts';
+import Link from 'next/link';
 import { Button, ConfirmDialog, Input, Select, Spinner, useToast } from '@crm/ui';
+import { AppointmentStatusChip } from '@/features/appointments';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import {
   MEETING_KEYS,
@@ -13,6 +15,7 @@ import {
   useMeetingMutations,
 } from '../../api/meetings';
 import { errorKind } from '../../lib/errors';
+import { isLinkedBooking, joinLinkOf } from '../../lib/meeting-booking';
 import {
   DURATIONS,
   asLink,
@@ -237,6 +240,8 @@ export function MeetingsPanel({
   const { toast } = useToast();
   const qc = useQueryClient();
   const canUpdate = useCan('record.contacts.update');
+  // Strictly the key: the link opens the appointments screen, which a user without it cannot use.
+  const canReadAppointments = useCan('record.appointments.read');
   const list = useContactMeetings(contact.id);
   const { create, update, remove } = useMeetingMutations(contact.id);
   const refreshContact = useRefreshContact(contact.id);
@@ -344,8 +349,13 @@ export function MeetingsPanel({
         </li>
       );
     }
-    const link = asLink(m.location);
+    const link = joinLinkOf(m, asLink);
+    // A place that is itself the join link (an older row) is shown once, as the link.
+    const place = m.location && asLink(m.location) === link?.href ? null : m.location;
     const waiting = m.id.startsWith('pending-');
+    const booked = m.source === 'booking';
+    // A row that mirrors a booking is changed on the appointment: no edit and no delete here, for anyone.
+    const readOnly = isLinkedBooking(m);
     return (
       <li
         key={m.id}
@@ -356,26 +366,50 @@ export function MeetingsPanel({
             <p dir="auto" className="break-words text-sm font-medium">
               {m.title}
             </p>
+            {booked && (
+              <p className="flex flex-wrap items-center gap-1.5">
+                <span className="inline-flex items-center whitespace-nowrap rounded-full border border-border bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                  {t('bookedOnline')}
+                </span>
+                {m.status && <AppointmentStatusChip status={m.status} />}
+              </p>
+            )}
             <p className="text-xs text-muted-foreground">{whenOf(m)}</p>
-            {m.location &&
-              (link ? (
-                <p className="break-all text-xs" dir="ltr">
-                  <a
-                    href={link}
-                    target="_blank"
-                    rel="noopener noreferrer"
+            {link && (
+              <p className="break-all text-xs" dir="ltr">
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  {t('join')}: {link.text}
+                </a>
+              </p>
+            )}
+            {place && (
+              <p dir="auto" className="break-words text-xs text-muted-foreground">
+                {t('atLocation', { location: place })}
+              </p>
+            )}
+            {readOnly &&
+              (canReadAppointments ? (
+                <p className="text-xs">
+                  <Link
+                    href={`/appointments?appt=${encodeURIComponent(m.appointmentId!)}`}
+                    aria-label={t(m.canManageBooking ? 'manageBookingAria' : 'viewBookingAria', {
+                      title: m.title,
+                    })}
                     className="text-primary underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary"
                   >
-                    {t('join')}: {m.location}
-                  </a>
+                    {t(m.canManageBooking ? 'manageBooking' : 'viewBooking')}
+                  </Link>
                 </p>
               ) : (
-                <p dir="auto" className="break-words text-xs text-muted-foreground">
-                  {t('atLocation', { location: m.location })}
-                </p>
+                <p className="text-xs text-muted-foreground">{t('bookedReadOnly')}</p>
               ))}
           </div>
-          {canUpdate && !waiting && (
+          {canUpdate && !waiting && !readOnly && (
             <div className="flex shrink-0 gap-1">
               <Button
                 variant="ghost"

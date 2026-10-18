@@ -1018,17 +1018,29 @@ export class FormSubmitService {
     contactId: number,
     names: readonly string[],
   ): Promise<void> {
+    // The tags that already exist, read once; the plan's cap is looked up at most once and only if a tag has to be made.
+    const known = await this.tags.findByNames(tx, orgId, names);
+    let cap: number | undefined;
+    let total: number | undefined;
+    const tagIds: number[] = [];
     for (const name of names) {
-      let tag = await this.tags.findByName(tx, orgId, name);
+      if (name.trim() === '') continue; // a blank label is never a tag
+      let tag = known.get(name.trim().toLowerCase());
       if (!tag) {
         // A submission is not refused over a label: past the plan's tag cap the tag is simply not made.
-        const cap = await this.entitlements.limit(orgId, 'tags');
-        if (cap > 0 && (await this.tags.countAll(tx, orgId)) >= cap) continue;
-        await this.tags.insertIfAbsent(tx, orgId, { name, color: '#2563EB' });
-        tag = await this.tags.findByName(tx, orgId, name);
+        cap ??= await this.entitlements.limit(orgId, 'tags');
+        if (cap > 0) {
+          total ??= await this.tags.countAll(tx, orgId);
+          if (total >= cap) continue;
+        }
+        const made = await this.tags.insertIfAbsent(tx, orgId, { name, color: '#2563EB' });
+        if (made && total !== undefined) total += 1;
+        tag = (await this.tags.findByNames(tx, orgId, [name])).get(name.trim().toLowerCase());
+        if (tag) known.set(name.trim().toLowerCase(), tag);
       }
-      if (tag) await this.tags.attach(tx, orgId, [contactId], [tag.id], null);
+      if (tag && !tagIds.includes(tag.id)) tagIds.push(tag.id);
     }
+    if (tagIds.length > 0) await this.tags.attach(tx, orgId, [contactId], tagIds, null);
   }
 
   /**

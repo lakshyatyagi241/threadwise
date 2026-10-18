@@ -1,0 +1,65 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "Sin contactar"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "Sin contactar",
+        "chipTitle": "Nadie del equipo se ha puesto en contacto todavía",
+        "waitingSince": "En espera desde {date}",
+        "markContacted": "Marcar como contactado",
+        "markUncontacted": "Marcar como sin contactar",
+        "markedContacted": "Marcado como contactado",
+        "markedUncontacted": "Marcado como sin contactar",
+        "markFailed": "No se pudo cambiar la marca. Inténtalo de nuevo.",
+        "bulkMarkedContacted": "{count, plural, one {# contacto marcado como contactado} other {# contactos marcados como contactados}}",
+        "bulkMarkedUncontacted": "{count, plural, one {# contacto marcado como sin contactar} other {# contactos marcados como sin contactar}}"
+      },
+      "settings": {
+        "save": "Guardar",
+        "discard": "Descartar cambios",
+        "saved": "Ajustes guardados",
+        "retry": "Reintentar",
+        "loading": "Cargando ajustes",
+        "conflict": "Otra persona guardó estos ajustes mientras los editabas. Se muestran de nuevo abajo; vuelve a hacer tu cambio.",
+        "conflictOk": "Entendido",
+        "errors": {
+          "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+          "forbidden": "Solo las personas que gestionan los ajustes del espacio de trabajo pueden cambiar esta página.",
+          "conflict": "Otra persona cambió estos ajustes antes. Recarga e inténtalo de nuevo.",
+          "validation": "Algunos de estos ajustes no son válidos. Revísalos e inténtalo de nuevo.",
+          "unexpected": "Algo salió mal. Inténtalo de nuevo."
+        },
+        "uncontacted": {
+          "title": "Clientes potenciales sin contactar",
+          "subtitle": "Marca los clientes potenciales a los que nadie ha contactado todavía, para que destaquen hasta que alguien se ponga en contacto. No cambia nada hasta que actives una opción.",
+          "clear": {
+            "title": "Marcar como contactado",
+            "intro": "Quitar automáticamente la marca «Sin contactar» cuando un miembro del equipo haga alguna de estas acciones:",
+            "contactButton": "Pulsa un botón de contacto (llamada, SMS, correo o WhatsApp) o realiza una llamada",
+            "message": "Envía un mensaje, una plantilla, una respuesta guardada o un archivo desde la bandeja de entrada",
+            "automation": "Una campaña, difusión o flujo automático envía un mensaje al cliente potencial",
+            "activity": "Añade una nota, una reunión u otra actividad a la cronología",
+            "manualHint": "También puedes cambiar la marca a mano: abre el menú Más de un contacto, o selecciona varios contactos y usa Más en la barra sobre la lista."
+          },
+          "new": {
+            "title": "Marcar los clientes potenciales nuevos como sin contactar",
+            "intro": "Cuando se cree un cliente potencial de alguna de estas formas, márcalo como sin contactar:",
+            "manual": "Creado manualmente en la app",
+            "import": "Importado desde un archivo o Google Sheets",
+            "leadSource": "Fuentes de clientes potenciales, formularios e integraciones"
+          },
+          "reassign": {
+            "title": "Clientes potenciales reasignados",
+            "intro": "Cuando un cliente potencial se asigna o se reasigna a un nuevo responsable:",
+            "keep": "No cambiar la marca «Sin contactar»",
+            "mark": "Marcar como sin contactar al reasignar"
+          }
+        }
+      }
+    }
+  }
+}

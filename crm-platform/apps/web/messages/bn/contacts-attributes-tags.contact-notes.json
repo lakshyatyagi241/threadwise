@@ -94,7 +94,13 @@
             "endInvalid": "শেষের একটি সঠিক তারিখ ও সময় দিন।",
             "endBeforeStart": "শেষের সময় শুরুর আগে হতে পারে না।"
           }
-        }
+        },
+        "bookedOnline": "অনলাইনে বুক করা",
+        "viewBooking": "বুকিং দেখুন",
+        "manageBooking": "বুকিং পরিচালনা করুন",
+        "viewBookingAria": "{title}-এর বুকিং দেখুন",
+        "manageBookingAria": "{title}-এর বুকিং পরিচালনা করুন",
+        "bookedReadOnly": "অনলাইনে বুক করা হয়েছে। এটি শুধু বুকিং থেকেই বদলানো যায়।"
       },
       "files": {
         "title": "ফাইল",

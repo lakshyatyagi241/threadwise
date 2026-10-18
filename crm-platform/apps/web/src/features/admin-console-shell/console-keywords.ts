@@ -105,7 +105,7 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'settings-privacy': 'privacy gdpr ada cookies consent accessibility data protection',
   'settings-analytics': 'analytics google analytics tag manager pixel tracking facebook',
   'settings-custom': 'custom code css javascript scripts head body snippet',
-  'settings-storage': 'cloud storage s3 bucket files uploads minio r2 spaces',
+  'settings-storage': 'cloud storage s3 bucket files uploads r2 spaces',
 
   system: 'system status version update updater license install server php',
   'i18n-languages': 'languages translations locales rtl arabic default language',

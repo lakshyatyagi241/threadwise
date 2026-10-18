@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "端点",
-            "hint": "Spaces、R2 和 MinIO 必需。末尾的 /bucket 会被移除。",
-            "placeholder": "https://…（Spaces / R2 / MinIO 必需；Wasabi 和 Bunny 自动设置）"
+            "hint": "Spaces 和 R2 必需。末尾的 /bucket 会被移除。",
+            "placeholder": "https://…（Spaces / R2 必需；Wasabi 和 Bunny 自动设置）"
           },
           "cdnUrl": {
             "label": "公开 / CDN URL（可选）",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "使用路径风格端点（MinIO / 部分 S3 兼容存储）"
+            "label": "使用路径风格端点（部分 S3 兼容存储）"
           },
           "storageZone": {
             "label": "存储区",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net 存储",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3 兼容"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "私有（签名 URL）",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "云存储",
-        "description": "将客户媒体发送到您自己的存储桶：Amazon S3、Wasabi、Bunny.net、DigitalOcean Spaces、Cloudflare R2 或 MinIO。",
+        "description": "将客户媒体发送到您自己的存储桶：Amazon S3、Wasabi、Bunny.net、DigitalOcean Spaces、Cloudflare R2。",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "使用 Bunny 字段：存储区和密码。区域为存储区所在区域（de、ny、la 等）。"
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "填写 S3 字段并粘贴端点 URL。MinIO 请勾选路径风格。"
+              "title": "Spaces / R2",
+              "body": "填写 S3 字段并粘贴端点 URL。"
             },
             "test": {
               "title": "务必先测试",
@@ -1760,7 +1759,7 @@
             },
             "consent": {
               "title": "3. 同意屏幕",
-              "body": "添加产品所请求的权限范围（calendar.events、calendar.freebusy、calendar.calendarlist.readonly、spreadsheets、documents、drive、forms.body.readonly、drive.metadata.readonly），然后发布应用：处于测试状态时，Google 会在 7 天后使所有授权失效，工作区需要重新连接。Drive 权限范围属于受限范围，需要通过 Google 的审核。"
+              "body": "添加产品所请求的权限范围（calendar.events、calendar.freebusy、calendar.calendarlist.readonly、spreadsheets、documents、drive、forms.body.readonly、forms.responses.readonly、drive.metadata.readonly），然后发布应用：处于测试状态时，Google 会在 7 天后使所有授权失效，工作区需要重新连接。Drive 权限范围属于受限范围，需要通过 Google 的审核。"
             },
             "workspaces": {
               "title": "4. 工作区连接",

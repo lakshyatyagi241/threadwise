@@ -107,6 +107,7 @@
       "noGateway": "Chưa cấu hình cổng thanh toán nào cho {currency}. Hãy nhờ quản trị viên kích hoạt một cổng.",
       "noGatewayButton": "Chưa cấu hình cổng thanh toán",
       "sandbox": "sandbox",
+      "sandboxNote": "Chế độ thử nghiệm: không tính tiền thật. Hãy thanh toán bằng thẻ thử trong tài liệu của cổng thanh toán. Trang mật khẩu dùng một lần (OTP) do cổng thanh toán hiển thị, không phải ứng dụng này.",
       "pay": "Thanh toán {amount}",
       "processing": "Đang bắt đầu thanh toán",
       "summary": "Tóm tắt đơn hàng",

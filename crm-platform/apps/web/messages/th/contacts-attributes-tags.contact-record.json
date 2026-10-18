@@ -196,7 +196,9 @@
           },
           "meeting": {
             "upcoming": "การประชุม: {title}",
-            "past": "พบกันแล้ว: {title}"
+            "past": "พบกันแล้ว: {title}",
+            "notHeld": "ไม่ได้จัด: {title}",
+            "noShow": "ไม่มาตามนัด: {title}"
           },
           "call": {
             "inbound": "สายเรียกเข้า",

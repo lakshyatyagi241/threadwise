@@ -613,7 +613,9 @@
         "campaign": "キャンペーン",
         "adset": "広告セット",
         "ad": "広告",
-        "form": "フォーム"
+        "form": "フォーム",
+        "channel": "チャネル",
+        "moduleType": "モジュールの種類"
       },
       "capturedAt": "取得日時",
       "openSource": "リードソースを開く"

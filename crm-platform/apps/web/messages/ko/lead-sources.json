@@ -613,7 +613,9 @@
         "campaign": "캠페인",
         "adset": "광고 세트",
         "ad": "광고",
-        "form": "양식"
+        "form": "양식",
+        "channel": "채널",
+        "moduleType": "모듈 유형"
       },
       "capturedAt": "캡처됨",
       "openSource": "리드 소스 열기"

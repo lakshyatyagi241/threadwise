@@ -1,6 +1,6 @@
 # Prometheus alert rules for the event-loop metrics exposed by every API, worker and web-server process (OBS_METRICS_PORT).
-# The warnings, the heap, long-stall and stale-report rules are not tied to a service, so they cover `web` too. The two "blocking with
-# impact" rules are written for api and worker; a web one is a follow-up (backlog EL-B07 note).
+# The warnings, the heap, long-stall and stale-report rules are not tied to a service, so they cover `web` too. The "blocking with
+# impact" rules are written per service: api, worker, and web (its impact signal is the request histogram the web server now exports, EL-B20).
 # Metric reference: docs/performance/event-loop/event-loop-metrics-inventory.md. Runbook: event-loop-observability-runbook.md.
 #
 # Paging rule: a critical alert needs SUSTAINED loop degradation AND user impact (slow API, slow webhook ack, or a queue wait
@@ -92,6 +92,27 @@ groups:
         labels: { severity: critical }
         annotations:
           summary: 'Worker event loop blocked and job wait p95 over 30 s'
+
+      - alert: WebEventLoopBlockingWithImpact
+        expr: |
+          (
+            avg_over_time(crm_event_loop_delay_p95_seconds{service="web"}[5m]) > 0.050
+            or avg_over_time(crm_event_loop_delay_p99_seconds{service="web"}[5m]) > 0.100
+          )
+          and on (service, instance)
+          (
+            # The same two ways as the API rule: the loop alone delays every page (loop p95 over 250 ms), or the pages are slow while the
+            # loop is also degraded. The request histogram of the web server times a request from when Next handles it, so it cannot see
+            # the time spent queued behind a blocked loop either; the probe target "web" (ApiCallerLatencyHigh) is the view that does.
+            avg_over_time(crm_event_loop_delay_p95_seconds{service="web"}[5m]) > 0.250
+            or
+            histogram_quantile(0.95, sum by (le, service, instance) (rate(crm_http_request_duration_seconds_bucket{service="web"}[5m]))) > 0.5
+          )
+        for: 5m
+        labels: { severity: critical }
+        annotations:
+          summary: 'Web server event loop blocked and pages are waiting on {{ $labels.instance }}'
+          description: 'Sustained loop delay in the Next.js server with either the loop delay p95 over 250 ms or page p95 over 500 ms. Capture a CPU profile (runbook, section Capture evidence) before restarting.'
 
       - alert: HeapNearOom
         expr: crm_process_heap_used_bytes / crm_process_heap_limit_bytes > 0.90

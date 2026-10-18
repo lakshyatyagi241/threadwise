@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Bağlı",
           "shopify": "Bağlı",
-          "google_sheets": "API anahtarı verildi",
-          "meta_catalog": "Katalog bağlandı"
+          "meta_catalog": "Katalog bağlandı",
+          "google_sheets": "Google hesabı bağlandı"
         },
         "notConnected": "bağlı değil",
         "connect": "Bağlan",

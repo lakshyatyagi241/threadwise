@@ -62,7 +62,8 @@
       "field_match": "Veld komt overeen",
       "date_field_match": "Datum komt overeen",
       "schedule": "Planning",
-      "ecom_event": "Winkelevent"
+      "ecom_event": "Winkelevent",
+      "segment_leave": "Segment verlaten"
     },
     "endReason": {
       "end_node": "Einde van de flow bereikt",

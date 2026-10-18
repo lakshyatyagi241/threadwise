@@ -1,0 +1,248 @@
+{
+ "generatedAt": "2026-10-18T06:14:10.222Z",
+ "node": "v22.17.0",
+ "seconds": 4,
+ "note": "Express + the app's JSON parser settings + the service's pre-acknowledgement CPU work (re-parse, HMAC for 2 platform secrets, SHA-256 job id). No database, Redis or queue in the path. Synthetic Meta-shaped payloads; this machine only.",
+ "rows": [
+  {
+   "variant": "current",
+   "body": "0.1 MiB",
+   "bodyBytes": 96882,
+   "concurrency": 1,
+   "requests": 931,
+   "failed": 0,
+   "acksPerSecond": 232.8,
+   "ackMs": {
+    "p50": 4,
+    "p95": 6.3,
+    "p99": 8,
+    "max": 21.8
+   },
+   "serverLoopDelayMs": {
+    "p50": 3.8,
+    "p99": 7.8,
+    "max": 11.2
+   }
+  },
+  {
+   "variant": "current",
+   "body": "0.1 MiB",
+   "bodyBytes": 96882,
+   "concurrency": 8,
+   "requests": 1519,
+   "failed": 0,
+   "acksPerSecond": 379.8,
+   "ackMs": {
+    "p50": 19.3,
+    "p95": 26.4,
+    "p99": 116.8,
+    "max": 241
+   },
+   "serverLoopDelayMs": {
+    "p50": 186.4,
+    "p99": 239.6,
+    "max": 239.6
+   }
+  },
+  {
+   "variant": "current",
+   "body": "1 MiB",
+   "bodyBytes": 993383,
+   "concurrency": 1,
+   "requests": 179,
+   "failed": 0,
+   "acksPerSecond": 44.8,
+   "ackMs": {
+    "p50": 19.6,
+    "p95": 38.5,
+    "p99": 46.2,
+    "max": 48
+   },
+   "serverLoopDelayMs": {
+    "p50": 16.1,
+    "p99": 29.5,
+    "max": 33.2
+   }
+  },
+  {
+   "variant": "current",
+   "body": "1 MiB",
+   "bodyBytes": 993383,
+   "concurrency": 8,
+   "requests": 246,
+   "failed": 0,
+   "acksPerSecond": 61.5,
+   "ackMs": {
+    "p50": 129,
+    "p95": 148.4,
+    "p99": 157.5,
+    "max": 1075.4
+   },
+   "serverLoopDelayMs": {
+    "p50": 21.5,
+    "p99": 1347.4,
+    "max": 1347.4
+   }
+  },
+  {
+   "variant": "current",
+   "body": "4 MiB (the cap)",
+   "bodyBytes": 3881378,
+   "concurrency": 1,
+   "requests": 53,
+   "failed": 0,
+   "acksPerSecond": 13.3,
+   "ackMs": {
+    "p50": 72.5,
+    "p95": 100.7,
+    "p99": 119.6,
+    "max": 119.6
+   },
+   "serverLoopDelayMs": {
+    "p50": 5.4,
+    "p99": 88.4,
+    "max": 105.5
+   }
+  },
+  {
+   "variant": "current",
+   "body": "4 MiB (the cap)",
+   "bodyBytes": 3881378,
+   "concurrency": 8,
+   "requests": 65,
+   "failed": 0,
+   "acksPerSecond": 16.3,
+   "ackMs": {
+    "p50": 546.3,
+    "p95": 596.5,
+    "p99": 619,
+    "max": 619
+   },
+   "serverLoopDelayMs": {
+    "p50": 465.6,
+    "p99": 518.3,
+    "max": 518.3
+   }
+  },
+  {
+   "variant": "single-parse",
+   "body": "0.1 MiB",
+   "bodyBytes": 96807,
+   "concurrency": 1,
+   "requests": 992,
+   "failed": 0,
+   "acksPerSecond": 248,
+   "ackMs": {
+    "p50": 3.9,
+    "p95": 5.9,
+    "p99": 7.9,
+    "max": 19.8
+   },
+   "serverLoopDelayMs": {
+    "p50": 3.6,
+    "p99": 6.8,
+    "max": 20.5
+   }
+  },
+  {
+   "variant": "single-parse",
+   "body": "0.1 MiB",
+   "bodyBytes": 96807,
+   "concurrency": 8,
+   "requests": 2095,
+   "failed": 0,
+   "acksPerSecond": 523.8,
+   "ackMs": {
+    "p50": 13.4,
+    "p95": 20.5,
+    "p99": 108.5,
+    "max": 170.8
+   },
+   "serverLoopDelayMs": {
+    "p50": 135.5,
+    "p99": 184.8,
+    "max": 184.8
+   }
+  },
+  {
+   "variant": "single-parse",
+   "body": "1 MiB",
+   "bodyBytes": 993478,
+   "concurrency": 1,
+   "requests": 221,
+   "failed": 0,
+   "acksPerSecond": 55.3,
+   "ackMs": {
+    "p50": 15.8,
+    "p95": 33.6,
+    "p99": 37.3,
+    "max": 38.9
+   },
+   "serverLoopDelayMs": {
+    "p50": 12.8,
+    "p99": 23.6,
+    "max": 29.8
+   }
+  },
+  {
+   "variant": "single-parse",
+   "body": "1 MiB",
+   "bodyBytes": 993478,
+   "concurrency": 8,
+   "requests": 331,
+   "failed": 0,
+   "acksPerSecond": 82.8,
+   "ackMs": {
+    "p50": 93.8,
+    "p95": 120.7,
+    "p99": 135.5,
+    "max": 787.8
+   },
+   "serverLoopDelayMs": {
+    "p50": 472.4,
+    "p99": 1031.8,
+    "max": 1031.8
+   }
+  },
+  {
+   "variant": "single-parse",
+   "body": "4 MiB (the cap)",
+   "bodyBytes": 3881549,
+   "concurrency": 1,
+   "requests": 74,
+   "failed": 0,
+   "acksPerSecond": 18.5,
+   "ackMs": {
+    "p50": 50.9,
+    "p95": 76.7,
+    "p99": 77.9,
+    "max": 77.9
+   },
+   "serverLoopDelayMs": {
+    "p50": 12,
+    "p99": 69.4,
+    "max": 71.8
+   }
+  },
+  {
+   "variant": "single-parse",
+   "body": "4 MiB (the cap)",
+   "bodyBytes": 3881549,
+   "concurrency": 8,
+   "requests": 84,
+   "failed": 0,
+   "acksPerSecond": 21,
+   "ackMs": {
+    "p50": 411.2,
+    "p95": 527.2,
+    "p99": 553.2,
+    "max": 553.2
+   },
+   "serverLoopDelayMs": {
+    "p50": 366.2,
+    "p99": 469.5,
+    "max": 469.5
+   }
+  }
+ ]
+}

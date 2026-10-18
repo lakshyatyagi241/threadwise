@@ -8,6 +8,7 @@ import {
   read,
   sh,
   skip,
+  unreviewed,
   warn,
 } from '../lib/core.mjs';
 import { neverValidated } from '../lib/not-valid.mjs';
@@ -56,7 +57,7 @@ export default {
       expectNone(
         'int-uuid-partitioned',
         'Partitioned/stream tables whose uuid cannot be unique-constrained',
-        partUuid,
+        unreviewed(48, partUuid),
         { level: 'warn' },
       ),
     );

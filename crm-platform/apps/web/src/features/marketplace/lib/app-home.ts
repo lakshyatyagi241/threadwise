@@ -20,7 +20,6 @@ export const APP_HOME: Readonly<Record<string, string>> = {
   'whatsapp-groups': '/waba-groups',
   'whatsapp-devices': '/devices',
   'meta-lead-forms': '/lead-sources',
-  'google-sheets': '/google-sheets-addon',
 };
 
 /** The screen of an installed app, or null when it has none or the installation is not running (a paused or killed app is not opened). */

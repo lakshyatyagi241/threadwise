@@ -374,6 +374,11 @@
         "label": "Propiedades de empresa",
         "description": "Añade los campos que quieres conservar en cada empresa.",
         "keywords": "campos personalizados, campos, obligatorio, desplegable, organización, cuenta"
+      },
+      "uncontacted-leads": {
+        "label": "Clientes potenciales sin contactar",
+        "description": "Elige qué acciones cuentan como contactar con un cliente potencial y qué contactos nuevos empiezan como sin contactar.",
+        "keywords": "sin contactar, contactado, cliente potencial, lead, nuevo cliente potencial, primer contacto, seguimiento, reasignar, marca"
       }
     },
     "backToMarketplace": "Volver al Marketplace"

@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "Endpoint",
-            "hint": "Bắt buộc với Spaces, R2 và MinIO. Phần /bucket ở cuối sẽ bị xóa.",
-            "placeholder": "https://… (bắt buộc với Spaces / R2 / MinIO; tự động với Wasabi và Bunny)"
+            "hint": "Bắt buộc với Spaces và R2. Phần /bucket ở cuối sẽ bị xóa.",
+            "placeholder": "https://… (bắt buộc với Spaces / R2; tự động với Wasabi và Bunny)"
           },
           "cdnUrl": {
             "label": "URL công khai / CDN (không bắt buộc)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "Dùng endpoint kiểu đường dẫn (MinIO / một số kho tương thích S3)"
+            "label": "Dùng endpoint kiểu đường dẫn (một số kho tương thích S3)"
           },
           "storageZone": {
             "label": "Vùng lưu trữ",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / tương thích S3"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "Riêng tư (URL có chữ ký)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "Lưu trữ đám mây",
-        "description": "Gửi phương tiện của khách hàng tới bucket riêng: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 hoặc MinIO.",
+        "description": "Gửi phương tiện của khách hàng tới bucket riêng: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "Dùng các trường Bunny: vùng lưu trữ và mật khẩu. Khu vực là khu vực của vùng (de, ny, la...)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "Điền các trường S3 và dán URL Endpoint. Chọn kiểu đường dẫn đối với MinIO."
+              "title": "Spaces / R2",
+              "body": "Điền các trường S3 và dán URL Endpoint."
             },
             "test": {
               "title": "Luôn kiểm tra trước",
@@ -1760,7 +1759,7 @@
             },
             "consent": {
               "title": "3. Màn hình đồng ý",
-              "body": "Thêm các phạm vi mà sản phẩm yêu cầu (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), sau đó xuất bản ứng dụng: ở chế độ Testing, Google sẽ hủy mọi cấp quyền sau 7 ngày và không gian làm việc sẽ phải kết nối lại. Các phạm vi drive bị hạn chế và cần Google xét duyệt."
+              "body": "Thêm các phạm vi mà sản phẩm yêu cầu (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), sau đó xuất bản ứng dụng: ở chế độ Testing, Google sẽ hủy mọi cấp quyền sau 7 ngày và không gian làm việc sẽ phải kết nối lại. Các phạm vi drive bị hạn chế và cần Google xét duyệt."
             },
             "workspaces": {
               "title": "4. Không gian làm việc kết nối",

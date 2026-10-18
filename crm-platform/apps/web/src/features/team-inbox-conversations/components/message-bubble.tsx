@@ -155,10 +155,12 @@ function MessageBody({
   }
 
   // Buttons an agent or a flow sent: the text, then the buttons as WhatsApp draws them under it.
-  if (m.kind === 'interactive' && m.sentInteractive) {
+  // With a header file (an image above the buttons) the file comes first.
+  if (m.sentInteractive) {
     const s = m.sentInteractive;
     return (
       <div data-testid="inbox-sent-interactive" className="space-y-1.5">
+        {visual}
         {s.header && (
           <p dir="auto" className="font-semibold break-words">
             {s.header}

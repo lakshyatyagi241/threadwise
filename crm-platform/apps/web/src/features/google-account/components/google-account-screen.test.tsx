@@ -89,8 +89,9 @@ describe('the Google account screen', () => {
     expect(out).toContain('Restricted by Google');
     expect(out).toContain('ga-cap-calendar');
     expect(out).toContain('ga-cap-docs');
-    // Calendar, Sheets and Forms start ticked; the two restricted ones do not.
+    // Calendar, Sheets, Forms and the Drive file list (every picker needs it) start ticked; Docs and Drive does not.
     expect(out).toMatch(/id="ga-cap-sheets"[^>]*checked/);
+    expect(out).toMatch(/id="ga-cap-drive_listing"[^>]*checked/);
     expect(out).not.toMatch(/id="ga-cap-docs"[^>]*checked/);
   });
 

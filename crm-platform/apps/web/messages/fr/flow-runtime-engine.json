@@ -62,7 +62,8 @@
       "field_match": "Correspondance de champ",
       "date_field_match": "Correspondance de date",
       "schedule": "Programmation",
-      "ecom_event": "Événement de boutique"
+      "ecom_event": "Événement de boutique",
+      "segment_leave": "Quitter le segment"
     },
     "endReason": {
       "end_node": "Fin du flux atteinte",

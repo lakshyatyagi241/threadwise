@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "Endpoint",
-            "hint": "จำเป็นสำหรับ Spaces, R2 และ MinIO ระบบจะตัด /bucket ที่ท้ายออก",
-            "placeholder": "https://… (จำเป็นสำหรับ Spaces / R2 / MinIO; อัตโนมัติสำหรับ Wasabi และ Bunny)"
+            "hint": "จำเป็นสำหรับ Spaces และ R2 ระบบจะตัด /bucket ที่ท้ายออก",
+            "placeholder": "https://… (จำเป็นสำหรับ Spaces / R2; อัตโนมัติสำหรับ Wasabi และ Bunny)"
           },
           "cdnUrl": {
             "label": "URL สาธารณะ / CDN (ไม่บังคับ)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "ใช้ endpoint แบบพาธ (MinIO / ที่เก็บแบบ S3-compatible บางรายการ)"
+            "label": "ใช้ endpoint แบบพาธ (ที่เก็บแบบ S3-compatible บางรายการ)"
           },
           "storageZone": {
             "label": "โซนจัดเก็บ",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3-compatible"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "ส่วนตัว (URL ที่ลงนามแล้ว)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "พื้นที่จัดเก็บบนคลาวด์",
-        "description": "ส่งสื่อของลูกค้าไปยังบัคเก็ตของคุณเอง: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 หรือ MinIO",
+        "description": "ส่งสื่อของลูกค้าไปยังบัคเก็ตของคุณเอง: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "ใช้ฟิลด์ Bunny: โซนจัดเก็บและรหัสผ่าน region คือ region ของโซน (de, ny, la...)"
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "กรอกฟิลด์ S3 และวาง Endpoint URL ทำเครื่องหมาย path-style สำหรับ MinIO"
+              "title": "Spaces / R2",
+              "body": "กรอกฟิลด์ S3 และวาง Endpoint URL"
             },
             "test": {
               "title": "ทดสอบก่อนเสมอ",
@@ -1760,7 +1759,7 @@
             },
             "consent": {
               "title": "3. หน้าจอยินยอม",
-              "body": "เพิ่มขอบเขตที่ผลิตภัณฑ์ขอ (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly) แล้วเผยแพร่แอป: ในโหมด Testing Google จะยกเลิกการอนุญาตทุก 7 วัน และพื้นที่ทำงานต้องเชื่อมต่อใหม่ ขอบเขต drive เป็นขอบเขตที่จำกัดและต้องผ่านการตรวจสอบของ Google"
+              "body": "เพิ่มขอบเขตที่ผลิตภัณฑ์ขอ (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly) แล้วเผยแพร่แอป: ในโหมด Testing Google จะยกเลิกการอนุญาตทุก 7 วัน และพื้นที่ทำงานต้องเชื่อมต่อใหม่ ขอบเขต drive เป็นขอบเขตที่จำกัดและต้องผ่านการตรวจสอบของ Google"
             },
             "workspaces": {
               "title": "4. พื้นที่ทำงานเชื่อมต่อ",

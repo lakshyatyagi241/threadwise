@@ -7,6 +7,7 @@
 //   node tools/event-loop-audit/scrape-demo.mjs --stall          # + API stall, worker stall with a backlog, a 12 s block
 //   node tools/event-loop-audit/scrape-demo.mjs --phases=api,long   # pick phases (api, worker, long)
 //   node tools/event-loop-audit/scrape-demo.mjs --grafana        # + a real Grafana loads the five dashboards and runs every panel query (EL-B04)
+//   node tools/event-loop-audit/scrape-demo.mjs --web            # + the BUILT Next.js server (pnpm --filter @crm/web build) as a fourth target (EL-B07, EL-B20, EL-B18)
 //
 // It starts throwaway Postgres + Redis containers, migrates, runs the BUILT api (dist/src/main.js), worker (dist/src/worker.js) and
 // probe (dist/src/tools/event-loop-probe.js) as separate processes, then runs prom/prometheus and prom/alertmanager with the files
@@ -50,6 +51,7 @@ const PHASES = new Set(
 );
 const INSPECT = PHASES.size > 0;
 const GRAFANA = argv.includes('--grafana');
+const WEB = argv.includes('--web');
 
 const P = {
   pg: 55433,
@@ -61,6 +63,8 @@ const P = {
   prom: 9099,
   receiver: 9500,
   grafana: 3990,
+  web: 3996,
+  webMetrics: 9467,
   inspectApi: 9229,
   inspectWorker: 9230,
 };
@@ -653,6 +657,7 @@ async function main() {
     OBS_METRICS_HOST: '0.0.0.0',
     OBS_METRICS_TOKEN: token,
     OBS_RUNTIME_INTERVAL_SECONDS: '5',
+    OBS_RELEASE: 'demo-1',
   };
   const start = (name, entry, extra, inspectPort) => {
     const log = join(work, `${name}.log`);
@@ -700,7 +705,7 @@ async function main() {
     3000,
   ).catch(() => undefined);
   start('probe', 'dist/src/tools/event-loop-probe.js', {
-    PROBE_TARGETS: `health=http://127.0.0.1:${P.api}/health,ready=http://127.0.0.1:${P.api}/ready`,
+    PROBE_TARGETS: `health=http://127.0.0.1:${P.api}/health,ready=http://127.0.0.1:${P.api}/ready${WEB ? `,web=http://127.0.0.1:${P.web}/robots.txt` : ''}`,
     PROBE_INTERVAL_SECONDS: '2',
     PROBE_TIMEOUT_SECONDS: '10',
     OBS_METRICS_PORT: String(P.probeMetrics),
@@ -711,7 +716,43 @@ async function main() {
     120_000,
     2000,
   );
-  console.log('api, worker and probe are serving /metrics');
+  if (WEB) {
+    const log = join(work, 'web.log');
+    const fd = openSync(log, 'w');
+    const web = spawn(
+      process.execPath,
+      ['node_modules/next/dist/bin/next', 'start', '-p', String(P.web)],
+      {
+        cwd: join(root, 'apps/web'),
+        env: {
+          ...process.env,
+          NODE_ENV: 'production',
+          OBS_METRICS_PORT: String(P.webMetrics),
+          OBS_METRICS_HOST: '0.0.0.0',
+          OBS_METRICS_TOKEN: token,
+          OBS_RUNTIME_INTERVAL_SECONDS: '5',
+          OBS_RELEASE: 'demo-1',
+        },
+        stdio: ['ignore', fd, fd],
+      },
+    );
+    closeSync(fd);
+    procs.push(web);
+    web.on('exit', (code) => console.log(`web exited (${code})`));
+    await waitFor(
+      'web metrics listener',
+      async () => (await scrapeDirect(P.webMetrics)).status === 200,
+      900_000,
+      3000,
+    );
+    await waitFor(
+      'the web server to answer',
+      async () => (await fetch(`http://127.0.0.1:${P.web}/robots.txt`)).status === 200,
+      300_000,
+      3000,
+    );
+  }
+  console.log(`api, worker, probe${WEB ? ' and web' : ''} are serving /metrics`);
   check(
     'the metrics listener refuses a scrape without the token',
     (await scrapeDirect(P.apiMetrics, false)).status === 401,
@@ -737,7 +778,8 @@ async function main() {
       ["'api:9464'", `'host.docker.internal:${P.apiMetrics}'`],
       ["'worker:9464'", `'host.docker.internal:${P.workerMetrics}'`],
       ["'probe:9464'", `'host.docker.internal:${P.probeMetrics}'`],
-    ]),
+      ...(WEB ? [["'web:9464'", `'host.docker.internal:${P.webMetrics}'`]] : []),
+    ]).replace(WEB ? /$^/ : /  - job_name: crm-web\n(?:    .*\n|\n)*?(?=  - job_name:)/, ''),
   );
   writeFileSync(
     join(amDir, 'alertmanager.yml'),
@@ -790,16 +832,16 @@ async function main() {
   );
 
   const targets = await waitFor(
-    'all three targets up',
+    WEB ? 'all four targets up' : 'all three targets up',
     async () => {
       const t = (await prom('/api/v1/targets')).activeTargets;
-      return t.length === 3 && t.every((x) => x.health === 'up') ? t : null;
+      return t.length === (WEB ? 4 : 3) && t.every((x) => x.health === 'up') ? t : null;
     },
     120_000,
     2000,
   );
   check(
-    'Prometheus has all three targets up',
+    WEB ? 'Prometheus has all four targets up' : 'Prometheus has all three targets up',
     true,
     targets.map((t) => `${t.labels.job}=${t.health}`).join(' '),
   );
@@ -808,7 +850,7 @@ async function main() {
     targets
       .map((t) => t.labels.job)
       .sort()
-      .join() === 'crm-api,crm-probe,crm-worker',
+      .join() === (WEB ? 'crm-api,crm-probe,crm-web,crm-worker' : 'crm-api,crm-probe,crm-worker'),
   );
   const ams = (await prom('/api/v1/alertmanagers')).activeAlertmanagers;
   check('Prometheus found Alertmanager', ams.length === 1, ams.map((a) => a.url).join());
@@ -824,30 +866,33 @@ async function main() {
   ];
   await waitFor(
     'first runtime windows',
-    async () => (await instant('crm_event_loop_delay_p99_seconds')).length === 2,
+    async () =>
+      (await instant('crm_event_loop_delay_p99_seconds{service=~"api|worker"}')).length === 2,
     120_000,
     3000,
   );
   for (const m of mustHave) {
-    const byService = (await instant(m))
+    const byService = (await instant(`${m}{service=~"api|worker"}`))
       .map((x) => `${x.metric.service}`)
       .sort()
       .join();
     check(`${m} present for the api and the worker`, byService === 'api,worker', byService);
   }
-  const one = (await instant('crm_event_loop_delay_p99_seconds'))[0].metric;
+  const one = (await instant('crm_event_loop_delay_p99_seconds{service=~"api|worker"}'))[0].metric;
   check(
     'series carry service, instance and the scrape job',
     Boolean(one.service && one.instance && one.job),
     one,
   );
-  const loop = await instant('crm_event_loop_delay_p99_seconds');
+  const loop = await instant('crm_event_loop_delay_p99_seconds{service=~"api|worker"}');
   check(
     'a healthy idle loop reads in a sane range (under 0.5 s)',
     loop.every((x) => Number(x.value[1]) < 0.5),
     loop.map((x) => `${x.metric.service}=${x.value[1]}`).join(' '),
   );
-  const fresh = await instant('time() - crm_runtime_last_report_timestamp_seconds');
+  const fresh = await instant(
+    'time() - crm_runtime_last_report_timestamp_seconds{service=~"api|worker"}',
+  );
   check(
     'the heartbeat timestamp is fresh (under 30 s old)',
     fresh.length === 2 && fresh.every((x) => Number(x.value[1]) < 30),
@@ -857,7 +902,7 @@ async function main() {
   // ---- the probe (caller-side latency, from another process) ----------------------------------------------------------------------
   await waitFor(
     'probe series',
-    async () => (await instant('crm_probe_up')).length === 2,
+    async () => (await instant('crm_probe_up')).length === (WEB ? 3 : 2),
     60_000,
     2000,
   );
@@ -884,6 +929,78 @@ async function main() {
     `${fmt(healthyProbe)} s`,
   );
 
+  // ---- the web server, when it was started (EL-B07, EL-B20, EL-B18) ---------------------------------------------------------
+  if (WEB) {
+    const web = (p) => `http://127.0.0.1:${P.web}${p}`;
+    const read = async (p) => {
+      const r = await fetch(web(p)).catch(() => undefined);
+      await r?.text();
+      return r;
+    };
+    for (let i = 0; i < 30; i++) await read('/robots.txt');
+    await read('/login');
+    await read('/wp-admin/setup-config.php?x=1');
+    await read('/definitely/not/a/route/12345');
+    const seen = await waitFor(
+      'web request series in Prometheus',
+      async () => {
+        const r = await instant(
+          'crm_http_request_duration_seconds_count{service="web",route="/robots.txt"}',
+        );
+        return r.length && Number(r[0].value[1]) >= 30 ? r : null;
+      },
+      120_000,
+      3000,
+    ).catch(() => []);
+    check(
+      'Prometheus has the web server request counts by route template',
+      seen.length > 0,
+      seen.map((x) => x.value[1]).join(),
+    );
+    // The 404s were sent after the 30 robots.txt requests, so their series can lag the one waited for above by a scrape.
+    const unmatched = await waitFor(
+      'the unmatched series in Prometheus',
+      async () => {
+        const r = await instant(
+          'crm_http_request_duration_seconds_count{service="web",route="unmatched"}',
+        );
+        return r.length ? r : null;
+      },
+      60_000,
+      3000,
+    ).catch(() => []);
+    check(
+      'a 404 is counted as "unmatched", never under its URL',
+      unmatched.length > 0 &&
+        (
+          await instant(
+            'crm_http_request_duration_seconds_count{service="web",route=~".*(wp-admin|12345).*"}',
+          )
+        ).length === 0,
+    );
+    const webLoop = await instant('crm_event_loop_delay_p99_seconds{service="web"}');
+    check(
+      'the web loop is scraped and reads sane (under 0.5 s)',
+      webLoop.length === 1 && Number(webLoop[0].value[1]) < 0.5,
+      webLoop.map((x) => x.value[1]).join(),
+    );
+    const byRelease = await instant(
+      'count by (release) (crm_runtime_last_report_timestamp_seconds)',
+    );
+    check(
+      'api, worker and web all carry the release label',
+      byRelease.length === 1 &&
+        byRelease[0].metric.release === 'demo-1' &&
+        Number(byRelease[0].value[1]) === 3,
+      byRelease.map((x) => `${x.metric.release}=${x.value[1]}`).join(),
+    );
+    check(
+      'the probe reaches the web server',
+      (await instant('crm_probe_up{target="web"}')).every((x) => x.value[1] === '1') &&
+        (await instant('crm_probe_up{target="web"}')).length === 1,
+    );
+  }
+
   // ---- a real job through the real worker -----------------------------------------------------------------------------------------
   const queue = new Queue('tpl-sweep', {
     connection: { host: '127.0.0.1', port: P.redis, maxRetriesPerRequest: null },
@@ -907,7 +1024,7 @@ async function main() {
 
   // ---- the rules ------------------------------------------------------------------------------------------------------------------
   const rules = (await prom('/api/v1/rules')).groups.flatMap((g) => g.rules);
-  check('Prometheus loaded all 15 alert rules', rules.length === 15, rules.length);
+  check('Prometheus loaded all 16 alert rules', rules.length === 16, rules.length);
   check(
     'every rule evaluates without error',
     rules.every((r) => r.health === 'ok'),

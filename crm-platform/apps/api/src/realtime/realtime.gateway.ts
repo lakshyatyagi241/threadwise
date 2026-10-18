@@ -26,6 +26,7 @@ import {
 import { DatabaseService } from '../infra/db/database.service';
 import { RealtimeAuthService, type SocketIdentity } from './realtime-auth.service';
 import { RESTRICTED_EVENT_PERMISSION, RealtimeEmitter } from './realtime-emitter.service';
+import { realtimeMetrics } from './realtime-metrics';
 import { RoomAccessService } from './room-access.service';
 import { VisibilityPresence } from './visibility-presence.service';
 import { refFromSpec, roomKeyFor, roomName, type RoomRef } from './rooms';
@@ -39,6 +40,13 @@ const GRANT_WATCH_MS = 1_000;
 const REAUTHORIZE_PARALLEL = 25;
 /** The permissions that have a room of their own: a restricted event goes only to the sockets whose member holds it (AZ-016). */
 const PERMISSION_ROOMS = [...new Set(Object.values(RESTRICTED_EVENT_PERMISSION))];
+
+const JOIN_REFUSAL_LABEL = {
+  FORBIDDEN: 'forbidden',
+  INVALID: 'invalid',
+  LIMIT: 'limit',
+  UNAVAILABLE: 'unavailable',
+} as const;
 
 interface SocketData {
   identity: SocketIdentity;
@@ -92,8 +100,14 @@ export class RealtimeGateway
     // sees `connect`, so no event can slip past between the two.
     server.use((socket, next) => {
       this.authenticate(socket).then(
-        () => next(),
-        () => next(new Error('unauthorized')),
+        () => {
+          realtimeMetrics.connection('accepted');
+          next();
+        },
+        () => {
+          realtimeMetrics.connection('refused');
+          next(new Error('unauthorized'));
+        },
       );
     });
 
@@ -123,6 +137,7 @@ export class RealtimeGateway
       rooms,
       serverTime: new Date().toISOString(),
     } satisfies RealtimeReady);
+    realtimeMetrics.setSockets(this.server.sockets.size);
     this.logger.debug(
       { orgId: identity.orgId, actorId: identity.actorId },
       'realtime client connected',
@@ -130,6 +145,8 @@ export class RealtimeGateway
   }
 
   handleDisconnect(client: Socket): void {
+    realtimeMetrics.disconnect();
+    realtimeMetrics.setSockets(this.server.sockets.size);
     const identity = (client.data as Partial<SocketData>).identity;
     if (identity?.actorType === 'user') {
       void this.presence.clear(identity.orgId, identity.actorId, client.id);
@@ -145,6 +162,12 @@ export class RealtimeGateway
     @ConnectedSocket() client: Socket,
     @MessageBody() body: unknown,
   ): Promise<RealtimeRoomAck> {
+    const ack = await this.join(client, body);
+    realtimeMetrics.join(ack.ok ? 'ok' : JOIN_REFUSAL_LABEL[ack.code]);
+    return ack;
+  }
+
+  private async join(client: Socket, body: unknown): Promise<RealtimeRoomAck> {
     const spec = realtimeRoomSpecSchema.safeParse(body);
     if (!spec.success) return { ok: false, code: 'INVALID' };
 

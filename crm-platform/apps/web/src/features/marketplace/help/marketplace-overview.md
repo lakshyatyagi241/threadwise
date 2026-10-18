@@ -30,7 +30,7 @@ The Marketplace is where you add mini apps and connect outside services to your 
 ## How to use it
 
 1. Open **Marketplace** from the menu. It opens on the **Integrations** tab.
-2. Besides apps, the **Integrations** tab starts with cards for the services you can connect to your workspace: **Shopify**, **WooCommerce**, **Google Sheets add-on** and **Email**. The **Add-ons** tab has cards for **Google Calendar**, **REST API**, **Webhooks**, **Geta publishing**, **Translation** and **Add-ons**. Select **Open** on a card to go to that screen. Your role and plan decide which cards you see, and the cards on the Integrations tab hide while you search or filter.
+2. Besides apps, the **Integrations** tab starts with cards for the services you can connect to your workspace: **Shopify**, **WooCommerce**, **Google account**, **Google Sheets**, **Google Docs**, **Google Forms**, **Google Calendar** and **Email**. The Google cards all open the one Google account page, where you connect once with Google's own sign-in and tick what each app may use. The **Add-ons** tab has cards for **REST API**, **Webhooks**, **Geta publishing**, **Translation** and **Add-ons**. Select **Open** on a card to go to that screen. Your role and plan decide which cards you see, and the cards on the Integrations tab hide while you search or filter.
 3. Find an app with the search box, the categories on the left, the **All**, **Available add-ons** and **Installed** buttons, and **Sort by** (**Featured**, **Most installed**, **Newest** or **Name**). With no filter set, shelves show **Featured**, **Popular** and **New** apps.
 4. Select a card to read the app page, including **What it can access** (each permission has a risk level), **What you will need to set up** and **Your data**.
 5. Select **Install**. Step one is **Permissions**: read the list and tick the box that allows them. Step two is **Set up**, where you fill in the fields the app needs. Keys are stored sealed and cannot be read back. Step three confirms the install.
@@ -47,7 +47,7 @@ If you open a screen of an app the workspace does not have, the page says it isn
 
 ## Available add-ons
 
-Your plan can list paid add-ons that you have not bought yet. They show an **Add-on** label with the monthly price and a **Subscribe** button. **Install** stays disabled with the note "Included in your plan's catalogue, buy it to use it" until you subscribe. Select **Available add-ons** above the grid to see only these. Apps your plan does not list do not appear at all. Add-ons you already bought, free apps and apps your plan includes install as usual.
+Your plan can list paid add-ons that you have not bought yet. They show an **Add-on** label with the monthly price and a **Subscribe** button. **Install** stays disabled with the note "Subscribe first. Install unlocks once your payment is complete." until you subscribe. Select **Available add-ons** above the grid to see only these. Apps your plan does not list do not appear at all. Add-ons you already bought, free apps and apps your plan includes install as usual.
 
 ## Plan and access
 

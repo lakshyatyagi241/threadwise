@@ -98,6 +98,8 @@ export const QUEUES = {
   CALENDAR_RECONCILE: 'calendar-reconcile',
   /** One job per workspace that just (re)connected a calendar or changed where bookings go: writes the events its upcoming bookings are missing (BL-035). Own queue: a slow calendar must not hold a booking message. */
   CALENDAR_BACKFILL: 'calendar-backfill',
+  /** Writes the Meetings row of every existing booking that has a contact and none yet (BL-281). Runs once per worker start; a repeat finds nothing to do. */
+  MEETING_MIRROR_BACKFILL: 'meeting-mirror-backfill',
   /** One job per iCal feed that is due: reads the subscribed calendar's busy time (BL-035). Own queue: somebody else's slow server must not hold a booking message. */
   CALENDAR_ICS_REFRESH: 'calendar-ics-refresh',
   /** One job per WeChat broadcast: makes its one mass-send call (all followers, a tag or the picked OpenIDs) and ends it done or failed (WECH). */

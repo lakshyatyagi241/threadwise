@@ -94,7 +94,13 @@
             "endInvalid": "Introduce una fecha y hora de fin válidas.",
             "endBeforeStart": "El fin no puede ser anterior al inicio."
           }
-        }
+        },
+        "bookedOnline": "Reservada en línea",
+        "viewBooking": "Ver reserva",
+        "manageBooking": "Gestionar reserva",
+        "viewBookingAria": "Ver la reserva de {title}",
+        "manageBookingAria": "Gestionar la reserva de {title}",
+        "bookedReadOnly": "Reservada en línea. Solo se puede cambiar desde la reserva."
       },
       "files": {
         "title": "Archivos",

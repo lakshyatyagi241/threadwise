@@ -27,7 +27,8 @@
       "minor": "未成年として設定",
       "dateOfBirth": "生年月日",
       "age": "年齢(歳)",
-      "timezone": "タイムゾーン"
+      "timezone": "タイムゾーン",
+      "uncontacted": "未連絡"
     },
     "fieldGroups": {
       "journey": "ジャーニー",

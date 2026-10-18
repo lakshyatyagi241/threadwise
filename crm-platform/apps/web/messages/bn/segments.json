@@ -27,7 +27,8 @@
       "minor": "নাবালক হিসেবে চিহ্নিত",
       "dateOfBirth": "জন্মতারিখ",
       "age": "বয়স (বছর)",
-      "timezone": "সময় অঞ্চল"
+      "timezone": "সময় অঞ্চল",
+      "uncontacted": "যোগাযোগ হয়নি"
     },
     "fieldGroups": {
       "journey": "যাত্রা",

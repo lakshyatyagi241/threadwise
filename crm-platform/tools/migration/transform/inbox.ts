@@ -164,8 +164,10 @@ export const inbox: HandlerSpec = {
       scrub(
         plain({
           historySync: true,
-          // the buttons under a bot message (Visit our website, Call now ...): the inbox draws them from meta.sentInteractive
-          ...(out && turn.kind === 'interactive'
+          // the buttons under a bot message (Visit our website, Call now ...): the inbox draws them from meta.sentInteractive.
+          // Not only for kind 'interactive': a button message with an image / video / document header is that file's message
+          // (parseTurn), and it still carries its buttons.
+          ...(out && turn.legacy.interactive !== undefined
             ? { sentInteractive: sentInteractiveFrom(turn.legacy.interactive, turn.body) }
             : {}),
           legacy: compact({

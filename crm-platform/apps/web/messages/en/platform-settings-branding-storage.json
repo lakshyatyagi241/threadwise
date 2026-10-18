@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "Endpoint",
-            "hint": "Required for Spaces, R2 and MinIO. A trailing /bucket is removed.",
-            "placeholder": "https://… (required for Spaces / R2 / MinIO; auto for Wasabi & Bunny)"
+            "hint": "Required for Spaces and R2. A trailing /bucket is removed.",
+            "placeholder": "https://… (required for Spaces / R2; auto for Wasabi & Bunny)"
           },
           "cdnUrl": {
             "label": "Public / CDN URL (optional)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "Use path-style endpoint (MinIO / some S3-compatible stores)"
+            "label": "Use path-style endpoint (some S3-compatible stores)"
           },
           "storageZone": {
             "label": "Storage zone",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3-compatible"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "Private (signed URLs)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "Cloud storage",
-        "description": "Send client media to your own bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 or MinIO.",
+        "description": "Send client media to your own bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "Use the Bunny fields: storage zone and password. Region is the zone region (de, ny, la...)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "Fill the S3 fields and paste the Endpoint URL. Tick path-style for MinIO."
+              "title": "Spaces / R2",
+              "body": "Fill the S3 fields and paste the Endpoint URL."
             },
             "test": {
               "title": "Always test first",
@@ -1760,7 +1759,7 @@
             },
             "consent": {
               "title": "3. Consent screen",
-              "body": "Add the scopes the product asks for (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), then publish the app: in Testing, Google ends every grant after 7 days and workspaces will need to reconnect. The drive scopes are restricted and need Google's review."
+              "body": "Add the scopes the product asks for (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), then publish the app: in Testing, Google ends every grant after 7 days and workspaces will need to reconnect. The drive scopes are restricted and need Google's review."
             },
             "workspaces": {
               "title": "4. Workspaces connect",

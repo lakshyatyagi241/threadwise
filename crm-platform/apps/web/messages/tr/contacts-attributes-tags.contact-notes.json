@@ -94,7 +94,13 @@
             "endInvalid": "Geçerli bir bitiş tarihi ve saati girin.",
             "endBeforeStart": "Bitiş, başlangıçtan önce olamaz."
           }
-        }
+        },
+        "bookedOnline": "Çevrimiçi rezerve edildi",
+        "viewBooking": "Rezervasyonu görüntüle",
+        "manageBooking": "Rezervasyonu yönet",
+        "viewBookingAria": "{title} rezervasyonunu görüntüle",
+        "manageBookingAria": "{title} rezervasyonunu yönet",
+        "bookedReadOnly": "Çevrimiçi rezerve edildi. Yalnızca rezervasyondan değiştirilebilir."
       },
       "files": {
         "title": "Dosyalar",

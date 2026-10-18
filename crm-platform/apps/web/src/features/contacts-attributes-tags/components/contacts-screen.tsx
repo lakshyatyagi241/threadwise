@@ -13,6 +13,8 @@ import { CallingProvider, OnCallPanel } from '@/features/calling-voice';
 import { useLeadScoringEnabled } from '@/features/lead-scoring';
 import { invalidateSegments, useSegments, appliedConditionCount } from '@/features/segments';
 import { useStoredValue } from '@/lib/use-stored-value';
+import type { ContactTouchChannel } from '@crm/contracts';
+import { bulkSetUncontacted, reportContactTouch } from '../api/lead-handling';
 import { useAttributes, useContactFilterValues, useStatusOptions } from '../api/attributes';
 import {
   bulkDelete,
@@ -140,6 +142,7 @@ const SEARCH_COLUMNS: readonly ColumnId[] = ['name', 'phone', 'email'];
 export function ContactsScreen() {
   const t = useTranslations('contacts-attributes-tags.list');
   const tb = useTranslations('contacts-attributes-tags.bulk');
+  const tu = useTranslations('contacts-attributes-tags.leadHandling.uncontacted');
   const tf = useTranslations('contacts-attributes-tags.form');
   const ts = useTranslations('contacts-attributes-tags.stageMenu');
   const router = useRouter();
@@ -527,6 +530,18 @@ export function ContactsScreen() {
     report(tb('deleted', { count: out.changed }), out);
   }
 
+  /** Marks the selection as uncontacted (`true`) or as contacted (`false`) by hand. */
+  async function onBulkMark(uncontacted: boolean) {
+    const out = await guarded(() => bulkSetUncontacted(target(), uncontacted));
+    if (!out) return;
+    dispatch({ type: 'clear' });
+    await refresh();
+    report(
+      tu(uncontacted ? 'bulkMarkedUncontacted' : 'bulkMarkedContacted', { count: out.changed }),
+      out,
+    );
+  }
+
   async function onBulkGroup(action: 'add' | 'remove', groupId: string): Promise<boolean> {
     const out = await guarded(() => bulkGroupMembership(target(), groupId, action));
     if (!out) return false;
@@ -609,6 +624,12 @@ export function ContactsScreen() {
       setBusy(false);
     }
   }
+
+  /** A contact button was pressed: the workspace's lead handling settings decide whether that marks the contact as contacted. */
+  const pressed = (row: RowView, channel: ContactTouchChannel) => {
+    if (!canUpdate) return;
+    reportContactTouch(row.id, channel, row.uncontactedSince ? () => void refresh() : undefined);
+  };
 
   /** The chat icon: open the conversation with the contact on the one connected number and go to it; several numbers: pick in the drawer. */
   async function onChat(row: RowView) {
@@ -725,14 +746,22 @@ export function ContactsScreen() {
     onDelete: (id: string) => setDeleteId(id),
     onSend:
       canSend || canCall
-        ? (row: RowView, channel: SendChannel) => setSendTarget({ row, channel })
+        ? (row: RowView, channel: SendChannel) => {
+            pressed(row, channel);
+            setSendTarget({ row, channel });
+          }
         : undefined,
     onFilterTag: (tagId: string) => setFilters({ tag: tagId }),
     onOpenQuick: (id: string, target?: AddTarget) => {
       askFocus(target ?? null);
       goQuick(id, target ? SECTION_OF_TARGET[target] : 'overview');
     },
-    onChat: canSend ? (row: RowView) => void onChat(row) : undefined,
+    onChat: canSend
+      ? (row: RowView) => {
+          pressed(row, 'whatsapp');
+          void onChat(row);
+        }
+      : undefined,
     onCopy: (value: string) => {
       void navigator.clipboard?.writeText(value).then(
         () => toast(t('copied'), 'success'),
@@ -851,6 +880,7 @@ export function ContactsScreen() {
               onAssignOwner={() => setUpdateOpen('owner')}
               onChangeStage={() => setUpdateOpen('stage')}
               onUpdate={() => setUpdateOpen('all')}
+              onMarkUncontacted={(v) => void onBulkMark(v)}
               picker={pickerRow ? null : picker}
               onPicker={(p) => (p === null ? closePicker() : setPicker(p))}
               onGroup={onBulkGroup}
@@ -870,6 +900,7 @@ export function ContactsScreen() {
                   meId={session.user.id}
                   count={viewId || !filtered ? (viewId ? total : s?.total) : undefined}
                   can={{ create: canCreateViews, update: canUpdateViews, delete: canDeleteViews }}
+                  hasUncontacted={(s?.uncontacted ?? 0) > 0}
                 />
                 {/* One count only: the pill on the view picker says it, except while a filter is on (the pill would be the workspace's). */}
                 {filtered && !viewId && (

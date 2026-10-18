@@ -613,7 +613,9 @@
         "campaign": "Campaña",
         "adset": "Conjunto de anuncios",
         "ad": "Anuncio",
-        "form": "Formulario"
+        "form": "Formulario",
+        "channel": "Canal",
+        "moduleType": "Tipo de módulo"
       },
       "capturedAt": "Capturado",
       "openSource": "Abrir la fuente de leads"

@@ -11,6 +11,7 @@ import { ChannelsRepository } from './channels.repository';
 import { DeliveryReporter } from './delivery-reporter';
 import { ChatRealtimePublisher } from './chat-realtime.publisher';
 import { ConversationLifecycleService } from './conversation-lifecycle.service';
+import { ContactTouchService } from '../crm';
 import { ConversationsRepository, type ConversationRow } from './conversations.repository';
 import { failureReason } from './message-rules';
 import { MessagesRepository, type MessageRow } from './messages.repository';
@@ -74,6 +75,7 @@ export class MessageDispatchService {
     private readonly realtime: ChatRealtimePublisher,
     private readonly deliveries: DeliveryReporter,
     private readonly translation: ConversationTranslationService,
+    private readonly leadHandling: ContactTouchService,
   ) {}
 
   async dispatch(
@@ -227,6 +229,10 @@ export class MessageDispatchService {
       // A reaction is not an answer: it must not end the customer's wait, stamp a first response or move "last outbound".
       const reaction = row.kind === 'reaction';
       const humanReply = row.senderKind === 'agent';
+      // A person's message that the provider accepted reached the contact: lead handling (the uncontacted marker, BL-290). Never throws.
+      if (humanReply && !reaction && lockedConv.contactId !== null) {
+        await this.leadHandling.touch(tx, orgId, lockedConv.contactId, 'message');
+      }
       const { row: after, firstResponse } = reaction
         ? { row: lockedConv, firstResponse: false }
         : await this.conversations.applyOutboundSent(tx, orgId, conv.id, {

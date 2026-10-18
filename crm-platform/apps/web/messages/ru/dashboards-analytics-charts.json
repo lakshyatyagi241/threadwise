@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Подключено",
           "shopify": "Подключено",
-          "google_sheets": "Ключ API выдан",
-          "meta_catalog": "Каталог привязан"
+          "meta_catalog": "Каталог привязан",
+          "google_sheets": "Аккаунт Google подключён"
         },
         "notConnected": "не подключено",
         "connect": "Подключить",

@@ -62,7 +62,8 @@
       "field_match": "Coincidencia de campo",
       "date_field_match": "Coincidencia de fecha",
       "schedule": "Programación",
-      "ecom_event": "Evento de la tienda"
+      "ecom_event": "Evento de la tienda",
+      "segment_leave": "Salir del segmento"
     },
     "endReason": {
       "end_node": "Llegó al final del flujo",

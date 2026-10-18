@@ -613,7 +613,9 @@
         "campaign": "Campaign",
         "adset": "Ad set",
         "ad": "Ad",
-        "form": "Form"
+        "form": "Form",
+        "channel": "Channel",
+        "moduleType": "Module type"
       },
       "capturedAt": "Captured",
       "openSource": "Open the lead source"

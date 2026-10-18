@@ -566,11 +566,12 @@
         "hint": "इसके बिना भी बुकिंग काम करती हैं। फ़्री/बिज़ी समय सिंक करने और Meet लिंक जोड़ने के लिए अपॉइंटमेंट, सेटिंग्स में Google Calendar कनेक्ट करें।",
         "unavailable": "इस प्लेटफ़ॉर्म पर Google Calendar अभी सेट नहीं है। ये सेटिंग्स बुकिंग प्रकार के साथ रखी जाती हैं, ताकि सेट होने पर काम आएं।",
         "calendarId": "कैलेंडर",
-        "calendarPlaceholder": "प्राइमरी",
         "spreadsheetId": "शीट में जोड़ें (वैकल्पिक)",
-        "spreadsheetPlaceholder": "स्प्रेडशीट आईडी",
         "createMeet": "हर बुकिंग के लिए Google Meet लिंक बनाएं",
-        "calendarDefault": "वर्कस्पेस कैलेंडर"
+        "calendarDefault": "वर्कस्पेस कैलेंडर",
+        "connectFirst": "सूची में से चुनने के लिए अपना <link>Google खाता</link> कनेक्ट करें।",
+        "spreadsheetNone": "कोई शीट नहीं",
+        "spreadsheetNoListing": "आपकी शीट की सूची नहीं दिखाई जा सकती क्योंकि Drive फ़ाइल सूची की अनुमति नहीं दी गई है। इसे Google खाता पेज पर जोड़ें।"
       },
       "messages": {
         "title": "जीवनचक्र संदेश",

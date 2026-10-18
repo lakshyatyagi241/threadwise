@@ -29,7 +29,8 @@ const AUTH = 'https://www.googleapis.com/auth';
  *  - `calendar`: write booking and Meet events, read busy time, list the account's calendars (not the full `calendar` scope).
  *  - `sheets`: the Google Sheets nodes read and append rows of a sheet the flow author names.
  *  - `docs`: copy a template document, fill its placeholders, share the copy. The copy of a user-owned template needs full `drive`.
- *  - `forms`: the Google Form node reads a form's public responder link.
+ *  - `forms`: the Google Form node reads a form's public responder link, and reads the form's responses so a submission resumes the
+ *    waiting flow (no script is pasted into the form).
  *  - `drive_listing`: only the node pickers (list the account's sheets, documents and forms by name); without it the author pastes the link.
  */
 export const GOOGLE_CAPABILITY_SCOPES: Record<GoogleCapability, readonly string[]> = {
@@ -40,7 +41,7 @@ export const GOOGLE_CAPABILITY_SCOPES: Record<GoogleCapability, readonly string[
   ],
   sheets: [`${AUTH}/spreadsheets`],
   docs: [`${AUTH}/documents`, `${AUTH}/drive`],
-  forms: [`${AUTH}/forms.body.readonly`],
+  forms: [`${AUTH}/forms.body.readonly`, `${AUTH}/forms.responses.readonly`],
   drive_listing: [`${AUTH}/drive.metadata.readonly`],
 };
 

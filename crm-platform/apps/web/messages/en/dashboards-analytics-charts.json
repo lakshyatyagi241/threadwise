@@ -293,7 +293,7 @@
         "connected": {
           "woocommerce": "Connected",
           "shopify": "Connected",
-          "google_sheets": "API key issued",
+          "google_sheets": "Google account connected",
           "meta_catalog": "Catalog linked"
         },
         "notConnected": "not connected",

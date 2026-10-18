@@ -325,7 +325,8 @@
           "url": "Ou utilisez l’adresse de votre propre image",
           "urlHint": "Collez l’adresse d’une image carrée (https://...). Le téléversement de fichier n’est pas encore disponible.",
           "botName": "Nom du bot",
-          "botNameHint": "Affiché dans l'en-tête de la fenêtre de chat. Laissez vide pour utiliser le nom de votre bot."
+          "botNameHint": "Affiché dans l'en-tête de la fenêtre de chat. Laissez vide pour utiliser le nom de votre bot.",
+          "urlHintUpload": "Collez l'adresse d'une image carrée (https://...) ou téléversez un fichier ci-dessous."
         },
         "3": {
           "title": "Définissez votre message de bienvenue",
@@ -585,6 +586,19 @@
             "placeholder": "example.com",
             "add": "Ajouter un site web",
             "remove": "Supprimer le site web"
+          },
+          "feedback": {
+            "label": "Laisser les visiteurs noter les réponses",
+            "hint": "Pouces levé et baissé sous chaque réponse du bot.",
+            "message": "Message affiché après une note",
+            "keptWhenOff": "Les avis sont désactivés. Ce message est conservé et réapparaît si vous les réactivez."
+          },
+          "languages": {
+            "primary": "Langue principale",
+            "follow": "Suivre le navigateur du visiteur",
+            "primaryHint": "La langue des textes propres à la fenêtre de chat.",
+            "additional": "Autres langues",
+            "additionalHint": "Un visiteur dont le navigateur utilise l'une d'elles voit la fenêtre dans cette langue. Les autres voient la langue principale."
           }
         },
         "rail": {
@@ -699,7 +713,9 @@
         "statusLive": "En ligne",
         "statusDraft": "Non publié",
         "codeLabel": "HTML",
-        "localNote": "Ce code pointe vers une adresse de cet ordinateur (localhost) : il ne fonctionne que sur les pages ouvertes ici. Sur un site en ligne, utilisez votre adresse déployée."
+        "localNote": "Ce code pointe vers une adresse de cet ordinateur (localhost) : il ne fonctionne que sur les pages ouvertes ici. Sur un site en ligne, utilisez votre adresse déployée.",
+        "statusNoNumber": "Publié, sans numéro",
+        "noNumber": "Ce bot est publié, mais il n'a pas encore de numéro WhatsApp : le bouton, le code QR et le lien direct restent donc masqués. Choisissez un numéro dans le Déclencheur, onglet Créer."
       },
       "whatsapp": {
         "loading": "Chargement du bouton…",
@@ -708,7 +724,8 @@
         "saved": "Bouton WhatsApp enregistré",
         "saveFailed": "Impossible d'enregistrer le bouton. Réessayez.",
         "fromBot": "Le bouton ouvre WhatsApp sur {number}, le numéro sur lequel ce bot fonctionne. Modifiez le numéro dans le déclencheur de l'onglet Créer.",
-        "noNumber": "Ce bot n’a pas encore de numéro WhatsApp. Choisissez-en un dans le déclencheur, onglet Créer, puis revenez enregistrer le bouton."
+        "noNumber": "Ce bot n’a pas encore de numéro WhatsApp. Choisissez-en un dans le déclencheur, onglet Créer, puis revenez enregistrer le bouton.",
+        "keywordMissing": "Le message ci-dessus ne contient pas le mot de démarrage de votre bot « {keyword} ». Si le bot ne démarre qu'avec ce mot, les visiteurs qui touchent le bouton ne l'atteindront pas."
       }
     },
     "webBots": {

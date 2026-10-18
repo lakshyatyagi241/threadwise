@@ -13,6 +13,7 @@ import { pct } from '../lib/decision';
 import { errorKey } from '../lib/errors';
 import { withoutLog } from '../lib/log-model';
 import { writePrefill } from '../lib/prefill';
+import { FallbackCard } from './fallback-card';
 import { FaqIcon, SearchIcon } from './icons';
 import { useFaqFlow } from './faq-flow';
 import { CandidateList, FaqPickerModal, OriginTag, WhyText } from './log-parts';
@@ -104,6 +105,7 @@ export function UnansweredScreen() {
         title={t('title')}
         subtitle={t('subtitle')}
       />
+      <FallbackCard settings={settings.data} />
       <div className={`${CARD} p-4`}>
         <div className="relative max-w-md">
           <label htmlFor="faq-un-search" className="sr-only">

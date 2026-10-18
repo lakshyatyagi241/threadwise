@@ -5,6 +5,10 @@ import { AppointmentCalendarConsumer } from './appointment-calendar.consumer';
 import { CalendarBackfillConsumer } from './calendar-backfill.consumer';
 import { CalendarBackfillProcessor } from './calendar-backfill.jobs';
 import { IcsFeedRefreshProcessor, IcsFeedRefreshScheduler } from './ics-feeds.jobs';
+import {
+  MeetingMirrorBackfillProcessor,
+  MeetingMirrorBackfillScheduler,
+} from './meeting-mirror-backfill.jobs';
 import { CalendarReconcileProcessor, CalendarReconcileScheduler } from './calendar-reconcile.jobs';
 import { GoogleConsentSweepService } from './google-consent-sweep.service';
 import { CalendarReconcileService } from './calendar-reconcile.service';
@@ -28,6 +32,8 @@ import { AppointmentReminderSweepService } from './appointment-reminder-sweep.se
     AppointmentCalendarConsumer,
     CalendarBackfillConsumer,
     CalendarBackfillProcessor,
+    MeetingMirrorBackfillProcessor,
+    MeetingMirrorBackfillScheduler,
     IcsFeedRefreshProcessor,
     IcsFeedRefreshScheduler,
     CalendarReconcileService,

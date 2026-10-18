@@ -1,4 +1,5 @@
 import type { ContactMeetingResponse } from '@crm/contracts';
+import { isClosedBooking } from './meeting-booking';
 import { EMPTY_MEETING, isoToZonedLocal, type MeetingFormValues } from './meeting-time';
 
 /**
@@ -92,7 +93,8 @@ export type MeetingGroup = 'upcoming' | 'past' | 'undated';
 
 /**
  * Splits a contact's meetings for the list: the ones still ahead (soonest first), the ones behind (latest first), and the ones
- * logged with no start. A meeting that has started but not yet ended counts as upcoming.
+ * logged with no start. A meeting that has started but not yet ended counts as upcoming. A booking that was cancelled or declined
+ * is never still ahead: it sits with the past ones, tagged.
  */
 export function groupMeetings(
   meetings: readonly ContactMeetingResponse[],
@@ -110,7 +112,7 @@ export function groupMeetings(
       continue;
     }
     const end = m.endsAt ? Date.parse(m.endsAt) : Date.parse(m.startsAt);
-    (end >= t ? out.upcoming : out.past).push(m);
+    (end >= t && !isClosedBooking(m) ? out.upcoming : out.past).push(m);
   }
   out.upcoming.sort((a, b) => Date.parse(a.startsAt!) - Date.parse(b.startsAt!));
   out.past.sort((a, b) => Date.parse(b.startsAt!) - Date.parse(a.startsAt!));

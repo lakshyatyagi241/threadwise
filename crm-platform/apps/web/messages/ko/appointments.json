@@ -566,11 +566,12 @@
         "hint": "이 기능 없이도 예약은 작동합니다. 예약의 설정에서 Google 캘린더를 연결하면 바쁜 시간과 빈 시간을 동기화하고 Meet 링크를 추가할 수 있습니다.",
         "unavailable": "이 플랫폼에는 아직 Google 캘린더가 설정되지 않았습니다. 설정되면 사용할 수 있도록 이 설정은 예약 유형과 함께 보관됩니다.",
         "calendarId": "캘린더",
-        "calendarPlaceholder": "기본",
         "spreadsheetId": "시트에 추가 (선택)",
-        "spreadsheetPlaceholder": "스프레드시트 ID",
         "createMeet": "예약마다 Google Meet 링크 만들기",
-        "calendarDefault": "워크스페이스 캘린더"
+        "calendarDefault": "워크스페이스 캘린더",
+        "connectFirst": "목록에서 선택하려면 <link>Google 계정</link>을 연결하세요.",
+        "spreadsheetNone": "시트 없음",
+        "spreadsheetNoListing": "Drive 파일 목록 권한이 부여되지 않아 시트를 불러올 수 없습니다. Google 계정 페이지에서 권한을 추가하세요."
       },
       "messages": {
         "title": "수명 주기 메시지",

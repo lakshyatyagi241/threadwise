@@ -94,7 +94,13 @@
             "endInvalid": "Hãy nhập ngày giờ kết thúc hợp lệ.",
             "endBeforeStart": "Giờ kết thúc không được trước giờ bắt đầu."
           }
-        }
+        },
+        "bookedOnline": "Đặt lịch trực tuyến",
+        "viewBooking": "Xem lượt đặt lịch",
+        "manageBooking": "Quản lý lượt đặt lịch",
+        "viewBookingAria": "Xem lượt đặt lịch của {title}",
+        "manageBookingAria": "Quản lý lượt đặt lịch của {title}",
+        "bookedReadOnly": "Đặt lịch trực tuyến. Chỉ có thể thay đổi trong lượt đặt lịch."
       },
       "files": {
         "title": "Tệp",

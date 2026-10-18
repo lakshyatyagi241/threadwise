@@ -65,6 +65,17 @@ describe('Deploy tab', () => {
     expect(out).not.toContain('not published yet');
   });
 
+  it('says a published WhatsApp bot without a number is not ready, instead of showing Live', () => {
+    state.value = {
+      isPending: false,
+      data: { widget: { ...widget, targetWhatsappCc: null, targetWhatsappNumber: null } },
+    };
+    const out = renderIntl(<FlowWidgetDeploy flowId="f1" channel="chat" published />);
+    expect(out).toContain('Published, no number');
+    expect(out).toContain('data-testid="deploy-no-number"');
+    expect(out).not.toContain('>Live<');
+  });
+
   it('warns that an unpublished bot does not answer', () => {
     state.value = { isPending: false, data: { widget } };
     expect(renderIntl(<FlowWidgetDeploy flowId="f1" channel="chat" published={false} />)).toContain(

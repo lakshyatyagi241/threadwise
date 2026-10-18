@@ -613,7 +613,9 @@
         "campaign": "Kampanya",
         "adset": "Reklam seti",
         "ad": "Reklam",
-        "form": "Form"
+        "form": "Form",
+        "channel": "Kanal",
+        "moduleType": "Modül türü"
       },
       "capturedAt": "Yakalandı",
       "openSource": "Potansiyel müşteri kaynağını aç"

@@ -2,7 +2,7 @@ import { deflateRawSync, gunzipSync, gzipSync, inflateRawSync } from 'node:zlib'
 import { describe, expect, it } from 'vitest';
 import {
   deflateRawAsync,
-  forEachLine,
+  forEachGzipLine,
   gunzipAsync,
   gzipAsync,
   inflateRawAsync,
@@ -44,15 +44,19 @@ describe('async zlib', () => {
   });
 });
 
-describe('forEachLine', () => {
-  const walk = async (text: string, every?: number) => {
+describe('forEachGzipLine', () => {
+  const walk = async (payload: Buffer) => {
     const got: string[] = [];
-    await forEachLine(text, (l) => got.push(l), every);
+    await forEachGzipLine(payload, (l) => got.push(l));
     return got;
   };
-  const reference = (text: string) => text.split('\n').filter((l) => l !== '');
+  const reference = (payload: Buffer) =>
+    gunzipSync(payload)
+      .toString('utf8')
+      .split('\n')
+      .filter((l) => l !== '');
 
-  it('visits the same lines in the same order as split + skip-empty, for awkward inputs', async () => {
+  it('visits the same lines in the same order as gunzip + split + skip-empty, for awkward inputs', async () => {
     for (const text of [
       '',
       '\n',
@@ -65,33 +69,58 @@ describe('forEachLine', () => {
       'x\r\ny\r\n', // CR stays on the line, as with split('\n')
       '{"a":1}\n{"a":2}\n',
     ]) {
-      expect(await walk(text, 2), JSON.stringify(text)).toEqual(reference(text));
+      const gz = gzipSync(text);
+      expect(await walk(gz), JSON.stringify(text)).toEqual(reference(gz));
     }
   });
 
-  it('matches on a big input with a small yield interval', async () => {
-    const text = Array.from({ length: 9_999 }, (_, i) => (i % 50 === 0 ? '' : `line ${i}`)).join(
-      '\n',
-    );
-    expect(await walk(text, 7)).toEqual(reference(text));
+  it('reads concatenated gzip members as one stream (the archive appends a member per batch)', async () => {
+    const gz = Buffer.concat([
+      gzipSync('first\nsecond\n'),
+      gzipSync('third\n'),
+      gzipSync('fourth'),
+    ]);
+    expect(await walk(gz)).toEqual(['first', 'second', 'third', 'fourth']);
   });
 
-  it('lets other work run while it walks (a timer set before it fires before it finishes)', async () => {
-    const text = Array.from({ length: 20_000 }, (_, i) => `{"i":${i}}`).join('\n');
+  it('keeps lines whole across chunk boundaries and does not split multi-byte characters', async () => {
+    // Longer than the 64 KB stream chunk, with 3- and 4-byte characters at every position mod 7.
+    const lines = Array.from(
+      { length: 6_000 },
+      (_, i) => `${'x'.repeat(i % 7)}€𝄞 line ${i} ünï${'y'.repeat(i % 50)}`,
+    );
+    const gz = gzipSync(`${lines.join('\n')}\n`);
+    expect(gunzipSync(gz).length).toBeGreaterThan(64 * 1024 * 3);
+    expect(await walk(gz)).toEqual(lines);
+  });
+
+  it('lets other work run while it streams (a timer set before it fires before it finishes)', async () => {
+    const gz = gzipSync(Array.from({ length: 200_000 }, (_, i) => `{"i":${i}}`).join('\n'));
     let timerFired = false;
     setTimeout(() => {
       timerFired = true;
     }, 0);
-    let firedBeforeEnd = false;
-    await forEachLine(text, () => undefined, 1_000);
-    firedBeforeEnd = timerFired;
-    expect(firedBeforeEnd).toBe(true);
+    let firedAtLine = -1;
+    let n = 0;
+    await forEachGzipLine(gz, () => {
+      n += 1;
+      if (timerFired && firedAtLine < 0) firedAtLine = n;
+    });
+    expect(n).toBe(200_000);
+    expect(firedAtLine).toBeGreaterThan(0);
+    expect(firedAtLine).toBeLessThan(200_000);
+  });
+
+  it('a corrupt payload rejects', async () => {
+    await expect(walk(Buffer.from('definitely not gzip'))).rejects.toThrow();
+    const truncated = gzipSync('a\nb\nc\n'.repeat(5_000)).subarray(0, 40);
+    await expect(walk(truncated)).rejects.toThrow();
   });
 
   it('a throwing callback rejects the walk and stops it', async () => {
     let seen = 0;
     await expect(
-      forEachLine('a\nb\nc\n', () => {
+      forEachGzipLine(gzipSync('a\nb\nc\n'), () => {
         seen += 1;
         if (seen === 2) throw new Error('bad line');
       }),

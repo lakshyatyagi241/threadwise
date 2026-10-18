@@ -566,11 +566,12 @@
         "hint": "การจองใช้งานได้โดยไม่ต้องมีสิ่งนี้ เชื่อมต่อ Google Calendar ที่ นัดหมาย, การตั้งค่า เพื่อซิงก์เวลาว่าง/ไม่ว่างและเพิ่มลิงก์ Meet",
         "unavailable": "แพลตฟอร์มนี้ยังไม่ได้ตั้งค่า Google Calendar การตั้งค่าเหล่านี้จะเก็บไว้กับประเภทการจองจนกว่าจะพร้อม",
         "calendarId": "ปฏิทิน",
-        "calendarPlaceholder": "หลัก",
         "spreadsheetId": "เพิ่มลงชีต (ไม่บังคับ)",
-        "spreadsheetPlaceholder": "รหัสสเปรดชีต",
         "createMeet": "สร้างลิงก์ Google Meet สำหรับแต่ละการจอง",
-        "calendarDefault": "ปฏิทินของเวิร์กสเปซ"
+        "calendarDefault": "ปฏิทินของเวิร์กสเปซ",
+        "connectFirst": "เชื่อมต่อ <link>บัญชี Google</link> เพื่อเลือกจากรายการ",
+        "spreadsheetNone": "ไม่มีชีต",
+        "spreadsheetNoListing": "ไม่สามารถแสดงรายการชีตของคุณได้ เนื่องจากไม่ได้ให้สิทธิ์ \"รายการไฟล์ใน Drive\" เพิ่มสิทธิ์นี้ได้ที่หน้าบัญชี Google"
       },
       "messages": {
         "title": "ข้อความตามวงจรการจอง",

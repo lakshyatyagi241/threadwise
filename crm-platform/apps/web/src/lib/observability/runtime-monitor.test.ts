@@ -1,8 +1,15 @@
 import { getRuntimeMonitor, stopRuntimeMonitor } from '@crm/observability';
 import { afterEach, describe, expect, it } from 'vitest';
-import { readMonitorConfig, startWebRuntimeMonitor } from './runtime-monitor';
+import {
+  readMonitorConfig,
+  startWebRuntimeMonitor,
+  stopWebRequestMetrics,
+} from './runtime-monitor';
 
-afterEach(() => stopRuntimeMonitor());
+afterEach(() => {
+  stopWebRequestMetrics();
+  stopRuntimeMonitor();
+});
 
 describe('readMonitorConfig', () => {
   it('uses the API defaults when nothing is set: on, 10 s window, no listener, loopback', () => {

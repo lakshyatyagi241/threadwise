@@ -439,6 +439,72 @@ describe('Forms and the file pickers', () => {
     });
   });
 
+  it("reads a form's submissions since a time, keyed by question title, oldest first", async () => {
+    const g = google([
+      [
+        /GET .*\/forms\/F1$/,
+        {
+          status: 200,
+          body: {
+            items: [
+              { title: 'Name', questionItem: { question: { questionId: 'q1' } } },
+              { title: 'Toppings', questionItem: { question: { questionId: 'q2' } } },
+            ],
+          },
+        },
+      ],
+      [
+        /GET .*\/forms\/F1\/responses/,
+        {
+          status: 200,
+          body: {
+            responses: [
+              {
+                responseId: 'r2',
+                lastSubmittedTime: '2026-10-18T10:05:00Z',
+                answers: { q1: { textAnswers: { answers: [{ value: 'Bo' }] } } },
+              },
+              {
+                responseId: 'r1',
+                lastSubmittedTime: '2026-10-18T10:00:00Z',
+                respondentEmail: 'ana@example.com',
+                answers: {
+                  q1: { textAnswers: { answers: [{ value: 'Ana' }] } },
+                  q2: { textAnswers: { answers: [{ value: 'olives' }, { value: 'feta' }] } },
+                },
+              },
+              { lastSubmittedTime: '2026-10-18T10:06:00Z' },
+            ],
+          },
+        },
+      ],
+    ]);
+    const asked = tokens();
+    const out = await new HttpGoogleWorkspace(asked.t, g.http).formResponses(
+      1,
+      'F1',
+      new Date('2026-10-18T09:59:00Z'),
+    );
+    expect(out.map((r) => r.responseId)).toEqual(['r1', 'r2']);
+    expect(out[0]).toMatchObject({
+      respondent: 'ana@example.com',
+      answers: { Name: 'Ana', Toppings: ['olives', 'feta'] },
+    });
+    expect(out[1]).toMatchObject({ respondent: null, answers: { Name: 'Bo' } });
+    expect(decodeURIComponent(g.calls[1]!.url)).toContain(
+      'filter=timestamp >= 2026-10-18T09:59:00.000Z',
+    );
+    expect(new Set(asked.asked)).toEqual(new Set(['forms']));
+  });
+
+  it('refuses a form id that is not a Google id before any request', async () => {
+    const g = google([]);
+    await expect(
+      new HttpGoogleWorkspace(tokens().t, g.http).formResponses(1, '../x', new Date(0)),
+    ).rejects.toMatchObject({ code: 'GOOGLE_BAD_REQUEST' });
+    expect(g.calls).toEqual([]);
+  });
+
   it('lists files of one kind, newest first, keeping only id and name', async () => {
     const g = google([
       [

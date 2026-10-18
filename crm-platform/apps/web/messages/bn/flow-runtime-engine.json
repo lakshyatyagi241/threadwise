@@ -62,7 +62,8 @@
       "field_match": "ফিল্ড মিলেছে",
       "date_field_match": "তারিখ মিলেছে",
       "schedule": "শিডিউল",
-      "ecom_event": "স্টোর ইভেন্ট"
+      "ecom_event": "স্টোর ইভেন্ট",
+      "segment_leave": "সেগমেন্ট ছাড়া"
     },
     "endReason": {
       "end_node": "ফ্লোর শেষ পর্যন্ত পৌঁছেছে",

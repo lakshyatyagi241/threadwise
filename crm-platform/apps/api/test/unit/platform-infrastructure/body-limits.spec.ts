@@ -61,7 +61,6 @@ describe('which paths are in which class', () => {
     ['/v2/shopify/compliance', 'webhook'],
     ['/v2/woocommerce/webhook/secret', 'webhook'],
     ['/v2/campaigns/node/update-status', 'webhook'],
-    ['/google/form-response', 'webhook'],
     ['/v2/public/lead-hooks/tok', 'lead-hook'],
     ['/v2/public/marketplace/hooks/x', 'marketplace-hook'],
   ])('%s is %s', (path, name) => {

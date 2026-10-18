@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "সংযুক্ত",
           "shopify": "সংযুক্ত",
-          "google_sheets": "API কী ইস্যু হয়েছে",
-          "meta_catalog": "ক্যাটালগ যুক্ত হয়েছে"
+          "meta_catalog": "ক্যাটালগ যুক্ত হয়েছে",
+          "google_sheets": "Google অ্যাকাউন্ট সংযুক্ত হয়েছে"
         },
         "notConnected": "সংযুক্ত নয়",
         "connect": "সংযুক্ত করুন",

@@ -114,6 +114,20 @@ describe('groupMeetings', () => {
   });
 });
 
+describe('groupMeetings and closed bookings', () => {
+  const now = new Date('2026-10-16T12:00:00Z');
+  it('a cancelled or declined booking in the future sits with the past ones, tagged; a pending or confirmed one stays upcoming', () => {
+    const base = { startsAt: '2026-10-20T10:00:00Z', endsAt: null, source: 'booking' as const };
+    const cancelled = meeting({ id: 'c', ...base, status: 'cancelled' });
+    const declined = meeting({ id: 'd', ...base, status: 'declined' });
+    const pending = meeting({ id: 'p', ...base, status: 'pending' });
+    const confirmed = meeting({ id: 'k', ...base, status: 'confirmed' });
+    const g = groupMeetings([cancelled, declined, pending, confirmed], now);
+    expect(g.upcoming.map((m) => m.id).sort()).toEqual(['k', 'p']);
+    expect(g.past.map((m) => m.id).sort()).toEqual(['c', 'd']);
+  });
+});
+
 describe('asLink', () => {
   it('accepts a web address and nothing else', () => {
     expect(asLink('https://meet.example.com/abc')).toBe('https://meet.example.com/abc');

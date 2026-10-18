@@ -16,6 +16,7 @@ import {
   type BulkGroupContactsInput,
   type BulkOwnerContactsInput,
   type BulkSelectionResult,
+  type BulkSetUncontactedInput,
   type BulkTagContactsInput,
   type ExportContactsInput,
   type RecordScope,
@@ -34,6 +35,7 @@ import { resolveContactFilter } from '../contacts/contact-filter.resolver';
 import { ContactsRepository } from '../contacts/contacts.repository';
 import { TagsRepository } from '../tags/tags.repository';
 import { TagsService } from '../tags/tags.service';
+import { ContactTouchService } from '../lead-handling/contact-touch.service';
 import { ContactBulkRepository, type ActorMeta } from './contact-bulk.repository';
 import { UTF8_BOM, csvLine, guardFormula } from './csv-writer';
 
@@ -87,6 +89,7 @@ export class ContactBulkService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly erasure: PersonalDataErasureService,
+    private readonly touch: ContactTouchService,
   ) {}
 
   private meta(): ActorMeta {
@@ -235,7 +238,32 @@ export class ContactBulkService {
       const r = await this.resolve(tx, input, scope, { maxMatched: BULK_FILTER_MAX });
       const changed =
         r.where && r.matched > 0
-          ? await this.repo.setOwner(tx, ctx.orgId, r.where, owner, this.meta())
+          ? await this.repo.setOwner(
+              tx,
+              ctx.orgId,
+              r.where,
+              owner,
+              this.meta(),
+              owner.id !== null && (await this.touch.marksOnReassign(tx, ctx.orgId)),
+            )
+          : 0;
+      return this.result(r, changed);
+    });
+  }
+
+  // --- uncontacted -------------------------------------------------------------------------
+
+  /** Marks a selection as uncontacted or as contacted by hand (BL-290), inside the caller's update record scope. */
+  async setUncontacted(
+    input: BulkSetUncontactedInput,
+    scope: RecordScope,
+  ): Promise<BulkSelectionResult> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const r = await this.resolve(tx, input, scope, { maxMatched: BULK_FILTER_MAX });
+      const changed =
+        r.where && r.matched > 0
+          ? await this.repo.setUncontacted(tx, ctx.orgId, r.where, input.uncontacted, this.meta())
           : 0;
       return this.result(r, changed);
     });

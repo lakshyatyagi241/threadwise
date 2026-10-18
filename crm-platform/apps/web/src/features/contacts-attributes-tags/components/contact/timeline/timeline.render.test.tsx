@@ -19,7 +19,7 @@ const renderAccount: typeof render = (element: ReactElement, options) =>
     '',
   );
 import { FIELD_HISTORY_KEY } from '../../../api/field-history';
-import { MEETING_KEYS } from '../../../api/meetings';
+import { MEETING_KEYS, MEETING_QUERY } from '../../../api/meetings';
 import { NOTE_KEYS } from '../../../api/notes';
 import type { ContactRow } from '../../../api/schemas';
 import {
@@ -277,7 +277,7 @@ describe('ActivityFeed', () => {
       session: can(...permissions),
       seed: [
         [[...NOTE_KEYS.list(ID), {}], page([])],
-        [[...MEETING_KEYS.list(ID), {}], page([])],
+        [[...MEETING_KEYS.list(ID), MEETING_QUERY], page([])],
         [[...FIELD_HISTORY_KEY(ID), { limit: 50 }], page([])],
         [['cat', 'activities', ID, {}], page([])],
         ...seed,

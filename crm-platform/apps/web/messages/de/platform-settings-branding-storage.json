@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "Endpunkt",
-            "hint": "Erforderlich für Spaces, R2 und MinIO. Ein abschließendes /bucket wird entfernt.",
-            "placeholder": "https://… (erforderlich für Spaces / R2 / MinIO; automatisch für Wasabi und Bunny)"
+            "hint": "Erforderlich für Spaces und R2. Ein abschließendes /bucket wird entfernt.",
+            "placeholder": "https://… (erforderlich für Spaces / R2; automatisch für Wasabi und Bunny)"
           },
           "cdnUrl": {
             "label": "Öffentliche / CDN-URL (optional)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "Pfadstil-Endpunkt verwenden (MinIO / einige S3-kompatible Speicher)"
+            "label": "Pfadstil-Endpunkt verwenden (einige S3-kompatible Speicher)"
           },
           "storageZone": {
             "label": "Speicherzone",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3-kompatibel"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "Privat (signierte URLs)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "Cloud-Speicher",
-        "description": "Senden Sie Medien der Kunden in Ihren eigenen Bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 oder MinIO.",
+        "description": "Senden Sie Medien der Kunden in Ihren eigenen Bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "Verwenden Sie die Bunny-Felder: Speicherzone und Passwort. Region ist die Zonenregion (de, ny, la …)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "Füllen Sie die S3-Felder aus und fügen Sie die Endpunkt-URL ein. Aktivieren Sie den Pfadstil für MinIO."
+              "title": "Spaces / R2",
+              "body": "Füllen Sie die S3-Felder aus und fügen Sie die Endpunkt-URL ein."
             },
             "test": {
               "title": "Immer zuerst testen",
@@ -1760,7 +1759,7 @@
             },
             "consent": {
               "title": "3. Zustimmungsbildschirm",
-              "body": "Fügen Sie die Bereiche hinzu, die das Produkt anfordert (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), und veröffentlichen Sie dann die App: Im Testmodus beendet Google jede Freigabe nach 7 Tagen, und Workspaces müssen sich neu verbinden. Die Drive-Bereiche sind eingeschränkt und erfordern die Prüfung durch Google."
+              "body": "Fügen Sie die Bereiche hinzu, die das Produkt anfordert (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), und veröffentlichen Sie dann die App: Im Testmodus beendet Google jede Freigabe nach 7 Tagen, und Workspaces müssen sich neu verbinden. Die Drive-Bereiche sind eingeschränkt und erfordern die Prüfung durch Google."
             },
             "workspaces": {
               "title": "4. Workspaces verbinden sich",

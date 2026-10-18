@@ -7,6 +7,7 @@ import {
   calendarConnectStartResponseSchema,
   calendarDriftActionSchema,
   calendarListResponseSchema,
+  spreadsheetListResponseSchema,
   calendarStatusResponseSchema,
   previewSlotsResponseSchema,
   publicBookResponseSchema,
@@ -27,6 +28,7 @@ import type {
   BookingTypeInput,
   CalendarConnection,
   CalendarOption,
+  SpreadsheetOption,
   PreviewDraft,
   PublicBookInput,
   PublicDirectory,
@@ -222,6 +224,12 @@ export const realAppointmentsApi = {
   },
   calendars(signal?: AbortSignal): Promise<CalendarOption[]> {
     return call('/appointments/calendar/google/calendars', { schema: calendarOptions, signal });
+  },
+  spreadsheets(signal?: AbortSignal): Promise<SpreadsheetOption[]> {
+    return call('/appointments/calendar/google/spreadsheets', {
+      schema: spreadsheetListResponseSchema.transform((r) => r.data),
+      signal,
+    });
   },
   selectCalendar(calendarId: string): Promise<CalendarConnection> {
     return call('/appointments/calendar/google/calendar', {

@@ -27,7 +27,8 @@
       "minor": "ทำเครื่องหมายเป็นผู้เยาว์แล้ว",
       "dateOfBirth": "วันเกิด",
       "age": "อายุ (ปี)",
-      "timezone": "เขตเวลา"
+      "timezone": "เขตเวลา",
+      "uncontacted": "ยังไม่ได้ติดต่อ"
     },
     "fieldGroups": {
       "journey": "เส้นทาง",

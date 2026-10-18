@@ -13,7 +13,13 @@ import {
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
-import { MergeTagService, renderMergeTags, resolveToken, type MergeContext } from '../crm';
+import {
+  ContactTouchService,
+  MergeTagService,
+  renderMergeTags,
+  resolveToken,
+  type MergeContext,
+} from '../crm';
 import { BroadcastInboxMirrorService } from './broadcast-inbox-mirror.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
 import { EngineSenderRegistry, renderPlainBody, type OutgoingText } from './engine-senders';
@@ -110,6 +116,7 @@ export class BroadcastDispatchService {
     @Inject(WARMER_GATE) private readonly warmer: WarmerGate,
     @Inject(PACING_SETTINGS) private readonly pacingSettings: PacingSettingsSource,
     private readonly runtime: PacingRuntime,
+    private readonly leadHandling: ContactTouchService,
     private readonly cap: CapTally,
     private readonly lease: SenderLease,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
@@ -559,10 +566,13 @@ export class BroadcastDispatchService {
             status: 'sent',
             providerMessageId,
           });
-          if (from !== null)
+          if (from !== null) {
             await this.progress.emitMessage(tx, orgId, broadcastId, contactId, 'sent', 'send', {
               providerMessageId,
             });
+            // The broadcast reached the contact: lead handling (the uncontacted marker, BL-290). Never throws.
+            await this.leadHandling.touch(tx, orgId, contactId, 'automation');
+          }
         });
         // The inbox bubble is best effort and has its own transaction: it never undoes the recorded send.
         await this.mirror

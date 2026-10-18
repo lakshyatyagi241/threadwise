@@ -48,17 +48,32 @@ export function splitNumber(phone: string | null): { cc: string; number: string 
 }
 
 /**
- * The button's number and message, always taken from the bot: its Trigger's number, and its keyword as the text a tap sends so the
- * keyword starts the bot (any-message bots keep the default text). Nothing here is asked for twice.
+ * The button's number, always taken from the bot: its Trigger's number. The message a tap sends is the bot's keyword for a button
+ * nobody has set up yet (so the keyword starts the bot; any-message bots keep the default text). A button that already exists, saved
+ * here or brought over from another system, keeps its own message: that text is what the customer sees in WhatsApp, and only the
+ * keyword-less message is filled from the bot.
  */
-export function botTarget(base: BuilderState, d: WhatsappBotDefaults): BuilderState {
+export function botTarget(
+  base: BuilderState,
+  d: WhatsappBotDefaults,
+  keepMessage = false,
+): BuilderState {
   const split = splitNumber(d.phone);
+  const keyword = d.keyword.trim();
   return {
     ...base,
     targetWhatsappCc: split?.cc ?? '',
     targetWhatsappNumber: split?.number ?? '',
-    ...(d.keyword.trim() === '' ? {} : { prefilledMessage: d.keyword.trim() }),
+    ...(keyword === '' || (keepMessage && base.prefilledMessage.trim() !== '')
+      ? {}
+      : { prefilledMessage: keyword }),
   };
+}
+
+/** True when a tap on the button would send a message that does not contain the word that starts the bot. */
+export function messageMissesKeyword(message: string, keyword: string): boolean {
+  const word = keyword.trim().toLowerCase();
+  return word !== '' && !message.toLowerCase().includes(word);
 }
 
 /** A new bot's button: the look the WhatsApp widget opens on, aimed at the bot. */
@@ -150,7 +165,7 @@ function Panel({
   const set = (patch: Partial<BuilderState>) => setLook((prev) => ({ ...prev, ...patch }));
 
   // What is shown, previewed and saved always follows the bot, so a number changed on the Trigger is never left behind here.
-  const s = botTarget(look, defaults);
+  const s = botTarget(look, defaults, !untouched);
   const hasNumber = splitNumber(defaults.phone) !== null;
 
   const save = async () => {
@@ -189,25 +204,8 @@ function Panel({
 
   return (
     <div>
-      {untouched ? (
-        <p
-          role="status"
-          data-testid="customize-untouched"
-          className="mx-4 mt-4 rounded-xl border border-warning/40 bg-warning/10 p-3 text-[12.5px] sm:mx-6 lg:mx-7"
-        >
-          {t('untouched')}
-        </p>
-      ) : null}
-      {hasNumber ? (
-        <p
-          data-testid="whatsapp-from-bot"
-          className="mx-4 mt-4 rounded-xl border border-border bg-background p-3 text-[12.5px] sm:mx-6 lg:mx-7"
-        >
-          {t('fromBot', {
-            number: `${defaults.numberLabel} +${(defaults.phone ?? '').replace(/\D+/g, '')}`,
-          })}
-        </p>
-      ) : (
+      {/* One message about the missing number, with what to do; the "not set up yet" reminder waits until there is a number */}
+      {!hasNumber ? (
         <p
           role="alert"
           data-testid="whatsapp-no-number"
@@ -215,7 +213,36 @@ function Panel({
         >
           {t('noNumber')}
         </p>
+      ) : (
+        <>
+          {untouched ? (
+            <p
+              role="status"
+              data-testid="customize-untouched"
+              className="mx-4 mt-4 rounded-xl border border-warning/40 bg-warning/10 p-3 text-[12.5px] sm:mx-6 lg:mx-7"
+            >
+              {t('untouched')}
+            </p>
+          ) : null}
+          <p
+            data-testid="whatsapp-from-bot"
+            className="mx-4 mt-4 rounded-xl border border-border bg-background p-3 text-[12.5px] sm:mx-6 lg:mx-7"
+          >
+            {t('fromBot', {
+              number: `${defaults.numberLabel} +${(defaults.phone ?? '').replace(/\D+/g, '')}`,
+            })}
+          </p>
+        </>
       )}
+      {messageMissesKeyword(s.prefilledMessage, defaults.keyword) ? (
+        <p
+          role="note"
+          data-testid="whatsapp-keyword-missing"
+          className="mx-4 mt-4 rounded-xl border border-warning/40 bg-warning/10 p-3 text-[12.5px] sm:mx-6 lg:mx-7"
+        >
+          {t('keywordMissing', { keyword: defaults.keyword.trim() })}
+        </p>
+      ) : null}
       <WhatsappBuilder
         embedded
         s={s}

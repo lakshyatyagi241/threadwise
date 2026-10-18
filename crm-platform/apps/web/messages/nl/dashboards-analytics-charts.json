@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Verbonden",
           "shopify": "Verbonden",
-          "google_sheets": "API-sleutel uitgegeven",
-          "meta_catalog": "Catalogus gekoppeld"
+          "meta_catalog": "Catalogus gekoppeld",
+          "google_sheets": "Google-account gekoppeld"
         },
         "notConnected": "niet verbonden",
         "connect": "Verbinden",

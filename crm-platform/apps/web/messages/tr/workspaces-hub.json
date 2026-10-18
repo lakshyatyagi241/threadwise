@@ -187,6 +187,7 @@
       "notFound": "Bu çalışma alanı artık yok.",
       "reasonRequired": "En az 8 karakterlik bir neden gerekli.",
       "orgSuspended": "Çalışma alanı askıya alındığı için girilemiyor.",
+      "noOwner": "Bu çalışma alanında, adına giriş yapılabilecek etkin bir sahip yok.",
       "validation": "Değerleri kontrol edip yeniden deneyin."
     },
     "detail": {

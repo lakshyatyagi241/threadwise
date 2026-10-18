@@ -566,11 +566,12 @@
         "hint": "Boekingen werken ook zonder dit. Verbind Google Agenda in Afspraken, Instellingen om vrij/bezet-tijden te synchroniseren en Meet-links toe te voegen.",
         "unavailable": "Google Agenda is nog niet ingesteld voor dit platform. Deze instellingen worden bij het boekingstype bewaard voor wanneer het zover is.",
         "calendarId": "Agenda",
-        "calendarPlaceholder": "primair",
         "spreadsheetId": "Toevoegen aan spreadsheet (optioneel)",
-        "spreadsheetPlaceholder": "Spreadsheet-ID",
         "createMeet": "Maak voor elke boeking een Google Meet-link",
-        "calendarDefault": "De workspaceagenda"
+        "calendarDefault": "De workspaceagenda",
+        "connectFirst": "Koppel je <link>Google-account</link> om uit de lijst te kiezen.",
+        "spreadsheetNone": "Geen sheet",
+        "spreadsheetNoListing": "Je sheets kunnen niet worden weergegeven omdat de machtiging Drive-bestandslijst niet is verleend. Voeg deze toe op de pagina Google-account."
       },
       "messages": {
         "title": "Levenscyclusberichten",

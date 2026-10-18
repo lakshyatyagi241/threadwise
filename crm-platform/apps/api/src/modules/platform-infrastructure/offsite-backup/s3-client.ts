@@ -11,7 +11,7 @@ import {
 
 /**
  * The few S3 calls the off-host backup needs (PUT from a file, HEAD, list, GET to a file, DELETE), signed with AWS Signature V4
- * (the shared signer in infra/net). No SDK: the API image has none and these providers (Cloudflare R2, S3, MinIO, ...) all accept
+ * (the shared signer in infra/net). No SDK: the API image has none and these providers (Cloudflare R2, S3, ...) all accept
  * plain SigV4. This client streams files and signs a precomputed payload hash.
  */
 export type S3Config = S3SigningConfig;

@@ -2,7 +2,7 @@
 name: setup
 description: >-
   End-to-end local dev environment setup for this CRM platform repo —
-  installs dependencies, starts Docker infra (Postgres/Redis/MinIO/Mailpit),
+  installs dependencies, starts Docker infra (Postgres/Redis/Mailpit),
   builds shared packages, runs database migrations, seeds demo data, and
   verifies the API actually boots and passes health checks. Use this
   whenever a teammate has just cloned the repo and wants to get it running

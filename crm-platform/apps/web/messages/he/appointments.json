@@ -566,11 +566,12 @@
         "hint": "הזמנות עובדות גם בלי זה. חבר את Google Calendar בפגישות, הגדרות כדי לסנכרן זמנים פנויים/תפוסים ולהוסיף קישורי Meet.",
         "unavailable": "Google Calendar עדיין לא הוגדר בפלטפורמה הזו. ההגדרות האלה נשמרות עם סוג ההזמנה לכשיוגדר.",
         "calendarId": "לוח שנה",
-        "calendarPlaceholder": "ראשי",
         "spreadsheetId": "הוספה לגיליון (אופציונלי)",
-        "spreadsheetPlaceholder": "מזהה גיליון",
         "createMeet": "יצירת קישור Google Meet לכל הזמנה",
-        "calendarDefault": "לוח השנה של סביבת העבודה"
+        "calendarDefault": "לוח השנה של סביבת העבודה",
+        "connectFirst": "חברו את <link>חשבון Google</link> שלכם כדי לבחור מתוך הרשימה שלו.",
+        "spreadsheetNone": "ללא גיליון",
+        "spreadsheetNoListing": "לא ניתן להציג את רשימת הגיליונות שלכם כי ההרשאה \"רשימת קבצי Drive\" לא ניתנה. הוסיפו אותה בעמוד חשבון Google."
       },
       "messages": {
         "title": "הודעות מחזור חיים",

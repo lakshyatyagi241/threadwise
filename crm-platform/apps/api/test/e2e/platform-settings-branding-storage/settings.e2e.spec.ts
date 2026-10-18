@@ -490,7 +490,7 @@ describe('TW-SET-039 storage test', () => {
     await save(
       'storage',
       {
-        provider: 'minio',
+        provider: 'r2',
         endpoint: stubUrl,
         bucket: 'media',
         accessKeyId: 'AKID',
@@ -520,7 +520,7 @@ describe('TW-SET-039 storage test', () => {
     });
     await save(
       'storage',
-      { provider: 'minio', endpoint: stubUrl, bucket: 'media', accessKeyId: 'AKID' },
+      { provider: 'r2', endpoint: stubUrl, bucket: 'media', accessKeyId: 'AKID' },
       { secret: 'bucket-secret' },
     );
     stubStatus = 403;

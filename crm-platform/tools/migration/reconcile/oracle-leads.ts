@@ -225,6 +225,28 @@ export function oracleAttribution(
       form: pick('module_name'),
       captured_at: captured.toISOString(),
       created_at: captured.toISOString(),
+      evidence: scrub({
+        legacy: {
+          waboo: {
+            id: key,
+            current: Object.fromEntries(
+              Object.entries(doc)
+                .filter(
+                  ([k, v]) =>
+                    !['_id', 'id', 'contact_id', 'first_touch'].includes(k) &&
+                    v !== null &&
+                    v !== undefined,
+                )
+                .map(([k, v]) => [k, plainOf(v)]),
+            ),
+            firstTouch: Object.fromEntries(
+              Object.entries(ft)
+                .filter(([, v]) => v !== null && v !== undefined)
+                .map(([k, v]) => [k, plainOf(v)]),
+            ),
+          },
+        },
+      }).value,
     },
   };
 }

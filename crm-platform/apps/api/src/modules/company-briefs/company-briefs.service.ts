@@ -221,9 +221,15 @@ export class CompanyBriefsService {
 
   /** The workspace's own key first (any vendor), else the platform's; null when neither exists. */
   private async resolveAi(orgId: number): Promise<ResolvedAi | null> {
+    // Each vendor is resolved at most once: the second pass (the platform's key) reuses what the first pass already read.
+    const resolved = new Map<string, Awaited<ReturnType<typeof this.keys.resolve>>>();
     for (const wanted of ['workspace', 'admin'] as const) {
       for (const provider of PROVIDERS) {
-        const r = await this.keys.resolve(orgId, provider);
+        let r = resolved.get(provider);
+        if (!r) {
+          r = await this.keys.resolve(orgId, provider);
+          resolved.set(provider, r);
+        }
         if (r.key && r.source === wanted) {
           return {
             provider,

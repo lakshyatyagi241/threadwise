@@ -126,7 +126,12 @@
       "details": {
         "title": "Detail kontak",
         "stage": "Tahap siklus hidup",
-        "otherProperties": "Properti lainnya"
+        "otherProperties": "Properti lainnya",
+        "stageSince": "Di tahap ini sejak",
+        "previousStage": "Tahap sebelumnya",
+        "previousStageSince": "Tahap sebelumnya sejak",
+        "lostReason": "Alasan kalah",
+        "updatedAt": "Terakhir diperbarui"
       },
       "company": {
         "title": "Perusahaan",

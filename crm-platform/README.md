@@ -14,7 +14,7 @@ corepack enable pnpm
 pnpm install
 cp .env.example .env
 
-pnpm infra:up                          # postgres, redis, minio, mailpit
+pnpm infra:up                          # postgres, redis, mailpit
 pnpm --filter @crm/contracts build
 pnpm --filter @crm/db build
 pnpm --filter @crm/observability build

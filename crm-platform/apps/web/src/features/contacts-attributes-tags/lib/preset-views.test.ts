@@ -49,10 +49,11 @@ describe('built-in contact views', () => {
     });
   });
 
-  it('the quick chips are five built-in views, in the order a small business reaches for them', () => {
+  it('the quick chips are six built-in views, in the order a small business reaches for them', () => {
     expect([...QUICK_PRESETS]).toEqual([
       'myContacts',
       'unassigned',
+      'uncontacted',
       'newThisWeek',
       'needsFollowUp',
       'hotLeads',
@@ -76,6 +77,7 @@ describe('built-in views while lead scoring is off', () => {
     expect(availablePresets(QUICK_PRESETS, false)).toEqual([
       'myContacts',
       'unassigned',
+      'uncontacted',
       'newThisWeek',
       'needsFollowUp',
     ]);
@@ -86,5 +88,21 @@ describe('built-in views while lead scoring is off', () => {
   it('keeps them all while it is on', () => {
     expect(availablePresets(QUICK_PRESETS, true)).toEqual([...QUICK_PRESETS]);
     expect(availablePresets(PRESET_VIEWS, true)).toEqual([...PRESET_VIEWS]);
+  });
+});
+
+describe('the Uncontacted view (BL-290)', () => {
+  it('filters on the uncontacted marker with the rule the condition builder writes', () => {
+    expect(JSON.parse(presetFilters('uncontacted', ME).rules!).children[0]).toMatchObject({
+      field: 'uncontacted',
+      operator: 'is_true',
+    });
+  });
+
+  it('is offered only while some contact carries the marker, so an unused feature adds no chip', () => {
+    expect(availablePresets(QUICK_PRESETS, true, false)).not.toContain('uncontacted');
+    expect(availablePresets(PRESET_VIEWS, true, false)).not.toContain('uncontacted');
+    expect(availablePresets(PRESET_VIEWS, true, false)).toHaveLength(PRESET_VIEWS.length - 1);
+    expect(availablePresets(PRESET_VIEWS, true, true)).toContain('uncontacted');
   });
 });

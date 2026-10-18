@@ -5,6 +5,21 @@
         "label": "Google アカウント",
         "description": "フローで使う Calendar、Sheets、Docs、Forms、Meet のために、Google アカウントを 1 つ接続します。",
         "keywords": "google, google アカウント, カレンダー, calendar, スプレッドシート, sheets, ドキュメント, docs, フォーム, forms, meet, drive, oauth, google 接続"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "フロー内でスプレッドシートの行の追加、行の検索、連絡先の保存ができます。Google アカウント接続を使用します。",
+        "keywords": "google sheets, スプレッドシート, 行, セル, oauth, google に接続"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "テンプレートドキュメントをコピーして入力し、フローから共有します。Google アカウント接続を使用します。",
+        "keywords": "google docs, ドキュメント, テンプレート, 共有, oauth, google に接続"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "顧客にフォームを送信し、回答されたら処理を続行します。Google アカウント接続を使用します。",
+        "keywords": "google forms, フォーム, アンケート, 回答, oauth, google に接続"
       }
     }
   },
@@ -91,8 +106,8 @@
         },
         "sheets": {
           "name": "Sheets",
-          "body": "シートに行を追加する、行を検索する、セルを確認する、行を連絡先にコピーする。",
-          "usedBy": "Google Sheets、Google Sheet フィールドの確認、Google Sheet から連絡先を保存"
+          "usedBy": "Google Sheets、Google Sheet フィールドの確認、Google Sheet から連絡先を保存",
+          "body": "シートに行を追加、行を検索、セルを確認、または行を連絡先にコピーします。"
         },
         "docs": {
           "name": "Docs と Drive",
@@ -101,13 +116,13 @@
         },
         "forms": {
           "name": "Forms",
-          "body": "フローが顧客に送れるよう、フォームの公開リンクを読み取ります。",
-          "usedBy": "Google Form ステップ"
+          "usedBy": "Google Form ステップ",
+          "body": "フォームの公開リンクを読み取ってフローから顧客に送信し、フォームの回答を読み取って顧客の入力後にフローを続行します。"
         },
         "drive_listing": {
           "name": "Drive のファイル一覧",
-          "body": "フロービルダーでシート、ドキュメント、フォームを名前で一覧表示し、リンクを貼り付けずに選べるようにします。",
-          "usedBy": "フロービルダーのファイル選択"
+          "body": "シート、ドキュメント、フォームを名前で一覧表示し、フロービルダーと予約設定でアカウントから選択できるようにします。すべてのファイルピッカーに必要です。",
+          "usedBy": "フロービルダーと予約設定のファイルピッカー"
         }
       },
       "lastError": {

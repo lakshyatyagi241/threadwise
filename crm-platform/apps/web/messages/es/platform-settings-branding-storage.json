@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "Endpoint",
-            "hint": "Obligatorio para Spaces, R2 y MinIO. Se elimina una / final de /bucket.",
-            "placeholder": "https://… (obligatorio para Spaces / R2 / MinIO; automático para Wasabi y Bunny)"
+            "hint": "Obligatorio para Spaces y R2. Se elimina una / final de /bucket.",
+            "placeholder": "https://… (obligatorio para Spaces / R2; automático para Wasabi y Bunny)"
           },
           "cdnUrl": {
             "label": "URL pública / de CDN (opcional)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "Usar endpoint con ruta (MinIO / algunos almacenes compatibles con S3)"
+            "label": "Usar endpoint con ruta (algunos almacenes compatibles con S3)"
           },
           "storageZone": {
             "label": "Zona de almacenamiento",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / compatible con S3"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "Privado (URL firmadas)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "Almacenamiento en la nube",
-        "description": "Envía los medios de los clientes a tu propio bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 o MinIO.",
+        "description": "Envía los medios de los clientes a tu propio bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "Usa los campos de Bunny: zona de almacenamiento y contraseña. La región es la de la zona (de, ny, la...)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "Rellena los campos de S3 y pega la URL del endpoint. Marca la ruta con estilo path para MinIO."
+              "title": "Spaces / R2",
+              "body": "Rellena los campos de S3 y pega la URL del endpoint."
             },
             "test": {
               "title": "Prueba siempre primero",
@@ -1760,7 +1759,7 @@
             },
             "consent": {
               "title": "3. Pantalla de consentimiento",
-              "body": "Añade los ámbitos que pide el producto (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly) y después publica la app: en modo de prueba, Google cancela cada concesión a los 7 días y los espacios de trabajo tendrán que volver a conectarse. Los ámbitos de drive son restringidos y requieren la revisión de Google."
+              "body": "Añade los ámbitos que pide el producto (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly) y después publica la app: en modo de prueba, Google cancela cada concesión a los 7 días y los espacios de trabajo tendrán que volver a conectarse. Los ámbitos de drive son restringidos y requieren la revisión de Google."
             },
             "workspaces": {
               "title": "4. Los espacios de trabajo se conectan",

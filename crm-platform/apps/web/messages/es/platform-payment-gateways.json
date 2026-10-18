@@ -107,6 +107,7 @@
       "noGateway": "Aún no hay ninguna pasarela de pago configurada para {currency}. Pide a tu administrador que active una.",
       "noGatewayButton": "No hay pasarela configurada",
       "sandbox": "sandbox",
+      "sandboxNote": "Modo de prueba: no se cobra dinero real. Paga con la tarjeta de prueba de la documentación de tu pasarela. La página de la contraseña de un solo uso (OTP) la muestra la pasarela, no esta aplicación.",
       "pay": "Pagar {amount}",
       "processing": "Iniciando el pago",
       "summary": "Resumen del pedido",

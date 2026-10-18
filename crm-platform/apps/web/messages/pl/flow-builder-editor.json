@@ -1659,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— wybierz arkusz —",
-              "empty": "Nie znaleziono arkuszy — wklej poniżej adres URL lub identyfikator",
               "loading": "Wczytywanie arkuszy…",
-              "notConnected": "Google nie jest połączony z tą przestrzenią roboczą, więc arkuszy nie można wyświetlić. Zamiast tego wklej identyfikator lub link arkusza.",
-              "idPlaceholder": "Identyfikator arkusza",
-              "saved": "Arkusz {id}… (nie wczytano)"
+              "saved": "Arkusz {id}… (nie wczytano)",
+              "empty": "Nie znaleziono arkuszy kalkulacyjnych na połączonym koncie Google",
+              "notConnected": "Google nie jest połączone z tym obszarem roboczym, więc nie można wyświetlić Twoich arkuszy. Połącz Google, aby wybrać arkusz."
             },
             "docs": {
               "pick": "— wybierz dokument szablonu —",
               "empty": "Nie znaleziono dokumentów",
               "loading": "Wczytywanie dokumentów…",
-              "notConnected": "Google nie jest połączony z tą przestrzenią roboczą, więc dokumentów nie można wyświetlić. Zamiast tego wklej identyfikator lub link dokumentu.",
-              "idPlaceholder": "Identyfikator dokumentu",
-              "saved": "Dokument {id}… (nie wczytano)"
+              "saved": "Dokument {id}… (nie wczytano)",
+              "notConnected": "Google nie jest połączone z tym obszarem roboczym, więc nie można wyświetlić Twoich dokumentów. Połącz Google, aby wybrać dokument."
             },
             "forms": {
               "pick": "— wybierz formularz —",
               "empty": "Nie znaleziono formularzy",
               "loading": "Wczytywanie formularzy…",
-              "notConnected": "Google nie jest połączony z tą przestrzenią roboczą, więc formularzy nie można wyświetlić. Zamiast tego wklej identyfikator lub link formularza.",
-              "idPlaceholder": "Identyfikator formularza",
-              "saved": "Formularz {id}… (nie wczytano)"
+              "saved": "Formularz {id}… (nie wczytano)",
+              "notConnected": "Google nie jest połączone z tym obszarem roboczym, więc nie można wyświetlić Twoich formularzy. Połącz Google, aby wybrać formularz."
             }
           },
           "sheetsIntro": "Dopisuje wiersz do arkusza Google (tryb zapisu) lub wyszukuje wiersz po kolumnie klucza (tryb odczytu). Korzysta z konta Google przypisanego do przestrzeni roboczej w <link>/google-account</link>.",
@@ -1701,8 +1698,6 @@
           "addColumn": "Dodaj kolumnę",
           "matchByHeader": "Dopasuj kolumny po nazwie nagłówka",
           "matchByHeaderHint": "Zapisuj każdą wartość w kolumnie arkusza z tym nagłówkiem (w dowolnej kolejności). Wyłącz, aby dopisywać od lewej do prawej według pozycji — to domyślne ustawienie.",
-          "pasteLabel": "…lub wklej adres URL / identyfikator arkusza",
-          "pasteHint": "Działa nawet wtedy, gdy lista wyboru jest pusta — wklej link do arkusza, a my wyodrębnimy jego identyfikator.",
           "docsIntro": "Skopiuj dokument szablonu, uzupełnij <mono>{placeholders}</mono>, udostępnij każdemu, kto ma link, i wyślij adres URL do klienta. Umieść <mono>{key}</mono> w szablonie w miejscu, gdzie ma się pojawić wartość.",
           "templateDocument": "Dokument szablonu",
           "newCopyTitle": "Tytuł nowej kopii",
@@ -1717,7 +1712,6 @@
           "messageTemplateHint": "Dymek bota wysyłany do klienta. <mono>{token}</mono> zostaje zastąpiony linkiem do udostępnienia.",
           "messageTemplatePlaceholder": "Oto Twój dokument:\n'{{'doc_url'}}'",
           "saveUrl": "Zapisz adres URL w zmiennej",
-          "formIntro": "Wysyła adres URL formularza przez WhatsApp, wstrzymuje przepływ i wznawia go przez wyjście <b>wysłano</b>, gdy klient go wypełni. Odpowiedzi stają się zmiennymi przepływu.",
           "googleForm": "Formularz Google",
           "bodyBubble": "Dymek treści (wysyłany nad linkiem)",
           "bodyBubblePlaceholder": "Prosimy o wypełnienie tego krótkiego formularza:",
@@ -1725,12 +1719,6 @@
           "saveResponsesHint": "Poszczególne odpowiedzi trafiają też jako <mono>{token}</mono>.",
           "expireAfter": "Wygasa po (sekundach)",
           "expireAfterHint": "Jak długo czekać na zgłoszenie przed przekroczeniem limitu czasu. 86400 = 24 h.",
-          "setupTitle": "Konfiguracja jednorazowa — wklej to do edytora skryptów formularza",
-          "setupOpen": "Otwórz formularz → <mono>menu ⋮</mono> → <mono>Edytor skryptów</mono>",
-          "setupDownload": "<link>Pobierz skrypt (.gs)</link> i wklej go",
-          "setupTrigger": "Dodaj wyzwalacz: <mono>onFormSubmit</mono> · Z formularza · Przy wysłaniu formularza",
-          "setupWarning": "Bez tego skryptu formularz nadal zapisze odpowiedzi w Formularzach Google, ale przepływ nie zostanie wznowiony.",
-          "noListing": "Nie można wyświetlić listy Twoich plików, ponieważ na stronie konta Google nie przyznano uprawnienia do listy plików Drive. Wklej zamiast tego link lub identyfikator.",
           "connection": {
             "open": "Otwórz konto Google",
             "permission": {
@@ -1743,7 +1731,9 @@
             "disconnected": "Nie połączono żadnego konta Google, więc ten krok zakończy się błędem podczas działania przepływu. Najpierw połącz Google.",
             "needsReconnect": "Google nie akceptuje już połączonego konta, więc ten krok zakończy się błędem podczas działania przepływu. Najpierw połącz Google ponownie.",
             "missing": "Połączone konto Google nie otrzymało uprawnienia {permission}, więc ten krok zakończy się błędem podczas działania przepływu."
-          }
+          },
+          "formIntro": "Wysyła adres URL formularza przez WhatsApp, wstrzymuje przepływ i wznawia go przez port <b>submitted</b>, gdy klient wypełni formularz. Odpowiedzi są odczytywane z formularza przez połączone konto Google, więc nic nie trzeba wklejać do formularza. Odpowiedzi stają się zmiennymi przepływu.",
+          "noListing": "Nie można wyświetlić Twoich plików, ponieważ na stronie konta Google nie przyznano uprawnienia do listy plików Drive. Dodaj je tam, aby wybierać pliki."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",

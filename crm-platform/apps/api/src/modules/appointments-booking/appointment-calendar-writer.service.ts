@@ -5,6 +5,7 @@ import {
   eventProviderOf,
   type CalendarSyncPort,
 } from '../../infra/providers/appointments-booking';
+import { AppointmentMeetingMirror } from './appointment-meeting-mirror.service';
 import { AppointmentsRepository } from './appointments.repository';
 import { BookingTypesRepository } from './booking-types.repository';
 
@@ -26,6 +27,7 @@ export class AppointmentCalendarWriter {
     private readonly appts: AppointmentsRepository,
     private readonly types: BookingTypesRepository,
     @Inject(APPOINTMENT_CALENDAR) private readonly calendar: CalendarSyncPort,
+    private readonly mirror: AppointmentMeetingMirror,
   ) {}
 
   /**
@@ -112,8 +114,8 @@ export class AppointmentCalendarWriter {
     });
     if (!result) return 'skipped';
     const now = new Date();
-    await this.db.txAs({ orgId, userId: null }, (tx) =>
-      this.appts.update(tx, orgId, row.id, undefined, {
+    await this.db.txAs({ orgId, userId: null }, async (tx) => {
+      await this.appts.update(tx, orgId, row.id, undefined, {
         calendar_event_id: result.eventId,
         calendar_id: result.calendarId ?? targetCalendarId,
         calendar_provider: result.provider ?? writeTo ?? null,
@@ -129,8 +131,11 @@ export class AppointmentCalendarWriter {
         google_drift_starts_at: null,
         google_drift_ends_at: null,
         google_checked_at: now,
-      }),
-    );
+      });
+      // The Meet or Teams link the calendar just made is the meeting's join link: the contact's row follows the appointment as it is NOW.
+      const current = await this.appts.findById(tx, orgId, row.id);
+      if (current) await this.mirror.sync(tx, orgId, current);
+    });
     return 'written';
   }
 }

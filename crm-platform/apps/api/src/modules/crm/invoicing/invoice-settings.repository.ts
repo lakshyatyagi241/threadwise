@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
+import { rawMappedColumn } from '../../../common/sql/identifier';
 import type { Tx } from '@crm/db';
 
 /** The invoice_settings row of one workspace (absent until the first save). */
@@ -195,7 +196,7 @@ export class InvoiceSettingsRepository {
     for (const key of Object.keys(patch) as Array<keyof SettingsPatch>) {
       const value = patch[key];
       if (value === undefined) continue;
-      const col = sql.raw(COLUMNS[key]);
+      const col = rawMappedColumn(COLUMNS, key);
       sets.push(
         JSON_COLUMNS.has(key)
           ? sql`${col} = ${value === null ? null : JSON.stringify(value)}::jsonb`

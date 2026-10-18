@@ -31,6 +31,8 @@ export interface WidgetPlan {
   row: Row | null;
   assistant: Row | null;
   soft: Soft[];
+  /** the bot's fallback message, exactly as written at the source (null: none, or too long to carry: FALLBACK_TOO_LONG) */
+  fallback: string | null;
   configKey: string | null;
   themeKey: string | null;
 }
@@ -170,6 +172,30 @@ export const MAPPED_CONFIG_KEYS = new Set([
   'avatar',
   'background_image',
   'desktop_auto_triggering',
+  'fallback_message',
+  'fallbackMessage',
+  'feedback',
+  'feedback_enabled',
+  'is_feedback_enabled',
+  'feedback_message',
+  'feedback_message_text',
+  'languages',
+  'primary_language',
+  'additional_languages',
+  'devices',
+  'device_availability',
+  'desktop_enabled',
+  'tablet_enabled',
+  'mobile_enabled',
+  'show_on_desktop',
+  'show_on_tablet',
+  'show_on_mobile',
+  'widget_animation',
+  'animation',
+  'button_type',
+  'launcher_type',
+  'tooltip',
+  'popup',
   'ai_configuration',
   'modelName',
   'prompt',
@@ -235,6 +261,195 @@ const uniq = (base: string, taken: Set<string>): string => {
   return out;
 };
 
+// --- launcher look: button type, animation, popup --------------------------------------------------------------------------------
+
+/** The text of a setting that the source keeps as a string or as an object ({ type | name | value | selected }). */
+function settingText(v: unknown): string {
+  if (typeof v === 'string') return v;
+  const o = obj(v);
+  for (const k of ['type', 'name', 'value', 'selected', 'style'])
+    if (typeof o[k] === 'string') return o[k] as string;
+  return '';
+}
+
+/**
+ * The closed launcher's look from the source configuration: button type (icon only or text), animation and the popup bubble. A value
+ * the tool does not recognise is NOT guessed: the application's default stays and the soft issue LAUNCHER_LOOK_UNRECOGNISED names
+ * the key. The popup is carried explicitly (off unless the source switches it on).
+ */
+export function launcherLook(
+  c: Doc,
+  t: Doc,
+  soft: Soft[],
+): {
+  buttonType: 'pill' | 'icon' | null;
+  animation: 'none' | 'bounce' | 'ripple' | null;
+  popup: { enabled: boolean; position?: 'side' | 'top'; text?: string };
+} {
+  const unknown: string[] = [];
+  const typeRaw = (
+    [
+      ['button_type', c.button_type],
+      ['launcher_type', c.launcher_type],
+      ['button.button_type', obj(t.button).button_type],
+    ] as const
+  )
+    .map(([k, v]) => [k, settingText(v)] as const)
+    .find(([, v]) => v !== '');
+  let buttonType: 'pill' | 'icon' | null = null;
+  if (typeRaw) {
+    if (/icon/i.test(typeRaw[1])) buttonType = 'icon';
+    else if (/text|label|pill|chat|cta/i.test(typeRaw[1])) buttonType = 'pill';
+    else unknown.push(typeRaw[0]);
+  }
+  const animRaw = settingText(c.widget_animation ?? c.animation);
+  let animation: 'none' | 'bounce' | 'ripple' | null = null;
+  if (animRaw !== '') {
+    if (/bounce/i.test(animRaw)) animation = 'bounce';
+    else if (/ripple|pulse|wave/i.test(animRaw)) animation = 'ripple';
+    else if (/^(none|off|no|disabled?)$/i.test(animRaw.trim())) animation = 'none';
+    else unknown.push('widget_animation');
+  }
+  const tip = obj(c.tooltip ?? c.popup);
+  const on = ['enabled', 'visible', 'show', 'isVisible', 'active']
+    .map((k) => tip[k])
+    .find((v) => v !== undefined);
+  const pos = settingText(tip.position ?? tip.placement);
+  const popup: { enabled: boolean; position?: 'side' | 'top'; text?: string } = {
+    enabled: on === undefined ? false : bool(on, false),
+  };
+  if (/top|above/i.test(pos)) popup.position = 'top';
+  else if (/side|left|right|beside/i.test(pos)) popup.position = 'side';
+  else if (pos !== '') unknown.push('tooltip.position');
+  const msg = text(tip.text ?? tip.message ?? tip.title, 200);
+  if (msg) popup.text = msg;
+  if (unknown.length > 0)
+    soft.push({
+      code: 'LAUNCHER_LOOK_UNRECOGNISED',
+      reason:
+        'a launcher setting holds a value the tool does not know: the default stays for it (check the Customize tab)',
+      detail: unknown,
+    });
+  return { buttonType, animation, popup };
+}
+
+/** FAQ_LIMITS.fallbackMessage of the application (faq_settings.fallback_message). */
+export const FALLBACK_MAX = 1024;
+
+/**
+ * What the source bot answers when it does not understand a message. Kept EXACTLY (no trimming, spelling and punctuation untouched):
+ * the first of the usual places that holds text. A text the application cannot hold is not cut: it is left out and reported.
+ * UNVERIFIED key names: read from the discovery notes (`default_messages` is a configuration key), not from a dump.
+ */
+export function fallbackOf(c: Doc, bot: Doc, soft: Soft[]): string | null {
+  const dm = obj(c.default_messages);
+  const found = [
+    c.fallback_message,
+    c.fallbackMessage,
+    bot.fallback_message,
+    dm.fallback,
+    dm.fallback_message,
+    dm.not_understood,
+    dm.no_match,
+  ].find((v) => typeof v === 'string' && v.trim() !== '');
+  if (typeof found !== 'string') return null;
+  if (Array.from(found).length > FALLBACK_MAX) {
+    soft.push({
+      code: 'FALLBACK_TOO_LONG',
+      reason: `the fallback message is longer than ${FALLBACK_MAX} characters, which the application cannot hold: it was not carried (never cut)`,
+      detail: Array.from(found).length,
+    });
+    return null;
+  }
+  return found;
+}
+
+const FEEDBACK_MESSAGE_MAX = 200;
+const CHAT_LANGUAGES_MAX = 10;
+
+/** One language as the application's code: a known name, or a code that already has the right shape; null when neither. */
+function languageCode(v: unknown): string | null {
+  const raw = settingText(v).trim().toLowerCase();
+  if (raw === '') return null;
+  if (LANG[raw]) return LANG[raw]!;
+  return /^[a-z]{2,3}(-[a-z]{2,4})?$/.test(raw) ? raw : null;
+}
+
+/**
+ * The chat window's feedback, language and device settings from the source configuration. The flags AND the stored values are carried
+ * even when the feature is off (a disabled feedback keeps its message). A part the source does not state is left out, so the
+ * application's default stays for it; a value the tool cannot read is reported, never guessed.
+ * UNVERIFIED key names: read from the discovery notes, not from a dump (check with the data check of the migration journey).
+ */
+export function chatSettingsOf(
+  c: Doc,
+  bot: Doc,
+  soft: Soft[],
+): {
+  feedback?: { enabled?: boolean; message?: string };
+  languages?: { primary?: string; additional?: string[] };
+  devices?: { desktop?: boolean; tablet?: boolean; mobile?: boolean };
+} {
+  const out: ReturnType<typeof chatSettingsOf> = {};
+  const unknown: string[] = [];
+
+  const fb = obj(c.feedback);
+  const flag = [fb.enabled, fb.is_enabled, c.feedback_enabled, c.is_feedback_enabled].find(
+    (v) => typeof v === 'boolean',
+  );
+  const msg = [fb.message, fb.text, c.feedback_message, c.feedback_message_text].find(
+    (v) => typeof v === 'string',
+  );
+  const fbOut: { enabled?: boolean; message?: string } = {};
+  if (typeof flag === 'boolean') fbOut.enabled = flag;
+  if (typeof msg === 'string' && msg !== '') {
+    if (Array.from(msg).length > FEEDBACK_MESSAGE_MAX) unknown.push('feedback_message');
+    else fbOut.message = msg;
+  }
+  if (Object.keys(fbOut).length > 0) out.feedback = fbOut;
+
+  const lg = obj(c.languages);
+  const primaryRaw = lg.primary ?? c.primary_language ?? bot.primary_language;
+  const primary = languageCode(primaryRaw);
+  const list = [lg.additional, c.additional_languages, bot.additional_languages].find(
+    Array.isArray,
+  ) as unknown[] | undefined;
+  if (primaryRaw !== undefined && primaryRaw !== null && primaryRaw !== '' && primary === null)
+    unknown.push('primary_language');
+  const additional: string[] = [];
+  for (const item of list ?? []) {
+    const code = languageCode(item);
+    if (code === null) unknown.push('additional_languages');
+    else if (code !== primary && !additional.includes(code)) additional.push(code);
+  }
+  if (additional.length > CHAT_LANGUAGES_MAX) {
+    unknown.push('additional_languages');
+    additional.length = CHAT_LANGUAGES_MAX;
+  }
+  if (primary !== null || additional.length > 0) {
+    out.languages = {};
+    if (primary !== null) out.languages.primary = primary;
+    if (additional.length > 0) out.languages.additional = additional;
+  }
+
+  const dv = obj(c.devices ?? c.device_availability);
+  const devices: NonNullable<ReturnType<typeof chatSettingsOf>['devices']> = {};
+  for (const k of ['desktop', 'tablet', 'mobile'] as const) {
+    const v = dv[k] ?? c[`${k}_enabled`] ?? c[`show_on_${k}`];
+    if (typeof v === 'boolean') devices[k] = v;
+  }
+  if (Object.keys(devices).length > 0) out.devices = devices;
+
+  if (unknown.length > 0)
+    soft.push({
+      code: 'CHAT_SETTING_UNRECOGNISED',
+      reason:
+        'a feedback or language setting holds a value the tool cannot carry: the application default stays for it (check the Behaviour card of the Customize tab)',
+      detail: Array.from(new Set(unknown)),
+    });
+  return out;
+}
+
 export function buildWidgetPlan(a: {
   settings: FlowSettings;
   chatbotDocs: Map<string, Doc[]>;
@@ -280,6 +495,7 @@ export function buildWidgetPlan(a: {
       row: null,
       assistant: null,
       soft,
+      fallback: null,
       configKey: cfgOk ? primaryKey(cfgOk) : null,
       themeKey: thOk ? primaryKey(thOk) : null,
     };
@@ -330,13 +546,16 @@ export function buildWidgetPlan(a: {
     const position = side(c.desktop_display_position) ?? side(c.display_position) ?? 'bottom_right';
     const spacing = (v: unknown): number | null =>
       typeof v === 'number' && Number.isInteger(v) && v >= 0 && v <= 500 ? v : null;
+    // only the parts the source states are carried: a missing part keeps the application's own default for that part alone
     const placement = (sd: unknown, sm: unknown, bm: unknown) => {
+      const out: Record<string, unknown> = {};
+      const d = /left/i.test(s(sd)) ? 'left' : /right/i.test(s(sd)) ? 'right' : null;
       const x = spacing(sm);
       const y = spacing(bm);
-      const d = /left/i.test(s(sd)) ? 'left' : /right/i.test(s(sd)) ? 'right' : null;
-      return d !== null && x !== null && y !== null
-        ? { side: d, sideSpacing: x, bottomSpacing: y }
-        : null;
+      if (d !== null) out.side = d;
+      if (x !== null) out.sideSpacing = x;
+      if (y !== null) out.bottomSpacing = y;
+      return Object.keys(out).length > 0 ? out : null;
     };
     const launcher: Record<string, unknown> = {};
     const intro = text(c.subheader_text ?? c.whatsapp_subheader_text, 500);
@@ -354,6 +573,13 @@ export function buildWidgetPlan(a: {
     if (dk) launcher.desktop = dk;
     if (mb) launcher.mobile = mb;
     if (primary) launcher.colour = primary;
+    wp.fallback = fallbackOf(c, bot, soft);
+    const look = launcherLook(c, t, soft);
+    if (look.buttonType) launcher.buttonType = look.buttonType;
+    if (look.animation) launcher.animation = look.animation;
+    launcher.popup = look.popup;
+    const chat = chatSettingsOf(c, bot, soft);
+    if (Object.keys(chat).length > 0) launcher.chat = chat;
 
     // images are file references until the files step copies the objects; an absolute http(s) address is kept
     const refs: string[] = [];
