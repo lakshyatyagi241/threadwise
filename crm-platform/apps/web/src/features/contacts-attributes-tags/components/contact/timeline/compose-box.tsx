@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { useTimeZone, useTranslations } from 'next-intl';
 import { useToast, cn } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
+import { usePersonaVisibility } from '@/features/persona';
 import { InlineTaskAdd } from '@/features/tasks';
 import { useCanLogCall } from '../../../api/call-log';
 import { useMeetingMutations } from '../../../api/meetings';
@@ -106,11 +107,13 @@ export function useComposeTabs(): ComposeTab[] {
   const canLogCall = useCanLogCall();
   const { permissions } = useSession();
   const tasksOpen = sectionAllowed(SECTION_OF_TARGET.task, (p) => p in permissions);
+  // A button the workspace's persona hides (`action:contact.<id>`) is not offered here either; the endpoints stay open.
+  const { isActionHidden } = usePersonaVisibility();
   return [
-    ...(canUpdate ? (['note'] as const) : []),
-    ...(canTask && tasksOpen ? (['task'] as const) : []),
-    ...(canLogCall ? (['call'] as const) : []),
-    ...(canUpdate ? (['meeting'] as const) : []),
+    ...(canUpdate && !isActionHidden('note') ? (['note'] as const) : []),
+    ...(canTask && tasksOpen && !isActionHidden('task') ? (['task'] as const) : []),
+    ...(canLogCall && !isActionHidden('call') ? (['call'] as const) : []),
+    ...(canUpdate && !isActionHidden('meeting') ? (['meeting'] as const) : []),
   ];
 }
 
