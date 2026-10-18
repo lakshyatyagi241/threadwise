@@ -1,4 +1,4 @@
-import { inflateRawSync } from 'node:zlib';
+import { inflateRawAsync } from '../../common/async-zlib';
 import { AppError } from '../../common/errors/app-error';
 import { ERROR_CODES } from '@crm/contracts';
 import { HttpStatus } from '@nestjs/common';
@@ -20,7 +20,7 @@ const unreadable = () =>
  * library, and nothing is ever written to disk. Entries that are encrypted, use a method other than stored or deflate, or inflate
  * past the cap are refused.
  */
-export function readZipEntry(zip: Buffer, name: string): Buffer | null {
+export async function readZipEntry(zip: Buffer, name: string): Promise<Buffer | null> {
   const EOCD = 0x06054b50;
   const CEN = 0x02014b50;
   const LOC = 0x04034b50;
@@ -55,7 +55,7 @@ export function readZipEntry(zip: Buffer, name: string): Buffer | null {
     if (method === 0) return data;
     if (method === 8) {
       try {
-        return inflateRawSync(data, { maxOutputLength: MAX_INFLATED });
+        return await inflateRawAsync(data, { maxOutputLength: MAX_INFLATED });
       } catch {
         throw unreadable();
       }
@@ -66,8 +66,8 @@ export function readZipEntry(zip: Buffer, name: string): Buffer | null {
 }
 
 /** Paragraph ends and line breaks become newlines, tabs stay tabs, every other tag goes; runs of blank lines collapse. */
-export function docxToText(file: Buffer): string {
-  const xml = readZipEntry(file, 'word/document.xml')?.toString('utf8');
+export async function docxToText(file: Buffer): Promise<string> {
+  const xml = (await readZipEntry(file, 'word/document.xml'))?.toString('utf8');
   if (!xml) return '';
   const text = decodeEntities(
     xml
@@ -108,7 +108,7 @@ export async function extractFileText(file: Buffer, ext: string): Promise<string
       case 'pdf':
         return await pdfToText(file);
       case 'docx':
-        return docxToText(file);
+        return await docxToText(file);
       case 'html':
       case 'htm':
         return stripHtml(file.toString('utf8')).trim();

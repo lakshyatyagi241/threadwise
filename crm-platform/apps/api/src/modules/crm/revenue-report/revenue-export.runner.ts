@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { gzipSync } from 'node:zlib';
+import { gzipAsync } from '../../../common/async-zlib';
 import {
   REVENUE_EXPORT_MAX_ROWS,
   REVENUE_EXPORT_TTL_DAYS,
@@ -137,7 +137,7 @@ export class RevenueExportRunner {
     }));
     if (row.format === 'csv') {
       return {
-        file: gzipSync(summaryCsv(report)),
+        file: await gzipAsync(summaryCsv(report)),
         rows: report.rows.items.length,
         fileName: `revenue-summary-${span}.csv`,
       };
@@ -152,7 +152,7 @@ export class RevenueExportRunner {
       hourCycle: 'h23',
     }).format(now);
     return {
-      file: gzipSync(renderRevenuePdf({ report, brand, generatedAt })),
+      file: await gzipAsync(renderRevenuePdf({ report, brand, generatedAt })),
       rows: report.rows.items.length,
       fileName: `revenue-report-${span}.pdf`,
     };
@@ -165,7 +165,7 @@ export class RevenueExportRunner {
     const orgId = row.orgId;
     const resolved = await this.db.txAs({ orgId }, (tx) => this.reports.resolve(tx, input));
     const span = { from: resolved.period.from, to: resolved.period.toExclusive };
-    const members: Buffer[] = [gzipSync(ledgerCsvStart())];
+    const members: Buffer[] = [await gzipAsync(ledgerCsvStart())];
     let rows = 0;
     let after: { paidAtText: string; id: number } | null = null;
 
@@ -185,7 +185,7 @@ export class RevenueExportRunner {
       if (page.length === 0) break;
       rows += page.length;
       if (rows > REVENUE_EXPORT_MAX_ROWS) throw new ExportTooLarge();
-      members.push(gzipSync(page.map(ledgerCsvLine).join('')));
+      members.push(await gzipAsync(page.map(ledgerCsvLine).join('')));
       const last = page[page.length - 1]!;
       after = { paidAtText: last.paidAtText, id: last.id };
       if (page.length < BATCH) break;
