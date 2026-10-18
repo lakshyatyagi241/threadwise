@@ -296,6 +296,7 @@
       "message": "Quy tắc {name} sẽ ngừng phân công. Các bản ghi đã được phân công vẫn giữ nguyên người phụ trách.",
       "confirm": "Xóa",
       "cancel": "Hủy"
-    }
+    },
+    "dismiss": "Bỏ qua"
   }
 }

@@ -296,6 +296,7 @@
       "message": "La regla {name} dejará de asignar. Los registros que ya asignó conservan su responsable.",
       "confirm": "Eliminar",
       "cancel": "Cancelar"
-    }
+    },
+    "dismiss": "Descartar"
   }
 }

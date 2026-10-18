@@ -296,6 +296,7 @@
       "message": "Reguła {name} przestanie przypisywać. Rekordy, które już przypisała, zachowają opiekuna.",
       "confirm": "Usuń",
       "cancel": "Anuluj"
-    }
+    },
+    "dismiss": "Odrzuć"
   }
 }

@@ -296,6 +296,7 @@
       "message": "La règle {name} cessera d'attribuer. Les enregistrements qu'elle a déjà attribués gardent leur responsable.",
       "confirm": "Supprimer",
       "cancel": "Annuler"
-    }
+    },
+    "dismiss": "Ignorer"
   }
 }

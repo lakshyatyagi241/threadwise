@@ -296,6 +296,7 @@
       "message": "Aturan {name} akan berhenti menugaskan. Data yang sudah ditugaskannya tetap mempertahankan pemiliknya.",
       "confirm": "Hapus",
       "cancel": "Batal"
-    }
+    },
+    "dismiss": "Tutup"
   }
 }

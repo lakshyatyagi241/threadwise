@@ -296,6 +296,7 @@
       "message": "A regra {name} deixará de atribuir. Os registros que ela já atribuiu mantêm o responsável.",
       "confirm": "Excluir",
       "cancel": "Cancelar"
-    }
+    },
+    "dismiss": "Dispensar"
   }
 }

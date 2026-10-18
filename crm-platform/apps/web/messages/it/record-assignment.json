@@ -296,6 +296,7 @@
       "message": "La regola {name} smetterà di assegnare. I record già assegnati mantengono il loro responsabile.",
       "confirm": "Elimina",
       "cancel": "Annulla"
-    }
+    },
+    "dismiss": "Ignora"
   }
 }

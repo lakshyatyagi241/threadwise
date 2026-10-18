@@ -296,6 +296,7 @@
       "message": "Die Regel {name} weist nicht mehr zu. Datensätze, die sie bereits zugewiesen hat, behalten ihren Verantwortlichen.",
       "confirm": "Löschen",
       "cancel": "Abbrechen"
-    }
+    },
+    "dismiss": "Schließen"
   }
 }

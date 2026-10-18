@@ -296,6 +296,7 @@
       "message": "{name} kuralı atama yapmayı bırakacak. Daha önce atadığı kayıtlar sahiplerini korur.",
       "confirm": "Sil",
       "cancel": "İptal"
-    }
+    },
+    "dismiss": "Kapat"
   }
 }
