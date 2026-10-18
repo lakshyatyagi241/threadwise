@@ -49,6 +49,7 @@ pnpm db:migrate                            # the migration is now a no-op
 
 - The `webhook-retry` job holds the channel event sealed with the credentials key (AES-256-GCM); Redis never holds the message text. The job is dropped
   when it completes and kept 3 days when it failed. A payload that cannot be opened (a key rotated away) is failed for good, not retried.
-- The `waba-ingest` job still holds the raw WhatsApp payload (dropped on success, kept 3 days on failure); it is not sealed yet.
+- The `waba-ingest` job is sealed the same way (a job queued before the change, with plain `changes`, is still worked). It is dropped on success
+  and kept 3 days on failure.
 - The order acknowledgement claim is two columns on the order (`wa_orders.ack_claimed_at`, `ack_sent_at`), so it survives a restart and a Redis flush.
   A claim whose worker died mid-send goes stale after 10 minutes and is taken again, which can at worst repeat the message once.
