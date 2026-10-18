@@ -101,7 +101,9 @@ expiry (1 to 365 days, default 90).
 | `legal.vendor_dpas`         | Executed DPAs on file with the sub-processors that hold personal data       | r32, r43 |
 | `governance.contacts_named` | Privacy contact, incident commander and grievance owner named and published | r47      |
 
-The list is closed: an attestation for any other key is rejected with 422.
+The list is closed: an attestation for any other key is rejected with 422. The request body is validated too: `note` is trimmed and holds
+at most 2000 characters, the optional `evidenceUrl` is trimmed, holds at most 2048 characters and must be an https link, a blank
+`evidenceUrl` is rejected so clients leave it out, and `expiresInDays` must be an integer from 1 to 365.
 
 ### 4.3 Code checks
 

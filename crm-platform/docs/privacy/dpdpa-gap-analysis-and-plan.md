@@ -108,6 +108,7 @@ Rule 19(9): the Board finishes an inquiry in six months, so evidence must be pro
 
 Status: **FOLLOWING**, **PARTIAL**, **NOT FOLLOWING**, **N/A**. Owner: T tenant, P platform (us), B both. The "Build" column points to
 section 5.
+The platform register at `/admin/dpdp-register` in the operator console mirrors these rows.
 
 ### A. Grounds, notice, consent (ss4 to 7, rule 3)
 
@@ -457,6 +458,7 @@ largest tenants), whether the report can be shared with tenants under NDA, and w
 8. Third Schedule: do tenants in e-commerce, gaming, social media at the stated sizes need a 48 hour notice tool from us?
 9. Does an India-hosted copy plus foreign AI vendors need disclosure or consent today (s16 is a negative list; none notified)?
 10. The Consent Manager standards: when do they publish, and what must a fiduciary build to accept consent through one?
+11. Row 46 (the platform's own signup notice, terms-acceptance record and cookie choice): which Act provision or rule is the right citation? The register shows "ss27 to 33, rule 19", which is the enforcement heading.
 
 ## 10. Not covered, assumptions, change watch
 
