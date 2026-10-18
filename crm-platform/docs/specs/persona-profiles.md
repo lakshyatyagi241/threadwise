@@ -1,6 +1,6 @@
 # Persona profiles: one product for many kinds of business (design only)
 
-Status: **phase P0 built, P1 to P6 not built** (backlog BL-280; see section 15). Written 2026-10-18 from a read-only investigation of `origin/main`.
+Status: **phase P0 built, the label-only slice of P5 built early as BL-310, the rest of P1 to P6 not built** (backlog BL-280; see section 15). Written 2026-10-18 from a read-only investigation of `origin/main`.
 The design below is unchanged by P0; P0 itself changes no behaviour. Owner direction: the product stays ONE generic system; a **persona** (doctor, dentist, sales
 team, real estate, retail store, salon, education...) decides which words, which modules and which starter setup a workspace sees. It is an
 owner-requested extension in the sense of [product-extensions.md](../threadwise-port/parity/product-extensions.md): the default persona
@@ -482,10 +482,11 @@ Risks:
 
 ## 15. Build status
 
-| Phase | State                                                                           |
-| ----- | ------------------------------------------------------------------------------- |
-| P0    | **Built** (branch `lakshya/next/persona-p0`, no visible change). Details below. |
-| P1-P6 | Not built. P1 (visibility runtime) is next and only needs P0.                   |
+| Phase                 | State                                                                               |
+| --------------------- | ----------------------------------------------------------------------------------- |
+| P0                    | **Built** (branch `lakshya/next/persona-p0`, no visible change). Details below.     |
+| P5-lite (BL-310)      | **Built** (branch `lakshya/next/persona-vocabulary`). Dynamic object naming, below. |
+| P1-P4, P6, rest of P5 | Not built. P1 (visibility runtime) is next and only needs P0.                       |
 
 What P0 delivers, and where it differs from the sketches above:
 
@@ -509,3 +510,17 @@ What P0 delivers, and where it differs from the sketches above:
   and is kept, the resolved view is memoised by `(org, row creation time, rev, version)` for 30 s, and a missing version is remembered for 5 s.
 - **Not in P0**: any UI, any endpoint, onboarding, the seat-driven `auto` solo mode (`solo` is true only for an explicit `on`), the `persona.enabled`
   flag (rollback in P0 is not reading `org.persona`, which nothing does), the vocabulary overlay.
+
+What P5-lite (BL-310, "dynamic object naming") delivers, and where it differs from section 7.4:
+
+- **Scope:** a workspace renames four nouns (contact, appointment, deal, meeting), per language, from Settings, Business, "Words we use" (`GET`/`PUT /v2/persona/vocabulary`,
+  `admin.settings.manage`). Labels in the web UI only; see [../api/persona-vocabulary.md](../api/persona-vocabulary.md) for the routes, the session field
+  `org.persona.nouns`, the limits and the coverage list (surfaces still saying the product's word).
+- **Mechanism:** the message overlay of 7.4 with two changes. (1) The overlay is applied in `(app)/layout.tsx` (a nested provider that already exists), not in
+  `i18n/request.ts`, because the session is read there and no extra call is needed. (2) Instead of one binding per message key with a noun and a form,
+  a binding is a **message-key prefix** ("a surface") and the rewrite finds the product's own words for the noun in that language
+  (`persona-vocabulary.defaults`, 21 languages) inside the already translated string; a string without them is left alone. This reaches about 1,100 strings
+  (235 mention a noun) without touching a component or a message, and keeps every language's wording as the fallback, string by string.
+- **No persona packs, no publish step, no operator grid:** the persona layer already flows through (`resolveNouns` in the session view), and the operator layer is
+  shown as a source; authoring them is P2/P3/P5. The workspace's own layer is what P5-lite adds.
+- **Golden rule kept:** no words, the same messages object as before (a test per language). Grammar: none (documented limit), nothing machine-translated.
