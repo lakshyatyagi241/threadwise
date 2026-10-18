@@ -1585,7 +1585,8 @@
             "ai_form_generations_monthly": "Lượt tạo bằng trình tạo biểu mẫu AI mỗi tháng",
             "sms_monthly": "SMS mỗi tháng",
             "email_mailboxes": "Hộp thư email",
-            "email_monthly": "Email mỗi tháng"
+            "email_monthly": "Email mỗi tháng",
+            "storage_gb": "Dung lượng lưu trữ (GB)"
           },
           "featureGroups": {
             "messaging": "Nhắn tin",
@@ -1683,7 +1684,8 @@
             "ai_form_generations_monthly": "Lượt tạo bằng trình tạo biểu mẫu AI trong tháng dương lịch, gồm cả lần thử sửa lại. 0 = không giới hạn.",
             "sms_monthly": "Số tin nhắn SMS gửi đi trong tháng dương lịch. 0 = không giới hạn.",
             "email_mailboxes": "Số hộp thư Gmail đã kết nối (hộp thư ngắt kết nối sẽ giải phóng chỗ). 0 = không giới hạn.",
-            "email_monthly": "Số email gửi đi trong tháng dương lịch, gồm cả thư trả lời và email chiến dịch. 0 = không giới hạn."
+            "email_monthly": "Số email gửi đi trong tháng dương lịch, gồm cả thư trả lời và email chiến dịch. 0 = không giới hạn.",
+            "storage_gb": "Dung lượng lưu trữ mà không gian làm việc được giữ, tính bằng GB (bản ghi cuộc gọi, phương tiện trò chuyện, tệp đính kèm email và tệp). 0 = không giới hạn. Hiện chỉ đo lường: chưa chặn gì cả."
           }
         }
       },

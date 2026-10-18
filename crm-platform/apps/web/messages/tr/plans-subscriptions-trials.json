@@ -46,7 +46,8 @@
       "ai_form_generations_monthly": "Aylık AI form oluşturucu üretimi",
       "sms_monthly": "Aylık SMS",
       "email_mailboxes": "E-posta kutuları",
-      "email_monthly": "Aylık e-posta"
+      "email_monthly": "Aylık e-posta",
+      "storage_gb": "Depolama (GB)"
     },
     "features": {
       "automation": "Otomasyon",
@@ -136,7 +137,8 @@
       "ai_form_generations_monthly": "Takvim ayında AI form oluşturucu üretimleri, onarım yeniden denemesi dahil. 0 = sınırsız.",
       "sms_monthly": "Takvim ayında gönderilen giden SMS mesajları. 0 = sınırsız.",
       "email_mailboxes": "Bağlı Gmail posta kutuları (bağlantısı kesilen kutu yerini boşaltır). 0 = sınırsız.",
-      "email_monthly": "Takvim ayında gönderilen e-postalar; yanıtlar ve kampanya e-postaları birlikte. 0 = sınırsız."
+      "email_monthly": "Takvim ayında gönderilen e-postalar; yanıtlar ve kampanya e-postaları birlikte. 0 = sınırsız.",
+      "storage_gb": "Çalışma alanının tutabileceği depolama alanı, GB cinsinden (çağrı kayıtları, sohbet medyası, e-posta ekleri ve dosyalar). 0 = sınırsız. Şimdilik yalnızca ölçülür: henüz hiçbir şey engellenmez."
     },
     "planAddons": {
       "title": "Planınızda kullanılabilir eklentiler",

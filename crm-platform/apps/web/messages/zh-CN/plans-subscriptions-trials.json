@@ -46,7 +46,8 @@
       "ai_form_generations_monthly": "每月 AI 表单生成次数",
       "sms_monthly": "每月短信数",
       "email_mailboxes": "邮箱数量",
-      "email_monthly": "每月邮件数"
+      "email_monthly": "每月邮件数",
+      "storage_gb": "存储空间 (GB)"
     },
     "features": {
       "automation": "自动化",
@@ -136,7 +137,8 @@
       "ai_form_generations_monthly": "本日历月 AI 表单生成次数，包括修复重试。0 表示不限。",
       "sms_monthly": "自然月内发出的短信条数。0 = 不限。",
       "email_mailboxes": "已连接的 Gmail 邮箱(断开连接的邮箱会释放名额)。0 = 不限。",
-      "email_monthly": "自然月内发出的邮件数(回复和营销活动邮件合计)。0 = 不限。"
+      "email_monthly": "自然月内发出的邮件数(回复和营销活动邮件合计)。0 = 不限。",
+      "storage_gb": "工作区可使用的存储空间,单位 GB(通话录音、聊天媒体、邮件附件和文件)。0 = 无限制。目前仅做统计,尚不会阻止任何操作。"
     },
     "planAddons": {
       "title": "您的套餐可用的附加包",
