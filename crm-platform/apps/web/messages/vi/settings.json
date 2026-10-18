@@ -379,6 +379,11 @@
         "label": "Khách hàng tiềm năng chưa liên hệ",
         "description": "Chọn hành động nào được tính là đã liên hệ với khách hàng tiềm năng, và liên hệ mới nào bắt đầu ở trạng thái chưa liên hệ.",
         "keywords": "chưa liên hệ, đã liên hệ, khách hàng tiềm năng, khách hàng tiềm năng mới, liên hệ đầu tiên, theo dõi, giao lại, dấu đánh dấu"
+      },
+      "follow-ups": {
+        "label": "Theo dõi",
+        "description": "Tự động đặt lịch theo dõi tiếp theo của liên hệ khi nhóm bạn liên hệ với họ, đồng thời chọn ngày và giờ nhắc.",
+        "keywords": "theo dõi, nhắc nhở, hành động tiếp theo, công việc, lịch hẹn, báo lại sau, để sau"
       }
     },
     "backToMarketplace": "Quay lại Marketplace"

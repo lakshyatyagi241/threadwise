@@ -379,6 +379,11 @@
         "label": "Clientes potenciales sin contactar",
         "description": "Elige qué acciones cuentan como contactar con un cliente potencial y qué contactos nuevos empiezan como sin contactar.",
         "keywords": "sin contactar, contactado, cliente potencial, lead, nuevo cliente potencial, primer contacto, seguimiento, reasignar, marca"
+      },
+      "follow-ups": {
+        "label": "Seguimientos",
+        "description": "Fija automáticamente el próximo seguimiento de un contacto cuando tu equipo se pone en contacto con él, y elige la fecha y la hora de alerta.",
+        "keywords": "seguimiento, recordatorio, próxima acción, tarea, programar, posponer, algún día"
       }
     },
     "backToMarketplace": "Volver al Marketplace"

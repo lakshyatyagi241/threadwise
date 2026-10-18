@@ -2,7 +2,10 @@
   "contacts-attributes-tags": {
     "views": {
       "presets": {
-        "uncontacted": "Non contacté"
+        "uncontacted": "Non contacté",
+        "followUpToday": "Relance aujourd'hui",
+        "followUpOverdue": "Relance en retard",
+        "followUpSomeday": "Relances « un jour »"
       }
     },
     "leadHandling": {
@@ -58,8 +61,77 @@
             "keep": "Ne pas modifier le marquage Non contacté",
             "mark": "Marquer comme non contacté lors de la réattribution"
           }
+        },
+        "followUps": {
+          "title": "Relances",
+          "subtitle": "Ne laissez aucun prospect de côté : quand un membre de l'équipe contacte une personne, sa prochaine relance peut être définie ou déplacée automatiquement. Rien ne change tant que vous n'activez pas une option.",
+          "when": {
+            "title": "Définir les relances automatiquement",
+            "intro": "Quand un membre de l'équipe contacte une personne ou lui envoie du contenu, mettre à jour sa relance si :",
+            "none": "Le contact n'a pas de relance",
+            "overdue": "La relance est en retard",
+            "today": "La relance est prévue aujourd'hui",
+            "future": "La relance est prévue plus tard"
+          },
+          "date": {
+            "title": "Date de relance par défaut",
+            "intro": "Quand une relance est mise à jour automatiquement, la fixer à :",
+            "day": "Dans 1 jour",
+            "three_days": "Dans 3 jours",
+            "week": "Dans 1 semaine",
+            "month": "Dans 1 mois",
+            "custom": "Personnalisé",
+            "someday": "Un jour",
+            "none": "Aucune relance",
+            "somedayHint": "La relance n'a pas de date et reste dans la liste « Un jour ». Aucun rappel n'est envoyé.",
+            "noneHint": "La relance ouverte est marquée comme terminée et aucune nouvelle n'est créée.",
+            "customDays": "Nombre de jours",
+            "daysLater": "jours plus tard"
+          },
+          "time": {
+            "title": "Heure de relance par défaut",
+            "intro": "Quand une nouvelle relance est créée, définir l'heure de l'alerte à :",
+            "hint": "Basée sur le fuseau horaire de votre espace de travail."
+          }
+        }
+      },
+      "followUp": {
+        "title": "Prochaine relance",
+        "somedayLabel": "Un jour",
+        "overdue": "En retard",
+        "done": "Terminé",
+        "snooze": "Reporter",
+        "snoozeDay": "1 jour",
+        "snoozeThreeDays": "3 jours",
+        "snoozeWeek": "Semaine prochaine",
+        "change": "Modifier la date",
+        "set": "Définir une relance",
+        "edit": "Modifier la relance",
+        "remove": "Supprimer la relance",
+        "dialogTitle": "Relance",
+        "someday": "Un jour (sans date)",
+        "dateTime": "Date et heure",
+        "cancel": "Annuler",
+        "save": "Enregistrer",
+        "savedFor": "Relance enregistrée",
+        "savedSomeday": "Relance définie sur « Un jour »",
+        "snoozed": "Relance reportée",
+        "doneMessage": "Relance marquée comme terminée",
+        "clearedMessage": "Relance supprimée",
+        "failed": "Impossible de modifier la relance. Réessayez.",
+        "filterLabel": "Relance",
+        "filter": {
+          "any": "Toutes",
+          "overdue": "En retard",
+          "today": "À faire aujourd'hui",
+          "upcoming": "À venir",
+          "someday": "Un jour",
+          "none": "Aucune relance"
         }
       }
+    },
+    "list": {
+      "colNextFollowUp": "Prochaine relance"
     }
   }
 }

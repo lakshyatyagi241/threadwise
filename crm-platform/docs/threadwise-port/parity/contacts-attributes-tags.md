@@ -604,7 +604,6 @@ The quick view header had empty space right of the name; the record page had a s
 - **Tests:** `lead-score-chip.dom.test.tsx`, `score-card.test.tsx`, `record.render.test.tsx` (AssociationCards), `data-sections.test.tsx` (stats tile, field history), `views-bar.render.test.tsx` (quick chips), `columns.test.ts`, `preset-views.test.ts`, `segments/lib/fields.test.ts`.
 - Not verified in a browser against a workspace with the switch off and a typed score; see the PR.
 
-
 ## Lead handling: uncontacted leads, automatic follow-ups, duplicate leads (BL-290 to BL-292, owner request 2026-10-18)
 
 **A product extension, not a Reference feature.** Spec: [specs/lead-followup-settings.md](../../specs/lead-followup-settings.md); wiring: [wiring/lead-handling.md](../wiring/lead-handling.md); API: [api/lead-handling.md](../../api/lead-handling.md). The owner's reference screenshots (a lead-management app's Settings pages) gave the idea only; the design is ours (contacts, tasks, lead sources, owners, record scopes, 21 locales, audit, RLS). **Nothing changes for a workspace until it switches a setting on**: every option that writes data is off by default, existing contacts are never touched, and no screen of Reference moves.
@@ -613,12 +612,12 @@ The quick view header had empty space right of the name; the record page had a s
 
 ### Intended differences from the reference platform
 
-| #   | Where                | Reference platform                          | Ours, and why |
-| --- | -------------------- | ------------------------------------------- | ------------- |
-| L01 | Contacts             | No "uncontacted" concept                    | `contacts.uncontacted_since` marker (null for every existing contact), a quiet dot in the list, a chip in the record header and quick view, an "Uncontacted" view and quick chip (offered only while a contact carries the marker, so a workspace that never uses it sees no new chip), a More-menu action and a bulk action |
-| L02 | Settings             | Nothing                                      | Settings > Automation and AI > Uncontacted leads (`admin.settings.manage`, Owner and Admin): four "mark as contacted" options (on by default: they only act on contacts already marked), three "mark new leads" options and a reassign choice (off, keep) |
-| L03 | What counts as reaching out | n/a                                   | Our own actions: the contact buttons and logged calls, a person's inbox message (typed text, saved reply, template, file: the server cannot tell a saved reply from typing), a campaign, broadcast or flow send, a timeline note, meeting or activity. First-reply, FAQ and consent-keyword bots do not count |
-| L04 | Row version          | n/a                                          | The marker moves without bumping `row_version` (like `last_activity_at`), so a colleague's reply never 409s an open edit form |
+| #   | Where                       | Reference platform       | Ours, and why                                                                                                                                                                                                                                                                                                                |
+| --- | --------------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| L01 | Contacts                    | No "uncontacted" concept | `contacts.uncontacted_since` marker (null for every existing contact), a quiet dot in the list, a chip in the record header and quick view, an "Uncontacted" view and quick chip (offered only while a contact carries the marker, so a workspace that never uses it sees no new chip), a More-menu action and a bulk action |
+| L02 | Settings                    | Nothing                  | Settings > Automation and AI > Uncontacted leads (`admin.settings.manage`, Owner and Admin): four "mark as contacted" options (on by default: they only act on contacts already marked), three "mark new leads" options and a reassign choice (off, keep)                                                                    |
+| L03 | What counts as reaching out | n/a                      | Our own actions: the contact buttons and logged calls, a person's inbox message (typed text, saved reply, template, file: the server cannot tell a saved reply from typing), a campaign, broadcast or flow send, a timeline note, meeting or activity. First-reply, FAQ and consent-keyword bots do not count                |
+| L04 | Row version                 | n/a                      | The marker moves without bumping `row_version` (like `last_activity_at`), so a colleague's reply never 409s an open edit form                                                                                                                                                                                                |
 
 ### Checks run
 
@@ -627,3 +626,14 @@ See the pull request body (tsc, ESLint, unit, real-Postgres e2e, web tests, `db:
 ### Not verified, and why
 
 A live WhatsApp or e-mail send through a real provider (the dispatch hook is covered by its transaction path and a service-level test, not a provider); campaign and broadcast sends end to end (the hooks sit on the per-recipient `sent` write); native review of the machine-drafted strings in 20 languages.
+
+### Step 2: automatic follow-ups (BL-291)
+
+### Intended differences from the reference platform
+
+| #   | Where    | Reference platform   | Ours, and why                                                                                                                                                                                                                                                                                                                               |
+| --- | -------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| L05 | Contacts | No follow-up concept | A contact's next follow-up is an open task of kind `follow_up` (one per contact), so the task list, the due reminder sweep, notifications, scopes and audit already work. Shown as "Next follow-up" in the record header and quick view (only when one exists), as a list column, a filter and three views (offered once a contact has one) |
+| L06 | Settings | Nothing              | Settings > Automation and AI > Follow-ups: four situations (none, overdue, today, later; a someday follow-up counts as none), default date (1 day, 3 days, 1 week, 1 month, custom days, someday, none = complete the open one) and alert time, all read on the workspace's time zone. Everything off by default                            |
+| L07 | Who      | n/a                  | The contact's owner, else the person who got in touch; an existing follow-up keeps its person. A per-user default is not built (BL-293)                                                                                                                                                                                                     |
+| L08 | By hand  | n/a                  | More menu: Set / Change / Remove follow-up; Done, Snooze (1 day, 3 days, next week at the default time) and Change date on the header row                                                                                                                                                                                                   |

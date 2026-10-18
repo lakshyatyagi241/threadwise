@@ -155,6 +155,7 @@ function wire(r: Row): TaskResponse {
     deal: r.dealId ? { id: r.dealId, title: dealTitle(r.dealId) } : null,
     company: null,
     source: 'manual',
+    kind: 'task',
     rowVersion: r.rowVersion,
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,

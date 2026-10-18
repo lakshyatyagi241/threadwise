@@ -2,7 +2,10 @@
   "contacts-attributes-tags": {
     "views": {
       "presets": {
-        "uncontacted": "Niet benaderd"
+        "uncontacted": "Niet benaderd",
+        "followUpToday": "Opvolging vandaag",
+        "followUpOverdue": "Opvolging te laat",
+        "followUpSomeday": "Opvolgingen zonder datum"
       }
     },
     "leadHandling": {
@@ -58,8 +61,77 @@
             "keep": "De markering Niet benaderd niet wijzigen",
             "mark": "Markeren als niet benaderd bij hertoewijzing"
           }
+        },
+        "followUps": {
+          "title": "Opvolgingen",
+          "subtitle": "Houd elke lead in beweging: wanneer een teamlid contact opneemt met iemand, kan de volgende opvolging automatisch worden ingesteld of verplaatst. Er verandert niets totdat je een optie inschakelt.",
+          "when": {
+            "title": "Opvolgingen automatisch instellen",
+            "intro": "Werk de opvolging bij wanneer een teamlid contact opneemt met iemand of content naar iemand stuurt, in deze gevallen:",
+            "none": "Het contact heeft geen opvolging",
+            "overdue": "De opvolging is te laat",
+            "today": "De opvolging is vandaag gepland",
+            "future": "De opvolging is later gepland"
+          },
+          "date": {
+            "title": "Standaarddatum voor opvolging",
+            "intro": "Als een opvolging automatisch wordt bijgewerkt, stel deze dan in op:",
+            "day": "1 dag later",
+            "three_days": "3 dagen later",
+            "week": "1 week later",
+            "month": "1 maand later",
+            "custom": "Aangepast",
+            "someday": "Ooit",
+            "none": "Geen opvolging",
+            "somedayHint": "De opvolging heeft geen datum en wacht in de lijst Ooit. Hiervoor komt nooit een herinnering.",
+            "noneHint": "De openstaande opvolging wordt als afgerond gemarkeerd en er wordt geen nieuwe gemaakt.",
+            "customDays": "Aantal dagen",
+            "daysLater": "dagen later"
+          },
+          "time": {
+            "title": "Standaardtijd voor opvolging",
+            "intro": "Stel bij elke nieuwe opvolging de meldingstijd in op:",
+            "hint": "Gebaseerd op de tijdzone van je werkruimte."
+          }
+        }
+      },
+      "followUp": {
+        "title": "Volgende opvolging",
+        "somedayLabel": "Ooit",
+        "overdue": "Te laat",
+        "done": "Klaar",
+        "snooze": "Uitstellen",
+        "snoozeDay": "1 dag",
+        "snoozeThreeDays": "3 dagen",
+        "snoozeWeek": "Volgende week",
+        "change": "Datum wijzigen",
+        "set": "Opvolging instellen",
+        "edit": "Opvolging wijzigen",
+        "remove": "Opvolging verwijderen",
+        "dialogTitle": "Opvolging",
+        "someday": "Ooit (geen datum)",
+        "dateTime": "Datum en tijd",
+        "cancel": "Annuleren",
+        "save": "Opslaan",
+        "savedFor": "Opvolging opgeslagen",
+        "savedSomeday": "Opvolging ingesteld op ooit",
+        "snoozed": "Opvolging verplaatst",
+        "doneMessage": "Opvolging gemarkeerd als klaar",
+        "clearedMessage": "Opvolging verwijderd",
+        "failed": "De opvolging kon niet worden gewijzigd. Probeer het opnieuw.",
+        "filterLabel": "Opvolging",
+        "filter": {
+          "any": "Alle",
+          "overdue": "Te laat",
+          "today": "Vandaag aan de beurt",
+          "upcoming": "Aankomend",
+          "someday": "Ooit",
+          "none": "Geen opvolging"
         }
       }
+    },
+    "list": {
+      "colNextFollowUp": "Volgende opvolging"
     }
   }
 }

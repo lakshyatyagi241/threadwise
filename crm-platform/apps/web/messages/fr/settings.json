@@ -379,6 +379,11 @@
         "label": "Prospects non contactés",
         "description": "Choisissez les actions qui comptent comme une prise de contact avec un prospect, et les nouveaux contacts qui démarrent comme non contactés.",
         "keywords": "non contacté, contacté, prospect, nouveau prospect, premier contact, relance, réattribuer, marquage"
+      },
+      "follow-ups": {
+        "label": "Relances",
+        "description": "Définissez automatiquement la prochaine relance d'un contact quand votre équipe le contacte, puis choisissez la date et l'heure de l'alerte.",
+        "keywords": "relance, rappel, prochaine action, tâche, planification, reporter, un jour"
       }
     },
     "backToMarketplace": "Retour au Marketplace"

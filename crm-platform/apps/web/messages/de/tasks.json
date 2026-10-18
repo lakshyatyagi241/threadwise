@@ -127,7 +127,8 @@
       "open": "Öffnen",
       "edit": "Bearbeiten",
       "delete": "Löschen",
-      "unassigned": "Nicht zugewiesen"
+      "unassigned": "Nicht zugewiesen",
+      "followUpBadge": "Wiedervorlage"
     },
     "bulk": {
       "label": "Aktionen für die ausgewählten Aufgaben",

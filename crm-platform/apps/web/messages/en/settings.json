@@ -379,6 +379,11 @@
         "label": "Uncontacted leads",
         "description": "Choose which actions count as reaching a lead, and which new contacts start as uncontacted.",
         "keywords": "uncontacted, contacted, lead, new lead, first contact, follow up, reassign, marker"
+      },
+      "follow-ups": {
+        "label": "Follow-ups",
+        "description": "Set a contact's next follow-up automatically when your team gets in touch, and choose the date and alert time.",
+        "keywords": "follow up, follow-up, reminder, next action, task, schedule, snooze, someday"
       }
     },
     "backToMarketplace": "Back to Marketplace"

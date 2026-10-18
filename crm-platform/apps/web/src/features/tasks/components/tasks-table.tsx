@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { MenuItem, MenuSeparator, cn } from '@crm/ui';
+import { Badge, MenuItem, MenuSeparator, cn } from '@crm/ui';
 import type { TaskResponse } from '@crm/contracts';
 import { type ColumnId } from '../lib/columns';
 import { formatDateTime } from '../lib/format';
@@ -136,6 +136,7 @@ export function TaskRowMenu({ task, h }: { task: TaskResponse; h: RowHandlers })
 }
 
 function TitleCell({ task, h }: { task: TaskResponse; h: RowHandlers }) {
+  const t = useTranslations('tasks.row');
   const done = task.status === 'done';
   return (
     <div className="flex min-w-0 items-center gap-2.5">
@@ -157,6 +158,7 @@ function TitleCell({ task, h }: { task: TaskResponse; h: RowHandlers }) {
       >
         {task.title}
       </button>
+      {task.kind === 'follow_up' && <Badge>{t('followUpBadge')}</Badge>}
       <TaskRowMenu task={task} h={h} />
     </div>
   );

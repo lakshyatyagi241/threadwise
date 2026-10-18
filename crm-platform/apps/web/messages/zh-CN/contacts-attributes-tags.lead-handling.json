@@ -2,7 +2,10 @@
   "contacts-attributes-tags": {
     "views": {
       "presets": {
-        "uncontacted": "未联系"
+        "uncontacted": "未联系",
+        "followUpToday": "今日跟进",
+        "followUpOverdue": "跟进已逾期",
+        "followUpSomeday": "未定期跟进"
       }
     },
     "leadHandling": {
@@ -58,8 +61,77 @@
             "keep": "不更改“未联系”标记",
             "mark": "重新分配时标记为未联系"
           }
+        },
+        "followUps": {
+          "title": "跟进",
+          "subtitle": "让每个潜在客户持续推进：团队成员联系某位联系人后，可自动为其设置或调整下次跟进。开启选项之前不会有任何变化。",
+          "when": {
+            "title": "自动设置跟进",
+            "intro": "每当团队成员联系某位联系人或向其发送内容时，在以下情况更新其跟进：",
+            "none": "该联系人没有跟进",
+            "overdue": "跟进已逾期",
+            "today": "跟进今天到期",
+            "future": "跟进在之后到期"
+          },
+          "date": {
+            "title": "默认跟进日期",
+            "intro": "自动更新跟进时，将其设置为：",
+            "day": "1 天后",
+            "three_days": "3 天后",
+            "week": "1 周后",
+            "month": "1 个月后",
+            "custom": "自定义",
+            "someday": "待定",
+            "none": "无跟进",
+            "somedayHint": "该跟进没有日期，会保留在“待定”列表中，不会发送提醒。",
+            "noneHint": "当前未完成的跟进会标记为已完成，且不会创建新的跟进。",
+            "customDays": "天数",
+            "daysLater": "天后"
+          },
+          "time": {
+            "title": "默认跟进时间",
+            "intro": "每当创建新的跟进时，将提醒时间设置为：",
+            "hint": "按工作区所在时区计算。"
+          }
+        }
+      },
+      "followUp": {
+        "title": "下次跟进",
+        "somedayLabel": "待定",
+        "overdue": "已逾期",
+        "done": "完成",
+        "snooze": "延后",
+        "snoozeDay": "1 天",
+        "snoozeThreeDays": "3 天",
+        "snoozeWeek": "下周",
+        "change": "更改日期",
+        "set": "设置跟进",
+        "edit": "修改跟进",
+        "remove": "移除跟进",
+        "dialogTitle": "跟进",
+        "someday": "待定（无日期）",
+        "dateTime": "日期和时间",
+        "cancel": "取消",
+        "save": "保存",
+        "savedFor": "跟进已保存",
+        "savedSomeday": "跟进已设为待定",
+        "snoozed": "跟进已延期",
+        "doneMessage": "跟进已标记为完成",
+        "clearedMessage": "跟进已移除",
+        "failed": "无法更改跟进，请重试。",
+        "filterLabel": "跟进",
+        "filter": {
+          "any": "全部",
+          "overdue": "已逾期",
+          "today": "今天到期",
+          "upcoming": "即将到期",
+          "someday": "待定",
+          "none": "无跟进"
         }
       }
+    },
+    "list": {
+      "colNextFollowUp": "下次跟进"
     }
   }
 }

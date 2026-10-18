@@ -1,3 +1,4 @@
+import type { FollowUpFilter } from '@crm/contracts';
 import { ownerTokens, UNASSIGNED_OWNER, type ContactFilters } from '../api/contacts';
 import { SEGMENT_PREFIX } from './segment-entries';
 
@@ -7,7 +8,16 @@ import { SEGMENT_PREFIX } from './segment-entries';
  */
 
 export type FilterChipKind =
-  'segment' | 'tag' | 'owner' | 'stage' | 'status' | 'minor' | 'consent' | 'source' | 'rules';
+  | 'segment'
+  | 'tag'
+  | 'owner'
+  | 'stage'
+  | 'status'
+  | 'minor'
+  | 'followUp'
+  | 'consent'
+  | 'source'
+  | 'rules';
 
 export interface FilterChip {
   /** Stable key for React and for tests. */
@@ -31,6 +41,9 @@ export interface ChipNames {
     minor: string;
     minorYes: string;
     minorNo: string;
+    followUp: string;
+    /** The name of each follow-up state, for the chip. */
+    followUpStates: Record<FollowUpFilter, string>;
     consent: string;
     source: string;
     conditions: string;
@@ -163,6 +176,17 @@ export function appliedFilterChips(f: ContactFilters, n: ChipNames): FilterChip[
     });
   }
 
+  if (f.followUp) {
+    const name = w.followUpStates[f.followUp];
+    out.push({
+      id: `followUp:${f.followUp}`,
+      kind: 'followUp',
+      label: text(w.followUp, name),
+      value: name,
+      clear: { followUp: '' },
+    });
+  }
+
   if (f.consent) {
     const name = f.consent === 'subscribed' ? w.subscribed : w.unsubscribed;
     out.push({
@@ -204,6 +228,7 @@ export function clearAllPatch(): Partial<ContactFilters> {
     lifecycleStage: '',
     status: '',
     minor: '',
+    followUp: '',
     consent: '',
     source: '',
     rules: '',

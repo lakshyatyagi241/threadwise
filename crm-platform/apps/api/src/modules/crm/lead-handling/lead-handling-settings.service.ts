@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
+  mergeFollowUpSettings,
   mergeUncontactedSettings,
+  type FollowUpSettings,
+  type FollowUpSettingsValues,
   type LeadHandlingSection,
   type LeadHandlingSettings,
   type UncontactedSettings,
   type UncontactedSettingsValues,
+  type UpdateFollowUpSettingsInput,
   type UpdateUncontactedSettingsInput,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
@@ -97,12 +101,34 @@ export class LeadHandlingSettingsService {
     return mergeUncontactedSettings(rows.get('uncontacted')?.config);
   }
 
+  /** The follow-ups section as the hooks need it: merged over the defaults. */
+  followUpsOf(config: unknown): FollowUpSettingsValues {
+    return mergeFollowUpSettings(config);
+  }
+
   async get(): Promise<LeadHandlingSettings> {
     const orgId = RequestContextStore.orgId();
     return this.db.tx(async (tx) => {
-      const rows = await this.readIn(tx, orgId, ['uncontacted']);
-      return { uncontacted: this.uncontactedOf(rows.get('uncontacted')) };
+      const rows = await this.readIn(tx, orgId, ['uncontacted', 'follow_ups']);
+      return {
+        uncontacted: this.uncontactedOf(rows.get('uncontacted')),
+        followUps: this.followUpsView(rows.get('follow_ups')),
+      };
     });
+  }
+
+  async updateFollowUps(input: UpdateFollowUpSettingsInput): Promise<FollowUpSettings> {
+    const { rowVersion, ...values } = input;
+    const row = await this.save('follow_ups', values, rowVersion, (c) => mergeFollowUpSettings(c));
+    return this.followUpsView(row);
+  }
+
+  private followUpsView(row: SectionRow | undefined): FollowUpSettings {
+    return {
+      ...mergeFollowUpSettings(row?.config),
+      rowVersion: row?.rowVersion ?? null,
+      updatedAt: row?.updatedAt.toISOString() ?? null,
+    };
   }
 
   async updateUncontacted(input: UpdateUncontactedSettingsInput): Promise<UncontactedSettings> {

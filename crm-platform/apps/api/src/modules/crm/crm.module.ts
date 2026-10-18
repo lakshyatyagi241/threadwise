@@ -18,6 +18,7 @@ import {
   LeadHandlingController,
 } from './lead-handling/lead-handling.controller';
 import { ContactTouchService } from './lead-handling/contact-touch.service';
+import { FollowUpService } from './lead-handling/follow-up.service';
 import { LeadHandlingSettingsService } from './lead-handling/lead-handling-settings.service';
 import { ContactAssignmentController } from './contact-assignment/contact-assignment.controller';
 import { ContactAssignmentEngine } from './contact-assignment/contact-assignment.engine';
@@ -282,6 +283,7 @@ import { TagsService } from './tags/tags.service';
     ContactBulkService,
     LeadHandlingSettingsService,
     ContactTouchService,
+    FollowUpService,
     OwnerReassignRepository,
     OwnerReassignService,
     ContactAssignmentRepository,

@@ -641,7 +641,9 @@ export class ContactsService {
     orgId: number,
     inputs: readonly ResolveContactInput[],
   ): Promise<ResolvedContact[]> {
-    const keyOf = (input: ResolveContactInput): { kind: 'email' | 'phone'; value: string } | null => {
+    const keyOf = (
+      input: ResolveContactInput,
+    ): { kind: 'email' | 'phone'; value: string } | null => {
       if (input.kind === 'phone') {
         const e164 = canonicalizePhone({ number: input.value })?.e164;
         return e164 ? { kind: 'phone', value: e164 } : null;
