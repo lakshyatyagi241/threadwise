@@ -63,6 +63,8 @@ export const contactResponseSchema = z.object({
   isMinor: z.boolean(),
   /** Bumped by note/activity/meeting writes — server-maintained. */
   lastActivityAt: z.string().datetime().nullable(),
+  /** BL-290: null = contacted; a timestamp = uncontacted since then (marker set by the workspace's lead handling settings or by hand). */
+  uncontactedSince: z.string().datetime().nullable(),
   customFields: z.record(z.unknown()),
   /** Where the contact came from: the import's source knob, "import", an API client... */
   source: z.string().nullable(),

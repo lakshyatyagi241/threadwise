@@ -90,6 +90,13 @@ export {
 export type { ContactGroupRow } from './contact-groups';
 export { ContactBulkService, csvLine, UTF8_BOM } from './contact-bulk';
 export {
+  ContactTouchService,
+  LeadHandlingSettingsService,
+  callReachedContact,
+  createMethodOfActor,
+} from './lead-handling';
+export type { CreateMethod, TouchSource } from './lead-handling';
+export {
   SegmentsService,
   SegmentsRepository,
   SegmentActionsService,

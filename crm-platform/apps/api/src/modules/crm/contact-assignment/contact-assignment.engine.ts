@@ -12,6 +12,7 @@ import { loadWorkspaceCalendar, onLeaveMap } from '../../../common/workspace-cal
 import { DatabaseService } from '../../../infra/db/database.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { PlanEntitlementService } from '../../plans-subscriptions-trials';
+import { ContactTouchService } from '../lead-handling/contact-touch.service';
 import { candidateOrder, matchesAssignment, type AssignmentFacts } from './assignment-matcher';
 import {
   ContactAssignmentRepository,
@@ -66,6 +67,7 @@ export class ContactAssignmentEngine {
     private readonly repo: ContactAssignmentRepository,
     private readonly outbox: OutboxService,
     private readonly entitlements: PlanEntitlementService,
+    private readonly touch: ContactTouchService,
   ) {}
 
   async assign(
@@ -94,6 +96,8 @@ export class ContactAssignmentEngine {
       if (!(await this.repo.setOwner(tx, orgId, subject, rec.id, person.id)))
         return { outcome: 'raced' };
       await this.repo.markFired(tx, orgId, rule.id, person.id);
+      // The contact has an owner now: back to uncontacted when the workspace says an assignment does that (BL-290).
+      if (subject === 'contact') await this.touch.afterReassign(tx, orgId, [rec.id]);
       const module = subject === 'contact' ? 'contacts' : 'deals';
       await this.repo.audit(tx, {
         orgId,

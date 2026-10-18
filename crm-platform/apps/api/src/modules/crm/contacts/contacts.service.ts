@@ -57,6 +57,8 @@ import { ContactQuotaService } from './contact-quota.service';
 import { assertContactScope } from './contact-scope';
 import { assertOwnerWithinScope } from '../owner-scope';
 import { SendWindowService } from '../../compliance-center';
+import { ContactTouchService } from '../lead-handling/contact-touch.service';
+import { createMethodOfActor, type CreateMethod } from '../lead-handling/lead-handling-rules';
 import { toContactResponse } from './contacts.mapper';
 import { ContactsRepository, encodeSortCursor, type ContactRow } from './contacts.repository';
 
@@ -207,6 +209,7 @@ export class ContactsService {
     private readonly erasure: PersonalDataErasureService,
     private readonly sendWindow: SendWindowService,
     private readonly minors: MinorDetectionService,
+    private readonly touch: ContactTouchService,
   ) {}
 
   /**
@@ -363,6 +366,8 @@ export class ContactsService {
   async createOrMatch(
     input: CreateContactInput,
     via?: ContactConsentContext,
+    /** How the contact came to be, when the actor does not say it (the Sheets add-on is an import): see the uncontacted settings. */
+    opts: { createdVia?: CreateMethod } = {},
   ): Promise<{ contact: ContactResponse; created: boolean }> {
     const ctx = RequestContextStore.require();
     // A worker/system actor (the inbound-message pipeline below) carries no grants at all and is
@@ -533,6 +538,10 @@ export class ContactsService {
         recordId: created.id,
         action: 'insert',
       });
+      // Start uncontacted when the workspace says contacts created this way do (BL-290). Off by default: no write.
+      const method = opts.createdVia ?? createMethodOfActor(ctx.actorType);
+      if (method) await this.touch.markNew(tx, ctx.orgId, created.id, method);
+
       // A date of birth that makes the contact a minor sets the flag in the same transaction (BL-217).
       if (input.dateOfBirth) {
         await this.minors.evaluateInTx(tx, ctx.orgId, created.id, new Date(), { dobChanged: true });
@@ -695,6 +704,11 @@ export class ContactsService {
     });
     await this.repo.addIdentity(tx, orgId, created.id, input.kind, value);
     await this.audit.record(tx, { module: MODULE_KEY, recordId: created.id, action: 'insert' });
+    // A lead source or a form made the contact: start it uncontacted when the workspace says so (BL-290). A test lead never is.
+    const origin = input.eventPayload?.origin;
+    if (!input.quiet && (origin === 'lead' || origin === 'form')) {
+      await this.touch.markNew(tx, orgId, created.id, 'lead_source');
+    }
     if (!input.quiet) {
       await this.outbox.emit(tx, {
         aggregateModule: MODULE_KEY,
@@ -1325,6 +1339,10 @@ export class ContactsService {
         values,
       );
       if (!updated) throw AppError.rowVersionConflict('Contact');
+      // A new owner puts the contact back to uncontacted when the workspace says so (BL-290).
+      if (values.ownerId != null && values.ownerId !== existing.ownerId) {
+        await this.touch.afterReassign(tx, ctx.orgId, [existing.id]);
+      }
 
       // The identity keys follow the contact: the old address or number is released (an edit or a clear), the new one claimed.
       if (input.email !== undefined && existing.email && input.email !== existing.email) {
@@ -1660,6 +1678,9 @@ export class ContactsService {
           updatedBy: ctx.userId,
         });
         if (!updated) throw AppError.notFound('Contact');
+        if (ownerId !== null && ownerId !== existing.ownerId) {
+          await this.touch.afterReassign(rowTx, ctx.orgId, [id]);
+        }
 
         await this.audit.record(rowTx, {
           module: MODULE_KEY,

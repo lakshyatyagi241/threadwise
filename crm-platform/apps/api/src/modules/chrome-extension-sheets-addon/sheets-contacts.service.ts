@@ -166,6 +166,7 @@ export class SheetsContactsService {
             customFields: c.customFields,
           },
           sheetsConsentVia(c),
+          { createdVia: 'import' },
         );
         // Another request for the same person got there first (the same row sent twice at once): this one found them, nothing was made.
         if (!made.created) {
