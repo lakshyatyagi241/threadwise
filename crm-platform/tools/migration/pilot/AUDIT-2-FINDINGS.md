@@ -33,3 +33,8 @@ which moves live inbound traffic away from Wabo. Nothing is sent to Meta and no 
 `S3_ENDPOINT=https://<account id>.r2.cloudflarestorage.com`, `S3_REGION=auto`, an R2 API token as `S3_ACCESS_KEY_ID` / `S3_SECRET_ACCESS_KEY`, `S3_BUCKET_MEDIA` / `S3_BUCKET_DOCUMENTS` = the R2 buckets.
 Order: `plan` (read-only) -> `copy --apply --confirm-org-slug S --max-files N --max-gb G --state f.jsonl` -> `verify`. Then set Settings > Storage (endpoint, bucket, base folder) to the same R2 bucket,
 or the app answers 404 for the copied keys. Rows already copied to S3 under `chat/<org>/waboo/...` are not re-read from Waboo: copy those objects bucket-to-bucket first (e.g. `rclone copy s3:bucket r2:bucket`, same keys), then `verify`.
+
+### Flow media (added)
+`copy-files` now also finds Waboo-host links inside `flows.flow_data` (media steps), copies each file to `flow-media/<org id>/waboo/<hash>/<name>` in `S3_BUCKET_MEDIA` (R2) and rewrites the step to
+`<flowMediaPublicBase>/<object key>`. A flow sends its media by link, so the config needs `"flowMediaPublicBase": "https://<public origin of the R2 bucket>"` (custom domain or r2.dev); `copy --apply` refuses without it.
+`verify` lists flow links still on a Waboo host (so you can see when nothing points at S3) and HEADs the rewritten R2 objects. Not covered still: template header media, broadcast / FAQ / knowledge attachments.
