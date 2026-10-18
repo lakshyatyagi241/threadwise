@@ -1,0 +1,1623 @@
+{
+  "generatedFrom": "apps/api/src",
+  "queueCount": 50,
+  "queues": [
+    {
+      "queue": "outbox",
+      "constant": "OUTBOX",
+      "class": "automation",
+      "priority": "P1",
+      "waitSloMsP95": 1000,
+      "workload": "event-fanout",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [],
+      "concurrencyPerWorker": null,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [],
+      "scheduled": false,
+      "purpose": "Drains event_outbox and fans events out to workflows/automations."
+    },
+    {
+      "queue": "campaign",
+      "constant": "CAMPAIGN",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "campaign-send",
+      "jobKind": "provider",
+      "dependency": "channel-providers",
+      "consumerFiles": [
+        "apps/api/src/modules/campaigns/campaign.processor.ts"
+      ],
+      "concurrencyPerWorker": 4,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/campaigns/campaign-jobs.ts",
+        "apps/api/src/modules/campaigns/fixture/fixture-receipts.ts",
+        "apps/api/src/modules/campaigns/wizard/wizard-test-send.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "Throttled campaign sending — rate limited per campaign (throttle_per_min)."
+    },
+    {
+      "queue": "message-dispatch",
+      "constant": "MESSAGE_DISPATCH",
+      "class": "interactive",
+      "priority": "P1",
+      "waitSloMsP95": 250,
+      "workload": "outbound-one-to-one",
+      "jobKind": "provider",
+      "dependency": "channel-providers",
+      "consumerFiles": [
+        "apps/api/src/modules/chat-conversations/message-dispatch.processor.ts"
+      ],
+      "concurrencyPerWorker": 8,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/chat-conversations/outbound.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "Single outbound message dispatch to a channel provider."
+    },
+    {
+      "queue": "webhook-ingest",
+      "constant": "WEBHOOK_INGEST",
+      "class": "critical-inbound",
+      "priority": "P0",
+      "waitSloMsP95": 100,
+      "workload": "inbox-ingest",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [
+        "apps/api/src/modules/chat-conversations/channel-ingest.processor.ts"
+      ],
+      "concurrencyPerWorker": 8,
+      "limiter": null,
+      "attempts": 10,
+      "backoff": "exp 5s jitter .25",
+      "inboundProtected": true,
+      "producerFiles": [
+        "apps/api/src/modules/chat-conversations/channel-ingest.publisher.ts"
+      ],
+      "scheduled": false,
+      "purpose": "Inbound webhooks (delivery receipts, inbound messages) — ack fast, process here."
+    },
+    {
+      "queue": "billing-posting",
+      "constant": "BILLING_POSTING",
+      "class": "critical-inbound",
+      "priority": "P0",
+      "waitSloMsP95": 1000,
+      "workload": "billing-usage",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [],
+      "concurrencyPerWorker": null,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [],
+      "scheduled": false,
+      "purpose": "Rolls unposted usage_charges into one wallet transaction per org (~60s)."
+    },
+    {
+      "queue": "sla-sweep",
+      "constant": "SLA_SWEEP",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "sla-sweep",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [],
+      "concurrencyPerWorker": null,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [],
+      "scheduled": false,
+      "purpose": "SLA due-date sweeper — marks breaches, emits escalation events."
+    },
+    {
+      "queue": "counter-flush",
+      "constant": "COUNTER_FLUSH",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "counter-flush",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [],
+      "concurrencyPerWorker": null,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [],
+      "scheduled": false,
+      "purpose": "Flushes in-memory metric counters to metric_counters (2–5s)."
+    },
+    {
+      "queue": "partition-maintenance",
+      "constant": "PARTITION_MAINTENANCE",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "partition-maintenance",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [],
+      "concurrencyPerWorker": null,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [],
+      "scheduled": false,
+      "purpose": "Creates next month's partitions well ahead of time."
+    },
+    {
+      "queue": "bulk-jobs",
+      "constant": "BULK_JOBS",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "bulk-import-export",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [],
+      "concurrencyPerWorker": null,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [],
+      "scheduled": false,
+      "purpose": "Bulk import/export jobs — long-running, off the OLTP path."
+    },
+    {
+      "queue": "con-import",
+      "constant": "CON_IMPORT",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "contacts-import",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [
+        "apps/api/src/modules/crm/contact-import/contact-import.processor.ts"
+      ],
+      "concurrencyPerWorker": 2,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/crm/contact-import/contact-import.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "Contact CSV imports above the synchronous size (TW-CON-027). Own queue: a huge file must not delay another bulk job."
+    },
+    {
+      "queue": "bcast-dispatch",
+      "constant": "BCAST_DISPATCH",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "broadcast-recipients",
+      "jobKind": "provider",
+      "dependency": "meta",
+      "consumerFiles": [
+        "apps/api/src/modules/broadcasts/broadcast-dispatch.processor.ts"
+      ],
+      "concurrencyPerWorker": 4,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/broadcasts/broadcast-due.service.ts",
+        "apps/api/src/modules/broadcasts/broadcasts-actions.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per broadcast: sends its pending recipients (TW-BCAST-016). Own queue so a slow provider cannot hold campaigns."
+    },
+    {
+      "queue": "waba-ingest",
+      "constant": "WABA_INGEST",
+      "class": "critical-inbound",
+      "priority": "P0",
+      "waitSloMsP95": 100,
+      "workload": "whatsapp-webhooks",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [
+        "apps/api/src/modules/whatsapp-cloud-api-waba/waba-ingest.processor.ts"
+      ],
+      "concurrencyPerWorker": 8,
+      "limiter": null,
+      "attempts": 10,
+      "backoff": "exp 5s jitter .25",
+      "inboundProtected": true,
+      "producerFiles": [
+        "apps/api/src/modules/platform-async-ops/async-ops.service.ts",
+        "apps/api/src/modules/whatsapp-cloud-api-waba/waba-webhook.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "WhatsApp Cloud API / Interakt webhook payloads (messages, receipts, template and account events). Acked first, processed here."
+    },
+    {
+      "queue": "pinnacle-credit-line",
+      "constant": "PINNACLE_CREDIT_LINE",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "credit-line",
+      "jobKind": "provider",
+      "dependency": "pinnacle,meta",
+      "consumerFiles": [
+        "apps/api/src/modules/whatsapp-cloud-api-waba/pinnacle-credit-line.processor.ts"
+      ],
+      "concurrencyPerWorker": 4,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/whatsapp-cloud-api-waba/pinnacle-onboarding.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One delayed job per Pinnacle client: shares the Meta credit line a few minutes after its embedded details arrive. Own queue: a slow partner must not hold WhatsApp ingest."
+    },
+    {
+      "queue": "webhook-forward",
+      "constant": "WEBHOOK_FORWARD",
+      "class": "automation",
+      "priority": "P1",
+      "waitSloMsP95": 1000,
+      "workload": "webhook-forward",
+      "jobKind": "provider",
+      "dependency": "platform-targets",
+      "consumerFiles": [
+        "apps/api/src/modules/webhook-fanout/webhook-forward.processor.ts"
+      ],
+      "concurrencyPerWorker": 16,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/webhook-fanout/webhook-fanout.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per (webhook, target): the raw Meta body POSTed unchanged to a platform-configured target. Own queue: a dead target must not delay WhatsApp ingest."
+    },
+    {
+      "queue": "webhook-deliver",
+      "constant": "WEBHOOK_DELIVER",
+      "class": "automation",
+      "priority": "P1",
+      "waitSloMsP95": 1000,
+      "workload": "customer-webhooks",
+      "jobKind": "provider",
+      "dependency": "customer-endpoints",
+      "consumerFiles": [
+        "apps/api/src/modules/outbound-webhooks/webhook-delivery.processor.ts"
+      ],
+      "concurrencyPerWorker": 16,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/outbound-webhooks/webhook-dispatch.consumer.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per (event, workspace webhook): a signed POST to the customer's own endpoint, retried with backoff (TW-API-147). Own queue: a dead customer endpoint must not delay anything else."
+    },
+    {
+      "queue": "tg-broadcast",
+      "constant": "TG_BROADCAST",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "telegram-broadcast",
+      "jobKind": "provider",
+      "dependency": "telegram",
+      "consumerFiles": [
+        "apps/api/src/modules/channel-telegram/tg-broadcast.processor.ts"
+      ],
+      "concurrencyPerWorker": 2,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/channel-telegram/tg-broadcast-sender.service.ts",
+        "apps/api/src/modules/channel-telegram/tg-broadcasts.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per Telegram broadcast run: sends its pending chats at a pace under Telegram's limits (TW-TG-013)."
+    },
+    {
+      "queue": "line-broadcast",
+      "constant": "LINE_BROADCAST",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "line-broadcast",
+      "jobKind": "provider",
+      "dependency": "line",
+      "consumerFiles": [
+        "apps/api/src/modules/channel-line/line-broadcast.processor.ts"
+      ],
+      "concurrencyPerWorker": 2,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/channel-line/line-broadcast-sender.service.ts",
+        "apps/api/src/modules/channel-line/line-broadcasts.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per LINE broadcast run: pushes to its pending people in batches of 40, paced under LINE's rate limits."
+    },
+    {
+      "queue": "viber-broadcast",
+      "constant": "VIBER_BROADCAST",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "viber-broadcast",
+      "jobKind": "provider",
+      "dependency": "viber",
+      "consumerFiles": [
+        "apps/api/src/modules/channel-viber/vib-broadcast.processor.ts"
+      ],
+      "concurrencyPerWorker": 2,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/channel-viber/vib-broadcast-sender.service.ts",
+        "apps/api/src/modules/channel-viber/vib-broadcasts.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per Viber broadcast run: sends its pending users in calls of up to 300 (TW-VIB-013)."
+    },
+    {
+      "queue": "fb-backfill",
+      "constant": "FB_BACKFILL",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "messenger-backfill",
+      "jobKind": "provider",
+      "dependency": "meta",
+      "consumerFiles": [
+        "apps/api/src/modules/channel-facebook/fb-backfill.processor.ts"
+      ],
+      "concurrencyPerWorker": 2,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/channel-facebook/pages.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per connected Facebook Page: imports its existing Messenger threads, storing only (TW-FB-010)."
+    },
+    {
+      "queue": "meta-leadgen",
+      "constant": "META_LEADGEN",
+      "class": "automation",
+      "priority": "P1",
+      "waitSloMsP95": 1000,
+      "workload": "lead-ads",
+      "jobKind": "provider",
+      "dependency": "meta",
+      "consumerFiles": [
+        "apps/api/src/modules/meta-lead-ads/leadgen.processor.ts"
+      ],
+      "concurrencyPerWorker": 4,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/channel-facebook/inbound.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per `leadgen` webhook event of a Facebook Page (BL-011): fetches the lead from Meta and hands it to the lead pipeline. Own queue: a slow Meta must not hold a Messenger message."
+    },
+    {
+      "queue": "meta-lead-sweep",
+      "constant": "META_LEAD_SWEEP",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "lead-ads-sweep",
+      "jobKind": "provider",
+      "dependency": "meta",
+      "consumerFiles": [
+        "apps/api/src/modules/meta-lead-ads/lead-sweep.processor.ts"
+      ],
+      "concurrencyPerWorker": 2,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/meta-lead-ads/lead-sweep.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per Page with Meta lead ads on: re-reads its forms' recent leads so a missed webhook never loses one (BL-011). Own queue: a long read must not hold a live lead."
+    },
+    {
+      "queue": "fb-broadcast",
+      "constant": "FB_BROADCAST",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "messenger-broadcast",
+      "jobKind": "provider",
+      "dependency": "meta",
+      "consumerFiles": [
+        "apps/api/src/modules/channel-facebook/fb-broadcast.processor.ts"
+      ],
+      "concurrencyPerWorker": 2,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/channel-facebook/fb-broadcast-sender.service.ts",
+        "apps/api/src/modules/channel-facebook/fb-broadcasts.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per Messenger broadcast run: sends its pending recipients at a pace under Meta's limits (TW-FB-013)."
+    },
+    {
+      "queue": "ig-pull",
+      "constant": "IG_PULL",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "instagram-pull",
+      "jobKind": "provider",
+      "dependency": "engine",
+      "consumerFiles": [
+        "apps/api/src/modules/channel-instagram/ig-pull.processor.ts"
+      ],
+      "concurrencyPerWorker": 4,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/channel-instagram/broadcasts.service.ts",
+        "apps/api/src/modules/channel-instagram/pull-sweep.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per organization with a linked Instagram account: pulls its new conversations and messages from the engine (TW-IG-009)."
+    },
+    {
+      "queue": "ecom-import",
+      "constant": "ECOM_IMPORT",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "store-import",
+      "jobKind": "provider",
+      "dependency": "store-apis,postgres",
+      "consumerFiles": [
+        "apps/api/src/modules/shopify-woocommerce/ecom-import.processor.ts"
+      ],
+      "concurrencyPerWorker": 2,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/shopify-woocommerce/import.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per connected store: imports its products, orders and customers into the mirror (TW-ECOM-011)."
+    },
+    {
+      "queue": "ecom-webhook",
+      "constant": "ECOM_WEBHOOK",
+      "class": "automation",
+      "priority": "P1",
+      "waitSloMsP95": 1000,
+      "workload": "ecommerce-webhooks",
+      "jobKind": "db",
+      "dependency": "postgres,store-apis",
+      "consumerFiles": [
+        "apps/api/src/modules/shopify-woocommerce/webhook.processor.ts"
+      ],
+      "concurrencyPerWorker": 5,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/shopify-woocommerce/broadcast.service.ts",
+        "apps/api/src/modules/shopify-woocommerce/cart.service.ts",
+        "apps/api/src/modules/shopify-woocommerce/webhook-pipeline.service.ts",
+        "apps/api/src/modules/shopify-woocommerce/webhook.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per verified store webhook: the event message, the order-status automation and the mirror upkeep (TW-ECOM-008, 010, 027)."
+    },
+    {
+      "queue": "sched-run",
+      "constant": "SCHED_RUN",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "scheduled-campaigns",
+      "jobKind": "provider",
+      "dependency": "channel-providers",
+      "consumerFiles": [
+        "apps/api/src/modules/scheduled-queue-warmer/scheduled-run.processor.ts"
+      ],
+      "concurrencyPerWorker": 4,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/scheduled-queue-warmer/scheduled-due.service.ts",
+        "apps/api/src/modules/scheduled-queue-warmer/scheduler.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per run of a scheduled message (TW-NODE-030, 031): sends its pending recipients with the pacing rules. Own queue so a long run cannot hold a broadcast."
+    },
+    {
+      "queue": "segment-actions",
+      "constant": "SEGMENT_ACTIONS",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "segment-actions",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [
+        "apps/api/src/modules/crm/segments/segment-actions.processor.ts"
+      ],
+      "concurrencyPerWorker": 2,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/crm/segments/segment-actions.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "Segment actions over more members than fit in a request (add a segment's contacts to a group, in chunks). Own queue: a huge segment must not delay an import."
+    },
+    {
+      "queue": "media-fetch",
+      "constant": "MEDIA_FETCH",
+      "class": "interactive",
+      "priority": "P1",
+      "waitSloMsP95": 250,
+      "workload": "inbox-media",
+      "jobKind": "provider",
+      "dependency": "meta,media-store",
+      "consumerFiles": [
+        "apps/api/src/modules/chat-conversations/media-fetch.processor.ts"
+      ],
+      "concurrencyPerWorker": 3,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/chat-conversations/media-fetch.publisher.ts"
+      ],
+      "scheduled": false,
+      "purpose": "Copies a customer's WhatsApp file from the provider into the media store: downloads can be large and slow, and a provider outage must not hold message ingest."
+    },
+    {
+      "queue": "flow-run",
+      "constant": "FLOW_RUN",
+      "class": "automation",
+      "priority": "P1",
+      "waitSloMsP95": 1000,
+      "workload": "automations",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [
+        "apps/api/src/modules/flow-runtime-engine/runtime/flow-run.processor.ts"
+      ],
+      "concurrencyPerWorker": 8,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/flow-runtime-engine/runtime/flow-run.publisher.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per step of a flow run (TW-FLR-015, 016): the node to run next, a Delay waking, a halted run trying again. Own queue so a long flow cannot hold a send."
+    },
+    {
+      "queue": "tpl-sweep",
+      "constant": "TPL_SWEEP",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "template-sweep",
+      "jobKind": "provider",
+      "dependency": "meta",
+      "consumerFiles": [
+        "apps/api/src/modules/message-templates/template-sweep.processor.ts"
+      ],
+      "concurrencyPerWorker": 1,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/message-templates/template-sweep.processor.ts"
+      ],
+      "scheduled": false,
+      "purpose": "Re-reads WhatsApp templates stuck PENDING on Meta (TW-TPL-027). Own queue: a Meta outage must not hold anything else."
+    },
+    {
+      "queue": "mkt-pull",
+      "constant": "MKT_PULL",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "marketplace-pull",
+      "jobKind": "provider",
+      "dependency": "marketplaces",
+      "consumerFiles": [
+        "apps/api/src/modules/marketplace/pull.worker.ts"
+      ],
+      "concurrencyPerWorker": 4,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/marketplace/pull-sync.service.ts",
+        "apps/api/src/modules/marketplace/pull.worker.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per due pull connection of the Marketplace (M-05): fetches the portal's new leads and hands them to the lead pipeline. Own queue: a slow portal must not hold a lead from another door."
+    },
+    {
+      "queue": "mkt-inbound",
+      "constant": "MKT_INBOUND",
+      "class": "automation",
+      "priority": "P1",
+      "waitSloMsP95": 1000,
+      "workload": "marketplace-inbound",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [
+        "apps/api/src/modules/marketplace/inbound.worker.ts"
+      ],
+      "concurrencyPerWorker": 6,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/marketplace/inbound-intake.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per delivery a portal pushed to a Marketplace connection that answers at once: maps it and hands the leads to the pipeline, retrying from the stored copy. Own queue: a slow pipeline must not hold a poll."
+    },
+    {
+      "queue": "lead-sync",
+      "constant": "LEAD_SYNC",
+      "class": "automation",
+      "priority": "P1",
+      "waitSloMsP95": 1000,
+      "workload": "lead-sync",
+      "jobKind": "provider",
+      "dependency": "crm-integrations",
+      "consumerFiles": [
+        "apps/api/src/modules/leads/lead-sync.worker.ts"
+      ],
+      "concurrencyPerWorker": 2,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/leads/lead-sync.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per \"Sync now\" or backfill of a pull-capable lead source (lead inbox, L-18): pulls the source's leads and hands them to the pipeline. Own queue: a portal's rate limit makes a backfill take minutes, and it must not hold a lead from another door."
+    },
+    {
+      "queue": "web-push",
+      "constant": "WEB_PUSH",
+      "class": "interactive",
+      "priority": "P1",
+      "waitSloMsP95": 250,
+      "workload": "notifications",
+      "jobKind": "provider",
+      "dependency": "push-services",
+      "consumerFiles": [
+        "apps/api/src/modules/notifications/web-push.processor.ts"
+      ],
+      "concurrencyPerWorker": 8,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/notifications/notification.publisher.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per bell row that may deserve a browser (Web Push) notification (BL-097). Own queue: a slow push service must not hold the outbox consumers or any other job."
+    },
+    {
+      "queue": "mail-sync",
+      "constant": "MAIL_SYNC",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "email-sync",
+      "jobKind": "provider",
+      "dependency": "mail-providers",
+      "consumerFiles": [
+        "apps/api/src/modules/channel-email/mail-sync.processor.ts"
+      ],
+      "concurrencyPerWorker": 4,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/channel-email/mail-sync.publisher.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per connected Gmail mailbox (TW-MAIL-021): reads what arrived since the last sync and stores it in the inbox. Own queue: a slow Google must not hold any other job."
+    },
+    {
+      "queue": "msg-log-export",
+      "constant": "MSG_LOG_EXPORT",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "message-log-export",
+      "jobKind": "db",
+      "dependency": "postgres,media-store",
+      "consumerFiles": [
+        "apps/api/src/modules/chat-conversations/message-log-export.processor.ts"
+      ],
+      "concurrencyPerWorker": 1,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/chat-conversations/message-log-export.publisher.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per requested export of the message delivery log: reads up to a year of events (live and archived) into a CSV and mails the requester. Own queue: a year-long export must not hold a send or a receipt."
+    },
+    {
+      "queue": "lsc-score",
+      "constant": "LSC_SCORE",
+      "class": "automation",
+      "priority": "P1",
+      "waitSloMsP95": 1000,
+      "workload": "ai-lead-scoring",
+      "jobKind": "provider",
+      "dependency": "openrouter",
+      "consumerFiles": [
+        "apps/api/src/modules/lead-scoring/lead-scoring.processor.ts"
+      ],
+      "concurrencyPerWorker": 3,
+      "limiter": {
+        "max": 5,
+        "durationMs": 1000
+      },
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/lead-scoring/lead-chat-digest.service.ts",
+        "apps/api/src/modules/lead-scoring/lead-scoring.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per contact to score with AI (LSC): the vendor call and the score write. Own queue: a slow AI vendor must not hold any other job."
+    },
+    {
+      "queue": "consent-export",
+      "constant": "CONSENT_EXPORT",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "consent-export",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [
+        "apps/api/src/modules/contact-consent/consent-export.processor.ts"
+      ],
+      "concurrencyPerWorker": 1,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/contact-consent/consent-export.publisher.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per requested export of the consent proof above the direct download's 50,000 rows: reads the ledger into a CSV and mails the requester. Own queue: a large export must not hold a send or a receipt."
+    },
+    {
+      "queue": "audit-log-export",
+      "constant": "AUDIT_LOG_EXPORT",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "audit-export",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [
+        "apps/api/src/modules/audit-log/audit-log-export.processor.ts"
+      ],
+      "concurrencyPerWorker": 1,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/audit-log/audit-log-export.publisher.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per requested export of the tenant audit log: reads the filtered window into a masked CSV and mails the requester. Own queue: a year of audit rows must not hold a send or a receipt."
+    },
+    {
+      "queue": "revenue-report-export",
+      "constant": "REVENUE_EXPORT",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "revenue-export",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [
+        "apps/api/src/modules/crm/revenue-report/revenue-export.processor.ts"
+      ],
+      "concurrencyPerWorker": 1,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/crm/revenue-report/revenue-export.publisher.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per requested file of the revenue report (CSV or PDF): reads the payments of the window or renders the report and mails the requester. Own queue: a year of payments must not hold a send or a receipt."
+    },
+    {
+      "queue": "privacy-export",
+      "constant": "PRIVACY_EXPORT",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "privacy-export",
+      "jobKind": "cpu",
+      "dependency": "postgres,media-store",
+      "consumerFiles": [
+        "apps/api/src/modules/privacy/requests/privacy-export.processor.ts"
+      ],
+      "concurrencyPerWorker": 1,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/privacy/requests/privacy-export.publisher.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per requested export of a data-subject request: reads everything the workspace holds about one person into a ZIP kept 7 days. Own queue: a heavy subject must not hold a send or a receipt."
+    },
+    {
+      "queue": "wab-migrate",
+      "constant": "WAB_MIGRATE",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "migration-run",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [
+        "apps/api/src/modules/waboo-migration/waboo-migration.processor.ts"
+      ],
+      "concurrencyPerWorker": 1,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/waboo-migration/waboo-migration.jobs.ts"
+      ],
+      "scheduled": false,
+      "purpose": ""
+    },
+    {
+      "queue": "calling-readiness",
+      "constant": "CALLING_READINESS",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "calling-readiness",
+      "jobKind": "provider",
+      "dependency": "meta",
+      "consumerFiles": [
+        "apps/api/src/modules/calling-voice/calling-readiness.jobs.ts"
+      ],
+      "concurrencyPerWorker": 4,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/calling-voice/calling-readiness.jobs.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per WhatsApp number to check for calling readiness (EXT-CALL-007): after a connect and on a schedule. Own queue: a slow Meta must not hold WhatsApp ingest."
+    },
+    {
+      "queue": "calendar-reconcile",
+      "constant": "CALENDAR_RECONCILE",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "calendar-reconcile",
+      "jobKind": "provider",
+      "dependency": "google",
+      "consumerFiles": [
+        "apps/api/src/modules/appointments-booking/calendar-reconcile.jobs.ts"
+      ],
+      "concurrencyPerWorker": 2,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/appointments-booking/calendar-reconcile.jobs.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per workspace whose upcoming appointments are compared with their Google events (TW-GACC-011). Own queue: a slow Google must not hold a booking message."
+    },
+    {
+      "queue": "calendar-backfill",
+      "constant": "CALENDAR_BACKFILL",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "calendar-backfill",
+      "jobKind": "provider",
+      "dependency": "google",
+      "consumerFiles": [
+        "apps/api/src/modules/appointments-booking/calendar-backfill.jobs.ts"
+      ],
+      "concurrencyPerWorker": 2,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/appointments-booking/calendar-backfill.jobs.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per workspace that just (re)connected a calendar or changed where bookings go: writes the events its upcoming bookings are missing (BL-035). Own queue: a slow calendar must not hold a booking message."
+    },
+    {
+      "queue": "meeting-mirror-backfill",
+      "constant": "MEETING_MIRROR_BACKFILL",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "meeting-mirror",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [
+        "apps/api/src/modules/appointments-booking/meeting-mirror-backfill.jobs.ts"
+      ],
+      "concurrencyPerWorker": 1,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/appointments-booking/meeting-mirror-backfill.jobs.ts"
+      ],
+      "scheduled": false,
+      "purpose": "Writes the Meetings row of every existing booking that has a contact and none yet (BL-281). Runs once per worker start; a repeat finds nothing to do."
+    },
+    {
+      "queue": "calendar-ics-refresh",
+      "constant": "CALENDAR_ICS_REFRESH",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "ics-refresh",
+      "jobKind": "provider",
+      "dependency": "ics-hosts",
+      "consumerFiles": [
+        "apps/api/src/modules/appointments-booking/ics-feeds.jobs.ts"
+      ],
+      "concurrencyPerWorker": 4,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/appointments-booking/ics-feeds.jobs.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per iCal feed that is due: reads the subscribed calendar's busy time (BL-035). Own queue: somebody else's slow server must not hold a booking message."
+    },
+    {
+      "queue": "wechat-broadcast",
+      "constant": "WECHAT_BROADCAST",
+      "class": "bulk",
+      "priority": "P2",
+      "waitSloMsP95": 5000,
+      "workload": "wechat-broadcast",
+      "jobKind": "provider",
+      "dependency": "wechat",
+      "consumerFiles": [
+        "apps/api/src/modules/channel-wechat/broadcast.processor.ts"
+      ],
+      "concurrencyPerWorker": 2,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/channel-wechat/broadcast-sender.service.ts",
+        "apps/api/src/modules/channel-wechat/broadcasts.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per WeChat broadcast: makes its one mass-send call (all followers, a tag or the picked OpenIDs) and ends it done or failed (WECH)."
+    },
+    {
+      "queue": "telephony-ingest",
+      "constant": "TELEPHONY_INGEST",
+      "class": "critical-inbound",
+      "priority": "P0",
+      "waitSloMsP95": 100,
+      "workload": "call-logging",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [
+        "apps/api/src/modules/calling-voice/logging/telephony-events.service.ts"
+      ],
+      "concurrencyPerWorker": 4,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/calling-voice/logging/telephony-webhook.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per finished call a telephony provider reported (call logging): finds the contact and writes the call log entry. Own queue: a slow database write must not make a provider retry its callback, and a call burst must not hold WhatsApp ingest."
+    },
+    {
+      "queue": "webhook-retry",
+      "constant": "WEBHOOK_RETRY",
+      "class": "critical-inbound",
+      "priority": "P0",
+      "waitSloMsP95": 100,
+      "workload": "inbound-retry",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [
+        "apps/api/src/modules/webhook-retry/webhook-retry.processor.ts"
+      ],
+      "concurrencyPerWorker": 4,
+      "limiter": null,
+      "attempts": 10,
+      "backoff": "exp 5s jitter .25",
+      "inboundProtected": true,
+      "producerFiles": [
+        "apps/api/src/modules/platform-async-ops/async-ops.service.ts",
+        "apps/api/src/modules/webhook-retry/webhook-retry.service.ts"
+      ],
+      "scheduled": false,
+      "purpose": "A channel webhook event (Telegram, Viber, LINE, Facebook) that could not be stored when it arrived: kept here and retried with backoff so the provider keeps its 200 (ASYNC-011/017)."
+    }
+  ],
+  "sweepers": [
+    {
+      "file": "apps/api/src/modules/analytics/rollup/rollup.worker.ts",
+      "kind": "Interval",
+      "spec": "30_000"
+    },
+    {
+      "file": "apps/api/src/modules/analytics/rollup/rollup.worker.ts",
+      "kind": "Cron",
+      "spec": "'15 2 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/api-library/api-library-retention.service.ts",
+      "kind": "Cron",
+      "spec": "'41 3 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/appointments-booking/appointment-lifecycle-sweep.service.ts",
+      "kind": "Interval",
+      "spec": "60_000"
+    },
+    {
+      "file": "apps/api/src/modules/appointments-booking/appointment-reminder-sweep.service.ts",
+      "kind": "Interval",
+      "spec": "60_000"
+    },
+    {
+      "file": "apps/api/src/modules/appointments-booking/calendar-reconcile.jobs.ts",
+      "kind": "Interval",
+      "spec": "RECONCILE_TICK_MS"
+    },
+    {
+      "file": "apps/api/src/modules/appointments-booking/google-consent-sweep.service.ts",
+      "kind": "Interval",
+      "spec": "60_000"
+    },
+    {
+      "file": "apps/api/src/modules/appointments-booking/ics-feeds.jobs.ts",
+      "kind": "Interval",
+      "spec": "ICS_TICK_MS"
+    },
+    {
+      "file": "apps/api/src/modules/audit-log/audit-log-export-sweep.service.ts",
+      "kind": "Cron",
+      "spec": "'47 2 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/auth/maintenance/auth-maintenance.service.ts",
+      "kind": "Cron",
+      "spec": "CronExpression.EVERY_DAY_AT_3AM"
+    },
+    {
+      "file": "apps/api/src/modules/auth/maintenance/otp-template-refresh.service.ts",
+      "kind": "Cron",
+      "spec": "CronExpression.EVERY_5_MINUTES"
+    },
+    {
+      "file": "apps/api/src/modules/broadcasts/broadcast-due.service.ts",
+      "kind": "Interval",
+      "spec": "3_000"
+    },
+    {
+      "file": "apps/api/src/modules/broadcasts/broadcast-resume.service.ts",
+      "kind": "Interval",
+      "spec": "60_000"
+    },
+    {
+      "file": "apps/api/src/modules/broadcasts/broadcast-retry-sweeper.service.ts",
+      "kind": "Interval",
+      "spec": "60_000"
+    },
+    {
+      "file": "apps/api/src/modules/bsp-billing-engine/auto-attach-sweep.service.ts",
+      "kind": "Interval",
+      "spec": "30_000"
+    },
+    {
+      "file": "apps/api/src/modules/calling-voice/call-recording-retention.service.ts",
+      "kind": "Cron",
+      "spec": "'23 3 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/calling-voice/calling-readiness.jobs.ts",
+      "kind": "Interval",
+      "spec": "SCHEDULE_TICK_MS"
+    },
+    {
+      "file": "apps/api/src/modules/calling-voice/logging/call-log-retention.service.ts",
+      "kind": "Cron",
+      "spec": "'41 3 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/campaigns/campaign-sweeper.service.ts",
+      "kind": "Interval",
+      "spec": "5_000"
+    },
+    {
+      "file": "apps/api/src/modules/campaigns/wizard/wizard-worker.service.ts",
+      "kind": "Interval",
+      "spec": "5_000"
+    },
+    {
+      "file": "apps/api/src/modules/campaigns/wizard/wizard-worker.service.ts",
+      "kind": "Interval",
+      "spec": "10_000"
+    },
+    {
+      "file": "apps/api/src/modules/campaigns/wizard/wizard-worker.service.ts",
+      "kind": "Interval",
+      "spec": "5_000"
+    },
+    {
+      "file": "apps/api/src/modules/campaigns/wizard/wizard-worker.service.ts",
+      "kind": "Interval",
+      "spec": "60 * 60_000"
+    },
+    {
+      "file": "apps/api/src/modules/catalog-products/catalog-sweeps.service.ts",
+      "kind": "Interval",
+      "spec": "60_000"
+    },
+    {
+      "file": "apps/api/src/modules/channel-email/mail-outbound-attachments.sweep.ts",
+      "kind": "Interval",
+      "spec": "MAIL_ATTACHMENT_SWEEP_INTERVAL_MS"
+    },
+    {
+      "file": "apps/api/src/modules/channel-email/mail-push.sweep.ts",
+      "kind": "Interval",
+      "spec": "MAIL_PUSH_SWEEP_INTERVAL_MS"
+    },
+    {
+      "file": "apps/api/src/modules/channel-email/mail-sync.sweep.ts",
+      "kind": "Interval",
+      "spec": "MAIL_SWEEP_INTERVAL_MS"
+    },
+    {
+      "file": "apps/api/src/modules/channel-facebook/page-health-sweep.service.ts",
+      "kind": "Cron",
+      "spec": "CronExpression.EVERY_HOUR"
+    },
+    {
+      "file": "apps/api/src/modules/channel-instagram/pull-sweep.service.ts",
+      "kind": "Cron",
+      "spec": "'*/20 * * * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/chat-conversations/media-fetch-recovery.service.ts",
+      "kind": "Interval",
+      "spec": "60_000"
+    },
+    {
+      "file": "apps/api/src/modules/chat-conversations/message-log-archive.service.ts",
+      "kind": "Cron",
+      "spec": "'17 2 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/chat-conversations/queued-message-recovery.service.ts",
+      "kind": "Interval",
+      "spec": "30_000"
+    },
+    {
+      "file": "apps/api/src/modules/contact-consent/consent-export-sweep.service.ts",
+      "kind": "Cron",
+      "spec": "'41 2 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/contact-consent/minor-sweep.service.ts",
+      "kind": "Cron",
+      "spec": "'35 3 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/crm/invoicing/invoice-overdue-sweep.service.ts",
+      "kind": "Interval",
+      "spec": "600_000"
+    },
+    {
+      "file": "apps/api/src/modules/crm/invoicing/recurring-invoice-sweep.service.ts",
+      "kind": "Interval",
+      "spec": "300_000"
+    },
+    {
+      "file": "apps/api/src/modules/crm/owner-reassign/owner-restore-sweep.service.ts",
+      "kind": "Interval",
+      "spec": "300_000"
+    },
+    {
+      "file": "apps/api/src/modules/crm/revenue-report/revenue-export-sweep.service.ts",
+      "kind": "Cron",
+      "spec": "'23 3 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/crm/sales-docs/sales-doc-expiry-sweep.service.ts",
+      "kind": "Interval",
+      "spec": "5 * 60_000"
+    },
+    {
+      "file": "apps/api/src/modules/crm/segments/segment-count-sweep.service.ts",
+      "kind": "Interval",
+      "spec": "60_000"
+    },
+    {
+      "file": "apps/api/src/modules/crm/tasks/task-due-sweep.service.ts",
+      "kind": "Interval",
+      "spec": "60_000"
+    },
+    {
+      "file": "apps/api/src/modules/data-retention/retention.worker.ts",
+      "kind": "Cron",
+      "spec": "'50 3 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/failed-operations/failure-capture.service.ts",
+      "kind": "Interval",
+      "spec": "60_000"
+    },
+    {
+      "file": "apps/api/src/modules/faq-knowledge/faq-embed.worker.ts",
+      "kind": "Interval",
+      "spec": "5000"
+    },
+    {
+      "file": "apps/api/src/modules/faq-knowledge/faq-retention.service.ts",
+      "kind": "Cron",
+      "spec": "'17 3 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/flow-runtime-engine/runtime/flow-run-retention.service.ts",
+      "kind": "Cron",
+      "spec": "'41 3 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/flow-runtime-engine/runtime/flow-sweeper.service.ts",
+      "kind": "Interval",
+      "spec": "15_000"
+    },
+    {
+      "file": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/integrations/google-form-poll.service.ts",
+      "kind": "Interval",
+      "spec": "30_000"
+    },
+    {
+      "file": "apps/api/src/modules/flow-runtime-engine/triggers/schedule.sweeper.ts",
+      "kind": "Interval",
+      "spec": "60_000"
+    },
+    {
+      "file": "apps/api/src/modules/forms-builder/form-payment-sweep.service.ts",
+      "kind": "Cron",
+      "spec": "'*/30 * * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/forms-builder/form-retention-sweep.service.ts",
+      "kind": "Cron",
+      "spec": "'17 3 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/growth-pilot/growth-sweeper.ts",
+      "kind": "Cron",
+      "spec": "'23 * * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/growth-pilot/growth-sweeper.ts",
+      "kind": "Cron",
+      "spec": "'37 2 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/lead-scoring/lead-chat-digest.sweeper.ts",
+      "kind": "Cron",
+      "spec": "'*/3 * * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/lead-scoring/lead-scoring-retention.service.ts",
+      "kind": "Cron",
+      "spec": "'41 3 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/leads/lead-first-reply.sweep.ts",
+      "kind": "Interval",
+      "spec": "10_000"
+    },
+    {
+      "file": "apps/api/src/modules/leads/lead-retention-sweep.service.ts",
+      "kind": "Cron",
+      "spec": "'7 * * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/leads/lead-sync.worker.ts",
+      "kind": "Interval",
+      "spec": "30_000"
+    },
+    {
+      "file": "apps/api/src/modules/marketplace/inbound.worker.ts",
+      "kind": "Cron",
+      "spec": "'*/20 * * * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/marketplace/inbound.worker.ts",
+      "kind": "Cron",
+      "spec": "'37 * * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/marketplace/pull.worker.ts",
+      "kind": "Cron",
+      "spec": "'*/30 * * * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/marketplace/pull.worker.ts",
+      "kind": "Cron",
+      "spec": "'17 * * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/marketplace/subscription-sweep.worker.ts",
+      "kind": "Cron",
+      "spec": "'0 15 * * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/marketplace/subscription-sweep.worker.ts",
+      "kind": "Cron",
+      "spec": "'0 * * * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/message-templates/template-sweep.processor.ts",
+      "kind": "Interval",
+      "spec": "TICK_MS"
+    },
+    {
+      "file": "apps/api/src/modules/meta-lead-ads/lead-sweep.service.ts",
+      "kind": "Cron",
+      "spec": "CronExpression.EVERY_10_MINUTES"
+    },
+    {
+      "file": "apps/api/src/modules/node-bridge-runtime/runtime/device-runtime.service.ts",
+      "kind": "Interval",
+      "spec": "TICK_MS"
+    },
+    {
+      "file": "apps/api/src/modules/notifications/notification-retention.service.ts",
+      "kind": "Cron",
+      "spec": "'0 30 3 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/notifications/push-subscriptions-prune.service.ts",
+      "kind": "Cron",
+      "spec": "'0 40 3 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/notifications/waiting-nudge.service.ts",
+      "kind": "Cron",
+      "spec": "'0 * * * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/plans-subscriptions-trials/plan-retention-sweep.service.ts",
+      "kind": "Cron",
+      "spec": "'17 3 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/platform-payment-gateways/paygw-worker.module.ts",
+      "kind": "Interval",
+      "spec": "TICK_MS"
+    },
+    {
+      "file": "apps/api/src/modules/platform-support-desk/support-sla-scan.service.ts",
+      "kind": "Cron",
+      "spec": "'*/5 * * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/privacy/requests/privacy-maintenance.service.ts",
+      "kind": "Cron",
+      "spec": "'* * * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/privacy/requests/privacy-maintenance.service.ts",
+      "kind": "Cron",
+      "spec": "'47 2 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/scheduled-queue-warmer/scheduled-due.service.ts",
+      "kind": "Interval",
+      "spec": "3_000"
+    },
+    {
+      "file": "apps/api/src/modules/storefront-builder/recovery/cart-recovery-sweep.service.ts",
+      "kind": "Interval",
+      "spec": "60_000"
+    },
+    {
+      "file": "apps/api/src/modules/team-inbox-conversations/inbox-snooze-wake.service.ts",
+      "kind": "Interval",
+      "spec": "30_000"
+    },
+    {
+      "file": "apps/api/src/modules/team-inbox-routing-sla/routing-escalation-sweep.service.ts",
+      "kind": "Interval",
+      "spec": "30_000"
+    },
+    {
+      "file": "apps/api/src/modules/team-inbox-routing-sla/sla-sweep.service.ts",
+      "kind": "Interval",
+      "spec": "60_000"
+    },
+    {
+      "file": "apps/api/src/modules/wallet-message-billing/reconcile.job.ts",
+      "kind": "Interval",
+      "spec": "HOUR_MS"
+    },
+    {
+      "file": "apps/api/src/modules/webhook-fanout/webhook-forward-retention.service.ts",
+      "kind": "Cron",
+      "spec": "CronExpression.EVERY_DAY_AT_3AM"
+    },
+    {
+      "file": "apps/api/src/modules/webhook-fanout/webhook-forward.processor.ts",
+      "kind": "Interval",
+      "spec": "5_000"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-worker.module.ts",
+      "kind": "Interval",
+      "spec": "CLICK_SYNC_MS"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-devices-baileys/device-groups-sweep.service.ts",
+      "kind": "Interval",
+      "spec": "SWEEP_TICK_MS"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-devices-baileys/history-import-sweep.service.ts",
+      "kind": "Interval",
+      "spec": "HISTORY_SWEEP_TICK_MS"
+    },
+    {
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/leave/leave-sweep.service.ts",
+      "kind": "Interval",
+      "spec": "300_000"
+    },
+    {
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/lifecycle/lifecycle-sweep.service.ts",
+      "kind": "Cron",
+      "spec": "'15 3 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/lifecycle/storage-purge.service.ts",
+      "kind": "Cron",
+      "spec": "'*/10 * * * *'"
+    },
+    {
+      "file": "apps/api/src/workers/outbox-drain.service.ts",
+      "kind": "Interval",
+      "spec": "2_000"
+    },
+    {
+      "file": "apps/api/src/workers/partition-maintenance.service.ts",
+      "kind": "Cron",
+      "spec": "CronExpression.EVERY_DAY_AT_2AM"
+    }
+  ],
+  "problems": [
+    "outbox: no @Processor found (producer-only or consumer registered another way - add to ALLOW_NO_CONSUMER with a reason)",
+    "outbox: no @InjectQueue producer found",
+    "billing-posting: no @Processor found (producer-only or consumer registered another way - add to ALLOW_NO_CONSUMER with a reason)",
+    "billing-posting: no @InjectQueue producer found",
+    "sla-sweep: no @Processor found (producer-only or consumer registered another way - add to ALLOW_NO_CONSUMER with a reason)",
+    "sla-sweep: no @InjectQueue producer found",
+    "counter-flush: no @Processor found (producer-only or consumer registered another way - add to ALLOW_NO_CONSUMER with a reason)",
+    "counter-flush: no @InjectQueue producer found",
+    "partition-maintenance: no @Processor found (producer-only or consumer registered another way - add to ALLOW_NO_CONSUMER with a reason)",
+    "partition-maintenance: no @InjectQueue producer found",
+    "bulk-jobs: no @Processor found (producer-only or consumer registered another way - add to ALLOW_NO_CONSUMER with a reason)",
+    "bulk-jobs: no @InjectQueue producer found"
+  ]
+}

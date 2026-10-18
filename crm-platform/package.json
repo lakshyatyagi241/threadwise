@@ -39,7 +39,9 @@
     "db:verify-schema": "pnpm --filter @crm/db verify-schema",
     "db:seed": "pnpm --filter @crm/db seed",
     "db:reset": "pnpm --filter @crm/db reset",
-    "prepare": "husky"
+    "prepare": "husky",
+    "audit:queue-capacity": "node tools/queue-capacity/inventory.mjs --check && node --test tools/queue-capacity/model.test.mjs",
+    "bench:queues": "node tools/queue-capacity/bench.mjs"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.3",

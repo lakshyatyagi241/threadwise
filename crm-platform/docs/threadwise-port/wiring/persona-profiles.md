@@ -2,7 +2,8 @@
 
 A product extension, not a Reference feature (spec [persona-profiles.md](../../specs/persona-profiles.md), backlog BL-280; the
 `product-extensions.md` row is added when phase 1 ships). API: [persona-profiles.md](../../api/persona-profiles.md). Update this file in the same
-change as any new route, table, permission, mark or consumer. **Status: phase 0 (data, resolver, session field) plus the early, label-only slice of phase 5, "dynamic object naming" (BL-310: the workspace's own words for contact, appointment, deal and meeting). Nothing else reads the persona to change a screen yet.**
+change as any new route, table, permission, mark or consumer. **Status: phases 0 and 1 (data, resolver, session field, and the web visibility runtime). The web hides modules for a persona other than
+`generic`; no such persona exists until phase 2.** Plus the early, label-only slice of phase 5, "dynamic object naming" (BL-310): the workspace's own words for contact, appointment, deal and meeting (see the vocabulary rows below).
 
 ## API routes
 
@@ -33,16 +34,18 @@ BL-310 adds one writer: `PersonaVocabularyService.save` updates `workspace_perso
 
 ## Consumers
 
-| Consumer                                                                                                                        | Status                                                                                                                                                                                         |
-| ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AccountService.sessionInfo` -> `org.persona`                                                                                   | built (phase 0)                                                                                                                                                                                |
-| Menu (`resolveNav`), Settings tiles, Help center                                                                                | **phase 1** (`Capabilities.hidden`, skip a hidden id before `evaluateGates`)                                                                                                                   |
-| Contact sections, quick tabs, action bar                                                                                        | **phase 1** (`visibleSections`, `quickTabs`, `ADD_TARGETS`)                                                                                                                                    |
-| Home cards (ids in `dashboards-analytics-charts/home-cards.ts`)                                                                 | **phase 1** (`dashboard-screen.tsx` skips a hidden card)                                                                                                                                       |
-| Command palette, search                                                                                                         | follow the resolved lists, phase 1                                                                                                                                                             |
-| Business type tile in Settings, Show more modules                                                                               | **phase 1**                                                                                                                                                                                    |
-| Platform console: personas, workspace Persona tab                                                                               | **phases 2 and 3**                                                                                                                                                                             |
-| Onboarding, solo mode, starter pack, Home checklist                                                                             | **phase 4**                                                                                                                                                                                    |
+| Consumer                                                                                      | Status                                                                                                                                        |
+| --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AccountService.sessionInfo` -> `org.persona`                                                 | built (phase 0)                                                                                                                               |
+| Menu (`resolveNav`), Settings tiles (`resolveSettings`)                                       | built (phase 1): `Capabilities.hidden`, `hiddenByPersona` before `evaluateGates`                                                              |
+| Help center (`helpFor`, `/help` pages via `help-center/server.ts`)                            | built (phase 1): a guide whose documented screens are all hidden leaves                                                                       |
+| Contact tabs, quick-view tabs, section list                                                   | built (phase 1): `pageTabs`, `quickTabs`, `visibleSections` take a `hidden` predicate; the section on screen is spared and a link still opens |
+| Contact action bar, compose box tabs, Lead score chip and card, Tasks / Deals / Company cards | built (phase 1): `usePersonaVisibility().isActionHidden / isSectionHidden`                                                                    |
+| Home cards (ids in `dashboards-analytics-charts/home-cards.ts`)                               | built (phase 1): `dashboard-screen.tsx` skips a hidden card                                                                                   |
+| Command palette, search                                                                       | built (follows the resolved lists, phase 1)                                                                                                   |
+| Business type tile in Settings, Show more modules                                             | **open** (needs `PATCH /v2/persona/settings`; the resolver already honours `showAll`)                                                         |
+| Platform console: personas, workspace Persona tab                                             | **phases 2 and 3**                                                                                                                            |
+| Onboarding, solo mode, starter pack, Home checklist                                           | **phase 4**                                                                                                                                   |
 | Vocabulary overlay (message rewrite of the bound surfaces)                                                                      | **built, BL-310**: `(app)/layout.tsx` -> `withVocabulary` (`features/persona-vocabulary/lib/`), not `i18n/request.ts`; surfaces in `lib/bindings.ts`; `useVocabulary()` for text built in code |
 | Words we use (Settings, Business, `/workspace-words`)                                                                           | **built, BL-310**: tile `workspace-words`, gate `admin.settings.manage`                                                                                                                        |
 | Operator Words grid, compile at publish, completeness meters, persona packs in 21 languages, bindings beyond the first surfaces | **phase 5** (what BL-310 does not do)                                                                                                                                                          |
@@ -57,6 +60,13 @@ A new screen adds its id with no second list. `module-catalog.test.ts` holds eve
 
 Platform: `platform.persona.view|manage|publish|override` (migration `20261230090100`). No tenant key (a workspace edits with the existing
 `admin.settings.manage`, which avoids the `provision_workspace_presets` gap recorded for the Forms, Email templates and Companies keys).
+
+## Where the web reads it (phase 1)
+
+`apps/web/src/features/persona/`: `visibility.ts` (pure), `persona-provider.tsx` (`PersonaProvider`, `usePersonaVisibility`), `server.ts`
+(`personaHiddenIds`, the catalog-wide hidden set for `Capabilities.hidden`), `testing.ts` (test views built with the real `resolvePersona`),
+`golden.test.ts`. Help guide: `persona/help/hidden-menu-items.md`. `AppGate` and `PlanPaywall` read the unfiltered registries, which is what keeps
+a typed address of a hidden module working.
 
 ## Rules that must keep holding
 

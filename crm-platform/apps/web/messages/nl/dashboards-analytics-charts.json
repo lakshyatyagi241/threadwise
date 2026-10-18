@@ -494,7 +494,8 @@
         "title": "Wachtrijen",
         "name": "Wachtrij",
         "pending": "In behandeling",
-        "failed": "Mislukt"
+        "failed": "Mislukt",
+        "lastFailure": "Reden van de laatste mislukking"
       },
       "clear": {
         "button": "Openstaande taken wissen",

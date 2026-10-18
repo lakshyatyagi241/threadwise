@@ -27,6 +27,8 @@ export {
   type ObservableWorker,
 } from './job-metrics';
 export { JobMetricsModule, JobMetricsService } from './job-metrics.module';
+export { QueueDepthModule, QueueDepthService } from './queue-depth.module';
+export { sampleQueueDepth, type DepthQueue, type QueueDepth } from './queue-depth';
 export {
   Prober,
   parseProbeTargets,

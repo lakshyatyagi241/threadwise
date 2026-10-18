@@ -1,7 +1,7 @@
 # Persona profiles: one product for many kinds of business (design only)
 
-Status: **phase P0 built, the label-only slice of P5 built early as BL-310, the rest of P1 to P6 not built** (backlog BL-280; see section 15). Written 2026-10-18 from a read-only investigation of `origin/main`.
-The design below is unchanged by P0; P0 itself changes no behaviour. Owner direction: the product stays ONE generic system; a **persona** (doctor, dentist, sales
+Status: **phases P0 and P1 built (the visibility runtime), the label-only slice of P5 built early as BL-310, the rest of P2 to P6 not built** (backlog BL-280; see section 15). Written 2026-10-18 from a read-only investigation of `origin/main`.
+The design below is unchanged by P0 and P1; P0 changes no behaviour and P1 only changes it for a persona other than `generic`, which no workspace has yet. Owner direction: the product stays ONE generic system; a **persona** (doctor, dentist, sales
 team, real estate, retail store, salon, education...) decides which words, which modules and which starter setup a workspace sees. It is an
 owner-requested extension in the sense of [product-extensions.md](../threadwise-port/parity/product-extensions.md): the default persona
 (`generic`) shows exactly what every workspace sees today, so Hard Rule 1 of the porting rules (no feature lost or changed) holds for every
@@ -482,11 +482,12 @@ Risks:
 
 ## 15. Build status
 
-| Phase                 | State                                                                               |
-| --------------------- | ----------------------------------------------------------------------------------- |
-| P0                    | **Built** (branch `lakshya/next/persona-p0`, no visible change). Details below.     |
-| P5-lite (BL-310)      | **Built** (branch `lakshya/next/persona-vocabulary`). Dynamic object naming, below. |
-| P1-P4, P6, rest of P5 | Not built. P1 (visibility runtime) is next and only needs P0.                       |
+| Phase | State                                                                                             |
+| ----- | ------------------------------------------------------------------------------------------------- |
+| P0    | **Built** (branch `lakshya/next/persona-p0`, no visible change). Details below.                   |
+| P5-lite (BL-310) | **Built** (branch `lakshya/next/persona-vocabulary`). Dynamic object naming, below.
+| P1    | **Built** (branch `lakshya/next/persona-p1`, zero visible change for `generic`).                  |
+| P2-P6 | Not built. P2 (platform console) is next; the Business type tile of P1 is still open (see below). |
 
 What P0 delivers, and where it differs from the sketches above:
 
@@ -510,6 +511,35 @@ What P0 delivers, and where it differs from the sketches above:
   and is kept, the resolved view is memoised by `(org, row creation time, rev, version)` for 30 s, and a missing version is remembered for 5 s.
 - **Not in P0**: any UI, any endpoint, onboarding, the seat-driven `auto` solo mode (`solo` is true only for an explicit `on`), the `persona.enabled`
   flag (rollback in P0 is not reading `org.persona`, which nothing does), the vocabulary overlay.
+
+What P1 delivers, and where it differs from the sketches above:
+
+- **One input, one hook.** `Capabilities.hidden` (`_registry/types.ts`) is the fourth input beside permissions, plan features and channels. It is
+  optional (`null`, absent and an empty set all hide nothing) so no existing caller or test changes. `resolveNavAll`/`resolveNav` and
+  `resolveSettings` skip an id in it BEFORE `evaluateGates` (`hiddenByPersona`), so a hidden entry draws no lock and no upsell. Client code asks
+  `usePersonaVisibility()` (`apps/web/src/features/persona/`): `isHidden(id)` plus typed `isNavHidden`, `isTileHidden`, `isSectionHidden`,
+  `isCardHidden`, `isActionHidden`, all built with `moduleId()` so no component spells an id by hand. `PersonaProvider` sits beside
+  `PlanFeaturesProvider` in `(app)/layout.tsx` and takes the session's `org.persona`; no provider or no view hides nothing.
+- **Server side.** `personaHiddenIds(view)` (`persona/server.ts`) turns the view into the set of hidden ids of the generated catalog. The app
+  layout and the `/help` pages (`help-center/server.ts`) both call it, so the menu, the Settings tiles and Help cannot disagree. The view travels
+  as `{ defaultVisibility, modules }`, so the client needs no catalog to answer `isHidden`.
+- **Consumers.** Menu and Settings tiles (resolvers). Help: a guide whose documented screens are all hidden leaves with them (the existing
+  "at least one documented screen is available" rule). Command palette and search: built from the resolved lists, so they follow. Contact page:
+  `pageTabs`, `quickTabs`, `visibleSections` take an optional `hidden` predicate; the tab strip spares the section on screen, and the section a
+  link names still opens (the permission check is the only one that closes a tab); the action bar (Note, Task, Call, Meeting, Add company), the
+  compose box tabs, the Lead score chip and card, and the Tasks, Deals and Company cards beside the record follow the `section:` and `action:` ids.
+  Home: `dashboard-screen.tsx` skips a card by the ids of `dashboards-analytics-charts/home-cards.ts` and drops the empty wrapper around hidden
+  groups.
+- **Not a lock.** `AppGate`, `PlanPaywall` and every route guard still read the unfiltered registries, so a typed or bookmarked address of a hidden
+  module opens when permission and entitlement allow (decision 9). The API is untouched: nothing server-side reads the persona.
+- **Golden test.** `apps/web/src/features/persona/golden.test.ts` compares, on five capability fixtures built from the real registries, the
+  menu, the hub panes, the Settings tiles, the Help index, the contact tabs and the Home cards of the `generic` persona with a workspace that has
+  no persona: identical. The same file holds the hidden-and-locked, Show-more, entitlement-wins and allow-list cases.
+- **Not in P1 (open, listed so it is not lost):** the Settings tile "Business type" with the "Show more modules" switch and its endpoint
+  `PATCH /v2/persona/settings` (the resolver already honours `showAll`; nothing can set it yet), the Home checklist card (phase 4), solo-mode
+  hiding (`solo` is carried on the view; nothing reads it), the `persona.enabled` platform flag, and the quick-access and quick-action lists
+  inside Home cards (a hidden module still appears there if the card itself is shown). No persona other than `generic` exists until phase 2, so
+  nothing is hidden for anyone yet. Not browser-checked with a non-generic persona (see the PR).
 
 What P5-lite (BL-310, "dynamic object naming") delivers, and where it differs from section 7.4:
 

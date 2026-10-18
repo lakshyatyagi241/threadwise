@@ -494,7 +494,8 @@
         "title": "Code",
         "name": "Coda",
         "pending": "In attesa",
-        "failed": "Falliti"
+        "failed": "Falliti",
+        "lastFailure": "Motivo dell'ultimo errore"
       },
       "clear": {
         "button": "Svuota i job in attesa",

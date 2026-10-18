@@ -53,6 +53,10 @@ delta, request_id, at`). Every statement names `org_id` and an `at` range, with 
   broadcasts), by a batched lookup of the record's uuid. The audited record number is shown as stored.
 - **Retention.** The platform policy `security.policy.auditLogRetentionDays` (default 365, 0 = keep) is pruned daily by
   `AuthMaintenanceService`. The screen shows the number, read through a privileged query; the workspace cannot change it.
+  A super admin can instead save live days and archive days for the audit log on the retention dashboard
+  ([runbook](../runbooks/data-retention.md#the-dashboard-what-a-super-admin-sets)): once the archive job really runs, closed months are
+  archived and dropped, the row-by-row prune steps aside, the number shown is live + archive days (0 when the archive keeps it for ever),
+  and an export also reads the archived months.
 
 ## 3.1 Act-as rows
 

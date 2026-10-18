@@ -1450,7 +1450,7 @@ export class WabaConnectService {
 const asApiError = (e: unknown): WabaApiError =>
   e instanceof WabaApiError ? e : WabaApiError.network(e);
 
-function authFor(conn: WabaConnection) {
+export function authFor(conn: WabaConnection) {
   if (conn.registry) return conn.registry;
   return conn.provider === 'interakt' && conn.authKey
     ? ({

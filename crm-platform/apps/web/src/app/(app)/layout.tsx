@@ -28,6 +28,8 @@ import { PLANNED_SETTINGS } from '@/features/_registry/settings-planned';
 import { resolveSettings } from '@/features/_registry/settings-resolve';
 import { SETTINGS } from '@/features/_registry/settings.generated';
 import { THEME_COOKIE } from '@/lib/auth/cookies';
+import { PersonaProvider } from '@/features/persona';
+import { personaHiddenIds } from '@/features/persona/server';
 import { PlanFeaturesProvider } from '@/lib/plan-features';
 import { listingPathFor } from '@/features/_registry/app-listings';
 import { getSession, signedOutTarget } from '@/lib/auth/server';
@@ -53,6 +55,9 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     planFeatures: enabledFeatures,
     // The connected channels drive `gates.channel` ("Meta Groups" needs a connected WhatsApp Business number); unknown (null) removes nothing.
     channels: await fetchConnectedChannels(permissions.has('waba.numbers.read')),
+    // What the workspace's persona hides from the menu, the Settings tiles and Help (docs/specs/persona-profiles.md, 7.2). It only
+    // removes entries from view, before the gates above run; nothing is closed, and unknown (no `org.persona`) hides nothing.
+    hidden: personaHiddenIds(session.org.persona),
   };
   // The docs this person may see in Help (gated like the menu); the page-level tip and every HelpTip read this index.
   const locale = await getLocale();
@@ -91,59 +96,64 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
       >
         {/* What the workspace has (plan, overrides, installed apps), for screens that sit inside other screens (a score on a contact). */}
         <PlanFeaturesProvider features={enabledFeatures ? [...enabledFeatures] : null}>
-          {/* One socket per signed-in session; the key starts a fresh one (and a fresh ticket) when the person or workspace changes.
+          {/* The persona's view, for screens that decide what to draw inside another screen (contact tabs, Home cards). */}
+          <PersonaProvider view={session.org.persona}>
+            {/* One socket per signed-in session; the key starts a fresh one (and a fresh ticket) when the person or workspace changes.
           The address is read here, on the server, so it can be set per deployment without rebuilding. */}
-          <RealtimeProvider
-            key={`${session.org.id}:${session.user.id}`}
-            url={process.env.REALTIME_URL ?? process.env.NEXT_PUBLIC_REALTIME_URL}
-          >
-            {/* Bell, toast, ping, desktop alert and tab-title badge on every page, from the socket above (no second connection). */}
-            <LiveNotifications />
-            <HelpProvider entries={help.entries}>
-              {/* The Inbox entry's unread number in the menu, on every page (read from the cache the Inbox and the live socket keep). */}
-              <InboxNavCounts enabled={capabilities.permissions.has('inbox.conversation.read')}>
-                <WalletAppShell
-                  user={{
-                    fullName: session.user.displayName ?? session.user.fullName,
-                    email: session.user.email,
-                    avatarUrl: session.user.avatarUrl,
-                  }}
-                  nav={resolveNav(NAV, capabilities, { planned: MENU_PLANNED_NAV })}
-                  settings={resolveSettings(SETTINGS, capabilities, { planned: PLANNED_SETTINGS })}
-                  theme={theme}
-                  navFooter={<WorkspaceSwitcher />}
-                  banners={
-                    <>
-                      {/* An operator acting as the owner (TW-WSP-033): non-dismissible, first thing under the top bar. */}
-                      <ImpersonationBanner key="impersonation" />
-                      <TrialBar />
-                      <BackgroundErrorBanner key="background-error" />
-                      <AccountBanners key="banners" />
-                    </>
-                  }
-                  bell={<NotificationBell key="bell" />}
-                >
-                  <AccountGate>
-                    <AppGate
-                      gates={appGates}
+            <RealtimeProvider
+              key={`${session.org.id}:${session.user.id}`}
+              url={process.env.REALTIME_URL ?? process.env.NEXT_PUBLIC_REALTIME_URL}
+            >
+              {/* Bell, toast, ping, desktop alert and tab-title badge on every page, from the socket above (no second connection). */}
+              <LiveNotifications />
+              <HelpProvider entries={help.entries}>
+                {/* The Inbox entry's unread number in the menu, on every page (read from the cache the Inbox and the live socket keep). */}
+                <InboxNavCounts enabled={capabilities.permissions.has('inbox.conversation.read')}>
+                  <WalletAppShell
+                    user={{
+                      fullName: session.user.displayName ?? session.user.fullName,
+                      email: session.user.email,
+                      avatarUrl: session.user.avatarUrl,
+                    }}
+                    nav={resolveNav(NAV, capabilities, { planned: MENU_PLANNED_NAV })}
+                    settings={resolveSettings(SETTINGS, capabilities, {
+                      planned: PLANNED_SETTINGS,
+                    })}
+                    theme={theme}
+                    navFooter={<WorkspaceSwitcher />}
+                    banners={
+                      <>
+                        {/* An operator acting as the owner (TW-WSP-033): non-dismissible, first thing under the top bar. */}
+                        <ImpersonationBanner key="impersonation" />
+                        <TrialBar />
+                        <BackgroundErrorBanner key="background-error" />
+                        <AccountBanners key="banners" />
+                      </>
+                    }
+                    bell={<NotificationBell key="bell" />}
+                  >
+                    <AccountGate>
+                      <AppGate
+                        gates={appGates}
+                        enabled={enabledFeatures ? [...enabledFeatures] : null}
+                        marketplaceHref={marketplaceHref}
+                      >
+                        {/* The Help assistant (launcher, panel, shortcut): nothing renders unless the plan, the workspace and the role allow it. */}
+                        <HelpAgentRoot planEnabled={enabledFeatures?.has('help_agent') ?? false}>
+                          {children}
+                        </HelpAgentRoot>
+                      </AppGate>
+                    </AccountGate>
+                    <PlanPaywall
+                      gates={paywallGates}
                       enabled={enabledFeatures ? [...enabledFeatures] : null}
-                      marketplaceHref={marketplaceHref}
-                    >
-                      {/* The Help assistant (launcher, panel, shortcut): nothing renders unless the plan, the workspace and the role allow it. */}
-                      <HelpAgentRoot planEnabled={enabledFeatures?.has('help_agent') ?? false}>
-                        {children}
-                      </HelpAgentRoot>
-                    </AppGate>
-                  </AccountGate>
-                  <PlanPaywall
-                    gates={paywallGates}
-                    enabled={enabledFeatures ? [...enabledFeatures] : null}
-                    canBrowseApps={marketplaceHref !== null}
-                  />
-                </WalletAppShell>
-              </InboxNavCounts>
-            </HelpProvider>
-          </RealtimeProvider>
+                      canBrowseApps={marketplaceHref !== null}
+                    />
+                  </WalletAppShell>
+                </InboxNavCounts>
+              </HelpProvider>
+            </RealtimeProvider>
+          </PersonaProvider>
         </PlanFeaturesProvider>
       </NextIntlClientProvider>
     </SessionProvider>

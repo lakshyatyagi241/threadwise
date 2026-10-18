@@ -1,3 +1,4 @@
+import { moduleId } from '@crm/contracts';
 import {
   NAV_GROUPS,
   type Capabilities,
@@ -10,6 +11,7 @@ export const CAPABILITIES_UNKNOWN: Capabilities = {
   permissions: null,
   planFeatures: null,
   channels: null,
+  hidden: null,
 };
 
 export interface ResolveOptions {
@@ -67,6 +69,15 @@ export function evaluateGates(
 }
 
 /**
+ * Whether the workspace's persona hides this module id. The one check the menu and the Settings tiles share; it runs BEFORE the
+ * gates, so a hidden entry that would also be plan-locked draws nothing (no lock, no upsell), and it never replaces them: an entry
+ * that is not hidden still goes through `evaluateGates`. Unknown (`null`) hides nothing.
+ */
+export function hiddenByPersona(caps: Pick<Capabilities, 'hidden'>, id: string): boolean {
+  return caps.hidden?.has(id) === true;
+}
+
+/**
  * `/account/<name>`, one segment: a pane of the account hub (profile, plan, wallet, ...). A domain adds one by
  * declaring it in its own `nav.ts`; the hub lists it in its own menu, so the main sidebar leaves it out.
  */
@@ -85,6 +96,7 @@ export function resolveNavAll(
 ): ResolvedNavItem[] {
   const out: ResolvedNavItem[] = [];
   for (const { item, comingSoon } of mergePlanned(items, options.planned ?? [])) {
+    if (hiddenByPersona(caps, moduleId('nav', item.id))) continue;
     const gate = evaluateGates(item.gates, caps, comingSoon);
     if (gate) out.push({ ...item, locked: gate.locked, comingSoon });
   }

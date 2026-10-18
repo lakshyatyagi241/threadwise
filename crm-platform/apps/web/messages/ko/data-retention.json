@@ -1,0 +1,117 @@
+{
+  "data-retention": {
+    "nav": {
+      "group": "데이터",
+      "item": "데이터 보존"
+    },
+    "page": {
+      "title": "데이터 보존",
+      "eyebrow": "플랫폼 · 데이터 보존",
+      "description": "데이터 종류별로 데이터베이스에 보관할 일수와, 영구 삭제되기 전까지 콜드 아카이브에 추가로 보관할 일수를 선택하세요. 항목의 값을 저장하기 전에는 아무것도 바뀌지 않습니다.",
+      "superOnly": "슈퍼 관리자만 보존 설정을 변경할 수 있습니다. 저장된 값과 마지막 실행 결과는 확인할 수 있습니다.",
+      "loading": "보존 정책을 불러오는 중…",
+      "retry": "다시 시도"
+    },
+    "engine": {
+      "offTitle": "아카이브 작업이 꺼져 있습니다",
+      "offBody": "분석 이벤트와 감사 로그에 저장한 값은 보관되지만, 작업을 활성화(RETENTION_ENABLED)하기 전에는 아카이브되거나 삭제되는 데이터가 없습니다. 그때까지 두 항목은 현재 동작을 유지합니다.",
+      "dryRunTitle": "아카이브 작업이 수행할 내용을 기록만 합니다",
+      "dryRunBody": "작업은 켜져 있지만 시험 실행(dry-run) 모드입니다(RETENTION_DRY_RUN). 분석 이벤트와 감사 로그에 저장한 값은 아직 적용되지 않습니다.",
+      "notDurableTitle": "아카이브가 영구적이지 않습니다",
+      "notDurableBody": "아카이브가 서버 자체 디스크의 폴더라서 재배포하면 지워집니다. 작업이 S3 또는 R2(ARCHIVE_DRIVER=s3)를 가리키기 전에는 데이터를 삭제하지 않습니다.",
+      "liveTitle": "아카이브 작업이 실행 중입니다",
+      "liveBody": "저장된 값은 야간 실행에서 적용됩니다. 아카이브된 데이터는 {driver}에 보관됩니다."
+    },
+    "items": {
+      "an_events": {
+        "title": "분석 이벤트",
+        "description": "보고서의 기반이 되는 이벤트 스트림입니다. 라이브 보관일보다 오래된 달은 통째로 아카이브로 이동합니다."
+      },
+      "audit_log": {
+        "title": "감사 로그",
+        "description": "각 워크스페이스에서 누가 무엇을 했는지 기록하며, 사용자로 전환해 수행한 작업도 포함합니다. 값을 저장하기 전에는 플랫폼 보안 정책의 일수 후에 삭제되며 아카이브되지 않습니다. 저장한 값은 먼저 아카이브한 뒤 나중에 삭제하며, 내보내기에서는 아카이브된 달도 계속 읽을 수 있습니다."
+      },
+      "security_events": {
+        "title": "보안 로그",
+        "description": "로그인, 보안 변경, 여기서 이루어진 모든 보존 설정 변경을 기록합니다. 라이브 보관일이 지나면 삭제되며 아카이브는 없습니다."
+      },
+      "audit_log_exports": {
+        "title": "감사 내보내기 파일",
+        "description": "워크스페이스가 감사 로그에서 요청한 CSV입니다. 요청자는 로그인하여 내려받을 수 있는 링크가 담긴 이메일을 받으며, 파일은 라이브 보관일이 지나면 삭제됩니다."
+      }
+    },
+    "fields": {
+      "liveDays": "라이브 보관일",
+      "liveDaysHint": "데이터가 데이터베이스에 머무는 일수입니다. 허용 범위: {min}~{max}.",
+      "keepForever": "아카이브를 영구 보관",
+      "archiveDays": "아카이브 보관일",
+      "archiveDaysHint": "아카이브가 추가로 보관하는 일수이며, 그 후 삭제됩니다. 허용 범위: {min}~{max}."
+    },
+    "summary": {
+      "noArchive": "기록된 후 {live, plural, other {#일}}이 지나면 영구 삭제됩니다.",
+      "archiveForever": "{live, plural, other {#일}} 동안 라이브로 보관한 뒤 아카이브하여 영구 보관합니다.",
+      "archiveThenDelete": "{live, plural, other {#일}} 동안 라이브로 보관하고, {archive, plural, other {#일}} 동안 아카이브한 뒤, 기록된 후 {total, plural, other {#일}}이 지나면 영구 삭제됩니다.",
+      "defaultForever": "현재 영구 보관 중입니다(보안 정책에 제한이 없습니다).",
+      "defaultNote": "현재 동작이며 저장된 값이 없습니다."
+    },
+    "status": {
+      "default": "현재 동작",
+      "custom": "직접 저장함",
+      "notApplied": "아직 적용되지 않음",
+      "updated": "{when}에 저장됨"
+    },
+    "stats": {
+      "live": "데이터베이스",
+      "liveValue": "{size}, 약 {rows}개 행",
+      "liveValueNoRows": "{size}",
+      "months": "{count, plural, other {월별 파티션 #개}}, 가장 오래된 항목 {oldest}",
+      "archive": "아카이브",
+      "archiveValue": "{size}, {count, plural, other {객체 #개}}",
+      "archiveNone": "아직 측정되지 않음",
+      "archiveMeasured": "{when}에 측정됨",
+      "lastRun": "마지막 실행",
+      "neverRun": "아직 실행된 적 없음",
+      "runLive": "{when}: {months, plural, other {#개월}} 아카이브됨(행 {rows}개, {size}), 아카이브에서 {expired} 삭제, 행 또는 파일 {deleted}개 삭제됨",
+      "runDry": "{when}: 시험 실행, 변경된 내용 없음",
+      "runFailed": "마지막 실행에 문제가 있었습니다: {error}"
+    },
+    "actions": {
+      "save": "저장",
+      "checking": "확인 중…",
+      "saving": "저장 중…",
+      "reset": "현재 동작으로 되돌리기",
+      "resetting": "되돌리는 중…",
+      "cancel": "취소",
+      "confirmSave": "저장 및 적용",
+      "resetTitle": "{item}을(를) 현재 동작으로 되돌리시겠습니까?",
+      "resetBody": "저장된 값이 삭제됩니다. 야간 작업은 이 항목에 대해 기본 제공 규칙으로 돌아갑니다. 이미 아카이브된 데이터는 아카이브에 그대로 남습니다.",
+      "confirmReset": "현재 동작으로 되돌리기"
+    },
+    "preview": {
+      "title": "{item}의 보존 설정을 저장하시겠습니까?",
+      "intro": "다음 야간 실행 시:",
+      "toArchive": "{count, plural, other {#개월}}(행 {rows}개, {size})이 아카이브로 이동하고 데이터베이스에서 사라집니다.",
+      "toDeleteFromArchive": "아카이브된 {count, plural, other {#개월}}이 아카이브에서 영구 삭제됩니다.",
+      "rowsToDelete": "{count, plural, other {행 또는 파일 #개}}가 영구 삭제됩니다.",
+      "notApplied": "아카이브 작업이 아직 저장된 값을 적용하지 않으므로, 활성화하기 전에는 위 내용이 실행되지 않습니다.",
+      "permanent": "삭제는 영구적이며 되돌릴 수 없습니다."
+    },
+    "saved": "보존 설정을 저장했습니다.",
+    "resetDone": "현재 동작으로 되돌렸습니다.",
+    "validation": {
+      "live_out_of_range": "라이브 보관일은 {min}에서 {max} 사이의 정수여야 합니다.",
+      "archive_out_of_range": "아카이브 보관일은 {min}에서 {max} 사이의 정수여야 합니다.",
+      "archive_not_supported": "이 항목은 아카이브할 수 없습니다.",
+      "delete_before_archive": "아카이브하기 전에는 데이터를 삭제할 수 없습니다.",
+      "not_a_number": "일수를 정수로 입력하세요."
+    },
+    "errors": {
+      "forbidden": "이 작업을 수행할 권한이 없습니다.",
+      "conflict": "다른 사용자가 이 항목을 변경했습니다. 최신 값을 불러왔으니 확인한 후 다시 저장하세요.",
+      "validation": "허용되지 않는 값입니다.",
+      "request": "요청이 거부되었습니다.",
+      "unexpected": "서버에서 문제가 발생했습니다. 다시 시도하세요.",
+      "network": "서버에 연결할 수 없습니다. 연결 상태를 확인한 후 다시 시도하세요."
+    }
+  }
+}

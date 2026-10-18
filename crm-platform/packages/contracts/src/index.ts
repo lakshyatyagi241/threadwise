@@ -10,6 +10,7 @@
  */
 export * from './analytics';
 export * from './platform-async-ops';
+export * from './data-retention';
 export * from './platform-failed-operations';
 export * from './common/ids';
 export * from './common/pagination';

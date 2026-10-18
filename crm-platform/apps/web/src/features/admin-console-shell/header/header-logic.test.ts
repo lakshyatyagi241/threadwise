@@ -9,8 +9,8 @@ const snap = (over: Partial<HealthResponse>): HealthResponse => ({
     { key: 'queue', state: 'up', value: 'Redis', detail: '', ping: 1 },
   ],
   queues: [
-    { name: 'outbox', pending: 4, failed: 0 },
-    { name: 'campaign', pending: 0, failed: 0 },
+    { name: 'outbox', pending: 4, failed: 0, lastFailure: null },
+    { name: 'campaign', pending: 0, failed: 0, lastFailure: null },
   ],
   engines: [],
   activity: { messages: 0, aiCalls: 0, conversations: 0, webhooks: 0 },
@@ -36,8 +36,8 @@ describe('header health pill (TW-ASHELL-006)', () => {
   it('counts failed jobs across queues as stuck jobs and goes amber', () => {
     const s = snap({
       queues: [
-        { name: 'outbox', pending: 0, failed: 1 },
-        { name: 'campaign', pending: 0, failed: 2 },
+        { name: 'outbox', pending: 0, failed: 1, lastFailure: null },
+        { name: 'campaign', pending: 0, failed: 2, lastFailure: null },
       ],
     });
     expect(pillFor(s)).toEqual({ state: 'warn', stuck: 3 });
@@ -45,7 +45,7 @@ describe('header health pill (TW-ASHELL-006)', () => {
   it('goes red when the database probe is down, ahead of any stuck count', () => {
     const s = snap({
       checks: [{ key: 'database', state: 'down', value: '', detail: '', ping: null }],
-      queues: [{ name: 'outbox', pending: 0, failed: 9 }],
+      queues: [{ name: 'outbox', pending: 0, failed: 9, lastFailure: null }],
     });
     expect(pillFor(s)).toEqual({ state: 'down', stuck: 0 });
   });

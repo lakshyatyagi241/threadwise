@@ -24,6 +24,8 @@ export interface AuditRow {
   userName: string | null;
   keyName: string | null;
   delta?: unknown;
+  /** Read back from the cold archive: the names are looked up afterwards (set by the export). */
+  fromArchive?: boolean;
 }
 
 const toRow = (r: Raw): AuditRow => ({
@@ -175,6 +177,35 @@ export class AuditLogRepository {
     return r ? Number(r.id) : null;
   }
 
+  /** Display names of the users and API keys of one workspace, for archived lines that carry only their ids. */
+  async actorNames(
+    tx: Tx,
+    orgId: number,
+    userIds: number[],
+    keyIds: number[],
+  ): Promise<{ users: Map<number, string>; keys: Map<number, string> }> {
+    const list = (ids: number[]) =>
+      sql.join(
+        ids.map((i) => sql`${i}`),
+        sql`, `,
+      );
+    const users = new Map<number, string>();
+    const keys = new Map<number, string>();
+    if (userIds.length > 0) {
+      const res = await tx.execute(
+        sql`SELECT id, full_name FROM users WHERE org_id = ${orgId} AND id IN (${list(userIds)})`,
+      );
+      for (const r of rowsOf(res)) users.set(Number(r.id), r.full_name as string);
+    }
+    if (keyIds.length > 0) {
+      const res = await tx.execute(
+        sql`SELECT id, name FROM api_keys WHERE org_id = ${orgId} AND id IN (${list(keyIds)})`,
+      );
+      for (const r of rowsOf(res)) keys.set(Number(r.id), r.name as string);
+    }
+    return { users, keys };
+  }
+
   /** The uuids of records of one linkable type that still exist (a deleted record has no screen). */
   async recordUuids(
     tx: Tx,
@@ -318,10 +349,17 @@ export class AuditLogRepository {
 
   // --- sweeps (privileged, across workspaces) ----------------------------------------------------------------------------------
 
-  async expireExports(tx: Tx, now: Date): Promise<number> {
+  /**
+   * Deletes the file of every export past its date. With `ttlDays` (a super admin's saved file lifetime) a file is also deleted once
+   * it is older than that, so shortening the lifetime reaches the files already built, not only the next ones.
+   */
+  async expireExports(tx: Tx, now: Date, ttlDays: number | null = null): Promise<number> {
+    const cutoff = ttlDays === null ? null : new Date(now.getTime() - ttlDays * 86_400_000);
     const res = await tx.execute(sql`
       UPDATE audit_log_exports SET status = 'expired', file_gz = NULL
-      WHERE status = 'ready' AND expires_at < ${now} RETURNING 1`);
+      WHERE status = 'ready'
+        AND (expires_at < ${now} OR (${cutoff}::timestamptz IS NOT NULL AND completed_at < ${cutoff}::timestamptz))
+      RETURNING 1`);
     return rowsOf(res).length;
   }
 

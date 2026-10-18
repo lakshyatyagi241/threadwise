@@ -1,0 +1,59 @@
+{
+  "commit": "b9dd0f8db302db03d79a2d9c0eb3a7334182f793",
+  "bullmq": "6.3.12",
+  "redis": "7.0.15",
+  "ioredis": "6.0.0",
+  "node": "v22.22.2",
+  "host": {
+    "platform": "linux",
+    "release": "7.0.0-38-generic",
+    "cpus": 22,
+    "cpuModel": "Intel(R) Core(TM) Ultra 7 155H",
+    "memGB": 30.8
+  },
+  "redisConfig": {
+    "appendonly": "no (main scenarios)",
+    "maxmemoryPolicy": "noeviction",
+    "singleInstance": true
+  },
+  "generatedAt": "2026-10-18T14:05:16.654Z",
+  "durationMultiplier": 1,
+  "caveat": "Synthetic handlers on one machine that also hosts producer, workers and Redis. Numbers are relative, queue-layer ceilings, not production capacity.",
+  "reproduce": "node tools/queue-capacity/bench.mjs --scenarios sweep,drain,profiles,isolation,fairness,provider,crash,redis,soak --duration 1 --soak-seconds 150",
+  "result": {
+    "idealCapacity": 450,
+    "muMeasured": 466,
+    "lambdaHigh": 698,
+    "lambdaLow": 233,
+    "growSeconds": 8,
+    "backlogAtSwitch": 1857,
+    "predictedBacklogGrowth": 1863,
+    "predictedDrainSeconds": 8,
+    "measuredDrainSeconds": 7.8,
+    "relativeError": 0.016,
+    "finalCounts": {
+      "completed": 9415,
+      "failed": 0,
+      "waiting": 0,
+      "active": 0,
+      "delayed": 0
+    },
+    "n": 9415,
+    "waitP50Ms": 1834,
+    "waitP95Ms": 3733.2,
+    "waitP99Ms": 3929,
+    "procP50Ms": 21,
+    "procP95Ms": 23,
+    "procP99Ms": 24,
+    "cpuPct": 13.4,
+    "rssMaxMB": 251.5,
+    "heapMaxMB": 146.9,
+    "eventLoopLagP99Ms": 11.03,
+    "eventLoopLagMaxMs": 22.8,
+    "redisMemMaxMB": 6.27,
+    "redisClientsMax": 4,
+    "redisPingMaxMs": 0.77,
+    "peakBacklog": 1850,
+    "oldestWaitingMaxMs": 3896
+  }
+}

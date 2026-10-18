@@ -1,4 +1,5 @@
-import { evaluateGates, mergePlanned } from './resolve';
+import { moduleId } from '@crm/contracts';
+import { evaluateGates, hiddenByPersona, mergePlanned } from './resolve';
 import {
   SETTINGS_SECTIONS,
   type ResolvedSettingsTile,
@@ -25,7 +26,10 @@ export function compareSettings(a: SettingsTile, b: SettingsTile): number {
   );
 }
 
-/** The menu's gate rules applied to the tiles: a tile the person cannot use is gone, a plan-gated one is locked. */
+/**
+ * The menu's gate rules applied to the tiles: a tile the person cannot use is gone, a plan-gated one is locked. A tile the persona hides
+ * (`caps.hidden`, `tile:<id>`) is skipped first, with no lock and no upsell.
+ */
 export function resolveSettings(
   tiles: readonly SettingsTile[],
   caps: Capabilities,
@@ -33,6 +37,7 @@ export function resolveSettings(
 ): ResolvedSettingsTile[] {
   const out: ResolvedSettingsTile[] = [];
   for (const { item, comingSoon } of mergePlanned(tiles, options.planned ?? [])) {
+    if (hiddenByPersona(caps, moduleId('tile', item.id))) continue;
     const gate = evaluateGates(item.gates, caps, comingSoon);
     if (gate) out.push({ ...item, locked: gate.locked, comingSoon });
   }
