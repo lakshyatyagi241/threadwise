@@ -1,0 +1,157 @@
+{
+  "whatsapp-throughput": {
+    "nav": {
+      "group": "WhatsApp",
+      "item": "发送限制"
+    },
+    "eyebrow": "WhatsApp",
+    "title": "发送限制与实时性能",
+    "description": "查看每个已连接的 WhatsApp 号码的发送速度、已使用的每日消息额度,以及当前的实时状态。更改将对所有工作进程发送的下一条消息生效。",
+    "updated": "实时。更新于 {time}",
+    "stale": "上次刷新失败,当前显示的是之前的数据。",
+    "liveUnavailable": "无法读取实时计数器,因此实时列显示为零。速率、等级和控制项仍然准确。",
+    "limiterOff": "发送限流器已关闭。此处不会对消息进行限速,仅受 Meta 自身的限流约束。",
+    "footnote": "号码的速率由 Meta 设定:默认每秒 80 条消息,Meta 升级后最高可达 1,000 条;同时在 WhatsApp Business 应用中使用的号码为 20 条。收发消息共用该速率。每日消息等级是另一项限制,针对 24 小时内联系的不重复用户数;此处的计数根据通过本平台发送的模板消息估算。",
+    "perSecond": "条/秒",
+    "peak": "过去一分钟峰值 {n}",
+    "sentCount": "已发送 {n}",
+    "deferredCount": "已暂缓 {n}",
+    "throttledCount": "被 Meta 限流 {n}",
+    "tierUsed": "24 小时内 {used} / {cap} 人",
+    "details": "详情",
+    "common": {
+      "loading": "加载中...",
+      "retry": "重试"
+    },
+    "errors": {
+      "conflict": "刚刚有其他人修改了此项。已加载最新值,请检查后重新提交您的更改。",
+      "metaUnavailable": "Meta 未响应。请稍后再刷新。",
+      "notFound": "此号码已不存在。请返回列表。",
+      "forbidden": "只有超级管理员可以更改发送限制。",
+      "invalid": "部分值未被接受。请检查后重试。",
+      "unexpected": "我们这边出了点问题。请稍后重试。"
+    },
+    "kpi": {
+      "now": "当前发送",
+      "nowHint": "每秒消息数,所有号码",
+      "sent": "已发送",
+      "last5": "过去 5 分钟",
+      "numbers": "已连接号码",
+      "attention": "需要关注",
+      "attentionHint": "{paused} 个已暂停,{tier} 个接近每日限额",
+      "heldBack": "已暂缓",
+      "heldBackHint": "{meta} 条被 Meta 限流,过去 5 分钟"
+    },
+    "settings": {
+      "title": "平台设置",
+      "description": "这些设置适用于所有号码。单个号码的覆盖值和暂停设置在其详情页中配置。",
+      "enabled": "按每个号码的限制控制发送节奏",
+      "enabledHelp": "关闭后将不限速发送;Meta 自身的限流仍然有效。",
+      "defaultMps": "默认速率(条/秒)",
+      "defaultMpsHelp": "用于 Meta 尚未上报速率的号码。",
+      "safetyMargin": "安全余量(%)",
+      "safetyMarginHelp": "为入站流量和时间误差预留的限额比例。",
+      "maxWait": "最长等待时间(毫秒)",
+      "maxWaitHelp": "等待时间超过此值的发送会退回队列并重试。",
+      "syncInterval": "从 Meta 重新读取(分钟)",
+      "syncIntervalHelp": "每个号码的速率和每日限额的刷新频率。",
+      "adaptive": "被 Meta 限流后降速",
+      "adaptiveHelp": "当 Meta 因发送过快而拒收消息时,速度减半,然后在一分钟内逐步恢复。",
+      "enforceTier": "达到每日限额时暂缓模板消息",
+      "enforceTierHelp": "号码达到每日消息等级后,停止发送新的模板消息。关闭时仅作标记。",
+      "tierWarn": "预警阈值(占每日限额的 %)",
+      "tierWarnHelp": "号码使用量达到其等级的此比例时将被标记。",
+      "save": "保存设置",
+      "saving": "保存中...",
+      "saved": "已保存。所有号码现已采用新设置。"
+    },
+    "numbers": {
+      "title": "号码",
+      "search": "按工作区、号码或 ID 搜索",
+      "emptyTitle": "没有已连接的号码",
+      "emptyBody": "工作区连接 WhatsApp 后,号码将显示在这里。"
+    },
+    "cols": {
+      "number": "号码",
+      "rate": "速率限制",
+      "live": "当前",
+      "last5": "过去 5 分钟",
+      "tier": "每日限额",
+      "state": "状态",
+      "actions": "操作"
+    },
+    "source": {
+      "override": "覆盖",
+      "coexistence": "WhatsApp Business(固定)",
+      "meta": "来自 Meta",
+      "default": "默认"
+    },
+    "tier": {
+      "unlimited": "不限",
+      "unknown": "尚未上报",
+      "unlimitedBody": "此号码的每日消息额度不限。",
+      "unknownBody": "Meta 尚未上报此号码的每日消息额度。请从 Meta 刷新。"
+    },
+    "state": {
+      "ok": "正常",
+      "paused": "已暂停",
+      "slowed": "已降速至 {pct}%",
+      "tierWarn": "接近每日限额",
+      "tierFull": "已达每日限额",
+      "syncFailed": "读取 Meta 失败"
+    },
+    "events": {
+      "meta_throttled": "Meta 已限制发送",
+      "upgrade_in_progress": "吞吐量升级中",
+      "throughput_upgraded": "吞吐量等级已变更",
+      "deferred": "发送已暂缓,队列过深",
+      "paused_block": "发送被阻止,号码已暂停",
+      "tier_full": "已达每日限额",
+      "paused": "已由操作员暂停",
+      "resumed": "已由操作员恢复",
+      "override_set": "已设置速率覆盖",
+      "override_cleared": "已移除速率覆盖",
+      "synced": "已从 Meta 重新读取"
+    },
+    "detail": {
+      "title": "WhatsApp 号码限制",
+      "back": "返回发送限制",
+      "description": "电话号码 ID {id}。每隔几秒更新一次。",
+      "refresh": "从 Meta 刷新",
+      "refreshing": "正在从 Meta 读取...",
+      "syncError": "上次从 Meta 读取失败:{message}",
+      "coexistence": "此号码同时在 WhatsApp Business 应用中使用,因此 Meta 将其固定为每秒 20 条消息。",
+      "rate": "限速至(条/秒)",
+      "speed": "速度",
+      "speedSlowed": "因 Meta 限流而降速,正在恢复",
+      "speedFull": "全速",
+      "wait": "平均等待时间",
+      "waitHint": "{n} 次发送需等待,过去 5 分钟",
+      "meta": "Meta 吞吐量等级",
+      "metaHint": "{n} 条/秒",
+      "unknown": "未上报",
+      "chartSeconds": "每秒发送数,过去一分钟",
+      "chartLegend": "虚线为限速后的速率。红色标记表示 Meta 拒绝发送的秒,琥珀色表示发送被暂缓的秒。",
+      "chartMinutes": "每分钟发送数,过去一小时",
+      "chartLegendMinutes": "红色标记表示 Meta 拒绝发送的分钟,琥珀色表示发送被暂缓的分钟。",
+      "tierTitle": "每日消息限额",
+      "tierNote": "Meta 限制一个号码在 24 小时内可发起对话的不同用户数。此计数涵盖通过本平台发送的模板消息,因此可能与 Meta 自身的数字不同。",
+      "events": "最近事件",
+      "eventsEmpty": "暂无",
+      "eventsEmptyBody": "此号码的限流、暂缓、暂停和速率变更会列在这里。"
+    },
+    "control": {
+      "title": "控制",
+      "description": "覆盖 Meta 为此号码提供的速率,或停止其发送。两者都会对使用该号码的所有工作区从下一条消息起生效。",
+      "override": "速率覆盖(条/秒)",
+      "overrideHelp": "1 到 {max} 之间的整数。留空则遵循 Meta。",
+      "overrideInvalid": "请输入 1 到 {max} 之间的整数。",
+      "overridePlaceholder": "遵循 Meta",
+      "pause": "暂停此号码的发送",
+      "pauseHelp": "群发和营销活动会自动停止并恢复;其他消息将失败并显示重试。",
+      "reason": "原因",
+      "reasonHelp": "将显示在事件日志中。",
+      "saved": "已保存。该号码将从下一条消息起采用新的控制设置。"
+    }
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "whatsapp-throughput": {
+    "nav": {
+      "group": "WhatsApp",
+      "item": "전송 한도"
+    },
+    "eyebrow": "WhatsApp",
+    "title": "전송 한도 및 실시간 성능",
+    "description": "연결된 각 WhatsApp 번호의 전송 속도, 일일 메시지 한도 사용량, 현재 상황을 확인합니다. 변경 사항은 모든 워커가 다음에 보내는 메시지부터 적용됩니다.",
+    "updated": "실시간. {time} 업데이트됨",
+    "stale": "마지막 새로고침에 실패했습니다. 이전 수치를 표시하고 있습니다.",
+    "liveUnavailable": "실시간 카운터를 읽지 못해 실시간 열에 0이 표시됩니다. 속도, 등급, 제어 항목은 정상입니다.",
+    "limiterOff": "전송 제한기가 꺼져 있습니다. 여기서는 메시지 전송 속도를 조절하지 않으며 Meta의 자체 제한만 적용됩니다.",
+    "footnote": "번호의 속도는 Meta가 정합니다. 기본값은 초당 메시지 80개이며, Meta가 업그레이드하면 최대 1,000개까지 늘어나고, WhatsApp Business 앱에서도 사용하는 번호는 20개입니다. 수신 메시지와 발신 메시지가 이 속도를 함께 사용합니다. 일일 메시지 등급은 24시간 동안 메시지를 보낸 고유 대상 수에 대한 별도의 한도이며, 여기에 표시되는 수는 이 플랫폼에서 보낸 템플릿 메시지를 기준으로 한 추정치입니다.",
+    "perSecond": "msg/s",
+    "peak": "최근 1분간 최고 {n}",
+    "sentCount": "{n}건 전송됨",
+    "deferredCount": "{n}건 보류됨",
+    "throttledCount": "Meta에 의해 {n}건 제한됨",
+    "tierUsed": "24시간 동안 {cap}명 중 {used}명",
+    "details": "상세 정보",
+    "common": {
+      "loading": "불러오는 중...",
+      "retry": "다시 시도"
+    },
+    "errors": {
+      "conflict": "방금 다른 사용자가 이 항목을 변경했습니다. 최신 값을 불러왔으니 확인한 후 변경 사항을 다시 적용하세요.",
+      "metaUnavailable": "Meta가 응답하지 않았습니다. 잠시 후 다시 새로고침하세요.",
+      "notFound": "이 번호는 더 이상 존재하지 않습니다. 목록으로 돌아가세요.",
+      "forbidden": "전송 한도는 슈퍼 관리자만 변경할 수 있습니다.",
+      "invalid": "일부 값이 허용되지 않았습니다. 값을 확인한 후 다시 시도하세요.",
+      "unexpected": "당사 측에서 문제가 발생했습니다. 잠시 후 다시 시도하세요."
+    },
+    "kpi": {
+      "now": "현재 전송 중",
+      "nowHint": "초당 메시지 수, 전체 번호",
+      "sent": "전송됨",
+      "last5": "최근 5분",
+      "numbers": "연결된 번호",
+      "attention": "확인 필요",
+      "attentionHint": "일시중지 {paused}개, 일일 한도에 근접 {tier}개",
+      "heldBack": "보류됨",
+      "heldBackHint": "Meta에 의해 {meta}건 제한됨, 최근 5분"
+    },
+    "settings": {
+      "title": "플랫폼 설정",
+      "description": "모든 번호에 적용됩니다. 번호별 재정의와 일시중지는 해당 번호 페이지에서 설정합니다.",
+      "enabled": "각 번호의 한도에 맞춰 전송 속도 조절",
+      "enabledHelp": "끄면 속도 조절 없이 전송합니다. Meta의 자체 제한은 계속 적용됩니다.",
+      "defaultMps": "기본 속도 (msg/s)",
+      "defaultMpsHelp": "Meta가 아직 속도를 알려 주지 않은 번호에 사용됩니다.",
+      "safetyMargin": "안전 마진 (%)",
+      "safetyMarginHelp": "수신 트래픽과 타이밍을 위해 비워 두는 한도의 비율입니다.",
+      "maxWait": "최대 대기 시간 (ms)",
+      "maxWaitHelp": "이보다 오래 대기해야 하는 전송은 대기열로 되돌려져 다시 시도됩니다.",
+      "syncInterval": "Meta에서 다시 읽기 (분)",
+      "syncIntervalHelp": "각 번호의 속도와 일일 한도를 새로 고치는 주기입니다.",
+      "adaptive": "Meta 제한 후 속도 낮추기",
+      "adaptiveHelp": "너무 빠르게 보내서 Meta가 메시지를 거부하면 속도를 절반으로 줄이고 1분에 걸쳐 회복합니다.",
+      "enforceTier": "일일 한도에서 템플릿 메시지 보류",
+      "enforceTierHelp": "번호가 일일 메시지 등급에 도달하면 새 템플릿 메시지를 중지합니다. 끄면 표시만 합니다.",
+      "tierWarn": "경고 기준 (일일 한도의 %)",
+      "tierWarnHelp": "번호가 등급의 이 비율을 사용하면 표시됩니다.",
+      "save": "설정 저장",
+      "saving": "저장 중...",
+      "saved": "저장되었습니다. 이제 모든 번호에 새 설정이 적용됩니다."
+    },
+    "numbers": {
+      "title": "번호",
+      "search": "워크스페이스, 번호 또는 ID로 검색",
+      "emptyTitle": "연결된 번호 없음",
+      "emptyBody": "워크스페이스가 WhatsApp을 연결하면 번호가 여기에 표시됩니다."
+    },
+    "cols": {
+      "number": "번호",
+      "rate": "속도 제한",
+      "live": "현재",
+      "last5": "최근 5분",
+      "tier": "일일 한도",
+      "state": "상태",
+      "actions": "작업"
+    },
+    "source": {
+      "override": "재정의",
+      "coexistence": "WhatsApp Business 앱 (고정)",
+      "meta": "Meta 기준",
+      "default": "기본값"
+    },
+    "tier": {
+      "unlimited": "무제한",
+      "unknown": "아직 보고되지 않음",
+      "unlimitedBody": "이 번호의 일일 메시지 한도는 무제한입니다.",
+      "unknownBody": "Meta가 이 번호의 일일 메시지 한도를 아직 알려 주지 않았습니다. Meta에서 새로고침하세요."
+    },
+    "state": {
+      "ok": "정상",
+      "paused": "일시중지됨",
+      "slowed": "{pct}%로 감속됨",
+      "tierWarn": "일일 한도에 근접",
+      "tierFull": "일일 한도 도달",
+      "syncFailed": "Meta에서 읽기 실패"
+    },
+    "events": {
+      "meta_throttled": "Meta가 전송을 제한함",
+      "upgrade_in_progress": "처리량 업그레이드 진행 중",
+      "throughput_upgraded": "처리량 수준이 변경됨",
+      "deferred": "전송 보류됨, 대기열이 너무 김",
+      "paused_block": "전송 차단됨, 번호 일시중지",
+      "tier_full": "일일 한도 도달",
+      "paused": "운영자가 일시중지함",
+      "resumed": "운영자가 재개함",
+      "override_set": "속도 재정의 설정됨",
+      "override_cleared": "속도 재정의 해제됨",
+      "synced": "Meta에서 다시 읽음"
+    },
+    "detail": {
+      "title": "WhatsApp 번호 한도",
+      "back": "전송 한도로 돌아가기",
+      "description": "전화번호 ID {id}. 몇 초마다 업데이트됩니다.",
+      "refresh": "Meta에서 새로고침",
+      "refreshing": "Meta에서 읽는 중...",
+      "syncError": "Meta에서 마지막으로 읽기에 실패했습니다: {message}",
+      "coexistence": "이 번호는 WhatsApp Business 앱에서도 사용되므로 Meta가 초당 메시지 20개로 고정합니다.",
+      "rate": "조절된 속도 (msg/s)",
+      "speed": "속도",
+      "speedSlowed": "Meta 제한 후 감속됨, 회복 중",
+      "speedFull": "최대 속도",
+      "wait": "평균 대기 시간",
+      "waitHint": "대기한 전송 {n}건, 최근 5분",
+      "meta": "Meta 처리량 수준",
+      "metaHint": "{n} msg/s",
+      "unknown": "보고되지 않음",
+      "chartSeconds": "초당 전송 수, 최근 1분",
+      "chartLegend": "점선은 조절된 속도입니다. 빨간색 표시는 Meta가 전송을 거부한 초, 주황색 표시는 전송이 보류된 초입니다.",
+      "chartMinutes": "분당 전송 수, 최근 1시간",
+      "chartLegendMinutes": "빨간색 표시는 Meta가 전송을 거부한 분, 주황색 표시는 전송이 보류된 분입니다.",
+      "tierTitle": "일일 메시지 한도",
+      "tierNote": "Meta는 하나의 번호가 24시간 동안 대화를 시작할 수 있는 서로 다른 사람의 수를 제한합니다. 이 수치는 이 플랫폼에서 보낸 템플릿 메시지를 기준으로 하므로 Meta의 수치와 다를 수 있습니다.",
+      "events": "최근 이벤트",
+      "eventsEmpty": "아직 없음",
+      "eventsEmptyBody": "이 번호의 제한, 보류, 일시중지, 속도 변경 내역이 여기에 표시됩니다."
+    },
+    "control": {
+      "title": "제어",
+      "description": "Meta가 이 번호에 부여한 속도를 재정의하거나 전송을 중지합니다. 둘 다 이 번호를 사용하는 모든 워크스페이스에서 다음 메시지부터 적용됩니다.",
+      "override": "속도 재정의 (msg/s)",
+      "overrideHelp": "1부터 {max}까지의 정수. 비워 두면 Meta 설정을 따릅니다.",
+      "overrideInvalid": "1부터 {max}까지의 정수를 입력하세요.",
+      "overridePlaceholder": "Meta 설정 따르기",
+      "pause": "이 번호에서의 전송 일시중지",
+      "pauseHelp": "브로드캐스트와 캠페인은 자동으로 중지되고 재개됩니다. 다른 메시지는 실패하며 다시 시도할 수 있습니다.",
+      "reason": "사유",
+      "reasonHelp": "이벤트 로그에 표시됩니다.",
+      "saved": "저장되었습니다. 이 번호는 다음 메시지부터 새 제어 설정을 따릅니다."
+    }
+  }
+}

@@ -54,6 +54,8 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
 
   'wap-providers': 'whatsapp providers bsp meta cloud interakt gupshup registry credentials',
   'wap-switch': 'switch provider number migrate whatsapp number change',
+  'wa-throughput':
+    'whatsapp throughput limits rate mps tps messages per second messaging tier quota pause throttle performance live 130429',
   'node-bridge': 'node bridge baileys qr unofficial whatsapp server token address sender pacing',
   'sms-channel': 'sms text message twilio msg91 channel switch enable disable platform',
   'webhook-forwarding':

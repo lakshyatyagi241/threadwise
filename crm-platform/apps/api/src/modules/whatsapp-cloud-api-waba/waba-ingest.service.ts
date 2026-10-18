@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Redis } from 'ioredis';
 import { RequestContextStore } from '../../common/context/request-context';
@@ -25,6 +25,7 @@ import { WabaOrdersService } from './waba-orders.service';
 import { WabaGroupsService, isGroupField } from './waba-groups.service';
 import { HANDLED_FIELDS, type WebhookChange } from './waba-rules';
 import { WabaTemplateEvents } from './waba-template-events.service';
+import { WabaThroughputService } from './waba-throughput.service';
 
 const INBOUND_DEDUPE_TTL_S = 24 * 3600;
 const MODULE = 'wa_provider_configs';
@@ -64,6 +65,8 @@ export class WabaIngestService {
     @Inject(WABA_CALLS_SINK) private readonly calls: WabaCallsSink,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     private readonly receiptSinks: WabaReceiptRegistry,
+    // Optional: a spec builds this service without it. Where present, Meta's number events refresh the send limits at once.
+    @Optional() private readonly throughput?: WabaThroughputService,
   ) {}
 
   async process(changes: WebhookChange[]): Promise<{ handled: number; dropped: number }> {
@@ -505,6 +508,15 @@ export class WabaIngestService {
         });
       }
     });
+    // A quality or tier change, or THROUGHPUT_UPGRADE: Meta raised or lowered what the number may send, so re-read it and republish the
+    // pacing. After the webhook's own write, and never awaited by it: a slow Meta must not hold the ingest job.
+    if (change.field === 'phone_number_quality_update' && this.throughput) {
+      void this.throughput.onNumberEvent(
+        route.orgId,
+        route.configId,
+        typeof v.event === 'string' ? v.event : null,
+      );
+    }
   }
 }
 
