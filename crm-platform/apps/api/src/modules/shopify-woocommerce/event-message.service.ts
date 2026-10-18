@@ -1,5 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DatabaseService } from '../../infra/db/database.service';
+import { CommerceConsentService } from './commerce-consent.service';
 import {
   COMMERCE_SENDER,
   ECOM_TEMPLATES,
@@ -33,6 +34,11 @@ const digits = (v: string | null): string => (v ?? '').replace(/\D/g, '');
 /**
  * Sends the WhatsApp message an automation maps to (TW-ECOM-010): fills the template from the order, picks the recipients (the
  * customer, the admin number, or both) and sends one by one. A failure is returned for the log, never thrown past the pipeline.
+ *
+ * Consent (BL-141 follow-up): the CUSTOMER of a MARKETING template (an abandoned-cart reminder, a reward, a back-in-stock alert set up
+ * as marketing) is cleared by the ConsentGate first; one the gate refuses is not messaged and the outcome says `skipped` with the
+ * closed-set reason in `Not messaged: consent (<reason>)`. A utility template (order confirmation, shipping and payment status) is never
+ * asked about, and the merchant's admin number is not a customer.
  */
 @Injectable()
 export class EventMessageService {
@@ -44,6 +50,7 @@ export class EventMessageService {
     private readonly events: EventsRepository,
     @Inject(ECOM_TEMPLATES) private readonly templates: EcomTemplates,
     @Inject(COMMERCE_SENDER) private readonly sender: CommerceSender,
+    private readonly consent: CommerceConsentService,
   ) {}
 
   /** The automation of this event, or undefined when it is off or has no template (nothing to send, not an error). */
@@ -96,10 +103,8 @@ export class EventMessageService {
     );
     const sendTo = opts.customerOnly ? 'customer' : cfg.sendTo;
     const customer = digits(kind === 'shopify' ? shopifyRecipient(data) : wooRecipient(data));
-    const to = [
-      ...(sendTo !== 'admin' && customer ? [customer] : []),
-      ...(sendTo !== 'customer' && digits(cfg.adminNumber) ? [digits(cfg.adminNumber)] : []),
-    ];
+    const admin = sendTo !== 'customer' ? digits(cfg.adminNumber) : '';
+    const to = [...(sendTo !== 'admin' && customer ? [customer] : []), ...(admin ? [admin] : [])];
     if (to.length === 0)
       return {
         status: 'skipped',
@@ -112,8 +117,21 @@ export class EventMessageService {
     const senderKey = kind === 'woocommerce' && typeof chosen === 'string' ? chosen : null;
     const sent: string[] = [];
     const errors: string[] = [];
+    const notes: string[] = [];
+    const refused: string[] = [];
     const response: unknown[] = [];
     for (const dest of [...new Set(to)]) {
+      // The customer is asked (a marketing template); the merchant's own number, when it is not also the customer's, is not.
+      const verdict =
+        dest === admin && dest !== customer
+          ? { ok: true as const, clearance: this.consent.staff() }
+          : await this.consent.clearCustomer(orgId, template.category, dest);
+      if (!verdict.ok) {
+        refused.push(dest);
+        notes.push(verdict.note);
+        response.push({ to: dest, skipped: verdict.reason });
+        continue;
+      }
       try {
         const out = await this.sender.send(orgId, {
           to: dest,
@@ -121,6 +139,7 @@ export class EventMessageService {
           ctx,
           reference,
           senderKey,
+          consent: verdict.clearance,
         });
         sent.push(dest);
         response.push({ to: dest, id: out.providerMessageId });
@@ -134,9 +153,10 @@ export class EventMessageService {
       }
     }
     return {
-      status: errors.length > 0 ? 'failed' : 'sent',
-      recipient: sent.join(',') || null,
-      error: errors.join('; ') || null,
+      status:
+        errors.length > 0 ? 'failed' : sent.length === 0 && refused.length > 0 ? 'skipped' : 'sent',
+      recipient: sent.join(',') || (errors.length === 0 ? refused.join(',') : '') || null,
+      error: [...errors, ...notes].join('; ') || null,
       response,
     };
   }
