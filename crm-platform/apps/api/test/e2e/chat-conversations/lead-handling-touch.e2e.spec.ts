@@ -46,7 +46,9 @@ async function uncontactedThread(t: Tenant, ch: SimChannel) {
   await until('inbound stored', async () => (await messagesOf(p, conv.id as number)).length >= 1);
   const contactId = Number(
     (await until('contact linked', async () => {
-      const r = await p.h.owner.query(`SELECT contact_id FROM conversations WHERE id = $1`, [conv.id]);
+      const r = await p.h.owner.query(`SELECT contact_id FROM conversations WHERE id = $1`, [
+        conv.id,
+      ]);
       return r.rows[0]?.contact_id ?? undefined;
     })) as number,
   );
@@ -99,7 +101,9 @@ describe('an inbox message the provider accepted', () => {
     // Queued is not sent: nothing has reached the contact yet.
     expect(await since(th.contactId)).not.toBeNull();
     await waitSent(message.id);
-    await until('marker cleared', async () => ((await since(th.contactId)) === null ? true : undefined));
+    await until('marker cleared', async () =>
+      (await since(th.contactId)) === null ? true : undefined,
+    );
     const events = await p.api.events(t.orgId, 'contact.uncontacted_changed');
     expect(events.at(-1)).toMatchObject({ uncontacted: false, cause: 'message' });
   }, 120_000);
