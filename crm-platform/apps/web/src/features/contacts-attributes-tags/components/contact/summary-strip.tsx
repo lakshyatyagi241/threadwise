@@ -9,6 +9,7 @@ import { useContactDeals } from '../../api/deals';
 import { useContactMeetings } from '../../api/meetings';
 import type { ContactRow } from '../../api/schemas';
 import { isNotAvailableToYou } from '../../lib/contact-data';
+import { isClosedBooking } from '../../lib/meeting-booking';
 import type { SectionId } from '../../lib/sections';
 
 function Tile({
@@ -86,7 +87,7 @@ export function SummaryStrip({
   const nextMeeting = useMemo(() => {
     const at = now.getTime();
     return meetings.items
-      .filter((m) => m.startsAt && Date.parse(m.startsAt) > at)
+      .filter((m) => m.startsAt && Date.parse(m.startsAt) > at && !isClosedBooking(m))
       .sort((a, b) => Date.parse(a.startsAt!) - Date.parse(b.startsAt!))[0];
   }, [meetings.items, now]);
   const dueTasks = tasks.items.filter((x) => x.dueAt);

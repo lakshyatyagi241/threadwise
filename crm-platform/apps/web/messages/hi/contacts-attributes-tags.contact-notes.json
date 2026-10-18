@@ -94,7 +94,13 @@
             "endInvalid": "समाप्ति की मान्य तारीख और समय लिखें।",
             "endBeforeStart": "समाप्ति का समय शुरू होने से पहले नहीं हो सकता।"
           }
-        }
+        },
+        "bookedOnline": "ऑनलाइन बुक किया गया",
+        "viewBooking": "बुकिंग देखें",
+        "manageBooking": "बुकिंग प्रबंधित करें",
+        "viewBookingAria": "{title} की बुकिंग देखें",
+        "manageBookingAria": "{title} की बुकिंग प्रबंधित करें",
+        "bookedReadOnly": "ऑनलाइन बुक किया गया। इसे केवल बुकिंग में ही बदला जा सकता है।"
       },
       "files": {
         "title": "फ़ाइलें",

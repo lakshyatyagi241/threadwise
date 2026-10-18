@@ -94,7 +94,13 @@
             "endInvalid": "Geben Sie ein gültiges Enddatum mit Uhrzeit ein.",
             "endBeforeStart": "Das Ende darf nicht vor dem Beginn liegen."
           }
-        }
+        },
+        "bookedOnline": "Online gebucht",
+        "viewBooking": "Buchung ansehen",
+        "manageBooking": "Buchung verwalten",
+        "viewBookingAria": "Buchung für {title} ansehen",
+        "manageBookingAria": "Buchung für {title} verwalten",
+        "bookedReadOnly": "Online gebucht. Änderungen sind nur in der Buchung selbst möglich."
       },
       "files": {
         "title": "Dateien",

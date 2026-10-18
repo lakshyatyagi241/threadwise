@@ -18,6 +18,7 @@ import { AppointmentsRepository } from './appointments.repository';
 import { AppointmentsService } from './appointments.service';
 import { AppointmentCalendarSyncService } from './appointment-calendar-sync.service';
 import { AppointmentCalendarWriter } from './appointment-calendar-writer.service';
+import { AppointmentMeetingMirror } from './appointment-meeting-mirror.service';
 import { AppointmentsSupport } from './appointments.support';
 import { AppointmentBookingGuard, AppointmentPlan } from './booking-plan';
 import { BookingOffersService } from './booking-offers.service';
@@ -39,6 +40,7 @@ import { ContactLinkService } from './contact-link.service';
 import { IcsBusySource } from './ics-busy.source';
 import { IcsFeedsRepository } from './ics-feeds.repository';
 import { IcsFeedsService } from './ics-feeds.service';
+import { MeetingMirrorBackfillService } from './meeting-mirror-backfill.jobs';
 import { GoogleConsentRepository } from './google-consent.repository';
 import { GoogleConsentService } from './google-consent.service';
 import { GoogleCalendarAdapter } from './google-calendar.adapter';
@@ -111,6 +113,8 @@ import { SlotsService } from './slots.service';
     AppointmentsSupport,
     AppointmentCalendarWriter,
     AppointmentCalendarSyncService,
+    AppointmentMeetingMirror,
+    MeetingMirrorBackfillService,
     SlotsService,
     BookingService,
     BookingTypesService,
@@ -155,6 +159,7 @@ import { SlotsService } from './slots.service';
     AppointmentsRepository,
     AppointmentsSupport,
     AppointmentCalendarWriter,
+    AppointmentMeetingMirror,
     SlotsService,
     APPOINTMENT_CALENDAR,
     APPOINTMENT_MESSENGER,
@@ -167,6 +172,8 @@ import { SlotsService } from './slots.service';
     CalendarBackfillQueue,
     // The worker's back-fill job runs it.
     CalendarBackfillService,
+    // The worker's back-fill of the Meetings rows of existing bookings runs it.
+    MeetingMirrorBackfillService,
     // The worker's iCal feed read runs them.
     IcsFeedsService,
     IcsFeedsRepository,

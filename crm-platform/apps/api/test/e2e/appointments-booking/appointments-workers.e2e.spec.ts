@@ -1,4 +1,5 @@
 import { AppointmentCalendarWriter } from '../../../src/modules/appointments-booking/appointment-calendar-writer.service';
+import { AppointmentMeetingMirror } from '../../../src/modules/appointments-booking/appointment-meeting-mirror.service';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import type {
@@ -703,7 +704,13 @@ describe('the calendar hook (TW-APPT-012, 029, D-08, EXT-APPT-08)', () => {
     t = await api.signup('wcc');
     cal = new FakeCalendar();
     consumer = new AppointmentCalendarConsumer(
-      new AppointmentCalendarWriter(db, apptsRepo, typesRepo, cal),
+      new AppointmentCalendarWriter(
+        db,
+        apptsRepo,
+        typesRepo,
+        cal,
+        h.app.get(AppointmentMeetingMirror),
+      ),
       new OutboxSubscriberRegistry(),
       cal,
     );

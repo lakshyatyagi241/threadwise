@@ -112,7 +112,8 @@ export const contactsNotesFiles = defineHolder({
       parent: 'contacts',
       tier: 'core',
       categories: ['content'],
-      pii: ['title', 'location'],
+      // join_url is the link that opens the call, copied from the booking's calendar event: whoever holds it can join.
+      pii: ['title', 'location', 'join_url'],
       retention: 'With the contact.',
     },
   ],

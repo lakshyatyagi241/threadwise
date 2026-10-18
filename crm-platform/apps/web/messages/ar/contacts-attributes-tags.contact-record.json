@@ -196,7 +196,9 @@
           },
           "meeting": {
             "upcoming": "اجتماع: {title}",
-            "past": "تم اللقاء: {title}"
+            "past": "تم اللقاء: {title}",
+            "notHeld": "لم يُعقد: {title}",
+            "noShow": "لم يحضر: {title}"
           },
           "call": {
             "inbound": "مكالمة واردة",

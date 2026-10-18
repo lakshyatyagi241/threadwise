@@ -94,7 +94,13 @@
             "endInvalid": "ختم ہونے کی درست تاریخ اور وقت درج کریں۔",
             "endBeforeStart": "ختم ہونے کا وقت شروع ہونے سے پہلے نہیں ہو سکتا۔"
           }
-        }
+        },
+        "bookedOnline": "آن لائن بک کیا گیا",
+        "viewBooking": "بکنگ دیکھیں",
+        "manageBooking": "بکنگ کا انتظام کریں",
+        "viewBookingAria": "{title} کی بکنگ دیکھیں",
+        "manageBookingAria": "{title} کی بکنگ کا انتظام کریں",
+        "bookedReadOnly": "آن لائن بک کیا گیا۔ اسے صرف بکنگ میں ہی تبدیل کیا جا سکتا ہے۔"
       },
       "files": {
         "title": "فائلیں",

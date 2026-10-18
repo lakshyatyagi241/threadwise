@@ -403,6 +403,8 @@ import { TagsService } from './tags/tags.service';
     ContactFilesService,
     ContactActivitiesService,
     ContactMeetingsService,
+    // The appointments module mirrors every booking into the contact's Meetings (AppointmentMeetingMirror), in the booking's transaction.
+    ContactMeetingsRepository,
     CompaniesService,
     CompaniesRepository,
     DealsService,

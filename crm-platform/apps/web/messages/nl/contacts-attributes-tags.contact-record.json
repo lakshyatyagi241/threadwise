@@ -196,7 +196,9 @@
           },
           "meeting": {
             "upcoming": "Vergadering: {title}",
-            "past": "Gesproken: {title}"
+            "past": "Gesproken: {title}",
+            "notHeld": "Niet doorgegaan: {title}",
+            "noShow": "Niet verschenen: {title}"
           },
           "call": {
             "inbound": "Inkomend gesprek",

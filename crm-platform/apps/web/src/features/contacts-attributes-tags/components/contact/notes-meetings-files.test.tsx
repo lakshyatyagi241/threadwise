@@ -14,7 +14,7 @@ import type {
 } from '@crm/contracts';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
 import { FILE_KEYS } from '../../api/files';
-import { MEETING_KEYS } from '../../api/meetings';
+import { MEETING_KEYS, MEETING_QUERY } from '../../api/meetings';
 import { NOTE_KEYS } from '../../api/notes';
 import type { ContactRow } from '../../api/schemas';
 import { FilesSection } from './files-section';
@@ -36,8 +36,8 @@ function merge(base: Tree, over: Tree): Tree {
   return out;
 }
 const MESSAGES = merge(
-  read('contacts-attributes-tags.json'),
-  read('contacts-attributes-tags.contact-notes.json'),
+  merge(read('contacts-attributes-tags.json'), read('contacts-attributes-tags.contact-notes.json')),
+  read('appointments.json'),
 );
 
 const ME = '11111111-1111-4111-8111-111111111111';
@@ -55,11 +55,20 @@ const contact = { id: CONTACT_ID, name: 'Aarav Sharma', rowVersion: 4 } as unkno
 
 const PAGE = { nextCursor: null, hasMore: false, limit: 50 };
 /** What `useCursorList` reads from the cache for an unfiltered list. */
-const seedList = (qc: QueryClient, key: readonly unknown[], data: unknown[], hasMore = false) =>
-  qc.setQueryData([...key, {}], {
+const seedList = (
+  qc: QueryClient,
+  key: readonly unknown[],
+  data: unknown[],
+  hasMore = false,
+  query: object = {},
+) =>
+  qc.setQueryData([...key, query], {
     pages: [{ data, page: { ...PAGE, hasMore, nextCursor: hasMore ? 'next' : null } }],
     pageParams: [undefined],
   });
+/** The meetings list is asked for with `when=all` (latest start first). */
+const seedMeetings = (qc: QueryClient, data: unknown[]) =>
+  seedList(qc, MEETING_KEYS.list(CONTACT_ID), data, false, MEETING_QUERY);
 
 function render(
   el: ReactElement,
@@ -204,7 +213,7 @@ describe('Meetings panel (inline, no dialog)', () => {
   it('lists meetings with the time range and the location, and Schedule meeting for people who can update', () => {
     const out = render(<MeetingsPanel contact={contact} />, {
       permissions: [UPDATE],
-      seed: (qc) => seedList(qc, MEETING_KEYS.list(CONTACT_ID), [meeting()]),
+      seed: (qc) => seedMeetings(qc, [meeting()]),
     });
     expect(out).toContain('Meetings');
     expect(out).toContain('Product demo');
@@ -222,24 +231,108 @@ describe('Meetings panel (inline, no dialog)', () => {
 
   it('a meeting link is a real link that opens in a new tab; a place stays plain text', () => {
     const out = render(<MeetingsPanel contact={contact} />, {
-      seed: (qc) =>
-        seedList(qc, MEETING_KEYS.list(CONTACT_ID), [
-          meeting({ location: 'https://meet.example.com/abc' }),
-        ]),
+      seed: (qc) => seedMeetings(qc, [meeting({ location: 'https://meet.example.com/abc' })]),
     });
     expect(out).toContain('href="https://meet.example.com/abc"');
     expect(out).toContain('target="_blank"');
     expect(out).toContain('rel="noopener noreferrer"');
     const place = render(<MeetingsPanel contact={contact} />, {
-      seed: (qc) => seedList(qc, MEETING_KEYS.list(CONTACT_ID), [meeting()]),
+      seed: (qc) => seedMeetings(qc, [meeting()]),
     });
     expect(place).not.toContain('href="Room 4"');
+  });
+
+  describe('a meeting that mirrors a booking', () => {
+    const APPT = '8e3a3c91-0000-4000-8000-000000000001';
+    const booked = (over: Partial<ContactMeetingResponse> = {}) =>
+      meeting({
+        title: 'Intro call - Priya',
+        location: null,
+        source: 'booking',
+        appointmentId: APPT,
+        status: 'confirmed',
+        joinUrl: 'https://meet.example.com/abc',
+        canManageBooking: false,
+        ...over,
+      });
+
+    it('is tagged Booked online with its status and shows the join link, and has no edit or delete even for a contact editor', () => {
+      const out = render(<MeetingsPanel contact={contact} />, {
+        permissions: [UPDATE],
+        seed: (qc) => seedMeetings(qc, [booked()]),
+      });
+      expect(out).toContain('Booked online');
+      expect(out).toContain('Confirmed');
+      expect(out).toContain('href="https://meet.example.com/abc"');
+      expect(out).not.toContain('>Edit<');
+      expect(out).not.toContain('>Delete<');
+      expect(out).not.toContain('Edit the meeting Intro call');
+      expect(out).not.toContain('Delete the meeting Intro call');
+      // A typed-in meeting beside it keeps both.
+      const mixed = render(<MeetingsPanel contact={contact} />, {
+        permissions: [UPDATE],
+        seed: (qc) => seedMeetings(qc, [booked(), meeting()]),
+      });
+      expect(mixed).toContain('aria-label="Edit the meeting Product demo"');
+      expect(mixed).not.toContain('Edit the meeting Intro call');
+      expect(mixed.match(/>Booked online</g)).toHaveLength(1);
+    });
+
+    it('links to the appointment only for someone who may read appointments, and says "Manage" only when they may change it', () => {
+      const view = render(<MeetingsPanel contact={contact} />, {
+        permissions: ['record.contacts.read', 'record.appointments.read'],
+        seed: (qc) => seedMeetings(qc, [booked()]),
+      });
+      expect(view).toContain(`href="/appointments?appt=${APPT}"`);
+      expect(view).toContain('View booking');
+      expect(view).not.toContain('Manage booking');
+      const manage = render(<MeetingsPanel contact={contact} />, {
+        permissions: [
+          'record.contacts.read',
+          'record.appointments.read',
+          'record.appointments.update',
+        ],
+        seed: (qc) => seedMeetings(qc, [booked({ canManageBooking: true })]),
+      });
+      expect(manage).toContain('Manage booking');
+      expect(manage).toContain('aria-label="Manage the booking for Intro call - Priya"');
+    });
+
+    it('without appointments permission the row is shown, read-only, with no link to the appointment screen', () => {
+      const out = render(<MeetingsPanel contact={contact} />, {
+        permissions: ['record.contacts.read'],
+        seed: (qc) => seedMeetings(qc, [booked()]),
+      });
+      expect(out).toContain('Intro call - Priya');
+      expect(out).toContain('Booked online');
+      expect(out).not.toContain('/appointments?appt=');
+      expect(out).toContain('It can only be changed on the booking.');
+    });
+
+    it('a cancelled booking stays in the list under Past, tagged Cancelled, never under Upcoming', () => {
+      const future = new Date(Date.now() + 5 * 86_400_000).toISOString();
+      const out = render(<MeetingsPanel contact={contact} />, {
+        seed: (qc) =>
+          seedMeetings(qc, [booked({ status: 'cancelled', startsAt: future, endsAt: null })]),
+      });
+      expect(out).toContain('Cancelled');
+      expect(out).toContain('Past');
+      expect(out).not.toContain('Upcoming');
+    });
+
+    it('a booking whose appointment was deleted is an ordinary row again: it can be edited', () => {
+      const out = render(<MeetingsPanel contact={contact} />, {
+        permissions: [UPDATE],
+        seed: (qc) => seedMeetings(qc, [booked({ appointmentId: null, status: null })]),
+      });
+      expect(out).toContain('Edit the meeting Intro call');
+    });
   });
 
   it('is read-only without the update permission', () => {
     const out = render(<MeetingsPanel contact={contact} />, {
       permissions: ['record.contacts.read'],
-      seed: (qc) => seedList(qc, MEETING_KEYS.list(CONTACT_ID), [meeting()]),
+      seed: (qc) => seedMeetings(qc, [meeting()]),
     });
     expect(out).toContain('Product demo');
     expect(out).not.toContain('Schedule meeting');
@@ -251,17 +344,14 @@ describe('Meetings panel (inline, no dialog)', () => {
   it('shows the empty state', () => {
     const out = render(<MeetingsPanel contact={contact} />, {
       permissions: [UPDATE],
-      seed: (qc) => seedList(qc, MEETING_KEYS.list(CONTACT_ID), []),
+      seed: (qc) => seedMeetings(qc, []),
     });
     expect(out).toContain('No meetings yet. Use Schedule meeting to add one.');
   });
 
   it('a meeting without times says so, under its own heading', () => {
     const out = render(<MeetingsPanel contact={contact} />, {
-      seed: (qc) =>
-        seedList(qc, MEETING_KEYS.list(CONTACT_ID), [
-          meeting({ startsAt: null, endsAt: null, location: null }),
-        ]),
+      seed: (qc) => seedMeetings(qc, [meeting({ startsAt: null, endsAt: null, location: null })]),
     });
     expect(out).toContain('No time set');
     expect(out).toContain('No date');
@@ -274,7 +364,7 @@ describe('Meetings panel (inline, no dialog)', () => {
     const ago = new Date(Date.now() - 3 * 86_400_000).toISOString();
     const out = render(<MeetingsPanel contact={contact} />, {
       seed: (qc) =>
-        seedList(qc, MEETING_KEYS.list(CONTACT_ID), [
+        seedMeetings(qc, [
           meeting({
             id: 'a0000000-0000-4000-8000-000000000001',
             title: 'Later one',

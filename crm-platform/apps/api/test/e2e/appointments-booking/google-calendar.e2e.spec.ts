@@ -569,6 +569,17 @@ describe('writing events (TW-APPT-029, D-08)', () => {
     });
     // The access token cached at connect time was good: the adapter never had to refresh.
     expect(fake.forms('refresh_token')).toHaveLength(0);
+
+    // The Meet link the calendar made is the join link of the booking's row in the contact's Meetings (BL-281), written in the same
+    // transaction as the link on the appointment.
+    const contactMeetings = await api.as(a.admin).get(`/v2/contacts/${appt.contact!.id}/meetings`);
+    expect(contactMeetings.status, JSON.stringify(contactMeetings.body)).toBe(200);
+    expect(contactMeetings.body.data).toHaveLength(1);
+    expect(contactMeetings.body.data[0]).toMatchObject({
+      source: 'booking',
+      appointmentId: appt.id,
+      joinUrl: `https://meet.fake/${appt.id}`,
+    });
   });
 
   it('a redelivered event updates the same Google event: never a second one', async () => {
