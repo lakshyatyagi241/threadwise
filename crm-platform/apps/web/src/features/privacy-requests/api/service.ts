@@ -27,15 +27,20 @@ const enc = encodeURIComponent;
 /** The list filters the screen sends (the page size and cursor are the hook's). */
 export type RequestFilters = Pick<ListPrivacyRequestsQuery, 'status' | 'requestType'> & {
   overdue?: boolean;
+  /** Cases waiting on a legal hold. */
+  restricted?: boolean;
 };
 
 export const privacyApi = {
   settings: (signal?: AbortSignal) =>
     apiFetch(`${BASE}/settings`, { schema: privacyRequestsSettingsSchema, signal }),
-  saveSettings: (slaDays: number) =>
+  saveSettings: (slaDays: number, legalHoldRequesterNotice?: string | null) =>
     apiFetch(`${BASE}/settings`, {
       method: 'PATCH',
-      body: { slaDays },
+      body: {
+        slaDays,
+        ...(legalHoldRequesterNotice !== undefined ? { legalHoldRequesterNotice } : {}),
+      },
       schema: privacyRequestsSettingsSchema,
     }),
   searchSubjects: (q: string, signal?: AbortSignal) =>
@@ -50,6 +55,7 @@ export const privacyApi = {
         status: filters.status,
         requestType: filters.requestType,
         overdue: filters.overdue ? true : undefined,
+        restricted: filters.restricted ? true : undefined,
         limit: 25,
         cursor,
       },

@@ -36,7 +36,8 @@
       "stageFlag": "Menang dan kalah hanya dapat diatur pada tahap kontak, dan satu tahap tidak boleh keduanya.",
       "statusStage": "Status itu milik tahap yang berbeda. Pilih status yang sesuai dengan tahap kontak.",
       "stageScope": "Status hanya dapat dibatasi ke salah satu tahap siklus hidup Anda.",
-      "planLimit": "Anda telah mencapai batas paket sebanyak {limit, plural, other {# kontak}}. Upgrade paket untuk menambah, atau hapus kontak yang ada untuk mengosongkan ruang."
+      "planLimit": "Anda telah mencapai batas paket sebanyak {limit, plural, other {# kontak}}. Upgrade paket untuk menambah, atau hapus kontak yang ada untuk mengosongkan ruang.",
+      "legalHold": "Catatan ini dilindungi dan saat ini tidak dapat dihapus."
     },
     "list": {
       "title": "Contact Hub",
@@ -338,7 +339,8 @@
       "sendCampaign": "Kirim kampanye",
       "assignOwner": "Tetapkan pemilik",
       "changeStage": "Ubah tahap",
-      "more": "Lainnya"
+      "more": "Lainnya",
+      "held": "Catatan ini dilindungi dan saat ini tidak dapat dihapus."
     },
     "form": {
       "addEyebrow": "Kontak baru",
@@ -609,7 +611,8 @@
         "tag_limit_reached": "batas tag paket tercapai",
         "invalid_date_of_birth": "tanggal lahir bukan tanggal berformat tahun lebih dulu yang bisa menjadi tanggal lahir",
         "duplicate_in_file": "nomor berulang, digabung ke baris sebelumnya",
-        "invalid_timezone": "zona waktu tidak valid"
+        "invalid_timezone": "zona waktu tidak valid",
+        "legal_hold": "catatan dilindungi, tidak diubah"
       },
       "statusHint": "Diterapkan ke kontak yang dibuat file ini.",
       "queued": "Menunggu untuk dimulai...",

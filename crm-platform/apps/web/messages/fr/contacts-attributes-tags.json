@@ -36,7 +36,8 @@
       "stageFlag": "Gagné et perdu ne peuvent être définis que sur une étape de contact, et une étape ne peut pas être les deux.",
       "statusStage": "Ce statut appartient à une autre étape. Choisissez un statut adapté à l’étape du contact.",
       "stageScope": "Un statut ne peut être limité qu’à l’une de vos étapes du cycle de vie.",
-      "planLimit": "Vous avez atteint la limite de {limit, plural, one {# contact} other {# contacts}} de votre forfait. Passez à un forfait supérieur pour en ajouter, ou supprimez un contact existant pour libérer de la place."
+      "planLimit": "Vous avez atteint la limite de {limit, plural, one {# contact} other {# contacts}} de votre forfait. Passez à un forfait supérieur pour en ajouter, ou supprimez un contact existant pour libérer de la place.",
+      "legalHold": "Cet enregistrement est protégé et ne peut pas être supprimé pour le moment."
     },
     "list": {
       "title": "Hub des contacts",
@@ -338,7 +339,8 @@
       "sendCampaign": "Envoyer une campagne",
       "assignOwner": "Attribuer un propriétaire",
       "changeStage": "Changer d'étape",
-      "more": "Plus"
+      "more": "Plus",
+      "held": "Cet enregistrement est protégé et ne peut pas être supprimé pour le moment."
     },
     "form": {
       "addEyebrow": "Nouveau contact",
@@ -609,7 +611,8 @@
         "tag_limit_reached": "limite d’étiquettes du forfait atteinte",
         "invalid_date_of_birth": "la date de naissance n'est pas une date avec l'année en premier pouvant être une date de naissance",
         "duplicate_in_file": "numéro répété, fusionné avec une ligne précédente",
-        "invalid_timezone": "fuseau horaire non valide"
+        "invalid_timezone": "fuseau horaire non valide",
+        "legal_hold": "enregistrement protégé, non modifié"
       },
       "statusHint": "Appliqué aux contacts créés par ce fichier.",
       "queued": "En attente de démarrage...",

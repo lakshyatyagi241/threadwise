@@ -36,7 +36,8 @@
       "stageFlag": "Kazanıldı ve kaybedildi yalnızca bir kişi aşamasında ayarlanabilir ve bir aşama ikisi birden olamaz.",
       "statusStage": "Bu durum farklı bir aşamaya ait. Kişinin aşamasına uygun bir durum seçin.",
       "stageScope": "Bir durum yalnızca yaşam döngüsü aşamalarınızdan biriyle sınırlandırılabilir.",
-      "planLimit": "Planınızın {limit, plural, one {# kişi} other {# kişi}} sınırına ulaştınız. Daha fazla eklemek için planınızı yükseltin veya yer açmak için mevcut bir kişiyi silin."
+      "planLimit": "Planınızın {limit, plural, one {# kişi} other {# kişi}} sınırına ulaştınız. Daha fazla eklemek için planınızı yükseltin veya yer açmak için mevcut bir kişiyi silin.",
+      "legalHold": "Bu kayıt korunmaktadır ve şu anda silinemez."
     },
     "list": {
       "title": "Kişi Merkezi",
@@ -338,7 +339,8 @@
       "sendCampaign": "Kampanya gönder",
       "assignOwner": "Sahip ata",
       "changeStage": "Aşamayı değiştir",
-      "more": "Diğer"
+      "more": "Diğer",
+      "held": "Bu kayıt korunmaktadır ve şu anda silinemez."
     },
     "form": {
       "addEyebrow": "Yeni kişi",
@@ -609,7 +611,8 @@
         "tag_limit_reached": "plan etiket sınırına ulaşıldı",
         "invalid_date_of_birth": "doğum tarihi, doğum tarihi olabilecek yıl önce yazılmış bir tarih değil",
         "duplicate_in_file": "tekrarlanan numara, önceki satırla birleştirildi",
-        "invalid_timezone": "geçersiz saat dilimi"
+        "invalid_timezone": "geçersiz saat dilimi",
+        "legal_hold": "korumalı kayıt, değiştirilmedi"
       },
       "statusHint": "Bu dosyanın oluşturduğu kişilere uygulanır.",
       "queued": "Başlatılması bekleniyor...",

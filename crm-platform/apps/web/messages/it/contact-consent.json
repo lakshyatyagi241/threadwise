@@ -357,7 +357,8 @@
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "Non consentito: questo contatto è contrassegnato come minorenne e il tuo spazio di lavoro trattiene il marketing.",
         "sale_share_opted_out": "Non consentito: il contatto si è opposto alla vendita o alla condivisione dei suoi dati.",
-        "on_dnc_list": "Nel tuo elenco \"Non chiamare\": nessuna chiamata né SMS di marketing a questo numero"
+        "on_dnc_list": "Nel tuo elenco \"Non chiamare\": nessuna chiamata né SMS di marketing a questo numero",
+        "legal_hold": "Non consentito: il trattamento di questo contatto è limitato."
       }
     },
     "notice": {

@@ -23,7 +23,11 @@
       "exportNotReady": "That file is not ready or has expired. Prepare a new export.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "validation": "Some of the values are not valid. Check the form and try again.",
-      "unexpected": "Something went wrong. Try again."
+      "unexpected": "Something went wrong. Try again.",
+      "holdActive": "This record is protected and cannot be deleted at the moment.",
+      "holdExists": "This person already has an active legal hold. Extend it to add another matter.",
+      "holdNotFound": "This legal hold no longer exists.",
+      "holdNotActive": "This legal hold has already ended."
     },
     "type": {
       "access": "Access",
@@ -182,6 +186,11 @@
           "erase_previewed": "Erasure previewed",
           "erased": "Data erased",
           "completed": "Request completed",
+          "restricted": "Restricted: legal hold",
+          "erasure_queued": "Erasure confirmed, waiting for the hold to end",
+          "restriction_lifted": "Restriction lifted",
+          "resume_skipped": "Automatic erasure skipped",
+          "resume_failed": "Automatic erasure failed, run it by hand",
           "other": "Update"
         }
       },
@@ -284,6 +293,168 @@
       "erase": "Erase this person",
       "created": "Request {reference} created.",
       "failed": "Could not create the request."
+    },
+    "legalHold": {
+      "close": "Close",
+      "tab": {
+        "label": "Privacy",
+        "requests": "Data requests",
+        "holds": "Legal holds"
+      },
+      "requesterResponse": "We have received your request. We are required to keep some of your data to meet a legal obligation, so we cannot erase it now. We have restricted how it is used and will erase it when the obligation ends. You can lodge a complaint with your data protection authority.",
+      "contactBanner": "Legal hold: erasure and deletion paused",
+      "workspaceBanner": "Legal hold on the whole workspace: erasure and deletion paused",
+      "caseStatus": "Restricted: legal hold",
+      "blockedMessage": "This record is protected and cannot be deleted at the moment.",
+      "listFilter": "Waiting on a legal hold",
+      "banner": {
+        "caseRef": "Case {caseRef}",
+        "reviewBy": "review by {date}",
+        "reviewOverdue": "review overdue since {date}",
+        "effects": "Marketing, AI processing and exports are restricted, and every access is logged.",
+        "open": "Open the register"
+      },
+      "category": {
+        "legal_obligation": "Legal obligation",
+        "legal_claim": "Legal claim or dispute",
+        "regulator_request": "Regulator or law-enforcement request",
+        "internal_investigation": "Internal investigation"
+      },
+      "scope": {
+        "contact": "Contact",
+        "lead": "Lead",
+        "workspace": "Whole workspace"
+      },
+      "status": {
+        "active": "Active",
+        "released": "Released",
+        "expired": "Expired"
+      },
+      "menu": {
+        "place": "Place legal hold...",
+        "release": "Release legal hold..."
+      },
+      "place": {
+        "title": "Place a legal hold on this contact",
+        "workspaceTitle": "Place a legal hold on the whole workspace",
+        "intro": "Erasure, deletion and retention clearing of this person are refused while the hold lasts, and marketing, AI processing and exports of their data are restricted. Customer service goes on as usual.",
+        "workspaceIntro": "Every person in the workspace is held: erasure, deletion, retention clearing and the removal of a lapsed workspace are refused, and marketing, AI processing and exports are restricted. Use it for an order that covers all records.",
+        "category": "Why is the data kept?",
+        "categoryPick": "Choose a reason",
+        "caseRef": "Case reference",
+        "caseRefHint": "Your own reference: a court file, a ticket, the number on a regulator letter.",
+        "note": "Note (optional)",
+        "noteHint": "Do not write names, phone numbers or details of the matter here.",
+        "reviewAt": "Review by (optional)",
+        "reviewHint": "The register flags the hold when this date passes.",
+        "expiresAt": "Ends on (optional)",
+        "expiresHint": "After this date the hold ends by itself.",
+        "submit": "Place hold",
+        "submitting": "Placing...",
+        "done": "Legal hold placed.",
+        "target": "Applies to",
+        "targetPerson": "One person",
+        "targetWorkspace": "The whole workspace",
+        "change": "Change",
+        "search": "Find the person",
+        "searchHint": "Type a name, phone number or email address (at least two characters).",
+        "noResults": "No one found."
+      },
+      "release": {
+        "title": "Release this legal hold",
+        "message": "Deletion, retention clearing and marketing can then resume for this subject. Erasure requests waiting on this hold leave the restricted state, and an erasure someone already confirmed runs by itself within a minute.",
+        "cases": "{count, plural, one {# data request is waiting on this hold.} other {# data requests are waiting on this hold.}}",
+        "reason": "Why is it released? (optional)",
+        "reasonHint": "Do not write names or details of the matter.",
+        "submit": "Release hold",
+        "submitting": "Releasing...",
+        "done": "Legal hold released.",
+        "doneResuming": "{count, plural, one {Legal hold released. # confirmed erasure will run now.} other {Legal hold released. # confirmed erasures will run now.}}"
+      },
+      "extend": {
+        "title": "Extend this legal hold",
+        "caseRefNow": "Case reference now: {caseRef}",
+        "addCaseRef": "Add a further case reference",
+        "addCaseRefHint": "A second matter about the same person is added to the same hold.",
+        "clearHint": "Empty the date to remove it.",
+        "submit": "Save changes",
+        "submitting": "Saving...",
+        "done": "Legal hold updated."
+      },
+      "review": {
+        "title": "Record a review",
+        "message": "Records that you looked at this hold again, and that it still applies.",
+        "next": "Next review by (optional)",
+        "nextHint": "Leave empty to keep the current review date.",
+        "submit": "Record review",
+        "submitting": "Saving...",
+        "done": "Review recorded."
+      },
+      "actions": {
+        "review": "Review",
+        "extend": "Extend",
+        "release": "Release"
+      },
+      "register": {
+        "title": "Legal holds",
+        "subtitle": "People and records whose erasure and deletion are paused because the data must be kept. A hold on one person is placed from that contact's page.",
+        "export": "Export CSV",
+        "empty": "No legal holds.",
+        "emptyFiltered": "No legal holds match these filters.",
+        "loadMore": "Load more",
+        "loadingMore": "Loading...",
+        "none": "-",
+        "overdue": "Review overdue",
+        "cases": "{count, plural, one {# request waiting} other {# requests waiting}}",
+        "open": "Open the hold with case reference {caseRef}",
+        "filters": {
+          "label": "Filters",
+          "status": "Status",
+          "category": "Reason",
+          "scope": "Applies to",
+          "caseRef": "Case reference",
+          "reviewDue": "Review overdue",
+          "any": "Any"
+        },
+        "columns": {
+          "subject": "Subject",
+          "category": "Reason",
+          "caseRef": "Case reference",
+          "placed": "Placed",
+          "review": "Review by",
+          "expires": "Ends",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "place": "Place legal hold..."
+      },
+      "detail": {
+        "title": "Legal hold",
+        "history": "History",
+        "releasedAt": "Ended",
+        "by": "by {actor}",
+        "system": "the system",
+        "action": {
+          "insert": "Hold placed",
+          "update": "Hold changed",
+          "delete": "Hold ended",
+          "other": "Update"
+        }
+      },
+      "case": {
+        "body": "This person's data is kept and locked while a legal hold applies. The erasure is not executed, marketing, AI processing and exports are restricted, and the deadline keeps running.",
+        "requesterTitle": "Answer to the person",
+        "requesterHint": "States that the data is kept under a legal obligation. It does not say why. Counsel can replace this wording in the privacy settings.",
+        "copy": "Copy text",
+        "copied": "Copied",
+        "queueHint": "You can still confirm the erasure now: it is recorded, nothing is erased, and it runs by itself when the hold ends.",
+        "queue": "Confirm erasure for when the hold ends",
+        "queued": "Recorded. Nothing was erased; the erasure will run by itself when the hold ends."
+      },
+      "settings": {
+        "noticeLabel": "Answer to a person whose erasure is held back",
+        "noticeHint": "Your counsel's wording. Leave it empty to use the default text. Do not name the matter or the reason."
+      }
     }
   }
 }

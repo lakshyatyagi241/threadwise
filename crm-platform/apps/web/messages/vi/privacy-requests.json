@@ -23,7 +23,11 @@
       "exportNotReady": "Tệp đó chưa sẵn sàng hoặc đã hết hạn. Hãy chuẩn bị một bản xuất mới.",
       "rateLimited": "Quá nhiều yêu cầu. Hãy chờ một lát rồi thử lại.",
       "validation": "Một số giá trị không hợp lệ. Hãy kiểm tra biểu mẫu và thử lại.",
-      "unexpected": "Đã xảy ra lỗi. Hãy thử lại."
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại.",
+      "holdActive": "Bản ghi này được bảo vệ và hiện không thể xóa.",
+      "holdExists": "Người này đã có lệnh giữ pháp lý đang hiệu lực. Hãy gia hạn để thêm vụ việc khác.",
+      "holdNotFound": "Lệnh giữ pháp lý này không còn tồn tại.",
+      "holdNotActive": "Lệnh giữ pháp lý này đã kết thúc."
     },
     "type": {
       "access": "Truy cập",
@@ -182,7 +186,12 @@
           "erase_previewed": "Đã xem trước việc xóa",
           "erased": "Đã xóa dữ liệu",
           "completed": "Yêu cầu đã hoàn thành",
-          "other": "Cập nhật"
+          "other": "Cập nhật",
+          "restricted": "Bị hạn chế: lệnh giữ pháp lý",
+          "erasure_queued": "Đã xác nhận xóa, chờ lệnh giữ kết thúc",
+          "restriction_lifted": "Đã gỡ hạn chế",
+          "resume_skipped": "Đã bỏ qua việc xóa tự động",
+          "resume_failed": "Xóa tự động thất bại, hãy chạy thủ công"
         }
       },
       "verify": {
@@ -284,6 +293,168 @@
       "erase": "Xóa người này",
       "created": "Đã tạo yêu cầu {reference}.",
       "failed": "Không thể tạo yêu cầu."
+    },
+    "legalHold": {
+      "close": "Đóng",
+      "tab": {
+        "label": "Quyền riêng tư",
+        "requests": "Yêu cầu về dữ liệu",
+        "holds": "Lệnh giữ pháp lý"
+      },
+      "requesterResponse": "Chúng tôi đã nhận được yêu cầu của bạn. Chúng tôi buộc phải giữ lại một số dữ liệu của bạn để đáp ứng nghĩa vụ pháp lý, nên hiện chưa thể xóa. Chúng tôi đã hạn chế việc sử dụng dữ liệu này và sẽ xóa khi nghĩa vụ chấm dứt. Bạn có thể khiếu nại với cơ quan bảo vệ dữ liệu của mình.",
+      "contactBanner": "Lệnh giữ pháp lý: tạm dừng xóa dữ liệu và xóa bản ghi",
+      "workspaceBanner": "Lệnh giữ pháp lý trên toàn bộ không gian làm việc: tạm dừng xóa dữ liệu và xóa bản ghi",
+      "caseStatus": "Bị hạn chế: lệnh giữ pháp lý",
+      "blockedMessage": "Bản ghi này được bảo vệ và hiện không thể xóa.",
+      "listFilter": "Đang chờ lệnh giữ pháp lý",
+      "banner": {
+        "caseRef": "Hồ sơ {caseRef}",
+        "reviewBy": "xem xét trước {date}",
+        "reviewOverdue": "quá hạn xem xét từ {date}",
+        "effects": "Tiếp thị, xử lý bằng AI và xuất dữ liệu bị hạn chế, và mọi lượt truy cập đều được ghi nhật ký.",
+        "open": "Mở sổ đăng ký"
+      },
+      "category": {
+        "legal_obligation": "Nghĩa vụ pháp lý",
+        "legal_claim": "Khiếu nại hoặc tranh chấp pháp lý",
+        "regulator_request": "Yêu cầu của cơ quan quản lý hoặc cơ quan thực thi pháp luật",
+        "internal_investigation": "Điều tra nội bộ"
+      },
+      "scope": {
+        "contact": "Liên hệ",
+        "lead": "Khách hàng tiềm năng",
+        "workspace": "Toàn bộ không gian làm việc"
+      },
+      "status": {
+        "active": "Đang hiệu lực",
+        "released": "Đã gỡ",
+        "expired": "Đã hết hạn"
+      },
+      "menu": {
+        "place": "Đặt lệnh giữ pháp lý...",
+        "release": "Gỡ lệnh giữ pháp lý..."
+      },
+      "place": {
+        "title": "Đặt lệnh giữ pháp lý cho liên hệ này",
+        "workspaceTitle": "Đặt lệnh giữ pháp lý cho toàn bộ không gian làm việc",
+        "intro": "Trong thời gian lệnh giữ còn hiệu lực, việc xóa dữ liệu, xóa bản ghi và dọn dẹp theo thời hạn lưu trữ đối với người này bị từ chối, còn việc tiếp thị, xử lý bằng AI và xuất dữ liệu của họ bị hạn chế. Dịch vụ khách hàng vẫn diễn ra bình thường.",
+        "workspaceIntro": "Mọi người trong không gian làm việc đều bị giữ: việc xóa dữ liệu, xóa bản ghi, dọn dẹp theo thời hạn lưu trữ và gỡ bỏ không gian làm việc đã hết hạn đều bị từ chối, còn tiếp thị, xử lý bằng AI và xuất dữ liệu bị hạn chế. Dùng khi có lệnh áp dụng cho tất cả bản ghi.",
+        "category": "Vì sao giữ dữ liệu?",
+        "categoryPick": "Chọn lý do",
+        "caseRef": "Mã tham chiếu hồ sơ",
+        "caseRefHint": "Mã tham chiếu của riêng bạn: số hồ sơ tòa án, số phiếu hỗ trợ, số trên thư của cơ quan quản lý.",
+        "note": "Ghi chú (không bắt buộc)",
+        "noteHint": "Không ghi tên, số điện thoại hay chi tiết vụ việc vào đây.",
+        "reviewAt": "Xem xét trước (không bắt buộc)",
+        "reviewHint": "Sổ đăng ký sẽ đánh dấu lệnh giữ khi quá ngày này.",
+        "expiresAt": "Kết thúc vào (không bắt buộc)",
+        "expiresHint": "Sau ngày này, lệnh giữ tự kết thúc.",
+        "submit": "Đặt lệnh giữ",
+        "submitting": "Đang đặt...",
+        "done": "Đã đặt lệnh giữ pháp lý.",
+        "target": "Áp dụng cho",
+        "targetPerson": "Một người",
+        "targetWorkspace": "Toàn bộ không gian làm việc",
+        "change": "Thay đổi",
+        "search": "Tìm người",
+        "searchHint": "Nhập tên, số điện thoại hoặc địa chỉ email (ít nhất hai ký tự).",
+        "noResults": "Không tìm thấy ai."
+      },
+      "release": {
+        "title": "Gỡ lệnh giữ pháp lý này",
+        "message": "Sau đó có thể tiếp tục xóa bản ghi, dọn dẹp theo thời hạn lưu trữ và tiếp thị đối với người này. Các yêu cầu xóa đang chờ lệnh giữ này sẽ thoát khỏi trạng thái hạn chế, và yêu cầu xóa đã được ai đó xác nhận sẽ tự chạy trong vòng một phút.",
+        "cases": "{count, plural, other {# yêu cầu về dữ liệu đang chờ lệnh giữ này.}}",
+        "reason": "Vì sao gỡ? (không bắt buộc)",
+        "reasonHint": "Không ghi tên hay chi tiết vụ việc.",
+        "submit": "Gỡ lệnh giữ",
+        "submitting": "Đang gỡ...",
+        "done": "Đã gỡ lệnh giữ pháp lý.",
+        "doneResuming": "{count, plural, other {Đã gỡ lệnh giữ pháp lý. # yêu cầu xóa đã xác nhận sẽ chạy ngay bây giờ.}}"
+      },
+      "extend": {
+        "title": "Gia hạn lệnh giữ pháp lý này",
+        "caseRefNow": "Mã tham chiếu hồ sơ hiện tại: {caseRef}",
+        "addCaseRef": "Thêm mã tham chiếu hồ sơ khác",
+        "addCaseRefHint": "Vụ việc thứ hai về cùng một người được thêm vào cùng lệnh giữ.",
+        "clearHint": "Xóa trống ngày để bỏ ngày đó.",
+        "submit": "Lưu thay đổi",
+        "submitting": "Đang lưu...",
+        "done": "Đã cập nhật lệnh giữ pháp lý."
+      },
+      "review": {
+        "title": "Ghi nhận một lần xem xét",
+        "message": "Ghi lại rằng bạn đã xem lại lệnh giữ này và nó vẫn còn áp dụng.",
+        "next": "Lần xem xét tiếp theo trước (không bắt buộc)",
+        "nextHint": "Để trống để giữ nguyên ngày xem xét hiện tại.",
+        "submit": "Ghi nhận xem xét",
+        "submitting": "Đang lưu...",
+        "done": "Đã ghi nhận lần xem xét."
+      },
+      "actions": {
+        "review": "Xem xét",
+        "extend": "Gia hạn",
+        "release": "Gỡ"
+      },
+      "register": {
+        "title": "Lệnh giữ pháp lý",
+        "subtitle": "Những người và bản ghi bị tạm dừng xóa dữ liệu vì dữ liệu phải được giữ lại. Lệnh giữ đối với một người được đặt từ trang của liên hệ đó.",
+        "export": "Xuất CSV",
+        "empty": "Chưa có lệnh giữ pháp lý nào.",
+        "emptyFiltered": "Không có lệnh giữ pháp lý nào khớp với các bộ lọc này.",
+        "loadMore": "Tải thêm",
+        "loadingMore": "Đang tải...",
+        "none": "-",
+        "overdue": "Quá hạn xem xét",
+        "cases": "{count, plural, other {# yêu cầu đang chờ}}",
+        "open": "Mở lệnh giữ có mã tham chiếu hồ sơ {caseRef}",
+        "filters": {
+          "label": "Bộ lọc",
+          "status": "Trạng thái",
+          "category": "Lý do",
+          "scope": "Áp dụng cho",
+          "caseRef": "Mã tham chiếu hồ sơ",
+          "reviewDue": "Quá hạn xem xét",
+          "any": "Bất kỳ"
+        },
+        "columns": {
+          "subject": "Chủ thể",
+          "category": "Lý do",
+          "caseRef": "Mã tham chiếu hồ sơ",
+          "placed": "Ngày đặt",
+          "review": "Xem xét trước",
+          "expires": "Kết thúc",
+          "status": "Trạng thái",
+          "actions": "Thao tác"
+        },
+        "place": "Đặt lệnh giữ pháp lý..."
+      },
+      "detail": {
+        "title": "Lệnh giữ pháp lý",
+        "history": "Lịch sử",
+        "releasedAt": "Đã kết thúc",
+        "by": "bởi {actor}",
+        "system": "hệ thống",
+        "action": {
+          "insert": "Đã đặt lệnh giữ",
+          "update": "Đã thay đổi lệnh giữ",
+          "delete": "Lệnh giữ đã kết thúc",
+          "other": "Cập nhật"
+        }
+      },
+      "case": {
+        "body": "Dữ liệu của người này được giữ lại và khóa trong khi lệnh giữ pháp lý còn áp dụng. Việc xóa không được thực hiện, tiếp thị, xử lý bằng AI và xuất dữ liệu bị hạn chế, và thời hạn vẫn tiếp tục chạy.",
+        "requesterTitle": "Phản hồi cho người yêu cầu",
+        "requesterHint": "Nêu rõ dữ liệu được giữ theo nghĩa vụ pháp lý, không nêu lý do. Luật sư có thể thay nội dung này trong phần cài đặt quyền riêng tư.",
+        "copy": "Sao chép nội dung",
+        "copied": "Đã sao chép",
+        "queueHint": "Bạn vẫn có thể xác nhận xóa ngay bây giờ: yêu cầu được ghi nhận, chưa có gì bị xóa, và việc xóa sẽ tự chạy khi lệnh giữ kết thúc.",
+        "queue": "Xác nhận xóa khi lệnh giữ kết thúc",
+        "queued": "Đã ghi nhận. Chưa có gì bị xóa; việc xóa sẽ tự chạy khi lệnh giữ kết thúc."
+      },
+      "settings": {
+        "noticeLabel": "Phản hồi cho người có yêu cầu xóa đang bị giữ lại",
+        "noticeHint": "Nội dung do luật sư của bạn soạn. Để trống để dùng văn bản mặc định. Không nêu tên vụ việc hay lý do."
+      }
     }
   }
 }

@@ -27,12 +27,14 @@ export function RequestsScreen() {
   const [status, setStatus] = useState<PrivacyRequestStatus | ''>('');
   const [type, setType] = useState<PrivacyRequestType | ''>('');
   const [overdue, setOverdue] = useState(false);
+  const [restricted, setRestricted] = useState(false);
   const [wizard, setWizard] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const filters = {
     status: status || undefined,
     requestType: type || undefined,
     overdue: overdue || undefined,
+    restricted: restricted || undefined,
   };
   const q = usePrivacyRequests(filters, canRead);
 
@@ -45,7 +47,7 @@ export function RequestsScreen() {
   }
 
   const rows = q.data?.pages.flatMap((p) => p.data) ?? [];
-  const filtered = status !== '' || type !== '' || overdue;
+  const filtered = status !== '' || type !== '' || overdue || restricted;
 
   return (
     <div className="space-y-4">
@@ -106,6 +108,13 @@ export function RequestsScreen() {
           onChange={(e) => setOverdue(e.target.checked)}
           className="pb-2"
         />
+        <Checkbox
+          id="pr-restricted"
+          label={t('legalHold.listFilter')}
+          checked={restricted}
+          onChange={(e) => setRestricted(e.target.checked)}
+          className="pb-2"
+        />
       </div>
 
       {q.isError ? (
@@ -148,7 +157,11 @@ export function RequestsScreen() {
                   <td className="px-3 py-2">{t(`type.${r.requestType}`)}</td>
                   <td className="px-3 py-2">{r.subjectLabel}</td>
                   <td className="px-3 py-2">
-                    <Badge tone={statusTone(r.status)}>{t(`status.${r.status}`)}</Badge>
+                    {r.restricted ? (
+                      <Badge tone="warning">{t('legalHold.caseStatus')}</Badge>
+                    ) : (
+                      <Badge tone={statusTone(r.status)}>{t(`status.${r.status}`)}</Badge>
+                    )}
                     {r.legalHold && (
                       <Badge tone="warning" className="ms-1">
                         {t('detail.legalHoldBadge')}

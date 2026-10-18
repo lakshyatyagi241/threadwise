@@ -36,7 +36,8 @@
       "stageFlag": "Won and lost can only be set on a contact stage, and a stage cannot be both.",
       "statusStage": "That status belongs to a different stage. Choose a status that fits the contact's stage.",
       "stageScope": "A status can only be limited to one of your lifecycle stages.",
-      "planLimit": "You've reached your plan's limit of {limit, plural, one {# contact} other {# contacts}}. Upgrade your plan to add more, or delete an existing one to free up space."
+      "planLimit": "You've reached your plan's limit of {limit, plural, one {# contact} other {# contacts}}. Upgrade your plan to add more, or delete an existing one to free up space.",
+      "legalHold": "This record is protected and cannot be deleted at the moment."
     },
     "list": {
       "title": "Contact Hub",
@@ -338,7 +339,8 @@
       "sendCampaign": "Send campaign",
       "assignOwner": "Assign owner",
       "changeStage": "Change stage",
-      "more": "More"
+      "more": "More",
+      "held": "This record is protected and cannot be deleted at the moment."
     },
     "form": {
       "addEyebrow": "New contact",
@@ -609,7 +611,8 @@
         "tag_limit_reached": "plan tag limit reached",
         "invalid_date_of_birth": "date of birth is not a year-first date that can be a birth date",
         "duplicate_in_file": "repeated number, merged into an earlier row",
-        "invalid_timezone": "invalid time zone"
+        "invalid_timezone": "invalid time zone",
+        "legal_hold": "protected record, not changed"
       },
       "statusHint": "Applied to contacts this file creates.",
       "queued": "Waiting to start...",
