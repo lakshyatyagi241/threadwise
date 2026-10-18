@@ -28,6 +28,8 @@ import {
   isFinal,
   type QuestionFacts,
 } from './appointment-rules';
+import { remindersOf } from './appointment-reminder.rules';
+import { AppointmentRemindersRepository } from './appointment-reminders.repository';
 import { buildIcs } from './ics';
 import {
   appointmentScopeCondition,
@@ -81,6 +83,7 @@ export class AppointmentsService {
     private readonly contactLink: ContactLinkService,
     private readonly rbac: RbacService,
     private readonly mirror: AppointmentMeetingMirror,
+    private readonly reminders: AppointmentRemindersRepository,
   ) {}
 
   // --- reads -----------------------------------------------------------------------------------------------------------
@@ -151,8 +154,34 @@ export class AppointmentsService {
       const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('Appointment', uuid);
       await this.assertScope(tx, scope, row);
-      return this.support.toResponse(row);
+      const res = this.support.toResponse(row);
+      // Only the single read carries the reminders and follow-ups and what became of each (a list would cost a query per row).
+      return { ...res, reminders: await this.reminderRowsOf(tx, ctx.orgId, row) };
     });
+  }
+
+  private async reminderRowsOf(
+    tx: Tx,
+    orgId: number,
+    row: AppointmentRow,
+  ): Promise<NonNullable<AppointmentResponse['reminders']>> {
+    const [runs, children] = await Promise.all([
+      this.reminders.forAppointment(tx, orgId, row.id),
+      row.bookingTypeId === null
+        ? Promise.resolve(null)
+        : this.types.children(tx, orgId, [row.bookingTypeId]),
+    ]);
+    const rules = row.bookingTypeId === null ? [] : (children?.get(row.bookingTypeId)?.reminders ?? []);
+    return remindersOf(row, rules, runs, Date.now()).map((r) => ({
+      kind: r.kind,
+      offsetMinutes: r.offsetMinutes,
+      label: r.label,
+      dueAt: r.dueAt.toISOString(),
+      status: r.status,
+      reason: r.reason,
+      channel: r.channel,
+      sentAt: r.sentAt ? r.sentAt.toISOString() : null,
+    }));
   }
 
   /** The appointment as an iCalendar file (EXT-APPT-06). */

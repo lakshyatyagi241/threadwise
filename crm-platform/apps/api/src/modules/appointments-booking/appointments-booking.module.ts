@@ -2,18 +2,17 @@ import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import {
   APPOINTMENT_CALENDAR,
-  APPOINTMENT_MESSENGER,
   GoogleCalendarClient,
   HttpIcsFeedFetcher,
   ICS_FEED_FETCHER,
   MicrosoftCalendarClient,
-  NoAppointmentMessenger,
 } from '../../infra/providers/appointments-booking';
 import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { AppointmentsController, ContactAppointmentsController } from './appointments.controller';
+import { AppointmentRemindersRepository } from './appointment-reminders.repository';
 import { AppointmentsRepository } from './appointments.repository';
 import { AppointmentsService } from './appointments.service';
 import { AppointmentCalendarSyncService } from './appointment-calendar-sync.service';
@@ -75,8 +74,8 @@ import { SlotsService } from './slots.service';
  *
  * The calendar and the customer messages go through two ports (`infra/providers/appointments-booking`). The calendar port is fronted by
  * `MultiCalendarAdapter`: busy time from every connected Google and Outlook calendar, events written to one (a workspace with nothing
- * connected behaves as the old stub did); the customer messages still have the stub
- * the channel domain replaces under the same token: a booking message is reported as skipped.
+ * connected behaves as the old stub did); the customer messages go through the real channel messenger, which only the worker process
+ * provides (`AppointmentsBookingWorkerModule`): nothing in the API process sends a booking message.
  *
  * The sweeps and the outbox consumers live in `AppointmentsBookingWorkerModule` (the worker process only).
  */
@@ -110,6 +109,7 @@ import { SlotsService } from './slots.service';
     AppointmentBookingGuard,
     BookingTypesRepository,
     AppointmentsRepository,
+    AppointmentRemindersRepository,
     AppointmentsSupport,
     AppointmentCalendarWriter,
     AppointmentCalendarSyncService,
@@ -149,7 +149,6 @@ import { SlotsService } from './slots.service';
     MultiCalendarAdapter,
     // The booking code talks to ONE port; it fronts the workspace's Google and Outlook calendars.
     { provide: APPOINTMENT_CALENDAR, useExisting: MultiCalendarAdapter },
-    { provide: APPOINTMENT_MESSENGER, useClass: NoAppointmentMessenger },
   ],
   exports: [
     AppointmentsService,
@@ -157,12 +156,12 @@ import { SlotsService } from './slots.service';
     BookingOffersService,
     BookingTypesRepository,
     AppointmentsRepository,
+    AppointmentRemindersRepository,
     AppointmentsSupport,
     AppointmentCalendarWriter,
     AppointmentMeetingMirror,
     SlotsService,
     APPOINTMENT_CALENDAR,
-    APPOINTMENT_MESSENGER,
     // The Google account domain (`/google-account`) shares this module's grant, its token refresh and its consent flow.
     GoogleCalendarConnectService,
     GoogleConsentService,

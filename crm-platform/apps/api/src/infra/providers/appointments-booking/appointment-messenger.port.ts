@@ -11,8 +11,20 @@
 
 export const APPOINTMENT_MESSENGER = Symbol('APPOINTMENT_MESSENGER');
 
-export type BookingMessageEvent = 'confirmation' | 'reminder' | 'cancellation' | 'reschedule';
-export type BookingMessageChannel = 'whatsapp' | 'email' | 'telegram' | 'instagram' | 'facebook';
+export type BookingMessageEvent =
+  | 'confirmation'
+  | 'reminder'
+  | 'cancellation'
+  | 'reschedule'
+  /** The after-visit follow-up of a reminder rule (BL-283). */
+  | 'follow_up';
+export type BookingMessageChannel =
+  | 'whatsapp'
+  | 'sms'
+  | 'email'
+  | 'telegram'
+  | 'instagram'
+  | 'facebook';
 
 export interface BookingMessage {
   orgId: number;
@@ -30,12 +42,25 @@ export interface BookingMessage {
   variableMap: Record<string, string> | null;
   /** The same key is the same message: dedupe on it. */
   idempotencyKey: string;
+  /** The contact's uuid when the booking has one. WhatsApp needs it (the message lands in the contact's thread). */
+  contactId?: string | null;
+  /** Every named placeholder of the booking (name, type, date, time, location, ...), to fill a template's numbered values. */
+  variables?: Record<string, string>;
+  /**
+   * `service`: the booking's own notices and reminders (asked of the ConsentGate as service messages). `follow_up`: an after-visit
+   * follow-up, asked as marketing (it needs consent where the workspace requires it).
+   */
+  purpose?: 'service' | 'follow_up';
+  /** A reminder that quiet hours would push past this instant (the booking's start) is skipped instead of held. */
+  notAfter?: string | null;
 }
 
 export interface BookingMessageResult {
-  status: 'sent' | 'skipped' | 'failed';
-  /** Why it was skipped or failed (logged, not shown to the customer). */
+  /** `held`: not now, ask again (quiet hours, a channel that is down); `holdUntil` is when, when the adapter knows. */
+  status: 'sent' | 'skipped' | 'failed' | 'held';
+  /** Why it was skipped, held or failed: a stable code (logged and recorded, not shown to the customer). */
   reason?: string;
+  holdUntil?: string;
   providerMessageId?: string;
 }
 

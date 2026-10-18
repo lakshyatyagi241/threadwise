@@ -15,6 +15,8 @@ export interface MessageFacts {
   timezone: string;
   location: string | null;
   manageUrl: string | null;
+  /** The link that opens the visit when it is online (a Meet or Teams link), apart from `location`. */
+  joinUrl?: string | null;
 }
 
 export const DEFAULT_TEXTS: Record<BookingTemplateEvent, string> = {
@@ -36,6 +38,7 @@ export function variablesFor(f: MessageFacts): Record<string, string> {
     date,
     time,
     location: f.location ?? '',
+    join_link: f.joinUrl ?? '',
     manage_link: f.manageUrl ?? '',
     manage_hint: f.manageUrl ? `\n\nReschedule or cancel: ${f.manageUrl}` : '',
   };
@@ -73,4 +76,28 @@ export function messageBody(
     out += vars.manage_hint;
   }
   return out;
+}
+
+/** The built-in text of the after-visit follow-up (BL-283) when a rule has none of its own. No niche noun: the type's name carries it. */
+export const DEFAULT_FOLLOW_UP_TEXT =
+  'Thank you for {{type}} on {{slot}}. If you have any questions, just reply to this message.';
+
+/**
+ * The text of a reminder or follow-up rule: its own body, else (for a reminder) the type's reminder message, else the built-in text.
+ * The same placeholders as the other booking messages.
+ */
+export function reminderBody(
+  kind: 'before' | 'after',
+  ruleBody: string | null | undefined,
+  typeReminderBody: string | null | undefined,
+  facts: MessageFacts,
+): string {
+  const vars = variablesFor(facts);
+  const own = ruleBody && ruleBody.trim() !== '' ? ruleBody : null;
+  const inherited =
+    kind === 'before' && typeReminderBody && typeReminderBody.trim() !== ''
+      ? typeReminderBody
+      : null;
+  const text = own ?? inherited ?? (kind === 'before' ? DEFAULT_TEXTS.reminder : DEFAULT_FOLLOW_UP_TEXT);
+  return renderTemplate(text, vars);
 }
