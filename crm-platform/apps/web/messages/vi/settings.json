@@ -301,7 +301,7 @@
         "keywords": "geta, xuất bản, bot, bảng điều khiển, đưa lên, chatbot"
       },
       "auto-assignment": {
-        "label": "Tự động phân công",
+        "label": "Tự động phân công cuộc trò chuyện",
         "description": "Tự động giao cuộc trò chuyện mới cho đúng nhân viên, theo lượt hoặc theo quy tắc.",
         "keywords": "định tuyến, luân phiên, phân công, nhân viên, quy tắc hộp thư, phân phối, chủ sở hữu"
       },

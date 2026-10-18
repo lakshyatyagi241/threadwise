@@ -18,7 +18,7 @@
     },
     "page": {
       "back": "Automatyzacja i AI",
-      "title": "Automatyczne przypisywanie",
+      "title": "Automatyczne przypisywanie rozmów",
       "subtitle": "Automatycznie przydzielaj każdą nową rozmowę właściwemu agentowi. Reguły są sprawdzane po kolei, od góry.",
       "noAccess": "Nie masz uprawnień do wyświetlania ustawień automatycznego przypisywania.",
       "create": "Utwórz regułę",
@@ -100,7 +100,7 @@
       "autoReplySummary": "Wysyła odpowiedź: {body}"
     },
     "form": {
-      "back": "Automatyczne przypisywanie",
+      "back": "Automatyczne przypisywanie rozmów",
       "noAccess": "Nie masz uprawnień do zmiany reguł automatycznego przypisywania.",
       "loading": "Wczytywanie reguły",
       "notFound": "Ta reguła już nie istnieje.",
@@ -312,7 +312,7 @@
       }
     },
     "businessHours": {
-      "eyebrow": "Automatyczne przypisywanie",
+      "eyebrow": "Automatyczne przypisywanie rozmów",
       "title": "Godziny pracy",
       "subtitle": "Reguły i cele SLA, które uwzględniają godziny pracy, liczą czas tylko w tych godzinach.",
       "close": "Zamknij",

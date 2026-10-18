@@ -301,7 +301,7 @@
         "keywords": "geta, yayınla, bot, konsol, canlıya al, sohbet botu"
       },
       "auto-assignment": {
-        "label": "Otomatik atama",
+        "label": "Konuşmalarda otomatik atama",
         "description": "Yeni konuşmaları sıra ile veya kurallara göre otomatik olarak doğru temsilciye verin.",
         "keywords": "yönlendirme, sırayla dağıtım, ata, temsilciler, gelen kutusu kuralları, dağıt, sahip"
       },

@@ -3,7 +3,7 @@
     "back": "Automatyzacja",
     "title": "Reguły przypisywania rekordów",
     "intro": "Automatycznie przypisuj nowe rekordy (moduły: {contacts}, firmy, {deals}) właściwemu opiekunowi sprzedaży.",
-    "crossNote": "Tu przypisywane są: {contacts}, firmy i {deals}. Aby przypisywać rozmowy do agentów, zobacz <link>Automatyczne przypisywanie</link>.",
+    "crossNote": "Tu przypisywane są: {contacts}, firmy i {deals}. Aby przypisywać rozmowy do agentów, zobacz <link>Automatyczne przypisywanie rozmów</link>.",
     "master": {
       "title": "Włącz przypisywanie rekordów",
       "hint": "Wyłączone, dopóki go nie włączysz. Po włączeniu poniższe reguły przypisują nowy rekord (moduły: {contact}, firma, {deal}) bez opiekuna do kogoś z Twojego zespołu.",

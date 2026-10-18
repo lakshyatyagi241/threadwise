@@ -18,7 +18,7 @@
     },
     "page": {
       "back": "Automatisation et IA",
-      "title": "Attribution automatique",
+      "title": "Attribution automatique des conversations",
       "subtitle": "Confiez automatiquement chaque nouvelle conversation au bon agent. Les règles sont appliquées dans l’ordre, de haut en bas.",
       "noAccess": "Vous n’avez pas l’autorisation d’afficher les paramètres d’attribution automatique.",
       "create": "Créer une règle",
@@ -100,7 +100,7 @@
       "autoReplySummary": "Envoie la réponse : {body}"
     },
     "form": {
-      "back": "Attribution automatique",
+      "back": "Attribution automatique des conversations",
       "noAccess": "Vous n’avez pas l’autorisation de modifier les règles d’attribution automatique.",
       "loading": "Chargement de la règle",
       "notFound": "Cette règle n’existe plus.",
@@ -312,7 +312,7 @@
       }
     },
     "businessHours": {
-      "eyebrow": "Attribution automatique",
+      "eyebrow": "Attribution automatique des conversations",
       "title": "Heures d'ouverture",
       "subtitle": "Les règles et objectifs SLA qui tiennent compte des heures d'ouverture ne comptent le temps qu'à l'intérieur de ces heures.",
       "close": "Fermer",

@@ -72,7 +72,7 @@ Each module has a **Run log** that shows what the engine did with every record, 
 
 ## Plan and access
 
-Seeing the rules needs the permission to view record assignment. Changing them and the switch need the permission to manage it. Managers and above have both by default. Your plan needs the Record assignment rules feature. This is separate from Auto-assignment, which assigns conversations in the inbox.
+Seeing the rules needs the permission to view record assignment. Changing them and the switch need the permission to manage it. Managers and above have both by default. Your plan needs the Record assignment rules feature. This is separate from Conversation auto-assignment, which assigns conversations in the inbox.
 
 ## If something looks wrong
 

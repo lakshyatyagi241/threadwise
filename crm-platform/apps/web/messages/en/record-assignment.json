@@ -3,7 +3,7 @@
     "back": "Automation",
     "title": "Record assignment rules",
     "intro": "Give new {contacts}, companies and {deals} to the right sales owner automatically.",
-    "crossNote": "This assigns {contacts}, companies and {deals}. To assign conversations to agents, see <link>Auto-assignment</link>.",
+    "crossNote": "This assigns {contacts}, companies and {deals}. To assign conversations to agents, see <link>Conversation auto-assignment</link>.",
     "master": {
       "title": "Turn on record assignment",
       "hint": "Off until you turn it on. When it is on, the rules below give a new {contact}, company or {deal} that has no owner to someone on your team.",

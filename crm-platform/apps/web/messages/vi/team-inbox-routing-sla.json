@@ -18,7 +18,7 @@
     },
     "page": {
       "back": "Tự động hóa và AI",
-      "title": "Tự động giao việc",
+      "title": "Tự động phân công cuộc trò chuyện",
       "subtitle": "Tự động giao mỗi cuộc trò chuyện mới cho đúng nhân viên. Các quy tắc được áp dụng theo thứ tự từ trên xuống.",
       "noAccess": "Bạn không có quyền xem cài đặt tự động giao việc.",
       "create": "Tạo quy tắc",
@@ -100,7 +100,7 @@
       "autoReplySummary": "Gửi trả lời: {body}"
     },
     "form": {
-      "back": "Tự động giao việc",
+      "back": "Tự động phân công cuộc trò chuyện",
       "noAccess": "Bạn không có quyền thay đổi quy tắc tự động giao việc.",
       "loading": "Đang tải quy tắc",
       "notFound": "Quy tắc này không còn tồn tại.",
@@ -312,7 +312,7 @@
       }
     },
     "businessHours": {
-      "eyebrow": "Tự động phân công",
+      "eyebrow": "Tự động phân công cuộc trò chuyện",
       "title": "Giờ làm việc",
       "subtitle": "Các quy tắc và mục tiêu SLA dùng giờ làm việc chỉ tính thời gian trong các khung giờ này.",
       "close": "Đóng",

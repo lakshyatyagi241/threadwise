@@ -3,7 +3,7 @@
     "back": "Tự động hóa",
     "title": "Quy tắc phân công bản ghi",
     "intro": "Tự động giao {contacts}, công ty và {deals} mới cho đúng người phụ trách bán hàng.",
-    "crossNote": "Mục này phân công {contacts}, công ty và {deals}. Để phân công cuộc trò chuyện cho nhân viên, xem <link>Tự động phân công</link>.",
+    "crossNote": "Mục này phân công {contacts}, công ty và {deals}. Để phân công cuộc trò chuyện cho nhân viên, xem <link>Tự động phân công cuộc trò chuyện</link>.",
     "master": {
       "title": "Bật phân công bản ghi",
       "hint": "Tắt cho đến khi bạn bật. Khi bật, các quy tắc bên dưới sẽ giao {contact}, công ty hoặc {deal} mới chưa có người phụ trách cho một thành viên trong nhóm của bạn.",

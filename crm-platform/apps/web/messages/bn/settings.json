@@ -301,7 +301,7 @@
         "keywords": "geta, publish, bot, কনসোল, go live, chatbot"
       },
       "auto-assignment": {
-        "label": "অটো-অ্যাসাইনমেন্ট",
+        "label": "কথোপকথনের স্বয়ংক্রিয় বরাদ্দ",
         "description": "নতুন কথোপকথন সঠিক এজেন্টকে স্বয়ংক্রিয়ভাবে দিন, পালাক্রমে বা নিয়ম অনুযায়ী।",
         "keywords": "routing, round robin, assign, agents, ইনবক্স নিয়ম, distribute, owner"
       },
