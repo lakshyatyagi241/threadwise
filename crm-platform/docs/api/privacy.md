@@ -44,6 +44,11 @@ recordings and media are deleted; leads, deals, tasks, projects, forms, appointm
 and text replaced by `[erased]` or NULL; invoices, payments, quotes and orders are kept for the statutory period (`FINANCIAL_RECORD_RETENTION_YEARS`)
 with the buyer identity replaced (amounts, numbers, tax facts, dates stay); consent events stay as proof with no link to the person.
 
+Call logging (`call_log_entries`, `telephony_click_calls`): a call log entry keeps the call (time, direction, outcome, duration) and loses the
+customer's number, the workspace number, the notes, the provider call id and the recording reference. A click-to-call placement still waiting for
+the provider's callback is **deleted**, found by contact id or by number. `telephony_connections` (the workspace's own provider numbers and a sealed
+signing secret) and `call_logging_settings` hold no person's data and are not registered; the registry test does not flag them.
+
 An appointment's `title` is "booking type, dash, invitee name" and the column is NOT NULL, so an erasure writes `[erased]` over it (the same for
 the invitee's name, e-mail and phone, notes, answers, location, cancel reason, the e-mail last pushed to the calendar event and the manage link).
 The event already written to the connected Google or Outlook calendar is not rewritten by an erasure; delete it there (see "not reached" in the proof).
