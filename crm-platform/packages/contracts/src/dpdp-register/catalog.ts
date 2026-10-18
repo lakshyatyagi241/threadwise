@@ -34,6 +34,9 @@ export const DPDP_CODE_CHECK_RESULTS: Record<DpdpCodeCheck, 'pass' | 'fail'> = {
   'transfer.country_killswitch': 'fail',
   'dpa.acceptance_persisted': 'fail',
   'consent.lawful_basis_dpdp': 'fail',
+  'lifecycle.exit_and_orphans_fixed': 'fail',
+  'evidence.board_pack': 'fail',
+  'grievance.intake_built': 'fail',
 };
 
 export const DPDP_CATALOG: readonly DpdpCatalogItem[] = [
@@ -298,7 +301,7 @@ export const DPDP_CATALOG: readonly DpdpCatalogItem[] = [
     penaltyTier: '50',
     planItems: ['DP-52'],
     baseline: 'partial',
-    checks: ['lifecycle.enabled'],
+    checks: ['lifecycle.enabled', 'lifecycle.exit_and_orphans_fixed'],
   },
   // D. Security (s8(4), (5), rule 6)
   {
@@ -500,7 +503,7 @@ export const DPDP_CATALOG: readonly DpdpCatalogItem[] = [
     penaltyTier: '50',
     planItems: ['DP-90'],
     baseline: 'partial',
-    checks: ['legal.counsel_engaged'],
+    checks: ['legal.counsel_engaged', 'evidence.board_pack'],
   },
   {
     id: 'r46',
@@ -520,6 +523,6 @@ export const DPDP_CATALOG: readonly DpdpCatalogItem[] = [
     penaltyTier: '50',
     planItems: ['DP-03', 'DP-41'],
     baseline: 'not_following',
-    checks: ['governance.contacts_named'],
+    checks: ['governance.contacts_named', 'grievance.intake_built'],
   },
 ];

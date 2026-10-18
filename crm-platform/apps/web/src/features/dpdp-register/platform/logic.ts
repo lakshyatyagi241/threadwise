@@ -145,11 +145,14 @@ export const CHECK_DETAILS: Record<DpdpCheckKey, readonly string[]> = {
   'transfer.country_killswitch': [],
   'dpa.acceptance_persisted': [],
   'consent.lawful_basis_dpdp': [],
+  'lifecycle.exit_and_orphans_fixed': [],
+  'evidence.board_pack': [],
+  'grievance.intake_built': [],
 };
 
 /**
  * The details any check can return (`details.<detail>`): a probe that could not read, a missing variable, the state of an
- * attestation, and a code check. One text each, so the 26 checks do not carry 26 copies for translators.
+ * attestation, and a code check. One text each, so the 29 checks do not carry 29 copies for translators.
  */
 export const GENERIC_DETAILS: readonly string[] = [
   'probe_error',

@@ -375,6 +375,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "Daftar tujuan memakai penggunaan persetujuan dan section 7 dari Act"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "Ekspor saat ruang kerja ditinggalkan dan pembersihan file sudah dibuat"
+      },
+      "evidence_board_pack": {
+        "title": "Paket bukti yang siap untuk Dewan Perlindungan Data sudah dibuat"
+      },
+      "grievance_intake_built": {
+        "title": "Penerimaan keluhan sudah dibuat"
       }
     },
     "attest": {

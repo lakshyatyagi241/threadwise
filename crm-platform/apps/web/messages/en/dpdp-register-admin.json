@@ -283,6 +283,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "The purpose registry uses the Act's consent and section 7 uses"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "Workspace exit export and file clean-up are built"
+      },
+      "evidence_board_pack": {
+        "title": "Board-ready evidence pack is built"
+      },
+      "grievance_intake_built": {
+        "title": "Grievance intake is built"
       }
     },
     "attest": {

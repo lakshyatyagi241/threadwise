@@ -375,6 +375,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "Le registre des finalités utilise les usages de consentement et de section 7 de l’Act"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "L’export à la sortie d’un espace de travail et le nettoyage des fichiers sont en place"
+      },
+      "evidence_board_pack": {
+        "title": "Le dossier de preuves prêt pour le Conseil de protection des données est en place"
+      },
+      "grievance_intake_built": {
+        "title": "La réception des réclamations est en place"
       }
     },
     "attest": {

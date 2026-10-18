@@ -147,12 +147,22 @@ describe('live checks', () => {
   });
 
   it('a passing probe alone makes an item with only that check following', () => {
-    // r26 is decided by lifecycle.enabled alone.
-    expect(statusOf(run(), 'r26')).toBe('unverified');
+    // A synthetic item decided by lifecycle.enabled alone (the real r26 also carries a code check).
+    const catalog = [synthItem('r98', { checks: ['lifecycle.enabled'] })];
+    expect(statusOf(run({ catalog }), 'r98')).toBe('unverified');
+    const response = run({
+      catalog,
+      probes: { 'lifecycle.enabled': { result: 'pass', detail: 'enabled' } },
+    });
+    expect(statusOf(response, 'r98')).toBe('following');
+  });
+
+  it('a passing probe does not make r26 following while its code check fails', () => {
     const response = run({
       probes: { 'lifecycle.enabled': { result: 'pass', detail: 'enabled' } },
     });
-    expect(statusOf(response, 'r26')).toBe('following');
+    expect(checkOf(response, 'r26', 'lifecycle.exit_and_orphans_fixed').result).toBe('fail');
+    expect(statusOf(response, 'r26')).toBe('partial');
   });
 });
 
@@ -238,7 +248,8 @@ describe('attested checks', () => {
     expect(check.result).toBe('unknown');
     expect(check.detail).toBe('attestation_missing');
     expect(check.attestation).toBeUndefined();
-    expect(statusOf(response, 'r47')).toBe('unverified');
+    // The unattested contacts are unknown, and r47 also carries a code check for the unbuilt grievance intake, which fails.
+    expect(statusOf(response, 'r47')).toBe('partial');
   });
 
   it('an attestation for another key does not count', () => {

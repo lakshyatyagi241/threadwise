@@ -375,6 +375,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "Реестр целей использует основания Act: согласие и section 7"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "Экспорт при выходе рабочего пространства и очистка файлов реализованы"
+      },
+      "evidence_board_pack": {
+        "title": "Пакет доказательств, готовый для Совета по защите данных, реализован"
+      },
+      "grievance_intake_built": {
+        "title": "Приём жалоб реализован"
       }
     },
     "attest": {

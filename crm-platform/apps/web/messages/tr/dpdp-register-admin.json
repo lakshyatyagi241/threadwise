@@ -375,6 +375,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "Amaç kayıt defteri, Act’in rıza ve section 7 kullanımlarını esas alır"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "Çalışma alanından ayrılırken dışa aktarma ve dosya temizliği hayata geçirilmiş"
+      },
+      "evidence_board_pack": {
+        "title": "Veri Koruma Kurulu soruşturmasına hazır kanıt paketi hayata geçirilmiş"
+      },
+      "grievance_intake_built": {
+        "title": "Şikâyet alımı hayata geçirilmiş"
       }
     },
     "attest": {

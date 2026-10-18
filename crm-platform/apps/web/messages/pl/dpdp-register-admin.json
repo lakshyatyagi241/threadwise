@@ -375,6 +375,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "Rejestr celów używa zastosowań zgody i section 7 z Act"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "Eksport przy opuszczaniu przestrzeni roboczej i czyszczenie plików są wdrożone"
+      },
+      "evidence_board_pack": {
+        "title": "Pakiet dowodów gotowy dla Rady Ochrony Danych jest wdrożony"
+      },
+      "grievance_intake_built": {
+        "title": "Przyjmowanie skarg jest wdrożone"
       }
     },
     "attest": {

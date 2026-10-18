@@ -375,6 +375,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "مقاصد کی رجسٹری Act کے رضامندی اور section 7 کے استعمالات استعمال کرتی ہے"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "ورک اسپیس چھوڑنے پر ایکسپورٹ اور فائلوں کی صفائی بنائی جا چکی ہے"
+      },
+      "evidence_board_pack": {
+        "title": "ڈیٹا پروٹیکشن بورڈ کی تحقیقات کے لیے ثبوتوں کا پیک بنایا جا چکا ہے"
+      },
+      "grievance_intake_built": {
+        "title": "شکایات وصول کرنے کا نظام بنایا جا چکا ہے"
       }
     },
     "attest": {

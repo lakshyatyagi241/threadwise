@@ -110,16 +110,22 @@ at most 2000 characters, the optional `evidenceUrl` is trimmed, holds at most 20
 Gaps the running code cannot show, so no probe can read them and no one can attest them. Each has a fixed result in the catalog
 (`DPDP_CODE_CHECK_RESULTS`), and every one is `fail` today. The PR that ships the fix flips it to `pass`, in the same change.
 
-| Check key                     | Gap it records (plan item that closes it)                                                     | Rows     |
-| ----------------------------- | --------------------------------------------------------------------------------------------- | -------- |
-| `pii.column_encryption`       | Contact phone, email and message body are not encrypted per column (DP-12b)                   | r27      |
-| `rls.privileged_guc_fixed`    | `app.privileged` is still a settable database setting; the ADR-0028 fix is unfinished (DP-16) | r28      |
-| `logs.erasure_keeps_year`     | Erasure and workspace erase delete history and logs at once, not after a year (DP-14, DP-51)  | r25, r31 |
-| `ci.security_jobs_scheduled`  | CI security workflows are manual only; nothing runs them on a schedule (DP-16)                | r33      |
-| `ai.workspace_switch`         | No workspace switch or notice for the AI paths that send contact text to a vendor (DP-74)     | r35      |
-| `transfer.country_killswitch` | No per-vendor country tag and no way to cut off a country the Government restricts (DP-72)    | r42      |
-| `dpa.acceptance_persisted`    | No record anywhere that a workspace accepted the DPA, with version and time (DP-91)           | r32      |
-| `consent.lawful_basis_dpdp`   | The purpose registry still uses GDPR lawful bases, not the Act's consent and s7 uses (DP-32)  | r01      |
+| Check key                          | Gap it records (plan item that closes it)                                                                                           | Rows     |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `pii.column_encryption`            | Contact phone, email and message body are not encrypted per column (DP-12b)                                                         | r27      |
+| `rls.privileged_guc_fixed`         | `app.privileged` is still a settable database setting; the ADR-0028 fix is unfinished (DP-16)                                       | r28      |
+| `logs.erasure_keeps_year`          | Erasure and workspace erase delete history and logs at once, not after a year (DP-14, DP-51)                                        | r25, r31 |
+| `ci.security_jobs_scheduled`       | CI security workflows are manual only; nothing runs them on a schedule (DP-16)                                                      | r33      |
+| `ai.workspace_switch`              | No workspace switch or notice for the AI paths that send contact text to a vendor (DP-74)                                           | r35      |
+| `transfer.country_killswitch`      | No per-vendor country tag and no way to cut off a country the Government restricts (DP-72)                                          | r42      |
+| `dpa.acceptance_persisted`         | No record anywhere that a workspace accepted the DPA, with version and time (DP-91)                                                 | r32      |
+| `consent.lawful_basis_dpdp`        | The purpose registry still uses GDPR lawful bases, not the Act's consent and s7 uses (DP-32)                                        | r01      |
+| `lifecycle.exit_and_orphans_fixed` | No export when a workspace leaves and lapsed-plan files are still orphaned; switching the lifecycle on does not close these (DP-52) | r26      |
+| `evidence.board_pack`              | No evidence pack that answers a Board inquiry in one export (DP-90)                                                                 | r45      |
+| `grievance.intake_built`           | No grievance intake, ticket, response deadline or record for the platform itself (DP-41)                                            | r47      |
+
+The last three keep a row from reading Following on a live or attested check alone while the plan items it names are unbuilt: r26 would
+pass on `lifecycle.enabled`, r45 on `legal.counsel_engaged` and r47 on `governance.contacts_named`.
 
 ## 5. Persistence
 

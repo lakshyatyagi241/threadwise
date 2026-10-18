@@ -375,6 +375,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "目的登记使用 Act 的同意用途和 section 7 用途"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "工作区退出时的导出和文件清理已实现"
+      },
+      "evidence_board_pack": {
+        "title": "可供数据保护委员会调查使用的证据包已实现"
+      },
+      "grievance_intake_built": {
+        "title": "投诉受理已实现"
       }
     },
     "attest": {

@@ -375,6 +375,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "Il registro delle finalità usa gli usi di consenso e di section 7 dell’Act"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "L’esportazione all’uscita di uno spazio di lavoro e la pulizia dei file sono realizzate"
+      },
+      "evidence_board_pack": {
+        "title": "Il pacchetto di prove pronto per il Consiglio per la protezione dei dati è realizzato"
+      },
+      "grievance_intake_built": {
+        "title": "La ricezione dei reclami è realizzata"
       }
     },
     "attest": {

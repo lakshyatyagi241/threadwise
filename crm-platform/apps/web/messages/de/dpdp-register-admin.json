@@ -375,6 +375,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "Das Zweckregister nutzt die Verwendungen der Act für Einwilligung und nach section 7"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "Der Export beim Verlassen eines Arbeitsbereichs und die Dateibereinigung sind umgesetzt"
+      },
+      "evidence_board_pack": {
+        "title": "Das Nachweispaket für eine Untersuchung des Datenschutzausschusses ist umgesetzt"
+      },
+      "grievance_intake_built": {
+        "title": "Die Annahme von Beschwerden ist umgesetzt"
       }
     },
     "attest": {

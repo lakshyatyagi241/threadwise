@@ -375,6 +375,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "מרשם המטרות משתמש בשימושי ההסכמה ובשימושי section 7 של Act"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "הייצוא בעת עזיבת סביבת עבודה וניקוי הקבצים בנויים"
+      },
+      "evidence_board_pack": {
+        "title": "חבילת הראיות המוכנה לחקירת מועצת הגנת המידע בנויה"
+      },
+      "grievance_intake_built": {
+        "title": "קליטת תלונות בנויה"
       }
     },
     "attest": {

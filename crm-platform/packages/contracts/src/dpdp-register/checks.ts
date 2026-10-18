@@ -38,6 +38,9 @@ export const DPDP_CODE_CHECKS = [
   'transfer.country_killswitch',
   'dpa.acceptance_persisted',
   'consent.lawful_basis_dpdp',
+  'lifecycle.exit_and_orphans_fixed',
+  'evidence.board_pack',
+  'grievance.intake_built',
 ] as const;
 export type DpdpCodeCheck = (typeof DPDP_CODE_CHECKS)[number];
 

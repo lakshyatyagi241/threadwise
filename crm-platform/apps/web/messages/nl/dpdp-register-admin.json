@@ -375,6 +375,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "Het doelenregister gebruikt de toestemmingsgebruiken en de gebruiken van section 7 van de Act"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "De export bij het verlaten van een werkruimte en het opruimen van bestanden zijn gebouwd"
+      },
+      "evidence_board_pack": {
+        "title": "Het bewijspakket dat klaarstaat voor de Raad voor gegevensbescherming is gebouwd"
+      },
+      "grievance_intake_built": {
+        "title": "De ontvangst van klachten is gebouwd"
       }
     },
     "attest": {

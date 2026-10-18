@@ -375,6 +375,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "سجل الأغراض يستخدم استخدامات الموافقة واستخدامات section 7 من Act"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "تصدير البيانات عند مغادرة مساحة العمل وتنظيف الملفات مُنفَّذان"
+      },
+      "evidence_board_pack": {
+        "title": "حزمة الأدلة الجاهزة لمجلس حماية البيانات مُنفَّذة"
+      },
+      "grievance_intake_built": {
+        "title": "استقبال الشكاوى مُنفَّذ"
       }
     },
     "attest": {

@@ -375,6 +375,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "उद्देश्य रजिस्ट्री Act के सहमति और section 7 उपयोग इस्तेमाल करती है"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "वर्कस्पेस छोड़ने पर एक्सपोर्ट और फ़ाइलों की सफ़ाई बनाई जा चुकी है"
+      },
+      "evidence_board_pack": {
+        "title": "बोर्ड की जाँच के लिए तैयार साक्ष्य पैक बनाया जा चुका है"
+      },
+      "grievance_intake_built": {
+        "title": "शिकायत दर्ज करने की व्यवस्था बनाई जा चुकी है"
       }
     },
     "attest": {

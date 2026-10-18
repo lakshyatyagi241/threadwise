@@ -375,6 +375,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "Sổ mục đích dùng các trường hợp sử dụng theo sự đồng ý và theo section 7 của Act"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "Tính năng xuất dữ liệu khi rời không gian làm việc và dọn dẹp tệp đã được xây dựng"
+      },
+      "evidence_board_pack": {
+        "title": "Gói bằng chứng sẵn sàng cho Hội đồng Bảo vệ Dữ liệu đã được xây dựng"
+      },
+      "grievance_intake_built": {
+        "title": "Việc tiếp nhận khiếu nại đã được xây dựng"
       }
     },
     "attest": {

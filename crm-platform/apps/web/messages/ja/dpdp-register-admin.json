@@ -375,6 +375,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "目的レジストリは、Act の同意と section 7 の用途を使っている"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "ワークスペース退出時のエクスポートとファイルのクリーンアップが実装されている"
+      },
+      "evidence_board_pack": {
+        "title": "データ保護委員会の調査に備えた証拠パックが実装されている"
+      },
+      "grievance_intake_built": {
+        "title": "苦情の受付が実装されている"
       }
     },
     "attest": {

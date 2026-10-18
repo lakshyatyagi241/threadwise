@@ -375,6 +375,15 @@
       },
       "consent_lawful_basis_dpdp": {
         "title": "El registro de finalidades usa los usos de consentimiento y de section 7 de la Act"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "La exportación al salir de un espacio de trabajo y la limpieza de archivos están implementadas"
+      },
+      "evidence_board_pack": {
+        "title": "El paquete de pruebas listo para la Junta de Protección de Datos está implementado"
+      },
+      "grievance_intake_built": {
+        "title": "La recepción de reclamaciones está implementada"
       }
     },
     "attest": {

@@ -44,9 +44,11 @@ fails; a probe never returns `pass` on an error). The service builds the depende
 The probes show the key or number they read in a short detail text; no secret reaches the response (not the Redis URL, not the DSN, not a
 key). The eight attestable checks (`hosting.region_documented`, `storage.encrypted_at_rest`, `backup.offsite_configured`,
 `backup.restore_drill`, `security.pentest_report`, `legal.counsel_engaged`, `legal.vendor_dpas`, `governance.contacts_named`) are read from
-`dpdp_register_attestations`: the newest row per key counts until `expires_at`, then the check is `unknown`. The eight code checks
-(`DPDP_CODE_CHECK_RESULTS` in `catalog.ts`) are fixed results declared in the catalog; each is `fail` today and the change that ships its fix
-flips it in the same PR.
+`dpdp_register_attestations`: the newest row per key counts until `expires_at`, then the check is `unknown`. The eleven code checks
+(`DPDP_CODE_CHECK_RESULTS` in `catalog.ts`) are fixed results declared in the catalog: `pii.column_encryption`, `rls.privileged_guc_fixed`,
+`logs.erasure_keeps_year`, `ci.security_jobs_scheduled`, `ai.workspace_switch`, `transfer.country_killswitch`, `dpa.acceptance_persisted`,
+`consent.lawful_basis_dpdp`, `lifecycle.exit_and_orphans_fixed` (r26, DP-52), `evidence.board_pack` (r45, DP-90) and `grievance.intake_built`
+(r47, DP-41). Each is `fail` today and the change that ships its fix flips it in the same PR.
 
 ## Consumers of the checks (every place they are used)
 

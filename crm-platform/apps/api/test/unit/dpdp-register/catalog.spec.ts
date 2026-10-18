@@ -48,7 +48,7 @@ describe('DPDP register catalog', () => {
     expect(new Set(ALL_CHECKS).size).toBe(ALL_CHECKS.length);
     expect(DPDP_LIVE_CHECKS).toHaveLength(10);
     expect(DPDP_ATTESTABLE_CHECKS).toHaveLength(8);
-    expect(DPDP_CODE_CHECKS).toHaveLength(8);
+    expect(DPDP_CODE_CHECKS).toHaveLength(11);
     for (const key of DPDP_LIVE_CHECKS) expect(dpdpCheckSource(key)).toBe('live');
     for (const key of DPDP_ATTESTABLE_CHECKS) expect(dpdpCheckSource(key)).toBe('attested');
     for (const key of DPDP_CODE_CHECKS) expect(dpdpCheckSource(key)).toBe('code');
