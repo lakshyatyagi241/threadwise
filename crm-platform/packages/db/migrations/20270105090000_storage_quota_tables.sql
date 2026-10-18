@@ -44,6 +44,8 @@ CREATE TABLE storage_org_state (
   -- The nightly counter check: when it last ran for this workspace, and how many bytes it had to correct.
   last_reconciled_at timestamptz,
   last_drift_bytes   bigint NOT NULL DEFAULT 0,
+  -- When the backfill (the registry built from the owner tables) finished for this workspace. NULL = not yet, so the scheduler picks it up.
+  backfilled_at      timestamptz,
   created_at         timestamptz NOT NULL DEFAULT now(),
   updated_at         timestamptz NOT NULL DEFAULT now(),
   row_version        integer NOT NULL DEFAULT 1,

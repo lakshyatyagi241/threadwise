@@ -106,6 +106,8 @@ export const QUEUES = {
   TELEPHONY_INGEST: 'telephony-ingest',
   /** A channel webhook event (Telegram, Viber, LINE, Facebook) that could not be stored when it arrived: kept here and retried with backoff so the provider keeps its 200 (ASYNC-011/017). */
   WEBHOOK_RETRY: 'webhook-retry',
+  /** One job per workspace to backfill or reconcile its storage meter (storage quota, BL-300): reads the owner tables, probes sizes on the bucket, recomputes counters. Own queue: a slow bucket or a huge workspace must not hold a send, a receipt or an export. */
+  STORAGE_QUOTA: 'storage-quota',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

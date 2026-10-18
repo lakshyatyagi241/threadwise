@@ -1,6 +1,13 @@
-import { Injectable, Optional } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { canonicalStorageKey } from '../../common/storage-key-owner';
+import { canonicalStorageKey, storageKeyOrg } from '../../common/storage-key-owner';
+import { categoryForAreaKey } from '../../common/storage-meter/storage-key-category';
+import {
+  STORAGE_METER,
+  recordRemovedOn,
+  reserveOn,
+  type StorageMeter,
+} from '../../common/storage-meter/storage-meter.port';
 import type { Env } from '../../config/env.schema';
 import {
   presignS3Get,
@@ -41,6 +48,11 @@ export class MediaStorageService {
   constructor(
     private readonly settings: SettingsService,
     @Optional() private readonly config?: ConfigService<Env, true>,
+    /**
+     * The storage quota guard (observe mode: measures, never refuses). Optional, so a process without the quota module (and every unit
+     * test that builds this service by hand) stores exactly as before.
+     */
+    @Optional() @Inject(STORAGE_METER) private readonly meter?: StorageMeter,
   ) {}
 
   /**
@@ -119,8 +131,35 @@ export class MediaStorageService {
   /**
    * Writes an object to the bucket. Returns null when media is local, so the caller writes it to its own disk; a bucket
    * that refuses the write throws (the caller decides whether to fall back).
+   *
+   * A key of a workspace area written straight through here (`marketing/`, `scheduled/`, `telegram/`, `ai-training/`) is metered by the
+   * storage quota guard: reserve, write, commit once the bucket took it (observe mode; it never refuses and never fails the write).
+   * `chat/` keys are metered by `ChatMediaStore`, which also covers local disk, so they are skipped here to count a file once.
    */
   async put(key: string, body: Buffer, contentType: string): Promise<{ key: string } | null> {
+    const category = categoryForAreaKey(normaliseKey(key));
+    const orgId = storageKeyOrg(key);
+    if (!this.meter || !category || orgId === null) return this.putObject(key, body, contentType);
+
+    const reservation = await reserveOn(this.meter, { orgId, bytes: body.length, category });
+    let stored: { key: string } | null;
+    try {
+      stored = await this.putObject(key, body, contentType);
+    } catch (err) {
+      await reservation.release();
+      throw err;
+    }
+    // null = local media: nothing was stored here, the caller decides what to do (and these callers refuse local storage).
+    if (stored) await reservation.commit({ key: normaliseKey(key) });
+    else await reservation.release();
+    return stored;
+  }
+
+  private async putObject(
+    key: string,
+    body: Buffer,
+    contentType: string,
+  ): Promise<{ key: string } | null> {
     const d = await this.destination();
     if (d.disk !== 'cloud' || !d.target) return null;
     const objectKey = this.fullKey(d, key);
@@ -156,6 +195,33 @@ export class MediaStorageService {
   }
 
   async remove(key: string): Promise<void> {
+    await this.removeObject(key);
+    // Gives the bytes back to the workspace's storage meter (idempotent; the object is gone, or was never on the bucket).
+    const orgId = storageKeyOrg(key);
+    if (orgId !== null) await recordRemovedOn(this.meter, orgId, normaliseKey(key));
+  }
+
+  /**
+   * The size of an object on the bucket (a HEAD), or null when it is not there or media is local. For the storage backfill, which
+   * asks for kinds that keep no size column; never on a request path.
+   */
+  async size(key: string): Promise<number | null> {
+    const d = await this.destination();
+    if (d.disk !== 'cloud' || !d.target) return null;
+    const req = signS3Request(d.target, 'HEAD', this.fullKey(d, key), Buffer.alloc(0));
+    const res = await fetch(req.url, {
+      method: 'HEAD',
+      headers: req.headers,
+      redirect: 'manual',
+      signal: AbortSignal.timeout(15_000),
+    });
+    if (res.status === 404 || res.status === 403) return null;
+    if (!res.ok) throw new Error(`Object storage refused the size check (HTTP ${res.status})`);
+    const length = Number(res.headers.get('content-length'));
+    return Number.isFinite(length) ? length : null;
+  }
+
+  private async removeObject(key: string): Promise<void> {
     const d = await this.destination();
     if (d.disk !== 'cloud' || !d.target) return;
     const req = signS3Request(d.target, 'DELETE', this.fullKey(d, key), Buffer.alloc(0));
