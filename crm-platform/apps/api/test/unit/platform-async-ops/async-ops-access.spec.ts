@@ -21,15 +21,21 @@ describe('platform async ops access', () => {
     expect(Reflect.getMetadata('__guards__', AsyncOpsController)).toContain(OperatorGuard);
   });
 
-  it.each(['replayOutbox', 'replayWaba'] as const)('%s needs a super admin', (handler) => {
-    const proto = AsyncOpsController.prototype;
-    expect(Reflect.getMetadata(OPERATOR_ROLES_KEY, proto[handler])).toEqual(['super_admin']);
-  });
+  it.each(['replayOutbox', 'replayWaba', 'replayWebhookRetry'] as const)(
+    '%s needs a super admin',
+    (handler) => {
+      const proto = AsyncOpsController.prototype;
+      expect(Reflect.getMetadata(OPERATOR_ROLES_KEY, proto[handler])).toEqual(['super_admin']);
+    },
+  );
 
-  it.each(['deadOutbox', 'failedWaba'] as const)('%s is readable by any operator', (handler) => {
-    const proto = AsyncOpsController.prototype;
-    expect(Reflect.getMetadata(OPERATOR_ROLES_KEY, proto[handler])).toBeUndefined();
-  });
+  it.each(['deadOutbox', 'failedWaba', 'failedWebhookRetry'] as const)(
+    '%s is readable by any operator',
+    (handler) => {
+      const proto = AsyncOpsController.prototype;
+      expect(Reflect.getMetadata(OPERATOR_ROLES_KEY, proto[handler])).toBeUndefined();
+    },
+  );
 
   it('replay requests carry only a type and a count, never a payload', () => {
     expect(Object.keys(outboxReplayRequestSchema.shape).sort()).toEqual(['eventType', 'limit']);

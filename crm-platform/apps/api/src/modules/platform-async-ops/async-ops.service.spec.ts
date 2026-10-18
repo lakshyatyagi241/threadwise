@@ -5,7 +5,13 @@ import { AsyncOpsService } from './async-ops.service';
  * ASYNC-044/045/046/050: failed work is visible and can be replayed by an authorized operator, replay only re-queues what is already
  * stored (the caller never supplies a payload), every replay is audited, and a second replay finds nothing left to replay.
  */
-function build(opts: { results?: unknown[][]; failedJobs?: Array<Record<string, unknown>> } = {}) {
+function build(
+  opts: {
+    results?: unknown[][];
+    failedJobs?: Array<Record<string, unknown>>;
+    retryJobs?: Array<Record<string, unknown>>;
+  } = {},
+) {
   const results = [...(opts.results ?? [])];
   const executed: unknown[] = [];
   const tx = {
@@ -17,8 +23,14 @@ function build(opts: { results?: unknown[][]; failedJobs?: Array<Record<string, 
   const store = { tx: async <T>(fn: (t: typeof tx) => Promise<T>) => fn(tx) };
   const audit = { record: vi.fn().mockResolvedValue(undefined) };
   const queue = { getFailed: vi.fn().mockResolvedValue(opts.failedJobs ?? []) };
-  const svc = new AsyncOpsService(store as never, queue as never, audit as never);
-  return { svc, audit, queue, executed };
+  const retryQueue = { getFailed: vi.fn().mockResolvedValue(opts.retryJobs ?? []) };
+  const svc = new AsyncOpsService(
+    store as never,
+    queue as never,
+    retryQueue as never,
+    audit as never,
+  );
+  return { svc, audit, queue, retryQueue, executed };
 }
 
 describe('AsyncOpsService.deadOutbox', () => {
@@ -126,5 +138,41 @@ describe('AsyncOpsService WhatsApp ingest jobs', () => {
     const b = failed('b');
     const { svc } = build({ failedJobs: [a, b] });
     expect(await svc.replayWaba({ limit: 100 }, 42)).toEqual({ replayed: 1, skipped: 1 });
+  });
+});
+
+describe('AsyncOpsService webhook retry jobs', () => {
+  const failed = (id: string, over: Record<string, unknown> = {}) => ({
+    id,
+    attemptsMade: 10,
+    opts: { attempts: 10 },
+    failedReason: 'db down',
+    finishedOn: 1_800_000_000_000,
+    data: { channel: 'telegram', payload: { update: { message: { text: 'secret' } } } },
+    retry: vi.fn().mockResolvedValue(undefined),
+    ...over,
+  });
+
+  it('lists failed jobs with their channel and no payload', async () => {
+    const { svc } = build({ retryJobs: [failed('a')] });
+    const out = await svc.failedWebhookRetry(50);
+    expect(out).toHaveLength(1);
+    expect(out[0]).toMatchObject({ jobId: 'a', attemptsMade: 10 });
+    expect(JSON.stringify(out)).not.toContain('secret');
+  });
+
+  it('replays exhausted jobs with a fresh budget, skips ones that failed on purpose, and audits it', async () => {
+    const exhausted = failed('e');
+    const permanent = failed('p', { attemptsMade: 2 });
+    const { svc, audit, retryQueue } = build({ retryJobs: [exhausted, permanent] });
+    expect(await svc.replayWebhookRetry({ limit: 100 }, 42)).toEqual({ replayed: 1, skipped: 1 });
+    expect(retryQueue.getFailed).toHaveBeenCalledWith(0, 99);
+    expect(exhausted.retry).toHaveBeenCalledWith('failed', { resetAttemptsMade: true });
+    expect(permanent.retry).not.toHaveBeenCalled();
+    expect(audit.record.mock.calls[0]![1]).toMatchObject({
+      event: 'platform.async_ops.webhook_retry_replayed',
+      actorId: 42,
+      payload: { replayed: 1, skipped: 1, limit: 100 },
+    });
   });
 });

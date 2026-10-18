@@ -74,6 +74,7 @@ describe('outbox replay', () => {
     svc = new AsyncOpsService(
       new AsyncOpsStore(new DatabaseService(clients)),
       queue as never,
+      queue as never,
       audit as never,
     );
   }, 180_000);
@@ -117,6 +118,16 @@ describe('outbox replay', () => {
   it('leaves the events of a workspace that is no longer active dead and says so', async () => {
     await seed(activeOrg, 'wallet.charge', 'dead', 1);
     await seed(suspendedOrg, 'wallet.charge', 'dead', 2);
+
+    const out = await svc.replayOutbox({ eventType: 'wallet.charge', limit: 200 }, 1);
+
+    expect(out).toEqual({ replayed: 1, skippedInactiveWorkspace: 2 });
+    expect(await count('wallet.charge', 'dead')).toBe(2);
+  });
+
+  it('leaves the events of a deleted workspace dead too (no organizations row to act for)', async () => {
+    await seed(activeOrg, 'wallet.charge', 'dead', 1);
+    await seed(987654, 'wallet.charge', 'dead', 2);
 
     const out = await svc.replayOutbox({ eventType: 'wallet.charge', limit: 200 }, 1);
 

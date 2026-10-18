@@ -25,8 +25,10 @@ const cut = (s: unknown): string | null =>
  *   inject work.
  * - Replay of an outbox event flips `dead` to `pending` in one statement that locks the rows it takes (`FOR UPDATE SKIP LOCKED`), so
  *   two operators, or a double click, never replay the same event twice at once; a second call finds nothing left.
- * - Events of a workspace that is no longer active stay dead: the authority to act for it is gone (ASYNC-046). A WhatsApp payload is
+ * - Events of a workspace that is suspended or deleted stay dead: the authority to act for it is gone (ASYNC-046). A WhatsApp payload is
  *   re-routed from its phone number when the worker processes it, so a replayed job reaches the workspace that owns the number now.
+ * - Replay keeps the events' own order among themselves (oldest first) but cannot put them before events of the same record that were
+ *   processed meanwhile: consumers must apply state forward-only or by upsert (ASYNC-062), as the idempotency audit requires.
  * - Consumers are at-least-once already (the billing charge, the message ledger and the webhook ledger deduplicate), which is what makes
  *   a replay safe to repeat (ASYNC-045).
  * - Every replay is recorded in the security events with the operator, the type and the counts.
@@ -36,6 +38,7 @@ export class AsyncOpsService {
   constructor(
     private readonly store: AsyncOpsStore,
     @InjectQueue(QUEUES.WABA_INGEST) private readonly wabaIngest: Queue,
+    @InjectQueue(QUEUES.WEBHOOK_RETRY) private readonly webhookRetry: Queue,
     private readonly audit: AuthAuditService,
   ) {}
 
@@ -73,8 +76,8 @@ export class AsyncOpsService {
           FROM event_outbox o
           WHERE o.status = 'dead'
             AND o.event_type = ${req.eventType}
-            AND NOT EXISTS (
-              SELECT 1 FROM organizations g WHERE g.id = o.org_id AND g.status <> 'active'
+            AND EXISTS (
+              SELECT 1 FROM organizations g WHERE g.id = o.org_id AND g.status = 'active'
             )
           ORDER BY o.created_at, o.id
           LIMIT ${req.limit}
@@ -91,7 +94,7 @@ export class AsyncOpsService {
         FROM event_outbox o
         WHERE o.status = 'dead'
           AND o.event_type = ${req.eventType}
-          AND EXISTS (SELECT 1 FROM organizations g WHERE g.id = o.org_id AND g.status <> 'active')
+          AND NOT EXISTS (SELECT 1 FROM organizations g WHERE g.id = o.org_id AND g.status = 'active')
       `);
       const result: OutboxReplayResult = {
         replayed: replayed.rows.length,
@@ -108,8 +111,24 @@ export class AsyncOpsService {
     });
   }
 
-  async failedWaba(limit: number): Promise<FailedIngestJob[]> {
-    const jobs = await this.wabaIngest.getFailed(0, Math.max(0, limit - 1));
+  failedWaba(limit: number): Promise<FailedIngestJob[]> {
+    return this.listFailed(this.wabaIngest, limit);
+  }
+
+  replayWaba(req: WabaReplayRequest, operatorId: number): Promise<WabaReplayResult> {
+    return this.replayFailed(this.wabaIngest, 'waba_ingest_replayed', req.limit, operatorId);
+  }
+
+  failedWebhookRetry(limit: number): Promise<FailedIngestJob[]> {
+    return this.listFailed(this.webhookRetry, limit);
+  }
+
+  replayWebhookRetry(req: WabaReplayRequest, operatorId: number): Promise<WabaReplayResult> {
+    return this.replayFailed(this.webhookRetry, 'webhook_retry_replayed', req.limit, operatorId);
+  }
+
+  private async listFailed(queue: Queue, limit: number): Promise<FailedIngestJob[]> {
+    const jobs = await queue.getFailed(0, Math.max(0, limit - 1));
     return jobs.map((j) => ({
       jobId: String(j.id ?? ''),
       attemptsMade: j.attemptsMade,
@@ -118,8 +137,13 @@ export class AsyncOpsService {
     }));
   }
 
-  async replayWaba(req: WabaReplayRequest, operatorId: number): Promise<WabaReplayResult> {
-    const jobs = await this.wabaIngest.getFailed(0, req.limit - 1);
+  private async replayFailed(
+    queue: Queue,
+    auditName: string,
+    limit: number,
+    operatorId: number,
+  ): Promise<WabaReplayResult> {
+    const jobs = await queue.getFailed(0, limit - 1);
     let replayed = 0;
     let skipped = 0;
     for (const job of jobs) {
@@ -139,11 +163,11 @@ export class AsyncOpsService {
     }
     await this.store.tx((tx) =>
       this.audit.record(tx, {
-        event: 'platform.async_ops.waba_ingest_replayed',
+        event: `platform.async_ops.${auditName}`,
         status: 'info',
         actorType: 'platform_operator',
         actorId: operatorId,
-        payload: { limit: req.limit, replayed, skipped },
+        payload: { limit, replayed, skipped },
       }),
     );
     return { replayed, skipped };

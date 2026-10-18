@@ -57,4 +57,20 @@ export class AsyncOpsController {
   replayWaba(@Body(zodPipe(wabaReplayRequestSchema)) body: WabaReplayRequest) {
     return this.ops.replayWaba(body, this.operatorId());
   }
+
+  @Get('webhook-retry/failed')
+  @ApiOperation({
+    summary:
+      'Channel webhook events (Telegram, Viber, LINE, Facebook) that failed for good (no payload)',
+  })
+  failedWebhookRetry(@Query('limit', zodPipe(limitQuery)) limit: number) {
+    return this.ops.failedWebhookRetry(limit);
+  }
+
+  @Post('webhook-retry/replay')
+  @OperatorRoles('super_admin')
+  @ApiOperation({ summary: 'Retry failed channel webhook events with a fresh retry budget' })
+  replayWebhookRetry(@Body(zodPipe(wabaReplayRequestSchema)) body: WabaReplayRequest) {
+    return this.ops.replayWebhookRetry(body, this.operatorId());
+  }
 }
