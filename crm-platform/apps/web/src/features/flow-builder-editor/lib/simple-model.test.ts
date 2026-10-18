@@ -121,7 +121,9 @@ describe('graph to simple', () => {
     );
     expect(canvasOnly).toEqual({
       ok: false,
-      reasons: [msg('simpleModel.reasons.unsupportedStep', { node: nodeLabelMsg('book_appointment') })],
+      reasons: [
+        msg('simpleModel.reasons.unsupportedStep', { node: nodeLabelMsg('book_appointment') }),
+      ],
     });
     const merge = toSimple(
       graph(
