@@ -9,6 +9,7 @@ import {
 } from '../auth/unofficial-whatsapp.port';
 import { DatabaseService } from '../../infra/db/database.service';
 import { orgIdList } from '../../common/sql/org-id-list';
+import { addOrRevive } from '../../infra/queue/add-or-revive';
 import { QUEUES } from '../../infra/queue/queues';
 import type { BroadcastDispatchJob } from './broadcast-dispatch.processor';
 
@@ -19,7 +20,8 @@ const BATCH = 50;
  *
  * Reference kept a scheduled broadcast only in Node's memory and lost it on a restart; here the broadcast row is the schedule.
  * A broadcast is due when it is `processing` or `scheduled`, its time has come and no job was queued for it yet.
- * The job id is the broadcast uuid, so queueing twice (a crash between the queue and the commit) is a no-op.
+ * The job id is the broadcast uuid, so queueing twice (a crash between the queue and the commit) is a no-op, while a finished job left
+ * from an earlier run is replaced so a resumed or retried broadcast really runs.
  *
  * Runs privileged: due broadcasts span every tenant, like the outbox drain.
  */
@@ -66,10 +68,13 @@ export class BroadcastDueService {
         org_id: number | string;
       }>;
       for (const r of rows) {
-        await this.queue.add(
+        // The row says nothing is queued, so a job of this id that already finished (a run being resumed or retried) is stale and must
+        // not swallow the add; one that is still waiting or running is the crash-between-queue-and-commit duplicate and stays.
+        await addOrRevive(
+          this.queue,
           'dispatch',
           { orgId: Number(r.org_id), broadcastId: Number(r.id) },
-          { jobId: r.uuid },
+          { jobId: r.uuid, replaceStates: ['failed', 'completed'] },
         );
         await tx.execute(sql`
           UPDATE broadcasts SET node_schedule_id = ${`bullmq:${r.uuid}`}, status = 'processing'

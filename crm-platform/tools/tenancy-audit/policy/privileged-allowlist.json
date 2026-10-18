@@ -435,6 +435,11 @@
     "reason": "blanket wrapper with ~60 call sites; operator routes and signed/tokened public receivers read, not every site. The webhook subscription match fell back to the newest subscription on a shared plan id (TI-009); fixed in subscription-lifecycle.service.ts",
     "reviewedOn": "2026-10-11"
   },
+  "modules/platform-async-ops/async-ops.store.ts": {
+    "status": "reviewed",
+    "reason": "operator-only (OperatorGuard, platform_operator) list and replay of dead event_outbox rows across tenants by design; the caller names an event type and a count, never a payload or an org, replay is a single UPDATE on rows already dead, skips workspaces that are not active, and is audited with the operator",
+    "reviewedOn": "2026-10-17"
+  },
   "modules/platform-support-desk/support-store.ts": {
     "status": "reviewed",
     "reason": "platform/operator data behind OperatorGuard routes; no tenant route reaches it",

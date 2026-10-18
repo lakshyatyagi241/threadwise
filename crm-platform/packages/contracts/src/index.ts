@@ -9,6 +9,7 @@
  *  - Internal bigint ids never appear. Every identifier on the wire is a uuid.
  */
 export * from './analytics';
+export * from './platform-async-ops';
 export * from './common/ids';
 export * from './common/pagination';
 export * from './common/errors';

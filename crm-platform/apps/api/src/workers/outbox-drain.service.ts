@@ -3,6 +3,7 @@ import { Interval } from '@nestjs/schedule';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../infra/db/database.service';
 import { OutboxSubscriberRegistry } from '../kernel/outbox/outbox-subscribers';
+import { outboxRetryDecision } from './outbox-retry-policy';
 
 interface OutboxRow {
   id: string;
@@ -16,7 +17,6 @@ interface OutboxRow {
 }
 
 const BATCH_SIZE = 200;
-const MAX_ATTEMPTS = 8;
 /**
  * A tick keeps claiming while the last batch came back full, up to this many batches. Without it a backlog drained at one batch per
  * 2 second tick (a ceiling of 100 events a second) however fast the consumers are; with it a backlog drains as fast as the consumers
@@ -43,8 +43,8 @@ function drainConcurrency(): number {
  * run the identical query concurrently without any of them blocking on, or
  * double-processing, another's rows — no distributed lock, no leader election.
  *
- * Failures back off exponentially via `available_at` and are dead-lettered
- * after MAX_ATTEMPTS. A poison event must not be able to stall the queue
+ * Failures back off exponentially (with jitter) via `available_at` and are dead-lettered
+ * after OUTBOX_MAX_ATTEMPTS (see outbox-retry-policy.ts). A poison event must not be able to stall the queue
  * behind it forever.
  *
  * Runs privileged: the outbox spans every tenant by definition.
@@ -119,9 +119,7 @@ export class OutboxDrainService {
         } else {
           const err = failure;
           const attempts = row.attempts + 1;
-          const dead = attempts >= MAX_ATTEMPTS;
-          // 2^attempts seconds, capped at 15 minutes.
-          const backoffSeconds = Math.min(2 ** attempts, 900);
+          const { dead, backoffSeconds } = outboxRetryDecision(attempts);
 
           await tx.execute(sql`
             UPDATE event_outbox
