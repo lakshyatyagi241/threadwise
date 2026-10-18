@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Connecté",
           "shopify": "Connecté",
-          "google_sheets": "Clé API émise",
-          "meta_catalog": "Catalogue lié"
+          "meta_catalog": "Catalogue lié",
+          "google_sheets": "Compte Google connecté"
         },
         "notConnected": "non connecté",
         "connect": "Connecter",
@@ -405,6 +405,43 @@
           "sent": "Envoyé à {peer}",
           "received": "Reçu de {peer}",
           "empty": "Aucune activité récente sur cette période."
+        },
+        "loginDevices": {
+          "title": "Appareils de connexion",
+          "subtitle": "Connexions à l'espace de travail sur cette période, par navigateur, système et type",
+          "active": "{n} actives maintenant",
+          "total": "{n, plural, one {# connexion} other {# connexions}}",
+          "empty": "Aucune connexion sur cette période.",
+          "activeLegend": "Actives maintenant",
+          "endedLegend": "Déconnectées ou expirées",
+          "row": "{count} connexions, {active} actives maintenant",
+          "group": {
+            "browser": "Navigateur",
+            "os": "Système",
+            "kind": "Type"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "Autre navigateur"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "Autre système"
+          },
+          "kind": {
+            "desktop": "Ordinateur",
+            "mobile": "Mobile",
+            "unknown": "Inconnu"
+          }
         }
       }
     },

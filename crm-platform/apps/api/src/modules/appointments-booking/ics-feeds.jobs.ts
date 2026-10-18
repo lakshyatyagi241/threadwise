@@ -28,7 +28,7 @@ const RELEASE = `if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call
 const JOB_OPTIONS = {
   // A read that fails is recorded with its own back-off; the queue's retry is only for a database or Redis fault.
   attempts: 2,
-  backoff: { type: 'exponential' as const, delay: 30_000 },
+  backoff: { type: 'exponential' as const, delay: 30_000, jitter: 0.5 },
   removeOnComplete: true,
   removeOnFail: { age: 24 * 3600 },
 };

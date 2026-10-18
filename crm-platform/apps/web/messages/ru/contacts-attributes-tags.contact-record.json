@@ -196,7 +196,9 @@
           },
           "meeting": {
             "upcoming": "Встреча: {title}",
-            "past": "Состоялась встреча: {title}"
+            "past": "Состоялась встреча: {title}",
+            "notHeld": "Не состоялась: {title}",
+            "noShow": "Не явился: {title}"
           },
           "call": {
             "inbound": "Входящий звонок",

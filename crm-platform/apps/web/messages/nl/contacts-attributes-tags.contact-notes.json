@@ -94,7 +94,13 @@
             "endInvalid": "Vul een geldige einddatum en -tijd in.",
             "endBeforeStart": "Het einde mag niet vóór het begin liggen."
           }
-        }
+        },
+        "bookedOnline": "Online geboekt",
+        "viewBooking": "Boeking bekijken",
+        "manageBooking": "Boeking beheren",
+        "viewBookingAria": "Boeking van {title} bekijken",
+        "manageBookingAria": "Boeking van {title} beheren",
+        "bookedReadOnly": "Online geboekt. Het kan alleen in de boeking zelf worden gewijzigd."
       },
       "files": {
         "title": "Bestanden",

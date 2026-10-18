@@ -196,7 +196,9 @@
           },
           "meeting": {
             "upcoming": "Réunion : {title}",
-            "past": "Rencontre : {title}"
+            "past": "Rencontre : {title}",
+            "notHeld": "Non tenu : {title}",
+            "noShow": "Absent : {title}"
           },
           "call": {
             "inbound": "Appel entrant",

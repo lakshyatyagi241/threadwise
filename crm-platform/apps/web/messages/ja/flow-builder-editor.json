@@ -1131,19 +1131,14 @@
           "aiModelPick": "— モデルを選択 —",
           "aiModelNone": "有効なAIモデルがありません。管理者にオンにするよう依頼してください",
           "aiModelNotEnabled": "{value}(無効)",
-          "aiAssistantNone": "— なし(上のプロンプトのみ使用)—",
           "aiAssistantOption": "{name} · {count, plural, other {ソース#件}}",
           "aiAssistantMissing": "(アシスタント{id})",
-          "aiAssistantHintNone": "ナレッジベースはまだありません。<link>AIトレーニング</link>で作成し、「リストを更新」を押してここで選択してください。",
-          "aiAssistantHintEmpty": "注意: このアシスタントには学習済みソースが0件です。<link>AIトレーニング</link>で追加しないと、返信はプロンプトのみで生成されます。",
-          "aiAssistantHint": "選択したアシスタントの学習済みコンテンツをこの返信に取り込みます。<link>ナレッジを管理 →</link>",
           "aiModelLabel": "モデル",
           "aiModelHint": "管理者が有効にしたモデルと、独自のキーを追加したプロバイダー(設定 → AIキー、BYOKプラン)が利用できます。",
           "aiModelHintNone": "利用可能なプロバイダーがまだありません。<link>設定 → AIキー</link>で独自のキーを追加する(BYOKプラン)か、管理者に有効化を依頼してください。",
           "aiPrompt": "システムプロンプト",
           "aiSave": "レスポンスの保存先",
           "aiSaveHint": "後続のノードは<v>{save}</v>として読み取ります。抽出時は<v>{path}</v>です。",
-          "aiAssistantLabel": "ナレッジベース(任意)",
           "aiExtract": "<strong>構造化データ(JSON)を抽出</strong> — メッセージをフィールドに変換します",
           "aiFields": "抽出するフィールド",
           "aiFieldsHint": "カンマ区切りのキーです。AIは1つのJSONオブジェクトを返し、各キーは<v>{key}</v>になります(複数のレコードが検出された場合は<v>{rows}</v>も。例: Googleスプレッドシートのノード用)。",
@@ -1156,7 +1151,25 @@
           "subflowMissing": "フロー{id}(ワークスペースにありません)",
           "subflowLabel": "実行するフロー",
           "subflowHint": "保存済みの別のフローを選択します。このノードが実行されると、そのフローが最後まで実行されてから、ここの次のノードに制御が戻ります。",
-          "endInfo": "このノードはフローを終了します。この後に接続したものは実行されません。"
+          "endInfo": "このノードはフローを終了します。この後に接続したものは実行されません。",
+          "aiSetupLegend": "このステップはどのように返信しますか?",
+          "aiSetupAgent": "AIエージェント",
+          "aiSetupAgentDesc": "AIトレーニングのエージェントの指示、モデル、ナレッジを使います。",
+          "aiSetupCustom": "カスタム設定",
+          "aiSetupCustomDesc": "ここでモデルを選び、指示を書きます。",
+          "aiAgentLabel": "AIエージェント",
+          "aiAgentPick": "— AIエージェントを選択 —",
+          "aiAgentHint": "エージェントは自身の指示、モデル、ナレッジを持っています。変更は<link>AIトレーニング</link>で行います。",
+          "aiAgentNone": "AIエージェントがまだありません。<link>最初のAIエージェントを作成</link>してから、リストを更新を押してください。",
+          "aiAgentRequired": "AIエージェントを選ぶか、カスタム設定に切り替えてください。",
+          "aiAgentSummary": "モデル {model} · {count, plural, other {ナレッジソース#件}}",
+          "aiAgentNoSources": "このエージェントにはまだナレッジがないため、指示だけで回答します。<link>AIトレーニング</link>でソースを追加してください。",
+          "aiPromptRequired": "AIへの指示を書いてください。",
+          "aiKnowledgeLabel": "AIエージェントのナレッジ(任意)",
+          "aiKnowledgeNone": "— なし —",
+          "aiKnowledgeHint": "そのエージェントの学習済みソースを返信に加えます。カスタム設定では、そのエージェントの指示とモデルは使われません。<link>AIトレーニングで管理 →</link>",
+          "aiAdvanced": "詳細オプション",
+          "aiCreateAgent": "+ AIエージェントを作成"
         },
         "options": {
           "prompt": "プロンプト",
@@ -1646,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— シートを選択 —",
-              "empty": "スプレッドシートが見つかりません。下にURLまたはIDを貼り付けてください",
               "loading": "シートを読み込み中…",
-              "notConnected": "このワークスペースはGoogleに接続されていないため、シートを一覧表示できません。代わりにシートのIDまたはリンクを貼り付けてください。",
-              "idPlaceholder": "シートID",
-              "saved": "シート {id}…（未読み込み）"
+              "saved": "シート {id}…（未読み込み）",
+              "empty": "連携中の Google アカウントにスプレッドシートが見つかりません",
+              "notConnected": "このワークスペースでは Google が連携されていないため、シートを一覧表示できません。シートを選ぶには Google を連携してください。"
             },
             "docs": {
               "pick": "— テンプレートのドキュメントを選択 —",
               "empty": "ドキュメントが見つかりません",
               "loading": "ドキュメントを読み込み中…",
-              "notConnected": "このワークスペースはGoogleに接続されていないため、ドキュメントを一覧表示できません。代わりにドキュメントのIDまたはリンクを貼り付けてください。",
-              "idPlaceholder": "ドキュメントID",
-              "saved": "ドキュメント {id}…（未読み込み）"
+              "saved": "ドキュメント {id}…（未読み込み）",
+              "notConnected": "このワークスペースでは Google が連携されていないため、ドキュメントを一覧表示できません。ドキュメントを選ぶには Google を連携してください。"
             },
             "forms": {
               "pick": "— フォームを選択 —",
               "empty": "フォームが見つかりません",
               "loading": "フォームを読み込み中…",
-              "notConnected": "このワークスペースはGoogleに接続されていないため、フォームを一覧表示できません。代わりにフォームのIDまたはリンクを貼り付けてください。",
-              "idPlaceholder": "フォームID",
-              "saved": "フォーム {id}…（未読み込み）"
+              "saved": "フォーム {id}…（未読み込み）",
+              "notConnected": "このワークスペースでは Google が連携されていないため、フォームを一覧表示できません。フォームを選ぶには Google を連携してください。"
             }
           },
           "sheetsIntro": "Googleスプレッドシートに行を追加します（書き込みモード）、またはキー列で行を検索します（読み取りモード）。<link>/google-account</link>で接続されたワークスペースのGoogleアカウントを使用します。",
@@ -1688,8 +1698,6 @@
           "addColumn": "列を追加",
           "matchByHeader": "見出し名で列を照合",
           "matchByHeaderHint": "見出しが一致するシートの列に各値を書き込みます（順序は問いません）。オフにすると位置に従って左から右に追加します（既定）。",
-          "pasteLabel": "…またはスプレッドシートのURL／IDを貼り付け",
-          "pasteHint": "選択肢が空でも使用できます。シートのリンクを貼り付けると、IDを自動で抽出します。",
           "docsIntro": "テンプレートのドキュメントをコピーし、<mono>{placeholders}</mono>を埋めて、リンクを知っている全員が閲覧できるように共有し、そのURLを顧客に送信します。値を入れたい場所にテンプレートで<mono>{key}</mono>を配置してください。",
           "templateDocument": "テンプレートのドキュメント",
           "newCopyTitle": "新しいコピーのタイトル",
@@ -1704,7 +1712,6 @@
           "messageTemplateHint": "顧客に送信されるボットのメッセージです。<mono>{token}</mono>には共有リンクが入ります。",
           "messageTemplatePlaceholder": "ドキュメントはこちらです:\n'{{'doc_url'}}'",
           "saveUrl": "URLの保存先変数",
-          "formIntro": "フォームのURLをWhatsAppで送信し、フローを一時停止します。顧客が入力すると<b>submitted</b>ポートから再開します。回答はフロー変数になります。",
           "googleForm": "Googleフォーム",
           "bodyBubble": "本文（リンクの上に送信）",
           "bodyBubblePlaceholder": "次の簡単なフォームにご記入ください:",
@@ -1712,12 +1719,6 @@
           "saveResponsesHint": "個別の回答も<mono>{token}</mono>として格納されます。",
           "expireAfter": "有効期限（秒）",
           "expireAfterHint": "送信を待つ時間の上限です。86400 = 24時間。",
-          "setupTitle": "初回のみの設定 — フォームのスクリプトエディタに貼り付けてください",
-          "setupOpen": "フォームを開く → <mono>⋮ メニュー</mono> → <mono>スクリプトエディタ</mono>",
-          "setupDownload": "<link>スクリプト（.gs）をダウンロード</link>して貼り付けてください",
-          "setupTrigger": "トリガーを追加: <mono>onFormSubmit</mono> · フォームから · フォーム送信時",
-          "setupWarning": "このスクリプトがない場合、フォームへの回答はGoogleフォームに記録されますが、フローは再開しません。",
-          "noListing": "Google アカウントのページで Drive のファイル一覧の権限が付与されていないため、ファイルを一覧表示できません。リンクまたは ID を貼り付けてください。",
           "connection": {
             "open": "Google アカウントを開く",
             "permission": {
@@ -1730,7 +1731,9 @@
             "disconnected": "Googleアカウントが接続されていないため、フローの実行時にこのステップは失敗します。先にGoogleを接続してください。",
             "needsReconnect": "接続中のアカウントがGoogleに受け付けられなくなったため、フローの実行時にこのステップは失敗します。先にGoogleを再接続してください。",
             "missing": "接続されたGoogleアカウントに{permission}の権限が付与されていないため、フローの実行時にこのステップは失敗します。"
-          }
+          },
+          "formIntro": "フォームの URL を WhatsApp で送信してフローを一時停止し、顧客が入力すると <b>submitted</b> ポートから再開します。回答は連携済みの Google アカウント経由でフォームから読み取られるため、フォームに何かを貼り付ける必要はありません。回答はフロー変数になります。",
+          "noListing": "Google アカウントのページで Drive ファイル一覧の権限が付与されていないため、ファイルを一覧表示できません。ファイルを選ぶには、そこで追加してください。"
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2497,7 +2500,8 @@
         "noSenderFacebook": "トリガーノードにFacebookページが選択されていません。トリガーの手順で選択してください。",
         "noSenderNumber": "トリガーノードに番号が選択されていません。トリガーの手順で選択してください。",
         "faqMinScore": "「{node}」の最小スコアが0.05~0.99の範囲外です。修正するか、空欄にしてフローの設定を使用してください。",
-        "locationInvalid": "「{node}」に有効な位置情報がありません。Google マップのリンクを貼り付けるか、緯度（-90～90）と経度（-180～180）を入力してください。"
+        "locationInvalid": "「{node}」に有効な位置情報がありません。Google マップのリンクを貼り付けるか、緯度（-90～90）と経度（-180～180）を入力してください。",
+        "aiNoAgent": "「{node}」にはAIエージェントもプロンプトもありません。AIエージェントを選ぶか、カスタム設定を選んで指示を書いてください。"
       }
     },
     "simpleModel": {
@@ -2663,7 +2667,9 @@
         "chooseFlow": "ステップ {stage}: ボタンが開始するフローを選んでください。",
         "chooseApi": "ステップ {stage}: 呼び出す API を選んでください。",
         "writeCode": "ステップ {stage}: 実行するコードを書いてください。",
-        "webhookUrl": "ステップ {stage}: 呼び出すアドレス(URL)を追加してください。"
+        "webhookUrl": "ステップ {stage}: 呼び出すアドレス(URL)を追加してください。",
+        "chooseAiAgent": "ステップ {stage}: 回答するAIエージェントを選ぶか、ステップをカスタム設定に切り替えてください。",
+        "writeAiPrompt": "ステップ {stage}: AIへの指示を書くか、AIエージェントを選んでください。"
       },
       "faqSummary": "{hasCategory, select, true {FAQから · {category}} other {FAQから}}"
     },

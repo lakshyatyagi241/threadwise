@@ -281,7 +281,9 @@
         "couldNotUndo": "This change cannot be undone any more: the contact moved on, or it was already undone."
       },
       "heldUntil": "Held until {when}",
-      "heldWhy": "This marketing message is waiting for your quiet hours to end. It is sent then, if the contact has not unsubscribed in the meantime."
+      "heldWhy": "This marketing message is waiting for your quiet hours to end. It is sent then, if the contact has not unsubscribed in the meantime.",
+      "templateSent": "Template “{name}” sent via {channel}",
+      "templateSentPlain": "Template “{name}” sent"
     },
     "media": {
       "openImage": "Open image {name}",
@@ -1119,6 +1121,12 @@
       },
       "titleBreached": "{kind}: missed (was due {time})",
       "titleOpen": "{kind}: due {time}"
+    },
+    "channelType": {
+      "official": "Official",
+      "unofficial": "Unofficial",
+      "officialFull": "Official (WhatsApp Cloud API)",
+      "unofficialFull": "Unofficial (QR / Baileys)"
     }
   }
 }

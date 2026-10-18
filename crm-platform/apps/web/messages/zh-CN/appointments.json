@@ -566,11 +566,12 @@
         "hint": "没有它预订也能正常使用。在“预约 > 设置”中连接 Google 日历，可同步忙闲时间并添加 Meet 链接。",
         "unavailable": "此平台尚未设置 Google 日历。这些设置会保存在预订类型中，待设置完成后生效。",
         "calendarId": "日历",
-        "calendarPlaceholder": "主日历",
         "spreadsheetId": "追加到表格（可选）",
-        "spreadsheetPlaceholder": "电子表格 ID",
         "createMeet": "为每个预订创建 Google Meet 链接",
-        "calendarDefault": "工作区日历"
+        "calendarDefault": "工作区日历",
+        "connectFirst": "连接您的 <link>Google 账号</link>，即可从其列表中选择。",
+        "spreadsheetNone": "无工作表",
+        "spreadsheetNoListing": "由于未授予“Drive 文件列表”权限，无法列出您的工作表。请在 Google 账号页面添加该权限。"
       },
       "messages": {
         "title": "生命周期消息",

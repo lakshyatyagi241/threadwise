@@ -91,8 +91,8 @@
         },
         "sheets": {
           "name": "Sheets",
-          "body": "Aggiungi una riga a un foglio, cerca una riga, controlla una cella o copia una riga in un contatto.",
-          "usedBy": "Google Sheets, Controlla campo Google Sheet, Salva contatto da Google Sheet"
+          "usedBy": "Google Sheets, Controlla campo Google Sheet, Salva contatto da Google Sheet",
+          "body": "Aggiungi una riga a un foglio, cerca una riga, controlla una cella o copia una riga in un contatto."
         },
         "docs": {
           "name": "Docs e Drive",
@@ -101,13 +101,13 @@
         },
         "forms": {
           "name": "Forms",
-          "body": "Leggi il link pubblico di un modulo così il flow può inviarlo al cliente.",
-          "usedBy": "Passaggio Google Form"
+          "usedBy": "Passaggio Google Form",
+          "body": "Leggi il link pubblico di un modulo per permettere al flusso di inviarlo al cliente, e leggi le risposte del modulo così il flusso prosegue quando il cliente lo compila."
         },
         "drive_listing": {
           "name": "Elenco file di Drive",
-          "body": "Mostra per nome i tuoi fogli, documenti e moduli nel flow builder, così puoi sceglierli invece di incollare un link.",
-          "usedBy": "Selettori di file nel flow builder"
+          "body": "Elenca i tuoi fogli, documenti e moduli per nome, così puoi sceglierli dal tuo account nel flow builder e nelle impostazioni di prenotazione. Necessario per ogni selettore di file.",
+          "usedBy": "Selettori di file nel flow builder e nelle impostazioni di prenotazione"
         }
       },
       "lastError": {

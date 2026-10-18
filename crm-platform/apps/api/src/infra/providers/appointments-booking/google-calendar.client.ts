@@ -196,6 +196,26 @@ export class GoogleCalendarClient {
     return out.sort((a, b) => Number(b.primary) - Number(a.primary));
   }
 
+  /**
+   * The account's spreadsheets by name, newest first (Drive `files.list` with the Drive file list permission), for the picker on a
+   * booking type. Never more than a hundred: the picker is for choosing, not for browsing a Drive.
+   */
+  async listSpreadsheets(accessToken: string): Promise<Array<{ id: string; name: string }>> {
+    const q = new URLSearchParams({
+      q: "mimeType='application/vnd.google-apps.spreadsheet' and trashed=false",
+      pageSize: '100',
+      orderBy: 'modifiedTime desc',
+      fields: 'files(id,name)',
+    });
+    const body = (await this.send(`${this.env().GOOGLE_DRIVE_API_URL}?${q}`, {
+      token: accessToken,
+      classify: classifyApiError,
+    })) as Json;
+    return ((body.files as Json[] | undefined) ?? [])
+      .filter((f) => typeof f.id === 'string' && f.id !== '')
+      .map((f) => ({ id: String(f.id), name: typeof f.name === 'string' ? f.name : String(f.id) }));
+  }
+
   /** `calendars.get`: throws `not_found` when the calendar is gone or not visible to the account. */
   async getCalendar(accessToken: string, calendarId: string): Promise<{ id: string }> {
     const body = (await this.api(accessToken, 'GET', `/calendars/${enc(calendarId)}`)) as Json;

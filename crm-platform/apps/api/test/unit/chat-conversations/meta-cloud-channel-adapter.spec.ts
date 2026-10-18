@@ -316,13 +316,24 @@ describe('send: what a refusal becomes', () => {
     expect(html).toMatchObject({ code: 'PROVIDER_ERROR', retryable: true });
   });
 
-  it('a connection that fails before any answer is retryable (the message may not have left)', async () => {
+  it('a connection refused before anything was sent is retryable', async () => {
     const { adapter } = build(() => {
-      throw new TypeError('fetch failed');
+      throw Object.assign(new TypeError('fetch failed'), { cause: { code: 'ECONNREFUSED' } });
     });
     await expect(adapter.send(meta(), text())).rejects.toMatchObject({
       code: 'PROVIDER_UNREACHABLE',
       retryable: true,
+    });
+  });
+
+  it('a send that times out is not retried: Meta may have accepted it (RF-01)', async () => {
+    const { adapter } = build(() => {
+      throw Object.assign(new Error('timed out'), { name: 'TimeoutError' });
+    });
+    await expect(adapter.send(meta(), text())).rejects.toMatchObject({
+      code: 'PROVIDER_OUTCOME_UNKNOWN',
+      retryable: false,
+      outcomeMayHaveCommitted: true,
     });
   });
 

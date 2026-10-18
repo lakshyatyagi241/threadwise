@@ -33,6 +33,14 @@ function singleLink(link: Link, subject: ResolvedSubject): SQL {
       return subject.contactIds.length
         ? sql`${col} = ANY(${bigintArray(subject.contactIds)})`
         : sql`FALSE`;
+    case 'user':
+      return subject.userIds.length
+        ? sql`${col} = ANY(${bigintArray(subject.userIds)})`
+        : sql`FALSE`;
+    case 'user_email':
+      return subject.userEmails.length
+        ? sql`lower(${col}::text) = ANY(${textArray(subject.userEmails)})`
+        : sql`FALSE`;
     case 'contact_uuid':
       return subject.contactUuids.length
         ? sql`${col} = ANY(${uuidArray(subject.contactUuids)})`
@@ -64,10 +72,20 @@ function singleLink(link: Link, subject: ResolvedSubject): SQL {
   }
 }
 
-/** `org_id = $1 AND (link) [AND where]` for one table spec. */
-export function rowsOf(spec: TableSpec, subject: ResolvedSubject): SQL {
+/** `org_id = $1 AND (link) [AND where]` for one table spec. `export` reads the narrower `exportLink` when the spec has one. */
+export function rowsOf(
+  spec: TableSpec,
+  subject: ResolvedSubject,
+  purpose: 'erase' | 'export' = 'erase',
+): SQL {
   const extra = spec.where ? sql` AND (${spec.where})` : sql``;
-  return sql`org_id = ${subject.orgId} AND (${linkPredicate(spec.link, subject)})${extra}`;
+  const link = purpose === 'export' && spec.exportLink ? spec.exportLink : spec.link;
+  return sql`org_id = ${subject.orgId} AND (${linkPredicate(link, subject)})${extra}`;
+}
+
+/** The kinds of link a spec uses (`user`, `contact`, ...). */
+export function linkKinds(spec: TableSpec): Set<Link['by']> {
+  return new Set(([] as Link[]).concat(spec.link as Link | Link[]).map((l) => l.by));
 }
 
 export function replacementSql(r: Replacement): SQL {

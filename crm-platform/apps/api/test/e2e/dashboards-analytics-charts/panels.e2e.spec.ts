@@ -146,6 +146,49 @@ describe('GET /v2/analytics/panels', () => {
     expect((await get(empty.admin)).body.team).toEqual([]);
   });
 
+  it('login devices: workspace sessions in the window by browser, system and kind; counts only, never another workspace', async () => {
+    const d = await api.signup('dpan4');
+    await q(`UPDATE org_plan_state SET overrides = $2::jsonb WHERE org_id = $1`, [
+      d.orgId,
+      JSON.stringify({ features: { analytics: true } }),
+    ]);
+    const before = analyticsPanelsSchema.parse((await get(d.admin)).body).loginDevices;
+    const CHROME_WIN =
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';
+    const SAFARI_IPHONE =
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1';
+    const session = (org: number, ua: string | null, ago: string, revoked = false) =>
+      q(
+        `INSERT INTO auth_sessions (org_id, user_id, ip, user_agent, created_at, expires_at, revoked_at)
+         VALUES ($1, $2, '203.0.113.9', $3, now() - $4::interval, now() + interval '7 days', CASE WHEN $5 THEN now() END)`,
+        [org, d.adminUserId, ua, ago, revoked],
+      );
+    await session(d.orgId, CHROME_WIN, '2 days');
+    await session(d.orgId, CHROME_WIN, '3 days', true); // signed out: counted, not active
+    await session(d.orgId, SAFARI_IPHONE, '1 day');
+    await session(d.orgId, null, '1 day'); // no agent: other / unknown
+    await session(d.orgId, CHROME_WIN, '60 days'); // outside the 30d window
+    // another workspace's sessions never show up here
+    await session(t.orgId, SAFARI_IPHONE, '1 day');
+
+    const res = await get(d.admin);
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    const ld = analyticsPanelsSchema.parse(res.body).loginDevices;
+    expect(ld.total - before.total).toBe(4);
+    expect(ld.byBrowser.find((r) => r.key === 'chrome')).toMatchObject({
+      count: before.byBrowser.find((r) => r.key === 'chrome')!.count + 2,
+    });
+    expect(ld.byOs.find((r) => r.key === 'iphone')?.count).toBe(1);
+    expect(ld.byKind.map((r) => r.key).sort()).toEqual(['desktop', 'mobile', 'unknown']);
+    // the 60-day-old session is live but outside the window: `active` counts live sessions of the workspace
+    expect(ld.active - before.active).toBe(4);
+    // counts only: no address, agent string or session id leaves the server
+    const raw = JSON.stringify(res.body);
+    expect(raw).not.toContain('203.0.113.9');
+    expect(raw).not.toContain('Mozilla');
+    expect(res.body.loginDevices).not.toHaveProperty('rows');
+  });
+
   it('TW-DASH-029: geography groups conversations of the window by the country of the number; the stream lists both directions', async () => {
     const g = await api.signup('dpan3');
     await q(`UPDATE org_plan_state SET overrides = $2::jsonb WHERE org_id = $1`, [

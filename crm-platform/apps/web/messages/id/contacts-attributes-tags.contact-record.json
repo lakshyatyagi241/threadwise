@@ -196,7 +196,9 @@
           },
           "meeting": {
             "upcoming": "Rapat: {title}",
-            "past": "Bertemu: {title}"
+            "past": "Bertemu: {title}",
+            "notHeld": "Tidak terlaksana: {title}",
+            "noShow": "Tidak hadir: {title}"
           },
           "call": {
             "inbound": "Panggilan masuk",

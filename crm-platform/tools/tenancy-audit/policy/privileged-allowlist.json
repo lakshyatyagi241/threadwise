@@ -195,11 +195,6 @@
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
     "reviewedOn": "2026-10-11"
   },
-  "modules/chrome-extension-sheets-addon/sheets-key.guard.ts": {
-    "status": "reviewed",
-    "reason": "pre-tenant lookup keyed by a high-entropy secret or hash; returns routing data; the org is set only after the secret verifies (128-bit key, sha256, unique partial index, per-IP failure throttle)",
-    "reviewedOn": "2026-10-11"
-  },
   "modules/compliance-center/public-trust.service.ts": {
     "status": "reviewed",
     "reason": "public, unauthenticated /trust/:slug page (BL-173). privileged() is used only to resolve slug -> org id/name (the only legitimate way to find an org pre-tenant-context, same pattern as tenant-directory.ts). Input is regex-validated before the query; every subsequent read runs under txAs({orgId}), properly tenant-scoped. The response is hand-built from an explicit allowlist of fields the workspace chose to publish (name, privacy/terms URLs, DPO contact, active subprocessors only) and is gated by a subprocessorsPublic opt-in toggle; a missing, inactive or opted-out workspace all answer the same 404, so the endpoint cannot be used to enumerate slugs.",
@@ -533,5 +528,10 @@
     "status": "reviewed",
     "reason": "catalog/schema objects only; no tenant rows",
     "reviewedOn": "2026-10-11"
+  },
+  "modules/failed-operations/failed-operations.repository.ts": {
+    "status": "reviewed",
+    "reason": "operator-only (OperatorGuard, platform_operator; redrive and close need super_admin) and worker-only records of background work that failed for good; failed_operations and failed_operation_events are platform tables whose every policy is app_is_privileged() (no workspace can read one), so privileged is the only way to reach them. A redrive takes nothing from the caller but the record id: payload, workspace and eligibility come from the stored record, a suspended or deleted workspace is refused, and every action is audited with the operator",
+    "reviewedOn": "2026-12-29"
   }
 }

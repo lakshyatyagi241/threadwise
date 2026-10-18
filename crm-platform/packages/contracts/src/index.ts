@@ -10,6 +10,7 @@
  */
 export * from './analytics';
 export * from './platform-async-ops';
+export * from './platform-failed-operations';
 export * from './common/ids';
 export * from './common/pagination';
 export * from './common/errors';
@@ -100,7 +101,6 @@ export * from './outbound-webhooks';
 export * from './forms-builder';
 export * from './forms-links-groups';
 export * from './ai-copilot-lead-finder';
-export * from './chrome-extension-sheets-addon';
 export * from './google-account';
 export * from './api-library';
 export * from './faq-knowledge';
@@ -112,3 +112,4 @@ export * from './compliance';
 export * from './waboo-migration';
 export * from './lead-handling';
 export * from './channel-wechat';
+export * from './persona';

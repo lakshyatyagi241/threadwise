@@ -281,7 +281,9 @@
         "couldNotUndo": "Perubahan ini tidak bisa diurungkan lagi: kontak sudah berpindah tahap atau sudah diurungkan."
       },
       "heldUntil": "Ditahan sampai {when}",
-      "heldWhy": "Pesan pemasaran ini menunggu jam tenang Anda berakhir. Pesan akan dikirim saat itu, jika kontak belum berhenti berlangganan."
+      "heldWhy": "Pesan pemasaran ini menunggu jam tenang Anda berakhir. Pesan akan dikirim saat itu, jika kontak belum berhenti berlangganan.",
+      "templateSent": "Templat “{name}” dikirim melalui {channel}",
+      "templateSentPlain": "Templat “{name}” dikirim"
     },
     "media": {
       "openImage": "Buka gambar {name}",
@@ -1119,6 +1121,12 @@
       },
       "titleBreached": "{kind}: terlewat (jatuh tempo {time})",
       "titleOpen": "{kind}: jatuh tempo {time}"
+    },
+    "channelType": {
+      "official": "Resmi",
+      "unofficial": "Tidak resmi",
+      "officialFull": "Resmi (WhatsApp Cloud API)",
+      "unofficialFull": "Tidak resmi (QR / Baileys)"
     }
   }
 }

@@ -172,6 +172,25 @@ describe('the pre-save check lists the same problems as the contracts, in the ca
       ],
     ],
     [
+      'AI assistant with no agent and no prompt',
+      [
+        [
+          node('t', 'trigger', { data: { deviceId: 'd' } }),
+          node('a', 'ai', { data: { agentMode: 'agent', assistant: '' } }),
+          node('b', 'ai', { data: { agentMode: 'custom', prompt: '  ' } }),
+          node('c', 'ai', { data: { agentMode: 'agent', assistant: 'x' } }),
+          node('d', 'ai', { data: { prompt: 'Be brief' } }),
+        ],
+        [
+          { source: 't', target: 'a' },
+          { source: 'a', target: 'b' },
+          { source: 'b', target: 'c' },
+          { source: 'c', target: 'd' },
+        ],
+        { mode: 'chat', senderAvailable: true },
+      ],
+    ],
+    [
       'no sender but none to pick',
       [[node('t', 'trigger', { data: {} })], [], { mode: 'call', senderAvailable: false }],
     ],

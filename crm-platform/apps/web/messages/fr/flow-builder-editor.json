@@ -1131,19 +1131,14 @@
           "aiModelPick": "— choisir un modèle —",
           "aiModelNone": "Aucun modèle IA activé : demandez à l’admin d’en activer un",
           "aiModelNotEnabled": "{value} (non activé)",
-          "aiAssistantNone": "— aucune (utiliser uniquement le prompt ci-dessus) —",
           "aiAssistantOption": "{name} · {count, plural, one {# source} other {# sources}}",
           "aiAssistantMissing": "(assistant {id})",
-          "aiAssistantHintNone": "Aucune base de connaissances pour l’instant. Créez-en une dans <link>Entraînement IA</link>, puis cliquez sur Actualiser la liste pour la choisir ici.",
-          "aiAssistantHintEmpty": "Remarque : cet assistant a 0 source entraînée. Ajoutez-en dans <link>Entraînement IA</link> ou la réponse n’utilisera que le prompt.",
-          "aiAssistantHint": "Intègre à cette réponse le contenu entraîné de l’assistant choisi. <link>Gérer les connaissances →</link>",
           "aiModelLabel": "Modèle",
           "aiModelHint": "Modèles activés par l’admin, plus tout fournisseur pour lequel vous avez ajouté votre propre clé (Réglages → Clés IA, sur les forfaits BYOK).",
           "aiModelHintNone": "Aucun fournisseur disponible pour l’instant. Ajoutez votre propre clé dans <link>Réglages → Clés IA</link> (forfaits BYOK), ou demandez à votre admin d’en activer un.",
           "aiPrompt": "Prompt système",
           "aiSave": "Enregistrer la réponse dans",
           "aiSaveHint": "Les nœuds suivants la lisent avec <v>{save}</v>, ou <v>{path}</v> lors d’une extraction.",
-          "aiAssistantLabel": "Base de connaissances (facultatif)",
           "aiExtract": "<strong>Extraire des données structurées (JSON)</strong> : transformer le message en champs",
           "aiFields": "Champs à extraire",
           "aiFieldsHint": "Clés séparées par des virgules. L’IA renvoie UN objet JSON ; chaque clé devient <v>{key}</v> (et <v>{rows}</v> quand plusieurs enregistrements sont détectés, p. ex. pour un nœud Google Sheets).",
@@ -1156,7 +1151,25 @@
           "subflowMissing": "Flux {id} (absent de l’espace de travail)",
           "subflowLabel": "Flux à exécuter",
           "subflowHint": "Choisissez un autre flux enregistré. Quand ce nœud se déclenche, ce flux s’exécute de bout en bout avant de rendre le contrôle au nœud suivant ici.",
-          "endInfo": "Ce nœud termine le flux. Tout ce qui est connecté après ne s’exécutera pas."
+          "endInfo": "Ce nœud termine le flux. Tout ce qui est connecté après ne s’exécutera pas.",
+          "aiSetupLegend": "Comment cette étape doit-elle répondre ?",
+          "aiSetupAgent": "Agent IA",
+          "aiSetupAgentDesc": "Utilise les instructions, le modèle et les connaissances d’un agent d’Entraînement IA.",
+          "aiSetupCustom": "Configuration personnalisée",
+          "aiSetupCustomDesc": "Choisissez un modèle et rédigez les instructions ici.",
+          "aiAgentLabel": "Agent IA",
+          "aiAgentPick": "— choisir un agent IA —",
+          "aiAgentHint": "L’agent apporte ses propres instructions, son modèle et ses connaissances. Modifiez-les dans <link>Entraînement IA</link>.",
+          "aiAgentNone": "Vous n’avez pas encore d’agent IA. <link>Créez votre premier agent IA</link>, puis cliquez sur Actualiser la liste.",
+          "aiAgentRequired": "Choisissez un agent IA ou passez à une configuration personnalisée.",
+          "aiAgentSummary": "Modèle {model} · {count, plural, one {# source de connaissances} other {# sources de connaissances}}",
+          "aiAgentNoSources": "Cet agent n’a pas encore de connaissances : il répond uniquement d’après ses instructions. Ajoutez des sources dans <link>Entraînement IA</link>.",
+          "aiPromptRequired": "Rédigez les instructions pour l’IA.",
+          "aiKnowledgeLabel": "Connaissances d’un agent IA (facultatif)",
+          "aiKnowledgeNone": "— aucune —",
+          "aiKnowledgeHint": "Ajoute à la réponse les sources entraînées de cet agent. Ses instructions et son modèle ne sont pas utilisés dans une configuration personnalisée. <link>Gérer dans Entraînement IA →</link>",
+          "aiAdvanced": "Options avancées",
+          "aiCreateAgent": "+ Créer un agent IA"
         },
         "options": {
           "prompt": "Prompt",
@@ -1646,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— choisir une feuille —",
-              "empty": "Aucun tableur trouvé — collez une URL / un ID ci-dessous",
               "loading": "Chargement des feuilles…",
-              "notConnected": "Google n’est pas connecté pour cet espace de travail : impossible d’afficher vos feuilles. Collez plutôt l’identifiant ou le lien de la feuille.",
-              "idPlaceholder": "Identifiant de la feuille",
-              "saved": "Feuille {id}… (non chargée)"
+              "saved": "Feuille {id}… (non chargée)",
+              "empty": "Aucune feuille de calcul trouvée dans le compte Google connecté",
+              "notConnected": "Google n'est pas connecté pour cet espace de travail, vos feuilles ne peuvent donc pas être listées. Connectez Google pour en choisir une."
             },
             "docs": {
               "pick": "— choisir un document modèle —",
               "empty": "Aucun document trouvé",
               "loading": "Chargement des documents…",
-              "notConnected": "Google n’est pas connecté pour cet espace de travail : impossible d’afficher vos documents. Collez plutôt l’identifiant ou le lien du document.",
-              "idPlaceholder": "Identifiant du document",
-              "saved": "Document {id}… (non chargé)"
+              "saved": "Document {id}… (non chargé)",
+              "notConnected": "Google n'est pas connecté pour cet espace de travail, vos documents ne peuvent donc pas être listés. Connectez Google pour en choisir un."
             },
             "forms": {
               "pick": "— choisir un formulaire —",
               "empty": "Aucun formulaire trouvé",
               "loading": "Chargement des formulaires…",
-              "notConnected": "Google n’est pas connecté pour cet espace de travail : impossible d’afficher vos formulaires. Collez plutôt l’identifiant ou le lien du formulaire.",
-              "idPlaceholder": "Identifiant du formulaire",
-              "saved": "Formulaire {id}… (non chargé)"
+              "saved": "Formulaire {id}… (non chargé)",
+              "notConnected": "Google n'est pas connecté pour cet espace de travail, vos formulaires ne peuvent donc pas être listés. Connectez Google pour en choisir un."
             }
           },
           "sheetsIntro": "Ajoute une ligne à une feuille Google (mode écriture) ou recherche une ligne à partir d’une colonne clé (mode lecture). Utilise le compte Google connecté à l’espace de travail sur <link>/google-account</link>.",
@@ -1688,8 +1698,6 @@
           "addColumn": "Ajouter une colonne",
           "matchByHeader": "Associer les colonnes par nom d’en-tête",
           "matchByHeaderHint": "Écrit chaque valeur dans la colonne dont l’en-tête correspond (dans n’importe quel ordre). Désactivé : ajout de gauche à droite selon la position, par défaut.",
-          "pasteLabel": "…ou collez l’URL / l’ID d’une feuille de calcul",
-          "pasteHint": "Fonctionne même si la liste est vide : collez le lien de la feuille, nous en extrayons l’ID.",
           "docsIntro": "Copiez un document modèle, remplissez les <mono>{placeholders}</mono>, partagez-le avec toute personne disposant du lien et envoyez l’URL au client. Placez <mono>{key}</mono> dans votre modèle là où la valeur doit apparaître.",
           "templateDocument": "Document modèle",
           "newCopyTitle": "Titre de la nouvelle copie",
@@ -1704,7 +1712,6 @@
           "messageTemplateHint": "La bulle du bot envoyée au client. <mono>{token}</mono> reçoit le lien de partage.",
           "messageTemplatePlaceholder": "Voici votre document :\n'{{'doc_url'}}'",
           "saveUrl": "Enregistrer l’URL dans la variable",
-          "formIntro": "Envoie l’URL du formulaire via WhatsApp, met le flux en pause et le reprend par la sortie <b>soumis</b> lorsque le client le remplit. Les réponses deviennent des variables du flux.",
           "googleForm": "Google Form",
           "bodyBubble": "Bulle du message (envoyée au-dessus du lien)",
           "bodyBubblePlaceholder": "Merci de remplir ce court formulaire :",
@@ -1712,12 +1719,6 @@
           "saveResponsesHint": "Les réponses individuelles sont aussi enregistrées sous <mono>{token}</mono>.",
           "expireAfter": "Expire après (secondes)",
           "expireAfterHint": "Durée d’attente d’une soumission avant expiration. 86400 = 24 h.",
-          "setupTitle": "Configuration unique — collez ceci dans l’éditeur de script de votre formulaire",
-          "setupOpen": "Ouvrez votre formulaire → <mono>menu ⋮</mono> → <mono>Éditeur de script</mono>",
-          "setupDownload": "<link>Téléchargez le script (.gs)</link> et collez-le",
-          "setupTrigger": "Ajoutez un déclencheur : <mono>onFormSubmit</mono> · Depuis le formulaire · À l’envoi du formulaire",
-          "setupWarning": "Sans ce script, le formulaire enregistrera toujours les réponses dans Google Forms, mais le flux ne reprendra pas.",
-          "noListing": "Vos fichiers ne peuvent pas être listés, car l’autorisation de liste des fichiers Drive n’a pas été accordée sur la page du compte Google. Collez plutôt le lien ou l’identifiant.",
           "connection": {
             "open": "Ouvrir le compte Google",
             "permission": {
@@ -1730,7 +1731,9 @@
             "disconnected": "Aucun compte Google n'est connecté : cette étape échouera à l'exécution du flux. Connectez d'abord Google.",
             "needsReconnect": "Google n'accepte plus le compte connecté : cette étape échouera à l'exécution du flux. Reconnectez d'abord Google.",
             "missing": "Le compte Google connecté n'a pas reçu l'autorisation {permission} : cette étape échouera à l'exécution du flux."
-          }
+          },
+          "formIntro": "Envoie l'URL du formulaire via WhatsApp, met le flux en pause et le reprend par le port <b>submitted</b> lorsque le client le remplit. Les réponses sont lues dans le formulaire via votre compte Google connecté, rien n'est donc à coller dans le formulaire. Les réponses deviennent des variables du flux.",
+          "noListing": "Vos fichiers ne peuvent pas être listés, car l'autorisation « liste des fichiers Drive » n'a pas été accordée sur la page du compte Google. Ajoutez-la là-bas pour choisir des fichiers."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2497,7 +2500,8 @@
         "noSenderFacebook": "Le nœud Déclencheur n’a aucune Page Facebook sélectionnée : choisissez-en une à l’étape Déclencheur.",
         "noSenderNumber": "Le nœud Déclencheur n’a aucun numéro sélectionné : choisissez-en un à l’étape Déclencheur.",
         "faqMinScore": "« {node} » a un score minimum hors de la plage 0.05 à 0.99. Corrigez-le ou laissez-le vide pour utiliser le réglage du flux.",
-        "locationInvalid": "« {node} » n’a pas d’emplacement valide : collez un lien Google Maps ou saisissez une latitude (-90 à 90) et une longitude (-180 à 180)."
+        "locationInvalid": "« {node} » n’a pas d’emplacement valide : collez un lien Google Maps ou saisissez une latitude (-90 à 90) et une longitude (-180 à 180).",
+        "aiNoAgent": "« {node} » n’a ni agent IA ni prompt — choisissez un agent IA ou une configuration personnalisée et rédigez les instructions."
       }
     },
     "simpleModel": {
@@ -2663,7 +2667,9 @@
         "chooseFlow": "Étape {stage} : choisissez le flow que le bouton lance.",
         "chooseApi": "Étape {stage} : choisissez l'API à appeler.",
         "writeCode": "Étape {stage} : écrivez le code à exécuter.",
-        "webhookUrl": "Étape {stage} : ajoutez l'adresse (URL) à appeler."
+        "webhookUrl": "Étape {stage} : ajoutez l'adresse (URL) à appeler.",
+        "chooseAiAgent": "Étape {stage} : choisissez l’agent IA qui répond ou passez l’étape en configuration personnalisée.",
+        "writeAiPrompt": "Étape {stage} : rédigez les instructions pour l’IA ou choisissez un agent IA."
       },
       "faqSummary": "{hasCategory, select, true {Depuis vos FAQ · {category}} other {Depuis vos FAQ}}"
     },

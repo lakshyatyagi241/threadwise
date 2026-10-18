@@ -325,7 +325,8 @@
           "url": "Hoặc dùng địa chỉ ảnh của riêng bạn",
           "urlHint": "Dán địa chỉ của ảnh vuông (https://...). Chưa hỗ trợ tải tệp lên.",
           "botName": "Tên bot",
-          "botNameHint": "Hiển thị ở phần đầu của cửa sổ chat. Để trống để dùng tên bot của bạn."
+          "botNameHint": "Hiển thị ở phần đầu của cửa sổ chat. Để trống để dùng tên bot của bạn.",
+          "urlHintUpload": "Dán địa chỉ ảnh vuông (https://...) hoặc tải tệp lên bên dưới."
         },
         "3": {
           "title": "Đặt lời chào mừng",
@@ -699,7 +700,9 @@
         "statusLive": "Đang hoạt động",
         "statusDraft": "Chưa xuất bản",
         "codeLabel": "HTML",
-        "localNote": "Mã này trỏ đến một địa chỉ trên máy tính này (localhost), nên chỉ chạy trên các trang mở tại đây. Trên website thật, hãy dùng địa chỉ đã triển khai của bạn."
+        "localNote": "Mã này trỏ đến một địa chỉ trên máy tính này (localhost), nên chỉ chạy trên các trang mở tại đây. Trên website thật, hãy dùng địa chỉ đã triển khai của bạn.",
+        "statusNoNumber": "Đã xuất bản, chưa có số",
+        "noNumber": "Bot này đã xuất bản nhưng chưa có số WhatsApp, nên nút, mã QR và liên kết trực tiếp vẫn bị ẩn. Hãy chọn số ở Trình kích hoạt trong tab Xây dựng."
       },
       "whatsapp": {
         "loading": "Đang tải nút…",
@@ -708,7 +711,8 @@
         "saved": "Đã lưu nút WhatsApp",
         "saveFailed": "Không thể lưu nút. Hãy thử lại.",
         "fromBot": "Nút này mở WhatsApp tại số {number}, là số mà bot này đang chạy. Để đổi số, hãy sửa Trình kích hoạt trong tab Build.",
-        "noNumber": "Bot này chưa có số WhatsApp. Hãy chọn một số ở trình kích hoạt trong tab Xây dựng, rồi quay lại để lưu nút."
+        "noNumber": "Bot này chưa có số WhatsApp. Hãy chọn một số ở trình kích hoạt trong tab Xây dựng, rồi quay lại để lưu nút.",
+        "keywordMissing": "Tin nhắn trên không chứa từ khởi động của bot \"{keyword}\". Nếu bot chỉ bắt đầu với từ đó, khách bấm nút sẽ không vào được bot."
       }
     },
     "webBots": {

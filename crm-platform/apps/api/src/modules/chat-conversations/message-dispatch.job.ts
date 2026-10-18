@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { exponentialDelayMs, providerWaitMs } from '../../infra/queue/backoff';
 
 /**
  * One job on `message-dispatch` per outbound message to send. The job carries ids only: the worker re-reads the message, so a job can
@@ -35,8 +36,9 @@ const MAX_BACKOFF_MS = 60 * 60_000;
  */
 export function sendBackoffStrategy(attemptsMade: number, _type?: string, err?: Error): number {
   const hint = (err as { retryAfterMs?: unknown } | undefined)?.retryAfterMs;
-  if (typeof hint === 'number' && hint > 0) return Math.min(hint, MAX_BACKOFF_MS);
-  return 2_000 * 2 ** Math.max(attemptsMade - 1, 0);
+  // The provider's wait is a floor (with a little spread); our own exponential rule is jittered so a recovered provider is not hit at once.
+  if (typeof hint === 'number' && hint > 0) return providerWaitMs(hint, MAX_BACKOFF_MS);
+  return exponentialDelayMs(2_000, attemptsMade, MAX_BACKOFF_MS);
 }
 
 export const messageSendJobId = (messageUuid: string, generation: number): string =>

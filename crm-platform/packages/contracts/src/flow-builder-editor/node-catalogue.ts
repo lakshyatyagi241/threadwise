@@ -434,6 +434,7 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
       };
     case 'ai':
       return {
+        agentMode: 'agent',
         model: 'gpt-4o-mini',
         prompt: 'You are a friendly support assistant. Reply briefly.',
         save: 'reply',

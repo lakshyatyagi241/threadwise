@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "সংযুক্ত",
           "shopify": "সংযুক্ত",
-          "google_sheets": "API কী ইস্যু হয়েছে",
-          "meta_catalog": "ক্যাটালগ যুক্ত হয়েছে"
+          "meta_catalog": "ক্যাটালগ যুক্ত হয়েছে",
+          "google_sheets": "Google অ্যাকাউন্ট সংযুক্ত হয়েছে"
         },
         "notConnected": "সংযুক্ত নয়",
         "connect": "সংযুক্ত করুন",
@@ -405,6 +405,43 @@
           "sent": "পাঠানো → {peer}",
           "received": "{peer}-এর কাছ থেকে পাওয়া",
           "empty": "এই সময়সীমায় সাম্প্রতিক কোনো কার্যকলাপ নেই।"
+        },
+        "loginDevices": {
+          "title": "লগইন ডিভাইস",
+          "subtitle": "এই সময়ে ওয়ার্কস্পেসের সাইন-ইন, ব্রাউজার, সিস্টেম ও ধরন অনুযায়ী",
+          "active": "{n}টি এখন সক্রিয়",
+          "total": "{n, plural, one {#টি সাইন-ইন} other {#টি সাইন-ইন}}",
+          "empty": "এই সময়ে কোনো সাইন-ইন নেই।",
+          "activeLegend": "এখন সক্রিয়",
+          "endedLegend": "সাইন-আউট বা মেয়াদোত্তীর্ণ",
+          "row": "{count}টি সাইন-ইন, {active}টি এখন সক্রিয়",
+          "group": {
+            "browser": "ব্রাউজার",
+            "os": "সিস্টেম",
+            "kind": "ধরন"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "অন্য ব্রাউজার"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "অন্য সিস্টেম"
+          },
+          "kind": {
+            "desktop": "ডেস্কটপ",
+            "mobile": "মোবাইল",
+            "unknown": "অজানা"
+          }
         }
       }
     },

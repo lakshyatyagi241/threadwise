@@ -32,6 +32,8 @@ import {
   type MailSyncMode,
   type MailSyncOptions,
   type PasswordMailDriver,
+  sendMayHaveCommitted,
+  sendOutcomeUnknown,
 } from './mail-driver';
 import { MailDriverRegistry } from './mail-driver.registry';
 import {
@@ -479,6 +481,13 @@ export class ImapMailDriver implements PasswordMailDriver, OnModuleInit {
       );
     }
     if (NET_CODES.has(code) || /timed? ?out|connect|closed/i.test(e.message ?? '')) {
+      // A mail server that stopped answering during the send may have taken the mail: only a refused or unresolved connection is safe to retry.
+      if (side === 'smtp' && op === 'send' && sendMayHaveCommitted(code)) {
+        return sendOutcomeUnknown(
+          `The ${name} server did not answer in time.`,
+          `${side}_${code || 'network'}`.toLowerCase(),
+        );
+      }
       return new MailDriverError('unreachable', `The ${name} server could not be reached.`, {
         providerCode: `${side}_${code || 'network'}`.toLowerCase(),
         retryable: op !== 'verify',

@@ -325,7 +325,8 @@
           "url": "Of gebruik je eigen afbeeldingsadres",
           "urlHint": "Plak het adres van een vierkante afbeelding (https://...). Een bestand uploaden is nog niet beschikbaar.",
           "botName": "Botnaam",
-          "botNameHint": "Wordt getoond in de header van het chatvenster. Laat leeg om de naam van je bot te gebruiken."
+          "botNameHint": "Wordt getoond in de header van het chatvenster. Laat leeg om de naam van je bot te gebruiken.",
+          "urlHintUpload": "Plak het adres van een vierkante afbeelding (https://...) of upload hieronder een bestand."
         },
         "3": {
           "title": "Stel je welkomstbericht in",
@@ -699,7 +700,9 @@
         "statusLive": "Live",
         "statusDraft": "Niet gepubliceerd",
         "codeLabel": "HTML",
-        "localNote": "Deze code verwijst naar een adres op deze computer (localhost) en werkt dus alleen op pagina's die hier zijn geopend. Gebruik op een live website je gepubliceerde adres."
+        "localNote": "Deze code verwijst naar een adres op deze computer (localhost) en werkt dus alleen op pagina's die hier zijn geopend. Gebruik op een live website je gepubliceerde adres.",
+        "statusNoNumber": "Gepubliceerd, geen nummer",
+        "noNumber": "Deze bot is gepubliceerd, maar heeft nog geen WhatsApp-nummer, dus de knop, de QR-code en de directe link blijven verborgen. Kies een nummer bij de Trigger op het tabblad Bouwen."
       },
       "whatsapp": {
         "loading": "Knop laden…",
@@ -708,7 +711,8 @@
         "saved": "WhatsApp-knop opgeslagen",
         "saveFailed": "De knop kon niet worden opgeslagen. Probeer het opnieuw.",
         "fromBot": "De knop opent WhatsApp op {number}, het nummer waarop deze bot draait. Wijzig het nummer bij de trigger op het tabblad Bouwen.",
-        "noNumber": "Deze bot heeft nog geen WhatsApp-nummer. Kies er een bij de trigger op het tabblad Bouwen en kom terug om de knop op te slaan."
+        "noNumber": "Deze bot heeft nog geen WhatsApp-nummer. Kies er een bij de trigger op het tabblad Bouwen en kom terug om de knop op te slaan.",
+        "keywordMissing": "Het bericht hierboven bevat het startwoord van je bot \"{keyword}\" niet. Als de bot alleen met dat woord start, bereiken bezoekers die op de knop tikken de bot niet."
       }
     },
     "webBots": {

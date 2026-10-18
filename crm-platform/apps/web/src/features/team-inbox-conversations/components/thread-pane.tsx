@@ -283,7 +283,7 @@ export function ThreadPane(props: ThreadPaneProps) {
                     {detail.peerKey}
                   </span>
                 )}
-                <ChannelTag decorative kind={detail.channel.kind} name={detail.channel.name} />
+                <ChannelTag full decorative kind={detail.channel.kind} name={detail.channel.name} />
                 <span className="truncate">{detail.channel.name}</span>
                 {personalGroup && canOpenGroups && (
                   <Link
@@ -435,6 +435,7 @@ export function ThreadPane(props: ThreadPaneProps) {
 
       <MessageStream
         conversationId={props.conversationId}
+        channelKind={detail?.channel.kind}
         state={thread.state}
         notes={props.notes}
         progress={thread.progress}
@@ -530,7 +531,9 @@ export function ThreadPane(props: ThreadPaneProps) {
               <AlertIcon className="mt-0.5 shrink-0 text-muted-foreground" />
               <div>
                 <p className="font-medium">{tg(`readOnly.${groupBlock}.title`)}</p>
-                <p className="text-xs text-muted-foreground">{tg(`readOnly.${groupBlock}.message`)}</p>
+                <p className="text-xs text-muted-foreground">
+                  {tg(`readOnly.${groupBlock}.message`)}
+                </p>
               </div>
             </div>
           )}

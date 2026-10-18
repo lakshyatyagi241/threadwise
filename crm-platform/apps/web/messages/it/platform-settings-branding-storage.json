@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. Schermata di consenso",
-              "body": "Aggiungi gli scope richiesti dal prodotto (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), poi pubblica l’app: in modalità Test, Google termina ogni autorizzazione dopo 7 giorni e i workspace dovranno ricollegarsi. Gli scope di Drive sono limitati e richiedono la revisione di Google."
+              "body": "Aggiungi gli scope richiesti dal prodotto (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), poi pubblica l’app: in modalità Test, Google termina ogni autorizzazione dopo 7 giorni e i workspace dovranno ricollegarsi. Gli scope di Drive sono limitati e richiedono la revisione di Google."
             },
             "workspaces": {
               "title": "4. Collegamento dei workspace",

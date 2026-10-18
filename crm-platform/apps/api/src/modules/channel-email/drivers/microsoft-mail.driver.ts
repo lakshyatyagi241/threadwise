@@ -37,6 +37,8 @@ import {
   type MailSyncMode,
   type MailSyncOptions,
   type OAuthMailDriver,
+  sendMayHaveCommitted,
+  sendOutcomeUnknown,
 } from './mail-driver';
 import { MailDriverRegistry } from './mail-driver.registry';
 
@@ -538,6 +540,9 @@ export class MicrosoftMailDriver implements OAuthMailDriver, OnModuleInit {
       case 'server':
       case 'network':
       case 'timeout':
+        if (op === 'send' && err.kind !== 'server' && sendMayHaveCommitted(meta.providerCode)) {
+          return sendOutcomeUnknown('Microsoft did not answer in time.', meta.providerCode);
+        }
         return new MailDriverError(
           'transient',
           op === 'send'

@@ -4,6 +4,7 @@ import { ERROR_CODES } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { provisionWorkspacePersona } from '../../persona';
 import { PlanEntitlementService, type InitialPlan } from '../../plans-subscriptions-trials';
 
 export interface OrgRef {
@@ -187,7 +188,7 @@ export class TenantDirectory {
 
   /**
    * Creates the organization, its five workspace preset roles (the locked Owner
-   * holds every capability key), the first user, that user's security/profile
+   * holds every capability key), its persona row, the first user, that user's security/profile
    * rows and the organization's plan (the registration default, plus a free
    * trial when the plan is free) in ONE transaction. `inTx` runs inside it so
    * the caller can write the audit row and outbox event atomically with the
@@ -231,6 +232,9 @@ export class TenantDirectory {
       // RBAC migration ran for every existing organization. The first user is the Owner (the locked top preset).
       const ownerRole = await tx.execute(sql`SELECT provision_workspace_presets(${orgId}) AS id`);
       const adminRoleId = Number((ownerRole.rows[0] as unknown as { id: number | string }).id);
+
+      // Every workspace has a persona row from its first moment (the `generic` one, which hides nothing).
+      await provisionWorkspacePersona(tx, orgId);
 
       const userRes = await tx.execute(sql`
         INSERT INTO users (org_id, email, full_name, password_hash)

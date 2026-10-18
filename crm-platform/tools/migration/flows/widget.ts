@@ -170,6 +170,12 @@ export const MAPPED_CONFIG_KEYS = new Set([
   'avatar',
   'background_image',
   'desktop_auto_triggering',
+  'widget_animation',
+  'animation',
+  'button_type',
+  'launcher_type',
+  'tooltip',
+  'popup',
   'ai_configuration',
   'modelName',
   'prompt',
@@ -234,6 +240,78 @@ const uniq = (base: string, taken: Set<string>): string => {
   taken.add(out);
   return out;
 };
+
+// --- launcher look: button type, animation, popup --------------------------------------------------------------------------------
+
+/** The text of a setting that the source keeps as a string or as an object ({ type | name | value | selected }). */
+function settingText(v: unknown): string {
+  if (typeof v === 'string') return v;
+  const o = obj(v);
+  for (const k of ['type', 'name', 'value', 'selected', 'style'])
+    if (typeof o[k] === 'string') return o[k] as string;
+  return '';
+}
+
+/**
+ * The closed launcher's look from the source configuration: button type (icon only or text), animation and the popup bubble. A value
+ * the tool does not recognise is NOT guessed: the application's default stays and the soft issue LAUNCHER_LOOK_UNRECOGNISED names
+ * the key. The popup is carried explicitly (off unless the source switches it on).
+ */
+export function launcherLook(
+  c: Doc,
+  t: Doc,
+  soft: Soft[],
+): {
+  buttonType: 'pill' | 'icon' | null;
+  animation: 'none' | 'bounce' | 'ripple' | null;
+  popup: { enabled: boolean; position?: 'side' | 'top'; text?: string };
+} {
+  const unknown: string[] = [];
+  const typeRaw = (
+    [
+      ['button_type', c.button_type],
+      ['launcher_type', c.launcher_type],
+      ['button.button_type', obj(t.button).button_type],
+    ] as const
+  )
+    .map(([k, v]) => [k, settingText(v)] as const)
+    .find(([, v]) => v !== '');
+  let buttonType: 'pill' | 'icon' | null = null;
+  if (typeRaw) {
+    if (/icon/i.test(typeRaw[1])) buttonType = 'icon';
+    else if (/text|label|pill|chat|cta/i.test(typeRaw[1])) buttonType = 'pill';
+    else unknown.push(typeRaw[0]);
+  }
+  const animRaw = settingText(c.widget_animation ?? c.animation);
+  let animation: 'none' | 'bounce' | 'ripple' | null = null;
+  if (animRaw !== '') {
+    if (/bounce/i.test(animRaw)) animation = 'bounce';
+    else if (/ripple|pulse|wave/i.test(animRaw)) animation = 'ripple';
+    else if (/^(none|off|no|disabled?)$/i.test(animRaw.trim())) animation = 'none';
+    else unknown.push('widget_animation');
+  }
+  const tip = obj(c.tooltip ?? c.popup);
+  const on = ['enabled', 'visible', 'show', 'isVisible', 'active']
+    .map((k) => tip[k])
+    .find((v) => v !== undefined);
+  const pos = settingText(tip.position ?? tip.placement);
+  const popup: { enabled: boolean; position?: 'side' | 'top'; text?: string } = {
+    enabled: on === undefined ? false : bool(on, false),
+  };
+  if (/top|above/i.test(pos)) popup.position = 'top';
+  else if (/side|left|right|beside/i.test(pos)) popup.position = 'side';
+  else if (pos !== '') unknown.push('tooltip.position');
+  const msg = text(tip.text ?? tip.message ?? tip.title, 200);
+  if (msg) popup.text = msg;
+  if (unknown.length > 0)
+    soft.push({
+      code: 'LAUNCHER_LOOK_UNRECOGNISED',
+      reason:
+        'a launcher setting holds a value the tool does not know: the default stays for it (check the Customize tab)',
+      detail: unknown,
+    });
+  return { buttonType, animation, popup };
+}
 
 export function buildWidgetPlan(a: {
   settings: FlowSettings;
@@ -330,13 +408,16 @@ export function buildWidgetPlan(a: {
     const position = side(c.desktop_display_position) ?? side(c.display_position) ?? 'bottom_right';
     const spacing = (v: unknown): number | null =>
       typeof v === 'number' && Number.isInteger(v) && v >= 0 && v <= 500 ? v : null;
+    // only the parts the source states are carried: a missing part keeps the application's own default for that part alone
     const placement = (sd: unknown, sm: unknown, bm: unknown) => {
+      const out: Record<string, unknown> = {};
+      const d = /left/i.test(s(sd)) ? 'left' : /right/i.test(s(sd)) ? 'right' : null;
       const x = spacing(sm);
       const y = spacing(bm);
-      const d = /left/i.test(s(sd)) ? 'left' : /right/i.test(s(sd)) ? 'right' : null;
-      return d !== null && x !== null && y !== null
-        ? { side: d, sideSpacing: x, bottomSpacing: y }
-        : null;
+      if (d !== null) out.side = d;
+      if (x !== null) out.sideSpacing = x;
+      if (y !== null) out.bottomSpacing = y;
+      return Object.keys(out).length > 0 ? out : null;
     };
     const launcher: Record<string, unknown> = {};
     const intro = text(c.subheader_text ?? c.whatsapp_subheader_text, 500);
@@ -354,6 +435,10 @@ export function buildWidgetPlan(a: {
     if (dk) launcher.desktop = dk;
     if (mb) launcher.mobile = mb;
     if (primary) launcher.colour = primary;
+    const look = launcherLook(c, t, soft);
+    if (look.buttonType) launcher.buttonType = look.buttonType;
+    if (look.animation) launcher.animation = look.animation;
+    launcher.popup = look.popup;
 
     // images are file references until the files step copies the objects; an absolute http(s) address is kept
     const refs: string[] = [];

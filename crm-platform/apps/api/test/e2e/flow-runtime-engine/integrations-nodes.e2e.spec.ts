@@ -1,6 +1,5 @@
 import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
-import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { simInbound } from '../chat-conversations/pipeline-support';
 import {
@@ -329,17 +328,27 @@ describe('Google nodes', () => {
         keyword,
       );
     };
-    const tokenOf = async (orgId: number) => {
-      const { GoogleFormWebhookService } =
-        await import('../../../src/modules/flow-runtime-engine/runtime/nodes/integrations/google-form-webhook.service');
-      return p.h.app.get(GoogleFormWebhookService, { strict: false }).tokenFor(orgId);
+    const poller = async () => {
+      const { GoogleFormPollService } =
+        await import('../../../src/modules/flow-runtime-engine/runtime/nodes/integrations/google-form-poll.service');
+      return p.h.app.get(GoogleFormPollService, { strict: false });
     };
-    const submit = (token: string | undefined, body: Record<string, unknown>) => {
-      const r = request(p.h.app.getHttpServer()).post('/google/form-response');
-      return (token ? r.set('X-Workspace-Token', token) : r).send(body);
+    /** The form's submissions as Google would list them, made after the run began waiting. */
+    const submissions = async (items: Array<{ id: string; answers: Record<string, unknown> }>) => {
+      const { GOOGLE_WORKSPACE } =
+        await import('../../../src/infra/providers/flow-runtime-engine/google-workspace.port');
+      const g = await port<Record<string, unknown>>(GOOGLE_WORKSPACE);
+      return vi.spyOn(g as never, 'formResponses' as never).mockResolvedValue(
+        items.map((i) => ({
+          responseId: i.id,
+          respondent: null,
+          submittedAt: new Date(Date.now() + 60_000),
+          answers: i.answers,
+        })) as never,
+      );
     };
 
-    it('parks the run, and the form submission resumes it by the submitted port with the answers', async () => {
+    it('parks the run, and the form submission read through Google resumes it by the submitted port with the answers', async () => {
       const a = await arrangeForm('flrform', 'formgo');
       const peer = nextPeer();
       await say(a.t, a.ch, peer, 'formgo');
@@ -349,49 +358,48 @@ describe('Google nodes', () => {
       const waiting = await untilRun(p, a.t, a.flowId, 'waiting', (r) => r.status === 'waiting');
       expect(waiting.wait).toMatchObject({ nodeId: 'f' });
 
-      const res = await submit(await tokenOf(a.t.orgId), {
-        form_id: 'F1',
-        answers: { Name: 'Ana', Toppings: ['olives', 'feta'] },
-      });
-      expect(res.status).toBe(200);
-      expect(res.body).toMatchObject({ ok: true, matched: true });
-      expect(await untilSent(p, a.t, a.ch, peer, 2)).toEqual([
-        'Fill this\n\nhttps://forms.example/F1',
-        'Thanks Ana (olives, feta)',
+      const spy = await submissions([
+        { id: 'resp-1', answers: { Name: 'Ana', Toppings: ['olives', 'feta'] } },
       ]);
-      await untilRun(p, a.t, a.flowId, 'completed', (r) => r.status === 'completed');
+      try {
+        expect(await (await poller()).tickOnce()).toBeGreaterThanOrEqual(1);
+        expect(await untilSent(p, a.t, a.ch, peer, 2)).toEqual([
+          'Fill this\n\nhttps://forms.example/F1',
+          'Thanks Ana (olives, feta)',
+        ]);
+        await untilRun(p, a.t, a.flowId, 'completed', (r) => r.status === 'completed');
 
-      // The wait is answered: a second submission matches nothing.
-      const again = await submit(await tokenOf(a.t.orgId), {
-        form_id: 'F1',
-        answers: { Name: 'Bo' },
-      });
-      expect(again.body).toMatchObject({ ok: true, matched: false });
+        // The wait is answered and the submission is claimed: the next poll resumes nothing.
+        expect(await (await poller()).tickOnce()).toBe(0);
+      } finally {
+        spy.mockRestore();
+      }
     });
 
-    it('rejects a missing or forged token, and another workspace cannot answer this one', async () => {
+    it('leaves a run waiting when the Google account cannot read the form', async () => {
       const a = await arrangeForm('flrformsec', 'formsec');
-      const other = await p.api.signup('flrformother');
       const peer = nextPeer();
       await say(a.t, a.ch, peer, 'formsec');
       await untilRun(p, a.t, a.flowId, 'waiting', (r) => r.status === 'waiting');
-      expect((await submit(undefined, { form_id: 'F1', answers: {} })).status).toBe(401);
-      expect(
-        (await submit(`${a.t.orgId}.${'0'.repeat(64)}`, { form_id: 'F1', answers: {} })).status,
-      ).toBe(401);
-      const foreign = await submit(await tokenOf(other.orgId), {
-        form_id: 'F1',
-        answers: { Name: 'Eve' },
-      });
-      expect(foreign.body).toMatchObject({ matched: false });
-      const run = (await untilRun(
-        p,
-        a.t,
-        a.flowId,
-        'still waiting',
-        (r) => r.status === 'waiting',
-      ))!;
-      expect(run.status).toBe('waiting');
+      const { GOOGLE_WORKSPACE, GoogleNotConnectedError } =
+        await import('../../../src/infra/providers/flow-runtime-engine/google-workspace.port');
+      const g = await port<Record<string, unknown>>(GOOGLE_WORKSPACE);
+      const spy = vi
+        .spyOn(g as never, 'formResponses' as never)
+        .mockRejectedValue(new GoogleNotConnectedError() as never);
+      try {
+        await (await poller()).tickOnce();
+        const run = (await untilRun(
+          p,
+          a.t,
+          a.flowId,
+          'still waiting',
+          (r) => r.status === 'waiting',
+        ))!;
+        expect(run.status).toBe('waiting');
+      } finally {
+        spy.mockRestore();
+      }
     });
 
     it('leaves by the timeout port when nobody submits in time', async () => {

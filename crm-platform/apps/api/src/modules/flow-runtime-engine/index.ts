@@ -22,5 +22,3 @@ export {
   type FlowShopPort,
   type ShopProvider,
 } from './runtime/nodes/commerce/shop-port';
-// The editor mints the token its Google Form Apps Script posts with (TW-FLB-059); the webhook itself lives here.
-export { GoogleFormWebhookService } from './runtime/nodes/integrations/google-form-webhook.service';

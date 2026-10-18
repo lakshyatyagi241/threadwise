@@ -3,6 +3,7 @@ export {
   PersonalDataErasureService,
   ALL_TIERS,
   CONTACT_DELETE_TIERS,
+  STAFF_ERASE_TIERS,
 } from './engine/erasure.service';
 export { SubjectResolver } from './engine/subject-resolver';
 export {

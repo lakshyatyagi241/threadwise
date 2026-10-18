@@ -1131,19 +1131,14 @@
           "aiModelPick": "— chọn mô hình —",
           "aiModelNone": "Chưa bật mô hình AI nào — nhờ quản trị viên bật một mô hình",
           "aiModelNotEnabled": "{value} (chưa bật)",
-          "aiAssistantNone": "— không có (chỉ dùng lời nhắc ở trên) —",
           "aiAssistantOption": "{name} · {count, plural, other {# nguồn}}",
           "aiAssistantMissing": "(trợ lý {id})",
-          "aiAssistantHintNone": "Chưa có cơ sở tri thức nào. Tạo một cơ sở tại <link>Huấn luyện AI</link>, rồi nhấn Làm mới danh sách để chọn tại đây.",
-          "aiAssistantHintEmpty": "Lưu ý: trợ lý này có 0 nguồn đã huấn luyện. Thêm nguồn tại <link>Huấn luyện AI</link> nếu không phản hồi sẽ chỉ dựa trên lời nhắc.",
-          "aiAssistantHint": "Đưa nội dung đã huấn luyện của trợ lý được chọn vào phản hồi này. <link>Quản lý kiến thức →</link>",
           "aiModelLabel": "Mô hình",
           "aiModelHint": "Các mô hình quản trị viên đã bật — cộng với mọi nhà cung cấp bạn đã thêm khóa riêng (Cài đặt → Khóa AI, trên gói BYOK).",
           "aiModelHintNone": "Chưa có nhà cung cấp nào khả dụng. Thêm khóa riêng tại <link>Cài đặt → Khóa AI</link> (gói BYOK), hoặc nhờ quản trị viên bật một nhà cung cấp.",
           "aiPrompt": "Lời nhắc hệ thống",
           "aiSave": "Lưu phản hồi vào",
           "aiSaveHint": "Các nút sau đọc giá trị này dưới dạng <v>{save}</v> — hoặc <v>{path}</v> khi trích xuất.",
-          "aiAssistantLabel": "Cơ sở tri thức (tùy chọn)",
           "aiExtract": "<strong>Trích xuất dữ liệu có cấu trúc (JSON)</strong> — chuyển tin nhắn thành các trường",
           "aiFields": "Các trường cần trích xuất",
           "aiFieldsHint": "Các khóa phân tách bằng dấu phẩy. AI trả về MỘT object JSON; mỗi khóa trở thành <v>{key}</v> (và <v>{rows}</v> khi phát hiện nhiều bản ghi — ví dụ cho nút Google Sheets).",
@@ -1156,7 +1151,25 @@
           "subflowMissing": "Luồng {id} (không có trong không gian làm việc)",
           "subflowLabel": "Luồng để chạy",
           "subflowHint": "Chọn một luồng đã lưu khác. Khi nút này kích hoạt, luồng đó chạy hết từ đầu đến cuối rồi quyền điều khiển quay lại nút tiếp theo ở đây.",
-          "endInfo": "Nút này kết thúc luồng. Mọi thứ nối sau nó sẽ không chạy."
+          "endInfo": "Nút này kết thúc luồng. Mọi thứ nối sau nó sẽ không chạy.",
+          "aiSetupLegend": "Bước này nên trả lời như thế nào?",
+          "aiSetupAgent": "Tác nhân AI",
+          "aiSetupAgentDesc": "Dùng hướng dẫn, mô hình và kiến thức của một tác nhân trong Huấn luyện AI.",
+          "aiSetupCustom": "Thiết lập tùy chỉnh",
+          "aiSetupCustomDesc": "Chọn mô hình và viết hướng dẫn tại đây.",
+          "aiAgentLabel": "Tác nhân AI",
+          "aiAgentPick": "— chọn tác nhân AI —",
+          "aiAgentHint": "Tác nhân mang theo hướng dẫn, mô hình và kiến thức riêng. Thay đổi chúng trong <link>Huấn luyện AI</link>.",
+          "aiAgentNone": "Bạn chưa có tác nhân AI nào. <link>Tạo tác nhân AI đầu tiên</link>, rồi nhấn Làm mới danh sách.",
+          "aiAgentRequired": "Hãy chọn một tác nhân AI, hoặc chuyển sang thiết lập tùy chỉnh.",
+          "aiAgentSummary": "Mô hình {model} · {count, plural, other {# nguồn kiến thức}}",
+          "aiAgentNoSources": "Tác nhân này chưa có kiến thức nên chỉ trả lời theo hướng dẫn của nó. Thêm nguồn trong <link>Huấn luyện AI</link>.",
+          "aiPromptRequired": "Hãy viết hướng dẫn cho AI.",
+          "aiKnowledgeLabel": "Kiến thức từ một tác nhân AI (tùy chọn)",
+          "aiKnowledgeNone": "— không có —",
+          "aiKnowledgeHint": "Thêm các nguồn đã huấn luyện của tác nhân đó vào phản hồi. Hướng dẫn và mô hình riêng của nó không được dùng trong thiết lập tùy chỉnh. <link>Quản lý trong Huấn luyện AI →</link>",
+          "aiAdvanced": "Tùy chọn nâng cao",
+          "aiCreateAgent": "+ Tạo tác nhân AI"
         },
         "options": {
           "prompt": "Lời nhắc",
@@ -1646,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— chọn một bảng tính —",
-              "empty": "Không tìm thấy bảng tính — dán URL/ID bên dưới",
               "loading": "Đang tải bảng tính…",
-              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê bảng tính. Hãy dán mã hoặc liên kết bảng tính thay thế.",
-              "idPlaceholder": "Mã bảng tính",
-              "saved": "Bảng tính {id}… (chưa tải)"
+              "saved": "Bảng tính {id}… (chưa tải)",
+              "empty": "Không tìm thấy bảng tính nào trong tài khoản Google đã kết nối",
+              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê các trang tính của bạn. Hãy kết nối Google để chọn."
             },
             "docs": {
               "pick": "— chọn tài liệu mẫu —",
               "empty": "Không tìm thấy tài liệu",
               "loading": "Đang tải tài liệu…",
-              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê tài liệu. Hãy dán mã hoặc liên kết tài liệu thay thế.",
-              "idPlaceholder": "Mã tài liệu",
-              "saved": "Tài liệu {id}… (chưa tải)"
+              "saved": "Tài liệu {id}… (chưa tải)",
+              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê các Docs của bạn. Hãy kết nối Google để chọn."
             },
             "forms": {
               "pick": "— chọn một biểu mẫu —",
               "empty": "Không tìm thấy biểu mẫu",
               "loading": "Đang tải biểu mẫu…",
-              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê biểu mẫu. Hãy dán mã hoặc liên kết biểu mẫu thay thế.",
-              "idPlaceholder": "Mã biểu mẫu",
-              "saved": "Biểu mẫu {id}… (chưa tải)"
+              "saved": "Biểu mẫu {id}… (chưa tải)",
+              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê các Forms của bạn. Hãy kết nối Google để chọn."
             }
           },
           "sheetsIntro": "Thêm một dòng vào Google Sheet (chế độ ghi) hoặc tra cứu một dòng theo cột khóa (chế độ đọc). Dùng tài khoản Google đã kết nối của không gian làm việc tại <link>/google-account</link>.",
@@ -1688,8 +1698,6 @@
           "addColumn": "Thêm cột",
           "matchByHeader": "Khớp cột theo tên tiêu đề",
           "matchByHeaderHint": "Ghi mỗi giá trị vào cột bảng tính có tiêu đề đó (theo thứ tự bất kỳ). Tắt để thêm từ trái sang phải theo vị trí — mặc định.",
-          "pasteLabel": "…hoặc dán URL / ID bảng tính",
-          "pasteHint": "Vẫn hoạt động khi danh sách chọn trống — dán liên kết bảng tính và hệ thống sẽ tự lấy ID.",
           "docsIntro": "Sao chép tài liệu mẫu, điền <mono>{placeholders}</mono>, chia sẻ cho bất kỳ ai có liên kết, rồi gửi URL cho khách hàng. Đặt <mono>{key}</mono> trong mẫu ở vị trí cần điền giá trị.",
           "templateDocument": "Tài liệu mẫu",
           "newCopyTitle": "Tiêu đề bản sao mới",
@@ -1704,7 +1712,6 @@
           "messageTemplateHint": "Bong bóng tin nhắn của bot gửi cho khách hàng. <mono>{token}</mono> sẽ nhận liên kết chia sẻ.",
           "messageTemplatePlaceholder": "Đây là tài liệu của bạn:\n'{{'doc_url'}}'",
           "saveUrl": "Lưu URL vào biến",
-          "formIntro": "Gửi URL biểu mẫu qua WhatsApp, tạm dừng luồng và tiếp tục qua cổng <b>đã gửi</b> khi khách hàng điền xong. Câu trả lời trở thành biến của luồng.",
           "googleForm": "Google Form",
           "bodyBubble": "Nội dung bong bóng tin nhắn (gửi phía trên liên kết)",
           "bodyBubblePlaceholder": "Vui lòng điền biểu mẫu ngắn này:",
@@ -1712,12 +1719,6 @@
           "saveResponsesHint": "Từng câu trả lời cũng được lưu dưới dạng <mono>{token}</mono>.",
           "expireAfter": "Hết hạn sau (giây)",
           "expireAfterHint": "Thời gian chờ gửi biểu mẫu trước khi hết giờ. 86400 = 24 giờ.",
-          "setupTitle": "Thiết lập một lần — dán đoạn này vào trình chỉnh sửa Script của biểu mẫu",
-          "setupOpen": "Mở biểu mẫu → <mono>menu ⋮</mono> → <mono>Trình chỉnh sửa Script</mono>",
-          "setupDownload": "<link>Tải script (.gs)</link> và dán vào",
-          "setupTrigger": "Thêm trình kích hoạt: <mono>onFormSubmit</mono> · Từ biểu mẫu · Khi gửi biểu mẫu",
-          "setupWarning": "Nếu không có script này, biểu mẫu vẫn ghi nhận câu trả lời trong Google Forms, nhưng luồng sẽ không tiếp tục.",
-          "noListing": "Không thể liệt kê tệp của bạn vì quyền danh sách tệp Drive chưa được cấp ở trang tài khoản Google. Hãy dán liên kết hoặc id.",
           "connection": {
             "open": "Mở tài khoản Google",
             "permission": {
@@ -1730,7 +1731,9 @@
             "disconnected": "Chưa có tài khoản Google nào được kết nối nên bước này sẽ thất bại khi luồng chạy. Hãy kết nối Google trước.",
             "needsReconnect": "Google không còn chấp nhận tài khoản đã kết nối nên bước này sẽ thất bại khi luồng chạy. Hãy kết nối lại Google trước.",
             "missing": "Tài khoản Google đã kết nối chưa được cấp quyền {permission} nên bước này sẽ thất bại khi luồng chạy."
-          }
+          },
+          "formIntro": "Gửi URL biểu mẫu qua WhatsApp, tạm dừng luồng và tiếp tục qua cổng <b>submitted</b> khi khách hàng điền xong. Các câu trả lời được đọc từ biểu mẫu thông qua tài khoản Google đã kết nối, nên không cần dán gì vào biểu mẫu. Câu trả lời trở thành biến của luồng.",
+          "noListing": "Không thể liệt kê các tệp của bạn vì chưa cấp quyền Danh sách tệp Drive ở trang Tài khoản Google. Hãy thêm quyền này tại đó để chọn tệp."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2497,7 +2500,8 @@
         "noSenderFacebook": "Nút Kích hoạt chưa chọn Trang Facebook — hãy chọn ở bước Kích hoạt.",
         "noSenderNumber": "Nút Kích hoạt chưa chọn số — hãy chọn ở bước Kích hoạt.",
         "faqMinScore": "\"{node}\" có điểm tối thiểu ngoài khoảng 0.05 đến 0.99 — hãy sửa hoặc để trống để dùng cài đặt của luồng.",
-        "locationInvalid": "“{node}” chưa có vị trí hợp lệ — hãy dán liên kết Google Maps hoặc nhập vĩ độ (-90 đến 90) và kinh độ (-180 đến 180)."
+        "locationInvalid": "“{node}” chưa có vị trí hợp lệ — hãy dán liên kết Google Maps hoặc nhập vĩ độ (-90 đến 90) và kinh độ (-180 đến 180).",
+        "aiNoAgent": "\"{node}\" không có tác nhân AI và cũng không có lời nhắc — hãy chọn tác nhân AI, hoặc chọn Thiết lập tùy chỉnh và viết hướng dẫn."
       }
     },
     "simpleModel": {
@@ -2663,7 +2667,9 @@
         "chooseFlow": "Bước {stage}: chọn luồng mà nút sẽ bắt đầu.",
         "chooseApi": "Bước {stage}: chọn API cần gọi.",
         "writeCode": "Bước {stage}: viết mã cần chạy.",
-        "webhookUrl": "Bước {stage}: thêm địa chỉ (URL) cần gọi."
+        "webhookUrl": "Bước {stage}: thêm địa chỉ (URL) cần gọi.",
+        "chooseAiAgent": "Bước {stage}: chọn tác nhân AI sẽ trả lời, hoặc chuyển bước này sang thiết lập tùy chỉnh.",
+        "writeAiPrompt": "Bước {stage}: viết hướng dẫn cho AI, hoặc chọn một tác nhân AI."
       },
       "faqSummary": "{hasCategory, select, true {Từ FAQ của bạn · {category}} other {Từ FAQ của bạn}}"
     },

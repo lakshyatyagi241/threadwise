@@ -1,4 +1,6 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { OUTCOME_UNKNOWN_PREFIX, isOutcomeUnknown } from './retry-policy';
+import { FailureRecorder } from '../failed-operations';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { ERROR_CODES } from '@crm/contracts';
 import { sql } from 'drizzle-orm';
 import { AppError } from '../../common/errors/app-error';
@@ -61,6 +63,9 @@ const BATCH = 200;
 const COUNTER_EVERY = 25;
 /** A recipient claimed for sending but not settled this long ago belongs to a worker that died. */
 const STALE_MINUTES = 10;
+/** Tries to write the outcome of an accepted send, and the wait before the next (times the try number). */
+const RECORD_ATTEMPTS = 3;
+const RECORD_RETRY_MS = 250;
 /** While resting, the sender lease is renewed this often. */
 const HEARTBEAT_MS = 20_000;
 
@@ -117,6 +122,8 @@ export class BroadcastDispatchService {
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
     private readonly sendWindow: SendWindowService,
     private readonly consentGate: ConsentGate,
+    // Optional so the dispatcher still builds where the record is not wired; the recipient is marked failed either way.
+    @Optional() private readonly failures?: FailureRecorder,
   ) {}
 
   /** Must run inside a request context for `orgId` (the processor sets it from the job). */
@@ -444,6 +451,7 @@ export class BroadcastDispatchService {
                 ...(built ? { components: built.components } : {}),
               });
             }
+<<<<<<< HEAD
             await this.db.tx(async (tx) => {
               const from = await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
                 status: 'sent',
@@ -464,6 +472,10 @@ export class BroadcastDispatchService {
                 await this.leadHandling.touch(tx, orgId, contactId, 'automation');
               }
             });
+=======
+            // The provider has accepted the message. Nothing below may turn that into a failed recipient: a failed one is sent again.
+            await this.recordSent(orgId, broadcastId, contactId, sent.providerMessageId);
+>>>>>>> origin/main
             if (sender.engine === 'baileys') await this.cap.bump(orgId, sender.engine, sender.id);
           } catch (err) {
             if (err instanceof AppError && err.code === ERROR_CODES.AUTH_SEND_HALTED) {
@@ -481,7 +493,19 @@ export class BroadcastDispatchService {
               this.logger.warn({ orgId, broadcastId }, '[BCAST] paused by the emergency halt');
               return 'paused';
             }
-            const reason = err instanceof Error ? err.message : String(err);
+            const message = err instanceof Error ? err.message : String(err);
+            // A timeout or reset may have been accepted by the provider: say so, and the automatic retry leaves it alone.
+            const unknown = isOutcomeUnknown(err);
+            const reason = unknown ? `${OUTCOME_UNKNOWN_PREFIX}${message}` : message;
+            // Shown as failed and never resent by itself; the record lets a person check the provider's receipt first (DLQ audit DF-08).
+            if (unknown)
+              await this.failures?.recordUnknownOutcome({
+                source: 'broadcast-send',
+                orgId,
+                ref: `${broadcastId}:${contactId}`,
+                jobName: 'broadcast-recipient',
+                reason: message,
+              });
             await this.db.tx(async (tx) => {
               const from = await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
                 status: 'failed',
@@ -544,6 +568,52 @@ export class BroadcastDispatchService {
       return 'finished';
     } finally {
       await this.lease.release(leaseKey, leaseToken);
+    }
+  }
+
+  /**
+   * Writes the outcome of a send the provider accepted. Never throws: a database error here must not mark the recipient failed (the
+   * automatic retry would send it a second time). It is tried again a few times; if the database stays down the recipient keeps its
+   * claim, and the stale-claim pass later marks it as interrupted, which the automatic retry skips.
+   */
+  private async recordSent(
+    orgId: number,
+    broadcastId: number,
+    contactId: number,
+    providerMessageId: string | null,
+  ): Promise<void> {
+    for (let attempt = 1; attempt <= RECORD_ATTEMPTS; attempt++) {
+      try {
+        await this.db.tx(async (tx) => {
+          const from = await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
+            status: 'sent',
+            providerMessageId,
+          });
+          if (from !== null)
+            await this.progress.emitMessage(tx, orgId, broadcastId, contactId, 'sent', 'send', {
+              providerMessageId,
+            });
+        });
+        // The inbox bubble is best effort and has its own transaction: it never undoes the recorded send.
+        await this.mirror
+          .mirror(orgId, broadcastId, contactId, 'sent', providerMessageId)
+          .catch((err: Error) =>
+            this.logger.warn(
+              { orgId, broadcastId, err: err.message },
+              '[BCAST] inbox mirror failed',
+            ),
+          );
+        return;
+      } catch (err) {
+        if (attempt === RECORD_ATTEMPTS) {
+          this.logger.error(
+            { orgId, broadcastId, contactId, providerMessageId, err: (err as Error).message },
+            '[BCAST] provider accepted the message but its result could not be recorded',
+          );
+          return;
+        }
+        await this.runtime.sleep(RECORD_RETRY_MS * attempt);
+      }
     }
   }
 

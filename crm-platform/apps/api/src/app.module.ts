@@ -63,6 +63,7 @@ import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
 import { LocalizationTranslationModule } from './modules/localization-translation';
 import { PlatformAsyncOpsModule } from './modules/platform-async-ops';
+import { FailedOperationsModule } from './modules/failed-operations';
 import { WebhookRetryModule } from './modules/webhook-retry';
 import { PlatformSupportDeskModule } from './modules/platform-support-desk';
 import { DashboardsAnalyticsChartsModule } from './modules/dashboards-analytics-charts';
@@ -110,7 +111,6 @@ import { FormsLinksGroupsModule } from './modules/forms-links-groups';
 import { AiCopilotLeadFinderModule } from './modules/ai-copilot-lead-finder';
 import { CompanyBriefsModule } from './modules/company-briefs';
 import { MarketplaceModule } from './modules/marketplace';
-import { ChromeExtensionSheetsAddonModule } from './modules/chrome-extension-sheets-addon';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { DeveloperRestApiV1Module } from './modules/developer-rest-api-v1';
@@ -250,6 +250,7 @@ import { HealthModule } from './health/health.module';
     DeveloperRestApiV1Module,
     PlatformSupportDeskModule,
     PlatformAsyncOpsModule,
+    FailedOperationsModule,
     WebhookRetryModule,
     TeamChatModule,
     WebhookFanoutModule,
@@ -279,7 +280,6 @@ import { HealthModule } from './health/health.module';
     AiCopilotLeadFinderModule,
     CompanyBriefsModule,
     MarketplaceModule,
-    ChromeExtensionSheetsAddonModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
     // module's README for the intended shape.
   ],

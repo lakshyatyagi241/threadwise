@@ -28,6 +28,8 @@ export interface RuntimeMonitorOptions {
   intervalMs?: number;
   /** Stable per-process id. Defaults to `<hostname>:<pid>`: low cardinality, restarts get a new one. */
   instance?: string;
+  /** The release this process runs (see `releaseFromEnv`): stamped on every series as `release`. Omitted: no such label. */
+  release?: string;
   /** A window whose worst delay exceeds this is logged with the slowest requests of that window. */
   blockedLogThresholdMs?: number;
   log?: (line: Record<string, unknown>) => void;
@@ -51,7 +53,7 @@ interface SlowRequest {
  */
 export class RuntimeMonitor {
   private readonly registry: Registry;
-  private readonly sampler = new EventLoopSampler();
+  private readonly sampler: EventLoopSampler;
   private readonly intervalMs: number;
   private readonly blockedLogThresholdMs: number;
   private readonly log: (line: Record<string, unknown>) => void;
@@ -90,6 +92,10 @@ export class RuntimeMonitor {
   private readonly throttledSeconds: Gauge;
   private readonly jobs: Counter;
   private readonly jobRetries: Counter;
+  private readonly dlqCaptured: Counter;
+  private readonly dlqCaptureFailures: Counter;
+  private readonly dlqOpen: Gauge;
+  private readonly dlqOldest: Gauge;
   private readonly httpDuration: Histogram;
   private readonly jobDuration: Histogram;
   private readonly jobWait: Histogram;
@@ -97,8 +103,13 @@ export class RuntimeMonitor {
   constructor(opts: RuntimeMonitorOptions) {
     // Same identity the worker heartbeat publishes to Redis, so /ready, Sentry and these series name a process alike.
     const instance = opts.instance ?? instanceId(hostname(), process.pid);
-    this.registry = new Registry({ service: opts.service, instance });
+    this.registry = new Registry({
+      service: opts.service,
+      instance,
+      ...(opts.release ? { release: opts.release } : {}),
+    });
     this.intervalMs = opts.intervalMs ?? 10_000;
+    this.sampler = new EventLoopSampler({ windowHintMs: this.intervalMs });
     this.blockedLogThresholdMs = opts.blockedLogThresholdMs ?? 250;
     this.log = opts.log ?? ((line) => process.stdout.write(`${JSON.stringify(line)}\n`));
     this.cgroupPath = opts.cgroupCpuStatPath ?? '/sys/fs/cgroup/cpu.stat';
@@ -186,6 +197,22 @@ export class RuntimeMonitor {
       'crm_container_cpu_throttled_seconds_total',
       'cgroup throttled_usec in seconds',
     );
+    this.dlqCaptured = this.registry.counter(
+      'crm_dead_letter_captured_total',
+      'Background operations recorded as failed for good (retries exhausted or unrecoverable), by queue and failure category',
+    );
+    this.dlqCaptureFailures = this.registry.counter(
+      'crm_dead_letter_capture_failures_total',
+      'Failed-operation records that could not be written. The job is still in the queue failed set and the reconcile sweep retries it; any non-zero value needs a person',
+    );
+    this.dlqOpen = this.registry.gauge(
+      'crm_dead_letter_open',
+      'Failed operations not yet resolved or closed, by queue',
+    );
+    this.dlqOldest = this.registry.gauge(
+      'crm_dead_letter_oldest_open_seconds',
+      'Age of the oldest unresolved failed operation, by queue (0 when none)',
+    );
     this.jobs = this.registry.counter(
       'crm_queue_jobs_total',
       'Finished queue jobs by queue and outcome',
@@ -244,6 +271,14 @@ export class RuntimeMonitor {
     this.sampler.stop();
   }
 
+  /**
+   * The registry behind `render()`, for a module that has series of its own (the realtime gateway's socket counts). Register a family
+   * once per monitor and keep the handle: a registry does not de-duplicate names.
+   */
+  get metrics(): Registry {
+    return this.registry;
+  }
+
   /** Called by the HTTP middleware when a response finishes. `route` must be the route template, never the raw URL. */
   observeHttp(method: string, route: string, status: number, durationMs: number): void {
     const statusClass = `${Math.floor(status / 100)}xx`;
@@ -268,6 +303,21 @@ export class RuntimeMonitor {
     this.jobDuration.observe(durationMs / 1000, { queue });
     this.jobs.inc(1, { queue, outcome });
     if (retries > 0) this.jobRetries.inc(retries, { queue });
+  }
+
+  /** A failed operation was recorded. Labels are the fixed queue name and the failure category: never an id, tenant or error text. */
+  observeDeadLetter(queue: string, category: string): void {
+    this.dlqCaptured.inc(1, { queue, category });
+  }
+
+  observeDeadLetterCaptureFailure(queue: string): void {
+    this.dlqCaptureFailures.inc(1, { queue });
+  }
+
+  /** The unresolved backlog of one queue, sampled by the reconcile sweep. */
+  setDeadLetterBacklog(queue: string, open: number, oldestSeconds: number): void {
+    this.dlqOpen.set(open, { queue });
+    this.dlqOldest.set(oldestSeconds, { queue });
   }
 
   render(): string {

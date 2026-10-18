@@ -294,3 +294,15 @@ test('database flow: plan, apply limits, copy, idempotency, resume, isolation, v
     await owner.end();
   }
 });
+
+test('flows: media urls on a Waboo host are found inside flow_data and replaced exactly', () => {
+  const data = { nodes: [{ type: 'media', data: { url: 'https://files.waboo.test/a/logo.png?sig=1', caption: 'x' } }, { type: 'message', data: { text: 'https://other.test/x.png' } }] };
+  const urls = [...lib.jsonUrls(data, ['files.waboo.test'])];
+  assert.deepEqual(urls, ['https://files.waboo.test/a/logo.png?sig=1']);
+  const cnt = { n: 0 };
+  const next = lib.jsonReplace(data, urls[0], 'https://media.example.test/flow-media/1/waboo/h/logo.png', cnt);
+  assert.equal(cnt.n, 1);
+  assert.equal(next.nodes[0].data.url, 'https://media.example.test/flow-media/1/waboo/h/logo.png');
+  assert.equal(next.nodes[1].data.text, 'https://other.test/x.png');
+  assert.equal(data.nodes[0].data.url.startsWith('https://files.waboo.test'), true);
+});

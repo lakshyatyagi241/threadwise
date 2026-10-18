@@ -1154,19 +1154,14 @@
           "aiModelPick": "— pick model —",
           "aiModelNone": "No AI models enabled — ask admin to switch one on",
           "aiModelNotEnabled": "{value} (not enabled)",
-          "aiAssistantNone": "— none (use the prompt above only) —",
           "aiAssistantOption": "{name} · {count, plural, one {# source} other {# sources}}",
           "aiAssistantMissing": "(assistant {id})",
-          "aiAssistantHintNone": "No knowledge bases yet. Create one in <link>AI Training</link>, then press Refresh list to pick it here.",
-          "aiAssistantHintEmpty": "Note: this assistant has 0 trained sources. Add some in <link>AI Training</link> or the reply uses the prompt only.",
-          "aiAssistantHint": "Pulls the chosen assistant's trained content into this reply. <link>Manage knowledge →</link>",
           "aiModelLabel": "Model",
           "aiModelHint": "Models the admin enabled — plus any provider you added your own key for (Settings → AI keys, on BYOK plans).",
           "aiModelHintNone": "No provider available yet. Add your own key in <link>Settings → AI keys</link> (BYOK plans), or ask your admin to enable one.",
           "aiPrompt": "System prompt",
           "aiSave": "Save response to",
           "aiSaveHint": "Later nodes read it as <v>{save}</v> — or <v>{path}</v> when extracting.",
-          "aiAssistantLabel": "Knowledge base (optional)",
           "aiExtract": "<strong>Extract structured data (JSON)</strong> — turn the message into fields",
           "aiFields": "Fields to extract",
           "aiFieldsHint": "Comma-separated keys. The AI returns ONE JSON object; each key becomes <v>{key}</v> (and <v>{rows}</v> when several records are detected — e.g. for a Google Sheets node).",
@@ -1179,7 +1174,25 @@
           "subflowMissing": "Flow {id} (not in workspace)",
           "subflowLabel": "Flow to run",
           "subflowHint": "Pick another saved flow. When this node fires, that flow runs end-to-end before control returns to the next node here.",
-          "endInfo": "This node terminates the flow. Anything connected after it won't run."
+          "endInfo": "This node terminates the flow. Anything connected after it won't run.",
+          "aiSetupLegend": "How should this step answer?",
+          "aiSetupAgent": "AI agent",
+          "aiSetupAgentDesc": "Uses the instructions, model and knowledge of an agent from AI Training.",
+          "aiSetupCustom": "Custom setup",
+          "aiSetupCustomDesc": "Choose a model and write the instructions here.",
+          "aiAgentLabel": "AI agent",
+          "aiAgentPick": "— choose an AI agent —",
+          "aiAgentHint": "The agent brings its own instructions, model and knowledge. Change them in <link>AI Training</link>.",
+          "aiAgentNone": "You have no AI agents yet. <link>Create your first AI agent</link>, then press Refresh list.",
+          "aiAgentRequired": "Choose an AI agent, or switch to a custom setup.",
+          "aiAgentSummary": "Model {model} · {count, plural, one {# knowledge source} other {# knowledge sources}}",
+          "aiAgentNoSources": "This agent has no knowledge yet, so it answers from its instructions only. Add sources in <link>AI Training</link>.",
+          "aiPromptRequired": "Write the instructions for the AI.",
+          "aiKnowledgeLabel": "Knowledge from an AI agent (optional)",
+          "aiKnowledgeNone": "— none —",
+          "aiKnowledgeHint": "Adds that agent's trained sources to the reply. Its own instructions and model are not used in a custom setup. <link>Manage in AI Training →</link>",
+          "aiAdvanced": "Advanced options",
+          "aiCreateAgent": "+ Create AI agent"
         },
         "options": {
           "prompt": "Prompt",
@@ -1669,26 +1682,23 @@
           "kinds": {
             "sheets": {
               "pick": "— pick a sheet —",
-              "empty": "No spreadsheets found — paste a URL/ID below",
+              "empty": "No spreadsheets found in the connected Google account",
               "loading": "Loading sheets…",
-              "notConnected": "Google isn't connected for this workspace, so your sheets can't be listed. Paste the sheet id or link instead.",
-              "idPlaceholder": "Sheet id",
+              "notConnected": "Google isn't connected for this workspace, so your sheets can't be listed. Connect Google to pick one.",
               "saved": "Sheet {id}… (not loaded)"
             },
             "docs": {
               "pick": "— pick a template doc —",
               "empty": "No docs found",
               "loading": "Loading docs…",
-              "notConnected": "Google isn't connected for this workspace, so your docs can't be listed. Paste the doc id or link instead.",
-              "idPlaceholder": "Doc id",
+              "notConnected": "Google isn't connected for this workspace, so your docs can't be listed. Connect Google to pick one.",
               "saved": "Doc {id}… (not loaded)"
             },
             "forms": {
               "pick": "— pick a form —",
               "empty": "No forms found",
               "loading": "Loading forms…",
-              "notConnected": "Google isn't connected for this workspace, so your forms can't be listed. Paste the form id or link instead.",
-              "idPlaceholder": "Form id",
+              "notConnected": "Google isn't connected for this workspace, so your forms can't be listed. Connect Google to pick one.",
               "saved": "Form {id}… (not loaded)"
             }
           },
@@ -1711,8 +1721,6 @@
           "addColumn": "Add column",
           "matchByHeader": "Match columns by header name",
           "matchByHeaderHint": "Write each value into the sheet column with that header (any order). Leave off to append left-to-right by position — the default.",
-          "pasteLabel": "…or paste a Spreadsheet URL / ID",
-          "pasteHint": "Works even if the picker is empty — paste the sheet link and we extract its ID.",
           "docsIntro": "Copy a template doc, fill <mono>{placeholders}</mono>, share anyone-with-link, send the URL to the customer. Place <mono>{key}</mono> in your template where the value should go.",
           "templateDocument": "Template document",
           "newCopyTitle": "New copy title",
@@ -1727,7 +1735,7 @@
           "messageTemplateHint": "The bot bubble sent to the customer. <mono>{token}</mono> gets the share link.",
           "messageTemplatePlaceholder": "Here's your document:\n'{{'doc_url'}}'",
           "saveUrl": "Save URL under variable",
-          "formIntro": "Sends the form URL via WhatsApp, pauses the flow, resumes via the <b>submitted</b> port when the customer fills it. Answers become flow variables.",
+          "formIntro": "Sends the form URL via WhatsApp, pauses the flow, resumes via the <b>submitted</b> port when the customer fills it. The answers are read from the form through your connected Google account, so nothing is pasted into the form. Answers become flow variables.",
           "googleForm": "Google Form",
           "bodyBubble": "Body bubble (sent above the link)",
           "bodyBubblePlaceholder": "Please fill out this short form:",
@@ -1735,12 +1743,7 @@
           "saveResponsesHint": "Individual answers also land as <mono>{token}</mono>.",
           "expireAfter": "Expire after (seconds)",
           "expireAfterHint": "How long to wait for a submission before timing out. 86400 = 24h.",
-          "setupTitle": "One-time setup — paste this into your Form's Script editor",
-          "setupOpen": "Open your form → <mono>⋮ menu</mono> → <mono>Script editor</mono>",
-          "setupDownload": "<link>Download the script (.gs)</link> and paste it",
-          "setupTrigger": "Add a trigger: <mono>onFormSubmit</mono> · From form · On form submit",
-          "setupWarning": "Without this script the form will still record answers in Google Forms, but the flow won't resume.",
-          "noListing": "Your files cannot be listed because the Drive file list permission was not given on the Google account page. Paste the link or id instead.",
+          "noListing": "Your files cannot be listed because the Drive file list permission was not given on the Google account page. Add it there to pick files.",
           "connection": {
             "unavailable": "Google is not set up for this platform, so this step fails when the flow runs.",
             "disconnected": "No Google account is connected, so this step fails when the flow runs. Connect Google first.",
@@ -2496,7 +2499,8 @@
         "noSenderFacebook": "The Trigger node has no Facebook Page selected — pick one on the Trigger step.",
         "noSenderNumber": "The Trigger node has no number selected — pick one on the Trigger step.",
         "faqMinScore": "\"{node}\" has a minimum score outside 0.05 to 0.99 — fix it or leave it blank to use the flow's setting.",
-        "locationInvalid": "\"{node}\" has no valid location — paste a Google Maps link or enter a latitude (-90 to 90) and longitude (-180 to 180)."
+        "locationInvalid": "\"{node}\" has no valid location — paste a Google Maps link or enter a latitude (-90 to 90) and longitude (-180 to 180).",
+        "aiNoAgent": "\"{node}\" has no AI agent and no prompt — pick an AI agent, or choose Custom setup and write the instructions."
       }
     },
     "simpleModel": {
@@ -2662,7 +2666,9 @@
         "chooseFlow": "Step {stage}: choose the flow the button starts.",
         "chooseApi": "Step {stage}: choose the API to call.",
         "writeCode": "Step {stage}: write the code to run.",
-        "webhookUrl": "Step {stage}: add the address (URL) to call."
+        "webhookUrl": "Step {stage}: add the address (URL) to call.",
+        "chooseAiAgent": "Step {stage}: choose the AI agent that answers, or switch the step to a custom setup.",
+        "writeAiPrompt": "Step {stage}: write the instructions for the AI, or choose an AI agent."
       },
       "faqSummary": "{hasCategory, select, true {From your FAQs · {category}} other {From your FAQs}}"
     },

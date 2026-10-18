@@ -17,3 +17,4 @@ export * from './ask-input';
 export * from './carousel';
 export * from './geta-publish';
 export * from './location';
+export * from './ai-node';

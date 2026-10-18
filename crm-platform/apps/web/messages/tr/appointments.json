@@ -566,11 +566,12 @@
         "hint": "Rezervasyonlar bu olmadan da çalışır. Müsait/meşgul saatleri eşitlemek ve Meet bağlantıları eklemek için Randevular, Ayarlar altında Google Takvim'i bağlayın.",
         "unavailable": "Google Takvim bu platform için henüz kurulmadı. Bu ayarlar, kurulduğunda kullanılmak üzere rezervasyon türüyle birlikte saklanır.",
         "calendarId": "Takvim",
-        "calendarPlaceholder": "birincil",
         "spreadsheetId": "Sayfaya satır ekleme (isteğe bağlı)",
-        "spreadsheetPlaceholder": "Elektronik tablo kimliği",
         "createMeet": "Her rezervasyon için bir Google Meet bağlantısı oluştur",
-        "calendarDefault": "Çalışma alanı takvimi"
+        "calendarDefault": "Çalışma alanı takvimi",
+        "connectFirst": "Listeden seçim yapmak için <link>Google hesabınızı</link> bağlayın.",
+        "spreadsheetNone": "Sayfa yok",
+        "spreadsheetNoListing": "Drive dosya listesi izni verilmediği için sayfalarınız listelenemiyor. Bu izni Google hesabı sayfasından ekleyin."
       },
       "messages": {
         "title": "Yaşam döngüsü mesajları",

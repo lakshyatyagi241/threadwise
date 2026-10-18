@@ -363,27 +363,24 @@
           "kinds": {
             "sheets": {
               "pick": "— scegli un foglio —",
-              "empty": "Nessun foglio di calcolo trovato — incolla qui sotto un URL / ID",
               "loading": "Caricamento fogli…",
-              "notConnected": "Google non è collegato a questo Workspace, quindi non è possibile elencare i tuoi fogli. Incolla invece l’id o il link del foglio.",
-              "idPlaceholder": "ID foglio",
-              "saved": "Foglio {id}… (non caricato)"
+              "saved": "Foglio {id}… (non caricato)",
+              "empty": "Nessun foglio di calcolo trovato nell'account Google collegato",
+              "notConnected": "Google non è collegato a questo workspace, quindi non è possibile elencare i tuoi fogli. Collega Google per sceglierne uno."
             },
             "docs": {
               "pick": "— scegli un documento Template —",
               "empty": "Nessun documento trovato",
               "loading": "Caricamento documenti…",
-              "notConnected": "Google non è collegato a questo Workspace, quindi non è possibile elencare i tuoi documenti. Incolla invece l’id o il link del documento.",
-              "idPlaceholder": "ID documento",
-              "saved": "Documento {id}… (non caricato)"
+              "saved": "Documento {id}… (non caricato)",
+              "notConnected": "Google non è collegato a questo workspace, quindi non è possibile elencare i tuoi documenti. Collega Google per sceglierne uno."
             },
             "forms": {
               "pick": "— scegli un modulo —",
               "empty": "Nessun modulo trovato",
               "loading": "Caricamento moduli…",
-              "notConnected": "Google non è collegato a questo Workspace, quindi non è possibile elencare i tuoi moduli. Incolla invece l’id o il link del modulo.",
-              "idPlaceholder": "ID modulo",
-              "saved": "Modulo {id}… (non caricato)"
+              "saved": "Modulo {id}… (non caricato)",
+              "notConnected": "Google non è collegato a questo workspace, quindi non è possibile elencare i tuoi moduli. Collega Google per sceglierne uno."
             }
           },
           "sheetsIntro": "Aggiunge una riga a un Foglio Google (modalità scrittura) oppure cerca una riga tramite una colonna chiave (modalità lettura). Usa l’account Google collegato dello Workspace in <link>/google-account</link>.",
@@ -405,8 +402,6 @@
           "addColumn": "Aggiungi colonna",
           "matchByHeader": "Abbina le colonne per nome dell’intestazione",
           "matchByHeaderHint": "Scrive ogni valore nella colonna del foglio con quell’intestazione (in qualsiasi ordine). Disattivalo per aggiungere da sinistra a destra per posizione — è il valore predefinito.",
-          "pasteLabel": "…oppure incolla un URL / ID di foglio di calcolo",
-          "pasteHint": "Funziona anche se il selettore è vuoto — incolla il link del foglio e ne estraiamo l’ID.",
           "templateDocument": "Documento Template",
           "newCopyTitle": "Titolo della nuova copia",
           "newCopyTitlePlaceholder": "Documento per '{{'name'}}'",
@@ -420,7 +415,6 @@
           "messageTemplateHint": "Il messaggio del bot inviato al cliente. <mono>{token}</mono> riceve il link di condivisione.",
           "messageTemplatePlaceholder": "Ecco il tuo documento:\n'{{'doc_url'}}'",
           "saveUrl": "Salva l’URL nella variabile",
-          "formIntro": "Invia l’URL del modulo via WhatsApp, mette in pausa il Flow e lo riprende tramite l’uscita <b>inviato</b> quando il cliente lo compila. Le risposte diventano variabili del Flow.",
           "googleForm": "Modulo Google",
           "bodyBubble": "Messaggio (inviato sopra il link)",
           "bodyBubblePlaceholder": "Compila questo breve modulo:",
@@ -428,13 +422,7 @@
           "saveResponsesHint": "Le singole risposte finiscono anche come <mono>{token}</mono>.",
           "expireAfter": "Scade dopo (secondi)",
           "expireAfterHint": "Quanto attendere un invio prima del timeout. 86400 = 24 ore.",
-          "setupTitle": "Configurazione una tantum — incolla questo nell’editor Script del tuo modulo",
-          "setupOpen": "Apri il modulo → <mono>menu ⋮</mono> → <mono>Editor script</mono>",
-          "setupDownload": "<link>Scarica lo script (.gs)</link> e incollalo",
-          "setupTrigger": "Aggiungi un trigger: <mono>onFormSubmit</mono> · Dal modulo · All’invio del modulo",
-          "setupWarning": "Senza questo script il modulo registrerà comunque le risposte in Moduli Google, ma il Flow non riprenderà.",
           "docsIntro": "Copia un documento Template, compila i <mono>{placeholders}</mono>, condividilo con chiunque abbia il link e invia l’URL al cliente. Inserisci <mono>{key}</mono> nel modello dove deve andare il valore.",
-          "noListing": "Non è possibile elencare i tuoi file perché il permesso Elenco file di Drive non è stato concesso nella pagina Account Google. Incolla invece il link o l’ID.",
           "connection": {
             "open": "Apri Account Google",
             "permission": {
@@ -447,7 +435,9 @@
             "disconnected": "Nessun account Google è collegato, quindi questo passaggio non riuscirà quando il flusso verrà eseguito. Collega prima Google.",
             "needsReconnect": "Google non accetta più l'account collegato, quindi questo passaggio non riuscirà quando il flusso verrà eseguito. Ricollega prima Google.",
             "missing": "All'account Google collegato non è stata concessa l'autorizzazione {permission}, quindi questo passaggio non riuscirà quando il flusso verrà eseguito."
-          }
+          },
+          "formIntro": "Invia l'URL del modulo tramite WhatsApp, mette in pausa il flusso e riprende dalla porta <b>submitted</b> quando il cliente lo compila. Le risposte vengono lette dal modulo tramite il tuo account Google collegato, quindi non serve incollare nulla nel modulo. Le risposte diventano variabili del flusso.",
+          "noListing": "Non è possibile elencare i tuoi file perché nella pagina dell'account Google non è stato concesso il permesso per l'elenco dei file di Drive. Aggiungilo lì per scegliere i file."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -1524,19 +1514,14 @@
           "aiModelPick": "— scegli modello —",
           "aiModelNone": "Nessun modello AI attivo — chiedi all’admin di attivarne uno",
           "aiModelNotEnabled": "{value} (non attivo)",
-          "aiAssistantNone": "— nessuno (usa solo il prompt sopra) —",
           "aiAssistantOption": "{name} · {count, plural, one {# fonte} other {# fonti}}",
           "aiAssistantMissing": "(assistente {id})",
-          "aiAssistantHintNone": "Nessuna knowledge base ancora. Creane una in <link>AI Training</link>, poi premi Aggiorna elenco per sceglierla qui.",
-          "aiAssistantHintEmpty": "Nota: questo assistente ha 0 fonti addestrate. Aggiungine in <link>AI Training</link>, altrimenti la risposta usa solo il prompt.",
-          "aiAssistantHint": "Porta i contenuti addestrati dell’assistente scelto in questa risposta. <link>Gestisci la knowledge →</link>",
           "aiModelLabel": "Modello",
           "aiModelHint": "Modelli attivati dall’admin — più qualsiasi provider per cui hai aggiunto una tua chiave (Impostazioni → Chiavi AI, nei piani BYOK).",
           "aiModelHintNone": "Nessun provider disponibile ancora. Aggiungi una tua chiave in <link>Impostazioni → Chiavi AI</link> (piani BYOK), oppure chiedi all’admin di attivarne uno.",
           "aiPrompt": "Prompt di sistema",
           "aiSave": "Salva risposta in",
           "aiSaveHint": "I nodi successivi la leggono come <v>{save}</v> — oppure <v>{path}</v> in caso di estrazione.",
-          "aiAssistantLabel": "Knowledge base (facoltativa)",
           "aiExtract": "<strong>Estrai dati strutturati (JSON)</strong> — trasforma il messaggio in campi",
           "aiFields": "Campi da estrarre",
           "aiFieldsHint": "Chiavi separate da virgole. L’AI restituisce UN oggetto JSON; ogni chiave diventa <v>{key}</v> (e <v>{rows}</v> quando vengono rilevati più record — ad es. per un nodo Google Sheets).",
@@ -1549,7 +1534,25 @@
           "subflowMissing": "Flow {id} (non presente nel workspace)",
           "subflowLabel": "Flow da eseguire",
           "subflowHint": "Scegli un altro flow salvato. Quando scatta questo nodo, quel flow viene eseguito fino in fondo prima che il controllo torni al nodo successivo.",
-          "endInfo": "Questo nodo termina il flow. Tutto ciò che è collegato dopo non verrà eseguito."
+          "endInfo": "Questo nodo termina il flow. Tutto ciò che è collegato dopo non verrà eseguito.",
+          "aiSetupLegend": "Come deve rispondere questo passo?",
+          "aiSetupAgent": "Agente AI",
+          "aiSetupAgentDesc": "Usa le istruzioni, il modello e le conoscenze di un agente di Addestramento AI.",
+          "aiSetupCustom": "Configurazione personalizzata",
+          "aiSetupCustomDesc": "Scegli un modello e scrivi qui le istruzioni.",
+          "aiAgentLabel": "Agente AI",
+          "aiAgentPick": "— scegli un agente AI —",
+          "aiAgentHint": "L’agente porta con sé istruzioni, modello e conoscenze propri. Modificali in <link>Addestramento AI</link>.",
+          "aiAgentNone": "Non hai ancora agenti AI. <link>Crea il tuo primo agente AI</link>, poi premi Aggiorna elenco.",
+          "aiAgentRequired": "Scegli un agente AI o passa a una configurazione personalizzata.",
+          "aiAgentSummary": "Modello {model} · {count, plural, one {# fonte di conoscenza} other {# fonti di conoscenza}}",
+          "aiAgentNoSources": "Questo agente non ha ancora conoscenze, quindi risponde solo in base alle sue istruzioni. Aggiungi fonti in <link>Addestramento AI</link>.",
+          "aiPromptRequired": "Scrivi le istruzioni per l’AI.",
+          "aiKnowledgeLabel": "Conoscenze di un agente AI (facoltativo)",
+          "aiKnowledgeNone": "— nessuna —",
+          "aiKnowledgeHint": "Aggiunge alla risposta le fonti addestrate di quell’agente. Le sue istruzioni e il suo modello non vengono usati in una configurazione personalizzata. <link>Gestisci in Addestramento AI →</link>",
+          "aiAdvanced": "Opzioni avanzate",
+          "aiCreateAgent": "+ Crea agente AI"
         },
         "options": {
           "prompt": "Prompt",
@@ -2355,7 +2358,8 @@
         "noSenderFacebook": "Il nodo Trigger non ha una Pagina Facebook selezionata — scegline una nel passo Trigger.",
         "noSenderNumber": "Il nodo Trigger non ha un numero selezionato — scegline uno nel passo Trigger.",
         "faqMinScore": "\"{node}\" ha un punteggio minimo fuori dall'intervallo da 0.05 a 0.99 — correggilo o lascialo vuoto per usare l'impostazione del flusso.",
-        "locationInvalid": "«{node}» non ha una posizione valida: incolla un link di Google Maps o inserisci latitudine (-90 a 90) e longitudine (-180 a 180)."
+        "locationInvalid": "«{node}» non ha una posizione valida: incolla un link di Google Maps o inserisci latitudine (-90 a 90) e longitudine (-180 a 180).",
+        "aiNoAgent": "\"{node}\" non ha né un agente AI né un prompt: scegli un agente AI oppure Configurazione personalizzata e scrivi le istruzioni."
       }
     },
     "simpleModel": {
@@ -2521,7 +2525,9 @@
         "chooseFlow": "Passo {stage}: scegli il flusso che il pulsante avvia.",
         "chooseApi": "Passo {stage}: scegli l'API da chiamare.",
         "writeCode": "Passo {stage}: scrivi il codice da eseguire.",
-        "webhookUrl": "Passaggio {stage}: aggiungi l'indirizzo (URL) da chiamare."
+        "webhookUrl": "Passaggio {stage}: aggiungi l'indirizzo (URL) da chiamare.",
+        "chooseAiAgent": "Passo {stage}: scegli l’agente AI che risponde o passa il passo a una configurazione personalizzata.",
+        "writeAiPrompt": "Passo {stage}: scrivi le istruzioni per l’AI o scegli un agente AI."
       },
       "faqSummary": "{hasCategory, select, true {Dalle tue FAQ · {category}} other {Dalle tue FAQ}}"
     },

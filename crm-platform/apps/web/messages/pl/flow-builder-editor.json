@@ -1131,19 +1131,14 @@
           "aiModelPick": "— wybierz model —",
           "aiModelNone": "Brak włączonych modeli AI — poproś administratora o włączenie jednego",
           "aiModelNotEnabled": "{value} (nie włączony)",
-          "aiAssistantNone": "— brak (tylko prompt powyżej) —",
           "aiAssistantOption": "{name} · {count, plural, one {# źródło} few {# źródła} many {# źródeł} other {# źródła}}",
           "aiAssistantMissing": "(asystent {id})",
-          "aiAssistantHintNone": "Brak baz wiedzy. Utwórz jedną w <link>Szkoleniu AI</link>, a następnie naciśnij Odśwież listę, aby ją tu wybrać.",
-          "aiAssistantHintEmpty": "Uwaga: ten asystent ma 0 przeszkolonych źródeł. Dodaj je w <link>Szkoleniu AI</link>, w przeciwnym razie odpowiedź używa tylko promptu.",
-          "aiAssistantHint": "Wprowadza przeszkolone treści wybranego asystenta do tej odpowiedzi. <link>Zarządzaj wiedzą →</link>",
           "aiModelLabel": "Model",
           "aiModelHint": "Modele włączone przez administratora — oraz dowolny dostawca, dla którego dodałeś własny klucz (Ustawienia → klucze AI, w planach BYOK).",
           "aiModelHintNone": "Brak dostępnego dostawcy. Dodaj własny klucz w <link>Ustawienia → klucze AI</link> (plany BYOK) lub poproś administratora o włączenie jednego.",
           "aiPrompt": "Prompt systemowy",
           "aiSave": "Zapisz odpowiedź do",
           "aiSaveHint": "Późniejsze węzły odczytują ją jako <v>{save}</v> — lub <v>{path}</v> przy wyodrębnianiu.",
-          "aiAssistantLabel": "Baza wiedzy (opcjonalnie)",
           "aiExtract": "<strong>Wyodrębnij dane strukturalne (JSON)</strong> — zamień wiadomość na pola",
           "aiFields": "Pola do wyodrębnienia",
           "aiFieldsHint": "Klucze oddzielone przecinkami. AI zwraca JEDEN obiekt JSON; każdy klucz staje się <v>{key}</v> (a <v>{rows}</v>, gdy wykryto kilka rekordów — np. dla węzła Arkuszy Google).",
@@ -1156,7 +1151,25 @@
           "subflowMissing": "Przepływ {id} (nie ma w przestrzeni roboczej)",
           "subflowLabel": "Przepływ do uruchomienia",
           "subflowHint": "Wybierz inny zapisany przepływ. Gdy ten węzeł się uruchomi, tamten przepływ wykona się w całości, zanim sterowanie wróci do następnego węzła tutaj.",
-          "endInfo": "Ten węzeł kończy przepływ. Wszystko, co jest za nim podłączone, nie zostanie uruchomione."
+          "endInfo": "Ten węzeł kończy przepływ. Wszystko, co jest za nim podłączone, nie zostanie uruchomione.",
+          "aiSetupLegend": "Jak ten krok ma odpowiadać?",
+          "aiSetupAgent": "Agent AI",
+          "aiSetupAgentDesc": "Używa instrukcji, modelu i wiedzy agenta z sekcji Trening AI.",
+          "aiSetupCustom": "Ustawienia własne",
+          "aiSetupCustomDesc": "Wybierz tutaj model i napisz instrukcje.",
+          "aiAgentLabel": "Agent AI",
+          "aiAgentPick": "— wybierz agenta AI —",
+          "aiAgentHint": "Agent ma własne instrukcje, model i wiedzę. Zmienisz je w sekcji <link>Trening AI</link>.",
+          "aiAgentNone": "Nie masz jeszcze agentów AI. <link>Utwórz pierwszego agenta AI</link>, a potem kliknij Odśwież listę.",
+          "aiAgentRequired": "Wybierz agenta AI albo przełącz na ustawienia własne.",
+          "aiAgentSummary": "Model {model} · {count, plural, one {# źródło wiedzy} few {# źródła wiedzy} many {# źródeł wiedzy} other {# źródła wiedzy}}",
+          "aiAgentNoSources": "Ten agent nie ma jeszcze wiedzy, więc odpowiada tylko na podstawie swoich instrukcji. Dodaj źródła w sekcji <link>Trening AI</link>.",
+          "aiPromptRequired": "Napisz instrukcje dla AI.",
+          "aiKnowledgeLabel": "Wiedza agenta AI (opcjonalnie)",
+          "aiKnowledgeNone": "— brak —",
+          "aiKnowledgeHint": "Dodaje do odpowiedzi wytrenowane źródła tego agenta. Jego instrukcje i model nie są używane w ustawieniach własnych. <link>Zarządzaj w Treningu AI →</link>",
+          "aiAdvanced": "Opcje zaawansowane",
+          "aiCreateAgent": "+ Utwórz agenta AI"
         },
         "options": {
           "prompt": "Prompt",
@@ -1646,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— wybierz arkusz —",
-              "empty": "Nie znaleziono arkuszy — wklej poniżej adres URL lub identyfikator",
               "loading": "Wczytywanie arkuszy…",
-              "notConnected": "Google nie jest połączony z tą przestrzenią roboczą, więc arkuszy nie można wyświetlić. Zamiast tego wklej identyfikator lub link arkusza.",
-              "idPlaceholder": "Identyfikator arkusza",
-              "saved": "Arkusz {id}… (nie wczytano)"
+              "saved": "Arkusz {id}… (nie wczytano)",
+              "empty": "Nie znaleziono arkuszy kalkulacyjnych na połączonym koncie Google",
+              "notConnected": "Google nie jest połączone z tym obszarem roboczym, więc nie można wyświetlić Twoich arkuszy. Połącz Google, aby wybrać arkusz."
             },
             "docs": {
               "pick": "— wybierz dokument szablonu —",
               "empty": "Nie znaleziono dokumentów",
               "loading": "Wczytywanie dokumentów…",
-              "notConnected": "Google nie jest połączony z tą przestrzenią roboczą, więc dokumentów nie można wyświetlić. Zamiast tego wklej identyfikator lub link dokumentu.",
-              "idPlaceholder": "Identyfikator dokumentu",
-              "saved": "Dokument {id}… (nie wczytano)"
+              "saved": "Dokument {id}… (nie wczytano)",
+              "notConnected": "Google nie jest połączone z tym obszarem roboczym, więc nie można wyświetlić Twoich dokumentów. Połącz Google, aby wybrać dokument."
             },
             "forms": {
               "pick": "— wybierz formularz —",
               "empty": "Nie znaleziono formularzy",
               "loading": "Wczytywanie formularzy…",
-              "notConnected": "Google nie jest połączony z tą przestrzenią roboczą, więc formularzy nie można wyświetlić. Zamiast tego wklej identyfikator lub link formularza.",
-              "idPlaceholder": "Identyfikator formularza",
-              "saved": "Formularz {id}… (nie wczytano)"
+              "saved": "Formularz {id}… (nie wczytano)",
+              "notConnected": "Google nie jest połączone z tym obszarem roboczym, więc nie można wyświetlić Twoich formularzy. Połącz Google, aby wybrać formularz."
             }
           },
           "sheetsIntro": "Dopisuje wiersz do arkusza Google (tryb zapisu) lub wyszukuje wiersz po kolumnie klucza (tryb odczytu). Korzysta z konta Google przypisanego do przestrzeni roboczej w <link>/google-account</link>.",
@@ -1688,8 +1698,6 @@
           "addColumn": "Dodaj kolumnę",
           "matchByHeader": "Dopasuj kolumny po nazwie nagłówka",
           "matchByHeaderHint": "Zapisuj każdą wartość w kolumnie arkusza z tym nagłówkiem (w dowolnej kolejności). Wyłącz, aby dopisywać od lewej do prawej według pozycji — to domyślne ustawienie.",
-          "pasteLabel": "…lub wklej adres URL / identyfikator arkusza",
-          "pasteHint": "Działa nawet wtedy, gdy lista wyboru jest pusta — wklej link do arkusza, a my wyodrębnimy jego identyfikator.",
           "docsIntro": "Skopiuj dokument szablonu, uzupełnij <mono>{placeholders}</mono>, udostępnij każdemu, kto ma link, i wyślij adres URL do klienta. Umieść <mono>{key}</mono> w szablonie w miejscu, gdzie ma się pojawić wartość.",
           "templateDocument": "Dokument szablonu",
           "newCopyTitle": "Tytuł nowej kopii",
@@ -1704,7 +1712,6 @@
           "messageTemplateHint": "Dymek bota wysyłany do klienta. <mono>{token}</mono> zostaje zastąpiony linkiem do udostępnienia.",
           "messageTemplatePlaceholder": "Oto Twój dokument:\n'{{'doc_url'}}'",
           "saveUrl": "Zapisz adres URL w zmiennej",
-          "formIntro": "Wysyła adres URL formularza przez WhatsApp, wstrzymuje przepływ i wznawia go przez wyjście <b>wysłano</b>, gdy klient go wypełni. Odpowiedzi stają się zmiennymi przepływu.",
           "googleForm": "Formularz Google",
           "bodyBubble": "Dymek treści (wysyłany nad linkiem)",
           "bodyBubblePlaceholder": "Prosimy o wypełnienie tego krótkiego formularza:",
@@ -1712,12 +1719,6 @@
           "saveResponsesHint": "Poszczególne odpowiedzi trafiają też jako <mono>{token}</mono>.",
           "expireAfter": "Wygasa po (sekundach)",
           "expireAfterHint": "Jak długo czekać na zgłoszenie przed przekroczeniem limitu czasu. 86400 = 24 h.",
-          "setupTitle": "Konfiguracja jednorazowa — wklej to do edytora skryptów formularza",
-          "setupOpen": "Otwórz formularz → <mono>menu ⋮</mono> → <mono>Edytor skryptów</mono>",
-          "setupDownload": "<link>Pobierz skrypt (.gs)</link> i wklej go",
-          "setupTrigger": "Dodaj wyzwalacz: <mono>onFormSubmit</mono> · Z formularza · Przy wysłaniu formularza",
-          "setupWarning": "Bez tego skryptu formularz nadal zapisze odpowiedzi w Formularzach Google, ale przepływ nie zostanie wznowiony.",
-          "noListing": "Nie można wyświetlić listy Twoich plików, ponieważ na stronie konta Google nie przyznano uprawnienia do listy plików Drive. Wklej zamiast tego link lub identyfikator.",
           "connection": {
             "open": "Otwórz konto Google",
             "permission": {
@@ -1730,7 +1731,9 @@
             "disconnected": "Nie połączono żadnego konta Google, więc ten krok zakończy się błędem podczas działania przepływu. Najpierw połącz Google.",
             "needsReconnect": "Google nie akceptuje już połączonego konta, więc ten krok zakończy się błędem podczas działania przepływu. Najpierw połącz Google ponownie.",
             "missing": "Połączone konto Google nie otrzymało uprawnienia {permission}, więc ten krok zakończy się błędem podczas działania przepływu."
-          }
+          },
+          "formIntro": "Wysyła adres URL formularza przez WhatsApp, wstrzymuje przepływ i wznawia go przez port <b>submitted</b>, gdy klient wypełni formularz. Odpowiedzi są odczytywane z formularza przez połączone konto Google, więc nic nie trzeba wklejać do formularza. Odpowiedzi stają się zmiennymi przepływu.",
+          "noListing": "Nie można wyświetlić Twoich plików, ponieważ na stronie konta Google nie przyznano uprawnienia do listy plików Drive. Dodaj je tam, aby wybierać pliki."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2497,7 +2500,8 @@
         "noSenderFacebook": "Węzeł Wyzwalacz nie ma wybranej strony Facebook — wybierz ją w kroku Wyzwalacz.",
         "noSenderNumber": "Węzeł Wyzwalacz nie ma wybranego numeru — wybierz go w kroku Wyzwalacz.",
         "faqMinScore": "\"{node}\" ma minimalny wynik spoza zakresu od 0.05 do 0.99 — popraw go lub zostaw puste, aby użyć ustawienia przepływu.",
-        "locationInvalid": "„{node}” nie ma poprawnej lokalizacji — wklej link do Map Google lub wpisz szerokość (-90 do 90) i długość (-180 do 180) geograficzną."
+        "locationInvalid": "„{node}” nie ma poprawnej lokalizacji — wklej link do Map Google lub wpisz szerokość (-90 do 90) i długość (-180 do 180) geograficzną.",
+        "aiNoAgent": "„{node}” nie ma ani agenta AI, ani promptu — wybierz agenta AI albo Ustawienia własne i napisz instrukcje."
       }
     },
     "simpleModel": {
@@ -2663,7 +2667,9 @@
         "chooseFlow": "Krok {stage}: wybierz przepływ uruchamiany przez przycisk.",
         "chooseApi": "Krok {stage}: wybierz API do wywołania.",
         "writeCode": "Krok {stage}: napisz kod do uruchomienia.",
-        "webhookUrl": "Krok {stage}: dodaj adres (URL) do wywołania."
+        "webhookUrl": "Krok {stage}: dodaj adres (URL) do wywołania.",
+        "chooseAiAgent": "Krok {stage}: wybierz agenta AI, który odpowiada, albo przełącz krok na ustawienia własne.",
+        "writeAiPrompt": "Krok {stage}: napisz instrukcje dla AI albo wybierz agenta AI."
       },
       "faqSummary": "{hasCategory, select, true {Z Twoich FAQ · {category}} other {Z Twoich FAQ}}"
     },

@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. Экран согласия",
-              "body": "Добавьте области, которые запрашивает продукт (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), затем опубликуйте приложение: в режиме Testing Google завершает каждое разрешение через 7 дней, и рабочим пространствам придётся подключиться заново. Области drive являются ограниченными и требуют проверки Google."
+              "body": "Добавьте области, которые запрашивает продукт (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), затем опубликуйте приложение: в режиме Testing Google завершает каждое разрешение через 7 дней, и рабочим пространствам придётся подключиться заново. Области drive являются ограниченными и требуют проверки Google."
             },
             "workspaces": {
               "title": "4. Подключение рабочих пространств",

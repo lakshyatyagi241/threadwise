@@ -213,14 +213,26 @@ export class ChannelDispatcher {
         plannedReceipts: sent.plannedReceipts ?? [],
         ...(sent.meta ? { meta: sent.meta } : {}),
       };
-      await this.redisCall(() =>
-        this.redis.set(
+      // The provider has accepted the message. Failing to remember that must not fail the send: a retryable error here makes the queue
+      // send it again with no stored answer to find. The caller's own database write is the durable record, and a retry that still
+      // finds the message queued is the narrow window this store exists to shrink, not one to widen.
+      await this.redis
+        .set(
           key,
           JSON.stringify({ ...result, acceptedAt: result.acceptedAt.toISOString() }),
           'EX',
           RESULT_TTL_SECONDS,
-        ),
-      );
+        )
+        .catch((err: Error) =>
+          this.logger.error(
+            {
+              orgId: req.channel.orgId,
+              clientReference: envelope.clientReference,
+              err: err.message,
+            },
+            'provider accepted the message but its result could not be stored',
+          ),
+        );
       return { ...result, replayed: false };
     } finally {
       await this.redis.eval(RELEASE_IF_OWNER, 1, `${key}:lock`, owner).catch(() => undefined);

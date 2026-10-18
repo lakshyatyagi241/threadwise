@@ -196,7 +196,9 @@
           },
           "meeting": {
             "upcoming": "会议：{title}",
-            "past": "已会面：{title}"
+            "past": "已会面：{title}",
+            "notHeld": "未举行：{title}",
+            "noShow": "未到场：{title}"
           },
           "call": {
             "inbound": "来电",

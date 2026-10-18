@@ -649,6 +649,12 @@ function route(
         { id: 'team@example.com', name: 'Team calendar', primary: false, timezone: 'UTC' },
       ];
     }
+    if (c === 'google' && d === 'spreadsheets') {
+      return [
+        { id: '1AbCdEfGhIjKlMnOp', name: 'Bookings' },
+        { id: '1QrStUvWxYz0123456', name: 'Leads 2026' },
+      ];
+    }
     if (c === 'google' && d === 'calendar' && method === 'PUT') {
       const id = String(body.calendarId ?? 'primary');
       s.settings.calendar = {

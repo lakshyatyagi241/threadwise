@@ -152,6 +152,11 @@ export class TagsService {
    * POST /tags. Background jobs pass false: the caller's permission was checked when the job was
    * accepted and a worker has no grants to look at. The plan's tag limit applies either way.
    */
+  /** The tags that already exist for these names, in one query, keyed by lower-cased trimmed name (for a caller about to find-or-create many). */
+  findManyByNames(tx: Tx, orgId: number, names: readonly string[]) {
+    return this.repo.findByNames(tx, orgId, names);
+  }
+
   async findOrCreateByName(
     tx: Tx,
     orgId: number,

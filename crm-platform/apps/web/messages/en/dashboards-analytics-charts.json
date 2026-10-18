@@ -293,7 +293,7 @@
         "connected": {
           "woocommerce": "Connected",
           "shopify": "Connected",
-          "google_sheets": "API key issued",
+          "google_sheets": "Google account connected",
           "meta_catalog": "Catalog linked"
         },
         "notConnected": "not connected",
@@ -405,6 +405,43 @@
           "sent": "Sent → {peer}",
           "received": "Received from {peer}",
           "empty": "No recent activity in this window."
+        },
+        "loginDevices": {
+          "title": "Login devices",
+          "subtitle": "Workspace sign-ins in this window, by browser, system and type",
+          "active": "{n} active now",
+          "total": "{n, plural, one {# sign-in} other {# sign-ins}}",
+          "empty": "No sign-ins in this window.",
+          "activeLegend": "Active now",
+          "endedLegend": "Signed out or expired",
+          "row": "{count} sign-ins, {active} active now",
+          "group": {
+            "browser": "Browser",
+            "os": "System",
+            "kind": "Type"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "Other browser"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "Other system"
+          },
+          "kind": {
+            "desktop": "Desktop",
+            "mobile": "Mobile",
+            "unknown": "Unknown"
+          }
         }
       }
     },

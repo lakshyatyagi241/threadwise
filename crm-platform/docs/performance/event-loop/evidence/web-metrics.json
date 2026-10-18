@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-18T05:10:59.845Z",
+ "generatedAt": "2026-10-18T07:11:07.692Z",
  "node": "v22.17.0",
  "results": [
   {
@@ -51,7 +51,30 @@
   {
    "name": "an idle web loop reads in a sane range (under 0.5 s)",
    "ok": true,
-   "detail": "p99 0.016842751 s"
+   "detail": "p99 0.016941055 s"
+  },
+  {
+   "name": "the request histogram counts /robots.txt under its route",
+   "ok": true,
+   "detail": 22
+  },
+  {
+   "name": "a page request is counted under a template (login)",
+   "ok": true,
+   "detail": 200
+  },
+  {
+   "name": "a 404 is counted as \"unmatched\", not under its URL",
+   "ok": true,
+   "detail": 404
+  },
+  {
+   "name": "the metrics listener does not count its own requests",
+   "ok": true
+  },
+  {
+   "name": "every series carries the release label",
+   "ok": true
   },
   {
    "name": "only /metrics answers (404 elsewhere)",

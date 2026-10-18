@@ -9,6 +9,7 @@ import {
   bookingTypeListSchema,
   bookingTypeSchema,
   calendarOptionSchema,
+  spreadsheetOptionSchema,
   calendarStartSchema,
   calendarStatusSchema,
   publicBookedSchema,
@@ -24,6 +25,7 @@ import {
   type BookingTypeInput,
   type CalendarConnection,
   type CalendarOption,
+  type SpreadsheetOption,
   type PreviewDraft,
   type PublicBookInput,
   type PublicDirectory,
@@ -177,6 +179,12 @@ export const mockAppointmentsApi = {
   calendars(signal?: AbortSignal): Promise<CalendarOption[]> {
     return call('/appointments/calendar/google/calendars', {
       schema: z.array(calendarOptionSchema),
+      signal,
+    });
+  },
+  spreadsheets(signal?: AbortSignal): Promise<SpreadsheetOption[]> {
+    return call('/appointments/calendar/google/spreadsheets', {
+      schema: z.array(spreadsheetOptionSchema),
       signal,
     });
   },

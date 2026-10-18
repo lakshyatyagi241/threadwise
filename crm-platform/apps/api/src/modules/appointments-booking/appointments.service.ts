@@ -35,6 +35,7 @@ import {
   type AppointmentRow,
   AppointmentsRepository,
 } from './appointments.repository';
+import { AppointmentMeetingMirror } from './appointment-meeting-mirror.service';
 import { AppointmentsSupport } from './appointments.support';
 import { BookingService } from './booking.service';
 import { BookingTypesRepository } from './booking-types.repository';
@@ -79,6 +80,7 @@ export class AppointmentsService {
     private readonly slots: SlotsService,
     private readonly contactLink: ContactLinkService,
     private readonly rbac: RbacService,
+    private readonly mirror: AppointmentMeetingMirror,
   ) {}
 
   // --- reads -----------------------------------------------------------------------------------------------------------
@@ -334,6 +336,8 @@ export class AppointmentsService {
         const ok = await this.repo.update(tx, ctx.orgId, row.id, input.rowVersion, patch);
         if (!ok) throw AppError.rowVersionConflict('Appointment');
         const after = (await this.repo.findById(tx, ctx.orgId, row.id))!;
+        // A contact linked later, moved or removed, and a new title or place, reach the contact's Meetings row in this transaction.
+        await this.mirror.sync(tx, ctx.orgId, after);
         await this.support.record(tx, after, { audit: { action: 'update', delta } });
         return this.support.toResponse(after);
       }
@@ -497,6 +501,7 @@ export class AppointmentsService {
           HttpStatus.CONFLICT,
         );
       }
+      await this.mirror.forget(tx, ctx.orgId, row);
       await this.repo.delete(tx, ctx.orgId, row.id);
       await this.support.record(tx, row, {
         audit: { action: 'delete', delta: { title: { old: row.title, new: null } } },

@@ -1131,19 +1131,14 @@
           "aiModelPick": "— pilih model —",
           "aiModelNone": "Tidak ada model AI yang aktif — minta admin mengaktifkan salah satu",
           "aiModelNotEnabled": "{value} (tidak aktif)",
-          "aiAssistantNone": "— tidak ada (gunakan prompt di atas saja) —",
           "aiAssistantOption": "{name} · {count, plural, other {# sumber}}",
           "aiAssistantMissing": "(asisten {id})",
-          "aiAssistantHintNone": "Belum ada basis pengetahuan. Buat di <link>Pelatihan AI</link>, lalu tekan Segarkan daftar untuk memilihnya di sini.",
-          "aiAssistantHintEmpty": "Catatan: asisten ini memiliki 0 sumber terlatih. Tambahkan di <link>Pelatihan AI</link> atau balasan hanya memakai prompt.",
-          "aiAssistantHint": "Menarik konten terlatih dari asisten yang dipilih ke balasan ini. <link>Kelola pengetahuan →</link>",
           "aiModelLabel": "Model",
           "aiModelHint": "Model yang diaktifkan admin — ditambah penyedia yang Anda tambahkan kunci sendiri (Pengaturan → Kunci AI, pada paket BYOK).",
           "aiModelHintNone": "Belum ada penyedia yang tersedia. Tambahkan kunci Anda sendiri di <link>Pengaturan → Kunci AI</link> (paket BYOK), atau minta admin mengaktifkan salah satu.",
           "aiPrompt": "System prompt",
           "aiSave": "Simpan respons ke",
           "aiSaveHint": "Node berikutnya membacanya sebagai <v>{save}</v> — atau <v>{path}</v> saat ekstraksi.",
-          "aiAssistantLabel": "Basis pengetahuan (opsional)",
           "aiExtract": "<strong>Ekstrak data terstruktur (JSON)</strong> — ubah pesan menjadi field",
           "aiFields": "Field yang diekstrak",
           "aiFieldsHint": "Kunci dipisahkan koma. AI mengembalikan SATU objek JSON; setiap kunci menjadi <v>{key}</v> (dan <v>{rows}</v> saat beberapa rekaman terdeteksi — mis. untuk node Google Sheets).",
@@ -1156,7 +1151,25 @@
           "subflowMissing": "Alur {id} (tidak ada di workspace)",
           "subflowLabel": "Alur yang dijalankan",
           "subflowHint": "Pilih alur tersimpan lain. Saat node ini aktif, alur tersebut berjalan sampai selesai sebelum kendali kembali ke node berikutnya di sini.",
-          "endInfo": "Node ini mengakhiri alur. Apa pun yang terhubung setelahnya tidak akan dijalankan."
+          "endInfo": "Node ini mengakhiri alur. Apa pun yang terhubung setelahnya tidak akan dijalankan.",
+          "aiSetupLegend": "Bagaimana langkah ini harus menjawab?",
+          "aiSetupAgent": "Agen AI",
+          "aiSetupAgentDesc": "Memakai instruksi, model, dan pengetahuan milik agen dari Pelatihan AI.",
+          "aiSetupCustom": "Pengaturan kustom",
+          "aiSetupCustomDesc": "Pilih model dan tulis instruksi di sini.",
+          "aiAgentLabel": "Agen AI",
+          "aiAgentPick": "— pilih agen AI —",
+          "aiAgentHint": "Agen membawa instruksi, model, dan pengetahuannya sendiri. Ubah di <link>Pelatihan AI</link>.",
+          "aiAgentNone": "Anda belum punya agen AI. <link>Buat agen AI pertama Anda</link>, lalu tekan Segarkan daftar.",
+          "aiAgentRequired": "Pilih agen AI, atau beralih ke pengaturan kustom.",
+          "aiAgentSummary": "Model {model} · {count, plural, other {# sumber pengetahuan}}",
+          "aiAgentNoSources": "Agen ini belum punya pengetahuan, jadi hanya menjawab dari instruksinya. Tambahkan sumber di <link>Pelatihan AI</link>.",
+          "aiPromptRequired": "Tulis instruksi untuk AI.",
+          "aiKnowledgeLabel": "Pengetahuan dari agen AI (opsional)",
+          "aiKnowledgeNone": "— tidak ada —",
+          "aiKnowledgeHint": "Menambahkan sumber terlatih milik agen itu ke balasan. Instruksi dan modelnya sendiri tidak dipakai pada pengaturan kustom. <link>Kelola di Pelatihan AI →</link>",
+          "aiAdvanced": "Opsi lanjutan",
+          "aiCreateAgent": "+ Buat agen AI"
         },
         "options": {
           "prompt": "Prompt",
@@ -1646,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— pilih lembar —",
-              "empty": "Tidak ada spreadsheet ditemukan — tempel URL/ID di bawah",
               "loading": "Memuat lembar…",
-              "notConnected": "Google belum terhubung untuk workspace ini, sehingga lembar Anda tidak dapat ditampilkan. Tempel ID atau tautan lembar sebagai gantinya.",
-              "idPlaceholder": "ID lembar",
-              "saved": "Lembar {id}… (belum dimuat)"
+              "saved": "Lembar {id}… (belum dimuat)",
+              "empty": "Tidak ada spreadsheet di akun Google yang terhubung",
+              "notConnected": "Google belum terhubung untuk workspace ini, sehingga daftar sheet Anda tidak dapat ditampilkan. Hubungkan Google untuk memilih sheet."
             },
             "docs": {
               "pick": "— pilih dokumen templat —",
               "empty": "Dokumen tidak ditemukan",
               "loading": "Memuat dokumen…",
-              "notConnected": "Google belum terhubung untuk workspace ini, sehingga dokumen Anda tidak dapat ditampilkan. Tempel ID atau tautan dokumen sebagai gantinya.",
-              "idPlaceholder": "ID dokumen",
-              "saved": "Dokumen {id}… (belum dimuat)"
+              "saved": "Dokumen {id}… (belum dimuat)",
+              "notConnected": "Google belum terhubung untuk workspace ini, sehingga daftar dokumen Anda tidak dapat ditampilkan. Hubungkan Google untuk memilih dokumen."
             },
             "forms": {
               "pick": "— pilih formulir —",
               "empty": "Formulir tidak ditemukan",
               "loading": "Memuat formulir…",
-              "notConnected": "Google belum terhubung untuk workspace ini, sehingga formulir Anda tidak dapat ditampilkan. Tempel ID atau tautan formulir sebagai gantinya.",
-              "idPlaceholder": "ID formulir",
-              "saved": "Formulir {id}… (belum dimuat)"
+              "saved": "Formulir {id}… (belum dimuat)",
+              "notConnected": "Google belum terhubung untuk workspace ini, sehingga daftar formulir Anda tidak dapat ditampilkan. Hubungkan Google untuk memilih formulir."
             }
           },
           "sheetsIntro": "Tambahkan baris ke Google Sheet (mode tulis) atau cari baris berdasarkan kolom kunci (mode baca). Menggunakan akun Google workspace yang terhubung di <link>/google-account</link>.",
@@ -1688,8 +1698,6 @@
           "addColumn": "Tambah kolom",
           "matchByHeader": "Cocokkan kolom berdasarkan nama header",
           "matchByHeaderHint": "Tulis setiap nilai ke kolom lembar dengan header tersebut (urutan bebas). Biarkan mati untuk menambahkan dari kiri ke kanan sesuai posisi — default.",
-          "pasteLabel": "…atau tempel URL / ID Spreadsheet",
-          "pasteHint": "Tetap berfungsi meskipun daftar pilihan kosong — tempel tautan lembar dan kami akan mengambil ID-nya.",
           "docsIntro": "Salin dokumen templat, isi <mono>{placeholders}</mono>, bagikan dengan siapa pun yang memiliki tautan, lalu kirim URL ke pelanggan. Letakkan <mono>{key}</mono> di templat Anda tempat nilai akan muncul.",
           "templateDocument": "Dokumen templat",
           "newCopyTitle": "Judul salinan baru",
@@ -1704,7 +1712,6 @@
           "messageTemplateHint": "Gelembung bot yang dikirim ke pelanggan. <mono>{token}</mono> akan berisi tautan berbagi.",
           "messageTemplatePlaceholder": "Berikut dokumen Anda:\n'{{'doc_url'}}'",
           "saveUrl": "Simpan URL ke variabel",
-          "formIntro": "Mengirim URL formulir melalui WhatsApp, menjeda alur, dan melanjutkan melalui port <b>submitted</b> saat pelanggan mengisinya. Jawaban menjadi variabel alur.",
           "googleForm": "Google Form",
           "bodyBubble": "Gelembung isi (dikirim di atas tautan)",
           "bodyBubblePlaceholder": "Silakan isi formulir singkat ini:",
@@ -1712,12 +1719,6 @@
           "saveResponsesHint": "Jawaban individual juga tersimpan sebagai <mono>{token}</mono>.",
           "expireAfter": "Kedaluwarsa setelah (detik)",
           "expireAfterHint": "Berapa lama menunggu pengiriman sebelum waktu habis. 86400 = 24 jam.",
-          "setupTitle": "Pengaturan sekali — tempel ini ke Editor Skrip Formulir Anda",
-          "setupOpen": "Buka formulir Anda → <mono>menu ⋮</mono> → <mono>Editor skrip</mono>",
-          "setupDownload": "<link>Unduh skrip (.gs)</link> lalu tempel",
-          "setupTrigger": "Tambahkan pemicu: <mono>onFormSubmit</mono> · Dari formulir · Saat formulir dikirim",
-          "setupWarning": "Tanpa skrip ini, formulir tetap mencatat jawaban di Google Forms, tetapi alur tidak akan dilanjutkan.",
-          "noListing": "File Anda tidak dapat ditampilkan karena izin daftar file Drive belum diberikan di halaman akun Google. Tempel tautan atau ID sebagai gantinya.",
           "connection": {
             "open": "Buka akun Google",
             "permission": {
@@ -1730,7 +1731,9 @@
             "disconnected": "Belum ada akun Google yang terhubung, sehingga langkah ini gagal saat alur dijalankan. Hubungkan Google terlebih dahulu.",
             "needsReconnect": "Google tidak lagi menerima akun yang terhubung, sehingga langkah ini gagal saat alur dijalankan. Hubungkan kembali Google terlebih dahulu.",
             "missing": "Akun Google yang terhubung tidak diberi izin {permission}, sehingga langkah ini gagal saat alur dijalankan."
-          }
+          },
+          "formIntro": "Mengirim URL formulir lewat WhatsApp, menjeda alur, lalu melanjutkan lewat port <b>submitted</b> saat pelanggan mengisinya. Jawaban dibaca dari formulir melalui akun Google Anda yang terhubung, jadi tidak perlu menempelkan apa pun ke formulir. Jawaban menjadi variabel alur.",
+          "noListing": "Daftar file Anda tidak dapat ditampilkan karena izin daftar file Drive belum diberikan di halaman akun Google. Tambahkan di sana untuk memilih file."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2497,7 +2500,8 @@
         "noSenderFacebook": "Node Pemicu belum memilih Halaman Facebook — pilih salah satu pada langkah Pemicu.",
         "noSenderNumber": "Node Pemicu belum memilih nomor — pilih salah satu pada langkah Pemicu.",
         "faqMinScore": "\"{node}\" memiliki skor minimum di luar 0.05 sampai 0.99 — perbaiki atau kosongkan untuk memakai pengaturan alur.",
-        "locationInvalid": "“{node}” tidak memiliki lokasi yang valid — tempel tautan Google Maps atau masukkan lintang (-90 sampai 90) dan bujur (-180 sampai 180)."
+        "locationInvalid": "“{node}” tidak memiliki lokasi yang valid — tempel tautan Google Maps atau masukkan lintang (-90 sampai 90) dan bujur (-180 sampai 180).",
+        "aiNoAgent": "\"{node}\" tidak punya agen AI maupun prompt — pilih agen AI, atau pilih Pengaturan kustom dan tulis instruksinya."
       }
     },
     "simpleModel": {
@@ -2663,7 +2667,9 @@
         "chooseFlow": "Langkah {stage}: pilih flow yang dimulai tombol.",
         "chooseApi": "Langkah {stage}: pilih API yang dipanggil.",
         "writeCode": "Langkah {stage}: tulis kode yang dijalankan.",
-        "webhookUrl": "Langkah {stage}: tambahkan alamat (URL) yang akan dipanggil."
+        "webhookUrl": "Langkah {stage}: tambahkan alamat (URL) yang akan dipanggil.",
+        "chooseAiAgent": "Langkah {stage}: pilih agen AI yang menjawab, atau ubah langkah ini ke pengaturan kustom.",
+        "writeAiPrompt": "Langkah {stage}: tulis instruksi untuk AI, atau pilih agen AI."
       },
       "faqSummary": "{hasCategory, select, true {Dari FAQ Anda · {category}} other {Dari FAQ Anda}}"
     },

@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
 import { sql } from 'drizzle-orm';
+import { sanitizeErrorText } from '../common/errors/sanitize-error';
 import { DatabaseService } from '../infra/db/database.service';
 import { OutboxSubscriberRegistry } from '../kernel/outbox/outbox-subscribers';
 import { outboxRetryDecision } from './outbox-retry-policy';
@@ -125,7 +126,7 @@ export class OutboxDrainService {
             UPDATE event_outbox
             SET status = ${dead ? 'dead' : 'pending'},
                 attempts = ${attempts},
-                last_error = ${err instanceof Error ? err.message : String(err)},
+                last_error = ${sanitizeErrorText(err)},
                 available_at = now() + ${`${backoffSeconds} seconds`}::interval
             WHERE id = ${row.id} AND created_at = ${row.created_at}
           `);

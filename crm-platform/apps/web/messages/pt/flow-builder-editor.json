@@ -1131,19 +1131,14 @@
           "aiModelPick": "— escolha o modelo —",
           "aiModelNone": "Nenhum modelo de IA ativado — peça ao admin para ativar um",
           "aiModelNotEnabled": "{value} (não ativado)",
-          "aiAssistantNone": "— nenhuma (usar só o prompt acima) —",
           "aiAssistantOption": "{name} · {count, plural, one {# fonte} other {# fontes}}",
           "aiAssistantMissing": "(assistente {id})",
-          "aiAssistantHintNone": "Nenhuma base de conhecimento ainda. Crie uma em <link>Treinamento de IA</link> e clique em Atualizar lista para escolhê-la aqui.",
-          "aiAssistantHintEmpty": "Observação: este assistente tem 0 fontes treinadas. Adicione algumas em <link>Treinamento de IA</link> ou a resposta usará só o prompt.",
-          "aiAssistantHint": "Traz o conteúdo treinado do assistente escolhido para esta resposta. <link>Gerenciar conhecimento →</link>",
           "aiModelLabel": "Modelo",
           "aiModelHint": "Modelos que o admin ativou — mais qualquer provedor para o qual você adicionou sua própria chave (Configurações → Chaves de IA, em planos BYOK).",
           "aiModelHintNone": "Nenhum provedor disponível ainda. Adicione sua própria chave em <link>Configurações → Chaves de IA</link> (planos BYOK) ou peça ao admin para ativar um.",
           "aiPrompt": "Prompt de sistema",
           "aiSave": "Salvar resposta em",
           "aiSaveHint": "Os nós seguintes a leem como <v>{save}</v> — ou <v>{path}</v> ao extrair.",
-          "aiAssistantLabel": "Base de conhecimento (opcional)",
           "aiExtract": "<strong>Extrair dados estruturados (JSON)</strong> — transforma a mensagem em campos",
           "aiFields": "Campos a extrair",
           "aiFieldsHint": "Chaves separadas por vírgula. A IA retorna UM objeto JSON; cada chave vira <v>{key}</v> (e <v>{rows}</v> quando vários registros são detectados — ex.: para um nó do Google Sheets).",
@@ -1156,7 +1151,25 @@
           "subflowMissing": "Fluxo {id} (não está no espaço de trabalho)",
           "subflowLabel": "Fluxo a executar",
           "subflowHint": "Escolha outro fluxo salvo. Quando este nó dispara, esse fluxo roda do início ao fim antes de o controle voltar ao próximo nó daqui.",
-          "endInfo": "Este nó encerra o fluxo. Nada conectado depois dele será executado."
+          "endInfo": "Este nó encerra o fluxo. Nada conectado depois dele será executado.",
+          "aiSetupLegend": "Como esta etapa deve responder?",
+          "aiSetupAgent": "Agente de IA",
+          "aiSetupAgentDesc": "Usa as instruções, o modelo e o conhecimento de um agente do Treinamento de IA.",
+          "aiSetupCustom": "Configuração personalizada",
+          "aiSetupCustomDesc": "Escolha um modelo e escreva as instruções aqui.",
+          "aiAgentLabel": "Agente de IA",
+          "aiAgentPick": "— escolha um agente de IA —",
+          "aiAgentHint": "O agente traz suas próprias instruções, modelo e conhecimento. Altere-os no <link>Treinamento de IA</link>.",
+          "aiAgentNone": "Você ainda não tem agentes de IA. <link>Crie seu primeiro agente de IA</link> e clique em Atualizar lista.",
+          "aiAgentRequired": "Escolha um agente de IA ou mude para uma configuração personalizada.",
+          "aiAgentSummary": "Modelo {model} · {count, plural, one {# fonte de conhecimento} other {# fontes de conhecimento}}",
+          "aiAgentNoSources": "Este agente ainda não tem conhecimento, então responde só com as instruções dele. Adicione fontes no <link>Treinamento de IA</link>.",
+          "aiPromptRequired": "Escreva as instruções para a IA.",
+          "aiKnowledgeLabel": "Conhecimento de um agente de IA (opcional)",
+          "aiKnowledgeNone": "— nenhum —",
+          "aiKnowledgeHint": "Adiciona à resposta as fontes treinadas desse agente. As instruções e o modelo dele não são usados em uma configuração personalizada. <link>Gerenciar no Treinamento de IA →</link>",
+          "aiAdvanced": "Opções avançadas",
+          "aiCreateAgent": "+ Criar agente de IA"
         },
         "options": {
           "prompt": "Prompt",
@@ -1646,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— escolha uma planilha —",
-              "empty": "Nenhuma planilha encontrada — cole uma URL ou ID abaixo",
               "loading": "Carregando planilhas…",
-              "notConnected": "O Google não está conectado a este espaço de trabalho, então suas planilhas não podem ser listadas. Cole o id ou o link da planilha.",
-              "idPlaceholder": "Id da planilha",
-              "saved": "Planilha {id}… (não carregada)"
+              "saved": "Planilha {id}… (não carregada)",
+              "empty": "Nenhuma planilha encontrada na conta Google conectada",
+              "notConnected": "O Google não está conectado a este workspace, então não é possível listar suas planilhas. Conecte o Google para escolher uma."
             },
             "docs": {
               "pick": "— escolha um documento modelo —",
               "empty": "Nenhum documento encontrado",
               "loading": "Carregando documentos…",
-              "notConnected": "O Google não está conectado a este espaço de trabalho, então seus documentos não podem ser listados. Cole o id ou o link do documento.",
-              "idPlaceholder": "Id do documento",
-              "saved": "Documento {id}… (não carregado)"
+              "saved": "Documento {id}… (não carregado)",
+              "notConnected": "O Google não está conectado a este workspace, então não é possível listar seus documentos. Conecte o Google para escolher um."
             },
             "forms": {
               "pick": "— escolha um formulário —",
               "empty": "Nenhum formulário encontrado",
               "loading": "Carregando formulários…",
-              "notConnected": "O Google não está conectado a este espaço de trabalho, então seus formulários não podem ser listados. Cole o id ou o link do formulário.",
-              "idPlaceholder": "Id do formulário",
-              "saved": "Formulário {id}… (não carregado)"
+              "saved": "Formulário {id}… (não carregado)",
+              "notConnected": "O Google não está conectado a este workspace, então não é possível listar seus formulários. Conecte o Google para escolher um."
             }
           },
           "sheetsIntro": "Adiciona uma linha a uma Planilha Google (modo escrita) ou busca uma linha por uma coluna-chave (modo leitura). Usa a conta Google conectada do espaço de trabalho em <link>/google-account</link>.",
@@ -1688,8 +1698,6 @@
           "addColumn": "Adicionar coluna",
           "matchByHeader": "Corresponder colunas pelo nome do cabeçalho",
           "matchByHeaderHint": "Grava cada valor na coluna da planilha com esse cabeçalho, em qualquer ordem. Deixe desativado para adicionar da esquerda para a direita, pela posição — o padrão.",
-          "pasteLabel": "…ou cole uma URL ou ID de planilha",
-          "pasteHint": "Funciona mesmo se o seletor estiver vazio — cole o link da planilha e extraímos o ID.",
           "docsIntro": "Copie um documento modelo, preencha os <mono>{placeholders}</mono>, compartilhe com qualquer pessoa com o link e envie a URL ao cliente. Coloque <mono>{key}</mono> no seu modelo onde o valor deve ir.",
           "templateDocument": "Documento modelo",
           "newCopyTitle": "Título da nova cópia",
@@ -1704,7 +1712,6 @@
           "messageTemplateHint": "O balão do bot enviado ao cliente. <mono>{token}</mono> recebe o link de compartilhamento.",
           "messageTemplatePlaceholder": "Aqui está o seu documento:\n'{{'doc_url'}}'",
           "saveUrl": "Salvar URL em variável",
-          "formIntro": "Envia a URL do formulário pelo WhatsApp, pausa o fluxo e retoma pela saída <b>enviado</b> quando o cliente o preencher. As respostas viram variáveis do fluxo.",
           "googleForm": "Formulário Google",
           "bodyBubble": "Balão do corpo (enviado acima do link)",
           "bodyBubblePlaceholder": "Preencha este formulário curto:",
@@ -1712,12 +1719,6 @@
           "saveResponsesHint": "As respostas individuais também são salvas como <mono>{token}</mono>.",
           "expireAfter": "Expirar após (segundos)",
           "expireAfterHint": "Quanto tempo esperar por um envio antes do tempo esgotar. 86400 = 24 h.",
-          "setupTitle": "Configuração única — cole isto no editor de Script do seu formulário",
-          "setupOpen": "Abra seu formulário → <mono>menu ⋮</mono> → <mono>Editor de script</mono>",
-          "setupDownload": "<link>Baixe o script (.gs)</link> e cole-o",
-          "setupTrigger": "Adicione um gatilho: <mono>onFormSubmit</mono> · A partir do formulário · Ao enviar o formulário",
-          "setupWarning": "Sem este script, o formulário continuará registrando as respostas no Formulários Google, mas o fluxo não será retomado.",
-          "noListing": "Não é possível listar seus arquivos porque a permissão de lista de arquivos do Drive não foi concedida na página da conta do Google. Cole o link ou o ID.",
           "connection": {
             "open": "Abrir conta do Google",
             "permission": {
@@ -1730,7 +1731,9 @@
             "disconnected": "Nenhuma conta Google está conectada, então esta etapa falha quando o fluxo é executado. Conecte o Google primeiro.",
             "needsReconnect": "O Google não aceita mais a conta conectada, então esta etapa falha quando o fluxo é executado. Reconecte o Google primeiro.",
             "missing": "A conta Google conectada não recebeu a permissão {permission}, então esta etapa falha quando o fluxo é executado."
-          }
+          },
+          "formIntro": "Envia o URL do formulário por WhatsApp, pausa o fluxo e o retoma pela porta <b>submitted</b> quando o cliente preenche o formulário. As respostas são lidas do formulário pela sua conta Google conectada, então não é preciso colar nada no formulário. As respostas viram variáveis do fluxo.",
+          "noListing": "Não foi possível listar seus arquivos porque a permissão de lista de arquivos do Drive não foi concedida na página da conta Google. Adicione-a lá para escolher arquivos."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2497,7 +2500,8 @@
         "noSenderFacebook": "O nó Gatilho não tem Página do Facebook selecionada — escolha uma na etapa Gatilho.",
         "noSenderNumber": "O nó Gatilho não tem número selecionado — escolha um na etapa Gatilho.",
         "faqMinScore": "“{node}” tem uma pontuação mínima fora do intervalo de 0.05 a 0.99. Corrija-a ou deixe em branco para usar a configuração do fluxo.",
-        "locationInvalid": "“{node}” não tem uma localização válida: cole um link do Google Maps ou informe latitude (-90 a 90) e longitude (-180 a 180)."
+        "locationInvalid": "“{node}” não tem uma localização válida: cole um link do Google Maps ou informe latitude (-90 a 90) e longitude (-180 a 180).",
+        "aiNoAgent": "“{node}” não tem agente de IA nem instruções — escolha um agente de IA ou selecione Configuração personalizada e escreva as instruções."
       }
     },
     "simpleModel": {
@@ -2663,7 +2667,9 @@
         "chooseFlow": "Passo {stage}: escolha o fluxo que o botão inicia.",
         "chooseApi": "Passo {stage}: escolha a API a chamar.",
         "writeCode": "Passo {stage}: escreva o código a executar.",
-        "webhookUrl": "Etapa {stage}: adicione o endereço (URL) a chamar."
+        "webhookUrl": "Etapa {stage}: adicione o endereço (URL) a chamar.",
+        "chooseAiAgent": "Passo {stage}: escolha o agente de IA que responde ou mude o passo para uma configuração personalizada.",
+        "writeAiPrompt": "Passo {stage}: escreva as instruções para a IA ou escolha um agente de IA."
       },
       "faqSummary": "{hasCategory, select, true {Das suas FAQs · {category}} other {Das suas FAQs}}"
     },

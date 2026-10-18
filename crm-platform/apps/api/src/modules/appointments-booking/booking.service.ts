@@ -18,6 +18,7 @@ import {
   money,
   type AnswerSnapshot,
 } from './appointment-rules';
+import { AppointmentMeetingMirror } from './appointment-meeting-mirror.service';
 import { AppointmentsRepository, type AppointmentRow } from './appointments.repository';
 import { AppointmentsSupport } from './appointments.support';
 import { AppointmentPlan, unavailable } from './booking-plan';
@@ -142,6 +143,7 @@ export class BookingService {
     private readonly support: AppointmentsSupport,
     private readonly slots: SlotsService,
     private readonly plan: AppointmentPlan,
+    private readonly mirror: AppointmentMeetingMirror,
   ) {}
 
   // --- book -----------------------------------------------------------------------------------------------------------------
@@ -258,6 +260,8 @@ export class BookingService {
     if (p.reservationUuid) await this.appts.deleteReservation(tx, p.orgId, p.reservationUuid);
 
     const row = (await this.appts.findById(tx, p.orgId, id))!;
+    // The contact's Meetings row, in this transaction: a booking from any source appears there or not at all.
+    await this.mirror.sync(tx, p.orgId, row);
     await this.support.record(tx, row, {
       orgId: p.orgId,
       audit: { action: 'insert' },
@@ -350,6 +354,7 @@ export class BookingService {
     // Every reminder offset is armed again for the new time.
     await this.appts.clearReminderRuns(tx, orgId, row.id);
     const after = (await this.appts.findById(tx, orgId, row.id))!;
+    await this.mirror.sync(tx, orgId, after);
     await this.support.record(tx, after, {
       orgId,
       audit: {
@@ -421,6 +426,9 @@ export class BookingService {
     const ok = await this.appts.update(tx, orgId, row.id, p.rowVersion, patch);
     if (!ok) throw AppError.rowVersionConflict('Appointment');
     const after = (await this.appts.findById(tx, orgId, row.id))!;
+    // The row keeps its place when the booking closes; the list reads the new status from the appointment. This only heals a
+    // booking that has no row yet (it predates the mirror and the back-fill has not reached it).
+    await this.mirror.sync(tx, orgId, after);
     const eventType: Record<string, string> = {
       confirmed: 'appointment.confirmed',
       declined: 'appointment.declined',

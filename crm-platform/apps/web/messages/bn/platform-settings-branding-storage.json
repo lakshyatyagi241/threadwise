@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "৩. সম্মতি স্ক্রিন",
-              "body": "পণ্যটি যে স্কোপ চায় সেগুলো যোগ করুন (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), তারপর অ্যাপ প্রকাশ করুন: Testing অবস্থায় Google ৭ দিন পর প্রতিটি অনুমতি বন্ধ করে দেয় এবং ওয়ার্কস্পেসকে আবার সংযুক্ত করতে হয়। drive স্কোপগুলো সীমাবদ্ধ এবং Google-এর পর্যালোচনা লাগে।"
+              "body": "পণ্যটি যে স্কোপ চায় সেগুলো যোগ করুন (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), তারপর অ্যাপ প্রকাশ করুন: Testing অবস্থায় Google ৭ দিন পর প্রতিটি অনুমতি বন্ধ করে দেয় এবং ওয়ার্কস্পেসকে আবার সংযুক্ত করতে হয়। drive স্কোপগুলো সীমাবদ্ধ এবং Google-এর পর্যালোচনা লাগে।"
             },
             "workspaces": {
               "title": "৪. ওয়ার্কস্পেস সংযুক্ত করে",

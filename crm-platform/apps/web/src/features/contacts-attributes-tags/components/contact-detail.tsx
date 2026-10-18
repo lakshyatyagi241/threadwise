@@ -14,6 +14,7 @@ import { useContactMeetings } from '../api/meetings';
 import { useContact } from '../api/contacts';
 import { displayName } from '../lib/contact-model';
 import { errorKind } from '../lib/errors';
+import { isClosedBooking } from '../lib/meeting-booking';
 import {
   ACTION_SECTION,
   pageTabs,
@@ -216,7 +217,8 @@ export function useTabCounts(contactId: string): TabCounts {
   const now = useNow().getTime();
   const waiting =
     tasks.items.length +
-    meetings.items.filter((m) => m.startsAt && Date.parse(m.startsAt) > now).length;
+    meetings.items.filter((m) => m.startsAt && Date.parse(m.startsAt) > now && !isClosedBooking(m))
+      .length;
   return {
     activities: waiting,
     files: files.items.length,

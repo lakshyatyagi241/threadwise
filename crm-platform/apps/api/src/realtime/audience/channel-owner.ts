@@ -1,5 +1,6 @@
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { rawIdentifier } from '../../common/sql/identifier';
 import { PERSONAL_OWNER_GONE } from './conversation-visibility';
 
 /** The permission that marks a workspace admin for the personal-mailbox rule (Admin preset only, see 20261119090100). */
@@ -19,7 +20,7 @@ export const PERM_MAIL_SETTINGS_MANAGE = 'mail.settings.manage';
  * other people's inboxes (exports, assignment targets, notification fan-out).
  */
 export function channelOwnerSql(alias = 'c'): SQL {
-  const c = sql.raw(alias);
+  const c = rawIdentifier(alias);
   return sql`(
     SELECT CASE WHEN mb.id IS NULL THEN ${PERSONAL_OWNER_GONE}::bigint
                 WHEN mb.scope = 'personal' THEN mb.owner_user_id END
@@ -43,7 +44,7 @@ export async function adminsCanReadPersonal(tx: Tx, orgId: number): Promise<bool
  * PERSONAL_OWNER_GONE), for lists of channels rather than of conversations.
  */
 export function channelRowOwnerSql(chAlias = 'ch'): SQL {
-  const ch = sql.raw(chAlias);
+  const ch = rawIdentifier(chAlias);
   return sql`(CASE WHEN ${ch}.kind = 'email' THEN NULLIF(COALESCE(
     (SELECT CASE WHEN mb.scope = 'personal' THEN mb.owner_user_id ELSE 0 END
        FROM mail_mailboxes mb WHERE mb.org_id = ${ch}.org_id AND mb.uuid::text = ${ch}.external_id),

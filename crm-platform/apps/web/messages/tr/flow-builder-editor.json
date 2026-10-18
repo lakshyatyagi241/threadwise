@@ -1131,19 +1131,14 @@
           "aiModelPick": "— model seçin —",
           "aiModelNone": "Etkin yapay zekâ modeli yok — yöneticiden birini açmasını isteyin",
           "aiModelNotEnabled": "{value} (etkin değil)",
-          "aiAssistantNone": "— yok (yalnızca yukarıdaki istemi kullan) —",
           "aiAssistantOption": "{name} · {count, plural, one {# kaynak} other {# kaynak}}",
           "aiAssistantMissing": "(asistan {id})",
-          "aiAssistantHintNone": "Henüz bilgi tabanı yok. <link>Yapay zekâ eğitimi</link> bölümünde bir tane oluşturun, ardından burada seçmek için Listeyi yenile'ye basın.",
-          "aiAssistantHintEmpty": "Not: bu asistanın eğitilmiş 0 kaynağı var. <link>Yapay zekâ eğitimi</link> bölümünde ekleyin, aksi halde yanıt yalnızca istemi kullanır.",
-          "aiAssistantHint": "Seçilen asistanın eğitilmiş içeriğini bu yanıta çeker. <link>Bilgiyi yönet →</link>",
           "aiModelLabel": "Model",
           "aiModelHint": "Yöneticinin etkinleştirdiği modeller — ayrıca kendi anahtarınızı eklediğiniz sağlayıcılar (Ayarlar → Yapay zekâ anahtarları, BYOK planlarında).",
           "aiModelHintNone": "Henüz kullanılabilir sağlayıcı yok. <link>Ayarlar → Yapay zekâ anahtarları</link> bölümünde kendi anahtarınızı ekleyin (BYOK planları) veya yöneticinizden birini etkinleştirmesini isteyin.",
           "aiPrompt": "Sistem istemi",
           "aiSave": "Yanıtı şuraya kaydet",
           "aiSaveHint": "Sonraki düğümler bunu <v>{save}</v> olarak okur — çıkarma yapılırken <v>{path}</v> olarak.",
-          "aiAssistantLabel": "Bilgi tabanı (isteğe bağlı)",
           "aiExtract": "<strong>Yapılandırılmış veri çıkar (JSON)</strong> — mesajı alanlara dönüştürür",
           "aiFields": "Çıkarılacak alanlar",
           "aiFieldsHint": "Virgülle ayrılmış anahtarlar. Yapay zekâ TEK bir JSON nesnesi döndürür; her anahtar <v>{key}</v> olur (birden çok kayıt algılanırsa <v>{rows}</v> da olur — örn. bir Google E-Tablolar düğümü için).",
@@ -1156,7 +1151,25 @@
           "subflowMissing": "Akış {id} (çalışma alanında değil)",
           "subflowLabel": "Çalıştırılacak akış",
           "subflowHint": "Başka bir kayıtlı akış seçin. Bu düğme tetiklendiğinde, kontrol buradaki sonraki düğüme dönmeden önce o akış baştan sona çalışır.",
-          "endInfo": "Bu düğme akışı sonlandırır. Ardından bağlanan hiçbir şey çalışmaz."
+          "endInfo": "Bu düğme akışı sonlandırır. Ardından bağlanan hiçbir şey çalışmaz.",
+          "aiSetupLegend": "Bu adım nasıl yanıt vermeli?",
+          "aiSetupAgent": "Yapay zekâ ajanı",
+          "aiSetupAgentDesc": "Yapay zekâ eğitimindeki bir ajanın talimatlarını, modelini ve bilgisini kullanır.",
+          "aiSetupCustom": "Özel kurulum",
+          "aiSetupCustomDesc": "Modeli burada seçin ve talimatları yazın.",
+          "aiAgentLabel": "Yapay zekâ ajanı",
+          "aiAgentPick": "— yapay zekâ ajanı seçin —",
+          "aiAgentHint": "Ajan kendi talimatlarını, modelini ve bilgisini getirir. Bunları <link>Yapay zekâ eğitimi</link> bölümünde değiştirin.",
+          "aiAgentNone": "Henüz yapay zekâ ajanınız yok. <link>İlk yapay zekâ ajanınızı oluşturun</link>, ardından Listeyi yenile’ye basın.",
+          "aiAgentRequired": "Bir yapay zekâ ajanı seçin ya da özel kuruluma geçin.",
+          "aiAgentSummary": "Model {model} · {count, plural, one {# bilgi kaynağı} other {# bilgi kaynağı}}",
+          "aiAgentNoSources": "Bu ajanın henüz bilgisi yok, bu yüzden yalnızca talimatlarına göre yanıt verir. <link>Yapay zekâ eğitimi</link> bölümünden kaynak ekleyin.",
+          "aiPromptRequired": "Yapay zekâ için talimatları yazın.",
+          "aiKnowledgeLabel": "Bir yapay zekâ ajanından bilgi (isteğe bağlı)",
+          "aiKnowledgeNone": "— yok —",
+          "aiKnowledgeHint": "O ajanın eğitilmiş kaynaklarını yanıta ekler. Özel kurulumda ajanın kendi talimatları ve modeli kullanılmaz. <link>Yapay zekâ eğitiminde yönet →</link>",
+          "aiAdvanced": "Gelişmiş seçenekler",
+          "aiCreateAgent": "+ Yapay zekâ ajanı oluştur"
         },
         "options": {
           "prompt": "İstem",
@@ -1646,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— bir sayfa seçin —",
-              "empty": "Elektronik tablo bulunamadı — aşağıya bir URL/kimlik yapıştırın",
               "loading": "Sayfalar yükleniyor…",
-              "notConnected": "Bu çalışma alanında Google bağlı değil, bu yüzden sayfalarınız listelenemiyor. Bunun yerine sayfa kimliğini veya bağlantısını yapıştırın.",
-              "idPlaceholder": "Sayfa kimliği",
-              "saved": "Sayfa {id}… (yüklenmedi)"
+              "saved": "Sayfa {id}… (yüklenmedi)",
+              "empty": "Bağlı Google hesabında e-tablo bulunamadı",
+              "notConnected": "Bu çalışma alanı için Google bağlı değil, bu yüzden sayfalarınız listelenemiyor. Birini seçmek için Google'ı bağlayın."
             },
             "docs": {
               "pick": "— bir şablon belgesi seçin —",
               "empty": "Belge bulunamadı",
               "loading": "Belgeler yükleniyor…",
-              "notConnected": "Bu çalışma alanında Google bağlı değil, bu yüzden belgeleriniz listelenemiyor. Bunun yerine belge kimliğini veya bağlantısını yapıştırın.",
-              "idPlaceholder": "Belge kimliği",
-              "saved": "Belge {id}… (yüklenmedi)"
+              "saved": "Belge {id}… (yüklenmedi)",
+              "notConnected": "Bu çalışma alanı için Google bağlı değil, bu yüzden belgeleriniz listelenemiyor. Birini seçmek için Google'ı bağlayın."
             },
             "forms": {
               "pick": "— bir form seçin —",
               "empty": "Form bulunamadı",
               "loading": "Formlar yükleniyor…",
-              "notConnected": "Bu çalışma alanında Google bağlı değil, bu yüzden formlarınız listelenemiyor. Bunun yerine form kimliğini veya bağlantısını yapıştırın.",
-              "idPlaceholder": "Form kimliği",
-              "saved": "Form {id}… (yüklenmedi)"
+              "saved": "Form {id}… (yüklenmedi)",
+              "notConnected": "Bu çalışma alanı için Google bağlı değil, bu yüzden formlarınız listelenemiyor. Birini seçmek için Google'ı bağlayın."
             }
           },
           "sheetsIntro": "Bir Google E-Tablo'ya satır ekler (yazma modu) ya da bir anahtar sütuna göre satır arar (okuma modu). <link>/google-account</link> adresindeki çalışma alanının bağlı Google hesabını kullanır.",
@@ -1688,8 +1698,6 @@
           "addColumn": "Sütun ekle",
           "matchByHeader": "Sütunları başlık adına göre eşleştir",
           "matchByHeaderHint": "Her değeri o başlığa sahip sayfa sütununa yazar (sıra önemli değildir). Kapalı bırakırsanız, varsayılan olarak konuma göre soldan sağa eklenir.",
-          "pasteLabel": "…ya da bir E-Tablo URL'si / kimliği yapıştırın",
-          "pasteHint": "Seçici boş olsa bile çalışır — sayfa bağlantısını yapıştırın, kimliğini biz çıkaralım.",
           "docsIntro": "Bir şablon belgeyi kopyalar, <mono>{placeholders}</mono> alanlarını doldurur, bağlantısı olan herkesle paylaşır ve URL'yi müşteriye gönderir. Değerin yazılacağı yere şablonunuzda <mono>{key}</mono> yerleştirin.",
           "templateDocument": "Şablon belge",
           "newCopyTitle": "Yeni kopya başlığı",
@@ -1704,7 +1712,6 @@
           "messageTemplateHint": "Müşteriye gönderilen bot balonu. <mono>{token}</mono> paylaşım bağlantısını alır.",
           "messageTemplatePlaceholder": "Belgeniz:\n'{{'doc_url'}}'",
           "saveUrl": "URL'yi şu değişken altında kaydet",
-          "formIntro": "Form URL'sini WhatsApp üzerinden gönderir, akışı duraklatır ve müşteri formu doldurduğunda <b>gönderildi</b> çıkışıyla devam eder. Yanıtlar akış değişkenleri olur.",
           "googleForm": "Google Form",
           "bodyBubble": "Gövde balonu (bağlantının üstünde gönderilir)",
           "bodyBubblePlaceholder": "Lütfen bu kısa formu doldurun:",
@@ -1712,12 +1719,6 @@
           "saveResponsesHint": "Tek tek yanıtlar da <mono>{token}</mono> olarak kaydedilir.",
           "expireAfter": "Şu süreden sonra sona ersin (saniye)",
           "expireAfterHint": "Zaman aşımına uğramadan önce gönderim için ne kadar beklenecek. 86400 = 24 saat.",
-          "setupTitle": "Tek seferlik kurulum — bunu Form'unuzun Komut dosyası düzenleyicisine yapıştırın",
-          "setupOpen": "Formunuzu açın → <mono>⋮ menü</mono> → <mono>Komut dosyası düzenleyicisi</mono>",
-          "setupDownload": "<link>Komut dosyasını (.gs) indirin</link> ve yapıştırın",
-          "setupTrigger": "Bir tetikleyici ekleyin: <mono>onFormSubmit</mono> · Formdan · Form gönderildiğinde",
-          "setupWarning": "Bu komut dosyası olmadan form yanıtları yine Google Forms'ta kaydedilir, ancak akış devam etmez.",
-          "noListing": "Google hesabı sayfasında Drive dosya listesi izni verilmediği için dosyalarınız listelenemiyor. Bunun yerine bağlantıyı veya kimliği yapıştırın.",
           "connection": {
             "open": "Google hesabını aç",
             "permission": {
@@ -1730,7 +1731,9 @@
             "disconnected": "Bağlı bir Google hesabı yok, bu yüzden akış çalıştığında bu adım başarısız olur. Önce Google'ı bağlayın.",
             "needsReconnect": "Google artık bağlı hesabı kabul etmiyor, bu yüzden akış çalıştığında bu adım başarısız olur. Önce Google'ı yeniden bağlayın.",
             "missing": "Bağlı Google hesabına {permission} izni verilmedi, bu yüzden akış çalıştığında bu adım başarısız olur."
-          }
+          },
+          "formIntro": "Form URL'sini WhatsApp ile gönderir, akışı duraklatır ve müşteri formu doldurduğunda <b>submitted</b> portundan devam eder. Yanıtlar, bağlı Google hesabınız üzerinden formdan okunur; bu yüzden forma hiçbir şey yapıştırılmaz. Yanıtlar akış değişkenlerine dönüşür.",
+          "noListing": "Google hesabı sayfasında Drive dosya listesi izni verilmediği için dosyalarınız listelenemiyor. Dosya seçmek için izni oradan ekleyin."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2497,7 +2500,8 @@
         "noSenderFacebook": "Tetikleyici düğümünde bir Facebook Sayfası seçilmemiş — Tetikleyici adımında bir sayfa seçin.",
         "noSenderNumber": "Tetikleyici düğümünde bir numara seçilmemiş — Tetikleyici adımında bir numara seçin.",
         "faqMinScore": "\"{node}\" için en düşük puan 0.05 ile 0.99 aralığının dışında — düzeltin veya akış ayarını kullanmak için boş bırakın.",
-        "locationInvalid": "“{node}” adımında geçerli bir konum yok — bir Google Haritalar bağlantısı yapıştırın veya enlem (-90 ile 90) ve boylam (-180 ile 180) girin."
+        "locationInvalid": "“{node}” adımında geçerli bir konum yok — bir Google Haritalar bağlantısı yapıştırın veya enlem (-90 ile 90) ve boylam (-180 ile 180) girin.",
+        "aiNoAgent": "\"{node}\" için ne yapay zekâ ajanı ne de istem var — bir yapay zekâ ajanı seçin ya da Özel kurulum’u seçip talimatları yazın."
       }
     },
     "simpleModel": {
@@ -2663,7 +2667,9 @@
         "chooseFlow": "Adım {stage}: düğmenin başlattığı akışı seçin.",
         "chooseApi": "Adım {stage}: çağrılacak API'yi seçin.",
         "writeCode": "Adım {stage}: çalıştırılacak kodu yazın.",
-        "webhookUrl": "Adım {stage}: Çağrılacak adresi (URL) ekleyin."
+        "webhookUrl": "Adım {stage}: Çağrılacak adresi (URL) ekleyin.",
+        "chooseAiAgent": "Adım {stage}: Yanıt verecek yapay zekâ ajanını seçin ya da adımı özel kuruluma geçirin.",
+        "writeAiPrompt": "Adım {stage}: Yapay zekâ için talimatları yazın ya da bir yapay zekâ ajanı seçin."
       },
       "faqSummary": "{hasCategory, select, true {FAQ'larınızdan · {category}} other {FAQ'larınızdan}}"
     },

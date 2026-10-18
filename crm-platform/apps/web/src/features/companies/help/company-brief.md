@@ -28,6 +28,7 @@ You can also ask the AI CRM Copilot to generate the brief of a company by name.
 - Counts, dates, amounts and short titles of deals and tasks, and the company's industry, size and properties.
 - The model never receives contact names, email addresses, phone numbers or the text of any message, nor the company's own email, phone, address or notes. Numbers and email addresses inside titles and property values are removed before anything is sent. A title you typed can still hold a name, so keep names out of deal and task titles if that matters to you.
 - A brief belongs to you. A colleague gets their own when they ask, written from what they can see. There is no public link to share.
+- A brief is a temporary summary, not a record. It is deleted with the person who generated it, and when a contact of the company is erased or deleted, so no summary of an erased person is kept. Generate it again and it is written from the records that remain.
 
 ## Options and settings
 

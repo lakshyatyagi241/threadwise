@@ -12,6 +12,7 @@ import type {
 } from '@crm/contracts';
 import { QUEUES } from '../../infra/queue/queues';
 import { AuthAuditService } from '../auth';
+import { FailedOperationsService, FailureRecorder } from '../failed-operations';
 import { AsyncOpsStore } from './async-ops.store';
 
 const REASON_MAX = 300;
@@ -31,7 +32,9 @@ const cut = (s: unknown): string | null =>
  *   processed meanwhile: consumers must apply state forward-only or by upsert (ASYNC-062), as the idempotency audit requires.
  * - Consumers are at-least-once already (the billing charge, the message ledger and the webhook ledger deduplicate), which is what makes
  *   a replay safe to repeat (ASYNC-045).
- * - Every replay is recorded in the security events with the operator, the type and the counts.
+ * - Replay keeps `last_error` (the evidence of why the event died) until the next failure overwrites it; it never clears it.
+ * - Every replay is recorded in the security events with the operator, the type, the counts and the first 100 event ids.
+ * - The two queue replays (waba-ingest, webhook-retry) go through the failed-operation record and its eligibility check, not `job.retry`.
  */
 @Injectable()
 export class AsyncOpsService {
@@ -40,6 +43,8 @@ export class AsyncOpsService {
     @InjectQueue(QUEUES.WABA_INGEST) private readonly wabaIngest: Queue,
     @InjectQueue(QUEUES.WEBHOOK_RETRY) private readonly webhookRetry: Queue,
     private readonly audit: AuthAuditService,
+    private readonly recorder: FailureRecorder,
+    private readonly failedOps: FailedOperationsService,
   ) {}
 
   async deadOutbox(): Promise<DeadOutboxGroup[]> {
@@ -84,7 +89,7 @@ export class AsyncOpsService {
           FOR UPDATE OF o SKIP LOCKED
         )
         UPDATE event_outbox o
-        SET status = 'pending', attempts = 0, available_at = now(), last_error = NULL
+        SET status = 'pending', attempts = 0, available_at = now()
         FROM picked
         WHERE o.id = picked.id AND o.created_at = picked.created_at
         RETURNING o.id
@@ -105,7 +110,12 @@ export class AsyncOpsService {
         status: 'info',
         actorType: 'platform_operator',
         actorId: operatorId,
-        payload: { eventType: req.eventType, limit: req.limit, ...result },
+        payload: {
+          eventType: req.eventType,
+          limit: req.limit,
+          ...result,
+          eventIds: replayed.rows.slice(0, 100).map((r) => String((r as { id: unknown }).id)),
+        },
       });
       return result;
     });
@@ -116,7 +126,13 @@ export class AsyncOpsService {
   }
 
   replayWaba(req: WabaReplayRequest, operatorId: number): Promise<WabaReplayResult> {
-    return this.replayFailed(this.wabaIngest, 'waba_ingest_replayed', req.limit, operatorId);
+    return this.replayFailed(
+      this.wabaIngest,
+      QUEUES.WABA_INGEST,
+      'waba_ingest_replayed',
+      req.limit,
+      operatorId,
+    );
   }
 
   failedWebhookRetry(limit: number): Promise<FailedIngestJob[]> {
@@ -124,7 +140,13 @@ export class AsyncOpsService {
   }
 
   replayWebhookRetry(req: WabaReplayRequest, operatorId: number): Promise<WabaReplayResult> {
-    return this.replayFailed(this.webhookRetry, 'webhook_retry_replayed', req.limit, operatorId);
+    return this.replayFailed(
+      this.webhookRetry,
+      QUEUES.WEBHOOK_RETRY,
+      'webhook_retry_replayed',
+      req.limit,
+      operatorId,
+    );
   }
 
   private async listFailed(queue: Queue, limit: number): Promise<FailedIngestJob[]> {
@@ -137,8 +159,14 @@ export class AsyncOpsService {
     }));
   }
 
+  /**
+   * The bulk replay of the two queues that existed before the failed-operation record. It no longer retries a job in the queue: each
+   * failed job is recorded (idempotently) and redriven through the same eligibility check as a single redrive, so the attempt
+   * history is kept, the replay count is bounded, a suspended workspace is refused, and a job that failed on purpose is left alone.
+   */
   private async replayFailed(
     queue: Queue,
+    queueName: string,
     auditName: string,
     limit: number,
     operatorId: number,
@@ -146,18 +174,30 @@ export class AsyncOpsService {
     const jobs = await queue.getFailed(0, limit - 1);
     let replayed = 0;
     let skipped = 0;
+    const ids: string[] = [];
     for (const job of jobs) {
-      // A job that failed before using its attempts was failed on purpose (UnrecoverableError: a rule the data broke); a retry fails the same way.
-      if (job.attemptsMade < (job.opts?.attempts ?? 1)) {
-        skipped += 1;
-        continue;
-      }
       try {
-        // attemptsMade is already at the limit; without a reset the replayed job would get one attempt and no backoff retries.
-        await job.retry('failed', { resetAttemptsMade: true });
+        // A job in the failed set is final; a count below its limit means it skipped its attempts (UnrecoverableError).
+        const rec = await this.recorder.record(
+          queueName,
+          job,
+          job.attemptsMade < (job.opts?.attempts ?? 1),
+        );
+        if (!rec.uuid) {
+          skipped += 1;
+          continue;
+        }
+        const out = await this.failedOps.redrive(rec.uuid, operatorId, false);
+        if (!out.redriven) {
+          skipped += 1;
+          continue;
+        }
         replayed += 1;
+        ids.push(rec.uuid);
+        // The record owns the work now; leaving the old job in the failed set would count it twice on the health page.
+        await job.remove().catch(() => undefined);
       } catch {
-        // No longer failed: another operator replayed it, or it was removed. Not an error for the rest.
+        // No longer failed, or the record could not be written: not an error for the rest.
         skipped += 1;
       }
     }
@@ -167,7 +207,7 @@ export class AsyncOpsService {
         status: 'info',
         actorType: 'platform_operator',
         actorId: operatorId,
-        payload: { limit, replayed, skipped },
+        payload: { limit, replayed, skipped, failedOperations: ids.slice(0, 100) },
       }),
     );
     return { replayed, skipped };

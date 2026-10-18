@@ -66,6 +66,11 @@ export interface NavItem {
   inMenu?: boolean;
 }
 
+/** One card of the Home dashboard, declared in `features/<domain>/home-cards.ts`. Only the id matters to the persona module catalog. */
+export interface HomeCard {
+  id: string;
+}
+
 /** `null` = not known yet (the app-init payload does not exist): show the item and do not lock it. */
 export interface Capabilities {
   permissions: ReadonlySet<string> | null;

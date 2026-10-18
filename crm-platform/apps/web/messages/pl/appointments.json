@@ -566,11 +566,12 @@
         "hint": "Rezerwacje działają bez tego. Połącz Kalendarz Google w Spotkania, Ustawienia, aby synchronizować terminy wolne/zajęte i dodawać linki Meet.",
         "unavailable": "Kalendarz Google nie jest jeszcze skonfigurowany dla tej platformy. Te ustawienia są przechowywane przy typie rezerwacji na czas, gdy będzie.",
         "calendarId": "Kalendarz",
-        "calendarPlaceholder": "główny",
         "spreadsheetId": "Dopisywanie do arkusza (opcjonalnie)",
-        "spreadsheetPlaceholder": "Identyfikator arkusza kalkulacyjnego",
         "createMeet": "Utwórz link Google Meet dla każdej rezerwacji",
-        "calendarDefault": "Kalendarz przestrzeni roboczej"
+        "calendarDefault": "Kalendarz przestrzeni roboczej",
+        "connectFirst": "Połącz swoje <link>konto Google</link>, aby wybrać z jego listy.",
+        "spreadsheetNone": "Brak arkusza",
+        "spreadsheetNoListing": "Nie można wyświetlić Twoich arkuszy, ponieważ nie przyznano uprawnienia do listy plików Drive. Dodaj je na stronie konta Google."
       },
       "messages": {
         "title": "Wiadomości cyklu życia",

@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. Pantalla de consentimiento",
-              "body": "Añade los ámbitos que pide el producto (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly) y después publica la app: en modo de prueba, Google cancela cada concesión a los 7 días y los espacios de trabajo tendrán que volver a conectarse. Los ámbitos de drive son restringidos y requieren la revisión de Google."
+              "body": "Añade los ámbitos que pide el producto (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly) y después publica la app: en modo de prueba, Google cancela cada concesión a los 7 días y los espacios de trabajo tendrán que volver a conectarse. Los ámbitos de drive son restringidos y requieren la revisión de Google."
             },
             "workspaces": {
               "title": "4. Los espacios de trabajo se conectan",
