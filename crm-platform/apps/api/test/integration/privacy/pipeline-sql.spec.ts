@@ -30,6 +30,8 @@ describe.skipIf(!URL)('registry statements run on the real schema', () => {
     orgId: 1,
     contactIds: [1],
     contactUuids: ['00000000-0000-4000-8000-000000000001'],
+    userIds: [1],
+    userEmails: ['staff@example.test'],
     leadIds: [1],
     conversationIds: [1],
     conversationUuids: ['00000000-0000-4000-8000-000000000002'],

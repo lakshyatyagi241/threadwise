@@ -67,7 +67,7 @@ async function exportHolder(
     const cap = spec.exportCap ?? DEFAULT_EXPORT_CAP;
     const res = await ctx.tx.execute(sql`
       SELECT to_jsonb(t) AS j FROM ${sql.identifier(spec.table)} t
-       WHERE ${rowsOf(spec, subject)} ORDER BY t.ctid LIMIT ${cap + 1}`);
+       WHERE ${rowsOf(spec, subject, 'export')} ORDER BY t.ctid LIMIT ${cap + 1}`);
     const raw = (res.rows as Array<{ j: Record<string, unknown> }>).map((r) => r.j);
     tables.push({
       table: spec.table,

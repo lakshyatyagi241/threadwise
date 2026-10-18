@@ -13,6 +13,7 @@ import {
   flowsRuntime,
 } from '../manifests/engagement';
 import { analyticsEvents } from '../manifests/analytics';
+import { companyBriefs, revenueExports } from '../manifests/derived';
 import { callsLogs, callsPermissions } from '../manifests/calls';
 import {
   consentLedger,
@@ -50,6 +51,8 @@ export const PERSONAL_DATA_REGISTRY: readonly PersonalDataHolder[] = [
   commerceNudges,
   privacyRequestsHolder,
   analyticsEvents,
+  revenueExports,
+  companyBriefs,
 ];
 
 /** Every (holder, table) pair, in the global execution order of an erasure. */
