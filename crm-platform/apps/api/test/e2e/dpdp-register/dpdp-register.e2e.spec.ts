@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import {
@@ -166,6 +167,18 @@ describe('the register', () => {
             params: { days: ENDED_SESSION_RETENTION_DAYS },
           },
     );
+    // The lifecycle probe reads the same switches the app booted with: take them from the app's own configuration, so a local .env cannot change the answer.
+    const config = h.app.get(ConfigService);
+    const enabled = config.get<boolean>('ORG_LIFECYCLE_ENABLED');
+    const dryRun = config.get<boolean>('ORG_LIFECYCLE_DRY_RUN');
+    const deleteEnabled = config.get<boolean>('ORG_LIFECYCLE_DELETE_ENABLED');
+    for (const flag of [enabled, dryRun, deleteEnabled]) expect(typeof flag).toBe('boolean');
+    const lifecycleOn = enabled === true && dryRun === false && deleteEnabled === true;
+    expect(checkOf(body, 'lifecycle.enabled')).toMatchObject({
+      result: lifecycleOn ? 'pass' : 'fail',
+      detail: lifecycleOn ? 'lifecycle_on' : 'lifecycle_off',
+      params: { enabled, dryRun, deleteEnabled },
+    });
     // No platform AI key is stored in a fresh database.
     expect(checkOf(body, 'ai.platform_key_off')).toMatchObject({
       result: 'pass',
