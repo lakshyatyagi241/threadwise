@@ -54,6 +54,8 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
 
   'wap-providers': 'whatsapp providers bsp meta cloud interakt gupshup registry credentials',
   'wap-switch': 'switch provider number migrate whatsapp number change',
+  'data-retention':
+    'retention archive archival delete deletion storage logs audit log events cold glacier r2 s3 days keep purge ttl expire',
   'wa-throughput':
     'whatsapp throughput limits rate mps tps messages per second messaging tier quota pause throttle performance live 130429',
   'node-bridge': 'node bridge baileys qr unofficial whatsapp server token address sender pacing',

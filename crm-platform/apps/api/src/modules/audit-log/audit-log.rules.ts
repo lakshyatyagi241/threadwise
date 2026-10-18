@@ -146,6 +146,60 @@ export function buildWhere(f: AuditLogFilters, ctx: FilterContext): SQL {
   return sql.join(parts, sql` AND `);
 }
 
+/** One archived `audit_log` line, as the retention job wrote it (`to_json` of the row, snake_case). */
+export interface ArchivedAuditLine {
+  id: number | string;
+  actor_id: number | string | null;
+  actor_type: string;
+  module: string;
+  record_id: number | string;
+  action: string;
+  request_id: string | null;
+  delta: unknown;
+  at: string;
+}
+
+/**
+ * `buildWhere` for a line read back from the cold archive: the same filters, applied in code because the archive is not a table.
+ * The window and the workspace are already fixed by where the line was read from.
+ */
+export function archivedLineMatches(
+  f: AuditLogFilters,
+  ctx: { actorDbId?: number },
+  r: ArchivedAuditLine,
+): boolean {
+  if (
+    ctx.actorDbId !== undefined &&
+    !(r.actor_type === 'user' && Number(r.actor_id) === ctx.actorDbId)
+  ) {
+    return false;
+  }
+  if (f.actorType) {
+    if (
+      f.actorType === 'other'
+        ? (KNOWN_ACTOR_TYPES as readonly string[]).includes(r.actor_type)
+        : r.actor_type !== f.actorType
+    ) {
+      return false;
+    }
+  }
+  if (f.module && r.module !== f.module) return false;
+  if (f.action && r.action !== f.action) return false;
+  if (f.recordId !== undefined && Number(r.record_id) !== f.recordId) return false;
+  if (f.requestId && r.request_id !== f.requestId) return false;
+  if (f.q) {
+    const needle = f.q.toLowerCase();
+    if (!r.module.toLowerCase().includes(needle) && !r.action.toLowerCase().includes(needle)) {
+      return false;
+    }
+  }
+  if (f.actAs) {
+    const d = r.delta;
+    if (!(d && typeof d === 'object' && !Array.isArray(d) && '_impersonatedBy' in d)) return false;
+  }
+  return true;
+}
+
 // --- CSV ----------------------------------------------------------------------------------------------------------------------
 
 export const CSV_BOM = '﻿';

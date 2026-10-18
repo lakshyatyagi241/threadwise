@@ -6,8 +6,8 @@ retention). This page is for the person running it.
 ## What the job does
 
 Every day at 03:50 (container time, UTC in production) the worker walks the streams in `STREAM_POLICIES`
-(`apps/api/src/modules/data-retention/retention-policies.ts`). Today that is one: `an_events`, 60 days live. For each month whose end is more than the live
-window ago:
+(`apps/api/src/modules/data-retention/retention-policies.ts`): `an_events` (60 days live) and `audit_log`, which only joins once a super admin has saved a
+policy for it (see [The dashboard](#the-dashboard-what-a-super-admin-sets)). For each month whose end is more than the live window ago:
 
 1. reads the partition once, in id order, 20,000 rows at a time, without the columns the policy omits (`contact_id`), and writes one gzipped NDJSON file per
    workspace to a temp directory;
@@ -21,13 +21,50 @@ Then, for streams with an archive window, it deletes the archive months older th
 It never touches the `_default` partition, the current or the previous month inside the live window, or any stream that is not in the list. Any doubt
 (a damaged object, a changed count, an unreachable store) means nothing is dropped; the next night starts the month again.
 
+## The dashboard: what a super admin sets
+
+Console, System, **Data retention** (`/admin/data-retention`). One card per data item, two numbers each:
+
+- **Live days**: how long the data stays in the database. Partitioned items leave by whole months: a month goes once its last day is more than this many days ago.
+- **Archive days**: how many further days the cold archive keeps it, then deletes it for good. "Keep the archive for ever" means no deletion. The data is deleted
+  live + archive days after it was written, so deletion can never come before archiving. Items that cannot be archived have only live days.
+
+| Item                | Kind                        | Built-in behaviour until a policy is saved                                   | Limits (live / archive)        |
+| ------------------- | --------------------------- | ---------------------------------------------------------------------------- | ------------------------------ |
+| `an_events`         | monthly partitions, archive | 60 live days, archive kept for ever                                          | 7 to 730 / 1 to 3650 or never  |
+| `audit_log`         | monthly partitions, archive | deleted row by row after the security policy's `auditLogRetentionDays` (365) | 7 to 3650 / 1 to 3650 or never |
+| `security_events`   | one table, delete only      | same security policy number                                                  | 30 to 3650                     |
+| `audit_log_exports` | files, delete only          | 7 days                                                                       | 1 to 30                        |
+
+Rules the page and the API both enforce (`packages/contracts/src/data-retention`): whole days inside the limits above; no archive days for an item that cannot be archived;
+only a super admin saves (other operators can look); a save needs the `rowVersion` that was read (409 otherwise). Before a save that would archive or delete data that exists
+today, the page lists what the next run will do (months and rows, archived months, rows or files) and asks for confirmation. Every save and reset writes a security event
+(`platform.data_retention.policy_updated` / `policy_reset`) with the values before and after, so the record of who changed what lives in `security_events`
+(which the dashboard keeps at least 30 days).
+
+**Saving changes nothing by itself.** The nightly jobs carry the values out: this job for the two partitioned items, the auth maintenance sweep for the security log, the
+export sweep for export files. The page says when a saved partitioned item is not carried out yet (job off, or `RETENTION_DRY_RUN` still on) and shows the job's state at the top.
+
+**The audit log.** With no saved policy it behaves as before: no archive, row-by-row delete after the security policy's days. With a saved policy and the job really running
+(`RETENTION_ENABLED=true`, `RETENTION_DRY_RUN=false`, a durable archive) closed months are archived, verified and dropped here, and the row-by-row delete steps aside, so nothing is
+deleted before it is archived. While the job only logs, the row-by-row delete keeps using the security policy's number; a saved policy never causes a delete without an archive.
+The audit log screen lists the live months only. An audit export (email link, sign-in required, never a direct download) also reads the archived months back, after the live rows:
+newest month first, and oldest first inside a month, with the same filters. Opening an old entry or a record's field history past the live window needs an export.
+
+**Restore latency.** The archive is S3 or R2 (the only adapters; R2 has no cold tier), so a read is immediate. If the bucket is moved to a Glacier-class tier, reading an archived month
+needs a restore request first (hours) and the export would fail until it is restored; that would need a restore step in front of `ArchiveReader`. Not built.
+
+**Vectors** are not part of any item here: they are rebuilt from page text by `kb-reingest`.
+
+Each card also shows the live size (from the catalog, no table scan), the archive size and object count measured by the last run, and what the last run did.
+
 ## Settings
 
 | Variable            | Default       | Meaning                                                                                                                         |
 | ------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | `RETENTION_ENABLED` | `false`       | The job does nothing at all unless this is `true`.                                                                              |
 | `RETENTION_DRY_RUN` | `true`        | With the job on, only log what it would do.                                                                                     |
-| `ARCHIVE_DRIVER`    | `local`       | `s3` for the bucket (S3, R2). `local` writes to `ARCHIVE_LOCAL_DIR` (default `.archive`) and is for development only.    |
+| `ARCHIVE_DRIVER`    | `local`       | `s3` for the bucket (S3, R2). `local` writes to `ARCHIVE_LOCAL_DIR` (default `.archive`) and is for development only.           |
 | `S3_BUCKET_ARCHIVE` | `crm-archive` | Created on the first write. Uses `S3_ENDPOINT`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_FORCE_PATH_STYLE`. |
 
 `RETENTION_DRY_RUN=false` with `ARCHIVE_DRIVER=local` in production is refused (`retention refused` in the log): a local archive lives in the container and a
@@ -145,6 +182,8 @@ numeric workspace id and a row count, no personal data. Archive objects never ca
 A stream's cut ships only after every reader of its old rows has switched to the rollups (the metric loop in [analytics.md](../architecture/analytics.md)).
 Then, in one change:
 
-1. add its `StreamPolicy` to `STREAM_POLICIES` (partition key, id and workspace columns, live days, archive days, columns to omit);
+1. add its `StreamPolicy` to `STREAM_POLICIES` (partition key, id and workspace columns, live days, archive days, columns to omit; `optIn: true` keeps it idle until a super admin
+   saves a policy for it, as `audit_log` does);
 2. a migration that replaces `archivable_streams()` with the stream added (the database refuses to drop anything else);
-3. a test with a real Postgres like `apps/api/test/integration/data-retention/partition-archiver.spec.ts`, and a dry run in production before the first real one.
+3. an entry in `RETENTION_ITEMS` (`packages/contracts/src/data-retention`) and messages for it in `apps/web/messages/*/data-retention.json`, so it appears on the dashboard;
+4. a test with a real Postgres like `apps/api/test/integration/data-retention/partition-archiver.spec.ts`, and a dry run in production before the first real one.

@@ -1,0 +1,61 @@
+# Prometheus alert rules for queue backlog and worker capacity (QCAP-014, 017..019, 098).
+# Signals: crm_queue_jobs_pending{queue,state} and crm_queue_oldest_waiting_seconds{queue} (QueueDepthService, worker process), plus
+# crm_queue_jobs_total and crm_queue_job_wait_seconds (job-metrics). Capacity method: docs/performance/queue-capacity/.
+#
+# Paging is by AGE of the oldest runnable job, not by depth: 100,000 queued jobs with a 2 s oldest age is healthy, 30 jobs with a
+# 10-minute oldest age is not. Classes follow tools/queue-capacity/lib/classes.mjs; keep the regexes in step with it.
+# Thresholds are initial engineering targets, not measured limits. Tested with promtool: queue-capacity.rules.test.yml.
+groups:
+  - name: queue-capacity
+    rules:
+      - record: crm:queue_arrival_rate
+        expr: sum by (queue) (rate(crm_queue_jobs_total[5m]))
+      - record: crm:queue_backlog
+        expr: sum by (queue) (crm_queue_jobs_pending{state="waiting"})
+      # Net drain rate needs the enqueue rate, which BullMQ does not export per job; backlog growth is the observable form.
+      - record: crm:queue_backlog_growth_per_second
+        expr: deriv(crm:queue_backlog[10m])
+
+      - alert: CriticalQueueOldestJobAge
+        expr: max by (queue) (crm_queue_oldest_waiting_seconds{queue=~"waba-ingest|webhook-ingest|webhook-retry|telephony-ingest"}) > 30
+        for: 2m
+        labels: { severity: critical }
+        annotations:
+          summary: 'Inbound queue {{ $labels.queue }}: oldest waiting job is {{ $value | humanizeDuration }} old'
+          description: 'Customer messages the provider already got our 200 for are waiting. Check worker liveness, then Postgres, then the queue-capacity runbook (docs/performance/queue-capacity/queue-observability-runbook.md).'
+
+      - alert: InteractiveQueueOldestJobAge
+        expr: max by (queue) (crm_queue_oldest_waiting_seconds{queue=~"message-dispatch|web-push|media-fetch"}) > 15
+        for: 3m
+        labels: { severity: critical }
+        annotations:
+          summary: 'Interactive queue {{ $labels.queue }}: oldest waiting job is {{ $value | humanizeDuration }} old'
+
+      - alert: AutomationQueueOldestJobAge
+        expr: max by (queue) (crm_queue_oldest_waiting_seconds{queue=~"flow-run|ecom-webhook|meta-leadgen|mkt-inbound|lead-sync|lsc-score|webhook-deliver|webhook-forward"}) > 60
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Automation queue {{ $labels.queue }}: oldest waiting job is {{ $value | humanizeDuration }} old'
+
+      - alert: BulkQueueBacklogNotDraining
+        expr: crm:queue_backlog{queue=~"campaign|bcast-dispatch|sched-run|con-import|segment-actions|tg-broadcast|line-broadcast|viber-broadcast|fb-broadcast|wechat-broadcast"} > 1000 and crm:queue_backlog_growth_per_second > 0
+        for: 30m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Bulk queue {{ $labels.queue }} has had a growing backlog of {{ $value }} jobs for 30 min'
+          description: 'Bulk work may be slow by design; this means it is still falling behind. Check the provider rate limit before adding workers.'
+
+      - alert: QueueFailedJobsGrowing
+        expr: sum by (queue) (increase(crm_queue_jobs_total{outcome="failed"}[15m])) > 50
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Queue {{ $labels.queue }}: {{ $value }} jobs failed in 15 min'
+
+      - alert: QueueRetryAmplification
+        expr: sum by (queue) (rate(crm_queue_job_retries_total[10m])) > 0.5 * sum by (queue) (rate(crm_queue_jobs_total[10m])) and sum by (queue) (rate(crm_queue_jobs_total[10m])) > 0.1
+        for: 10m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Queue {{ $labels.queue }}: retries are over half of completions (retry storm or provider throttling)'

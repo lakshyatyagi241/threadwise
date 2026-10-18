@@ -19,6 +19,11 @@ export interface StreamPolicy {
   archiveDays: number | null;
   /** Columns left out of the archive object (links to a person, so a contact erase never has to rewrite an archive). */
   omitColumns: readonly string[];
+  /**
+   * The stream is only cut once a super admin has saved a policy for it (`data_retention_policies`). Without one it keeps its old
+   * behaviour: nothing is archived or dropped by this job.
+   */
+  optIn?: boolean;
 }
 
 export const STREAM_POLICIES: readonly StreamPolicy[] = [
@@ -30,6 +35,18 @@ export const STREAM_POLICIES: readonly StreamPolicy[] = [
     liveDays: 60,
     archiveDays: null,
     omitColumns: ['contact_id'],
+  },
+  {
+    // The audit log was pruned row by row after the platform security policy's days (AuthMaintenanceService). Once an admin saves a
+    // policy for it, whole months are archived and dropped here instead, and that prune steps aside for it.
+    stream: 'audit_log',
+    partitionKey: 'at',
+    idColumn: 'id',
+    orgColumn: 'org_id',
+    liveDays: 365,
+    archiveDays: null,
+    omitColumns: [],
+    optIn: true,
   },
 ];
 
