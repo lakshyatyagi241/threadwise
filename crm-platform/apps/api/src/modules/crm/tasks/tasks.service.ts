@@ -462,7 +462,12 @@ export class TasksService {
   async setFollowUpIn(
     tx: Tx,
     orgId: number,
-    v: { contactId: number; dueAt: Date | null; assigneeId: number | null; source: 'manual' | 'auto' },
+    v: {
+      contactId: number;
+      dueAt: Date | null;
+      assigneeId: number | null;
+      source: 'manual' | 'auto';
+    },
   ): Promise<OpenFollowUp> {
     const ctx = RequestContextStore.require();
     await this.repo.lockFollowUp(tx, orgId, v.contactId);

@@ -135,7 +135,9 @@ export class ContactTouchController {
   @Post(':id/follow-up/snooze')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.contacts.update')
-  @ApiOperation({ summary: "Move the follow-up to 1 day, 3 days or next week at the default alert time" })
+  @ApiOperation({
+    summary: 'Move the follow-up to 1 day, 3 days or next week at the default alert time',
+  })
   snooze(
     @Param('id', ParseUUIDPipe) id: string,
     @Body(zodPipe(snoozeFollowUpSchema)) body: SnoozeFollowUpInput,

@@ -31,7 +31,12 @@ const shape = <T>(...required: string[]): z.ZodType<T, z.ZodTypeDef, unknown> =>
   );
 
 const settingsShape = shape<LeadHandlingSettings>('uncontacted', 'followUps');
-const followUpsShape = shape<FollowUpSettings>('updateWhen', 'defaultDate', 'defaultTime', 'rowVersion');
+const followUpsShape = shape<FollowUpSettings>(
+  'updateWhen',
+  'defaultDate',
+  'defaultTime',
+  'rowVersion',
+);
 const followUpResultShape = shape<FollowUpResult>('nextFollowUp');
 const uncontactedShape = shape<UncontactedSettings>(
   'clearOn',

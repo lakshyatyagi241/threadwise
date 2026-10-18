@@ -43,7 +43,11 @@ export const QUICK_PRESETS = [
 const SCORE_PRESETS: readonly PresetView[] = ['hotLeads'];
 
 /** The built-in views of the contact's next follow-up (BL-291): offered once some contact has an open follow-up. */
-const FOLLOW_UP_PRESETS: readonly PresetView[] = ['followUpToday', 'followUpOverdue', 'followUpSomeday'];
+const FOLLOW_UP_PRESETS: readonly PresetView[] = [
+  'followUpToday',
+  'followUpOverdue',
+  'followUpSomeday',
+];
 
 /**
  * `presets` without the ones that do not apply: "Hot leads" needs lead scoring (off: it filters by a score nobody sees), and

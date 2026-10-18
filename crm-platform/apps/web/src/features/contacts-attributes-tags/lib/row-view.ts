@@ -84,7 +84,9 @@ export function rowView(row: ContactRow, attributeLabels: ReadonlyMap<string, st
     source: (row.source ?? text(row.customFields[EXTRA_KEYS.source])).trim(),
     lastActivityAt: row.lastActivityAt ?? null,
     uncontactedSince: row.uncontactedSince ?? null,
-    nextFollowUp: row.nextFollowUp ? { id: row.nextFollowUp.id, dueAt: row.nextFollowUp.dueAt } : null,
+    nextFollowUp: row.nextFollowUp
+      ? { id: row.nextFollowUp.id, dueAt: row.nextFollowUp.dueAt }
+      : null,
     // The list asks for `expand=groups,tags`, so the chips arrive with the row (a deleted group simply is not there).
     groups: (row.groups ?? []).map((g) => ({ id: g.id, name: g.name, color: g.color })),
     tags: row.tags ?? [],

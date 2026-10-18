@@ -197,7 +197,9 @@ export class ContactsRepository {
       isMinor: sql<boolean>`EXISTS (SELECT 1 FROM contact_privacy_flags pf WHERE pf.org_id = ${contacts.orgId} AND pf.contact_id = ${contacts.id} AND pf.is_minor)`,
       lastActivityAt: contacts.lastActivityAt,
       uncontactedSince: contacts.uncontactedSince,
-      nextFollowUp: sql<ContactRow['nextFollowUp']>`(SELECT jsonb_build_object('id', t.uuid, 'dueAt', t.due_at, 'assigneeId', au.uuid) FROM tasks t LEFT JOIN users au ON au.org_id = t.org_id AND au.id = t.assignee_id WHERE t.org_id = ${contacts.orgId} AND t.contact_id = ${contacts.id} AND t.kind = 'follow_up' AND t.status = 'open')`,
+      nextFollowUp: sql<
+        ContactRow['nextFollowUp']
+      >`(SELECT jsonb_build_object('id', t.uuid, 'dueAt', t.due_at, 'assigneeId', au.uuid) FROM tasks t LEFT JOIN users au ON au.org_id = t.org_id AND au.id = t.assignee_id WHERE t.org_id = ${contacts.orgId} AND t.contact_id = ${contacts.id} AND t.kind = 'follow_up' AND t.status = 'open')`,
       data: contacts.data,
       timezone: contacts.timezone,
       timezoneSource: contacts.timezoneSource,
@@ -885,7 +887,12 @@ export class ContactsRepository {
             sql`, `,
           )})
         ORDER BY ci.id`);
-      for (const r of res.rows as Array<{ kind: string; value: string; id: number | string; uuid: string }>) {
+      for (const r of res.rows as Array<{
+        kind: string;
+        value: string;
+        id: number | string;
+        uuid: string;
+      }>) {
         const key = `${r.kind}|${r.value}`;
         if (!out.has(key)) out.set(key, { id: Number(r.id), uuid: r.uuid });
       }

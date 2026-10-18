@@ -68,7 +68,9 @@ const click = (el: Element | undefined) =>
 beforeEach(() => {
   api.perms = new Set(['record.contacts.update']);
   api.done.mockReset().mockResolvedValue({ nextFollowUp: null });
-  api.snooze.mockReset().mockResolvedValue({ nextFollowUp: { id: 'x', dueAt: future, assigneeId: null } });
+  api.snooze
+    .mockReset()
+    .mockResolvedValue({ nextFollowUp: { id: 'x', dueAt: future, assigneeId: null } });
   api.set.mockReset();
   api.clear.mockReset();
 });
@@ -103,13 +105,17 @@ describe('the next follow-up row', () => {
   });
 
   it('Done completes it', async () => {
-    mount(<NextFollowUpRow contactId={ID} followUp={{ id: 'a', dueAt: future, assigneeId: null }} />);
+    mount(
+      <NextFollowUpRow contactId={ID} followUp={{ id: 'a', dueAt: future, assigneeId: null }} />,
+    );
     await click(btn(fu('done')));
     expect(api.done).toHaveBeenCalledWith(ID);
   });
 
   it('Snooze offers 1 day, 3 days and next week', async () => {
-    mount(<NextFollowUpRow contactId={ID} followUp={{ id: 'a', dueAt: future, assigneeId: null }} />);
+    mount(
+      <NextFollowUpRow contactId={ID} followUp={{ id: 'a', dueAt: future, assigneeId: null }} />,
+    );
     await click(btn(fu('snooze')));
     await click(btn(fu('snoozeThreeDays')));
     expect(api.snooze).toHaveBeenCalledWith(ID, 'three_days');
@@ -117,7 +123,9 @@ describe('the next follow-up row', () => {
 
   it('shows no actions to a person who cannot edit the contact', () => {
     api.perms = new Set();
-    mount(<NextFollowUpRow contactId={ID} followUp={{ id: 'a', dueAt: future, assigneeId: null }} />);
+    mount(
+      <NextFollowUpRow contactId={ID} followUp={{ id: 'a', dueAt: future, assigneeId: null }} />,
+    );
     expect(btn(fu('done'))).toBeUndefined();
     expect(host.textContent).toContain(fu('title'));
   });

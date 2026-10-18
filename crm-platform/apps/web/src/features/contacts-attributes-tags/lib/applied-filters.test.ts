@@ -91,10 +91,12 @@ describe('appliedFilterChips', () => {
   });
 
   it('makes a chip for the follow-up filter', () => {
-    expect(appliedFilterChips({ ...DEFAULT_FILTERS, followUp: 'overdue' }, names)[0]).toMatchObject({
-      label: 'Follow-up: Overdue',
-      clear: { followUp: '' },
-    });
+    expect(appliedFilterChips({ ...DEFAULT_FILTERS, followUp: 'overdue' }, names)[0]).toMatchObject(
+      {
+        label: 'Follow-up: Overdue',
+        clear: { followUp: '' },
+      },
+    );
   });
 
   it('makes a chip for the minor filter, yes or no', () => {

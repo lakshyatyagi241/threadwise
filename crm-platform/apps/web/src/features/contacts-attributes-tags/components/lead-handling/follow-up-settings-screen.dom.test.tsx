@@ -111,7 +111,9 @@ describe('Settings > Follow-ups', () => {
   it('shows the defaults: every automatic option off, 3 days later, 09:00', async () => {
     await mountScreen();
     for (const k of ['none', 'overdue', 'today', 'future']) {
-      expect(sw(label(`settings.followUps.when.${k}`)).getAttribute('aria-checked'), k).toBe('false');
+      expect(sw(label(`settings.followUps.when.${k}`)).getAttribute('aria-checked'), k).toBe(
+        'false',
+      );
     }
     expect(radio(label('settings.followUps.date.three_days')).checked).toBe(true);
     expect(host.querySelector<HTMLInputElement>('input[type="time"]')!.value).toBe('09:00');
@@ -143,7 +145,12 @@ describe('Settings > Follow-ups', () => {
   });
 
   it('a later save carries the version it read', async () => {
-    state.query = ok(settings({ rowVersion: 5, updateWhen: { none: true, overdue: false, today: false, future: false } }));
+    state.query = ok(
+      settings({
+        rowVersion: 5,
+        updateWhen: { none: true, overdue: false, today: false, future: false },
+      }),
+    );
     await mountScreen();
     await click(sw(label('settings.followUps.when.future')));
     await click(btn(label('settings.save')));

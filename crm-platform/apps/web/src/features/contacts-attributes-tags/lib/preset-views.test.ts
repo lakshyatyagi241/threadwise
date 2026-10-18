@@ -117,7 +117,8 @@ describe('the follow-up views (BL-291)', () => {
   it('are offered only once some contact has a follow-up, and never as quick chips', () => {
     const follow = ['followUpToday', 'followUpOverdue', 'followUpSomeday'];
     for (const p of follow) expect(QUICK_PRESETS).not.toContain(p);
-    for (const p of follow) expect(availablePresets(PRESET_VIEWS, true, true, false)).not.toContain(p);
+    for (const p of follow)
+      expect(availablePresets(PRESET_VIEWS, true, true, false)).not.toContain(p);
     for (const p of follow) expect(availablePresets(PRESET_VIEWS, true, true, true)).toContain(p);
     expect(availablePresets(PRESET_VIEWS, true, true, false)).toHaveLength(PRESET_VIEWS.length - 3);
   });

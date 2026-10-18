@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import type { RecordScope, FollowUpResult, FollowUpSettingsValues, NextFollowUp } from '@crm/contracts';
+import type {
+  RecordScope,
+  FollowUpResult,
+  FollowUpSettingsValues,
+  NextFollowUp,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
@@ -54,7 +59,11 @@ export class FollowUpService {
     const now = new Date();
     const tz = await this.tasks.workspaceZone(tx, orgId);
     const open = await this.tasks.openFollowUp(tx, orgId, contactId);
-    const state = followUpState(open === undefined ? undefined : open.dueAt, now, dayEndOf(now, tz));
+    const state = followUpState(
+      open === undefined ? undefined : open.dueAt,
+      now,
+      dayEndOf(now, tz),
+    );
     if (!updatesWhen(cfg, state)) return;
     const plan = plannedFollowUp(cfg, now, tz);
     if (plan.kind === 'none') {
@@ -149,4 +158,3 @@ export class FollowUpService {
     return ref;
   }
 }
-

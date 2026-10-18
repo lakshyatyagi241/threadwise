@@ -11,7 +11,11 @@ import type {
 } from '@crm/contracts';
 import { Alert, Input, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { LEAD_HANDLING_KEYS, leadHandlingApi, useLeadHandlingSettings } from '../../api/lead-handling';
+import {
+  LEAD_HANDLING_KEYS,
+  leadHandlingApi,
+  useLeadHandlingSettings,
+} from '../../api/lead-handling';
 import {
   RadioRow,
   SettingsFrame,
@@ -25,7 +29,11 @@ import {
 /** The preset choices of the default date; "custom" is any number of days that is not one of the presets. */
 export type DateChoice = 'day' | 'three_days' | 'week' | 'month' | 'custom' | 'someday' | 'none';
 
-const PRESET_DAYS: Record<'day' | 'three_days' | 'week', number> = { day: 1, three_days: 3, week: 7 };
+const PRESET_DAYS: Record<'day' | 'three_days' | 'week', number> = {
+  day: 1,
+  three_days: 3,
+  week: 7,
+};
 
 export function choiceOf(d: FollowUpDefaultDate): DateChoice {
   if (d.kind === 'month') return 'month';
@@ -55,7 +63,11 @@ export function dateOf(choice: DateChoice, customDays: number): FollowUpDefaultD
 }
 
 export function valuesOf(s: FollowUpSettings | FollowUpSettingsValues): FollowUpSettingsValues {
-  return { updateWhen: { ...s.updateWhen }, defaultDate: { ...s.defaultDate }, defaultTime: s.defaultTime };
+  return {
+    updateWhen: { ...s.updateWhen },
+    defaultDate: { ...s.defaultDate },
+    defaultTime: s.defaultTime,
+  };
 }
 
 export const sameFollowUps = (a: FollowUpSettingsValues, b: FollowUpSettingsValues): boolean =>
@@ -171,9 +183,21 @@ function Body({
     >
       <SettingsSection title={tf('when.title')} intro={tf('when.intro')}>
         <ToggleRow label={tf('when.none')} checked={form.updateWhen.none} onChange={when('none')} />
-        <ToggleRow label={tf('when.overdue')} checked={form.updateWhen.overdue} onChange={when('overdue')} />
-        <ToggleRow label={tf('when.today')} checked={form.updateWhen.today} onChange={when('today')} />
-        <ToggleRow label={tf('when.future')} checked={form.updateWhen.future} onChange={when('future')} />
+        <ToggleRow
+          label={tf('when.overdue')}
+          checked={form.updateWhen.overdue}
+          onChange={when('overdue')}
+        />
+        <ToggleRow
+          label={tf('when.today')}
+          checked={form.updateWhen.today}
+          onChange={when('today')}
+        />
+        <ToggleRow
+          label={tf('when.future')}
+          checked={form.updateWhen.future}
+          onChange={when('future')}
+        />
       </SettingsSection>
 
       <SettingsSection title={tf('date.title')} intro={tf('date.intro')}>

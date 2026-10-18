@@ -138,12 +138,29 @@ describe('the settings document', () => {
     expect(got).toMatchObject({ rowVersion: 1, updateWhen: { none: true } });
     const body = { ...FOLLOW_UP_DEFAULTS };
     expect((await api.as(t.admin).put(url).send(body)).status).toBe(409);
-    expect((await api.as(t.admin).put(url).send({ ...body, rowVersion: 9 })).status).toBe(409);
     expect(
-      (await api.as(t.admin).put(url).send({ ...body, defaultDate: { kind: 'days', days: 400 }, rowVersion: 1 })).status,
+      (
+        await api
+          .as(t.admin)
+          .put(url)
+          .send({ ...body, rowVersion: 9 })
+      ).status,
+    ).toBe(409);
+    expect(
+      (
+        await api
+          .as(t.admin)
+          .put(url)
+          .send({ ...body, defaultDate: { kind: 'days', days: 400 }, rowVersion: 1 })
+      ).status,
     ).toBe(422);
     expect(
-      (await api.as(t.admin).put(url).send({ ...body, defaultTime: '25:61', rowVersion: 1 })).status,
+      (
+        await api
+          .as(t.admin)
+          .put(url)
+          .send({ ...body, defaultTime: '25:61', rowVersion: 1 })
+      ).status,
     ).toBe(422);
     const audit = await h.owner.query(
       `SELECT action, delta FROM audit_log WHERE org_id = $1 AND module = 'lead_followup_settings' ORDER BY id`,
@@ -155,9 +172,18 @@ describe('the settings document', () => {
 
   it('needs admin.settings.manage, and is private to the workspace', async () => {
     const m = await api.member(t, 'ed', [['record.contacts.update']]);
-    expect((await api.as(m.token).put(url).send({ ...FOLLOW_UP_DEFAULTS, rowVersion: 1 })).status).toBe(403);
+    expect(
+      (
+        await api
+          .as(m.token)
+          .put(url)
+          .send({ ...FOLLOW_UP_DEFAULTS, rowVersion: 1 })
+      ).status,
+    ).toBe(403);
     const other = await api.signup('fus2');
-    expect((await api.as(other.admin).get('/v2/lead-handling/settings')).body.followUps).toMatchObject({
+    expect(
+      (await api.as(other.admin).get('/v2/lead-handling/settings')).body.followUps,
+    ).toMatchObject({
       rowVersion: null,
       updateWhen: { none: false },
     });
@@ -187,14 +213,21 @@ describe('the four situations', () => {
     await touchAs(t, c.id);
     const rows = await followUps(c.id, 'Asia/Kolkata');
     expect(rows).toHaveLength(1);
-    expect(rows[0]).toMatchObject({ status: 'open', source: 'auto', kind: 'follow_up', clock: '09:00', day_offset: 3 });
+    expect(rows[0]).toMatchObject({
+      status: 'open',
+      source: 'auto',
+      kind: 'follow_up',
+      clock: '09:00',
+      day_offset: 3,
+    });
     expect(rows[0]!.assignee_id).toBe(t.adminUserId);
     const contact = (await api.as(t.admin).get(`/v2/contacts/${c.id}`)).body;
     expect(contact.nextFollowUp).toMatchObject({ id: rows[0]!.uuid });
     expect(new Date(contact.nextFollowUp.dueAt).getTime()).toBe(rows[0]!.due_at!.getTime());
     const tasks = await api.as(t.admin).get('/v2/tasks?limit=100');
     expect(
-      (tasks.body.data as Array<{ id: string; kind: string }>).find((x) => x.id === rows[0]!.uuid)?.kind,
+      (tasks.body.data as Array<{ id: string; kind: string }>).find((x) => x.id === rows[0]!.uuid)
+        ?.kind,
     ).toBe('follow_up');
   });
 
@@ -202,14 +235,20 @@ describe('the four situations', () => {
     const c = await create(t);
     await touchAs(t, c.id);
     const first = (await followUps(c.id))[0]!;
-    const audits = await h.owner.query(`SELECT count(*)::int AS n FROM audit_log WHERE org_id = $1 AND module = 'tasks'`, [t.orgId]);
+    const audits = await h.owner.query(
+      `SELECT count(*)::int AS n FROM audit_log WHERE org_id = $1 AND module = 'tasks'`,
+      [t.orgId],
+    );
     await touchAs(t, c.id);
     await touchAs(t, c.id);
     const rows = await followUps(c.id);
     expect(rows).toHaveLength(1);
     expect(rows[0]).toMatchObject({ uuid: first.uuid });
     expect(rows[0]!.due_at!.getTime()).toBe(first.due_at!.getTime());
-    const after = await h.owner.query(`SELECT count(*)::int AS n FROM audit_log WHERE org_id = $1 AND module = 'tasks'`, [t.orgId]);
+    const after = await h.owner.query(
+      `SELECT count(*)::int AS n FROM audit_log WHERE org_id = $1 AND module = 'tasks'`,
+      [t.orgId],
+    );
     expect(after.rows[0].n).toBe(audits.rows[0].n);
   });
 
@@ -236,8 +275,12 @@ describe('the four situations', () => {
       const others: When = { none: true, overdue: true, today: true, future: true, [key]: false };
       await settings(t, { when: others });
       await touchAs(t, c.id);
-      expect((await open(c.id))[0]!.due_at!.getTime(), 'the option is off').toBe(before.due_at!.getTime());
-      await settings(t, { when: { none: false, overdue: false, today: false, future: false, [key]: true } });
+      expect((await open(c.id))[0]!.due_at!.getTime(), 'the option is off').toBe(
+        before.due_at!.getTime(),
+      );
+      await settings(t, {
+        when: { none: false, overdue: false, today: false, future: false, [key]: true },
+      });
       await touchAs(t, c.id);
       const after = await open(c.id, 'Asia/Kolkata');
       expect(after, 'the option is on').toHaveLength(1);
@@ -248,7 +291,10 @@ describe('the four situations', () => {
   );
 
   it('an existing follow-up keeps its person; a new one belongs to whoever got in touch when the contact has no owner', async () => {
-    const asha = await api.member(t, 'asha', [['record.contacts.update'], ['record.contacts.read']]);
+    const asha = await api.member(t, 'asha', [
+      ['record.contacts.update'],
+      ['record.contacts.read'],
+    ]);
     const c = await create(t, { ownerId: null });
     await touchAs(t, c.id, asha.userId);
     expect((await open(c.id))[0]!.assignee_id).toBe(asha.userId);
@@ -271,13 +317,23 @@ describe('the default date and the alert time', () => {
     [{ kind: 'days', days: 1 }, 1],
     [{ kind: 'days', days: 7 }, 7],
     [{ kind: 'days', days: 12 }, 12],
-  ] as const)('%j is that many days later at the chosen time, in the workspace zone', async (defaultDate, offset) => {
-    await settings(t, { when: { none: true }, defaultDate: { ...defaultDate }, defaultTime: '17:45' });
-    const c = await create(t);
-    await touchAs(t, c.id);
-    expect((await open(c.id, 'America/New_York'))[0]).toMatchObject({ day_offset: offset, clock: '17:45' });
-    await settings(t, { when: { none: true }, defaultDate: { kind: 'days', days: 3 } });
-  });
+  ] as const)(
+    '%j is that many days later at the chosen time, in the workspace zone',
+    async (defaultDate, offset) => {
+      await settings(t, {
+        when: { none: true },
+        defaultDate: { ...defaultDate },
+        defaultTime: '17:45',
+      });
+      const c = await create(t);
+      await touchAs(t, c.id);
+      expect((await open(c.id, 'America/New_York'))[0]).toMatchObject({
+        day_offset: offset,
+        clock: '17:45',
+      });
+      await settings(t, { when: { none: true }, defaultDate: { kind: 'days', days: 3 } });
+    },
+  );
 
   it('one month later is the same day of the next month', async () => {
     await settings(t, { when: { none: true }, defaultDate: { kind: 'month' } });
@@ -369,14 +425,20 @@ describe('by hand', () => {
     expect(moved.body.nextFollowUp).toMatchObject({ id: set.body.nextFollowUp.id, dueAt: null });
     expect(await open(c.id)).toHaveLength(1);
 
-    const snoozed = await api.as(t.admin).post(`/v2/contacts/${c.id}/follow-up/snooze`).send({ preset: 'week' });
+    const snoozed = await api
+      .as(t.admin)
+      .post(`/v2/contacts/${c.id}/follow-up/snooze`)
+      .send({ preset: 'week' });
     expect(snoozed.status, JSON.stringify(snoozed.body)).toBe(200);
     expect((await open(c.id, 'Asia/Kolkata'))[0]).toMatchObject({ day_offset: 7, clock: '09:00' });
 
     const done = await api.as(t.admin).post(`/v2/contacts/${c.id}/follow-up/done`).send({});
     expect(done.body).toEqual({ nextFollowUp: null });
     expect((await followUps(c.id))[0]!.status).toBe('done');
-    expect(((await api.as(t.admin).get(`/v2/contacts/${c.id}`)).body as { nextFollowUp: unknown }).nextFollowUp).toBeNull();
+    expect(
+      ((await api.as(t.admin).get(`/v2/contacts/${c.id}`)).body as { nextFollowUp: unknown })
+        .nextFollowUp,
+    ).toBeNull();
 
     await api.as(t.admin).put(`/v2/contacts/${c.id}/follow-up`).send({ dueAt: in5() });
     const cleared = await api.as(t.admin).delete(`/v2/contacts/${c.id}/follow-up`);
@@ -386,21 +448,36 @@ describe('by hand', () => {
 
   it('snoozing a contact without a follow-up is 404; an unknown contact is 404', async () => {
     const c = await create(t);
-    expect((await api.as(t.admin).post(`/v2/contacts/${c.id}/follow-up/snooze`).send({ preset: 'day' })).status).toBe(404);
     expect(
-      (await api.as(t.admin).put(`/v2/contacts/00000000-0000-4000-8000-000000000009/follow-up`).send({ dueAt: in5() })).status,
+      (await api.as(t.admin).post(`/v2/contacts/${c.id}/follow-up/snooze`).send({ preset: 'day' }))
+        .status,
+    ).toBe(404);
+    expect(
+      (
+        await api
+          .as(t.admin)
+          .put(`/v2/contacts/00000000-0000-4000-8000-000000000009/follow-up`)
+          .send({ dueAt: in5() })
+      ).status,
     ).toBe(404);
   });
 
   it('a new follow-up needs permission to create tasks; moving an existing one does not', async () => {
-    const m = await api.member(t, 'noTasks', [['record.contacts.read'], ['record.contacts.update']]);
+    const m = await api.member(t, 'noTasks', [
+      ['record.contacts.read'],
+      ['record.contacts.update'],
+    ]);
     const c = await create(t);
-    expect((await api.as(m.token).put(`/v2/contacts/${c.id}/follow-up`).send({ dueAt: in5() })).status).toBe(403);
+    expect(
+      (await api.as(m.token).put(`/v2/contacts/${c.id}/follow-up`).send({ dueAt: in5() })).status,
+    ).toBe(403);
     await api.as(t.admin).put(`/v2/contacts/${c.id}/follow-up`).send({ dueAt: in5() });
-    expect((await api.as(m.token).put(`/v2/contacts/${c.id}/follow-up`).send({ dueAt: null })).status).toBe(200);
+    expect(
+      (await api.as(m.token).put(`/v2/contacts/${c.id}/follow-up`).send({ dueAt: null })).status,
+    ).toBe(200);
   });
 
-  it('a member limited to their own contacts cannot reach someone else\'s follow-up', async () => {
+  it("a member limited to their own contacts cannot reach someone else's follow-up", async () => {
     const m = await api.member(t, 'own', [
       ['record.contacts.read', 'own'],
       ['record.contacts.update', 'own'],
@@ -422,7 +499,9 @@ describe('by hand', () => {
     const other = await api.signup('fuh2');
     const c = await create(t);
     await api.as(t.admin).put(`/v2/contacts/${c.id}/follow-up`).send({ dueAt: in5() });
-    expect((await api.as(other.admin).post(`/v2/contacts/${c.id}/follow-up/done`).send({})).status).toBe(404);
+    expect(
+      (await api.as(other.admin).post(`/v2/contacts/${c.id}/follow-up/done`).send({})).status,
+    ).toBe(404);
     expect(await open(c.id)).toHaveLength(1);
   });
 });
@@ -441,7 +520,11 @@ describe('finding contacts by follow-up', () => {
     const someday = await mk(null);
     const none = await mk('none');
     const ids = async (state: string) =>
-      ((await api.as(t.admin).get(`/v2/contacts?followUp=${state}&limit=100`)).body.data as Array<{ id: string }>)
+      (
+        (await api.as(t.admin).get(`/v2/contacts?followUp=${state}&limit=100`)).body.data as Array<{
+          id: string;
+        }>
+      )
         .map((c) => c.id)
         .sort();
     expect(await ids('overdue')).toEqual([overdue]);
@@ -450,7 +533,9 @@ describe('finding contacts by follow-up', () => {
     expect(await ids('someday')).toEqual([someday]);
     expect(await ids('none')).toEqual([none]);
     expect((await api.as(t.admin).get('/v2/contacts?followUp=bogus')).status).toBe(422);
-    const stats = (await api.as(t.admin).get('/v2/contacts/stats')).body as { withFollowUp: number };
+    const stats = (await api.as(t.admin).get('/v2/contacts/stats')).body as {
+      withFollowUp: number;
+    };
     expect(stats.withFollowUp).toBe(4);
     const bulk = await api
       .as(t.admin)

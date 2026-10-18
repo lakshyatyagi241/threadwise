@@ -18,7 +18,7 @@ import { isoToZonedLocal, zonedLocalToIso } from '../../lib/meeting-time';
 import { CheckIcon } from '../icons';
 
 /** Overdue: dated and before now. A "someday" follow-up has no date and is never overdue. */
-export function isOverdue(f: NextFollowUp, now = Date.now()): boolean {
+export function isOverdue(f: { dueAt: string | null }, now = Date.now()): boolean {
   return f.dueAt !== null && new Date(f.dueAt).getTime() < now;
 }
 
@@ -28,7 +28,10 @@ function useFollowUpActions(contactId: string) {
   const { toast } = useToast();
   const qc = useQueryClient();
   const after = async (message: string) => {
-    await Promise.all([invalidateContacts(qc), qc.invalidateQueries({ queryKey: KEYS.contact(contactId) })]);
+    await Promise.all([
+      invalidateContacts(qc),
+      qc.invalidateQueries({ queryKey: KEYS.contact(contactId) }),
+    ]);
     toast(message, 'success');
   };
   const failed = () => toast(t('failed'), 'danger');
@@ -53,7 +56,13 @@ function useFollowUpActions(contactId: string) {
     onSuccess: () => after(t('clearedMessage')),
     onError: failed,
   });
-  return { set, snooze, done, clear, busy: set.isPending || snooze.isPending || done.isPending || clear.isPending };
+  return {
+    set,
+    snooze,
+    done,
+    clear,
+    busy: set.isPending || snooze.isPending || done.isPending || clear.isPending,
+  };
 }
 
 /** The date-and-time editor of a follow-up: a wall clock in the workspace's zone, or "someday" (no date). */
@@ -106,9 +115,7 @@ export function FollowUpDialog({
           <Button
             variant="brand"
             disabled={!valid || actions.busy}
-            onClick={() =>
-              actions.set.mutate(iso, { onSuccess: () => onClose() })
-            }
+            onClick={() => actions.set.mutate(iso, { onSuccess: () => onClose() })}
           >
             {actions.busy && <Spinner />}
             {t('save')}
@@ -124,7 +131,13 @@ export function FollowUpDialog({
  * with Done, Snooze (1 day, 3 days, next week) and Change date. Drawn only for a contact that has one: setting the first one is the
  * More menu's "Set follow-up", so a workspace that does not use follow-ups sees nothing new.
  */
-export function NextFollowUpRow({ contactId, followUp }: { contactId: string; followUp: NextFollowUp | null }) {
+export function NextFollowUpRow({
+  contactId,
+  followUp,
+}: {
+  contactId: string;
+  followUp: NextFollowUp | null;
+}) {
   const t = useTranslations('contacts-attributes-tags.leadHandling.followUp');
   const locale = useLocale();
   const { org } = useSession();
@@ -133,7 +146,9 @@ export function NextFollowUpRow({ contactId, followUp }: { contactId: string; fo
   const [editing, setEditing] = useState(false);
   if (!followUp) return null;
   const overdue = isOverdue(followUp);
-  const when = followUp.dueAt ? formatDateTime(followUp.dueAt, locale, org.timezone ?? undefined) : t('somedayLabel');
+  const when = followUp.dueAt
+    ? formatDateTime(followUp.dueAt, locale, org.timezone ?? undefined)
+    : t('somedayLabel');
   return (
     <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm">
       <span className="text-muted-foreground">{t('title')}</span>
@@ -141,21 +156,38 @@ export function NextFollowUpRow({ contactId, followUp }: { contactId: string; fo
       {overdue && <Badge tone="danger">{t('overdue')}</Badge>}
       {canUpdate && (
         <span className="ms-auto flex items-center gap-1">
-          <Button size="sm" variant="secondary" disabled={actions.busy} onClick={() => actions.done.mutate()}>
+          <Button
+            size="sm"
+            variant="secondary"
+            disabled={actions.busy}
+            onClick={() => actions.done.mutate()}
+          >
             <CheckIcon className="size-3.5" /> {t('done')}
           </Button>
           <Menu label={t('snooze')} trigger={<span>{t('snooze')}</span>}>
             <MenuItem onSelect={() => actions.snooze.mutate('day')}>{t('snoozeDay')}</MenuItem>
-            <MenuItem onSelect={() => actions.snooze.mutate('three_days')}>{t('snoozeThreeDays')}</MenuItem>
+            <MenuItem onSelect={() => actions.snooze.mutate('three_days')}>
+              {t('snoozeThreeDays')}
+            </MenuItem>
             <MenuItem onSelect={() => actions.snooze.mutate('week')}>{t('snoozeWeek')}</MenuItem>
           </Menu>
-          <Button size="sm" variant="secondary" disabled={actions.busy} onClick={() => setEditing(true)}>
+          <Button
+            size="sm"
+            variant="secondary"
+            disabled={actions.busy}
+            onClick={() => setEditing(true)}
+          >
             {t('change')}
           </Button>
         </span>
       )}
       {editing && (
-        <FollowUpDialog contactId={contactId} current={followUp} open onClose={() => setEditing(false)} />
+        <FollowUpDialog
+          contactId={contactId}
+          current={followUp}
+          open
+          onClose={() => setEditing(false)}
+        />
       )}
     </div>
   );
@@ -173,11 +205,15 @@ export function FollowUpCell({
 }) {
   const t = useTranslations('contacts-attributes-tags.leadHandling.followUp');
   if (!followUp) return <span className="text-muted-foreground">-</span>;
-  if (followUp.dueAt === null) return <span className="text-muted-foreground">{t('somedayLabel')}</span>;
-  const overdue = new Date(followUp.dueAt).getTime() < Date.now();
+  if (followUp.dueAt === null)
+    return <span className="text-muted-foreground">{t('somedayLabel')}</span>;
+  const overdue = isOverdue(followUp);
   const text = formatDateTime(followUp.dueAt, locale, timeZone);
   return (
-    <span className={overdue ? 'font-medium text-danger' : undefined} title={overdue ? t('overdue') : undefined}>
+    <span
+      className={overdue ? 'font-medium text-danger' : undefined}
+      title={overdue ? t('overdue') : undefined}
+    >
       {text}
     </span>
   );
