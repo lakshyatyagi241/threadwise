@@ -14,6 +14,7 @@ import { ContactQuickView, QuickTabs } from '../contact-quick-view';
 import { NOTE_KEYS } from '../../api/notes';
 import { pageTabs, quickTabs } from '../../lib/sections';
 import { ContactTabs } from '../contact-detail';
+import { ContactSection } from './sections';
 import { ComplianceBody, LocationBody, SubscriptionBody } from './cards';
 import { OptInPill, ScoreRing, SocialIcons } from './parts';
 
@@ -284,5 +285,36 @@ describe('QuickTabs', () => {
     );
     expect(out).toContain('role="tablist"');
     expect(out).not.toMatch(/\b(?:ml|mr|pl|pr)-\d/);
+  });
+});
+
+describe('details section: lifecycle history', () => {
+  it('shows since when the contact is in its stage, the stage before it, and the last update', () => {
+    const out = renderAccount(
+      <ContactSection
+        section="details"
+        variant="page"
+        contact={contact({
+          lifecycleStage: 'lead',
+          lifecycleStageDate: '2026-02-01T09:30:00.000Z',
+          previousLifecycleStage: 'new',
+          previousLifecycleStageDate: '2026-01-15T08:00:00.000Z',
+          lostReason: 'Budget',
+          updatedAt: '2026-03-06T12:00:00.000Z',
+        })}
+      />,
+      { session: can('record.contacts.read') },
+    );
+    for (const label of [
+      'In this stage since',
+      'Previous stage',
+      'Previous stage since',
+      'Lost reason',
+      'Last updated',
+    ])
+      expect(out).toContain(label);
+    expect(out).toContain('Budget');
+    expect(out).toContain('Feb 1, 2026');
+    expect(out).toContain('Jan 15, 2026');
   });
 });

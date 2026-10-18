@@ -1,5 +1,5 @@
 // #47 Constraint audit: PKs, tenant-composite keys, FKs, RLS, enum-like columns, public ids.
-import { expectNone } from '../lib/core.mjs';
+import { expectNone, unreviewed } from '../lib/core.mjs';
 import { buildSchema, isTenant } from '../lib/schema.mjs';
 
 export default {
@@ -58,7 +58,7 @@ export default {
       expectNone(
         'con-pk-org',
         'Tenant table primary keys include org_id (partition/RLS key)',
-        f.pkNoOrg,
+        unreviewed(47, f.pkNoOrg),
         { level: 'warn' },
       ),
       expectNone(
@@ -70,9 +70,14 @@ export default {
       expectNone('con-rls', 'Every tenant table has RLS enabled AND forced', f.noRls, {
         severity: 'critical',
       }),
-      expectNone('con-org-fk', 'Every tenant table references organizations(id)', f.noOrgFk, {
-        level: 'warn',
-      }),
+      expectNone(
+        'con-org-fk',
+        'Every tenant table references organizations(id)',
+        unreviewed(47, f.noOrgFk),
+        {
+          level: 'warn',
+        },
+      ),
       expectNone(
         'con-enum',
         'Enum-like text columns (status/type/kind...) are constrained',
@@ -82,7 +87,7 @@ export default {
       expectNone(
         'con-org-notnull',
         'org_id is NOT NULL on tenant tables (nullable = global rows: confirm the RLS policy hides them from tenants)',
-        f.nullableOrg,
+        unreviewed(47, f.nullableOrg),
         { level: 'warn' },
       ),
     ];

@@ -613,7 +613,9 @@
         "campaign": "קמפיין",
         "adset": "קבוצת מודעות",
         "ad": "מודעה",
-        "form": "טופס"
+        "form": "טופס",
+        "channel": "ערוץ",
+        "moduleType": "סוג מודול"
       },
       "capturedAt": "נלכד",
       "openSource": "פתח את מקור הליד"

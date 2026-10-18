@@ -406,7 +406,9 @@
         "campaign": "广告系列",
         "adset": "广告组",
         "ad": "广告",
-        "form": "表单"
+        "form": "表单",
+        "channel": "渠道",
+        "moduleType": "模块类型"
       },
       "capturedAt": "捕获时间",
       "openSource": "打开线索来源"

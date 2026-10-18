@@ -234,12 +234,22 @@ export class AiCrmCopilotService {
   private async resolveProvider(
     orgId: number,
   ): Promise<{ provider: string; model: string; key: string; source: 'workspace' | 'admin' } | null> {
+    // Each vendor is resolved at most once: the second pass (the platform's key) reuses what the first pass already read.
+    const resolved = new Map<string, Awaited<ReturnType<typeof this.keys.resolve>>>();
+    const resolve = async (provider: (typeof PROVIDER_PRIORITY_ORDER)[number]) => {
+      let r = resolved.get(provider);
+      if (!r) {
+        r = await this.keys.resolve(orgId, provider);
+        resolved.set(provider, r);
+      }
+      return r;
+    };
     for (const provider of PROVIDER_PRIORITY_ORDER) {
-      const r = await this.keys.resolve(orgId, provider);
+      const r = await resolve(provider);
       if (r.key && r.source === 'workspace') return { provider, model: r.model ?? this.defaultModel(provider), key: r.key, source: 'workspace' };
     }
     for (const provider of PROVIDER_PRIORITY_ORDER) {
-      const r = await this.keys.resolve(orgId, provider);
+      const r = await resolve(provider);
       if (r.key) return { provider, model: r.model ?? this.defaultModel(provider), key: r.key, source: 'admin' };
     }
     return null;

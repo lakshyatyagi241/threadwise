@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. Zustimmungsbildschirm",
-              "body": "Fügen Sie die Bereiche hinzu, die das Produkt anfordert (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), und veröffentlichen Sie dann die App: Im Testmodus beendet Google jede Freigabe nach 7 Tagen, und Workspaces müssen sich neu verbinden. Die Drive-Bereiche sind eingeschränkt und erfordern die Prüfung durch Google."
+              "body": "Fügen Sie die Bereiche hinzu, die das Produkt anfordert (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), und veröffentlichen Sie dann die App: Im Testmodus beendet Google jede Freigabe nach 7 Tagen, und Workspaces müssen sich neu verbinden. Die Drive-Bereiche sind eingeschränkt und erfordern die Prüfung durch Google."
             },
             "workspaces": {
               "title": "4. Workspaces verbinden sich",

@@ -168,7 +168,9 @@ export function buildFaqDocs(a: FaqInput): FaqDoc[] {
     const botid = str(v.botid);
     if (botid === null) continue; // faq_replies quarantines it NO_BOT_ID
     const qid = str(v.qid) ?? `var:${primaryKey(v)}`;
-    const k = groups.has(gkey(botid, qid)) ? gkey(botid, qid) : (byJourney.get(gkey(botid, qid)) ?? gkey(botid, qid));
+    const k = groups.has(gkey(botid, qid))
+      ? gkey(botid, qid)
+      : (byJourney.get(gkey(botid, qid)) ?? gkey(botid, qid));
     const g = groups.get(k) ?? { botid, qid, records: [], vdocs: [] };
     g.vdocs.push(v);
     groups.set(k, g);
@@ -184,7 +186,21 @@ export function buildFaqDocs(a: FaqInput): FaqDoc[] {
     };
 
     const owner = a.owner(g.botid);
-    if (!owner.ok) stop('NO_OWNER_FLOW', `its bot has no flow to own the FAQ (${owner.code}): ${owner.reason}`);
+    if (!owner.ok)
+      stop('NO_OWNER_FLOW', `its bot has no flow to own the FAQ (${owner.code}): ${owner.reason}`);
+
+    // a question made of Intent records only is a trigger phrase of the bot (the flow's trigger and the paused keyword replies already
+    // carry it); it is still an FAQ here (it starts the flow), so the report names it: the owner decides whether to keep it
+    if (
+      g.records.length > 0 &&
+      g.records.every((r) => (str(r.type) ?? '').toLowerCase() === 'intent')
+    )
+      soft.push({
+        code: 'INTENT_ONLY',
+        reason:
+          'every source record of this FAQ is an Intent (a trigger phrase of the bot), not an FAQ record: it became a paused FAQ that starts the flow. Delete it on the FAQ screen when the phrase should only trigger the flow',
+        detail: g.records.length,
+      });
 
     // the question: the first non-empty `question` (else `query`) of the records; the other strings are extra phrasings
     const asked: string[] = [];
@@ -208,11 +224,15 @@ export function buildFaqDocs(a: FaqInput): FaqDoc[] {
           : 'the Intent / FAQ record has no question text',
       );
     else if (question.length > FAQ_LIMITS.question)
-      stop('QUESTION_TOO_LONG', `the question is longer than ${FAQ_LIMITS.question} characters, which the application refuses`);
+      stop(
+        'QUESTION_TOO_LONG',
+        `the question is longer than ${FAQ_LIMITS.question} characters, which the application refuses`,
+      );
     if (g.records.length > 1)
       soft.push({
         code: 'RECORDS_MERGED',
-        reason: 'several Intent / FAQ records share this qid: one FAQ, the first question is the question, the others are variations',
+        reason:
+          'several Intent / FAQ records share this qid: one FAQ, the first question is the question, the others are variations',
         detail: g.records.length,
       });
 
@@ -231,7 +251,10 @@ export function buildFaqDocs(a: FaqInput): FaqDoc[] {
           detail: red.n,
         });
       if (answerText.length > FAQ_LIMITS.answerText)
-        stop('ANSWER_TOO_LONG', `the answer is longer than ${FAQ_LIMITS.answerText} characters, which the application refuses (never cut)`);
+        stop(
+          'ANSWER_TOO_LONG',
+          `the answer is longer than ${FAQ_LIMITS.answerText} characters, which the application refuses (never cut)`,
+        );
       if (ans.buttons + ans.other + ans.media > 0)
         soft.push({
           code: 'ANSWER_PARTS_LOST',
@@ -242,7 +265,8 @@ export function buildFaqDocs(a: FaqInput): FaqDoc[] {
       if (ans.journey !== null)
         soft.push({
           code: 'ANSWER_ALSO_FLOW',
-          reason: 'the record has an inline answer and a journey; the inline answer is used and the journey is not linked',
+          reason:
+            'the record has an inline answer and a journey; the inline answer is used and the journey is not linked',
           detail: ans.journey,
         });
     } else if (ans.journey !== null) {
@@ -254,7 +278,10 @@ export function buildFaqDocs(a: FaqInput): FaqDoc[] {
         detail: ans.journey,
       });
     } else {
-      stop('NO_ANSWER', 'the record has neither an inline answer (response) nor a journey, so there is nothing to answer with');
+      stop(
+        'NO_ANSWER',
+        'the record has neither an inline answer (response) nor a journey, so there is nothing to answer with',
+      );
     }
 
     // the variations: the question itself (as the application keeps it), the other questions, then the faq_variations phrases
@@ -281,7 +308,11 @@ export function buildFaqDocs(a: FaqInput): FaqDoc[] {
       add(question, 'question');
       for (const t of asked.slice(1)) add(t, 'import');
       for (const v of g.vdocs)
-        for (const p of Array.isArray(v.phrases) ? v.phrases : typeof v.phrases === 'string' ? [v.phrases] : [])
+        for (const p of Array.isArray(v.phrases)
+          ? v.phrases
+          : typeof v.phrases === 'string'
+            ? [v.phrases]
+            : [])
           if (typeof p === 'string') add(tidy(p), 'import');
       if (tooLong > 0)
         soft.push({
@@ -317,7 +348,8 @@ export function buildFaqDocs(a: FaqInput): FaqDoc[] {
     if (display)
       soft.push({
         code: 'DATE_ZONE_ASSUMED',
-        reason: 'dates written as "dd Mon, yyyy h:mm:ss AM" carry no time zone: they were read as UTC',
+        reason:
+          'dates written as "dd Mon, yyyy h:mm:ss AM" carry no time zone: they were read as UTC',
       });
     const min = created.length ? new Date(Math.min(...created.map((x) => x.getTime()))) : null;
     const max = updated.length ? new Date(Math.max(...updated.map((x) => x.getTime()))) : min;
@@ -370,10 +402,11 @@ export function buildFaqDocs(a: FaqInput): FaqDoc[] {
       });
       // the application keeps exactly one `question` variation, equal to the question: the numbered text takes that place
       const rest = d.variations.filter((v) => v.source !== 'question');
-      d.variations = [{ text: next, source: 'question' }, { text: q, source: 'import' }, ...rest.filter((v) => v.text.toLowerCase() !== q.toLowerCase())].slice(
-        0,
-        FAQ_LIMITS.variationsPerFaq,
-      );
+      d.variations = [
+        { text: next, source: 'question' },
+        { text: q, source: 'import' },
+        ...rest.filter((v) => v.text.toLowerCase() !== q.toLowerCase()),
+      ].slice(0, FAQ_LIMITS.variationsPerFaq);
       q = next;
       d.question = next;
     }

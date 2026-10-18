@@ -10,6 +10,7 @@ import { googleRequest } from '../appointments-booking/google-transport';
 import {
   GoogleAccountError,
   type DocGenerate,
+  type FormResponseItem,
   type GoogleAccessTokens,
   type GoogleFileItem,
   type GoogleFileKind,
@@ -21,6 +22,9 @@ import {
 } from './google-workspace.port';
 
 const enc = encodeURIComponent;
+
+/** Most submissions one poll reads for a form; a busier form catches up over the next polls. */
+const FORM_RESPONSES_MAX = 200;
 
 /**
  * A Google file id is letters, digits, `_` and `-`. A flow author types or pastes the id, and it goes into a fixed Google URL: anything else
@@ -246,6 +250,56 @@ export class HttpGoogleWorkspace implements GoogleWorkspacePort {
       throw new GoogleAccountError('GOOGLE_NOT_FOUND', 'The form has no responder link', 'forms');
     }
     return { url: f.responderUri };
+  }
+
+  async formResponses(orgId: number, formId: string, since: Date): Promise<FormResponseItem[]> {
+    const id = fileId(formId, 'forms');
+    // Question ids mean nothing to a flow author: the answers are keyed by the question's title, as the form shows it.
+    const form = await this.call<{
+      items?: Array<{ title?: string; questionItem?: { question?: { questionId?: string } } }>;
+    }>(orgId, 'forms', `${apis().forms}/${id}`);
+    const titles = new Map<string, string>();
+    for (const it of form.items ?? []) {
+      const qid = it.questionItem?.question?.questionId;
+      if (qid) titles.set(qid, it.title ?? qid);
+    }
+    type Raw = {
+      responseId?: string;
+      createTime?: string;
+      lastSubmittedTime?: string;
+      respondentEmail?: string;
+      answers?: Record<string, { textAnswers?: { answers?: Array<{ value?: string }> } }>;
+    };
+    const out: FormResponseItem[] = [];
+    let page = '';
+    for (let n = 0; n < 4 && out.length < FORM_RESPONSES_MAX; n++) {
+      const filter = enc(`timestamp >= ${since.toISOString()}`);
+      const r = await this.call<{ responses?: Raw[]; nextPageToken?: string }>(
+        orgId,
+        'forms',
+        `${apis().forms}/${id}/responses?pageSize=100&filter=${filter}${page ? `&pageToken=${enc(page)}` : ''}`,
+      );
+      for (const x of r.responses ?? []) {
+        const at = new Date(x.lastSubmittedTime ?? x.createTime ?? '');
+        if (!x.responseId || Number.isNaN(at.getTime())) continue;
+        const answers: Record<string, string | string[]> = {};
+        for (const [qid, a] of Object.entries(x.answers ?? {})) {
+          const values = (a.textAnswers?.answers ?? []).map((v) => String(v.value ?? ''));
+          answers[titles.get(qid) ?? qid] = values.length === 1 ? values[0]! : values;
+        }
+        out.push({
+          responseId: x.responseId,
+          respondent: x.respondentEmail || null,
+          submittedAt: at,
+          answers,
+        });
+      }
+      if (!r.nextPageToken) break;
+      page = r.nextPageToken;
+    }
+    return out
+      .sort((a, b) => a.submittedAt.getTime() - b.submittedAt.getTime())
+      .slice(0, FORM_RESPONSES_MAX);
   }
 
   async createMeet(orgId: number, req: MeetCreate): Promise<{ meetUrl: string; eventId: string }> {

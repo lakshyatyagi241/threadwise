@@ -126,7 +126,12 @@
       "details": {
         "title": "連絡先の詳細",
         "stage": "ライフサイクルステージ",
-        "otherProperties": "その他のプロパティ"
+        "otherProperties": "その他のプロパティ",
+        "stageSince": "このステージになった日時",
+        "previousStage": "前のステージ",
+        "previousStageSince": "前のステージだった日時",
+        "lostReason": "失注理由",
+        "updatedAt": "最終更新"
       },
       "company": {
         "title": "会社",

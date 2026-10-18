@@ -1659,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— escolha uma planilha —",
-              "empty": "Nenhuma planilha encontrada — cole uma URL ou ID abaixo",
               "loading": "Carregando planilhas…",
-              "notConnected": "O Google não está conectado a este espaço de trabalho, então suas planilhas não podem ser listadas. Cole o id ou o link da planilha.",
-              "idPlaceholder": "Id da planilha",
-              "saved": "Planilha {id}… (não carregada)"
+              "saved": "Planilha {id}… (não carregada)",
+              "empty": "Nenhuma planilha encontrada na conta Google conectada",
+              "notConnected": "O Google não está conectado a este workspace, então não é possível listar suas planilhas. Conecte o Google para escolher uma."
             },
             "docs": {
               "pick": "— escolha um documento modelo —",
               "empty": "Nenhum documento encontrado",
               "loading": "Carregando documentos…",
-              "notConnected": "O Google não está conectado a este espaço de trabalho, então seus documentos não podem ser listados. Cole o id ou o link do documento.",
-              "idPlaceholder": "Id do documento",
-              "saved": "Documento {id}… (não carregado)"
+              "saved": "Documento {id}… (não carregado)",
+              "notConnected": "O Google não está conectado a este workspace, então não é possível listar seus documentos. Conecte o Google para escolher um."
             },
             "forms": {
               "pick": "— escolha um formulário —",
               "empty": "Nenhum formulário encontrado",
               "loading": "Carregando formulários…",
-              "notConnected": "O Google não está conectado a este espaço de trabalho, então seus formulários não podem ser listados. Cole o id ou o link do formulário.",
-              "idPlaceholder": "Id do formulário",
-              "saved": "Formulário {id}… (não carregado)"
+              "saved": "Formulário {id}… (não carregado)",
+              "notConnected": "O Google não está conectado a este workspace, então não é possível listar seus formulários. Conecte o Google para escolher um."
             }
           },
           "sheetsIntro": "Adiciona uma linha a uma Planilha Google (modo escrita) ou busca uma linha por uma coluna-chave (modo leitura). Usa a conta Google conectada do espaço de trabalho em <link>/google-account</link>.",
@@ -1701,8 +1698,6 @@
           "addColumn": "Adicionar coluna",
           "matchByHeader": "Corresponder colunas pelo nome do cabeçalho",
           "matchByHeaderHint": "Grava cada valor na coluna da planilha com esse cabeçalho, em qualquer ordem. Deixe desativado para adicionar da esquerda para a direita, pela posição — o padrão.",
-          "pasteLabel": "…ou cole uma URL ou ID de planilha",
-          "pasteHint": "Funciona mesmo se o seletor estiver vazio — cole o link da planilha e extraímos o ID.",
           "docsIntro": "Copie um documento modelo, preencha os <mono>{placeholders}</mono>, compartilhe com qualquer pessoa com o link e envie a URL ao cliente. Coloque <mono>{key}</mono> no seu modelo onde o valor deve ir.",
           "templateDocument": "Documento modelo",
           "newCopyTitle": "Título da nova cópia",
@@ -1717,7 +1712,6 @@
           "messageTemplateHint": "O balão do bot enviado ao cliente. <mono>{token}</mono> recebe o link de compartilhamento.",
           "messageTemplatePlaceholder": "Aqui está o seu documento:\n'{{'doc_url'}}'",
           "saveUrl": "Salvar URL em variável",
-          "formIntro": "Envia a URL do formulário pelo WhatsApp, pausa o fluxo e retoma pela saída <b>enviado</b> quando o cliente o preencher. As respostas viram variáveis do fluxo.",
           "googleForm": "Formulário Google",
           "bodyBubble": "Balão do corpo (enviado acima do link)",
           "bodyBubblePlaceholder": "Preencha este formulário curto:",
@@ -1725,12 +1719,6 @@
           "saveResponsesHint": "As respostas individuais também são salvas como <mono>{token}</mono>.",
           "expireAfter": "Expirar após (segundos)",
           "expireAfterHint": "Quanto tempo esperar por um envio antes do tempo esgotar. 86400 = 24 h.",
-          "setupTitle": "Configuração única — cole isto no editor de Script do seu formulário",
-          "setupOpen": "Abra seu formulário → <mono>menu ⋮</mono> → <mono>Editor de script</mono>",
-          "setupDownload": "<link>Baixe o script (.gs)</link> e cole-o",
-          "setupTrigger": "Adicione um gatilho: <mono>onFormSubmit</mono> · A partir do formulário · Ao enviar o formulário",
-          "setupWarning": "Sem este script, o formulário continuará registrando as respostas no Formulários Google, mas o fluxo não será retomado.",
-          "noListing": "Não é possível listar seus arquivos porque a permissão de lista de arquivos do Drive não foi concedida na página da conta do Google. Cole o link ou o ID.",
           "connection": {
             "open": "Abrir conta do Google",
             "permission": {
@@ -1743,7 +1731,9 @@
             "disconnected": "Nenhuma conta Google está conectada, então esta etapa falha quando o fluxo é executado. Conecte o Google primeiro.",
             "needsReconnect": "O Google não aceita mais a conta conectada, então esta etapa falha quando o fluxo é executado. Reconecte o Google primeiro.",
             "missing": "A conta Google conectada não recebeu a permissão {permission}, então esta etapa falha quando o fluxo é executado."
-          }
+          },
+          "formIntro": "Envia o URL do formulário por WhatsApp, pausa o fluxo e o retoma pela porta <b>submitted</b> quando o cliente preenche o formulário. As respostas são lidas do formulário pela sua conta Google conectada, então não é preciso colar nada no formulário. As respostas viram variáveis do fluxo.",
+          "noListing": "Não foi possível listar seus arquivos porque a permissão de lista de arquivos do Drive não foi concedida na página da conta Google. Adicione-a lá para escolher arquivos."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",

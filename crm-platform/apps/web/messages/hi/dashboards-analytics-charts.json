@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "कनेक्टेड",
           "shopify": "कनेक्टेड",
-          "google_sheets": "API कुंजी जारी की गई",
-          "meta_catalog": "कैटलॉग लिंक किया गया"
+          "meta_catalog": "कैटलॉग लिंक किया गया",
+          "google_sheets": "Google खाता कनेक्ट हो गया"
         },
         "notConnected": "कनेक्ट नहीं है",
         "connect": "कनेक्ट करें",

@@ -1,5 +1,7 @@
+import { sql } from 'drizzle-orm';
 import {
   bigint,
+  check,
   index,
   pgTable,
   primaryKey,
@@ -90,6 +92,12 @@ export const contactMeetings = pgTable(
     startsAt: timestamp('starts_at', { withTimezone: true }),
     endsAt: timestamp('ends_at', { withTimezone: true }),
     location: text('location'),
+    /** 'manual' (typed in) or 'booking' (mirrored from an appointment by the appointments-booking module). */
+    source: text('source').notNull().default('manual'),
+    /** The appointment a 'booking' row mirrors; the foreign key (org_id, appointment_id) sets it NULL when the appointment goes. */
+    appointmentId: idColumn('appointment_id'),
+    /** The web address that joins the call (BL-245); `location` stays for places. */
+    joinUrl: text('join_url'),
     createdBy: idColumn('created_by'),
     rowVersion: rowVersion(),
     createdAt: createdAt(),
@@ -99,6 +107,18 @@ export const contactMeetings = pgTable(
     primaryKey({ columns: [t.orgId, t.id] }),
     uniqueIndex('contact_meetings_org_id_uuid_key').on(t.orgId, t.uuid),
     index('idx_contact_meetings_contact').on(t.orgId, t.contactId, t.startsAt),
+    uniqueIndex('uq_contact_meetings_appointment')
+      .on(t.orgId, t.appointmentId)
+      .where(sql`${t.appointmentId} is not null`),
+    check('ck_contact_meetings_source', sql`${t.source} in ('manual', 'booking')`),
+    check(
+      'ck_contact_meetings_appointment_source',
+      sql`${t.appointmentId} is null or ${t.source} = 'booking'`,
+    ),
+    check(
+      'ck_contact_meetings_join_url',
+      sql`${t.joinUrl} is null or char_length(${t.joinUrl}) <= 2048`,
+    ),
   ],
 );
 

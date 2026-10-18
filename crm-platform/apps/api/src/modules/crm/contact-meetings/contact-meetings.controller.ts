@@ -36,7 +36,12 @@ export class ContactMeetingsController {
 
   @Get()
   @RequirePermission('record.contacts.read')
-  @ApiOperation({ summary: "List a contact's meetings" })
+  @ApiOperation({
+    summary: "List a contact's meetings",
+    description:
+      'Typed-in meetings and the mirror of every booking (source `booking`, with the appointment id and its current status). ' +
+      '`when=upcoming|past|all` orders by start and filters; without it, most recently logged first.',
+  })
   async list(
     @Param('contactId', ParseUUIDPipe) contactId: string,
     @Query(zodPipe(listContactMeetingsQuerySchema)) query: ListContactMeetingsQuery,

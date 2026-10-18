@@ -341,7 +341,7 @@ describe('Hand-off to WhatsApp (TW-FLB-062, 064, 065)', () => {
 });
 
 describe('Google nodes while Google is not connected', () => {
-  it('Sheets, Docs and Forms say so and fall back to an id box (no invented list)', () => {
+  it('Sheets, Docs and Forms say so and offer the Google account page, never an id box (no invented list)', () => {
     googleFails = true;
     for (const [type, noun] of [
       ['google_sheets', 'sheets'],
@@ -352,24 +352,43 @@ describe('Google nodes while Google is not connected', () => {
       expect(html, type).toContain(
         `Google isn&#x27;t connected for this workspace, so your ${noun} can&#x27;t be listed`,
       );
+      expect(html, type).toContain('href="/google-account"');
       expect(html, type).not.toContain('Leads sheet');
+      expect(html, type).not.toContain('docs.google.com');
+      expect(html, type).not.toMatch(/placeholder="(Sheet|Doc|Form) id"/);
     }
   });
-  it('when Google answers, the picker lists the files', () => {
+  it('keeps showing the value a step already holds when the account cannot list files', () => {
+    googleFails = true;
+    expect(render('google_sheets', { mode: 'write', sheetId: '1AbCdEfGhIjKlMn' })).toContain(
+      'Sheet 1AbCdEfGhIjK',
+    );
+  });
+  it('when Google answers, the picker lists the files and nothing can be pasted', () => {
     googleFails = false;
     const html = render('google_sheets', { mode: 'write', sheetId: '' });
     expect(html).toContain('Leads sheet');
-    expect(html).toContain('…or paste a Spreadsheet URL / ID');
+    expect(html).not.toContain('paste');
+    expect(html).not.toContain('docs.google.com');
     googleFails = true;
   });
-  it('the Google Form node shows the one-time Apps Script setup once a form is chosen', () => {
-    expect(render('google_form', { formId: '' })).not.toContain('One-time setup');
-    const html = render('google_form', { formId: '1FAIpQLSc_abc-123' });
-    expect(html).toContain('One-time setup — paste this into your Form&#x27;s Script editor');
-    expect(html).toContain(
-      'href="/api/v2/flows/builder-context/google/forms/1FAIpQLSc_abc-123/apps-script"',
-    );
-    expect(html).toContain('onFormSubmit');
+  it('the Check Google Sheet field and Save contact from Google Sheet steps pick the sheet from the account', () => {
+    googleFails = false;
+    for (const type of ['sheet_check', 'sheet_contact']) {
+      const html = render(type, { sheetId: '' });
+      expect(html, type).toContain('Leads sheet');
+      expect(html, type).not.toContain('docs.google.com');
+    }
+    googleFails = true;
+  });
+  it('the Google Form node needs no script: nothing to download or paste, whichever form is chosen', () => {
+    for (const formId of ['', '1FAIpQLSc_abc-123']) {
+      const html = render('google_form', { formId });
+      expect(html).not.toContain('Script editor');
+      expect(html).not.toContain('apps-script');
+      expect(html).not.toContain('onFormSubmit');
+      expect(html).toContain('nothing is pasted into the form');
+    }
   });
 });
 

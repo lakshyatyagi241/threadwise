@@ -196,7 +196,9 @@
           },
           "meeting": {
             "upcoming": "פגישה: {title}",
-            "past": "נפגשו: {title}"
+            "past": "נפגשו: {title}",
+            "notHeld": "לא התקיימה: {title}",
+            "noShow": "לא הגיע: {title}"
           },
           "call": {
             "inbound": "שיחה נכנסת",

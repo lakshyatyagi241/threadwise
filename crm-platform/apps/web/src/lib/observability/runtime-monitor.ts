@@ -1,4 +1,10 @@
-import { startRuntimeMonitorWith, type RuntimeMonitorConfig } from '@crm/observability';
+import {
+  instrumentHttpRequests,
+  releaseFromEnv,
+  startRuntimeMonitorWith,
+  type RuntimeMonitorConfig,
+} from '@crm/observability';
+import { webRouteOf } from './route-of';
 
 /**
  * Event-loop and runtime monitoring for the Next.js server process (EL-B07). The same monitor the API and the worker run
@@ -28,13 +34,26 @@ export function readMonitorConfig(env: Env = process.env): RuntimeMonitorConfig 
     metricsHost: env.OBS_METRICS_HOST?.trim() || '127.0.0.1',
     // Shorter than the API accepts is ignored, so a non-loopback listener stays closed instead of opening with a guessable token.
     metricsToken: token && token.length >= 16 ? token : undefined,
+    release: releaseFromEnv(env),
   };
 }
 
-/** Starts the monitor for this process. Never throws: observability must not stop the server from starting. */
+let stopHttp: (() => void) | undefined;
+
+/** Puts the process's `http.Server.emit` back and forgets the request timer (tests). */
+export function stopWebRequestMetrics(): void {
+  stopHttp?.();
+  stopHttp = undefined;
+}
+
+/**
+ * Starts the monitor for this process, and times every request the Next.js server answers (`crm_http_request_duration_seconds`, route
+ * from `webRouteOf`). Never throws: observability must not stop the server from starting.
+ */
 export function startWebRuntimeMonitor(env: Env = process.env): void {
   try {
-    startRuntimeMonitorWith('web', readMonitorConfig(env));
+    const monitor = startRuntimeMonitorWith('web', readMonitorConfig(env));
+    if (monitor && !stopHttp) stopHttp = instrumentHttpRequests(monitor, webRouteOf);
   } catch (err) {
     process.stdout.write(
       `${JSON.stringify({ level: 40, msg: 'runtime monitor did not start', service: 'web', err: err instanceof Error ? err.message : String(err) })}\n`,

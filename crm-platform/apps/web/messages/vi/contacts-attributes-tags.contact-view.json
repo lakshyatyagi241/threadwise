@@ -126,7 +126,12 @@
       "details": {
         "title": "Chi tiết liên hệ",
         "stage": "Giai đoạn vòng đời",
-        "otherProperties": "Thuộc tính khác"
+        "otherProperties": "Thuộc tính khác",
+        "stageSince": "Ở giai đoạn này từ",
+        "previousStage": "Giai đoạn trước",
+        "previousStageSince": "Giai đoạn trước từ",
+        "lostReason": "Lý do thất bại",
+        "updatedAt": "Cập nhật lần cuối"
       },
       "company": {
         "title": "Công ty",

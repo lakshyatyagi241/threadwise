@@ -187,6 +187,7 @@
       "notFound": "Dieser Workspace existiert nicht mehr.",
       "reasonRequired": "Ein Grund mit mindestens 8 Zeichen ist erforderlich.",
       "orgSuspended": "Der Workspace ist gesperrt und kann nicht betreten werden.",
+      "noOwner": "Dieser Workspace hat keinen aktiven Inhaber, als der man sich anmelden könnte.",
       "validation": "Prüfen Sie die Werte und versuchen Sie es erneut."
     },
     "detail": {

@@ -325,7 +325,8 @@
           "url": "Lub użyj adresu własnego obrazu",
           "urlHint": "Wklej adres kwadratowego obrazu (https://...). Przesyłanie pliku nie jest jeszcze dostępne.",
           "botName": "Nazwa bota",
-          "botNameHint": "Wyświetlana w nagłówku okna czatu. Zostaw puste, aby użyć nazwy Twojego bota."
+          "botNameHint": "Wyświetlana w nagłówku okna czatu. Zostaw puste, aby użyć nazwy Twojego bota.",
+          "urlHintUpload": "Wklej adres kwadratowego obrazu (https://...) lub prześlij plik poniżej."
         },
         "3": {
           "title": "Ustaw wiadomość powitalną",
@@ -699,7 +700,9 @@
         "statusLive": "Na żywo",
         "statusDraft": "Nieopublikowany",
         "codeLabel": "HTML",
-        "localNote": "Ten kod wskazuje adres na tym komputerze (localhost), więc działa tylko na stronach otwartych tutaj. Na działającej witrynie użyj wdrożonego adresu."
+        "localNote": "Ten kod wskazuje adres na tym komputerze (localhost), więc działa tylko na stronach otwartych tutaj. Na działającej witrynie użyj wdrożonego adresu.",
+        "statusNoNumber": "Opublikowany, brak numeru",
+        "noNumber": "Ten bot jest opublikowany, ale nie ma jeszcze numeru WhatsApp, więc przycisk, kod QR i bezpośredni link pozostają ukryte. Wybierz numer w Wyzwalaczu na karcie Budowanie."
       },
       "whatsapp": {
         "loading": "Ładowanie przycisku…",
@@ -708,7 +711,8 @@
         "saved": "Przycisk WhatsApp zapisany",
         "saveFailed": "Nie udało się zapisać przycisku. Spróbuj ponownie.",
         "fromBot": "Przycisk otwiera WhatsApp na numer {number}, na którym działa ten bot. Numer zmienisz w wyzwalaczu na karcie Budowanie.",
-        "noNumber": "Ten bot nie ma jeszcze numeru WhatsApp. Wybierz go w wyzwalaczu na karcie Tworzenie, a potem wróć i zapisz przycisk."
+        "noNumber": "Ten bot nie ma jeszcze numeru WhatsApp. Wybierz go w wyzwalaczu na karcie Tworzenie, a potem wróć i zapisz przycisk.",
+        "keywordMissing": "Powyższa wiadomość nie zawiera słowa startowego bota „{keyword}”. Jeśli bot uruchamia się tylko tym słowem, odwiedzający, którzy dotkną przycisku, do niego nie trafią."
       }
     },
     "webBots": {

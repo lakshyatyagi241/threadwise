@@ -94,7 +94,13 @@
             "endInvalid": "Masukkan tanggal dan waktu selesai yang valid.",
             "endBeforeStart": "Waktu selesai tidak boleh sebelum waktu mulai."
           }
-        }
+        },
+        "bookedOnline": "Dipesan online",
+        "viewBooking": "Lihat pemesanan",
+        "manageBooking": "Kelola pemesanan",
+        "viewBookingAria": "Lihat pemesanan untuk {title}",
+        "manageBookingAria": "Kelola pemesanan untuk {title}",
+        "bookedReadOnly": "Dipesan online. Hanya bisa diubah di pemesanannya."
       },
       "files": {
         "title": "Berkas",

@@ -94,7 +94,13 @@
             "endInvalid": "أدخل تاريخ ووقت انتهاء صالحين.",
             "endBeforeStart": "لا يمكن أن يسبق وقت الانتهاء وقت البدء."
           }
-        }
+        },
+        "bookedOnline": "تم الحجز عبر الإنترنت",
+        "viewBooking": "عرض الحجز",
+        "manageBooking": "إدارة الحجز",
+        "viewBookingAria": "عرض الحجز الخاص بـ {title}",
+        "manageBookingAria": "إدارة الحجز الخاص بـ {title}",
+        "bookedReadOnly": "تم الحجز عبر الإنترنت. لا يمكن تغييره إلا من الحجز نفسه."
       },
       "files": {
         "title": "الملفات",

@@ -411,15 +411,18 @@ export class WabaIngestService {
     if (removed > 0) this.logger.log({ orgId: route.orgId, removed }, 'app-state remove ignored');
     if (contacts.length === 0) return;
     await this.db.txAs({ orgId: route.orgId }, async (tx) => {
-      for (const c of contacts) {
-        await this.contacts.resolveOrCreateByIdentity(tx, route.orgId, {
-          kind: 'phone',
+      // The address book can be hundreds of numbers, most of them already contacts: those are answered in two queries, not four each.
+      await this.contacts.resolveManyByIdentity(
+        tx,
+        route.orgId,
+        contacts.map((c) => ({
+          kind: 'phone' as const,
           value: c.phone,
           name: c.name,
           source: 'whatsapp_business_app',
           quiet: true,
-        });
-      }
+        })),
+      );
     });
   }
 

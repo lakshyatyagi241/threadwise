@@ -566,11 +566,12 @@
         "hint": "Buchungen funktionieren auch ohne dies. Verbinden Sie Google Kalender unter Termine, Einstellungen, um Frei-/Belegt-Zeiten zu synchronisieren und Meet-Links hinzuzufügen.",
         "unavailable": "Google Kalender ist für diese Plattform noch nicht eingerichtet. Diese Einstellungen werden beim Buchungstyp gespeichert, bis es so weit ist.",
         "calendarId": "Kalender",
-        "calendarPlaceholder": "primär",
         "spreadsheetId": "An Tabelle anhängen (optional)",
-        "spreadsheetPlaceholder": "Tabellen-ID",
         "createMeet": "Für jede Buchung einen Google-Meet-Link erstellen",
-        "calendarDefault": "Der Workspace-Kalender"
+        "calendarDefault": "Der Workspace-Kalender",
+        "connectFirst": "Verbinde dein <link>Google-Konto</link>, um aus dessen Liste auszuwählen.",
+        "spreadsheetNone": "Keine Tabelle",
+        "spreadsheetNoListing": "Deine Tabellen können nicht aufgelistet werden, weil die Berechtigung „Drive-Dateiliste“ nicht erteilt wurde. Füge sie auf der Seite „Google-Konto“ hinzu."
       },
       "messages": {
         "title": "Nachrichten im Buchungsverlauf",

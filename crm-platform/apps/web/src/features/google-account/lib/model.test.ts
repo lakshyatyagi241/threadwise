@@ -58,10 +58,11 @@ describe('what Google sends the browser back with', () => {
 });
 
 describe('what is ticked and what is asked', () => {
-  it('ticks the permissions that need no Google review and are not allowed yet', () => {
-    expect(defaultTicks(undefined)).toEqual(['calendar', 'sheets', 'forms']);
-    expect(defaultTicks(account({}, ['sheets']))).toEqual(['calendar', 'forms']);
-    expect(defaultTicks(account({}, ['calendar', 'sheets', 'forms']))).toEqual([]);
+  it('ticks the permissions that need no Google review, and the file list the pickers need, when not allowed yet', () => {
+    expect(defaultTicks(undefined)).toEqual(['calendar', 'sheets', 'forms', 'drive_listing']);
+    expect(defaultTicks(account({}, ['sheets']))).toEqual(['calendar', 'forms', 'drive_listing']);
+    expect(defaultTicks(account({}, ['calendar', 'sheets', 'forms']))).toEqual(['drive_listing']);
+    expect(defaultTicks(account({}, ['calendar', 'sheets', 'forms', 'drive_listing']))).toEqual([]);
   });
 
   it('asks for the ticked ones, and on a reconnect also for what the account held', () => {

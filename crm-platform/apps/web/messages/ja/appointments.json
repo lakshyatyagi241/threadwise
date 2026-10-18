@@ -566,11 +566,12 @@
         "hint": "これがなくても予約は利用できます。予約の設定でGoogleカレンダーを接続すると、空き時間の同期やMeetリンクの追加ができます。",
         "unavailable": "このプラットフォームではGoogleカレンダーがまだ設定されていません。設定が整ったときのために、これらの設定は予約タイプとともに保持されます。",
         "calendarId": "カレンダー",
-        "calendarPlaceholder": "プライマリ",
         "spreadsheetId": "スプレッドシートへの追記(任意)",
-        "spreadsheetPlaceholder": "スプレッドシートID",
         "createMeet": "予約ごとにGoogle Meetリンクを作成",
-        "calendarDefault": "ワークスペースのカレンダー"
+        "calendarDefault": "ワークスペースのカレンダー",
+        "connectFirst": "<link>Google アカウント</link>を連携すると、その一覧から選択できます。",
+        "spreadsheetNone": "シートなし",
+        "spreadsheetNoListing": "Drive ファイル一覧の権限が付与されていないため、シートを一覧表示できません。Google アカウントのページで追加してください。"
       },
       "messages": {
         "title": "ライフサイクルメッセージ",

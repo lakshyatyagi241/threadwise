@@ -383,7 +383,10 @@ export function IntegrationsCard({ data }: { data: DashWidgets['integrations'] }
                 className="size-1.5 rounded-full bg-success"
               />
             ) : (
-              <Link href="/integrations" className="text-[10px] font-medium text-primary">
+              <Link
+                href={r.code === 'google_sheets' ? '/google-account' : '/integrations'}
+                className="text-[10px] font-medium text-primary"
+              >
                 {t('connect')}
               </Link>
             )}

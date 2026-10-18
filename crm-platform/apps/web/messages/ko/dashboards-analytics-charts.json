@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "연결됨",
           "shopify": "연결됨",
-          "google_sheets": "API 키 발급됨",
-          "meta_catalog": "카탈로그 연결됨"
+          "meta_catalog": "카탈로그 연결됨",
+          "google_sheets": "Google 계정 연결됨"
         },
         "notConnected": "연결되지 않음",
         "connect": "연결",

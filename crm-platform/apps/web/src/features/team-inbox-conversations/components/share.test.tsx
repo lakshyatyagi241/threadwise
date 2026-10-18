@@ -114,6 +114,40 @@ describe('buttons we sent', () => {
   });
 });
 
+describe('buttons under a message with a header image (imported history)', () => {
+  it('draws the image first, then the text and every button', () => {
+    const out = html(
+      <MessageBubble
+        message={outbound(5, {
+          kind: 'image',
+          body: 'This is test bot',
+          media: { url: '/v2/media/t', mime: 'image/png', sizeBytes: 12000, name: 'logo.png' },
+          sentInteractive: {
+            type: 'buttons',
+            header: null,
+            body: 'This is test bot',
+            footer: null,
+            buttons: [
+              { title: 'Welcome', url: null },
+              { title: 'Feedback', url: null },
+              { title: 'No more', url: null },
+            ],
+          },
+        })}
+        quoted={null}
+        onRetry={asyncNoop}
+      />,
+    );
+    expect(out).toContain('data-testid="inbox-sent-interactive"');
+    expect(out.indexOf('/v2/media/t')).toBeGreaterThan(-1);
+    expect(out.indexOf('/v2/media/t')).toBeLessThan(out.indexOf('This is test bot'));
+    expect(out.match(/data-testid="inbox-sent-button"/g)).toHaveLength(3);
+    for (const t of ['Welcome', 'Feedback', 'No more']) expect(out).toContain(t);
+    // reply buttons are not links: they are drawn, not actionable
+    expect(out).not.toMatch(/<a [^>]*data-testid="inbox-sent-button"/);
+  });
+});
+
 describe('a list we sent', () => {
   it('draws the text, the rows by section and the button that opens it', () => {
     const out = html(

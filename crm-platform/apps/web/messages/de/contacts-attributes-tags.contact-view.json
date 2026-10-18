@@ -126,7 +126,12 @@
       "details": {
         "title": "Kontaktdetails",
         "stage": "Lebenszyklusphase",
-        "otherProperties": "Weitere Eigenschaften"
+        "otherProperties": "Weitere Eigenschaften",
+        "stageSince": "In dieser Phase seit",
+        "previousStage": "Vorherige Phase",
+        "previousStageSince": "Vorherige Phase seit",
+        "lostReason": "Verlustgrund",
+        "updatedAt": "Zuletzt aktualisiert"
       },
       "company": {
         "title": "Unternehmen",

@@ -1,4 +1,5 @@
 import {
+  releaseFromEnv,
   startRuntimeMonitorWith,
   type RuntimeMonitor,
   type RuntimeService,
@@ -23,5 +24,6 @@ export function startRuntimeMonitor(
     metricsPort: cfg.OBS_METRICS_PORT,
     metricsHost: cfg.OBS_METRICS_HOST,
     metricsToken: cfg.OBS_METRICS_TOKEN,
+    release: releaseFromEnv(env),
   });
 }

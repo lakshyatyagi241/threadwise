@@ -20,3 +20,5 @@ export {
   type ListenerDecision,
   type RuntimeMonitorConfig,
 } from './start-runtime-monitor';
+export { instrumentHttpRequests, type RouteOf } from './http-server-instrumentation';
+export { releaseFromEnv } from './release';

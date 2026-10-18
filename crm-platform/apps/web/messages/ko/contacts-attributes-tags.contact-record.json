@@ -196,7 +196,9 @@
           },
           "meeting": {
             "upcoming": "미팅: {title}",
-            "past": "만남: {title}"
+            "past": "만남: {title}",
+            "notHeld": "진행되지 않음: {title}",
+            "noShow": "노쇼: {title}"
           },
           "call": {
             "inbound": "수신 통화",

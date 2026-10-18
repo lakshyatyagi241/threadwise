@@ -30,28 +30,6 @@ import { ShopsRepository, type ShopRow } from './shops.repository';
 
 export const STORE_MODULE = 'storefronts';
 
-/** A shop as an outside list (the Sheets add-on, TW-EXT-008) needs it: no internal ids, no payment or shipping detail. */
-export interface ShopSummary {
-  uuid: string;
-  shopName: string | null;
-  slug: string;
-  currencyCode: string;
-  enabled: boolean;
-  themeKey: string;
-  customDomain: string | null;
-  publicUrl: string;
-  updatedAt: Date;
-}
-
-/** What a sync from outside says about its shop. Absent fields keep what is stored. */
-export interface ShopSyncInput {
-  /** The shop to update; an id that matches no shop of this workspace makes a new one (Reference behaviour). */
-  uuid?: string | null;
-  shopName: string;
-  description?: string | null;
-  currencyCode?: string | null;
-  themeKey?: string | null;
-}
 const MAX_SLUG_ATTEMPTS = 200;
 
 export const domainTaken = () =>
@@ -253,104 +231,6 @@ export class ShopsService {
       });
       return { shops, orders, products };
     });
-  }
-
-  /** The workspace's shops, most recently changed first. */
-  async listForIntegration(): Promise<ShopSummary[]> {
-    const ctx = RequestContextStore.require();
-    return this.db.tx(async (tx) => {
-      const rows = await this.repo.listByNewest(tx, ctx.orgId);
-      return rows.map((r) => this.summary(r));
-    });
-  }
-
-  /**
-   * Creates or updates the shop a sheet sync belongs to (TW-EXT-009). Unlike the wizard it needs no connected WhatsApp number (Reference's
-   * add-on did not either) and never touches the device, the domain or the enabled flag of an existing shop. A new shop gets a slug from
-   * its name, the default theme and is enabled; the description becomes the shop's hero text.
-   */
-  async upsertForIntegration(
-    input: ShopSyncInput,
-  ): Promise<{ shop: ShopSummary; created: boolean }> {
-    const ctx = RequestContextStore.require();
-    return this.db.tx(async (tx) => {
-      const existing = input.uuid
-        ? await this.repo.findByUuid(tx, ctx.orgId, input.uuid)
-        : undefined;
-      const settings = (patch: Record<string, unknown>) =>
-        input.description ? { ...patch, hero_text: input.description } : patch;
-
-      if (!existing) {
-        const id = await this.insertWithUniqueSlug(tx, ctx.orgId, baseSlug(input.shopName), {
-          shopName: input.shopName,
-          themeKey: input.themeKey ?? DEFAULT_STORE_THEME,
-          enabled: true,
-        });
-        if (input.currencyCode || input.description) {
-          await this.repo.update(tx, ctx.orgId, id, {
-            ...(input.currencyCode ? { currencyCode: input.currencyCode } : {}),
-            ...(input.description ? { settings: settings({}) } : {}),
-          });
-        }
-        const row = (await this.repo.findById(tx, ctx.orgId, id))!;
-        await this.audit.record(tx, { module: STORE_MODULE, recordId: id, action: 'insert' });
-        await this.outbox.emit(tx, {
-          aggregateModule: STORE_MODULE,
-          aggregateId: id,
-          eventType: 'storefront.created',
-          payload: { uuid: row.uuid, name: row.shopName, slug: row.slug, via: 'sheets_addon' },
-        });
-        return { shop: this.summary(row), created: true };
-      }
-
-      await this.repo.update(tx, ctx.orgId, existing.id, {
-        shopName: input.shopName,
-        ...(input.currencyCode ? { currencyCode: input.currencyCode } : {}),
-        ...(input.themeKey ? { themeKey: input.themeKey } : {}),
-        ...(input.description ? { settings: settings(existing.settings) } : {}),
-      });
-      const after = (await this.repo.findById(tx, ctx.orgId, existing.id))!;
-      await this.audit.record(tx, {
-        module: STORE_MODULE,
-        recordId: existing.id,
-        action: 'update',
-        delta: this.audit.diff(
-          {
-            shopName: existing.shopName,
-            currencyCode: existing.currencyCode,
-            themeKey: existing.themeKey,
-            heroText: existing.settings.hero_text ?? null,
-          },
-          {
-            shopName: after.shopName,
-            currencyCode: after.currencyCode,
-            themeKey: after.themeKey,
-            heroText: after.settings.hero_text ?? null,
-          },
-        ),
-      });
-      await this.outbox.emit(tx, {
-        aggregateModule: STORE_MODULE,
-        aggregateId: existing.id,
-        eventType: 'storefront.updated',
-        payload: { uuid: after.uuid, name: after.shopName, slug: after.slug, via: 'sheets_addon' },
-      });
-      return { shop: this.summary(after), created: false };
-    });
-  }
-
-  private summary(r: ShopRow): ShopSummary {
-    return {
-      uuid: r.uuid,
-      shopName: r.shopName,
-      slug: r.slug,
-      currencyCode: r.currencyCode,
-      enabled: r.enabled,
-      themeKey: r.themeKey,
-      customDomain: r.customDomain,
-      publicUrl: this.urls.publicUrl(r),
-      updatedAt: r.updatedAt,
-    };
   }
 
   /**

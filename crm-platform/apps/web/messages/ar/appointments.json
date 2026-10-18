@@ -566,11 +566,12 @@
         "hint": "تعمل الحجوزات بدونه. اربط تقويم Google من المواعيد، الإعدادات لمزامنة أوقات الانشغال وإضافة روابط Meet.",
         "unavailable": "تقويم Google غير مُعدّ لهذه المنصة بعد. تُحفظ هذه الإعدادات مع نوع الحجز إلى أن يتوفر.",
         "calendarId": "التقويم",
-        "calendarPlaceholder": "primary",
         "spreadsheetId": "الإضافة إلى جدول (اختياري)",
-        "spreadsheetPlaceholder": "معرّف جدول البيانات",
         "createMeet": "إنشاء رابط Google Meet لكل حجز",
-        "calendarDefault": "تقويم مساحة العمل"
+        "calendarDefault": "تقويم مساحة العمل",
+        "connectFirst": "اربط <link>حساب Google</link> الخاص بك للاختيار من قائمته.",
+        "spreadsheetNone": "بلا جدول",
+        "spreadsheetNoListing": "تعذر عرض جداولك لأن إذن قائمة ملفات Drive لم يُمنح. أضفه من صفحة حساب Google."
       },
       "messages": {
         "title": "رسائل دورة الحجز",

@@ -363,27 +363,24 @@
           "kinds": {
             "sheets": {
               "pick": "— kies een blad —",
-              "empty": "Geen spreadsheets gevonden — plak hieronder een URL/ID",
               "loading": "Bladen laden…",
-              "notConnected": "Google is niet verbonden voor deze workspace, dus je bladen kunnen niet worden getoond. Plak in plaats daarvan het blad-id of de link.",
-              "idPlaceholder": "Blad-id",
-              "saved": "Blad {id}… (niet geladen)"
+              "saved": "Blad {id}… (niet geladen)",
+              "empty": "Geen spreadsheets gevonden in het gekoppelde Google-account",
+              "notConnected": "Google is niet gekoppeld voor deze werkruimte, dus je sheets kunnen niet worden weergegeven. Koppel Google om er een te kiezen."
             },
             "docs": {
               "pick": "— kies een sjabloondocument —",
               "empty": "Geen documenten gevonden",
               "loading": "Documenten laden…",
-              "notConnected": "Google is niet verbonden voor deze workspace, dus je documenten kunnen niet worden getoond. Plak in plaats daarvan het document-id of de link.",
-              "idPlaceholder": "Document-id",
-              "saved": "Document {id}… (niet geladen)"
+              "saved": "Document {id}… (niet geladen)",
+              "notConnected": "Google is niet gekoppeld voor deze werkruimte, dus je documenten kunnen niet worden weergegeven. Koppel Google om er een te kiezen."
             },
             "forms": {
               "pick": "— kies een formulier —",
               "empty": "Geen formulieren gevonden",
               "loading": "Formulieren laden…",
-              "notConnected": "Google is niet verbonden voor deze workspace, dus je formulieren kunnen niet worden getoond. Plak in plaats daarvan het formulier-id of de link.",
-              "idPlaceholder": "Formulier-id",
-              "saved": "Formulier {id}… (niet geladen)"
+              "saved": "Formulier {id}… (niet geladen)",
+              "notConnected": "Google is niet gekoppeld voor deze werkruimte, dus je formulieren kunnen niet worden weergegeven. Koppel Google om er een te kiezen."
             }
           },
           "sheetsIntro": "Voegt een rij toe aan een Google Spreadsheet (schrijfmodus) of zoekt een rij op via een sleutelkolom (leesmodus). Gebruikt het verbonden Google-account van de workspace via <link>/google-account</link>.",
@@ -405,8 +402,6 @@
           "addColumn": "Kolom toevoegen",
           "matchByHeader": "Kolommen koppelen op kopnaam",
           "matchByHeaderHint": "Schrijf elke waarde in de bladkolom met die kop (willekeurige volgorde). Uitzetten om van links naar rechts op positie toe te voegen — de standaard.",
-          "pasteLabel": "…of plak een Spreadsheet-URL / -ID",
-          "pasteHint": "Werkt ook als de kiezer leeg is — plak de bladlink en we halen het ID eruit.",
           "docsIntro": "Kopieer een sjabloondocument, vul <mono>{placeholders}</mono> in, deel het via iedereen-met-link en stuur de URL naar de klant. Plaats <mono>{key}</mono> in je sjabloon waar de waarde moet komen.",
           "templateDocument": "Sjabloondocument",
           "newCopyTitle": "Titel van nieuwe kopie",
@@ -421,7 +416,6 @@
           "messageTemplateHint": "De botbubbel die naar de klant wordt gestuurd. <mono>{token}</mono> krijgt de deellink.",
           "messageTemplatePlaceholder": "Hier is je document:\n'{{'doc_url'}}'",
           "saveUrl": "URL opslaan onder variabele",
-          "formIntro": "Stuurt de formulier-URL via WhatsApp, pauzeert de flow en gaat verder via de uitgang <b>ingediend</b> zodra de klant het invult. Antwoorden worden flowvariabelen.",
           "googleForm": "Google-formulier",
           "bodyBubble": "Tekstbubbel (boven de link verzonden)",
           "bodyBubblePlaceholder": "Vul dit korte formulier in:",
@@ -429,12 +423,6 @@
           "saveResponsesHint": "Individuele antwoorden komen ook terecht als <mono>{token}</mono>.",
           "expireAfter": "Verlopen na (seconden)",
           "expireAfterHint": "Hoe lang er op een inzending wordt gewacht voordat er een time-out optreedt. 86400 = 24 uur.",
-          "setupTitle": "Eenmalige installatie — plak dit in de scripteditor van je formulier",
-          "setupOpen": "Open je formulier → <mono>⋮-menu</mono> → <mono>Scripteditor</mono>",
-          "setupDownload": "<link>Download het script (.gs)</link> en plak het",
-          "setupTrigger": "Voeg een trigger toe: <mono>onFormSubmit</mono> · Vanuit formulier · Bij verzenden van formulier",
-          "setupWarning": "Zonder dit script slaat het formulier de antwoorden wel op in Google Formulieren, maar gaat de flow niet verder.",
-          "noListing": "Je bestanden kunnen niet worden getoond omdat de toestemming voor de Drive-bestandslijst niet is gegeven op de Google-accountpagina. Plak in plaats daarvan de link of het id.",
           "connection": {
             "open": "Google-account openen",
             "permission": {
@@ -447,7 +435,9 @@
             "disconnected": "Er is geen Google-account gekoppeld, dus deze stap mislukt wanneer de flow draait. Koppel eerst Google.",
             "needsReconnect": "Google accepteert het gekoppelde account niet meer, dus deze stap mislukt wanneer de flow draait. Koppel Google eerst opnieuw.",
             "missing": "Het gekoppelde Google-account heeft de toestemming {permission} niet gegeven, dus deze stap mislukt wanneer de flow draait."
-          }
+          },
+          "formIntro": "Verstuurt de formulier-URL via WhatsApp, pauzeert de flow en gaat verder via de poort <b>submitted</b> wanneer de klant het formulier invult. De antwoorden worden via je gekoppelde Google-account uit het formulier gelezen, dus er hoeft niets in het formulier te worden geplakt. Antwoorden worden flowvariabelen.",
+          "noListing": "Je bestanden kunnen niet worden weergegeven omdat de machtiging Drive-bestandslijst niet is verleend op de pagina Google-account. Voeg deze daar toe om bestanden te kiezen."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",

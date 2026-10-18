@@ -63,12 +63,22 @@ export function viewState(input: {
 }
 
 /**
- * What is ticked when the page opens: the permissions that need no review by Google, minus what is already allowed. The restricted ones
- * (Docs and Drive, the Drive file list) are left for the admin to choose on purpose.
+ * The restricted permission every file picker needs: sheets, documents and forms are chosen by name from the account's own list, so it is
+ * ticked for you (nothing is ever pasted by hand).
+ */
+const PICKER_CAPABILITY: GoogleCapability = 'drive_listing';
+
+/**
+ * What is ticked when the page opens: the permissions that need no review by Google plus the Drive file list that the pickers need,
+ * minus what is already allowed. The other restricted one (Docs and Drive) is left for the admin to choose on purpose.
  */
 export function defaultTicks(account: GoogleAccountResponse | undefined): GoogleCapability[] {
-  if (!account) return GOOGLE_CAPABILITIES.filter((c) => !googleCapabilityRestricted(c));
-  return account.capabilities.filter((c) => !c.granted && !c.restricted).map((c) => c.key);
+  const on = (key: GoogleCapability, restricted: boolean) =>
+    !restricted || key === PICKER_CAPABILITY;
+  if (!account) return GOOGLE_CAPABILITIES.filter((c) => on(c, googleCapabilityRestricted(c)));
+  return account.capabilities
+    .filter((c) => !c.granted && on(c.key, c.restricted))
+    .map((c) => c.key);
 }
 
 export interface Actions {

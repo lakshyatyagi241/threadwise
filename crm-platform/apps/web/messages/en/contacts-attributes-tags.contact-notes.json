@@ -94,7 +94,13 @@
             "endInvalid": "Enter a valid end date and time.",
             "endBeforeStart": "The end cannot be before the start."
           }
-        }
+        },
+        "bookedOnline": "Booked online",
+        "viewBooking": "View booking",
+        "manageBooking": "Manage booking",
+        "viewBookingAria": "View the booking for {title}",
+        "manageBookingAria": "Manage the booking for {title}",
+        "bookedReadOnly": "Booked online. It can only be changed on the booking."
       },
       "files": {
         "title": "Files",

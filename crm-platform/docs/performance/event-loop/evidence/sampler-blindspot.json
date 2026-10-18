@@ -1,0 +1,26 @@
+{
+ "generatedAt": "2026-10-18T08:38:56.428Z",
+ "node": "v22.17.0",
+ "windowMs": 250,
+ "stallMs": 120,
+ "results": {
+  "single": {
+   "trials": 60,
+   "stallsSeen": 0,
+   "nextWindowMaxMs": {
+    "min": 16,
+    "median": 24,
+    "max": 85
+   }
+  },
+  "two-histograms": {
+   "trials": 60,
+   "stallsSeen": 60,
+   "nextWindowMaxMs": {
+    "min": 120,
+    "median": 136,
+    "max": 153
+   }
+  }
+ }
+}

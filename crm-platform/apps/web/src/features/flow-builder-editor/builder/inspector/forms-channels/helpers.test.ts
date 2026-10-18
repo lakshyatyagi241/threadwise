@@ -1,9 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   MAX_PRODUCT_ITEMS,
-  extractGoogleId,
   agentOptionLabel,
-  appsScriptHref,
   flowOptionLabel,
   formLabel,
   formatPrice,
@@ -129,17 +127,6 @@ describe('product items', () => {
   });
 });
 
-describe('google ids', () => {
-  it('extracts the id from a url and keeps a bare id', () => {
-    expect(
-      extractGoogleId(
-        ' https://docs.google.com/spreadsheets/d/1AbCdEfGhIjKlMnOpQrStUv/edit#gid=0 ',
-      ),
-    ).toBe('1AbCdEfGhIjKlMnOpQrStUv');
-    expect(extractGoogleId('short')).toBe('short');
-  });
-});
-
 describe('withSavedOption', () => {
   const base = [
     { v: '', l: 'pick' },
@@ -241,14 +228,5 @@ describe('agentOptionLabel', () => {
     );
     expect(agentOptionLabel('Triage', null, 'gpt-4o-mini', 'abcdef1234', t)).toBe('Triage');
     expect(agentOptionLabel('', 'openai', 'm', 'abcdef1234', t)).toBe('Agent abcdef12 · openai/m');
-  });
-});
-
-describe('appsScriptHref', () => {
-  it('points at the editor API, encoded', () => {
-    expect(appsScriptHref('1FAIpQLSc_abc-123')).toBe(
-      '/api/v2/flows/builder-context/google/forms/1FAIpQLSc_abc-123/apps-script',
-    );
-    expect(appsScriptHref('a/b')).toContain('a%2Fb');
   });
 });

@@ -352,7 +352,10 @@ export async function oracleChat(
       q('NO_PEER');
       continue;
     }
-    const cb = certainBody(doc);
+    let cb = certainBody(doc);
+    // a customer turn with a typed query object but no content is loaded as a placeholder (inbox/parse.ts CONTENT_UNAVAILABLE)
+    if (cb.empty && cb.dir === 'in' && !isObj(doc.bot_response) && isObj(doc.user_query_object) && Object.keys(doc.user_query_object).length > 0)
+      cb = { dir: 'in', body: '(message content not available)', kind: 'text' };
     if (cb.dir === null || cb.empty) {
       q('EMPTY_MESSAGE');
       continue;

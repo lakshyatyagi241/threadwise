@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. Màn hình đồng ý",
-              "body": "Thêm các phạm vi mà sản phẩm yêu cầu (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), sau đó xuất bản ứng dụng: ở chế độ Testing, Google sẽ hủy mọi cấp quyền sau 7 ngày và không gian làm việc sẽ phải kết nối lại. Các phạm vi drive bị hạn chế và cần Google xét duyệt."
+              "body": "Thêm các phạm vi mà sản phẩm yêu cầu (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), sau đó xuất bản ứng dụng: ở chế độ Testing, Google sẽ hủy mọi cấp quyền sau 7 ngày và không gian làm việc sẽ phải kết nối lại. Các phạm vi drive bị hạn chế và cần Google xét duyệt."
             },
             "workspaces": {
               "title": "4. Không gian làm việc kết nối",

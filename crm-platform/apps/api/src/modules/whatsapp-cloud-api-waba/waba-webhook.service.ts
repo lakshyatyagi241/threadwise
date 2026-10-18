@@ -86,6 +86,12 @@ export class WabaWebhookService {
 
   async receive(input: {
     rawBody: Buffer | undefined;
+    /**
+     * What the JSON body parser already made of `rawBody` (`req.body`). When it is an object it is used as the payload instead of
+     * parsing the same bytes a second time: at the 4 MiB cap that second parse (and the 4 MiB string it needs) was about a quarter of
+     * the loop time one delivery cost (EL-B09). The signature is still checked against `rawBody`, the bytes as sent.
+     */
+    parsedBody?: unknown;
     signatureHeader: string | undefined;
     contentType?: string | undefined;
     queryKey: string | undefined;
@@ -96,10 +102,14 @@ export class WabaWebhookService {
   }): Promise<{ queued: number }> {
     if (!input.rawBody || input.rawBody.length === 0) throw AppError.validation('Empty body');
     let payload: unknown;
-    try {
-      payload = JSON.parse(input.rawBody.toString('utf8'));
-    } catch {
-      throw AppError.validation('Body is not JSON');
+    if (typeof input.parsedBody === 'object' && input.parsedBody !== null) {
+      payload = input.parsedBody;
+    } else {
+      try {
+        payload = JSON.parse(input.rawBody.toString('utf8'));
+      } catch {
+        throw AppError.validation('Body is not JSON');
+      }
     }
     const changes = splitWebhook(payload);
 

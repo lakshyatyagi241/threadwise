@@ -22,6 +22,23 @@ describe('attributionView', () => {
     expect(v.first.sourceHref).toBe(`/lead-sources/${ID(1)}`);
   });
 
+  it('lists the channel and module type a migrated touch carries', () => {
+    const t = touch({
+      id: ID(1),
+      campaign: null,
+      adset: null,
+      ad: null,
+      form: null,
+      channel: 'WhatsApp',
+      moduleType: 'WhatsApp Chatbot',
+    });
+    const v = attributionView({ first: t, latest: t, touches: [t], total: 1 })!;
+    expect(v.first.details).toEqual([
+      { field: 'channel', value: 'WhatsApp' },
+      { field: 'moduleType', value: 'WhatsApp Chatbot' },
+    ]);
+  });
+
   it('two touches are shown apart, with the total', () => {
     const first = touch({ id: ID(1), campaign: 'Launch' });
     const latest = touch({

@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. Onay ekranı",
-              "body": "Ürünün istediği kapsamları ekleyin (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), ardından uygulamayı yayımlayın: Test aşamasında Google her izni 7 gün sonra sonlandırır ve çalışma alanlarının yeniden bağlanması gerekir. Drive kapsamları kısıtlıdır ve Google incelemesi gerektirir."
+              "body": "Ürünün istediği kapsamları ekleyin (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), ardından uygulamayı yayımlayın: Test aşamasında Google her izni 7 gün sonra sonlandırır ve çalışma alanlarının yeniden bağlanması gerekir. Drive kapsamları kısıtlıdır ve Google incelemesi gerektirir."
             },
             "workspaces": {
               "title": "4. Çalışma alanları bağlanır",

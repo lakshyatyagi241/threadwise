@@ -18,3 +18,15 @@ export function identifier(name: string): string {
 
 /** The name as SQL, for `sql`${rawIdentifier(alias)}.col``. */
 export const rawIdentifier = (name: string): SQL => sql.raw(identifier(name));
+
+/**
+ * The column a patch key updates, from a fixed map of allowed columns. The key must be one the map itself holds: a key that is not
+ * there (a field nobody may update, or `constructor` / `__proto__`, which a plain lookup would find on the prototype) is refused, and the
+ * column name the map gives is validated like any identifier.
+ */
+export function rawMappedColumn(map: Readonly<Record<string, string>>, key: string): SQL {
+  if (!Object.prototype.hasOwnProperty.call(map, key)) {
+    throw new Error(`Not an updatable column: ${JSON.stringify(key)}`);
+  }
+  return rawIdentifier(map[key]!);
+}

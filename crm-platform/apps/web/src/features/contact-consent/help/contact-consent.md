@@ -112,7 +112,7 @@ These are the places that record it:
 
 - **A person on your team** sets a contact's WhatsApp, SMS or email status to **subscribed**, or uses **Mark as subscribed**. You are asked how they agreed (what they said or signed, and where). A status set to subscribed with no explanation is refused: a status on its own is a label, not proof.
 - **A form** with the marketing box ticked, **the website chat form** and **the booking page** when the person ticks the consent line you wrote for them (see below), and **your Shopify or WooCommerce store** when the customer accepted marketing there.
-- **The customer API, partner and public lead submissions and the Google Sheets add-on**, when the request says the person agreed and explains how. In a sheet, put yes in a `consent` column and say how in a `consent_note` column; a yes without a note is refused for that row, and a no or a blank changes nothing.
+- **The customer API, partner and public lead submissions**, when the request says the person agreed and explains how. A yes without an explanation is refused, and a no or a blank changes nothing.
 
 A grant never overrides a STOP the contact sent: to bring an opted-out contact back, use **Mark as subscribed** on their Consent card and say why.
 

@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. 同意画面",
-              "body": "製品が要求するスコープ(calendar.events、calendar.freebusy、calendar.calendarlist.readonly、spreadsheets、documents、drive、forms.body.readonly、drive.metadata.readonly)を追加してから、アプリを公開してください。テスト中の場合、Google はすべての許可を 7 日後に失効させ、ワークスペースは再接続が必要になります。drive のスコープは制限付きで、Google の審査が必要です。"
+              "body": "製品が要求するスコープ(calendar.events、calendar.freebusy、calendar.calendarlist.readonly、spreadsheets、documents、drive、forms.body.readonly、forms.responses.readonly、drive.metadata.readonly)を追加してから、アプリを公開してください。テスト中の場合、Google はすべての許可を 7 日後に失効させ、ワークスペースは再接続が必要になります。drive のスコープは制限付きで、Google の審査が必要です。"
             },
             "workspaces": {
               "title": "4. ワークスペースの接続",

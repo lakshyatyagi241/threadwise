@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. Consent screen",
-              "body": "Add the scopes the product asks for (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), then publish the app: in Testing, Google ends every grant after 7 days and workspaces will need to reconnect. The drive scopes are restricted and need Google's review."
+              "body": "Add the scopes the product asks for (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), then publish the app: in Testing, Google ends every grant after 7 days and workspaces will need to reconnect. The drive scopes are restricted and need Google's review."
             },
             "workspaces": {
               "title": "4. Workspaces connect",

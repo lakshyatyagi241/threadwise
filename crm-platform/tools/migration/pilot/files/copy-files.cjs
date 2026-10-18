@@ -244,7 +244,7 @@ async function download(rawUrl, cfg, hooks = {}) {
 // ---------- S3 (SigV4, same signing as apps/api .../object-storage.probe.ts) ----------------------------------------------------------
 function s3FromEnv(env, kinds) {
   const need = ['S3_ENDPOINT', 'S3_ACCESS_KEY_ID', 'S3_SECRET_ACCESS_KEY', 'S3_REGION'];
-  const buckets = { messages: 'S3_BUCKET_MEDIA', contact_files: 'S3_BUCKET_DOCUMENTS' };
+  const buckets = { messages: 'S3_BUCKET_MEDIA', flows: 'S3_BUCKET_MEDIA', widgets: 'S3_BUCKET_MEDIA', contact_files: 'S3_BUCKET_DOCUMENTS' };
   const missing = [...need, ...kinds.map((k) => buckets[k])].filter((k) => !env[k] || !env[k].trim());
   if (missing.length)
     refuse(
@@ -261,7 +261,7 @@ function s3FromEnv(env, kinds) {
     id: env.S3_ACCESS_KEY_ID.trim(),
     secret: env.S3_SECRET_ACCESS_KEY.trim(),
     pathStyle: String(env.S3_FORCE_PATH_STYLE ?? 'true') !== 'false',
-    bucket: { messages: env[buckets.messages], contact_files: env[buckets.contact_files] },
+    bucket: { messages: env[buckets.messages], flows: env[buckets.messages], widgets: env[buckets.messages], contact_files: env[buckets.contact_files] },
   };
 }
 
@@ -331,6 +331,8 @@ function loadConfig(file) {
     authHeaders: c.authHeaders || {},
     maxFileMB: Number(c.maxFileMB) > 0 ? Number(c.maxFileMB) : 50,
     timeoutMs: Number(c.timeoutMs) > 0 ? Number(c.timeoutMs) : 60_000,
+    // public https origin of the R2 media bucket (custom domain or r2.dev): a flow sends its media by link, so the rewritten step needs a public URL
+    flowMediaBase: typeof c.flowMediaPublicBase === 'string' ? c.flowMediaPublicBase.trim().replace(/\/+$/, '') : '',
   };
 }
 
@@ -462,8 +464,25 @@ async function findOrg(db, slug) {
   }
 }
 
+/** Every string of a parsed JSON value that is an http(s) URL on one of the hosts. */
+function jsonUrls(v, hosts, out = new Set()) {
+  if (typeof v === 'string') {
+    const id = /^https?:\/\//i.test(v) ? urlId(v) : null;
+    if (id && hosts.includes(id.host)) out.add(v);
+  } else if (Array.isArray(v)) for (const x of v) jsonUrls(x, hosts, out);
+  else if (v && typeof v === 'object') for (const x of Object.values(v)) jsonUrls(x, hosts, out);
+  return out;
+}
+/** The same value with every string equal to `from` replaced by `to`; changed = how many. */
+function jsonReplace(v, from, to, cnt = { n: 0 }) {
+  if (typeof v === 'string') return v === from ? (cnt.n++, to) : v;
+  if (Array.isArray(v)) return v.map((x) => jsonReplace(x, from, to, cnt));
+  if (v && typeof v === 'object') return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, jsonReplace(x, from, to, cnt)]));
+  return v;
+}
+
 /** Every row of the org that still points at an http(s) URL. */
-async function collectRefs(db, org, rekey = false) {
+async function collectRefs(db, org, rekey = false, cfg = { allowedHosts: [] }) {
   return tenant(
     db,
     org.id,
@@ -485,7 +504,21 @@ async function collectRefs(db, org, rekey = false) {
             [org.id],
           );
       const c = rekey ? { rows: [] } : await db.query(`SELECT id, storage_key AS url FROM contact_files WHERE org_id = $1 AND storage_key ~* '^https?://'`, [org.id]);
+      // media steps of converted flows hold the Waboo address inside flow_data
+      const f = rekey ? { rows: [] } : await db.query(`SELECT id, flow_data FROM flows WHERE org_id = $1 AND flow_data IS NOT NULL`, [org.id]);
+      const flowRefs = f.rows.flatMap((r) => [...jsonUrls(r.flow_data, cfg.allowedHosts)].map((url) => ({ kind: 'flows', id: r.id, url, match: url })));
+      // chat widgets: the launcher image, the body background image (text columns) and the launcher avatar (inside the launcher jsonb)
+      const w = rekey ? { rows: [] } : await db.query(`SELECT id, button_image_url, body_bg_image_url, launcher FROM chatbot_widgets WHERE org_id = $1`, [org.id]);
+      const onWaboo = (u) => typeof u === 'string' && cfg.allowedHosts.includes(urlId(u)?.host);
+      const widgetRefs = w.rows.flatMap((r) =>
+        [r.button_image_url, r.body_bg_image_url, r.launcher && r.launcher.avatar]
+          .filter(onWaboo)
+          .filter((u, i, a) => a.indexOf(u) === i)
+          .map((url) => ({ kind: 'widgets', id: r.id, url, match: url })),
+      );
       return [
+        ...flowRefs,
+        ...widgetRefs,
         ...m.rows.map((r) => ({ kind: 'messages', id: r.id, created_at: r.created_at, url: r.url, match: r.match ?? r.url })),
         ...c.rows.map((r) => ({ kind: 'contact_files', id: r.id, url: r.url })),
       ];
@@ -523,11 +556,47 @@ function safeName(p) {
   return n || 'file';
 }
 // messages: the app's ChatMediaStore.ownsKey() accepts only `chat/<org id>/...`; contact_files: `<area>/<org id>/` (contact-files.service.ts:73-75)
-const keyPrefix = (org, g) => (g.kind === 'messages' ? `chat/${org.id}/waboo` : `contact-files/${org.id}/waboo`);
+const keyPrefix = (org, g) => (g.kind === 'messages' ? `chat/${org.id}/waboo` : g.kind === 'flows' ? `flow-media/${org.id}/waboo` : g.kind === 'widgets' ? `widget-media/${org.id}/waboo` : `contact-files/${org.id}/waboo`);
 const targetKeyOf = (org, g) => `${keyPrefix(org, g)}/${g.id.key.slice(0, 16)}/${safeName(g.id.path)}`;
 const fullKey = (prefix, k) => (prefix ? `${prefix}/${k}` : k);
 
-async function applyRows(db, org, g, done) {
+async function applyFlowRows(db, org, g, done, publicUrl) {
+  return tenant(db, org.id, async () => {
+    let changed = 0;
+    for (const r of g.refs) {
+      const row = (await db.query(`SELECT flow_data FROM flows WHERE org_id = $1 AND id = $2 FOR UPDATE`, [org.id, r.id])).rows[0];
+      if (!row) continue;
+      const cnt = { n: 0 };
+      const next = jsonReplace(row.flow_data, r.url, publicUrl, cnt);
+      if (cnt.n === 0) continue;
+      await db.query(`UPDATE flows SET flow_data = $3::jsonb WHERE org_id = $1 AND id = $2`, [org.id, r.id, JSON.stringify(next)]);
+      changed++;
+    }
+    return changed;
+  });
+}
+
+async function applyWidgetRows(db, org, g, publicUrl) {
+  return tenant(db, org.id, async () => {
+    let changed = 0;
+    for (const r of g.refs) {
+      const res = await db.query(
+        `UPDATE chatbot_widgets SET
+           button_image_url = CASE WHEN button_image_url = $3 THEN $4 ELSE button_image_url END,
+           body_bg_image_url = CASE WHEN body_bg_image_url = $3 THEN $4 ELSE body_bg_image_url END,
+           launcher = CASE WHEN launcher->>'avatar' = $3 THEN jsonb_set(launcher, '{avatar}', to_jsonb($4::text)) ELSE launcher END
+         WHERE org_id = $1 AND id = $2 AND ($3 IN (COALESCE(button_image_url, ''), COALESCE(body_bg_image_url, ''), COALESCE(launcher->>'avatar', '')))`,
+        [org.id, r.id, r.url, publicUrl],
+      );
+      changed += res.rowCount;
+    }
+    return changed;
+  });
+}
+
+async function applyRows(db, org, g, done, cfg = {}) {
+  if (g.kind === 'widgets') return applyWidgetRows(db, org, g, `${cfg.flowMediaBase}/${done.objectKey}`);
+  if (g.kind === 'flows') return applyFlowRows(db, org, g, done, `${cfg.flowMediaBase}/${done.objectKey}`);
   return tenant(db, org.id, async () => {
     let changed = 0;
     for (const r of g.refs) {
@@ -641,7 +710,7 @@ async function runCopy(ctx) {
       }
     } else stats.resumed++;
     try {
-      const n = await serial(() => applyRows(db, org, g, done));
+      const n = await serial(() => applyRows(db, org, g, done, cfg));
       stats.rows += n;
       stats.rowsUnchanged += g.refs.length - n;
     } catch {
@@ -668,11 +737,11 @@ async function runVerify(ctx) {
   const { db, org, cfg, state, s3, flags } = ctx;
   const prefix = (flags['base-folder'] || '').replace(/^\/+|\/+$/g, '');
   const head = Boolean(flags['head-only']);
-  const [msgs, cfs, left] = await tenant(
+  const [msgs, cfs, left, noSource, flowRows, widgetRows] = await tenant(
     db,
     org.id,
     async () => [
-      (await db.query(`SELECT media_key AS key, media_size AS size, media_sha256 AS sha FROM messages WHERE org_id = $1 AND media_key LIKE $2`, [org.id, `chat/${org.id}/waboo/%`])).rows,
+      (await db.query(`SELECT media_key AS key, media_size AS size, media_sha256 AS sha, kind FROM messages WHERE org_id = $1 AND media_key LIKE $2`, [org.id, `chat/${org.id}/waboo/%`])).rows,
       (await db.query(`SELECT storage_key AS key, file_size_bytes AS size FROM contact_files WHERE org_id = $1 AND storage_key LIKE $2`, [org.id, `contact-files/${org.id}/waboo/%`])).rows,
       (await db.query(
         `SELECT 'messages' AS t, COALESCE(meta->'legacy'->>'mediaUrl', media_key) AS url FROM messages
@@ -680,22 +749,60 @@ async function runVerify(ctx) {
          UNION ALL SELECT 'contact_files', storage_key FROM contact_files WHERE org_id = $1 AND storage_key ~* '^https?://'`,
         [org.id],
       )).rows,
+      // media-kind messages (a header image of a button message included) that have neither a stored object nor a URL to copy it from:
+      // nothing can ever serve them, so they are listed as a problem instead of passing unnoticed
+      (await db.query(
+        `SELECT kind, count(*)::int AS n FROM messages
+          WHERE org_id = $1 AND kind IN ('image', 'video', 'audio', 'voice', 'document', 'sticker') AND media_key IS NULL
+            AND COALESCE(meta->'legacy'->>'mediaUrl', '') !~* '^https?://' AND meta->'legacy' IS NOT NULL AND meta->'legacy'->>'src' = 'waboo'
+          GROUP BY kind`,
+        [org.id],
+      )).rows,
+      (await db.query(`SELECT flow_data FROM flows WHERE org_id = $1 AND flow_data IS NOT NULL`, [org.id])).rows,
+      (await db.query(`SELECT button_image_url, body_bg_image_url, launcher FROM chatbot_widgets WHERE org_id = $1`, [org.id])).rows,
     ],
     true,
   );
+  // flows: any link still on a Waboo host is a leftover; a link under the R2 public base must exist in the bucket
+  const flowUrls = flowRows.flatMap((r) => [...jsonUrls(r.flow_data, cfg.allowedHosts)]);
+  for (const u of flowUrls) left.push({ t: 'flows', url: u });
+  for (const r of widgetRows)
+    for (const u of [r.button_image_url, r.body_bg_image_url, r.launcher && r.launcher.avatar])
+      if (typeof u === 'string' && cfg.allowedHosts.includes(urlId(u)?.host)) left.push({ t: 'widgets', url: u });
+  const base = cfg.flowMediaBase;
+  const flowObjects = new Set();
+  if (base)
+    for (const r of flowRows) {
+      const walk = (v) => {
+        if (typeof v === 'string') {
+          if (v.startsWith(`${base}/`) && /\/flow-media\/\d+\/waboo\//.test(v)) flowObjects.add(v.slice(base.length + 1));
+        } else if (Array.isArray(v)) v.forEach(walk);
+        else if (v && typeof v === 'object') Object.values(v).forEach(walk);
+      };
+      walk(r.flow_data);
+    }
+  for (const r of widgetRows)
+    for (const u of [r.button_image_url, r.body_bg_image_url, r.launcher && r.launcher.avatar])
+      if (base && typeof u === 'string' && u.startsWith(`${base}/`) && /\/widget-media\/\d+\/waboo\//.test(u)) flowObjects.add(u.slice(base.length + 1));
   const shaByKey = new Map([...state.values()].filter((e) => e.status === 'done').map((e) => [e.targetKey, e.sha256]));
   const jobs = [
     ...msgs.map((r) => ({ bucket: s3.bucket.messages, ...r })),
     ...cfs.map((r) => ({ bucket: s3.bucket.contact_files, ...r, sha: shaByKey.get(r.key) || null })),
+    // the object key already carries the base folder (the public URL is origin + object key)
+    ...[...flowObjects].map((k) => ({ bucket: s3.bucket.flows, key: k, size: null, sha: null, kind: 'flows', raw: true })),
   ];
   const bad = new Map();
+  const byKind = new Map();
+  for (const r of noSource) bad.set(`NO_SOURCE_${String(r.kind).toUpperCase()}`, r.n);
+  for (const j of msgs) tally(byKind, j.kind);
+  if (flowObjects.size) byKind.set('flows (R2 objects)', flowObjects.size);
   const q = [...jobs];
   await Promise.all(
     Array.from({ length: Math.max(1, Number(flags.concurrency || 3)) }, async () => {
       while (q.length) {
         const j = q.shift();
         try {
-          const st = await s3Stat(s3, j.bucket, fullKey(prefix, j.key), !head && Boolean(j.sha));
+          const st = await s3Stat(s3, j.bucket, j.raw ? j.key : fullKey(prefix, j.key), !head && Boolean(j.sha));
           if (!st) tally(bad, 'OBJECT_MISSING');
           else if (j.size !== null && Number(j.size) !== st.size) tally(bad, 'SIZE_MISMATCH');
           else if (j.sha && st.sha256 && st.sha256 !== j.sha) tally(bad, 'SHA256_MISMATCH');
@@ -710,6 +817,7 @@ async function runVerify(ctx) {
   const failedByReason = new Map();
   for (const e of state.values()) if (e.status === 'failed') tally(failedByReason, e.reason);
   say(`objects checked=${jobs.length} (${head ? 'size only' : 'size + sha256 where known'}) problems: ${lines(bad)}`);
+  say(`stored message files by kind: ${lines(byKind)}`);
   say(`rows still pointing at a URL: ${left.length}  by table@host: ${lines(pointing)}`);
   say(`last recorded failure per file (state): ${lines(failedByReason)}`);
   return bad.size || left.length ? 1 : 0;
@@ -748,7 +856,7 @@ async function main(argv, hooks = {}) {
   const db = await connect(flags);
   try {
     const org = await findOrg(db, flags['org-slug']);
-    const refs = await collectRefs(db, org, !!flags.rekey);
+    const refs = await collectRefs(db, org, !!flags.rekey, cfg);
     const { groups, notUrl } = groupRefs(refs);
     const byTable = {};
     for (const r of refs) byTable[r.kind] = (byTable[r.kind] || 0) + 1;
@@ -757,7 +865,8 @@ async function main(argv, hooks = {}) {
       say(cmd === 'copy' ? 'dry run: nothing was downloaded, uploaded or written (add --apply with the limits)' : '');
       return 0;
     }
-    const kinds = cmd === 'verify' ? ['messages', 'contact_files'] : [...new Set(groups.map((g) => g.kind))];
+    if (apply && (byTable.flows || byTable.widgets) && !/^https:\/\//.test(cfg.flowMediaBase)) refuse('config.flowMediaPublicBase (the public https origin of the R2 media bucket) is required: converted flows and chat widgets show their images by link');
+    const kinds = cmd === 'verify' ? ['messages', 'contact_files', 'flows'] : [...new Set(groups.map((g) => g.kind))];
     const s3 = s3FromEnv(process.env, kinds.length ? kinds : ['messages']);
     const ctx = { db, org, groups, cfg, reg, state, s3, flags, hooks };
     return cmd === 'verify' ? await runVerify(ctx) : await runCopy(ctx);
@@ -766,7 +875,7 @@ async function main(argv, hooks = {}) {
   }
 }
 
-module.exports = { main, download, isPrivateIp, s3Sign, s3FromEnv, urlId, safeName, targetKeyOf, setOut: (f) => (OUT = f), scrub };
+module.exports = { main, jsonUrls, jsonReplace, download, isPrivateIp, s3Sign, s3FromEnv, urlId, safeName, targetKeyOf, setOut: (f) => (OUT = f), scrub };
 
 if (require.main === module) {
   main(process.argv.slice(2)).then(

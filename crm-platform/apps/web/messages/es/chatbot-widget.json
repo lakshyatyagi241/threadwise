@@ -325,7 +325,8 @@
           "url": "O usa la dirección de tu propia imagen",
           "urlHint": "Pega la dirección de una imagen cuadrada (https://...). Subir un archivo aún no está disponible.",
           "botName": "Nombre del bot",
-          "botNameHint": "Se muestra en el encabezado de la ventana del chat. Déjalo vacío para usar el nombre de tu bot."
+          "botNameHint": "Se muestra en el encabezado de la ventana del chat. Déjalo vacío para usar el nombre de tu bot.",
+          "urlHintUpload": "Pega la dirección de una imagen cuadrada (https://...) o sube un archivo abajo."
         },
         "3": {
           "title": "Define tu mensaje de bienvenida",
@@ -699,7 +700,9 @@
         "statusLive": "En vivo",
         "statusDraft": "Sin publicar",
         "codeLabel": "HTML",
-        "localNote": "Este código apunta a una dirección de este equipo (localhost), así que solo funciona en páginas abiertas aquí. En un sitio web real, usa tu dirección desplegada."
+        "localNote": "Este código apunta a una dirección de este equipo (localhost), así que solo funciona en páginas abiertas aquí. En un sitio web real, usa tu dirección desplegada.",
+        "statusNoNumber": "Publicado, sin número",
+        "noNumber": "Este bot está publicado, pero aún no tiene un número de WhatsApp, así que el botón, el código QR y el enlace directo siguen ocultos. Elige un número en el Disparador, en la pestaña Crear."
       },
       "whatsapp": {
         "loading": "Cargando el botón…",
@@ -708,7 +711,8 @@
         "saved": "Botón de WhatsApp guardado",
         "saveFailed": "No se pudo guardar el botón. Inténtalo de nuevo.",
         "fromBot": "El botón abre WhatsApp en el {number}, el número en el que funciona este bot. Cambia el número en el disparador de la pestaña Crear.",
-        "noNumber": "Este bot aún no tiene número de WhatsApp. Elige uno en el disparador, en la pestaña Crear, y vuelve para guardar el botón."
+        "noNumber": "Este bot aún no tiene número de WhatsApp. Elige uno en el disparador, en la pestaña Crear, y vuelve para guardar el botón.",
+        "keywordMissing": "El mensaje de arriba no contiene la palabra de inicio de tu bot \"{keyword}\". Si el bot solo se inicia con esa palabra, los visitantes que toquen el botón no llegarán a él."
       }
     },
     "webBots": {

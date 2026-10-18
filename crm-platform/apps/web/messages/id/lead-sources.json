@@ -613,7 +613,9 @@
         "campaign": "Kampanye",
         "adset": "Set iklan",
         "ad": "Iklan",
-        "form": "Formulir"
+        "form": "Formulir",
+        "channel": "Saluran",
+        "moduleType": "Jenis modul"
       },
       "capturedAt": "Ditangkap",
       "openSource": "Buka sumber prospek"

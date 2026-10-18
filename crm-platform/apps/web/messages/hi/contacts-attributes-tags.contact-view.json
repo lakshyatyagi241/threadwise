@@ -126,7 +126,12 @@
       "details": {
         "title": "संपर्क विवरण",
         "stage": "लाइफ़साइकल चरण",
-        "otherProperties": "अन्य प्रॉपर्टी"
+        "otherProperties": "अन्य प्रॉपर्टी",
+        "stageSince": "इस चरण में कब से",
+        "previousStage": "पिछला चरण",
+        "previousStageSince": "पिछला चरण कब से",
+        "lostReason": "हार का कारण",
+        "updatedAt": "अंतिम अपडेट"
       },
       "company": {
         "title": "कंपनी",

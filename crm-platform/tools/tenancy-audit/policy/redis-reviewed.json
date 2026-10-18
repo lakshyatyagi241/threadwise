@@ -103,10 +103,6 @@
     "status": "baseline-unreviewed",
     "reason": "key template has no org token by heuristic; not read line by line yet"
   },
-  "modules/chrome-extension-sheets-addon/sheets-key.guard.ts": {
-    "status": "baseline-unreviewed",
-    "reason": "key template has no org token by heuristic; not read line by line yet"
-  },
   "modules/developer-rest-api-v1/auth/bearer-api-key.guard.ts": {
     "status": "baseline-unreviewed",
     "reason": "key template has no org token by heuristic; not read line by line yet"

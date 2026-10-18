@@ -187,6 +187,7 @@
       "notFound": "Ta przestrzeń robocza już nie istnieje.",
       "reasonRequired": "Wymagany jest powód liczący co najmniej 8 znaków.",
       "orgSuspended": "Przestrzeń robocza jest zawieszona, więc nie można do niej wejść.",
+      "noOwner": "Ten obszar roboczy nie ma aktywnego właściciela, na którego można się zalogować.",
       "validation": "Sprawdź wartości i spróbuj ponownie."
     },
     "detail": {

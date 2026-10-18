@@ -126,7 +126,12 @@
       "details": {
         "title": "Contact details",
         "stage": "Lifecycle stage",
-        "otherProperties": "Other properties"
+        "otherProperties": "Other properties",
+        "stageSince": "In this stage since",
+        "previousStage": "Previous stage",
+        "previousStageSince": "Previous stage since",
+        "lostReason": "Lost reason",
+        "updatedAt": "Last updated"
       },
       "company": {
         "title": "Company",

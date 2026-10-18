@@ -3,6 +3,33 @@
   "commit": "604c1db95bac5efb2245506552f95f4801b63461 + uncommitted working tree",
   "results": [
     {
+      "suite": "scrape-demo.mjs --grafana --web: real API, worker, probe and BUILT Next.js server; Prometheus 2.55 and Alertmanager 0.27; Grafana 11.3.0",
+      "status": "68 of 68 checks",
+      "ranOn": "2026-10-18, branch claude/event-loop-backlog-sweep",
+      "rawData": "evidence/scrape-demo-web-grafana.json",
+      "observed": {
+        "targets": "four up: crm-api, crm-worker, crm-probe, crm-web",
+        "web": "request counts by route template, 404s as \"unmatched\" (never under their URL), loop scraped, probe reaches web",
+        "release": "release=\"demo-1\" on api, worker and web",
+        "grafana": "5 dashboards provisioned; 105 panel queries (the release dashboard once per service), 0 errors",
+        "rules": "16 alert rules loaded and evaluating"
+      },
+      "caveat": "The demo opens no sockets, so the realtime panels had no data; no stall was injected into the web server, so WebEventLoopBlockingWithImpact was only promtool-tested. One laptop. The first run of this demo failed 1 check that was a race in the check itself (it read the unmatched series before Prometheus scraped it); the check now waits for the series."
+    },
+    {
+      "suite": "web-metrics-check.mjs: the BUILT web app started five times (listener rules, switches, request histogram, release label)",
+      "status": "PASSED (25 of 25)",
+      "ranOn": "2026-10-18",
+      "rawData": "evidence/web-metrics.json",
+      "note": "The first version of this check never read response bodies, so Next's streamed pages and 404s had not finished (and were not counted) when it scraped; it now reads them, which is also how a real client behaves."
+    },
+    {
+      "suite": "unit and gate runs for the sweep: platform-infrastructure, realtime, WABA, ai-agents-training, chat-conversations (see the PR for the file counts), web observability and i18n, promtool check and test, dashboards build check, scan gate",
+      "status": "see PR body",
+      "ranOn": "2026-10-18",
+      "note": "apps/web src/i18n/unicode-rtl.test.ts has one failing test (a physical left/right class baseline) in files this work does not touch."
+    },
+    {
       "suite": "measure-zlib-sites.mjs (20 sync zlib sites, synthetic payloads at two compressibilities, sync against thread-pool) and measure-zlib-real.mjs (the real compiled functions after EL-B08)",
       "status": "RAN",
       "ranOn": "2026-10-18, branch claude/event-loop-zlib-profile",
@@ -405,6 +432,7 @@
     "the quality.yml event-loop job on GitHub (the workflow only runs manually and never has)",
     "the regression gate on a GitHub runner, a CI baseline, or its false-alarm rate (EL-B19)",
     "Prometheus scraping the web container, the probe against web, and the full desk-web and desk-api image builds with @crm/observability",
-    "the export runners and the archive sweep end to end after EL-B08 (no database run), and any of the zlib figures on production-shaped data"
+    "the export runners and the archive sweep end to end after EL-B08 (no database run), and any of the zlib figures on production-shaped data",
+    "WebEventLoopBlockingWithImpact firing from a real web stall; the realtime series with real sockets; the i18n cache saving on live traffic and its heap cost in a container"
   ]
 }

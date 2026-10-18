@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
 import { ConsentCard } from '@/features/contact-consent';
 import { LinkedAppointments } from '@/features/appointments';
 import { LinkedInvoices } from '@/features/invoicing';
@@ -26,7 +26,10 @@ import { StatsSection } from './stats-section';
 function DetailsSection({ contact }: SectionProps) {
   const t = useTranslations('contacts-attributes-tags.contact.details');
   const td = useTranslations('contacts-attributes-tags.detail');
+  const format = useFormatter();
   const rows = useInfoRows(contact, { full: true });
+  const when = (iso: string | null) =>
+    iso ? format.dateTime(new Date(iso), { dateStyle: 'medium', timeStyle: 'short' }) : '';
   const custom = useCustomGroups(contact);
   const groups = contact.groups ?? [];
   const all = [
@@ -36,6 +39,16 @@ function DetailsSection({ contact }: SectionProps) {
       label: t('stage'),
       value: contact.lifecycleStage ?? '',
     },
+    // the stage history a migrated or edited contact carries: since when, and the stage before
+    { key: 'stage-since', label: t('stageSince'), value: when(contact.lifecycleStageDate) },
+    { key: 'stage-prev', label: t('previousStage'), value: contact.previousLifecycleStage ?? '' },
+    {
+      key: 'stage-prev-since',
+      label: t('previousStageSince'),
+      value: when(contact.previousLifecycleStageDate),
+    },
+    { key: 'lost-reason', label: t('lostReason'), value: contact.lostReason ?? '' },
+    { key: 'updated', label: t('updatedAt'), value: when(contact.updatedAt) },
     {
       key: 'groups',
       label: td('groups'),

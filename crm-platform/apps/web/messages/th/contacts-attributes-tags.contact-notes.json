@@ -94,7 +94,13 @@
             "endInvalid": "กรอกวันที่และเวลาสิ้นสุดที่ถูกต้อง",
             "endBeforeStart": "เวลาสิ้นสุดต้องไม่อยู่ก่อนเวลาเริ่ม"
           }
-        }
+        },
+        "bookedOnline": "จองออนไลน์",
+        "viewBooking": "ดูการจอง",
+        "manageBooking": "จัดการการจอง",
+        "viewBookingAria": "ดูการจองของ {title}",
+        "manageBookingAria": "จัดการการจองของ {title}",
+        "bookedReadOnly": "จองออนไลน์ เปลี่ยนแปลงได้ที่การจองเท่านั้น"
       },
       "files": {
         "title": "ไฟล์",

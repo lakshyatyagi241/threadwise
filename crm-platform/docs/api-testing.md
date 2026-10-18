@@ -1772,6 +1772,18 @@ Scheduled meetings on a contact (`apps/api/src/modules/crm/contact-meetings`,
 
 Response — `200 OK`: standard cursor-page envelope, `[]` for a contact with no meetings.
 
+Query: `limit`, `cursor`, and optionally `when=upcoming|past|all`. Without `when` the list is most recently logged first. With it the list
+is ordered by `startsAt` (ties by when the row was logged): `upcoming` is still to come, soonest first (a booking that was cancelled or
+declined is never upcoming), `past` is every other dated row, latest first, and `all` is every row, latest start first, rows with no start
+last. A cursor from one window is not valid in another (`400`); an unknown `when` is `422`.
+
+A booking that has a contact is also a row of this list (`source: "booking"`, written by the appointments module in the booking's
+transaction). Every row now also carries `source` (`manual` or `booking`), `appointmentId` (the appointment's uuid, null for a typed-in
+row or when the appointment was deleted), `status` (the appointment's current status, null for a typed-in row), `joinUrl` (the call's web
+address, null when there is none) and `canManageBooking` (true when the caller may change that appointment: `record.appointments.update`
+within its record scope; always false on a typed-in row). A booked row that still has its appointment is read-only here: `PATCH` and
+`DELETE` on it return `409 CONFLICT`.
+
 ### POST /v2/contacts/:contactId/meetings
 
 - **Permission**: `record.contacts.update`

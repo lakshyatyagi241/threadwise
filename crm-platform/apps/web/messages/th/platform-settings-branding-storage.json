@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. หน้าจอยินยอม",
-              "body": "เพิ่มขอบเขตที่ผลิตภัณฑ์ขอ (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly) แล้วเผยแพร่แอป: ในโหมด Testing Google จะยกเลิกการอนุญาตทุก 7 วัน และพื้นที่ทำงานต้องเชื่อมต่อใหม่ ขอบเขต drive เป็นขอบเขตที่จำกัดและต้องผ่านการตรวจสอบของ Google"
+              "body": "เพิ่มขอบเขตที่ผลิตภัณฑ์ขอ (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly) แล้วเผยแพร่แอป: ในโหมด Testing Google จะยกเลิกการอนุญาตทุก 7 วัน และพื้นที่ทำงานต้องเชื่อมต่อใหม่ ขอบเขต drive เป็นขอบเขตที่จำกัดและต้องผ่านการตรวจสอบของ Google"
             },
             "workspaces": {
               "title": "4. พื้นที่ทำงานเชื่อมต่อ",

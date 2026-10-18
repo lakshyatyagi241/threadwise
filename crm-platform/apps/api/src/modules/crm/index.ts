@@ -81,7 +81,7 @@ export {
   ContactMeetingsRepository,
   toContactMeetingResponse,
 } from './contact-meetings';
-export type { ContactMeetingRow } from './contact-meetings';
+export type { BackfillBatch, BookedMeetingValues, ContactMeetingRow } from './contact-meetings';
 export {
   ContactGroupsService,
   ContactGroupsRepository,

@@ -223,7 +223,11 @@ export function TimelineRow({
         return {
           summary: d.upcoming
             ? t('entry.meeting.upcoming', { title: d.title })
-            : t('entry.meeting.past', { title: d.title }),
+            : d.status === 'cancelled' || d.status === 'declined'
+              ? t('entry.meeting.notHeld', { title: d.title })
+              : d.status === 'no_show'
+                ? t('entry.meeting.noShow', { title: d.title })
+                : t('entry.meeting.past', { title: d.title }),
           sub: [start, d.location].filter(Boolean).join(' · ') || null,
         };
       }

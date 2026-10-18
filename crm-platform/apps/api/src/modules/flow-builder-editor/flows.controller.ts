@@ -53,7 +53,6 @@ import { FlowAiService } from './flow-ai.service';
 import { FlowMediaTooLargeInterceptor } from './flow-media-too-large.interceptor';
 import { FLOW_MEDIA_MAX_BYTES, FLOW_MEDIA_TYPES, FlowMediaService } from './flow-media.service';
 import { flowExportFileName } from './flow-rules';
-import { GOOGLE_FORM_ID_RE } from './google-apps-script';
 import { FlowsService } from './flows.service';
 import { TestWebhookService } from './test-webhook.service';
 import { MapsLinkService } from './maps-link.service';
@@ -69,7 +68,6 @@ export const FLB_PLAN_FEATURE = 'automation' satisfies PlanFeatureKey;
 
 const uploadTypeSchema = z.enum(FLOW_MEDIA_TYPES);
 const googleKindSchema = z.enum(FLB_GOOGLE_PICKER_KINDS);
-const googleFormIdSchema = z.string().regex(GOOGLE_FORM_ID_RE, 'Not a Google form id');
 const upload = FileInterceptor('file', {
   limits: { fileSize: FLOW_MEDIA_MAX_BYTES, files: 1 },
 });
@@ -181,27 +179,10 @@ export class FlowsController {
   @ApiOperation({
     summary: 'Google Sheets / Docs / Forms files for the node pickers',
     description:
-      "The connected account's files of that kind, newest first. Needs the Drive file list permission on the Google account page. 409 GOOGLE_ACCOUNT_NOT_CONNECTED, GOOGLE_ACCOUNT_NEEDS_RECONNECT or GOOGLE_SCOPE_MISSING when the account cannot list; 503 GOOGLE_ACCOUNT_NOT_CONFIGURED or GOOGLE_API_NOT_ENABLED when the platform's Google setup is incomplete; the builder falls back to a text field for the id on any of them.",
+      "The connected account's files of that kind, newest first. Needs the Drive file list permission on the Google account page. 409 GOOGLE_ACCOUNT_NOT_CONNECTED, GOOGLE_ACCOUNT_NEEDS_RECONNECT or GOOGLE_SCOPE_MISSING when the account cannot list; 503 GOOGLE_ACCOUNT_NOT_CONFIGURED or GOOGLE_API_NOT_ENABLED when the platform's Google setup is incomplete; the builder shows the way out (connect, reconnect, add the permission) for any of them.",
   })
   async google(@Param('kind', zodPipe(googleKindSchema)) kind: z.infer<typeof googleKindSchema>) {
     return this.googleFiles.list(kind);
-  }
-
-  @Get('builder-context/google/forms/:formId/apps-script')
-  @RequirePermission('flb.flows.read')
-  @ApiOperation({
-    summary: 'The Apps Script that reports a Google Form submission back to the flow',
-    description:
-      "Plain-text `.gs` download for the Google Form node's one-time setup. It carries this workspace's webhook token. 422 when the form id is not a Google form id.",
-  })
-  googleFormScript(
-    @Param('formId', zodPipe(googleFormIdSchema)) formId: string,
-    @Res() res: { setHeader(name: string, value: string): unknown; send(body: string): unknown },
-  ) {
-    const { fileName, source } = this.context.googleFormScript(formId);
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
-    res.send(source);
   }
 
   @Post('import')
