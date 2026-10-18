@@ -66,8 +66,8 @@ function interactiveOf(row: MessageRow): MessageResponse['interactive'] {
 /** The buttons of an interactive message we sent. */
 function sentInteractiveOf(row: MessageRow): MessageResponse['sentInteractive'] {
   const i = row.meta.sentInteractive as Record<string, unknown> | undefined;
-  if (row.kind !== 'interactive' || row.direction !== 'out' || !i || typeof i !== 'object')
-    return null;
+  // Any kind: a button message with an image / video / document header is stored as that file's message and keeps its buttons.
+  if (row.direction !== 'out' || !i || typeof i !== 'object') return null;
   const common = { header: str(i.header), body: str(i.body) ?? '', footer: str(i.footer) };
   if (i.type === 'cta_url') {
     return {
