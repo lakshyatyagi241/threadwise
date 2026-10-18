@@ -264,7 +264,7 @@ describe("Simple import: this workspace's own file", () => {
       flow_data: {
         flowNodes: [
           { id: 't', type: 'trigger', x: 0, y: 0, data: {}, isStart: true },
-          { id: 'w', type: 'webhook', x: 0, y: 100, data: {} },
+          { id: 'w', type: 'book_appointment', x: 0, y: 100, data: {} },
         ],
         flowEdges: [{ id: 'e', source: 't', sourceHandle: 'out', target: 'w' }],
         vars: [],

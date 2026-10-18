@@ -1,6 +1,7 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import { flbDefaultNodeData, type FlowNode } from '@crm/contracts';
+import { ToastProvider } from '@crm/ui';
 import { AskForm, ButtonsForm, ListForm } from './options';
 
 // Messages are not loaded here: the key is the text; a key with params keeps them so the `{{choice}}` hint can be read.
@@ -31,15 +32,17 @@ const html = (
   const data = { ...flbDefaultNodeData(type), ...patch };
   const node: FlowNode = { id: 'n_1', type, x: 0, y: 0, data };
   return renderToStaticMarkup(
-    <Form
-      node={node}
-      data={data}
-      set={noop}
-      setMany={noop}
-      addOption={noop}
-      removeOption={noop}
-      env={{ ctx: { flows: [], teams: [] }, loading: false, flowId: null } as never}
-    />,
+    <ToastProvider>
+      <Form
+        node={node}
+        data={data}
+        set={noop}
+        setMany={noop}
+        addOption={noop}
+        removeOption={noop}
+        env={{ ctx: { flows: [], teams: [] }, loading: false, flowId: null } as never}
+      />
+    </ToastProvider>,
   );
 };
 
