@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "generated": "2026-10-18",
+  "note": "Version-controlled resource policy. 'current' fields are read from deploy/hostinger/docker-compose.yml by tools/resource-limits/check.mjs on every run. 'measured' is null everywhere: no baseline has been taken, so no expected-peak or headroom number is claimed. Thresholds are starting targets from the standard, for owner review.",
+  "thresholds": {
+    "heapToMemoryMax": 0.75,
+    "redisToMemoryMax": 0.6,
+    "hostHeadroom": 0.2,
+    "dbConnectionReserve": 0.15,
+    "workerStopGraceMinSeconds": 60,
+    "workerConcurrencyPerPoolSlot": 3,
+    "alerts": {
+      "containerMemoryWarn": 0.8,
+      "containerMemoryCritical": 0.9,
+      "cpuThrottleWarnSecondsPerSecond": 0.1,
+      "pidsWarn": 0.8,
+      "dbConnectionUtilizationWarn": 0.8,
+      "redisMemoryWarn": 0.8
+    }
+  },
+  "hosts": {
+    "hostinger": {
+      "memoryBytes": null,
+      "cpuCores": null,
+      "diskBytes": null,
+      "note": "Shared Dokploy host. Size not recorded anywhere in the repo; ask the operator (RES-002). Setting memoryBytes turns the host-budget check from BLOCKED into a real comparison."
+    },
+    "prod-reference": {
+      "memoryBytes": null,
+      "note": "docker-compose.prod.yml is the reference single-VM topology (assumes 16 GB+ per its own comment); it is not what runs at desk.wabo.ai."
+    }
+  },
+  "deployments": {
+    "hostinger": {
+      "file": "deploy/hostinger/docker-compose.yml",
+      "deployed": true
+    },
+    "prod-reference": {
+      "file": "docker-compose.prod.yml",
+      "deployed": false
+    }
+  },
+  "services": [
+    {
+      "service": "api-blue/api-green",
+      "criticality": "P0",
+      "tenantScope": "all tenants",
+      "memLimit": "1g",
+      "nodeHeapMiB": 640,
+      "dbPoolMax": 10,
+      "stopGrace": "30s",
+      "overloadBehavior": "body-size classes answer 413; per-route throttles answer 429; pool wait times out after 10 s; statement_timeout 15 s",
+      "recovery": "restart: unless-stopped; /ready healthcheck; blue-green slot",
+      "measured": null,
+      "tests": ["tools/resource-limits/check.mjs"]
+    },
+    {
+      "service": "worker",
+      "criticality": "P0",
+      "tenantScope": "all tenants",
+      "memLimit": "1g",
+      "nodeHeapMiB": 640,
+      "dbPoolMax": 10,
+      "stopGrace": "60s",
+      "overloadBehavior": "BullMQ concurrency per queue (sum 171); no per-tenant cap except the WhatsApp per-number limiter",
+      "recovery": "restart: unless-stopped; heartbeat healthcheck; stalled jobs return to the queue",
+      "measured": null,
+      "tests": ["tools/resource-limits/check.mjs", "docs/performance/queue-capacity"]
+    },
+    {
+      "service": "web-blue/web-green",
+      "criticality": "P1",
+      "tenantScope": "all tenants",
+      "memLimit": "768m",
+      "nodeHeapMiB": 512,
+      "stopGrace": "20s",
+      "measured": null
+    },
+    {
+      "service": "postgres",
+      "criticality": "P0",
+      "tenantScope": "all tenants",
+      "memLimit": "1g",
+      "maxConnections": 100,
+      "sharedBuffers": "PG_SHARED_BUFFERS (.env.example: 256MB)",
+      "workMem": "default 4MB (hostinger); 16MB dev; 32MB prod-reference",
+      "measured": null,
+      "overloadBehavior": "max_connections refuses new clients; statement_timeout is set by the app per connection, not by the server"
+    },
+    {
+      "service": "redis",
+      "criticality": "P0",
+      "tenantScope": "all tenants",
+      "memLimit": "256m",
+      "maxmemory": "192mb",
+      "policy": "noeviction",
+      "persistence": "appendonly yes",
+      "measured": null,
+      "overloadBehavior": "writes fail with OOM at maxmemory; reads and in-flight jobs continue",
+      "recovery": "AOF reload on restart"
+    },
+    {
+      "service": "backup",
+      "criticality": "P1",
+      "memLimit": "192m"
+    },
+    {
+      "service": "offsite",
+      "criticality": "P2",
+      "memLimit": "256m"
+    }
+  ],
+  "acceptedGaps": [
+    {
+      "id": "hostinger:cpu-limit",
+      "finding": "RL-01",
+      "reason": "No container has a CPU limit on a host shared with other apps. Needs the host's core count and a measured baseline before choosing numbers; the proposed values are in the deployment-limits patch for owner review.",
+      "expires": "2027-01-31"
+    },
+    {
+      "id": "hostinger:pids-limit",
+      "finding": "RL-02",
+      "reason": "No container has a PID limit. Same patch.",
+      "expires": "2027-01-31"
+    },
+    {
+      "id": "hostinger:host-budget",
+      "finding": "RL-03",
+      "reason": "Host RAM is not recorded. Steady-state limits sum to 4.44 GiB and the blue-green release overlap to 6.19 GiB; whether that fits is unknown until the operator fills hosts.hostinger.memoryBytes.",
+      "expires": "2027-01-31"
+    },
+    {
+      "id": "worker:concurrency-vs-pool",
+      "finding": "RL-04",
+      "reason": "Summed worker concurrency is 171 against a pool of 10. Most jobs wait on providers, not the database, so this is a risk to measure, not a proven fault; needs pool wait metrics (RL-08) first.",
+      "expires": "2027-01-31"
+    },
+    {
+      "id": "hostinger:redis-maxmemory",
+      "finding": "RL-06",
+      "reason": "maxmemory 192mb in a 256m container is 75%. An AOF rewrite forks, and a queue Redis that keeps writing during the rewrite can need close to double the data size; the kernel then kills Redis and in-flight queue state since the last fsync is lost. The deployment-limits patch sets the container to 320m (60%) for owner review.",
+      "expires": "2027-01-31"
+    },
+    {
+      "id": "prod-reference:mem-limit",
+      "finding": "RL-05",
+      "reason": "docker-compose.prod.yml is the reference topology and is not deployed; it sets no limits.",
+      "expires": "2027-03-31"
+    },
+    {
+      "id": "prod-reference:cpu-limit",
+      "finding": "RL-05",
+      "reason": "Same as above.",
+      "expires": "2027-03-31"
+    },
+    {
+      "id": "prod-reference:pids-limit",
+      "finding": "RL-05",
+      "reason": "Same as above.",
+      "expires": "2027-03-31"
+    },
+    {
+      "id": "prod-reference:log-cap",
+      "finding": "RL-05",
+      "reason": "Same as above.",
+      "expires": "2027-03-31"
+    },
+    {
+      "id": "prod-reference:host-budget",
+      "finding": "RL-05",
+      "reason": "Same as above.",
+      "expires": "2027-03-31"
+    },
+    {
+      "id": "prod-reference:redis-maxmemory",
+      "finding": "RL-05",
+      "reason": "Same as above; also a Redis with no maxmemory grows until the container or host is out of memory.",
+      "expires": "2027-03-31"
+    }
+  ],
+  "notRun": [
+    "container limit enforcement (no Docker daemon in the audit container)",
+    "OOM recovery, CPU throttling, disk-full, fd exhaustion, host pressure, restart during active jobs",
+    "DB pool exhaustion and Postgres connection saturation (no Postgres server in the audit container)",
+    "load, stress and soak runs; baselines; expected-peak numbers",
+    "alert delivery end to end (rules are tested with promtool only)"
+  ]
+}

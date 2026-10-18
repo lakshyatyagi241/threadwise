@@ -1,0 +1,45 @@
+# Prometheus alert rules for container resource pressure, from the cgroup series every API, worker and web process exports
+# (crm_container_*; packages/observability/src/runtime-monitor.ts). Standard: docs/performance/resource-limits/README.md.
+# Thresholds are the initial engineering targets (container memory warn 80% / critical 90% of the hard limit), not measured limits:
+# tune them from the baselines before making them gates. Tested with promtool: resource-limits.rules.test.yml next to this file.
+#
+# What these cannot see: a kill of the container's main process (PID 1, which is `node` in our images) restarts the container and the
+# cgroup counters start again at 0, so crm_container_oom_kills_total misses it. ProcessRestartLoop catches that case from the
+# process start time instead; the kernel's reason (OOM or not) is then read with `docker inspect -f '{{.State.OOMKilled}}'`.
+groups:
+  - name: resource-limits
+    rules:
+      - alert: ContainerMemoryNearLimit
+        expr: crm_container_memory_bytes / crm_container_memory_limit_bytes > 0.80
+        for: 10m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Container memory above 80% of its limit for 10 min on {{ $labels.service }} {{ $labels.instance }}'
+          description: 'Includes page cache. Compare crm_process_heap_used_bytes and crm_process_rss_bytes: heap growth is a leak or an unbounded batch; RSS above heap is buffers and native memory.'
+
+      - alert: ContainerMemoryCritical
+        expr: crm_container_memory_bytes / crm_container_memory_limit_bytes > 0.90
+        for: 5m
+        labels: { severity: critical }
+        annotations:
+          summary: 'Container memory above 90% of its limit for 5 min on {{ $labels.service }} {{ $labels.instance }}: OOM kill is near'
+
+      - alert: ContainerOomKilled
+        expr: increase(crm_container_oom_kills_total[15m]) > 0
+        labels: { severity: critical }
+        annotations:
+          summary: 'The kernel killed a process for memory in the container of {{ $labels.service }} {{ $labels.instance }}'
+
+      - alert: ProcessRestartLoop
+        expr: changes(crm_process_start_time_seconds[30m]) >= 3
+        labels: { severity: critical }
+        annotations:
+          summary: '{{ $labels.service }} restarted 3 or more times in 30 min ({{ $labels.instance }} series changed)'
+          description: 'A crash loop. If the container limit is the cause, docker inspect shows OOMKilled=true. Queue work claimed by the dead process is recovered by the stalled-job check (docs/runbooks/failed-background-work.md).'
+
+      - alert: ContainerPidsNearLimit
+        expr: crm_container_pids / crm_container_pids_limit > 0.80
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Container PIDs above 80% of the limit on {{ $labels.service }} {{ $labels.instance }}'

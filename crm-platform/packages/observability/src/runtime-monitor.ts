@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import { hostname } from 'node:os';
+import { dirname, join } from 'node:path';
 import { PerformanceObserver, constants as perfConstants } from 'node:perf_hooks';
 import { getHeapStatistics } from 'node:v8';
 import { EventLoopSampler, classifySnapshot, type EventLoopSnapshot } from './event-loop-sampler';
@@ -90,6 +91,11 @@ export class RuntimeMonitor {
   private readonly blocked: Counter;
   private readonly throttledPeriods: Gauge;
   private readonly throttledSeconds: Gauge;
+  private readonly cgroupMemory: Gauge;
+  private readonly cgroupMemoryLimit: Gauge;
+  private readonly cgroupOomKills: Gauge;
+  private readonly cgroupPids: Gauge;
+  private readonly cgroupPidsLimit: Gauge;
   private readonly jobs: Counter;
   private readonly jobRetries: Counter;
   private readonly dlqCaptured: Counter;
@@ -196,6 +202,26 @@ export class RuntimeMonitor {
     this.throttledSeconds = this.registry.gauge(
       'crm_container_cpu_throttled_seconds_total',
       'cgroup throttled_usec in seconds',
+    );
+    this.cgroupMemory = this.registry.gauge(
+      'crm_container_memory_bytes',
+      'cgroup memory.current: everything the container is charged for (heap, buffers, code, page cache), not the V8 heap',
+    );
+    this.cgroupMemoryLimit = this.registry.gauge(
+      'crm_container_memory_limit_bytes',
+      'cgroup memory.max; absent when the container has no memory limit',
+    );
+    this.cgroupOomKills = this.registry.gauge(
+      'crm_container_oom_kills_total',
+      'cgroup memory.events oom_kill (counter exposed as gauge: read from the kernel). Any increase is a process the kernel killed for memory',
+    );
+    this.cgroupPids = this.registry.gauge(
+      'crm_container_pids',
+      'cgroup pids.current: processes and threads',
+    );
+    this.cgroupPidsLimit = this.registry.gauge(
+      'crm_container_pids_limit',
+      'cgroup pids.max; absent when the container has no PID limit',
     );
     this.dlqCaptured = this.registry.counter(
       'crm_dead_letter_captured_total',
@@ -420,5 +446,31 @@ export class RuntimeMonitor {
     } catch {
       // Not Linux, or not cgroup v2: the throttling series is simply absent.
     }
+    const dir = dirname(this.cgroupPath);
+    const one = async (name: string): Promise<string | undefined> => {
+      try {
+        return (await readFile(join(dir, name), 'utf8')).trim();
+      } catch {
+        return undefined;
+      }
+    };
+    const [current, max, events, pids, pidsMax] = await Promise.all([
+      one('memory.current'),
+      one('memory.max'),
+      one('memory.events'),
+      one('pids.current'),
+      one('pids.max'),
+    ]);
+    // "max" means no limit: the limit series stays absent so a ratio alert cannot divide by it.
+    const count = (v: string | undefined): number | undefined =>
+      v !== undefined && /^\d+$/.test(v) ? Number(v) : undefined;
+    const set = (g: Gauge, v: number | undefined): void => {
+      if (v !== undefined) g.set(v);
+    };
+    set(this.cgroupMemory, count(current));
+    set(this.cgroupMemoryLimit, count(max));
+    set(this.cgroupOomKills, count(/^oom_kill (\d+)$/m.exec(events ?? '')?.[1]));
+    set(this.cgroupPids, count(pids));
+    set(this.cgroupPidsLimit, count(pidsMax));
   }
 }
