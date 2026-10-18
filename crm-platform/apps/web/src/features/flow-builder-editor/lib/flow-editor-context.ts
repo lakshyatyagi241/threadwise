@@ -4,6 +4,8 @@ import { createContext } from 'react';
 export interface FlowEditorValue {
   flowId: string | null;
   web: boolean;
+  /** The channel the bot runs on right now: the other bots its steps may start are the ones of this channel. Unset only in tests. */
+  channel?: string;
 }
 
 export const FlowEditorContext = createContext<FlowEditorValue>({ flowId: null, web: false });

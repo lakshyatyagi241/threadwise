@@ -2,7 +2,7 @@
 
 import { useContext } from 'react';
 import { useTranslations } from 'next-intl';
-import type { FlbBuilderContext } from '@crm/contracts';
+import { flbLinkableFlows, type FlbBuilderContext } from '@crm/contracts';
 import { Input, Select } from '@crm/ui';
 import { FlowEditorContext } from '../lib/flow-editor-context';
 import {
@@ -35,7 +35,7 @@ export function ButtonActionPicker({
   const ts = useTranslations('flb.builder.simple.editors');
   const th = useTranslations('flb.builder.formsCore.helpers');
   // Opting in or out is a WhatsApp (messaging) consent: a website chat visitor has none to change.
-  const { web } = useContext(FlowEditorContext);
+  const { web, channel } = useContext(FlowEditorContext);
   const kinds = BUTTON_ACTION_KINDS.filter((k) => !web || (k !== 'opt_in' && k !== 'opt_out'));
 
   const choose = (kind: ButtonActionKind) => {
@@ -44,7 +44,10 @@ export function ButtonActionPicker({
     else if (kind === 'live_agent') onChange({ kind, team: '', message: '' });
     else onChange({ kind } as ButtonAction);
   };
-  const flows = ctx.flows.filter((f) => f.id !== flowId);
+  // A conversation stays on its channel: only bots of this bot's channel are offered (a WhatsApp bot never lists a website chat bot).
+  const flows = channel
+    ? flbLinkableFlows(ctx.flows, channel, flowId)
+    : ctx.flows.filter((f) => f.id !== flowId);
   const picked = value.kind === 'flow' ? value.flow : '';
 
   return (

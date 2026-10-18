@@ -581,7 +581,7 @@ function BuilderInner({
   );
 
   return (
-    <FlowEditorContext.Provider value={{ flowId, web: mode === 'web' }}>
+    <FlowEditorContext.Provider value={{ flowId, web: mode === 'web', channel: mode }}>
       <div
         className="flb-root fixed inset-0 z-40 flex flex-col bg-background text-foreground"
         data-testid="flow-builder"

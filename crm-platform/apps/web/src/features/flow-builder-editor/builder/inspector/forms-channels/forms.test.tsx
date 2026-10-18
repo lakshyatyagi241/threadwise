@@ -84,11 +84,11 @@ describe('registry (TW-FLB-046, 051)', () => {
 });
 
 describe('Sub-flow form', () => {
-  it('lists the other flows with live / draft, never the flow being edited', () => {
+  it('lists the other flows of this channel with live / draft, never the flow being edited or a flow of another channel', () => {
     const html = render('subflow', { flow: '' }, { flows }, { flowId: U(1) });
     expect(html).not.toContain('Welcome');
     expect(html).toContain('Drip · draft');
-    expect(html).toContain('IG bot · live');
+    expect(html).not.toContain('IG bot');
     expect(html).toContain('— pick flow —');
   });
   it('says Loading while the context loads, and keeps a flow that left the workspace selectable', () => {

@@ -35,7 +35,7 @@ registered before `:id`.
 | `GET /flow-media/:org/:name`                                  | none    | Serves what `upload-media` stored (local disk adapter until object storage lands)                                                                                                                                                                                            |
 | `POST /flows`                                                 | create  | `{ name, category, flowType, graph }`; 201 with the flow (a draft). Name up to 255                                                                                                                                                                                           |
 | `GET /flows/:id`                                              | read    | The flow with its `graph` (`flowNodes`, `flowEdges`, `vars`) and `rowVersion`                                                                                                                                                                                                |
-| `PUT /flows/:id`                                              | update  | Save: `{ name, category, flowType, graph, rowVersion }`; 409 `ROW_VERSION_CONFLICT`; re-derives `trigger_kind / trigger_value / trigger_keywords / trigger_channel_id / provider`; 422 `FLB_TRIGGER_KEYWORDS_TOO_LONG` (writes nothing)                                      |
+| `PUT /flows/:id`                                              | update  | Save: `{ name, category, flowType, graph, rowVersion }`; 409 `ROW_VERSION_CONFLICT`; re-derives `trigger_kind / trigger_value / trigger_keywords / trigger_channel_id / provider`; 422 `FLB_TRIGGER_KEYWORDS_TOO_LONG` or `FLB_FLOW_LINK_INVALID` (writes nothing)           |
 | `PATCH /flows/:id/rename`                                     | update  | `{ name }` up to 191                                                                                                                                                                                                                                                         |
 | `POST /flows/:id/toggle`                                      | update  | Pause or resume (flips `is_active`): `{ isActive, state }`                                                                                                                                                                                                                   |
 | `POST /flows/:id/duplicate`                                   | create  | Copy "<name> (Copy)", unpublished, keeps the source's `is_active`; plan cap                                                                                                                                                                                                  |
@@ -193,7 +193,7 @@ security event.
 
 ## Errors
 
-`FLB_IMPORT_INVALID`, `FLB_TEMPLATE_GRAPH_REQUIRED`, `FLB_TRIGGER_KEYWORDS_TOO_LONG`, `FLB_AI_NO_KEY`, `FLB_AI_PROVIDER_FAILED`,
+`FLB_IMPORT_INVALID`, `FLB_TEMPLATE_GRAPH_REQUIRED`, `FLB_TRIGGER_KEYWORDS_TOO_LONG`, `FLB_FLOW_LINK_INVALID`, `FLB_AI_NO_KEY`, `FLB_AI_PROVIDER_FAILED`,
 `FLB_AI_BAD_JSON`, `FLB_UPLOAD_REJECTED`, `FLB_STORAGE_UNAVAILABLE`, `FLB_INTEGRATION_DISABLED`, `FLB_GETA_NOT_CONFIGURED`,
 `FLB_GETA_SETTINGS_INVALID`, `FLB_GETA_NOT_RETRYABLE`, plus the shared `PLAN_LIMIT_REACHED`,
 `PLAN_FEATURE_LOCKED`, `ROW_VERSION_CONFLICT`, `NOT_FOUND`, `VALIDATION_FAILED`.
@@ -201,3 +201,12 @@ security event.
 ## Age question in the Ask node (BL-218)
 
 Ask > "Validate as" gained **Age** (`age`) and **Date of birth** (`date_of_birth`, written in the chosen date format). Node data: `ageMinAge` (1..21, empty = the workspace's minor age), `ageWhenUnder` (`end`, the default, or `continue`), `ageEndText` (the neutral closing line; empty = "We are not able to continue."). At run time (`ask-input-node.ts`) the answer is written to the contact (the date of birth, the younger date wins) and, when under, flags it (source `dob`); `{{var}}_age_gate` is `under` or `adult`. `end` sends the closing line and ends the run; `continue` lets the author branch on the variable (for example to ask for a parent). Nothing says which answer passes.
+
+## Flow links stay on one channel
+
+A step that starts another bot (Run sub-flow, or a Quick replies / List button's "start another flow") may only point at a bot of the
+same channel (`flowType`), never at the bot itself. `POST /flows`, `PUT /flows/:id` and import refuse a graph that breaks this with 422
+`FLB_FLOW_LINK_INVALID` (one detail per step, `path` = `graph.flowNodes.<node id>`). `POST /flows/:id/publish` checks the stored graph
+again, so a flow saved before the rule existed is named when it goes live, and also refuses a link to a bot that was deleted since.
+Pointing at an unpublished bot is still allowed (the picker labels it "draft"). The Instagram / Messenger "hand off to WhatsApp" steps
+cross channels by design and are not covered.

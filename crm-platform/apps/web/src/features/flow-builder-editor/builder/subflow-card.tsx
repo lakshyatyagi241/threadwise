@@ -1,7 +1,9 @@
 'use client';
 
+import { useContext } from 'react';
 import { useTranslations } from 'next-intl';
-import type { FlbBuilderContext, FlowNode } from '@crm/contracts';
+import { flbLinkableFlows, type FlbBuilderContext, type FlowNode } from '@crm/contracts';
+import { FlowEditorContext } from '../lib/flow-editor-context';
 import { subflowLabel } from './inspector/forms-core/helpers';
 
 /** The Run sub-flow card: pick (or change) the connected flow right on the node, without opening the inspector. */
@@ -17,7 +19,10 @@ export function SubflowCardBody({
   const t = useTranslations('flb.builder.formsCore.logic');
   const th = useTranslations('flb.builder.formsCore.helpers');
   const current = typeof node.data?.flow === 'string' ? node.data.flow : '';
-  const known = ctx.flows.some((f) => f.id === current);
+  const { flowId, channel } = useContext(FlowEditorContext);
+  // Only bots of this channel (and never the bot itself) can be started from here.
+  const flows = channel ? flbLinkableFlows(ctx.flows, channel, flowId) : ctx.flows;
+  const known = flows.some((f) => f.id === current);
   return (
     <div className="px-3 pt-2 pb-2.5" data-testid="subflow-card">
       <select
@@ -31,7 +36,7 @@ export function SubflowCardBody({
         {current && !known ? (
           <option value={current}>{t('subflowMissing', { id: current.slice(0, 8) })}</option>
         ) : null}
-        {ctx.flows.map((f) => (
+        {flows.map((f) => (
           <option key={f.id} value={f.id}>
             {subflowLabel(th, f.name, f.isPublished)}
           </option>
