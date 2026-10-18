@@ -1,0 +1,1213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Phase 5 QA Report</title>
+    <style>
+      :root {
+        --bg: #f4f6f9;
+        --surface: #fff;
+        --ink: #141a26;
+        --muted: #586275;
+        --line: #dde2ea;
+        --accent: #2a49c9;
+        --pass: #17613a;
+        --pass-soft: #dff3e7;
+        --part: #8a4a00;
+        --part-soft: #fdeccf;
+        --fail: #8a2b1f;
+        --fail-soft: #fbe4df;
+        --info: #3d4f7a;
+        --info-soft: #e6ebf5;
+        --code-bg: #eef1f6;
+        --font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        --mono: ui-monospace, Menlo, monospace;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          --bg: #0f131b;
+          --surface: #171c27;
+          --ink: #e8ecf4;
+          --muted: #9aa5b8;
+          --line: #2a3242;
+          --accent: #8ea3f5;
+          --pass: #7fd6a2;
+          --pass-soft: #14301f;
+          --part: #f4c37a;
+          --part-soft: #3a2c14;
+          --fail: #f2a99c;
+          --fail-soft: #3a1d19;
+          --info: #aebbe0;
+          --info-soft: #232b40;
+          --code-bg: #0f1420;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font: 14px/1.55 var(--font);
+        margin: 0;
+        padding: 28px 16px 80px;
+      }
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 34px;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      code,
+      pre {
+        font-family: var(--mono);
+      }
+      code {
+        background: var(--code-bg);
+        border-radius: 4px;
+        padding: 1px 5px;
+        font-size: 12.5px;
+        overflow-wrap: anywhere;
+      }
+      a {
+        color: var(--accent);
+      }
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      h1 {
+        font-size: clamp(26px, 4.2vw, 36px);
+        line-height: 1.12;
+        font-weight: 600;
+      }
+      .lede {
+        color: var(--muted);
+        max-width: 70ch;
+        margin-top: 10px;
+      }
+      h2.sec {
+        font-size: 19px;
+        font-weight: 600;
+      }
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 18px;
+        margin-top: 14px;
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      .meta b {
+        color: var(--ink);
+      }
+      .chip {
+        display: inline-block;
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 2px 9px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+      .pass {
+        background: var(--pass-soft);
+        color: var(--pass);
+      }
+      .part {
+        background: var(--part-soft);
+        color: var(--part);
+      }
+      .fail {
+        background: var(--fail-soft);
+        color: var(--fail);
+      }
+      .info {
+        background: var(--info-soft);
+        color: var(--info);
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+      }
+      .stat {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 14px 16px;
+      }
+      .stat b {
+        display: block;
+        font-family: var(--mono);
+        font-size: 26px;
+        font-weight: 500;
+      }
+      .stat span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .board {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow-x: auto;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th {
+        text-align: left;
+        font-size: 11px;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+      td {
+        padding: 11px 14px;
+        border-top: 1px solid var(--line);
+        vertical-align: top;
+      }
+      tr:first-child td {
+        border-top: 0;
+      }
+      td.n {
+        font-family: var(--mono);
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .board table {
+        min-width: 720px;
+      }
+      .toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .toc a {
+        text-decoration: none;
+        font-size: 12.5px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 4px 11px;
+      }
+      article.report {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 20px 22px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      article.report > header {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--line);
+      }
+      .rt {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 12px;
+        align-items: baseline;
+      }
+      .rt h2 {
+        font-size: 20px;
+        font-weight: 600;
+        flex: 1;
+        min-width: 200px;
+      }
+      .rt .id {
+        font-family: var(--mono);
+        color: var(--muted);
+        font-size: 12.5px;
+      }
+      dl.facts {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        margin: 0;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      dl.facts dt,
+      dl.facts dd {
+        margin: 0;
+        padding: 9px 12px;
+        border-top: 1px solid var(--line);
+      }
+      dl.facts dt:first-of-type,
+      dl.facts dd:first-of-type {
+        border-top: 0;
+      }
+      dl.facts dt {
+        background: var(--code-bg);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      @media (max-width: 560px) {
+        dl.facts {
+          grid-template-columns: 1fr;
+        }
+      }
+      .blk h3 {
+        font-size: 11.5px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+      .blk ul,
+      .blk ol {
+        margin: 0;
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .cases {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+      .cases table {
+        min-width: 640px;
+        font-size: 13px;
+      }
+      .cases td,
+      .cases th {
+        padding: 8px 12px;
+      }
+      .res {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+      }
+      .res div {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+      }
+      .res b {
+        display: block;
+        font-family: var(--mono);
+        font-size: 20px;
+        font-weight: 500;
+      }
+      .res span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      pre {
+        margin: 0;
+        background: var(--code-bg);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 12px;
+        overflow-x: auto;
+      }
+      .note {
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      .warn {
+        font-size: 12.5px;
+        background: var(--part-soft);
+        color: var(--part);
+        border-radius: 6px;
+        padding: 8px 10px;
+      }
+      footer {
+        color: var(--muted);
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="eyebrow">QA, security and performance backlog · Phase 5 · performance</div>
+        <h1>Phase 5 QA Report</h1>
+        <p class="lede">
+          Reports for five tasks from the team sheet: API latency benchmarking, slow endpoint
+          detection, throughput benchmarking, spike testing, and network/bandwidth optimisation.
+          Each report says what kind of work it is, what it covers, the tools used, what was run,
+          what was found, and where it falls short of the sheet's target.
+          <b>All five are partly met.</b> The tooling is built, tested and was run against a real
+          Postgres, Redis and API with a realistic data volume. The numbers are real but come from
+          one shared 4-core machine, so read them as a ranking and a trend.
+        </p>
+        <div class="meta">
+          <span><b>Prepared by</b> Vishal</span><span><b>Date</b> 18 Oct 2026</span
+          ><span
+            ><b>Branch</b> <code>vishal/qa-phase-5</code> (from <code>main</code> at
+            <code>120022ef</code>)</span
+          >
+        </div>
+      </header>
+
+      <section style="display: flex; flex-direction: column; gap: 14px">
+        <h2 class="sec">Summary</h2>
+        <div class="stats">
+          <div class="stat">
+            <b>5 / 5</b><span>tasks built and measured; 0 of 5 fully at target</span>
+          </div>
+          <div class="stat"><b>1,893</b><span>API routes classified A, B or C</span></div>
+          <div class="stat">
+            <b>3</b
+            ><span
+              >endpoints over their latency budget: inbox counts, inbox list, contacts search</span
+            >
+          </div>
+          <div class="stat">
+            <b>~30 rps</b><span>where this machine saturates with the 70/25/5 mix</span>
+          </div>
+          <div class="stat">
+            <b>2 of 3</b><span>spike types pass the no-cascading-failure rule</span>
+          </div>
+          <div class="stat">
+            <b>13x</b><span>smaller contacts page on the wire after compression</span>
+          </div>
+        </div>
+        <p>
+          <b>What changed in how this was run.</b> Earlier phases could not start Postgres or Redis.
+          This phase found that both are installed in the sandbox, built pgvector 0.8 from source
+          (the packaged 0.6 lacks a type the migrations use), ran all 440 migrations, and started
+          the API in production mode with real secrets. A native k6 binary did the load. That is why
+          this phase has real latency figures, not only scripts.
+        </p>
+        <p>
+          <b>The most useful findings were about the product:</b> the inbox counts (one aggregate
+          over every conversation) is about 21 times over its budget and also decides class A and
+          the throughput result; the contacts search is three times over; the API sent everything
+          uncompressed (fixed here); and the web app ships close to a megabyte of JavaScript per
+          route.
+        </p>
+        <p class="warn">
+          Nothing here runs on GitHub automatically: the check workflows were removed in #328 and
+          jobs do not start on this account. The new <code>Performance</code> workflow is manual and
+          has never run. k6, the API, Postgres and Redis shared four cores, with one organisation
+          and one user and shortened phases; none of this is a production figure.
+        </p>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 12px">
+        <h2 class="sec">Result against the sheet's target</h2>
+        <div class="board">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Task</th>
+                <th>Sheet target</th>
+                <th>Result</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="n">#50</td>
+                <td><a href="#qa-50">API latency benchmarking</a></td>
+                <td>A p95 under 50 ms, B under 150, C under 300</td>
+                <td>
+                  1 user, final build: A 918 ms, B 371 ms, C 238 ms. C met; A and B over because of
+                  three endpoints.
+                </td>
+                <td><span class="chip part">Partly met</span></td>
+              </tr>
+              <tr>
+                <td class="n">#51</td>
+                <td><a href="#qa-51">Slow endpoint detection</a></td>
+                <td>Baseline, p50/p95/p99, regression budget as CI artifact</td>
+                <td>
+                  Ranked list, baseline and guard built and tested; slow-request log seen on the
+                  real API; no CI artifact yet.
+                </td>
+                <td><span class="chip part">Partly met</span></td>
+              </tr>
+              <tr>
+                <td class="n">#52</td>
+                <td><a href="#qa-52">Throughput benchmarking</a></td>
+                <td>Baseline and regression budget as CI artifact</td>
+                <td>
+                  Saturates near 30 rps; 0 rps sustained inside the budgets; one queue drained
+                  (13,503 jobs in 16 s).
+                </td>
+                <td><span class="chip part">Partly met</span></td>
+              </tr>
+              <tr>
+                <td class="n">#55</td>
+                <td><a href="#qa-55">Spike testing</a></td>
+                <td>3x expected peak in 60 s; no cascading failure</td>
+                <td>
+                  Webhook and socket spikes pass; HTTP spike fails the rule (7.4% errors in the
+                  hold) and recovers cleanly.
+                </td>
+                <td><span class="chip part">Partly met</span></td>
+              </tr>
+              <tr>
+                <td class="n">#63</td>
+                <td><a href="#qa-63">Network/bandwidth optimisation</a></td>
+                <td>Baseline and regression budget as CI artifact</td>
+                <td>
+                  API compression added (13x on the contacts page); web baseline for 409 routes; no
+                  web reduction.
+                </td>
+                <td><span class="chip part">Partly met</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <nav class="toc">
+          <a href="#qa-50">#50 Latency</a><a href="#qa-51">#51 Slow endpoints</a
+          ><a href="#qa-52">#52 Throughput</a><a href="#qa-55">#55 Spike</a
+          ><a href="#qa-63">#63 Bandwidth</a><a href="#def-h">Defect register</a>
+        </nav>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 12px">
+        <h2 class="sec">Test environment and tools</h2>
+        <div class="board">
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Detail</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Machine</td>
+                <td>
+                  Cloud Linux container, 4 cores, 15 GB, Node 22.22, pnpm 9.15.4.
+                  <b>No Docker daemon.</b> Postgres, Redis, the API, the mail sink and k6 all on
+                  this one machine.
+                </td>
+              </tr>
+              <tr>
+                <td>Stack</td>
+                <td>
+                  Postgres 16.15 (native, <code>pg_stat_statements</code> on), pgvector 0.8.0 built
+                  from source, Redis 7.0.15, the API built and run with
+                  <code>NODE_ENV=production</code> and generated secrets, 440 migrations applied
+                </td>
+              </tr>
+              <tr>
+                <td>How it was built</td>
+                <td>
+                  A scratch copy of <code>crm-platform</code> with the blocked
+                  <code>libsignal</code> package stubbed (as in Phases 3 and 4); the lockfile delta
+                  for the one new dependency (<code>compression</code>) was applied to the
+                  repository
+                </td>
+              </tr>
+              <tr>
+                <td>Load tool</td>
+                <td>k6 1.4.0 (downloaded as a release binary)</td>
+              </tr>
+              <tr>
+                <td>Data</td>
+                <td>
+                  One organisation: 100,000 contacts, 5,000 companies, 20,000 tasks, 50,000
+                  conversations, 1,000,000 messages, one admin user. Synthetic only
+                </td>
+              </tr>
+              <tr>
+                <td>What ran</td>
+                <td>
+                  9 latency runs, 1 throughput run, 3 spike runs, API and web bandwidth, 45 Node
+                  tests for the tools, 11 vitest tests for the API changes, <code>tsc</code> and
+                  ESLint on the API changes, Prettier on every file touched
+                </td>
+              </tr>
+              <tr>
+                <td>What did not run</td>
+                <td>
+                  The manual <code>Performance</code> workflow; anything on a dedicated runner;
+                  Lighthouse; a worker with real jobs; the pre-pr gate
+                </td>
+              </tr>
+              <tr>
+                <td>Severity scale</td>
+                <td>
+                  <b>High</b> real harm possible or a release blocker · <b>Medium</b> wrong
+                  behaviour or a gap the team can hit · <b>Low</b> cosmetic or a limit worth knowing
+                  · <b>Info</b> recorded for awareness
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div id="reports" style="display: flex; flex-direction: column; gap: 22px"></div>
+
+      <section style="display: flex; flex-direction: column; gap: 12px">
+        <h2 class="sec" id="def-h">Defect and finding register</h2>
+        <p class="note">
+          Numbered P5-xx to keep them apart from the earlier registers. "Recorded" means written
+          down, not changed.
+        </p>
+        <div class="board">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Task</th>
+                <th>Finding</th>
+                <th>Severity</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="defects"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="blk" style="display: flex; flex-direction: column; gap: 10px">
+        <h2 class="sec">What is still open</h2>
+        <ul id="open"></ul>
+      </section>
+      <footer>
+        Sources: the team sheet "Action items" tab (rows 50, 51, 52, 55, 63), the repository, and
+        the k6 and Node runs of 18 Oct 2026 kept in
+        <code>perf/results/</code>. Nothing was measured on GitHub.
+      </footer>
+    </div>
+
+    <script>
+      const esc = (s) =>
+        String(s).replace(
+          /[&<>"]/g,
+          (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c],
+        );
+      const li = (a) => a.map((x) => `<li>${x}</li>`).join('');
+      const chip = (s) =>
+        ({
+          pass: '<span class="chip pass">Met</span>',
+          part: '<span class="chip part">Partly met</span>',
+          fail: '<span class="chip fail">Not met</span>',
+        })[s];
+      const R = [
+        {
+          id: 'qa-50',
+          n: 50,
+          t: 'API latency benchmarking',
+          status: 'part',
+          type: 'Performance testing · latency per endpoint class against a speed budget, on a database of realistic size',
+          target: 'Class A p95 <50ms; Class B <150ms; Class C <300ms; track p99 separately',
+          summary:
+            'There was no performance tooling at all. This task adds a latency class for every API route, a seed that fills one organisation with realistic volume, k6 scripts that measure each class, a budgets file, and a ranked list of what is over budget. It ran on a native Postgres, Redis and API on one machine. <b>Two of the three classes miss their budget</b>, because of three endpoints: the inbox counts and the inbox list (about 1 second each at p95 against a 50 ms budget) and the contacts search (466 ms against 150 ms). Everything else measured is inside its budget.',
+          what: 'Latency benchmarking times each endpoint under controlled load and compares the 95th percentile (p95: 95 of 100 requests are at least this fast) with a budget. Latency on an empty database proves nothing, so the database is filled first.',
+          objective:
+            'Make "how fast is the API" a repeatable number per class, store it on every run, and name the endpoints that are over.',
+          coverage:
+            'Measured: 18 probed endpoints (11 class A, 6 class B, 2 class C) plus the contacts search. Classified: 1,893 routes by rule, and the 18 probed ones agree with their rule. The sheet asks for the top 150 routes to be reviewed by hand and for every endpoint to be measured; neither is done. Budgets: class C met, A and B not met.',
+          defects: 'P5-01 (high), P5-02 (medium), P5-08 (medium).',
+          scope: [
+            'In: the class rules and check, the seed, the k6 latency script (1 user and 20 users), the budgets file, the ranking, the baseline.',
+            'Out: measuring every route, the hand review of the top 150, a CI-like runner with pinned CPU and memory, fixing the slow endpoints.',
+          ],
+          tools: [
+            'k6 1.4.0, one script (<code>perf/latency.js</code>) with one scenario per class after a thrown-away warm-up.',
+            '<code>tools/perf/classify.mjs</code> (rules with a reason per class, <code>--check</code> keeps the file in step with the controllers), <code>tools/perf/seed.sql</code>, <code>tools/perf/rank.mjs</code>.',
+            'Postgres 16 with <code>pg_stat_statements</code>, Redis 7, the API built and run in production mode, all on one 4-core machine (no Docker).',
+          ],
+          approach: [
+            'Read every controller (the QA suite route scanner) and classified 1,893 routes: reports, exports, bulk and provider calls are C; writes and searches are B; single-record reads, sessions and plain lists are A. Each class carries its reason.',
+            'Stood up the real stack without Docker: native Postgres and Redis, pgvector 0.8 built from source (the packaged 0.6 lacks <code>halfvec</code>), 440 migrations, the API in production mode with real secrets, and a stand-in mail sink for the sign-up code.',
+            'Seeded one organisation: 100,000 contacts, 5,000 companies, 20,000 tasks, 50,000 conversations, 1,000,000 messages. The seed first ran 30 times slower than it should: foreign-key checks against rows from the same open transaction. One statement per transaction fixed it (90 s).',
+            'Wrote the probe list (18 endpoints, real ids discovered at set-up), ran 3 runs of 1 user (pure latency) and 3 runs of 20 users (contention), and took the median.',
+            'Ranked by distance over budget and read <code>pg_stat_statements</code> to link the slow endpoints to their queries.',
+          ],
+          cases: [
+            [
+              'C1',
+              'Every route has a class; the check fails on a new or removed route',
+              'All',
+              '1,893 classified: 681 A, 866 B, 346 C; 12 tests pass',
+              'Pass',
+            ],
+            [
+              'C2',
+              'Seed produces the stated volume',
+              '100k / 1M rows',
+              '100,000 contacts, 1,000,000 messages, 50,000 conversations',
+              'Pass',
+            ],
+            [
+              'C3',
+              'Class A p95 under 50 ms (1 user)',
+              '< 50 ms',
+              '917.6 ms (p50 15.7 ms). Without the inbox pair every A endpoint is under 30 ms',
+              'Defect P5-01',
+            ],
+            [
+              'C4',
+              'Class B p95 under 150 ms (1 user)',
+              '< 150 ms',
+              '371.2 ms. The contacts search is 466 ms; every write is under 40 ms',
+              'Defect P5-02',
+            ],
+            [
+              'C5',
+              'Class C p95 under 300 ms (1 user)',
+              '< 300 ms',
+              '237.8 ms (the dashboard is at 84% of the budget)',
+              'Pass',
+            ],
+            [
+              'C6',
+              'p99 tracked',
+              'Reported, never fails a run',
+              'A 1089 ms, B 454 ms, C 269 ms',
+              'Recorded',
+            ],
+            [
+              'C7',
+              '20 users at once',
+              'Reported',
+              'A p95 4983 ms, B 941 ms, C 1178 ms: the four shared cores saturated',
+              'Recorded',
+            ],
+            [
+              'C8',
+              'Hand review of the top 150 routes',
+              '150 reviewed',
+              'Not done (18 probed routes checked against their rule)',
+              'Not run',
+            ],
+          ],
+          counts: [
+            ['18', 'endpoints measured'],
+            ['9', 'k6 runs for the figures'],
+            ['0', 'failed requests (1 user)'],
+            ['3', 'endpoints over budget'],
+          ],
+          evidence: [
+            '<pre>Class  p50     p95     p99     budget   (1 user, median of 3)\nA      15.7    917.6   1088.8  50   OVER\nB      19.1    371.2   453.8   150  OVER\nC      156.4   237.8   269.3   300  pass\n\nGET /v2/inbox/counts           p95 1053 ms  (50)   21x\nGET /v2/inbox/conversations    p95 1047 ms  (50)   21x\nGET /v2/contacts?q=            p95  466 ms  (150)   3.1x</pre>',
+            'Cause of the first two: one aggregate with <code>FILTER</code> clauses over every conversation of the organisation; <code>pg_stat_statements</code> mean 2374 ms under load. Raw results and the ranking are in <code>perf/results/</code>; the guide is <code>docs/quality/performance-testing.md</code>.',
+          ],
+          limits: [
+            'k6, the API, Postgres and Redis shared four cores, so the twenty-user figures describe the machine, not the product. Docker on a laptop is also slower than production; judge by trend and by budget on a fixed runner.',
+            'One organisation with one user; the sheet asked for twenty.',
+            'Messages are all in the existing monthly partitions; a database with years of history may behave differently.',
+            'Compression was added after the first set of runs (see #63). The committed baseline and the one-user table are from the final build; the twenty-user figures are from before it.',
+          ],
+          recs: [
+            'Fix the inbox counts (a maintained counter or a partial index) and re-measure; this alone brings class A inside its budget.',
+            'Give the contacts search an index that matches how it searches (trigram or a search vector) and re-measure.',
+            'Run the same script on a fixed CI runner with pinned CPU and memory, with k6 on a separate machine, and treat that as the budget run.',
+            'Hand-review the top 150 routes into <code>perf/endpoint-class-overrides.json</code>.',
+          ],
+          rerun:
+            '<pre>node tools/perf/classify.mjs --check\npsql "$MIGRATION_DATABASE_URL" -f tools/perf/seed.sql\nbash tools/perf/run-latency.sh perf/results\nnode tools/perf/rank.mjs perf/results/latency-vus1-run*.json --top 20 --baseline perf/baseline.json</pre>',
+          files:
+            '<code>perf/budgets.json</code>, <code>perf/endpoint-classes.json</code>, <code>perf/latency.js</code>, <code>perf/lib/common.js</code>, <code>perf/baseline.json</code>, <code>perf/results/</code>, <code>tools/perf/classify.mjs</code>, <code>seed.sql</code>, <code>run-latency.sh</code>, <code>rank.mjs</code>, <code>docs/quality/performance-testing.md</code>',
+        },
+        {
+          id: 'qa-51',
+          n: 51,
+          t: 'Slow endpoint detection',
+          status: 'part',
+          type: 'Performance monitoring · a ranked list of slow endpoints, a regression guard, and a slow-request log in the running app',
+          target: 'Baseline + p50/p95/p99 + regression budget stored as CI artifact',
+          summary:
+            'Task 50 gives numbers per class. This task turns them into a ranked top-20 list that points at what to fix, a guard that fails when an endpoint gets worse than the stored baseline, and a log line in the API for any request over 500 ms. The ranking and the guard work and are tested; the log line was seen firing on the real API. <b>The CI artifact part has not run</b>: the workflow is manual and has never been started on GitHub.',
+          what: 'Finding slow endpoints automatically, in the benchmark and in the running app, so that new slow code is seen.',
+          objective:
+            'A short list of what to fix, a stored baseline, and a failing check when an endpoint regresses.',
+          coverage:
+            'Built: ranked list (median of repeat runs), baseline file, regression rule (20% worse and more than 20 ms worse), slow-request log, the <code>pg_stat_statements</code> link. Proven: the rule with 7 unit tests including a deliberately slowed endpoint, the log with 6 unit tests and one real call. Not done: the stored CI artifact, a regression run against a real second build.',
+          defects: 'P5-01 (high), P5-08 (medium).',
+          scope: [
+            'In: <code>tools/perf/rank.mjs</code>, <code>perf/baseline.json</code>, the Nest slow-request interceptor with <code>SLOW_REQUEST_MS</code>, reading <code>pg_stat_statements</code> after a run.',
+            'Out: handing the slow-query list to the slow-query work (QA 41, 42) in a meeting; the finding is in the guide for them.',
+          ],
+          tools: [
+            '<code>tools/perf/rank.mjs</code> (7 tests), <code>apps/api/src/common/interceptors/slow-request.interceptor.ts</code> (6 tests).',
+            '<code>pg_stat_statements</code>, already enabled in <code>docker-compose.yml</code> with a 500 ms statement log.',
+          ],
+          approach: [
+            'Merged repeat runs by the median so one slow run does not decide, then ranked by p95 over the class budget.',
+            'Wrote the regression rule with both a share and a minimum (a 5 ms to 12 ms change is noise) and tested it, including a deliberately slowed endpoint.',
+            'Wrote the interceptor: one warn line with the route pattern (never the URL, ids or query), organisation, status, duration and request id; off at 0; non-HTTP contexts ignored.',
+            'Ran it for real: the first <code>/v2/inbox/counts</code> call logged <code>slow request ... 981 ms</code>.',
+            'Read <code>pg_stat_statements</code> after the runs: the top statement was the inbox counts aggregate.',
+          ],
+          cases: [
+            [
+              'C1',
+              'Median of repeat runs; ranking by distance over budget; class verdicts; p99 only reported',
+              'As specified',
+              '7 tests pass',
+              'Pass',
+            ],
+            [
+              'C2',
+              'Regression: share and minimum both needed; deliberately slowed endpoint caught',
+              'Caught',
+              'Caught in the unit test',
+              'Pass',
+            ],
+            [
+              'C3',
+              'Slow-request log: logs over the threshold, route pattern only, silent when fast, off at 0, still rethrows, ignores non-HTTP',
+              'As specified',
+              '6 tests pass',
+              'Pass',
+            ],
+            [
+              'C4',
+              'Slow-request log on the real API',
+              'A line for a call over 500 ms',
+              'Logged 981 ms for /v2/inbox/counts with route and org',
+              'Pass',
+            ],
+            [
+              'C5',
+              'Top-20 list stored as a CI artifact on every run',
+              'Artifact',
+              'Workflow written, never run on GitHub',
+              'Not run',
+            ],
+          ],
+          counts: [
+            ['13', 'unit tests for #51, all passing'],
+            ['1', 'real slow-request line seen'],
+            ['14', 'ranked endpoints'],
+            ['0', 'CI artifacts produced'],
+          ],
+          evidence: [
+            "<pre>WARN [SlowRequest] { msg: 'slow request', method: 'GET', route: '/v2/inbox/counts',\n  orgId: 1, status: 200, durationMs: 981, requestId: '9275d7d9-...' }</pre>",
+            'The ranked table is <code>perf/results/ranked-vus1.md</code>.',
+          ],
+          limits: [
+            'The duration is what interceptors see (after guards), so it understates the time a client waits by the guard time.',
+            'The baseline was written from this machine; a baseline from a different runner would make the guard useless, so it must be rewritten on the CI runner before it is enforced.',
+            'Not wired to run on a pull request (no workflow runs).',
+          ],
+          recs: [
+            'Write the baseline from the CI runner, then enforce the guard on a schedule.',
+            'Send the slow-query finding (inbox counts, contacts search) to the owners of QA 41 and 42 so it is not worked twice.',
+          ],
+          rerun:
+            '<pre>node --test tools/perf/rank.test.mjs\nnode tools/perf/rank.mjs perf/results/latency-vus1-run*.json --baseline perf/baseline.json --top 20</pre>',
+          files:
+            '<code>tools/perf/rank.mjs</code> and test, <code>perf/baseline.json</code>, <code>apps/api/src/common/interceptors/slow-request.interceptor.ts</code>, <code>apps/api/test/unit/common/slow-request.interceptor.spec.ts</code>, <code>apps/api/src/app.module.ts</code>, <code>apps/api/src/config/env.schema.ts</code>',
+        },
+        {
+          id: 'qa-52',
+          n: 52,
+          t: 'Throughput benchmarking',
+          status: 'part',
+          type: 'Performance testing · requests per second the system sustains inside the latency budgets, and how fast a queue drains',
+          target: 'Baseline + p50/p95/p99 + regression budget stored as CI artifact',
+          summary:
+            'A stepped arrival-rate run with a realistic mix (70% A, 25% B, 5% C) found where the system gives out. On this machine it <b>saturates at about 30 requests per second</b>: at a target of 40 it achieved 31 with 16% errors and 19-second p95, at 80 it achieved 39 with 52% errors. <b>No step stayed inside the latency budgets</b>, because the two slow inbox endpoints are in the mix; so the sustained capacity is recorded as 0 and no throughput baseline is committed. One queue was measured for drain speed.',
+          what: 'Latency at low load says little about capacity. Throughput asks how much load the system takes while still inside its budgets, and what gives out first.',
+          objective: 'A capacity figure per traffic mix and a regression budget for it.',
+          coverage:
+            'Done: the stepped scenario, the capacity calculation (7 tests), one run, the limit found (about 30 rps), one queue drained. Not done: the Postgres, Redis and event-loop watch during the steps, drain time for the other hot queues (message dispatch, outbox, campaign), the stored regression budget, a repeat after fixing the inbox pair.',
+          defects: 'P5-04 (medium), P5-01 (high), P5-08 (medium).',
+          scope: [
+            'In: <code>perf/throughput.js</code> (constant-arrival-rate steps), <code>tools/perf/capacity.mjs</code>, <code>tools/perf/sample.mjs</code>, signed webhook replay (in #55), one queue drain.',
+            'Out: the other hot queues (see <code>docs/performance/queue-capacity/</code>, QA 72), tuning.',
+          ],
+          tools: [
+            'k6 <code>constant-arrival-rate</code>, 600 virtual users allowed.',
+            '<code>tools/perf/capacity.mjs</code>: a step is sustained when errors are under 1%, nothing was dropped and every class is inside its p95 budget.',
+          ],
+          approach: [
+            'Defined the mix from the budgets file and stepped 10, 20, 40 and 80 requests per second, 30 s each with 5 s of quiet between.',
+            'Judged each step against the latency budgets and the error ceiling; the capacity is the highest step before the first failure.',
+            'Started a worker after the webhook spike and timed the drain of the ingest queue.',
+          ],
+          cases: [
+            [
+              'C1',
+              'Capacity calculation: errors, class budgets, dropped iterations, first failing step, baseline drop',
+              'As specified',
+              '7 tests pass',
+              'Pass',
+            ],
+            [
+              'C2',
+              'Step 10 and 20 per second inside budgets',
+              'Sustained',
+              'Not sustained: class A p95 1043 / 1290 ms, B 497 / 669 ms',
+              'Defect P5-01',
+            ],
+            [
+              'C3',
+              'Step 40 per second',
+              'Sustained',
+              '31.2 achieved, 16% errors, p95 about 19 s: saturated',
+              'Defect P5-04',
+            ],
+            [
+              'C4',
+              'Step 80 per second',
+              'Sustained',
+              '39.2 achieved, 52% errors: saturated',
+              'Defect P5-04',
+            ],
+            [
+              'C5',
+              'Queue drain, WhatsApp ingest',
+              'Recorded',
+              '13,503 jobs drained in 16 s (about 840 per second)',
+              'Recorded',
+            ],
+            ['C6', 'Other hot queues and webhook-bound limits', 'Recorded', 'Not run', 'Not run'],
+          ],
+          counts: [
+            ['4', 'steps run'],
+            ['0', 'steps inside budget'],
+            ['~30', 'requests per second at saturation'],
+            ['13,503', 'jobs drained in 16 s'],
+          ],
+          evidence: [
+            '<pre>Target  Achieved  Errors   Verdict\n10      10.4      0%       over budget (A 1043 ms, B 497 ms)\n20      20.5      0%       over budget\n40      31.2      16%      saturated\n80      39.2      52%      saturated</pre>',
+            '<code>perf/results/throughput.json</code> and <code>capacity.md</code>.',
+          ],
+          limits: [
+            'k6 and 600 virtual users on the same four cores as the API and the databases: part of the saturation is the load generator.',
+            'The drain test used a phone-number id that belongs to no connection, so each job ended early; it is a lower bound for that queue and says nothing about the others.',
+            'The steps are 30 s each, not minutes.',
+          ],
+          recs: [
+            'Fix the inbox pair, re-run, then write the capacity as the baseline and enforce a 10% drop.',
+            'Run on a dedicated stack with k6 on its own machine and watch Postgres CPU, pool waits, Redis and event-loop lag while stepping.',
+            'Drain each hot queue with real jobs (QA 72 owns the queue models).',
+          ],
+          rerun:
+            '<pre>k6 run perf/throughput.js -e RATES=25,50,100,200 -e STEP=60\nnode tools/perf/capacity.mjs perf/results/throughput.json</pre>',
+          files:
+            '<code>perf/throughput.js</code>, <code>tools/perf/capacity.mjs</code> and test, <code>tools/perf/sample.mjs</code> and test, <code>perf/results/throughput.json</code>, <code>capacity.md</code>',
+        },
+        {
+          id: 'qa-55',
+          n: 55,
+          t: 'Spike testing',
+          status: 'part',
+          type: 'Performance and resilience testing · a sudden jump to three times the normal load, held, dropped, then watched for recovery',
+          target: '3× expected peak within 60 seconds; no cascading failure',
+          summary:
+            'Three kinds of spike were run, each ramping to 3× its normal rate in 60 seconds (30 seconds for the webhook and socket runs): the HTTP mix, signed WhatsApp webhooks, and a socket.io connection storm. A steady canary on <code>/health</code> and a light authenticated read ran through every phase. <b>The webhook and socket spikes pass. The HTTP spike fails the rule</b>: 7.4% errors in the hold and the health canary waited up to 11 seconds. It recovers cleanly, with no restart and flat memory, so it bends and does not break.',
+          what: 'A campaign going out, a webhook burst or a Monday login wave can arrive all at once. The question is whether the system degrades and recovers, or falls over and drags other features with it.',
+          objective:
+            'Run the three spike types, apply a written pass rule, and list the protections that did or did not engage.',
+          coverage:
+            'Done: three spike scripts, the pass rule as code (8 tests), a sampler for uptime, memory and queue depth, one run of each type. Not done: the 5-minute holds and the repeat after fixes, the expected-peak figure from the load work (QA 53), checking rate limits, timeouts and pool limits one by one.',
+          defects: 'P5-04 (medium), P5-07 (info), P5-08 (medium).',
+          scope: [
+            'In: <code>perf/spike.js</code> (SPIKE=http, webhook, socket), <code>tools/perf/spike-check.mjs</code>, <code>tools/perf/sample.mjs</code>.',
+            'Out: the full-length phases, a spike against a stack with the fixes applied.',
+          ],
+          tools: [
+            'k6 <code>constant-arrival-rate</code> and <code>ramping-arrival-rate</code> per phase (normal, ramp, hold, drop, recovery), a canary scenario in every phase.',
+            'k6 HMAC signing for the WhatsApp webhook; the socket.io v4 handshake over WebSocket for the connection storm.',
+            'Sampler: API uptime, resident memory, Postgres connections, BullMQ waiting jobs every 2 s.',
+          ],
+          approach: [
+            'Chose the normal rate for this machine (10 per second HTTP, 50 webhooks, 20 connections) so the peak is 3×, and shortened the phases.',
+            'Wrote the pass rule: errors under 5% during ramp and hold, under 1% after, canary healthy in every phase, recovery p95 within twice normal, no restart, queues empty at the end, memory not growing.',
+            'Ran each spike with the sampler and applied the rule.',
+            'Fixed my own scripts twice: the socket check was untagged (it read 100% failures) and the webhook run needed the app secret on the API.',
+          ],
+          cases: [
+            [
+              'C1',
+              'Pass rule: errors by phase, canary, recovery latency, restart, queue, memory',
+              'As specified',
+              '8 tests pass',
+              'Pass',
+            ],
+            [
+              'C2',
+              'HTTP spike, 10 to 30 per second',
+              'Pass the rule',
+              'Ramp 1.0% errors, hold 7.4% (ceiling 5%), drop 1.2%, canary 1.5% failed with waits up to 11 s; recovery 0% and p95 back to normal',
+              'Defect P5-04',
+            ],
+            [
+              'C3',
+              'HTTP spike: restart, memory',
+              'None',
+              'No restart; memory 519 MB to 511 MB',
+              'Pass',
+            ],
+            [
+              'C4',
+              'Webhook spike, 50 to 150 per second',
+              'Pass the rule',
+              '0 errors in every phase, p95 14 to 21 ms, no restart, memory returned to start',
+              'Pass',
+            ],
+            [
+              'C5',
+              'Webhook spike: queue empty at the end',
+              'Empty',
+              '13,503 jobs waiting because no worker ran; drained in 16 s once one started',
+              'Recorded P5-07',
+            ],
+            [
+              'C6',
+              'Socket storm, 20 to 60 connections per second',
+              'Pass the rule',
+              '0 failed upgrades, connect p95 under 5 ms, canary healthy',
+              'Pass',
+            ],
+            [
+              'C7',
+              'Rate limits, timeouts, backpressure, pool limits engaged',
+              'Checked',
+              'Not checked one by one',
+              'Not run',
+            ],
+          ],
+          counts: [
+            ['3', 'spike types run'],
+            ['2', 'pass the rule'],
+            ['1', 'fails the rule (HTTP)'],
+            ['0', 'restarts'],
+          ],
+          evidence: [
+            '<pre>HTTP  phase     fail   p95        canary\n      normal    0.0%   1021 ms    0%\n      ramp      1.0%   5094 ms    0%\n      hold      7.4%   18876 ms   1.5% (max wait 11.4 s)\n      drop      1.2%   13422 ms   0%\n      recovery  0.0%   1074 ms    0%</pre>',
+            'Results and the rule output are in <code>perf/results/spike-*.json</code> and <code>spike-*-check.txt</code>.',
+          ],
+          limits: [
+            'The HTTP failure is partly the machine: at about 30 requests per second the four cores are saturated, and k6 is one of the consumers. On a dedicated stack the same rule may pass.',
+            'The phases are 30 to 60 seconds, not five minutes, and recovery is judged from the whole recovery phase, not as a time to return to normal.',
+            'The webhook run measures the request path and the queue only; the jobs ended early (unknown phone-number id).',
+            'The "expected peak" of QA 53 has not been converted into an arrival rate.',
+          ],
+          recs: [
+            'Fix the inbox pair first, then repeat the HTTP spike on a dedicated stack.',
+            'Keep the health endpoint off the heavy path: a health check that waits 11 s will flap a load balancer during a spike.',
+            'Run the webhook spike with a worker up and a connected test number, so the drain is the real one.',
+          ],
+          rerun:
+            '<pre>API_PID=&lt;pid&gt; node tools/perf/sample.mjs perf/results/samples-http.json --seconds 780 &amp;\nk6 run perf/spike.js -e SPIKE=http -e NORMAL=20\nnode tools/perf/spike-check.mjs perf/results/spike-http.json --samples perf/results/samples-http.json</pre>',
+          files:
+            '<code>perf/spike.js</code>, <code>tools/perf/spike-check.mjs</code> and test, <code>tools/perf/sample.mjs</code>, <code>perf/results/spike-*.json</code>',
+        },
+        {
+          id: 'qa-63',
+          n: 63,
+          t: 'Network/bandwidth optimization',
+          status: 'part',
+          type: 'Performance testing · bytes on the wire for the API and the web app, a fix, and budgets',
+          target: 'Baseline + p50/p95/p99 + regression budget stored as CI artifact',
+          summary:
+            'The API sent every response uncompressed (a 50-contact page is 52 KB) and nothing in this repository configures a proxy that would. The fix is compression in the API: <b>the same page is now 3.9 KB on the wire, 13 times smaller</b>, at a cost of 1 to 4 ms on loopback. For the web app, the JavaScript each route can load was measured for all 409 routes: the median is 968 KB gzip and the login page alone is 629 KB. <b>No web reduction was made</b>; the budget holds the line only.',
+          what: 'Customers on mobile data and slow links feel payload size directly. This task measures bytes, cuts waste where it is cheap, and sets budgets so it does not grow back.',
+          objective:
+            'A baseline of bytes per top endpoint and per route, compression confirmed or enabled, budgets in place.',
+          coverage:
+            'Done: API baseline for 8 top endpoints, compression enabled and measured, web baseline for 409 routes, budgets file and a tool that enforces both (8 tests). Not done: the measured reduction on the three heaviest web items, Lighthouse and bundle-analyzer, realtime payload sizes, cache headers on reference data, enforcing the budgets in CI.',
+          defects: 'P5-03 (medium, fixed), P5-05 (medium), P5-06 (low).',
+          scope: [
+            'In: <code>tools/perf/bandwidth.mjs</code>, <code>perf/bandwidth-budgets.json</code>, <code>apps/api/src/common/http/response-compression.ts</code>, <code>RESPONSE_COMPRESSION</code>.',
+            'Out: splitting the flow builder, loading one locale instead of 21, Cache-Control and ETag changes, socket.io payloads.',
+          ],
+          tools: [
+            "The API response with and without <code>Accept-Encoding</code> (8 endpoints); the production build's client-reference manifests for the web routes.",
+            '<code>compression</code> 1.8.2 (gzip level 4, brotli quality 4, threshold 1 KB, event streams and <code>x-no-compression</code> excluded), 5 tests.',
+          ],
+          approach: [
+            'Measured the top endpoints uncompressed and found no <code>Content-Encoding</code>; looked for a proxy configuration in <code>deploy/</code> and <code>docker/</code> and found none.',
+            'Added compression in the API behind a switch, with explicit brotli quality (the library default is far too slow for a response), and a lockfile delta for the one new dependency and its types.',
+            'Re-measured: every large response is compressed. Timed identity, gzip and brotli on the 50-contact page: p50 14.2, 19.7 and 17.1 ms on loopback.',
+            "Measured the web build per route and set budgets that hold today's size (default 1,050,000 bytes, a named limit for the 16 routes above it).",
+          ],
+          cases: [
+            [
+              'C1',
+              'Large JSON is compressed; small bodies, event streams and opted-out requests are not',
+              'As specified',
+              '5 tests pass',
+              'Pass',
+            ],
+            ['C2', 'Contacts page, 50 rows', 'Smaller on the wire', '52,061 B to 3,973 B', 'Pass'],
+            [
+              'C3',
+              'The 8 top endpoints',
+              'Compressed',
+              'All compressed (br or gzip); 3.9 to 20 times smaller',
+              'Pass',
+            ],
+            [
+              'C4',
+              'Latency cost of compression',
+              'Small',
+              '+1 to 4 ms p95 on loopback',
+              'Recorded',
+            ],
+            [
+              'C5',
+              'Web JavaScript per route (409 routes)',
+              'Recorded',
+              'median 968 KB, login 629 KB, contacts 1,205 KB (gzip, upper bound)',
+              'Recorded',
+            ],
+            [
+              'C6',
+              'Budget check',
+              'Passes today, fails on growth',
+              'Web budget passes; API budget passes with compression',
+              'Pass',
+            ],
+            [
+              'C7',
+              'Measured reduction on the three heaviest web items',
+              'Reduced',
+              'Not done',
+              'Not run',
+            ],
+          ],
+          counts: [
+            ['13x', 'smaller contacts page on the wire'],
+            ['409', 'web routes measured'],
+            ['13', 'tests for #63, all passing'],
+            ['0', 'web routes reduced'],
+          ],
+          evidence: [
+            '<pre>GET /v2/contacts?limit=50     52,061 B -> 3,973 B\nGET /v2/contacts?limit=20     20,891 B -> 1,871 B\nGET /v2/inbox/conversations   15,928 B -> 2,000 B\nGET /v2/auth/session          11,528 B -> 2,512 B\nweb /login 629 KB   /inbox 966 KB   /contacts 1,205 KB (gzip JavaScript)</pre>',
+            'Results: <code>perf/results/bandwidth-api-before.json</code>, <code>bandwidth-api-after.json</code>, <code>bandwidth-web.json</code>.',
+          ],
+          limits: [
+            'The web figure is an upper bound from the manifests: a chunk counts when any client component of the page names it.',
+            'If the proxy in front of the API also compresses, set <code>RESPONSE_COMPRESSION=false</code> to avoid doing it twice.',
+            'Compression cost was measured on loopback with one client; under load it adds CPU on the API host.',
+            'No Cache-Control on list responses; ETags are sent.',
+          ],
+          recs: [
+            "Split the flow builder and the contacts screens, load only the active locale's messages, and re-measure the three heaviest routes.",
+            'Add Lighthouse CI on login, inbox, contacts and the flow builder with a slow-network profile.',
+            'Confirm what the production proxy does with <code>Accept-Encoding</code> and switch the API compression off if it duplicates it.',
+          ],
+          rerun:
+            '<pre>node tools/perf/bandwidth.mjs api --token "$TOKEN" --check\npnpm --filter @crm/web build\nnode tools/perf/bandwidth.mjs web --next apps/web/.next --check</pre>',
+          files:
+            '<code>tools/perf/bandwidth.mjs</code> and test, <code>perf/bandwidth-budgets.json</code>, <code>apps/api/src/common/http/response-compression.ts</code>, <code>apps/api/src/main.ts</code>, <code>apps/api/package.json</code>, <code>pnpm-lock.yaml</code>',
+        },
+      ];
+      const DEFECTS = [
+        [
+          'P5-01',
+          '50, 51',
+          'The inbox counts and the inbox list take about 1 second at p95 (budget 50 ms): one aggregate with FILTER clauses over every conversation of the organisation (50,000 rows). It also makes class A fail and keeps the mix from sustaining any rate.',
+          'High',
+          'Open: owner of the inbox module',
+        ],
+        [
+          'P5-02',
+          '50',
+          'The contacts free-text search is 466 ms at p95 (budget 150 ms) on 100,000 contacts.',
+          'Medium',
+          'Open',
+        ],
+        [
+          'P5-03',
+          '63',
+          'API responses were sent uncompressed (52 KB for 50 contacts) and the repository configures no proxy that compresses.',
+          'Medium',
+          'Fixed: compression in the API, 13x smaller; switch RESPONSE_COMPRESSION',
+        ],
+        [
+          'P5-04',
+          '52, 55',
+          'At about 30 requests per second (the 3x spike) this machine saturates: 7.4% errors in the hold, 19 s p95, and the /health canary waited up to 11 s.',
+          'Medium',
+          'Open: repeat on a dedicated stack after P5-01',
+        ],
+        [
+          'P5-05',
+          '63',
+          'The web app ships a median of 968 KB of gzip JavaScript per route (login 629 KB, contacts 1,205 KB).',
+          'Medium',
+          'Open: budgets hold the line',
+        ],
+        [
+          'P5-06',
+          '63',
+          'List responses carry no Cache-Control; the session response is no-store.',
+          'Low',
+          'Recorded',
+        ],
+        [
+          'P5-07',
+          '52, 55',
+          'The WhatsApp ingest queue grows without bound while no worker runs (13,503 jobs in 3 minutes at 150 per second); it drained in 16 s once a worker started.',
+          'Info',
+          'Recorded: alert on queue depth',
+        ],
+        [
+          'P5-08',
+          'all',
+          'Everything ran on one 4-core machine with k6 on it, no Docker, one organisation with one user, shortened phases; the top-150 hand review, the stored CI artifacts and the GitHub workflow are not done.',
+          'Medium',
+          'Open',
+        ],
+      ];
+      const OPEN = [
+        'Fix the inbox counts (P5-01) and the contacts search (P5-02), then re-run the latency, throughput and HTTP spike runs on a dedicated stack; only then write the throughput baseline.',
+        'Run the manual <code>Performance</code> workflow once on GitHub when jobs start, and write <code>perf/baseline.json</code> from that runner.',
+        'Hand-review the top 150 routes into <code>perf/endpoint-class-overrides.json</code>.',
+        'Seed twenty users, run the full-length spike phases, convert the QA 53 expected peak into an arrival rate, and check rate limits, timeouts, backpressure and pool limits one by one.',
+        'Web bundles: split the flow builder and contacts screens, load one locale at a time, add Lighthouse CI, and re-measure the three heaviest routes.',
+        'Confirm what the production proxy does about compression; switch RESPONSE_COMPRESSION off if it already compresses.',
+        "Run the repository's pre-pr gate and the architecture check on the API change (the interceptor, the compression middleware and the lockfile delta).",
+        'Review: the Phase 5 pull request.',
+      ];
+      const caseStatus = (s) =>
+        /^Pass/.test(s)
+          ? `<span class="chip pass">${esc(s)}</span>`
+          : /^Defect|^Open/.test(s)
+            ? `<span class="chip fail">${esc(s)}</span>`
+            : `<span class="chip info">${esc(s)}</span>`;
+      document.getElementById('reports').innerHTML = R.map(
+        (
+          r,
+        ) => `<article class="report" id="${r.id}"><header><div class="rt"><span class="id">QA task #${r.n}</span><h2>${esc(r.t)}</h2>${chip(r.status)}</div><p>${r.summary}</p></header>
+<dl class="facts"><dt>Type of testing</dt><dd>${esc(r.type)}</dd><dt>What it is</dt><dd>${r.what}</dd><dt>Objective</dt><dd>${r.objective}</dd><dt>Sheet target</dt><dd>${esc(r.target)}</dd><dt>Result against target</dt><dd>${r.coverage}</dd><dt>Defects</dt><dd>${r.defects}</dd></dl>
+<div class="blk"><h3>Scope</h3><ul>${li(r.scope)}</ul></div><div class="blk"><h3>Tools used</h3><ul>${li(r.tools)}</ul></div><div class="blk"><h3>Approach</h3><ol>${li(r.approach)}</ol></div>
+<div class="blk"><h3>Test cases and results</h3><div class="cases"><table><thead><tr><th>ID</th><th>Scenario</th><th>Expected</th><th>Actual</th><th>Status</th></tr></thead><tbody>${r.cases.map((c) => `<tr><td class="n">${c[0]}</td><td>${c[1]}</td><td>${c[2]}</td><td>${c[3]}</td><td>${caseStatus(c[4])}</td></tr>`).join('')}</tbody></table></div></div>
+<div class="blk"><h3>Execution summary</h3><div class="res">${r.counts.map((c) => `<div><b>${esc(c[0])}</b><span>${esc(c[1])}</span></div>`).join('')}</div></div>
+<div class="blk"><h3>Evidence</h3><div style="display:flex;flex-direction:column;gap:10px">${r.evidence.map((e) => (e.startsWith('<pre>') ? e : `<p class="note">${e}</p>`)).join('')}</div></div>
+<div class="blk"><h3>Limitations and risks</h3><ul>${li(r.limits)}</ul></div><div class="blk"><h3>Recommendations</h3><ul>${li(r.recs)}</ul></div>
+<div class="blk"><h3>How to re-run</h3>${r.rerun}</div><div class="blk"><h3>Files changed</h3><p class="note">${r.files}</p></div></article>`,
+      ).join('');
+      document.getElementById('defects').innerHTML = DEFECTS.map((d) => {
+        const sev = d[3] === 'High' ? 'fail' : d[3] === 'Medium' ? 'part' : 'info';
+        return `<tr><td class="n">${d[0]}</td><td class="n">${d[1] === 'all' ? 'all' : '#' + d[1]}</td><td>${d[2]}</td><td><span class="chip ${sev}">${d[3]}</span></td><td>${d[4]}</td></tr>`;
+      }).join('');
+      document.getElementById('open').innerHTML = li(OPEN);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+Spike http: 10 -> 30 per second
+
+PASS  errors during ramp stay under 5.00%  [0.98%]
+FAIL  errors during hold stay under 5.00%  [7.37%]
+FAIL  errors in drop stay under 1.00%  [1.23%]
+PASS  errors in recovery stay under 1.00%  [0.00%]
+PASS  canary healthy in normal  [0.00%]
+PASS  canary healthy in ramp  [0.00%]
+FAIL  canary healthy in hold  [1.52%]
+PASS  canary healthy in drop  [0.00%]
+PASS  canary healthy in recovery  [0.00%]
+PASS  recovery p95 is back within twice normal (or +50 ms)  [normal 1021 ms, recovery 1074 ms]
+PASS  no iterations dropped in recovery  [0]
+PASS  the API did not restart  [0 restart(s)]
+PASS  queues are empty at the end of recovery  [peak 0, last 0]
+PASS  memory did not grow without bound (end under 1.5x the peak of the first quarter)  [start 519 MB, peak 519 MB, end 511 MB]
