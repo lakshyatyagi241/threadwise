@@ -11,7 +11,7 @@ describe('flbWhatsappLimitProblems (Meta interactive message limits)', () => {
       options: ['a'.repeat(20), 'b'.repeat(20), 'c'.repeat(20)],
     });
     const list = node('list', {
-      prompt: x(FLB_WA_LIMITS.body),
+      prompt: x(FLB_WA_LIMITS.listBody),
       button: x(FLB_WA_LIMITS.listButton),
       options: Array.from({ length: 10 }, (_, i) => ({
         title: `${i}`.repeat(24),
@@ -43,6 +43,11 @@ describe('flbWhatsappLimitProblems (Meta interactive message limits)', () => {
     ).map((i) => i.message);
     expect(p).toContain('The list button is longer than 20 characters.');
     expect(p).toContain('A WhatsApp list has at most 10 items.');
+    expect(
+      flbWhatsappLimitProblems(node('list', { prompt: x(4097), button: 'b', options: [] })).map(
+        (i) => i.message,
+      ),
+    ).toEqual(['The text above the list is longer than 4096 characters.']);
     expect(p).toContain('List item 1 is longer than 24 characters.');
     expect(p).toContain('The description of list item 1 is longer than 72 characters.');
     expect(p).toContain('The section of list item 1 is longer than 24 characters.');

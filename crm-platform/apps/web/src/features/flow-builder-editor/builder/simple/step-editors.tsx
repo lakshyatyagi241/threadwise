@@ -658,7 +658,7 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
           rows={4}
           label={t('list.above')}
           value={prompt}
-          max={LIMITS.body}
+          max={FLB_WA_LIMITS.listBody}
           variables={flowVariables(doc)}
           onChange={(v) => set({ prompt: v })}
         />

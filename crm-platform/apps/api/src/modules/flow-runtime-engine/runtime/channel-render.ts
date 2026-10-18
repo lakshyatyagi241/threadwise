@@ -250,7 +250,7 @@ export function renderForChannel(m: OutboundMessage, profile: ChannelProfile): R
           kind: 'interactive',
           interactive: {
             type: 'list',
-            body: cut(m.body, 1024),
+            body: cut(m.body, 4096),
             ...(m.header ? { header: cut(m.header, 60) } : {}),
             ...(m.footer ? { footer: cut(m.footer, 60) } : {}),
             button: cut(m.button || 'Select', 20),

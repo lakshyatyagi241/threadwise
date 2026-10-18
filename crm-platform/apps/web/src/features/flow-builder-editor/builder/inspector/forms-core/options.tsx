@@ -148,7 +148,7 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
         <TextArea
           value={d.prompt}
           rows={3}
-          maxLength={whatsapp ? FLB_WA_LIMITS.body : undefined}
+          maxLength={whatsapp ? FLB_WA_LIMITS.listBody : undefined}
           onChange={(v) => set('prompt', v)}
         />
       </Field>

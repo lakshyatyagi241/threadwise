@@ -4,12 +4,13 @@
  *
  * Source: Meta's WhatsApp Business Platform documentation (developers.facebook.com/documentation/business-messaging/whatsapp):
  *  - messages/interactive-reply-buttons-messages (reply buttons): 1 to 3 buttons, title 20, button id 256, body 1024, header 60, footer 60
- *  - messages/interactive-list-messages (list): 10 rows in all, row title 24, row description 72, row id 200, section title 24,
+ *  - messages/interactive-list-messages (list): body 4096, 10 rows in all, row title 24, row description 72, row id 200, section title 24,
  *    list button 20, header 60, footer 60
  *  - messages/interactive-cta-url-messages (CTA URL): button text 20, one URL button, body 1024, header 60, footer 60
  *  - direct-send/supported-features-and-limits and the template components reference (body 1024, header/footer 60)
  *  - messages/text-messages: a plain text body is 4096
- * Meta publishes no length for a CTA URL; `ctaUrl` is the common 2000-character URL cap, kept as a conservative check.
+ * Checked against the live pages on 2026-10-18. Meta publishes no length for a CTA URL; `ctaUrl` is the common 2000-character URL
+ * cap, kept as a conservative check.
  * Website chat bots are not bound by any of this; callers apply it to WhatsApp flows only (`flowType` `chat`).
  *
  * Lengths are counted in UTF-16 code units (`string.length`), which is also what `maxLength` on an input counts, so an input
@@ -20,6 +21,8 @@ export const FLB_WA_LIMITS = {
   buttonTitle: 20,
   replyId: 256,
   body: 1024,
+  /** A list message's body is the exception: Meta allows 4096 (reply buttons and link buttons, 1024). */
+  listBody: 4096,
   header: 60,
   footer: 60,
   listRows: 10,
@@ -97,7 +100,7 @@ export function flbWhatsappLimitProblems(
                 section: text(rec(o).section),
               },
         );
-        over('The text above the list', d.prompt, L.body);
+        over('The text above the list', d.prompt, L.listBody);
         over('The list button', d.button, L.listButton);
         if (rows.length > L.listRows) add(`A WhatsApp list has at most ${L.listRows} items.`);
         if (new Set(rows.map((r) => r.section.trim())).size > L.listSections)
