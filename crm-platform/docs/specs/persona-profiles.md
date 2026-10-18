@@ -482,12 +482,12 @@ Risks:
 
 ## 15. Build status
 
-| Phase | State                                                                                             |
-| ----- | ------------------------------------------------------------------------------------------------- |
-| P0    | **Built** (branch `lakshya/next/persona-p0`, no visible change). Details below.                   |
-| P5-lite (BL-310) | **Built** (branch `lakshya/next/persona-vocabulary`). Dynamic object naming, below.
-| P1    | **Built** (branch `lakshya/next/persona-p1`, zero visible change for `generic`).                  |
-| P2-P6 | Not built. P2 (platform console) is next; the Business type tile of P1 is still open (see below). |
+| Phase            | State                                                                                             |
+| ---------------- | ------------------------------------------------------------------------------------------------- |
+| P0               | **Built** (branch `lakshya/next/persona-p0`, no visible change). Details below.                   |
+| P1               | **Built** (branch `lakshya/next/persona-p1`, zero visible change for `generic`).                  |
+| P5-lite (BL-310) | **Built** (branch `lakshya/next/persona-vocabulary`). Dynamic object naming, below.               |
+| P2-P6            | Not built. P2 (platform console) is next; the Business type tile of P1 is still open (see below). |
 
 What P0 delivers, and where it differs from the sketches above:
 
