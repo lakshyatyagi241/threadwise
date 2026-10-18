@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import {
+  flbAiSetup,
   flbSanitizeConditionGroup,
   type FlbBuilderContext,
   type FlowNode,
@@ -349,15 +350,21 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
           <Mono cls="text-[11px]">{`{{${str(d.save) || 'result'}}}`}</Mono>
         </div>
       );
-    case 'ai':
+    case 'ai': {
+      // An agent setup shows the agent (its prompt and model are its own); a custom one shows the model and the prompt.
+      const asAgent = flbAiSetup(d) === 'agent';
+      const agent = asAgent ? ctx.assistants.find((a) => a.id === str(d.assistant)) : undefined;
       return (
         <Box>
-          <div className="bubble">🤖 {str(d.model) || 'gpt-4o-mini'}</div>
+          <div className="bubble">
+            🤖 {asAgent ? (agent?.name ?? tp('aiLabel')) : str(d.model) || 'gpt-4o-mini'}
+          </div>
           <div className="mt-1.5 line-clamp-2 text-[10.5px] text-muted-foreground">
-            {str(d.prompt) || tp('aiPromptDefault')}
+            {asAgent ? agent?.model || tp('aiAnswers') : str(d.prompt) || tp('aiPromptDefault')}
           </div>
         </Box>
       );
+    }
     case 'tag': {
       const cached = ctx.tags.find((t) => t.id === str(d.tagId));
       const name = cached ? cached.name : str(d.tag) || '—';

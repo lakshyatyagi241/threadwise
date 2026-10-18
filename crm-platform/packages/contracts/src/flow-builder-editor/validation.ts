@@ -6,6 +6,7 @@ import {
   type FlbNodeData,
 } from './node-catalogue';
 import { flbReadLocation } from './location';
+import { flbAiNodeProblem } from './ai-node';
 
 /**
  * Pre-save graph validation (TW-FLB-018): the guard Save and Publish run before anything is stored. Messages are
@@ -24,6 +25,8 @@ import { flbReadLocation } from './location';
  *
  *  - a "Location" node must have usable coordinates: latitude -90..90, longitude -180..180, not 0,0 (not a Reference rule: WhatsApp
  *    refuses a location message without them, and the step used to accept anything)
+ *
+ *  - an "AI assistant" node needs an AI agent, or (custom setup) a prompt (not a Reference rule: without either it ran on a made-up default prompt)
  *
  * Not checked, on purpose (inventory rule 5): a missing Trigger, empty required fields, dangling edges, cycles, port
  * completeness, node count.
@@ -117,6 +120,14 @@ export function flbValidateGraph(
     bad.add(n.id);
     items.push(
       '"Location" has no valid location — paste a Google Maps link or enter a latitude (-90 to 90) and longitude (-180 to 180).',
+    );
+  }
+
+  for (const n of nodes) {
+    if (n.type !== 'ai' || flbAiNodeProblem(n.data) === null) continue;
+    bad.add(n.id);
+    items.push(
+      '"AI assistant" has no AI agent and no prompt — pick an AI agent, or choose Custom setup and write the instructions.',
     );
   }
 

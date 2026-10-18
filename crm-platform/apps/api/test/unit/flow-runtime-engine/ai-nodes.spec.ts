@@ -113,6 +113,62 @@ describe('AI node (TW-FLR-030)', () => {
     });
   });
 
+  it('an agent setup runs as the agent; a step with no setup choice (saved before it existed) is a custom setup', async () => {
+    const ai = new FakeAi([ok('a'), ok('b'), ok('c')]);
+    const agent = '5e0f7e2a-0c1b-4b57-8f4e-1c2d3e4f5a6b';
+    await nodes(ai).execute(
+      ctx('ChatGPT', { agentMode: 'agent', assistant: agent, prompt: 'ignored' }, {}).c,
+    );
+    await nodes(ai).execute(
+      ctx('ChatGPT', { agentMode: 'custom', assistant: agent, prompt: 'Mine' }, {}).c,
+    );
+    await nodes(ai).execute(ctx('ChatGPT', { assistant: agent, prompt: 'Old step' }, {}).c);
+    expect(ai.calls.map((c) => c.agentUse)).toEqual(['full', undefined, undefined]);
+    expect(ai.calls[0]!.assistantId).toEqual({ kind: 'uuid', uuid: agent });
+    expect(ai.calls[1]).toMatchObject({ systemPrompt: 'Mine' });
+    expect(ai.calls[2]).toMatchObject({ systemPrompt: 'Old step' });
+  });
+
+  it('says in the run log when the agent no longer exists, and still answers', async () => {
+    const ai = new FakeAi([
+      { ok: true, reply: 'fallback', provider: 'openai', agentMissing: true },
+    ]);
+    const { c, notes, sent } = ctx('ChatGPT', { agentMode: 'agent', assistant: 7 }, {});
+    await nodes(ai).execute(c);
+    expect(sent).toHaveLength(1);
+    expect(notes.join('|')).toContain('the AI agent no longer exists');
+  });
+
+  it("the hidden extraction pass on exit borrows only the agent's model", async () => {
+    const ai = new FakeAi([ok('{"NAME":"Asha"}')]);
+    const { c } = ctx(
+      'ChatGPT',
+      {
+        agentMode: 'agent',
+        assistant: 7,
+        conversational: true,
+        extract: true,
+        fields: ['NAME'],
+        exit_keyword: 'done',
+      },
+      {},
+      { ok: true },
+      {
+        nodeId: 'n1',
+        variable: 'user_message',
+        kind: 'Custom',
+        handler: 'ChatGPT',
+        data: { history: [{ role: 'user', content: 'I am Asha' }] },
+      },
+    );
+    await nodes(ai).onReply(c, { kind: 'text', id: '', text: 'done' });
+    expect(ai.calls[0]).toMatchObject({
+      agentUse: 'model',
+      json: true,
+      assistantId: { kind: 'id', id: 7 },
+    });
+  });
+
   it('extraction mode asks for JSON with a 4000 token budget and flattens the fields', async () => {
     const ai = new FakeAi([ok('{"NAME":"Asha","PHONE":"123"}')]);
     const { c, run } = ctx(

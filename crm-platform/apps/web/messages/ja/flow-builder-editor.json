@@ -1131,19 +1131,14 @@
           "aiModelPick": "— モデルを選択 —",
           "aiModelNone": "有効なAIモデルがありません。管理者にオンにするよう依頼してください",
           "aiModelNotEnabled": "{value}(無効)",
-          "aiAssistantNone": "— なし(上のプロンプトのみ使用)—",
           "aiAssistantOption": "{name} · {count, plural, other {ソース#件}}",
           "aiAssistantMissing": "(アシスタント{id})",
-          "aiAssistantHintNone": "ナレッジベースはまだありません。<link>AIトレーニング</link>で作成し、「リストを更新」を押してここで選択してください。",
-          "aiAssistantHintEmpty": "注意: このアシスタントには学習済みソースが0件です。<link>AIトレーニング</link>で追加しないと、返信はプロンプトのみで生成されます。",
-          "aiAssistantHint": "選択したアシスタントの学習済みコンテンツをこの返信に取り込みます。<link>ナレッジを管理 →</link>",
           "aiModelLabel": "モデル",
           "aiModelHint": "管理者が有効にしたモデルと、独自のキーを追加したプロバイダー(設定 → AIキー、BYOKプラン)が利用できます。",
           "aiModelHintNone": "利用可能なプロバイダーがまだありません。<link>設定 → AIキー</link>で独自のキーを追加する(BYOKプラン)か、管理者に有効化を依頼してください。",
           "aiPrompt": "システムプロンプト",
           "aiSave": "レスポンスの保存先",
           "aiSaveHint": "後続のノードは<v>{save}</v>として読み取ります。抽出時は<v>{path}</v>です。",
-          "aiAssistantLabel": "ナレッジベース(任意)",
           "aiExtract": "<strong>構造化データ(JSON)を抽出</strong> — メッセージをフィールドに変換します",
           "aiFields": "抽出するフィールド",
           "aiFieldsHint": "カンマ区切りのキーです。AIは1つのJSONオブジェクトを返し、各キーは<v>{key}</v>になります(複数のレコードが検出された場合は<v>{rows}</v>も。例: Googleスプレッドシートのノード用)。",
@@ -1156,7 +1151,25 @@
           "subflowMissing": "フロー{id}(ワークスペースにありません)",
           "subflowLabel": "実行するフロー",
           "subflowHint": "保存済みの別のフローを選択します。このノードが実行されると、そのフローが最後まで実行されてから、ここの次のノードに制御が戻ります。",
-          "endInfo": "このノードはフローを終了します。この後に接続したものは実行されません。"
+          "endInfo": "このノードはフローを終了します。この後に接続したものは実行されません。",
+          "aiSetupLegend": "このステップはどのように返信しますか?",
+          "aiSetupAgent": "AIエージェント",
+          "aiSetupAgentDesc": "AIトレーニングのエージェントの指示、モデル、ナレッジを使います。",
+          "aiSetupCustom": "カスタム設定",
+          "aiSetupCustomDesc": "ここでモデルを選び、指示を書きます。",
+          "aiAgentLabel": "AIエージェント",
+          "aiAgentPick": "— AIエージェントを選択 —",
+          "aiAgentHint": "エージェントは自身の指示、モデル、ナレッジを持っています。変更は<link>AIトレーニング</link>で行います。",
+          "aiAgentNone": "AIエージェントがまだありません。<link>最初のAIエージェントを作成</link>してから、リストを更新を押してください。",
+          "aiAgentRequired": "AIエージェントを選ぶか、カスタム設定に切り替えてください。",
+          "aiAgentSummary": "モデル {model} · {count, plural, other {ナレッジソース#件}}",
+          "aiAgentNoSources": "このエージェントにはまだナレッジがないため、指示だけで回答します。<link>AIトレーニング</link>でソースを追加してください。",
+          "aiPromptRequired": "AIへの指示を書いてください。",
+          "aiKnowledgeLabel": "AIエージェントのナレッジ(任意)",
+          "aiKnowledgeNone": "— なし —",
+          "aiKnowledgeHint": "そのエージェントの学習済みソースを返信に加えます。カスタム設定では、そのエージェントの指示とモデルは使われません。<link>AIトレーニングで管理 →</link>",
+          "aiAdvanced": "詳細オプション",
+          "aiCreateAgent": "+ AIエージェントを作成"
         },
         "options": {
           "prompt": "プロンプト",
@@ -2497,7 +2510,8 @@
         "noSenderFacebook": "トリガーノードにFacebookページが選択されていません。トリガーの手順で選択してください。",
         "noSenderNumber": "トリガーノードに番号が選択されていません。トリガーの手順で選択してください。",
         "faqMinScore": "「{node}」の最小スコアが0.05~0.99の範囲外です。修正するか、空欄にしてフローの設定を使用してください。",
-        "locationInvalid": "「{node}」に有効な位置情報がありません。Google マップのリンクを貼り付けるか、緯度（-90～90）と経度（-180～180）を入力してください。"
+        "locationInvalid": "「{node}」に有効な位置情報がありません。Google マップのリンクを貼り付けるか、緯度（-90～90）と経度（-180～180）を入力してください。",
+        "aiNoAgent": "「{node}」にはAIエージェントもプロンプトもありません。AIエージェントを選ぶか、カスタム設定を選んで指示を書いてください。"
       }
     },
     "simpleModel": {
@@ -2663,7 +2677,9 @@
         "chooseFlow": "ステップ {stage}: ボタンが開始するフローを選んでください。",
         "chooseApi": "ステップ {stage}: 呼び出す API を選んでください。",
         "writeCode": "ステップ {stage}: 実行するコードを書いてください。",
-        "webhookUrl": "ステップ {stage}: 呼び出すアドレス(URL)を追加してください。"
+        "webhookUrl": "ステップ {stage}: 呼び出すアドレス(URL)を追加してください。",
+        "chooseAiAgent": "ステップ {stage}: 回答するAIエージェントを選ぶか、ステップをカスタム設定に切り替えてください。",
+        "writeAiPrompt": "ステップ {stage}: AIへの指示を書くか、AIエージェントを選んでください。"
       },
       "faqSummary": "{hasCategory, select, true {FAQから · {category}} other {FAQから}}"
     },

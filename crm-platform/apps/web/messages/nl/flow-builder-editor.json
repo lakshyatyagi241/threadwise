@@ -1524,19 +1524,14 @@
           "aiModelPick": "— kies model —",
           "aiModelNone": "Geen AI-modellen ingeschakeld — vraag de admin er een in te schakelen",
           "aiModelNotEnabled": "{value} (niet ingeschakeld)",
-          "aiAssistantNone": "— geen (gebruik alleen de prompt hierboven) —",
           "aiAssistantOption": "{name} · {count, plural, one {# bron} other {# bronnen}}",
           "aiAssistantMissing": "(assistent {id})",
-          "aiAssistantHintNone": "Nog geen kennisbanken. Maak er een aan bij <link>AI-training</link> en klik daarna op Lijst vernieuwen om hem hier te kiezen.",
-          "aiAssistantHintEmpty": "Let op: deze assistent heeft 0 getrainde bronnen. Voeg er een paar toe bij <link>AI-training</link>, anders gebruikt het antwoord alleen de prompt.",
-          "aiAssistantHint": "Haalt de getrainde inhoud van de gekozen assistent in dit antwoord. <link>Kennis beheren →</link>",
           "aiModelLabel": "Model",
           "aiModelHint": "Modellen die de admin heeft ingeschakeld — plus elke provider waarvoor je zelf een sleutel hebt toegevoegd (Instellingen → AI-sleutels, bij BYOK-abonnementen).",
           "aiModelHintNone": "Nog geen provider beschikbaar. Voeg je eigen sleutel toe bij <link>Instellingen → AI-sleutels</link> (BYOK-abonnementen), of vraag je admin er een in te schakelen.",
           "aiPrompt": "Systeemprompt",
           "aiSave": "Antwoord opslaan in",
           "aiSaveHint": "Latere nodes lezen het als <v>{save}</v> — of <v>{path}</v> bij extraheren.",
-          "aiAssistantLabel": "Kennisbank (optioneel)",
           "aiExtract": "<strong>Gestructureerde gegevens extraheren (JSON)</strong> — zet het bericht om in velden",
           "aiFields": "Te extraheren velden",
           "aiFieldsHint": "Komma-gescheiden sleutels. De AI geeft ÉÉN JSON-object terug; elke sleutel wordt <v>{key}</v> (en <v>{rows}</v> wanneer meerdere records worden gevonden — bijv. voor een Google Sheets-node).",
@@ -1549,7 +1544,25 @@
           "subflowMissing": "Flow {id} (niet in workspace)",
           "subflowLabel": "Uit te voeren flow",
           "subflowHint": "Kies een andere opgeslagen flow. Wanneer deze node wordt geactiveerd, draait die flow volledig voordat de besturing terugkeert naar de volgende node hier.",
-          "endInfo": "Deze node beëindigt de flow. Alles wat erna is verbonden, draait niet."
+          "endInfo": "Deze node beëindigt de flow. Alles wat erna is verbonden, draait niet.",
+          "aiSetupLegend": "Hoe moet deze stap antwoorden?",
+          "aiSetupAgent": "AI-agent",
+          "aiSetupAgentDesc": "Gebruikt de instructies, het model en de kennis van een agent uit AI-training.",
+          "aiSetupCustom": "Eigen instelling",
+          "aiSetupCustomDesc": "Kies hier een model en schrijf de instructies.",
+          "aiAgentLabel": "AI-agent",
+          "aiAgentPick": "— kies een AI-agent —",
+          "aiAgentHint": "De agent brengt eigen instructies, model en kennis mee. Wijzig ze in <link>AI-training</link>.",
+          "aiAgentNone": "Je hebt nog geen AI-agents. <link>Maak je eerste AI-agent</link> en klik dan op Lijst vernieuwen.",
+          "aiAgentRequired": "Kies een AI-agent of schakel over naar een eigen instelling.",
+          "aiAgentSummary": "Model {model} · {count, plural, one {# kennisbron} other {# kennisbronnen}}",
+          "aiAgentNoSources": "Deze agent heeft nog geen kennis en antwoordt alleen op basis van zijn instructies. Voeg bronnen toe in <link>AI-training</link>.",
+          "aiPromptRequired": "Schrijf de instructies voor de AI.",
+          "aiKnowledgeLabel": "Kennis van een AI-agent (optioneel)",
+          "aiKnowledgeNone": "— geen —",
+          "aiKnowledgeHint": "Voegt de getrainde bronnen van die agent toe aan het antwoord. Zijn eigen instructies en model worden bij een eigen instelling niet gebruikt. <link>Beheren in AI-training →</link>",
+          "aiAdvanced": "Geavanceerde opties",
+          "aiCreateAgent": "+ AI-agent maken"
         },
         "options": {
           "prompt": "Prompt",
@@ -2355,7 +2368,8 @@
         "noSenderFacebook": "De Trigger-node heeft geen Facebook-pagina geselecteerd — kies er een in de triggerstap.",
         "noSenderNumber": "De Trigger-node heeft geen nummer geselecteerd — kies er een in de triggerstap.",
         "faqMinScore": "\"{node}\" heeft een minimumscore buiten 0.05 tot 0.99 — corrigeer dit of laat het leeg om de instelling van de flow te gebruiken.",
-        "locationInvalid": "„{node}” heeft geen geldige locatie: plak een Google Maps-link of voer een breedtegraad (-90 tot 90) en lengtegraad (-180 tot 180) in."
+        "locationInvalid": "„{node}” heeft geen geldige locatie: plak een Google Maps-link of voer een breedtegraad (-90 tot 90) en lengtegraad (-180 tot 180) in.",
+        "aiNoAgent": "\"{node}\" heeft geen AI-agent en geen prompt — kies een AI-agent of kies Eigen instelling en schrijf de instructies."
       }
     },
     "simpleModel": {
@@ -2521,7 +2535,9 @@
         "chooseFlow": "Stap {stage}: kies de flow die de knop start.",
         "chooseApi": "Stap {stage}: kies de API die wordt aangeroepen.",
         "writeCode": "Stap {stage}: schrijf de code die wordt uitgevoerd.",
-        "webhookUrl": "Stap {stage}: voeg het aan te roepen adres (URL) toe."
+        "webhookUrl": "Stap {stage}: voeg het aan te roepen adres (URL) toe.",
+        "chooseAiAgent": "Stap {stage}: kies de AI-agent die antwoordt of zet de stap op een eigen instelling.",
+        "writeAiPrompt": "Stap {stage}: schrijf de instructies voor de AI of kies een AI-agent."
       },
       "faqSummary": "{hasCategory, select, true {Uit je FAQ's · {category}} other {Uit je FAQ's}}"
     },
