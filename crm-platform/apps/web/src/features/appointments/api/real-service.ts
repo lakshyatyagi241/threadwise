@@ -98,7 +98,9 @@ const typeOne = bookingTypeResponseSchema.transform(toBookingType);
 /** Only what a rule's template picker needs; the rest of a template summary is not this screen's business. */
 const waTemplateList = z
   .object({
-    data: z.array(z.object({ id: z.string(), name: z.string(), language: z.string() }).passthrough()),
+    data: z.array(
+      z.object({ id: z.string(), name: z.string(), language: z.string() }).passthrough(),
+    ),
   })
   .transform((r) => r.data.map((x) => ({ id: x.id, name: x.name, language: x.language })));
 const typeList = bookingTypeListResponseSchema.transform((l) => l.data.map(toBookingType));

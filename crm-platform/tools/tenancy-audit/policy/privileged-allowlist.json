@@ -34,6 +34,11 @@
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
     "reviewedOn": "2026-10-11"
   },
+  "modules/appointments-booking/appointment-reminder.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (the reminder sweep calls it; no controller reaches it); the two privileged steps take the waiting runs across tenants (FOR UPDATE SKIP LOCKED) and close the ones a dead worker left, every per-run read, delivery and write then runs under that run's own txAs and request context",
+    "reviewedOn": "2026-10-18"
+  },
   "modules/appointments-booking/bookings-feed.service.ts": {
     "status": "reviewed",
     "reason": "public calendar feed (no login): the privileged step only maps the hashed feed token to an org and user, then the request runs in that tenant context with a per-IP and per-token throttle and an RBAC check on appointments read before anything is returned.",

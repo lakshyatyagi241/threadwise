@@ -15,6 +15,7 @@ import {
 } from '../lib/format';
 import { formatMoney } from '../lib/money';
 import { deriveReminders } from '../lib/reminders';
+import { knownReason } from '../lib/reminder-rules';
 import { REMINDER_RUN_TONE, REMINDER_TONE, actionsFor } from '../lib/status';
 import { CalendarSyncPanel } from './calendar-sync-panel';
 import { Drawer } from './drawer';
@@ -107,8 +108,8 @@ function RecordedReminders({
             <span className="block text-xs text-muted-foreground">
               {r.status === 'sent' && r.channel
                 ? t('sentOn', { channel: t(`channels.${r.channel}`) })
-                : r.reason
-                  ? t(`reasons.${r.reason}`)
+                : knownReason(r.reason)
+                  ? t(`reasons.${knownReason(r.reason)!}`)
                   : null}
             </span>
           </span>

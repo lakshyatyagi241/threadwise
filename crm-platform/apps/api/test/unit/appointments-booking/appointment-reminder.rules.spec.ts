@@ -127,7 +127,9 @@ describe('gateRun', () => {
 describe('settleChannels', () => {
   const NOW = T('2026-11-09T10:00:00Z');
   const sent: ChannelOutcome = { status: 'sent' };
-  const skip = (reason: Extract<ChannelOutcome, { status: 'skipped' }>['reason']): ChannelOutcome => ({
+  const skip = (
+    reason: Extract<ChannelOutcome, { status: 'skipped' }>['reason'],
+  ): ChannelOutcome => ({
     status: 'skipped',
     reason,
   });
@@ -151,7 +153,12 @@ describe('settleChannels', () => {
         [{ channel: 'whatsapp', outcome: { status: 'held', reason: 'quiet_hours', until } }],
         NOW,
       ),
-    ).toMatchObject({ status: 'held', reason: 'quiet_hours', channel: 'whatsapp', until: T(until) });
+    ).toMatchObject({
+      status: 'held',
+      reason: 'quiet_hours',
+      channel: 'whatsapp',
+      until: T(until),
+    });
     const noTime = settleChannels(
       [{ channel: 'sms', outcome: { status: 'held', reason: 'channel_unavailable' } }],
       NOW,
@@ -183,7 +190,11 @@ describe('settleChannels', () => {
         NOW,
       ),
     ).toEqual({ status: 'skipped', reason: 'opted_out', channel: null });
-    expect(settleChannels([], NOW)).toEqual({ status: 'skipped', reason: 'no_channel', channel: null });
+    expect(settleChannels([], NOW)).toEqual({
+      status: 'skipped',
+      reason: 'no_channel',
+      channel: null,
+    });
   });
 });
 
@@ -193,7 +204,10 @@ describe('outcomes', () => {
       status: 'skipped',
       reason: 'opted_out',
     });
-    expect(outcomeOfCode(ERROR_CODES.WALLET_EMPTY)).toEqual({ status: 'held', reason: 'wallet_empty' });
+    expect(outcomeOfCode(ERROR_CODES.WALLET_EMPTY)).toEqual({
+      status: 'held',
+      reason: 'wallet_empty',
+    });
     expect(outcomeOfCode(ERROR_CODES.CHANNEL_DISCONNECTED)).toEqual({
       status: 'held',
       reason: 'channel_unavailable',
@@ -213,7 +227,10 @@ describe('outcomes', () => {
       status: 'skipped',
       reason: 'processing_restricted',
     });
-    expect(outcomeOfDenial('no_consent_recorded')).toEqual({ status: 'skipped', reason: 'no_consent' });
+    expect(outcomeOfDenial('no_consent_recorded')).toEqual({
+      status: 'skipped',
+      reason: 'no_consent',
+    });
   });
 });
 
@@ -313,13 +330,23 @@ describe('remindersOf (what a booking shows)', () => {
   });
 
   it('shows the recorded outcome instead of "scheduled"', () => {
-    const shown = remindersOf(booking(), [rule('before', 1440)], [run()], T('2026-11-09T12:00:00Z').getTime());
+    const shown = remindersOf(
+      booking(),
+      [rule('before', 1440)],
+      [run()],
+      T('2026-11-09T12:00:00Z').getTime(),
+    );
     expect(shown).toHaveLength(1);
     expect(shown[0]).toMatchObject({ status: 'sent', channel: 'sms' });
   });
 
   it('does not schedule a before-rule that is already past or that falls before the booking was made', () => {
-    const past = remindersOf(booking(), [rule('before', 1440)], [], T('2026-11-09T12:00:00Z').getTime());
+    const past = remindersOf(
+      booking(),
+      [rule('before', 1440)],
+      [],
+      T('2026-11-09T12:00:00Z').getTime(),
+    );
     expect(past).toEqual([]);
     const madeLate = remindersOf(
       { ...booking(), armedAt: T('2026-11-09T20:00:00Z') },
@@ -336,7 +363,10 @@ describe('remindersOf (what a booking shows)', () => {
     const shown = remindersOf(
       booking(),
       [],
-      [run({ armedAt: old, status: 'sent' }), run({ armedAt: old, offsetMinutes: 60, status: 'cancelled' })],
+      [
+        run({ armedAt: old, status: 'sent' }),
+        run({ armedAt: old, offsetMinutes: 60, status: 'cancelled' }),
+      ],
       T('2026-11-09T12:00:00Z').getTime(),
     );
     expect(shown.map((r) => r.status)).toEqual(['sent']);
@@ -354,9 +384,9 @@ describe('timelineEntry', () => {
       title: 'Reminder not sent',
       body: 'The contact opted out.',
     });
-    expect(timelineEntry('after', 'held', 'sms', 'quiet_hours', T('2026-11-09T14:00:00Z')).body).toContain(
-      '2026-11-09T14:00:00.000Z',
-    );
+    expect(
+      timelineEntry('after', 'held', 'sms', 'quiet_hours', T('2026-11-09T14:00:00Z')).body,
+    ).toContain('2026-11-09T14:00:00.000Z');
     expect(timelineEntry('before', 'failed', 'sms', 'provider_error').title).toBe(
       'Reminder failed on SMS',
     );

@@ -71,27 +71,54 @@ interface Setup {
 }
 
 function make(s: Setup = {}) {
-  const gateCheck = vi.fn(async () => s.gate ?? { decision: 'allow', reason: 'ok' });
-  const purposeOfTemplate = vi.fn(async () => s.templatePurpose ?? 'service_messaging');
-  const windowCheck = vi.fn(async () => s.window ?? { decision: 'allow' });
-  const enqueueOutbound = vi.fn(
-    s.enqueue ?? (async () => ({ message: { id: 'msg-1' }, replayed: false })),
+  const gateCheck = vi.fn(
+    async (..._a: unknown[]) => s.gate ?? { decision: 'allow', reason: 'ok' },
   );
-  const openConversationFor = vi.fn(async () => ({
+  const purposeOfTemplate = vi.fn(
+    async (..._a: unknown[]) => s.templatePurpose ?? 'service_messaging',
+  );
+  const windowCheck = vi.fn(async (..._a: unknown[]) => s.window ?? { decision: 'allow' });
+  const enqueueOutbound = vi.fn(
+    (..._a: unknown[]) =>
+      (s.enqueue ?? (async () => ({ message: { id: 'msg-1' }, replayed: false })))() as Promise<{
+        message: { id: string };
+      }>,
+  );
+  const openConversationFor = vi.fn(async (..._a: unknown[]) => ({
     id: 'thread-1',
     lastInboundAt: 'lastInboundAt' in s ? s.lastInboundAt : null,
   }));
-  const sendText = vi.fn(s.engineSend ?? (async () => ({ providerMessageId: 'p1' })));
-  const open = vi.fn(async () => ({ sendText }));
-  const engines = { get: vi.fn((n: string) => (s.noEngine ? undefined : n === 'sms' || n === 'email' ? { open } : undefined)) };
+  const sendText = vi.fn((..._a: unknown[]) =>
+    (s.engineSend ?? (async () => ({ providerMessageId: 'p1' })))(),
+  );
+  const open = vi.fn(async (..._a: unknown[]) => ({ sendText }));
+  const engines = {
+    get: vi.fn((n: string) =>
+      s.noEngine ? undefined : n === 'sms' || n === 'email' ? { open } : undefined,
+    ),
+  };
   const tx = {
     execute: async (q: unknown) => {
       const text = JSON.stringify(q);
       if (text.includes('wa_provider_configs')) {
-        return { rows: 'smsRow' in s ? (s.smsRow ? [s.smsRow] : []) : [{ id: 8, phone_number: '+14155550100', label: 'Sales' }] };
+        return {
+          rows:
+            'smsRow' in s
+              ? s.smsRow
+                ? [s.smsRow]
+                : []
+              : [{ id: 8, phone_number: '+14155550100', label: 'Sales' }],
+        };
       }
       if (text.includes('mail_mailboxes')) {
-        return { rows: 'mailRow' in s ? (s.mailRow ? [s.mailRow] : []) : [{ id: 9, address: 'sales@acme.test', label: 'Sales' }] };
+        return {
+          rows:
+            'mailRow' in s
+              ? s.mailRow
+                ? [s.mailRow]
+                : []
+              : [{ id: 9, address: 'sales@acme.test', label: 'Sales' }],
+        };
       }
       return { rows: [] };
     },
@@ -105,13 +132,25 @@ function make(s: Setup = {}) {
     { check: windowCheck } as never,
     {
       list: async () =>
-        s.channels ?? [{ uuid: 'ch-cloud', kind: 'whatsapp_cloud', status: 'connected', wabaConfigId: 41 }],
+        s.channels ?? [
+          { uuid: 'ch-cloud', kind: 'whatsapp_cloud', status: 'connected', wabaConfigId: 41 },
+        ],
     } as never,
     engines as never,
     { findByUuid: async () => ('tpl' in s ? s.tpl : template()) } as never,
     { openConversationFor, enqueueOutbound } as never,
   );
-  return { messenger, gateCheck, windowCheck, enqueueOutbound, openConversationFor, sendText, open, purposeOfTemplate, engines };
+  return {
+    messenger,
+    gateCheck,
+    windowCheck,
+    enqueueOutbound,
+    openConversationFor,
+    sendText,
+    open,
+    purposeOfTemplate,
+    engines,
+  };
 }
 
 const DAY = 24 * 3_600_000;
@@ -129,7 +168,9 @@ describe('uuidOfKey', () => {
 describe('address checks', () => {
   it('skips a channel the contact has no number or address for', async () => {
     const { messenger, gateCheck } = make();
-    expect(await messenger.send(message({ to: { name: 'A', phone: null, email: 'a@b.test' } }))).toEqual({
+    expect(
+      await messenger.send(message({ to: { name: 'A', phone: null, email: 'a@b.test' } })),
+    ).toEqual({
       status: 'skipped',
       reason: 'no_contact_point',
     });
@@ -143,7 +184,10 @@ describe('address checks', () => {
 
   it('skips WhatsApp when the booking has no contact (the message lands in the contact thread)', async () => {
     const { messenger } = make({ contact: undefined });
-    expect(await messenger.send(message())).toEqual({ status: 'skipped', reason: 'no_contact_point' });
+    expect(await messenger.send(message())).toEqual({
+      status: 'skipped',
+      reason: 'no_contact_point',
+    });
   });
 
   it('skips a channel the port does not deliver on', async () => {
@@ -172,8 +216,10 @@ describe('WhatsApp', () => {
     expect(call.sender.kind).toBe('bot');
   });
 
-  it('asks the gate with the TEMPLATE\'s purpose, so a marketing-category template is gated as marketing', async () => {
-    const { messenger, gateCheck, purposeOfTemplate } = make({ templatePurpose: 'marketing_messaging' });
+  it("asks the gate with the TEMPLATE's purpose, so a marketing-category template is gated as marketing", async () => {
+    const { messenger, gateCheck, purposeOfTemplate } = make({
+      templatePurpose: 'marketing_messaging',
+    });
     await messenger.send(message({ waTemplateId: TEMPLATE_UUID }));
     expect(purposeOfTemplate).toHaveBeenCalled();
     expect(gateCheck.mock.calls[0]![3]).toBe('marketing_messaging');
@@ -182,14 +228,21 @@ describe('WhatsApp', () => {
 
   it('skips free text outside the 24 hour window on the Cloud API: it needs an approved template', async () => {
     const { messenger, enqueueOutbound } = make({ lastInboundAt: new Date(Date.now() - 2 * DAY) });
-    expect(await messenger.send(message())).toEqual({ status: 'skipped', reason: 'template_required' });
+    expect(await messenger.send(message())).toEqual({
+      status: 'skipped',
+      reason: 'template_required',
+    });
     expect(enqueueOutbound).not.toHaveBeenCalled();
   });
 
   it('sends free text inside the window', async () => {
-    const { messenger, enqueueOutbound } = make({ lastInboundAt: new Date(Date.now() - 3_600_000) });
+    const { messenger, enqueueOutbound } = make({
+      lastInboundAt: new Date(Date.now() - 3_600_000),
+    });
     expect((await messenger.send(message())).status).toBe('sent');
-    expect((enqueueOutbound.mock.calls[0]![0] as { content: { kind: string } }).content.kind).toBe('text');
+    expect((enqueueOutbound.mock.calls[0]![0] as { content: { kind: string } }).content.kind).toBe(
+      'text',
+    );
   });
 
   it('sends free text to a QR number anywhere', async () => {
@@ -207,7 +260,10 @@ describe('WhatsApp', () => {
       reason: 'template_unavailable',
     });
     const none = make({ channels: [] });
-    expect(await none.messenger.send(message())).toEqual({ status: 'skipped', reason: 'no_sender' });
+    expect(await none.messenger.send(message())).toEqual({
+      status: 'skipped',
+      reason: 'no_sender',
+    });
   });
 
   it('holds when the number is not connected right now', async () => {
@@ -220,21 +276,27 @@ describe('WhatsApp', () => {
     });
   });
 
-  it('turns the dispatcher\'s refusals into outcomes', async () => {
+  it("turns the dispatcher's refusals into outcomes", async () => {
     const wallet = make({
       lastInboundAt: new Date(),
       enqueue: async () => {
         throw new AppError(ERROR_CODES.WALLET_EMPTY, 'empty');
       },
     });
-    expect(await wallet.messenger.send(message())).toEqual({ status: 'held', reason: 'wallet_empty' });
+    expect(await wallet.messenger.send(message())).toEqual({
+      status: 'held',
+      reason: 'wallet_empty',
+    });
     const optOut = make({
       lastInboundAt: new Date(),
       enqueue: async () => {
         throw new AppError(ERROR_CODES.CONSENT_OPTED_OUT, 'opted out');
       },
     });
-    expect(await optOut.messenger.send(message())).toEqual({ status: 'skipped', reason: 'opted_out' });
+    expect(await optOut.messenger.send(message())).toEqual({
+      status: 'skipped',
+      reason: 'opted_out',
+    });
     const boom = make({
       lastInboundAt: new Date(),
       enqueue: async () => {
@@ -252,7 +314,10 @@ describe('SMS and email', () => {
     const { messenger, open, sendText } = make();
     const res = await messenger.send(message({ channel: 'sms' }));
     expect(res.status).toBe('sent');
-    expect(open).toHaveBeenCalledWith(ORG, expect.objectContaining({ engine: 'sms', id: 8, phoneDigits: '14155550100' }));
+    expect(open).toHaveBeenCalledWith(
+      ORG,
+      expect.objectContaining({ engine: 'sms', id: 8, phoneDigits: '14155550100' }),
+    );
     expect(sendText).toHaveBeenCalledWith(
       expect.objectContaining({ to: '919876543210', text: 'Reminder: Consultation tomorrow' }),
     );
@@ -271,7 +336,9 @@ describe('SMS and email', () => {
       status: 'skipped',
       reason: 'no_sender',
     });
-    expect(await make({ mailRow: undefined }).messenger.send(message({ channel: 'email' }))).toEqual({
+    expect(
+      await make({ mailRow: undefined }).messenger.send(message({ channel: 'email' })),
+    ).toEqual({
       status: 'skipped',
       reason: 'no_sender',
     });
@@ -301,7 +368,13 @@ describe('SMS and email', () => {
 });
 
 describe('quiet hours: HOLD, never deny', () => {
-  const hold = (until: string) => ({ decision: 'hold', reason: 'quiet_hours', until, zone: 'UTC', zoneSource: 'utc' });
+  const hold = (until: string) => ({
+    decision: 'hold',
+    reason: 'quiet_hours',
+    until,
+    zone: 'UTC',
+    zoneSource: 'utc',
+  });
 
   it('holds a reminder until the quiet hours end, when that still leaves time before the booking', async () => {
     const { messenger, enqueueOutbound, gateCheck } = make({
@@ -318,10 +391,19 @@ describe('quiet hours: HOLD, never deny', () => {
   });
 
   it('skips a reminder that quiet hours would push to the booking or past it', async () => {
-    const { messenger } = make({ lastInboundAt: new Date(), window: hold('2026-11-10T09:58:00.000Z') });
-    expect(await messenger.send(message())).toEqual({ status: 'skipped', reason: 'quiet_hours_too_late' });
+    const { messenger } = make({
+      lastInboundAt: new Date(),
+      window: hold('2026-11-10T09:58:00.000Z'),
+    });
+    expect(await messenger.send(message())).toEqual({
+      status: 'skipped',
+      reason: 'quiet_hours_too_late',
+    });
     const past = make({ lastInboundAt: new Date(), window: hold('2026-11-10T12:00:00.000Z') });
-    expect(await past.messenger.send(message())).toEqual({ status: 'skipped', reason: 'quiet_hours_too_late' });
+    expect(await past.messenger.send(message())).toEqual({
+      status: 'skipped',
+      reason: 'quiet_hours_too_late',
+    });
   });
 
   it('always holds a follow-up, however long', async () => {
@@ -329,7 +411,9 @@ describe('quiet hours: HOLD, never deny', () => {
       lastInboundAt: new Date(),
       window: hold('2026-11-11T03:00:00.000Z'),
     });
-    expect(await messenger.send(message({ event: 'follow_up', purpose: 'follow_up', notAfter: null }))).toEqual({
+    expect(
+      await messenger.send(message({ event: 'follow_up', purpose: 'follow_up', notAfter: null })),
+    ).toEqual({
       status: 'held',
       reason: 'quiet_hours',
       holdUntil: '2026-11-11T03:00:00.000Z',
@@ -337,7 +421,10 @@ describe('quiet hours: HOLD, never deny', () => {
   });
 
   it('does not hold a confirmation or a cancellation: the person asked for it', async () => {
-    const { messenger, windowCheck } = make({ lastInboundAt: new Date(), window: hold('2026-11-10T07:00:00.000Z') });
+    const { messenger, windowCheck } = make({
+      lastInboundAt: new Date(),
+      window: hold('2026-11-10T07:00:00.000Z'),
+    });
     expect((await messenger.send(message({ event: 'confirmation' }))).status).toBe('sent');
     expect(windowCheck).not.toHaveBeenCalled();
   });
@@ -351,7 +438,10 @@ describe('the ConsentGate', () => {
     ['no_consent_recorded', 'no_consent'],
   ])('a %s denial skips the send as %s and delivers nothing', async (reason, code) => {
     const { messenger, sendText } = make({ gate: { decision: 'deny', reason } });
-    expect(await messenger.send(message({ channel: 'sms' }))).toEqual({ status: 'skipped', reason: code });
+    expect(await messenger.send(message({ channel: 'sms' }))).toEqual({
+      status: 'skipped',
+      reason: code,
+    });
     expect(sendText).not.toHaveBeenCalled();
   });
 
@@ -360,7 +450,9 @@ describe('the ConsentGate', () => {
     await a.messenger.send(message({ channel: 'sms' }));
     expect(a.gateCheck.mock.calls[0]![3]).toBe('service_messaging');
     const b = make();
-    await b.messenger.send(message({ channel: 'sms', event: 'follow_up', purpose: 'follow_up', notAfter: null }));
+    await b.messenger.send(
+      message({ channel: 'sms', event: 'follow_up', purpose: 'follow_up', notAfter: null }),
+    );
     expect(b.gateCheck.mock.calls[0]![3]).toBe('marketing_messaging');
   });
 

@@ -339,20 +339,20 @@ APPT_LINK_UNAVAILABLE` for slots, reschedule and cancel (the page itself still s
 Written in the same transaction as the change, with an audit row (module `appointments` / `booking_types`). Payloads carry identifiers and
 what a consumer decides on, **never** the notes, the manage link or the invitee's name, email or phone (a consumer reads the booking at delivery).
 
-| Event                                          | When                                                  | Extra payload                                              |
-| ---------------------------------------------- | ----------------------------------------------------- | ---------------------------------------------------------- |
-| `appointment.booked`                           | a booking is made (any status)                        | `requiresApproval`, `paymentDue`, `notify`                 |
-| `appointment.confirmed`                        | pending to confirmed (staff, or a payment)            | `from`, `by`, `reason`, `notify`                           |
-| `appointment.declined`                         | a request declined (staff, or expired)                | `from`, `by`, `reason`, `notify`                           |
-| `appointment.cancelled`                        | cancelled (staff, customer, system)                   | `from`, `by`, `reason`, `notify`, `feeRecorded`            |
-| `appointment.rescheduled`                      | moved                                                 | `previousStartsAt`, `by`, `notify`                         |
-| `appointment.completed`, `appointment.no_show` | closed (staff, or the sweep for a checked-in booking) | `from`, `by`, `reason`, `notify`, `feeRecorded`            |
-| `appointment.reminder_due`                     | the sweep claims a (booking, rule)                    | `kind`, `offsetMinutes`, `dueAt`, `startsAt`, `endsAt`, `timezone` |
-| `appointment.reminder_sent`, `_held`, `_skipped`, `_failed`, `_cancelled` | a reminder or follow-up reaches that outcome | `kind`, `reason` (a stable code), `channel` |
-| `appointment.payment_due`                      | a booking with an amount due to book is made          | `amount`, `currency`, `gatewaySlug`, `holdExpiresAt`       |
-| `appointment.payment_received`                 | a payment is recorded                                 | `amount`, `currency`, `method`, `reference`                |
-| `appointment.deleted`                          | a final-status booking is deleted                     |                                                            |
-| `booking_type.created`, `.updated`, `.deleted` | a type changes                                        | `uuid`, `name`, `slug`, `isActive`                         |
+| Event                                                                     | When                                                  | Extra payload                                                      |
+| ------------------------------------------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------ |
+| `appointment.booked`                                                      | a booking is made (any status)                        | `requiresApproval`, `paymentDue`, `notify`                         |
+| `appointment.confirmed`                                                   | pending to confirmed (staff, or a payment)            | `from`, `by`, `reason`, `notify`                                   |
+| `appointment.declined`                                                    | a request declined (staff, or expired)                | `from`, `by`, `reason`, `notify`                                   |
+| `appointment.cancelled`                                                   | cancelled (staff, customer, system)                   | `from`, `by`, `reason`, `notify`, `feeRecorded`                    |
+| `appointment.rescheduled`                                                 | moved                                                 | `previousStartsAt`, `by`, `notify`                                 |
+| `appointment.completed`, `appointment.no_show`                            | closed (staff, or the sweep for a checked-in booking) | `from`, `by`, `reason`, `notify`, `feeRecorded`                    |
+| `appointment.reminder_due`                                                | the sweep claims a (booking, rule)                    | `kind`, `offsetMinutes`, `dueAt`, `startsAt`, `endsAt`, `timezone` |
+| `appointment.reminder_sent`, `_held`, `_skipped`, `_failed`, `_cancelled` | a reminder or follow-up reaches that outcome          | `kind`, `reason` (a stable code), `channel`                        |
+| `appointment.payment_due`                                                 | a booking with an amount due to book is made          | `amount`, `currency`, `gatewaySlug`, `holdExpiresAt`               |
+| `appointment.payment_received`                                            | a payment is recorded                                 | `amount`, `currency`, `method`, `reference`                        |
+| `appointment.deleted`                                                     | a final-status booking is deleted                     |                                                                    |
+| `booking_type.created`, `.updated`, `.deleted`                            | a type changes                                        | `uuid`, `name`, `slug`, `isActive`                                 |
 
 Every appointment event also carries `uuid`, `status`, `startsAt`, `endsAt`, `timezone`, `bookingTypeId`, `contactId`, `hostId`, `source`,
 `paymentStatus`, `rowVersion`. `notify: false` (a silent staff action) tells the message consumer to send nothing.
@@ -691,8 +691,8 @@ Override the token in a module (`{ provide: APPOINTMENT_MESSENGER, useClass: ...
   list, a minor and a legal hold are skipped with their own reason. A confirmation or cancellation is not held by quiet hours.
 - A result is `sent`, `held` (+ `holdUntil`), `skipped` or `failed`, each with a stable reason code. The text and the address never reach a result,
   a run or the timeline; a provider's own error sentence goes to the log's error field only.
-The calendar port is served by `MultiCalendarAdapter` over the Google and Outlook adapters (`NoCalendarSync` stays as the reference "nothing connected" behaviour). The Sheets
-append is not built (`blocked`: it is the Sheets half of TW-APPT-012 and 029, and its scope is not requested).
+  The calendar port is served by `MultiCalendarAdapter` over the Google and Outlook adapters (`NoCalendarSync` stays as the reference "nothing connected" behaviour). The Sheets
+  append is not built (`blocked`: it is the Sheets half of TW-APPT-012 and 029, and its scope is not requested).
 
 **For the flow-runtime domain** (the "Book appointment" node, TW-APPT-034) call `BookingOffersService` (exported from the barrel, no HTTP):
 `offer(orgId)` (active types + the gate: `feature_off` / `plan_limit`), `days(orgId, typeId, offset)` and `times(orgId, typeId, date, offset)`

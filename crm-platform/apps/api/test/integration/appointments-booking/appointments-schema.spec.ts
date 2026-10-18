@@ -621,7 +621,13 @@ describe('appointments: schema, constraints, isolation and the double-booking gu
       const a = Number((await appt(orgA, typeA, 20, 21)).rows[0].id);
       const armed = '2026-11-01T08:00:00Z';
       const claim = (kind = 'before', offset = 60, at = armed) =>
-        owner.query(`${insert} VALUES ($1,$2,$3,$4, now(), $5) ${key}`, [orgA, a, kind, offset, at]);
+        owner.query(`${insert} VALUES ($1,$2,$3,$4, now(), $5) ${key}`, [
+          orgA,
+          a,
+          kind,
+          offset,
+          at,
+        ]);
       expect((await claim()).rows).toHaveLength(1);
       expect((await claim()).rows).toHaveLength(0);
       // 60 minutes after the end is a different rule from 60 minutes before the start.
@@ -655,13 +661,24 @@ describe('appointments: schema, constraints, isolation and the double-booking gu
         `${insert} VALUES ($1,$2,'before',30, now(), now()) RETURNING status, attempts, reason, channel`,
         [orgA, a],
       );
-      expect(run.rows[0]).toMatchObject({ status: 'pending', attempts: 0, reason: null, channel: null });
+      expect(run.rows[0]).toMatchObject({
+        status: 'pending',
+        attempts: 0,
+        reason: null,
+        channel: null,
+      });
       await rejects(
-        owner.query(`UPDATE appointment_reminder_runs SET status = 'delivered' WHERE appointment_id = $1`, [a]),
+        owner.query(
+          `UPDATE appointment_reminder_runs SET status = 'delivered' WHERE appointment_id = $1`,
+          [a],
+        ),
         /chk_appointment_reminder_runs_status/,
       );
       await rejects(
-        owner.query(`UPDATE appointment_reminder_runs SET channel = 'fax' WHERE appointment_id = $1`, [a]),
+        owner.query(
+          `UPDATE appointment_reminder_runs SET channel = 'fax' WHERE appointment_id = $1`,
+          [a],
+        ),
         /chk_appointment_reminder_runs_channel/,
       );
       await rejects(

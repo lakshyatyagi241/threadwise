@@ -4,7 +4,7 @@ title: Reminders and follow-ups
 summary: Message a contact before an appointment starts and follow up after it ends, set per booking type and sent on WhatsApp, SMS or email.
 area: settings
 order: 12
-documents: []
+documents: [tile:appointment-settings]
 keywords:
   [
     reminders,

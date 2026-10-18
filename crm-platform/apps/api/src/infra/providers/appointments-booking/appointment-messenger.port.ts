@@ -19,12 +19,7 @@ export type BookingMessageEvent =
   /** The after-visit follow-up of a reminder rule (BL-283). */
   | 'follow_up';
 export type BookingMessageChannel =
-  | 'whatsapp'
-  | 'sms'
-  | 'email'
-  | 'telegram'
-  | 'instagram'
-  | 'facebook';
+  'whatsapp' | 'sms' | 'email' | 'telegram' | 'instagram' | 'facebook';
 
 export interface BookingMessage {
   orgId: number;

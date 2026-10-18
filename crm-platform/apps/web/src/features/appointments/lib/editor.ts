@@ -1,13 +1,11 @@
 import { newId } from './availability';
 import {
-  LIMITS,
   STEPS,
   stepOfProblem,
   type BookingTypeDraft,
   type FormProblem,
   type ProblemMap,
   type QuestionDraft,
-  type ReminderDraft,
   type Step,
 } from './booking-form';
 import { parseMajor, parsePercent, priceBreakdown, type PriceBreakdown } from './money';

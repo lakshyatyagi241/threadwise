@@ -134,6 +134,7 @@ Bound surfaces (`lib/bindings.ts`; every prefix is checked against the English m
 | contacts-list  | `contacts-attributes-tags.list`, `.bulk`, `.kanban`, `.views`, `.form` (header, add button, search, empty and first-run states, selection banner, bulk actions, views, create and edit dialogs)                             |
 | contact-record | `contacts-attributes-tags.detail`, `.contact.quick`, `.contact.header`, `.contact.record`, `.contact.nav`, `.contact.actions`, `.contact.tabs`, `.contact.details`, `.contact.meetings`, `.contact.deals`, `.contact.notes` |
 | appointments   | `appointments.nav`, `.hub`, `.tabs`, `.toolbar`, `.table`, `.row`, `.calendar`, `.status`, `.drawer`, `.toast`, `.reschedule`                                                                                               |
+| reminders      | `appointments.reminders` (reminders and follow-ups: the settings card, the editor step, the drawer list)                                                                                                                    |
 | deals          | `deals-pipelines.nav`, `.board`, `.toolbar`, `.list`, `.card`, `.form`, `.drawer`                                                                                                                                           |
 
 TODO, surfaces still saying the product's word (`NOT_YET_BOUND` in `lib/bindings.ts`, kept in step with this list by a test):

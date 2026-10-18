@@ -171,7 +171,8 @@ export class AppointmentsService {
         ? Promise.resolve(null)
         : this.types.children(tx, orgId, [row.bookingTypeId]),
     ]);
-    const rules = row.bookingTypeId === null ? [] : (children?.get(row.bookingTypeId)?.reminders ?? []);
+    const rules =
+      row.bookingTypeId === null ? [] : (children?.get(row.bookingTypeId)?.reminders ?? []);
     return remindersOf(row, rules, runs, Date.now()).map((r) => ({
       kind: r.kind,
       offsetMinutes: r.offsetMinutes,

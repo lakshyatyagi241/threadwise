@@ -63,6 +63,9 @@ describe('the worker process', () => {
     const { SendGuardModule } = await import('../../../src/modules/auth');
     const { RealtimeEmitterModule } = await import('../../../src/realtime');
     const { WorkersModule } = await import('../../../src/workers/workers.module');
+    // Global, and imported by `worker.module.ts`: ApiKeyGuard (a provider of the flows module) needs it.
+    const { ApiKeyAccessModule } =
+      await import('../../../src/modules/public-api/api-key-access.module');
     const { PullProcessor, PullSweepService } =
       await import('../../../src/modules/marketplace/pull.worker');
     const { PullRunService } = await import('../../../src/modules/marketplace/pull-run.service');
@@ -77,6 +80,7 @@ describe('the worker process', () => {
         SendGuardModule,
         KernelModule,
         RealtimeEmitterModule,
+        ApiKeyAccessModule,
         WorkersModule,
       ],
     }).compile();

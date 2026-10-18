@@ -98,6 +98,7 @@ export function reminderBody(
     kind === 'before' && typeReminderBody && typeReminderBody.trim() !== ''
       ? typeReminderBody
       : null;
-  const text = own ?? inherited ?? (kind === 'before' ? DEFAULT_TEXTS.reminder : DEFAULT_FOLLOW_UP_TEXT);
+  const text =
+    own ?? inherited ?? (kind === 'before' ? DEFAULT_TEXTS.reminder : DEFAULT_FOLLOW_UP_TEXT);
   return renderTemplate(text, vars);
 }

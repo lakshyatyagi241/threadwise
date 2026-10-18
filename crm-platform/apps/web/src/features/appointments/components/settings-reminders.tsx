@@ -131,9 +131,7 @@ function TypeReminders({ type, canEdit }: { type: BookingType; canEdit: boolean 
       >
         <TypeDot color={type.color} />
         <span className="min-w-0 flex-1 truncate text-sm font-medium">{type.name}</span>
-        {!type.isActive && (
-          <span className="text-xs text-muted-foreground">{t('paused')}</span>
-        )}
+        {!type.isActive && <span className="text-xs text-muted-foreground">{t('paused')}</span>}
         <span className="text-xs text-muted-foreground">
           {rules.length === 0 ? t('summaryNone') : t('summary', { on, total: rules.length })}
           {dirty ? ` · ${t('unsaved')}` : ''}

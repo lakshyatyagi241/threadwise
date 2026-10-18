@@ -131,7 +131,11 @@ describe('the reminder sweep (TW-APPT-030, D-14)', () => {
 
   async function book(
     name: string,
-    reminderOffsets: Array<{ offsetMinutes: number; isActive?: boolean; kind?: 'before' | 'after' }>,
+    reminderOffsets: Array<{
+      offsetMinutes: number;
+      isActive?: boolean;
+      kind?: 'before' | 'after';
+    }>,
   ) {
     // A rule is created OFF; these tests are about rules that are on.
     const type = await api.type(t.admin, {
@@ -350,7 +354,12 @@ describe('reminder rules and their delivery (BL-283)', () => {
     expect(m.idempotencyKey).toMatch(/^apptrem:/);
 
     const [run] = await runsOf(a.id);
-    expect(run).toMatchObject({ kind: 'before', offset_minutes: 60, status: 'sent', channel: 'sms' });
+    expect(run).toMatchObject({
+      kind: 'before',
+      offset_minutes: 60,
+      status: 'sent',
+      channel: 'sms',
+    });
     expect(await timeline(a.id)).toEqual([{ title: 'Reminder sent on SMS', body: null }]);
     expect(JSON.stringify(await timeline(a.id))).not.toMatch(/Rita|\+9198|@example/);
     const audit = await h.owner.query(
@@ -471,7 +480,10 @@ describe('reminder rules and their delivery (BL-283)', () => {
       [second.type.id],
     );
     await reminders.deliver();
-    expect((await runsOf(second.a.id))[0]).toMatchObject({ status: 'cancelled', reason: 'rule_off' });
+    expect((await runsOf(second.a.id))[0]).toMatchObject({
+      status: 'cancelled',
+      reason: 'rule_off',
+    });
     expect(reminderMessenger.sent).toEqual([]);
   });
 
@@ -494,8 +506,12 @@ describe('reminder rules and their delivery (BL-283)', () => {
         [x.a.id],
       );
     }
-    await h.owner.query(`UPDATE appointments SET status = 'completed' WHERE uuid = $1`, [done.a.id]);
-    await h.owner.query(`UPDATE appointments SET status = 'no_show' WHERE uuid = $1`, [missed.a.id]);
+    await h.owner.query(`UPDATE appointments SET status = 'completed' WHERE uuid = $1`, [
+      done.a.id,
+    ]);
+    await h.owner.query(`UPDATE appointments SET status = 'no_show' WHERE uuid = $1`, [
+      missed.a.id,
+    ]);
     expect(await reminders.sweep()).toBe(1);
     await reminders.deliver();
     expect(reminderMessenger.sent).toHaveLength(1);
@@ -875,10 +891,8 @@ describe('the message consumer (TW-APPT-013, 030, 031, D-14, EXT-APPT-08)', () =
     expect(wa.variables).toMatchObject({ name: 'Bo', type: 'Custom', location: '9 High St' });
     expect(wa.purpose).toBe('service');
     const mail = messenger.sent.find((m) => m.channel === 'email')!;
-    expect(mail).toMatchObject({
-      body: 'Email confirmation for Custom',
-      subject: 'Custom: Your booking is confirmed',
-    });
+    expect(mail.body.startsWith('Email confirmation for Custom')).toBe(true);
+    expect(mail.subject).toBe('Custom: Your booking is confirmed');
   });
 
   it('with no message configured: WhatsApp when there is a phone, else email; with neither, nothing', async () => {

@@ -143,7 +143,9 @@ export class AppointmentMessageConsumer implements OutboxSubscriber, OnModuleIni
       const res = await this.messenger.send(message);
       if (res.status === 'failed' || res.status === 'held') {
         // Throwing makes the drain retry the event with backoff; the adapter's dedupe makes the retry safe.
-        throw new Error(`booking message ${res.status} (${message.channel}): ${res.reason ?? 'unknown'}`);
+        throw new Error(
+          `booking message ${res.status} (${message.channel}): ${res.reason ?? 'unknown'}`,
+        );
       }
       if (res.status === 'sent') delivered = true;
       if (res.status === 'skipped') {

@@ -26,6 +26,45 @@ export const REMINDER_BODY_MAX = 2000;
 export const REMINDER_SUBJECT_MAX = 191;
 export const REMINDER_LABEL_MAX = 40;
 
+/** What a run can say about why it did not go (the API's stable codes); each has a sentence under `appointments.reminders.reasons`. */
+export const REMINDER_REASON_CODES = [
+  'rule_removed',
+  'rule_off',
+  'rescheduled',
+  'booking_cancelled',
+  'booking_declined',
+  'booking_no_show',
+  'booking_not_confirmed',
+  'started',
+  'expired',
+  'no_contact_point',
+  'no_channel',
+  'no_sender',
+  'template_required',
+  'template_unavailable',
+  'quiet_hours_too_late',
+  'no_consent',
+  'opted_out',
+  'do_not_call',
+  'minor',
+  'processing_restricted',
+  'plan_limit',
+  'quiet_hours',
+  'channel_unavailable',
+  'wallet_empty',
+  'send_halted',
+  'provider_error',
+  'interrupted',
+  'internal_error',
+] as const;
+export type ReminderReasonCode = (typeof REMINDER_REASON_CODES)[number];
+
+/** A code from a newer server than this app knows says nothing rather than a broken key. */
+export const knownReason = (reason: string | null): ReminderReasonCode | null =>
+  (REMINDER_REASON_CODES as readonly string[]).includes(reason ?? '')
+    ? (reason as ReminderReasonCode)
+    : null;
+
 /** The placeholders a reminder text may use; the same ones the booking messages use. */
 export const REMINDER_PLACEHOLDERS = [
   'name',
@@ -58,7 +97,11 @@ export interface ReminderDraft {
   waTemplateId: string;
 }
 
-export const newReminder = (offset = '', label = '', kind: ReminderKind = 'before'): ReminderDraft => ({
+export const newReminder = (
+  offset = '',
+  label = '',
+  kind: ReminderKind = 'before',
+): ReminderDraft => ({
   id: newId(),
   kind,
   enabled: false,
@@ -80,7 +123,8 @@ export function minutesOf(r: Pick<ReminderDraft, 'offset' | 'unit'>): number | n
 
 /** An offset in minutes as the largest unit that holds it exactly: 1440 is 1 day, 90 is 90 minutes. */
 export function splitMinutes(minutes: number): { offset: string; unit: ReminderUnit } {
-  if (minutes >= 1440 && minutes % 1440 === 0) return { offset: String(minutes / 1440), unit: 'days' };
+  if (minutes >= 1440 && minutes % 1440 === 0)
+    return { offset: String(minutes / 1440), unit: 'days' };
   if (minutes >= 60 && minutes % 60 === 0) return { offset: String(minutes / 60), unit: 'hours' };
   return { offset: String(minutes), unit: 'minutes' };
 }
@@ -135,7 +179,8 @@ export function moveChannel(
   delta: number,
 ): ReminderChannel[] {
   const to = index + delta;
-  if (index < 0 || index >= channels.length || to < 0 || to >= channels.length) return [...channels];
+  if (index < 0 || index >= channels.length || to < 0 || to >= channels.length)
+    return [...channels];
   const next = [...channels];
   const [item] = next.splice(index, 1);
   next.splice(to, 0, item!);
@@ -183,7 +228,8 @@ export function validateReminders(list: readonly ReminderDraft[]): Record<string
     else if (r.label.length > REMINDER_LABEL_MAX) p[key] = 'labelTooLong';
     if (m !== null) seen.add(ruleKey(r.kind, m));
   }
-  if (list.filter((r) => r.offset.trim() !== '').length > REMINDER_MAX_RULES) p.reminders = 'tooMany';
+  if (list.filter((r) => r.offset.trim() !== '').length > REMINDER_MAX_RULES)
+    p.reminders = 'tooMany';
   return p;
 }
 
@@ -207,7 +253,8 @@ export function remindersToInput(list: readonly ReminderDraft[]): ReminderInput[
   const used = new Set<string>();
   for (const r of list) {
     const m = minutesOf(r);
-    if (m === null || m < 1 || used.has(ruleKey(r.kind, m)) || out.length >= REMINDER_MAX_RULES) continue;
+    if (m === null || m < 1 || used.has(ruleKey(r.kind, m)) || out.length >= REMINDER_MAX_RULES)
+      continue;
     used.add(ruleKey(r.kind, m));
     out.push({
       ...(r.serverId ? { id: r.serverId } : {}),
@@ -276,7 +323,8 @@ export function remindersChanged(
 /** The standard texts the API uses when a rule has none (they are what the contact would get). */
 export const STANDARD_TEXT: Record<ReminderKind, string> = {
   before: 'Reminder: you have {{type}} coming up on {{slot}}. See you then!',
-  after: 'Thank you for {{type}} on {{slot}}. If you have any questions, just reply to this message.',
+  after:
+    'Thank you for {{type}} on {{slot}}. If you have any questions, just reply to this message.',
 };
 
 export interface PreviewSample {
@@ -299,9 +347,6 @@ export function renderPreview(body: string, sample: PreviewSample): string {
 }
 
 /** What the contact would read: the rule's own text, else the standard one. */
-export function previewOf(
-  r: Pick<ReminderDraft, 'kind' | 'body'>,
-  sample: PreviewSample,
-): string {
+export function previewOf(r: Pick<ReminderDraft, 'kind' | 'body'>, sample: PreviewSample): string {
   return renderPreview(r.body.trim() === '' ? STANDARD_TEXT[r.kind] : r.body, sample);
 }

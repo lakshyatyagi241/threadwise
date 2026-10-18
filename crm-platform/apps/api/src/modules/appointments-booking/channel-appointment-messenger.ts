@@ -140,7 +140,8 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
           this.contacts.findByUuid(tx, m.orgId, m.contactId!),
         )
       : undefined;
-    if (channel === 'whatsapp' && !contact) return { status: 'skipped', reason: 'no_contact_point' };
+    if (channel === 'whatsapp' && !contact)
+      return { status: 'skipped', reason: 'no_contact_point' };
 
     // Prepare first (it finds the sender and the template), so the quiet hours and the gate are asked about what will really be sent.
     const prepared = await this.prepare(m, channel, phone, contact?.uuid ?? null);
@@ -312,7 +313,9 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
             now,
           )
         : 'template_unavailable';
-      const values = tpl ? waTemplateValues(tokensOf(tpl.templateBody).length, m.variables ?? {}) : null;
+      const values = tpl
+        ? waTemplateValues(tokensOf(tpl.templateBody).length, m.variables ?? {})
+        : null;
       if (tpl && !problem && values) {
         const channel = cloudMine.find((c) => c.status === 'connected');
         if (!channel) {
@@ -390,9 +393,7 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
   ): Promise<boolean> {
     try {
       const thread = await this.conversations.openConversationFor(contactUuid, channelUuid);
-      return (
-        thread.lastInboundAt !== null && Date.now() - thread.lastInboundAt.getTime() < DAY_MS
-      );
+      return thread.lastInboundAt !== null && Date.now() - thread.lastInboundAt.getTime() < DAY_MS;
     } catch (err) {
       this.logger.debug(
         { err: err instanceof Error ? err.message : 'unknown', appointmentId: m.appointmentId },

@@ -84,7 +84,10 @@ export function ReminderRulesEditor({
       else next.add(id);
       return next;
     });
-  const add = (fn: () => ReminderDraft[], opened?: (next: ReminderDraft[]) => string | undefined) => {
+  const add = (
+    fn: () => ReminderDraft[],
+    opened?: (next: ReminderDraft[]) => string | undefined,
+  ) => {
     const next = fn();
     onChange(next);
     const id = opened?.(next);
@@ -179,7 +182,10 @@ export function ReminderRulesEditor({
           disabled={disabled || full}
           onClick={() => {
             const row = newReminder();
-            add(() => [...rules, row], () => row.id);
+            add(
+              () => [...rules, row],
+              () => row.id,
+            );
           }}
         >
           <PlusIcon /> {t('add')}
@@ -356,7 +362,9 @@ export function ReminderRulesEditor({
                               key={c}
                               type="button"
                               disabled={disabled}
-                              onClick={() => patch(r.id, { channels: toggleChannel(r.channels, c) })}
+                              onClick={() =>
+                                patch(r.id, { channels: toggleChannel(r.channels, c) })
+                              }
                               className={chipClass}
                             >
                               <PlusIcon className="size-3" /> {t(`channels.${c}`)}
@@ -398,7 +406,9 @@ export function ReminderRulesEditor({
                         onChange={(e) => patch(r.id, { body: e.target.value })}
                       />
                       <div className="flex items-start justify-between gap-2 text-xs text-muted-foreground">
-                        <span>{r.kind === 'before' ? t('bodyHintBefore') : t('bodyHintAfter')}</span>
+                        <span>
+                          {r.kind === 'before' ? t('bodyHintBefore') : t('bodyHintAfter')}
+                        </span>
                         <span className="tabular-nums" dir="ltr">
                           {r.body.length} / {REMINDER_BODY_MAX}
                         </span>
@@ -407,7 +417,10 @@ export function ReminderRulesEditor({
 
                     {usesEmail && (
                       <div className="space-y-1.5">
-                        <label htmlFor={`${prefix}-subject-${r.id}`} className="text-xs font-medium">
+                        <label
+                          htmlFor={`${prefix}-subject-${r.id}`}
+                          className="text-xs font-medium"
+                        >
                           {t('subjectTitle')}
                         </label>
                         <Input
@@ -436,9 +449,10 @@ export function ReminderRulesEditor({
                           onChange={(e) => patch(r.id, { waTemplateId: e.target.value })}
                         >
                           <option value="">{t('templateNone')}</option>
-                          {r.waTemplateId !== '' && !templates.some((x) => x.id === r.waTemplateId) && (
-                            <option value={r.waTemplateId}>{t('templateUnknown')}</option>
-                          )}
+                          {r.waTemplateId !== '' &&
+                            !templates.some((x) => x.id === r.waTemplateId) && (
+                              <option value={r.waTemplateId}>{t('templateUnknown')}</option>
+                            )}
                           {templates.map((x) => (
                             <option key={x.id} value={x.id}>
                               {x.name} ({x.language})

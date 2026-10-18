@@ -350,12 +350,22 @@ describe('booking types (TW-APPT-005..015)', () => {
       questions: [{ label: 'Keep me', type: 'text' }],
       reminders: [
         { offsetMinutes: 60 },
-        { offsetMinutes: 60, kind: 'after', channels: ['email', 'sms'], body: 'Thanks {{name}}', subject: 'Thanks' },
+        {
+          offsetMinutes: 60,
+          kind: 'after',
+          channels: ['email', 'sms'],
+          body: 'Thanks {{name}}',
+          subject: 'Thanks',
+        },
       ],
     });
     expect(type.reminders.map((r: { isActive: boolean }) => r.isActive)).toEqual([false, false]);
     const after = type.reminders.find((r: { kind: string }) => r.kind === 'after')!;
-    expect(after).toMatchObject({ channels: ['email', 'sms'], body: 'Thanks {{name}}', subject: 'Thanks' });
+    expect(after).toMatchObject({
+      channels: ['email', 'sms'],
+      body: 'Thanks {{name}}',
+      subject: 'Thanks',
+    });
 
     const res = await api
       .as(t.admin)
@@ -363,7 +373,11 @@ describe('booking types (TW-APPT-005..015)', () => {
       .send({
         rowVersion: type.rowVersion,
         reminders: [
-          ...type.reminders.map((r: { id: string }) => ({ id: r.id, offsetMinutes: 60, isActive: true })),
+          ...type.reminders.map((r: { id: string }) => ({
+            id: r.id,
+            offsetMinutes: 60,
+            isActive: true,
+          })),
         ].map((r, i) =>
           i === 0
             ? { ...r, kind: 'before', channels: ['sms', 'whatsapp'], waTemplateId: waId }
@@ -374,7 +388,11 @@ describe('booking types (TW-APPT-005..015)', () => {
     expect(res.body.questions).toHaveLength(1);
     expect(res.body.reminders).toHaveLength(2);
     const before = res.body.reminders.find((r: { kind: string }) => r.kind === 'before');
-    expect(before).toMatchObject({ isActive: true, channels: ['sms', 'whatsapp'], waTemplateId: waId });
+    expect(before).toMatchObject({
+      isActive: true,
+      channels: ['sms', 'whatsapp'],
+      waTemplateId: waId,
+    });
   });
 
   it('BL-283: the same moment before the start and after the end are two rules; the same twice, a bad channel, a template of nobody and an over-long text are refused', async () => {
@@ -384,7 +402,7 @@ describe('booking types (TW-APPT-005..015)', () => {
       timezone: 'UTC',
       reminders: [{ offsetMinutes: 60 }, { offsetMinutes: 60 }],
     });
-    expect(dup.status).toBe(400);
+    expect(dup.status).toBe(422);
     for (const bad of [
       { channels: ['fax'] },
       { channels: [] },
@@ -398,7 +416,7 @@ describe('booking types (TW-APPT-005..015)', () => {
         timezone: 'UTC',
         reminders: [{ offsetMinutes: 60, ...bad }],
       });
-      expect(res.status, JSON.stringify(bad)).toBe(400);
+      expect(res.status, JSON.stringify(bad)).toBe(422);
     }
     const unknown = await api.post(t.admin, '/v2/booking-types', {
       name: 'Unknown template',

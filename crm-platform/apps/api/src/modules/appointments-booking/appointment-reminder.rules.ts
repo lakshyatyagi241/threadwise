@@ -23,7 +23,8 @@ export const FOLLOW_UP_GRACE_MS = 24 * 3_600_000;
 export const REMINDER_MIN_LEAD_MS = 2 * 60_000;
 
 /** What became of a run. `held` and `pending` are not final: the run is looked at again. */
-export type RunStatus = 'pending' | 'sending' | 'held' | 'sent' | 'skipped' | 'failed' | 'cancelled';
+export type RunStatus =
+  'pending' | 'sending' | 'held' | 'sent' | 'skipped' | 'failed' | 'cancelled';
 
 /** Stable codes stored on a run and shown (translated) next to it. Never a message, a number or an address. */
 export const REMINDER_REASONS = [
@@ -89,8 +90,7 @@ export interface RunFacts {
 }
 
 export type Gate =
-  | { go: true }
-  | { go: false; status: 'cancelled' | 'skipped'; reason: ReminderReason };
+  { go: true } | { go: false; status: 'cancelled' | 'skipped'; reason: ReminderReason };
 
 /**
  * Whether a claimed run should still go out, decided at delivery from the booking and the rule as they are now (a cancel, a decline, a
@@ -405,7 +405,14 @@ export function remindersOf(
       : booking.status === 'completed';
   for (const rule of rules) {
     if (!rule.isActive) continue;
-    if (runs.some((r) => r.kind === rule.kind && r.offsetMinutes === rule.offsetMinutes && r.armedAt.getTime() === armed)) {
+    if (
+      runs.some(
+        (r) =>
+          r.kind === rule.kind &&
+          r.offsetMinutes === rule.offsetMinutes &&
+          r.armedAt.getTime() === armed,
+      )
+    ) {
       continue;
     }
     const dueAt = dueAtOf(rule.kind, booking.startsAt, booking.endsAt, rule.offsetMinutes);

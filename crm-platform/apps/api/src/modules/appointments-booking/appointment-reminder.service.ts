@@ -229,9 +229,7 @@ export class AppointmentReminderService {
     runId: number,
     row: AppointmentRow | null,
     kind: 'before' | 'after',
-    outcome:
-      | Settled
-      | { status: 'cancelled' | 'skipped'; reason: ReminderReason; channel: null },
+    outcome: Settled | { status: 'cancelled' | 'skipped'; reason: ReminderReason; channel: null },
     previousReason: string | null = null,
   ): Promise<void> {
     const held = outcome.status === 'held';

@@ -142,7 +142,11 @@ describe('to and from the API', () => {
       ['a', 'before', 60, true],
       ['c', 'after', 120, true],
     ]);
-    expect(input[1]).toMatchObject({ channels: ['sms', 'whatsapp'], waTemplateId: 'tpl-1', label: '1h' });
+    expect(input[1]).toMatchObject({
+      channels: ['sms', 'whatsapp'],
+      waTemplateId: 'tpl-1',
+      label: '1h',
+    });
     expect(input[0]).toMatchObject({ subject: 'Soon', body: 'Hi {{name}}' });
   });
 
@@ -162,15 +166,27 @@ describe('to and from the API', () => {
   });
 
   it('drops an empty row and a repeated moment, and keeps at most eight', () => {
-    expect(remindersToInput([newReminder(''), row(), row({ offset: '1', unit: 'hours' })])).toHaveLength(1);
+    expect(
+      remindersToInput([newReminder(''), row(), row({ offset: '1', unit: 'hours' })]),
+    ).toHaveLength(1);
     const many = Array.from({ length: 10 }, (_, i) => row({ offset: String(i + 1) }));
     expect(remindersToInput(many)).toHaveLength(8);
   });
 
   it('tells a real change from re-typing the same thing', () => {
-    expect(remindersChanged(saved, saved.map((r) => ({ ...r })))).toBe(false);
+    expect(
+      remindersChanged(
+        saved,
+        saved.map((r) => ({ ...r })),
+      ),
+    ).toBe(false);
     expect(remindersChanged(saved, [...saved, newReminder('')])).toBe(false);
-    expect(remindersChanged(saved, saved.map((r, i) => (i === 0 ? { ...r, enabled: !r.enabled } : r)))).toBe(true);
+    expect(
+      remindersChanged(
+        saved,
+        saved.map((r, i) => (i === 0 ? { ...r, enabled: !r.enabled } : r)),
+      ),
+    ).toBe(true);
     expect(remindersChanged(saved, saved.slice(1))).toBe(true);
   });
 });
