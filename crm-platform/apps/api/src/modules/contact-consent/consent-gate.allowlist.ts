@@ -21,6 +21,8 @@ export const SEND_PRIMITIVES = [
   'MailDriverRegistry',
   'EngineSenderRegistry',
   'OutboundRegistry',
+  // The commerce (Shopify / WooCommerce) sender: a template send to a customer needs the clearance CommerceConsentService issues.
+  'COMMERCE_SENDER',
 ] as const;
 
 /** Text that marks a file as gate-aware. */
@@ -32,7 +34,11 @@ export interface AllowlistEntry {
   reason: string;
 }
 
-const GAP = 'KNOWN GAP (BL-141 follow-up):';
+/**
+ * What an entry's reason starts with while its file still sends without asking the gate. There is none today (the commerce senders were the
+ * last, closed in BL-278); the guard test fails if one is added, so a gap is never left in silently.
+ */
+export const KNOWN_GAP_PREFIX = 'KNOWN GAP (BL-141 follow-up):';
 
 export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
   // --- the dispatcher itself and the layers beneath it -------------------------------------------------------------------------
@@ -219,7 +225,8 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
       'Twilio transport; reached from broadcasts, campaigns and schedules, whose audiences are gated.',
   },
   {
-    path: 'modules/shopify-woocommerce/_shims/engine-commerce-sender.ts',
-    reason: `${GAP} commerce broadcasts (abandoned cart, order updates) send through the engine registry; they honour the contact flag only.`,
+    path: 'modules/shopify-woocommerce/cart.service.ts',
+    reason:
+      'Asks the commerce sender only whether a number is connected (canSend) before it schedules a follow-up; it sends nothing. The reminder itself goes out through EventMessageService, which clears the customer with CommerceConsentService.',
   },
 ];

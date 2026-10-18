@@ -82,12 +82,18 @@ export class WorkerHeartbeatService implements OnApplicationBootstrap, OnApplica
              LIMIT ${READY_CAP}) due)::int AS ready,
           (SELECT floor(extract(epoch FROM now() - available_at))::int FROM event_outbox
              WHERE status = 'pending' AND available_at <= now()
-             ORDER BY available_at, id LIMIT 1) AS lag_seconds
+             ORDER BY available_at, id LIMIT 1) AS lag_seconds,
+          (SELECT count(*) FROM (
+             SELECT 1 FROM event_outbox
+             WHERE status = 'dead'
+             LIMIT ${READY_CAP}) d)::int AS dead
       `);
-      const row = res.rows[0] as { ready: number; lag_seconds: number | null } | undefined;
+      const row = res.rows[0] as
+        { ready: number; lag_seconds: number | null; dead?: number } | undefined;
       return {
         ready: Number(row?.ready ?? 0),
         lagSeconds: Math.max(0, Number(row?.lag_seconds ?? 0)),
+        dead: Number(row?.dead ?? 0),
         sampledAt: now,
       };
     });

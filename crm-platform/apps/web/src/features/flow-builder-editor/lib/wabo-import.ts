@@ -1,6 +1,7 @@
 import {
   flbCleanAskFileExtensions,
   flbDefaultNodeData,
+  FLB_WA_LIMITS,
   type FlowEdge,
   type FlowGraph,
   type FlowNode,
@@ -105,6 +106,18 @@ const BUTTON_ACTIONS = ['flow', 'mobile', 'email', 'link', 'live_agent'];
 /** A web chat bot's button row (`{type, value:{text,url,nodeId}}`) as a link button of the Link button / Carousel steps, or null. */
 const linkKind = (type: string): 'url' | 'phone' | 'email' | null =>
   type === 'link' ? 'url' : type === 'mobile' ? 'phone' : type === 'email' ? 'email' : null;
+
+/** WhatsApp needs each button name to be different: a repeat (after clipping too) gets " (2)", " (3)"... inside the 20 characters. */
+function uniqueLabels(labels: string[]): string[] {
+  const taken = new Set<string>();
+  return labels.map((label) => {
+    let out = label;
+    for (let n = 2; taken.has(out.trim().toLowerCase()); n++)
+      out = `${clip(label, LIMITS.buttonLabel - ` (${n})`.length)} (${n})`;
+    taken.add(out.trim().toLowerCase());
+    return out;
+  });
+}
 
 const VIDEO_PAGE = /(youtube\.com|youtu\.be|vimeo\.com)/i;
 
@@ -287,6 +300,7 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
         return {
           type: 'location',
           data: {
+            locMode: 'coords',
             lat: str(v.latitude),
             lng: str(v.longitude),
             address: str(v.address),
@@ -299,14 +313,14 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
         return {
           type: 'cta',
           data: {
-            actions: buttons.map((b) => ({
+            actions: buttons.slice(0, FLB_WA_LIMITS.ctaActions).map((b) => ({
               type: 'url',
-              label: clip(str(rec(b.value).text), 25),
+              label: clip(str(rec(b.value).text), FLB_WA_LIMITS.ctaText),
               value: str(rec(b.value).url),
             })),
             bodyText: body(inter.body, ''),
-            headerText: str(rec(inter.header).text),
-            footerText: plain(inter.footer),
+            headerText: clip(str(rec(inter.header).text), FLB_WA_LIMITS.header),
+            footerText: clip(plain(inter.footer), FLB_WA_LIMITS.footer),
             ...(inter.header ? { header: inter.header } : {}),
           },
         };
@@ -321,13 +335,16 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
                 text: str(rec(b.value).text),
               }),
             );
+        if (buttons.length > LIMITS.buttons) notes.push(msg('waboImport.notes.tooManyButtons'));
         return {
           type: 'buttons',
           data: {
             prompt: body(inter.body, inter.footer) || '…',
-            options: buttons
-              .slice(0, LIMITS.buttons)
-              .map((b) => clip(str(rec(b.value).text).trim() || 'Button', LIMITS.buttonLabel)),
+            options: uniqueLabels(
+              buttons
+                .slice(0, LIMITS.buttons)
+                .map((b) => clip(str(rec(b.value).text).trim() || 'Button', LIMITS.buttonLabel)),
+            ),
             var: claimVar(r, `choice_${id8}`),
             ...(inter.header ? { header: inter.header } : {}),
           },
@@ -341,7 +358,7 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
             rows.push({
               title: clip(str(rec(row.value).text).trim() || 'Option', LIMITS.rowTitle),
               description: '',
-              section: str(s.title),
+              section: clip(str(s.title), FLB_WA_LIMITS.sectionTitle),
             });
         return {
           type: 'list',
@@ -583,15 +600,23 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
       c.type === 'buttons'
         ? arr(action.buttons)
         : arr(action.sections).flatMap((s) => arr(rec(s).rows));
+    // A button or row that leads nowhere in the file ends the conversation there, as it did in wabo; saying so keeps the Simple builder
+    // from refusing to publish it (`endOptions`). A live-agent button of an exact import leads to its Assign step instead.
+    const ends: number[] = [];
     targets.slice(0, arr(c.data.options).length).forEach((t, i) => {
       const v = rec(rec(t).value);
       const to = idByNode.get(str(v.nodeId));
       if (rec(t).type === 'flow' && to) {
         edge(id, `p${i}`, to);
         if (!leadTitle.has(to)) leadTitle.set(to, str(v.text).trim());
-      } else if (rec(t).type === 'flow' && str(v.nodeId))
+        return;
+      }
+      if (rec(t).type === 'flow' && str(v.nodeId))
         notes.push(msg('waboImport.notes.leadsOutside', { text: str(v.text).trim() }));
+      if (!(opts.exact && c.type === 'buttons' && rec(t).type === 'live_agent')) ends.push(i);
     });
+    const node = nodes.find((n) => n.id === id);
+    if (node && ends.length > 0) node.data.endOptions = ends;
   }
 
   // A website chat bot's buttons and carousel cards lead where their `nodeId` says, when that node is in the file.

@@ -5,7 +5,7 @@ import { CryptoService } from '../../common/crypto/crypto.service';
 import { DatabaseService } from '../../infra/db/database.service';
 import { QUEUES } from '../../infra/queue/queues';
 import { send } from './send';
-import type { WebhookDeliveryJob } from './webhook-job';
+import { RetryAfterError, webhookBackoffStrategy, type WebhookDeliveryJob } from './webhook-job';
 import { WebhooksRepository } from './webhooks.repository';
 
 /**
@@ -13,7 +13,10 @@ import { WebhooksRepository } from './webhooks.repository';
  * answer can never improve (a 4xx other than 408/429, a blocked address); then the endpoint is marked failing. Every attempt is a
  * row in the delivery log, which is how a customer sees what their server answered. Registered only in the worker process.
  */
-@Processor(QUEUES.WEBHOOK_DELIVER, { concurrency: 16 })
+@Processor(QUEUES.WEBHOOK_DELIVER, {
+  concurrency: 16,
+  settings: { backoffStrategy: webhookBackoffStrategy },
+})
 export class WebhookDeliveryProcessor extends WorkerHost {
   private readonly logger = new Logger(WebhookDeliveryProcessor.name);
 
@@ -67,6 +70,8 @@ export class WebhookDeliveryProcessor extends WorkerHost {
       );
       throw new UnrecoverableError(out.error ?? 'delivery failed');
     }
+    if (out.retryAfterMs !== null)
+      throw new RetryAfterError(out.error ?? 'delivery failed', out.retryAfterMs);
     throw new Error(out.error ?? 'delivery failed');
   }
 }

@@ -866,13 +866,6 @@
             "hour": "hours",
             "day": "days"
           },
-          "location": {
-            "placeName": "Place name",
-            "placePlaceholder": "Our office",
-            "address": "Address",
-            "latitude": "Latitude",
-            "longitude": "Longitude"
-          },
           "template": {
             "label": "Approved template",
             "hint": "Only templates your WhatsApp number has approved are listed.",
@@ -1093,13 +1086,7 @@
           "info": "Add up to {max} CTA buttons in one message — mix Visit website, Call, and Copy code in any combination. Same cap WhatsApp template buttons have.",
           "buttonLabel": "Button label",
           "addButton": "Add button",
-          "maxReached": "Max {max} buttons reached.",
-          "locationTitle": "Title",
-          "locationTitlePlaceholder": "Our office",
-          "locationAddress": "Address",
-          "locationAddressPlaceholder": "Street, city, country",
-          "locationLatitude": "Latitude",
-          "locationLongitude": "Longitude"
+          "maxReached": "Max {max} buttons reached."
         },
         "logic": {
           "operator": {
@@ -1167,19 +1154,14 @@
           "aiModelPick": "— pick model —",
           "aiModelNone": "No AI models enabled — ask admin to switch one on",
           "aiModelNotEnabled": "{value} (not enabled)",
-          "aiAssistantNone": "— none (use the prompt above only) —",
           "aiAssistantOption": "{name} · {count, plural, one {# source} other {# sources}}",
           "aiAssistantMissing": "(assistant {id})",
-          "aiAssistantHintNone": "No knowledge bases yet. Create one in <link>AI Training</link>, then press Refresh list to pick it here.",
-          "aiAssistantHintEmpty": "Note: this assistant has 0 trained sources. Add some in <link>AI Training</link> or the reply uses the prompt only.",
-          "aiAssistantHint": "Pulls the chosen assistant's trained content into this reply. <link>Manage knowledge →</link>",
           "aiModelLabel": "Model",
           "aiModelHint": "Models the admin enabled — plus any provider you added your own key for (Settings → AI keys, on BYOK plans).",
           "aiModelHintNone": "No provider available yet. Add your own key in <link>Settings → AI keys</link> (BYOK plans), or ask your admin to enable one.",
           "aiPrompt": "System prompt",
           "aiSave": "Save response to",
           "aiSaveHint": "Later nodes read it as <v>{save}</v> — or <v>{path}</v> when extracting.",
-          "aiAssistantLabel": "Knowledge base (optional)",
           "aiExtract": "<strong>Extract structured data (JSON)</strong> — turn the message into fields",
           "aiFields": "Fields to extract",
           "aiFieldsHint": "Comma-separated keys. The AI returns ONE JSON object; each key becomes <v>{key}</v> (and <v>{rows}</v> when several records are detected — e.g. for a Google Sheets node).",
@@ -1192,7 +1174,25 @@
           "subflowMissing": "Flow {id} (not in workspace)",
           "subflowLabel": "Flow to run",
           "subflowHint": "Pick another saved flow. When this node fires, that flow runs end-to-end before control returns to the next node here.",
-          "endInfo": "This node terminates the flow. Anything connected after it won't run."
+          "endInfo": "This node terminates the flow. Anything connected after it won't run.",
+          "aiSetupLegend": "How should this step answer?",
+          "aiSetupAgent": "AI agent",
+          "aiSetupAgentDesc": "Uses the instructions, model and knowledge of an agent from AI Training.",
+          "aiSetupCustom": "Custom setup",
+          "aiSetupCustomDesc": "Choose a model and write the instructions here.",
+          "aiAgentLabel": "AI agent",
+          "aiAgentPick": "— choose an AI agent —",
+          "aiAgentHint": "The agent brings its own instructions, model and knowledge. Change them in <link>AI Training</link>.",
+          "aiAgentNone": "You have no AI agents yet. <link>Create your first AI agent</link>, then press Refresh list.",
+          "aiAgentRequired": "Choose an AI agent, or switch to a custom setup.",
+          "aiAgentSummary": "Model {model} · {count, plural, one {# knowledge source} other {# knowledge sources}}",
+          "aiAgentNoSources": "This agent has no knowledge yet, so it answers from its instructions only. Add sources in <link>AI Training</link>.",
+          "aiPromptRequired": "Write the instructions for the AI.",
+          "aiKnowledgeLabel": "Knowledge from an AI agent (optional)",
+          "aiKnowledgeNone": "— none —",
+          "aiKnowledgeHint": "Adds that agent's trained sources to the reply. Its own instructions and model are not used in a custom setup. <link>Manage in AI Training →</link>",
+          "aiAdvanced": "Advanced options",
+          "aiCreateAgent": "+ Create AI agent"
         },
         "options": {
           "prompt": "Prompt",
@@ -2041,6 +2041,41 @@
         "groupContact": "Contact properties",
         "groupFlow": "Saved in this flow",
         "variableNone": "No variables found"
+      },
+      "location": {
+        "modeLabel": "How to set the location",
+        "modeLink": "Google Maps link",
+        "modeCoords": "Latitude & longitude",
+        "linkLabel": "Google Maps link",
+        "linkPlaceholder": "Paste a link, e.g. https://maps.app.goo.gl/…",
+        "linkHint": "In Google Maps, open the place, tap Share, then Copy link. Short and long links both work.",
+        "finding": "Looking up the link…",
+        "retry": "Try again",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "coordsHint": "Latitude is -90 to 90 and longitude is -180 to 180. You can paste “lat, lng” into either box.",
+        "found": "Location found",
+        "openInMaps": "Open in Google Maps",
+        "optionalHint": "Optional: shown on the map card the customer receives. You can leave both empty.",
+        "optional": "(optional)",
+        "placeName": "Place name",
+        "placePlaceholder": "Our office",
+        "address": "Address",
+        "problem": {
+          "empty": "Enter a Google Maps link or coordinates.",
+          "lat_missing": "Enter a latitude.",
+          "lng_missing": "Enter a longitude.",
+          "lat_nan": "Latitude must be a number, for example 18.5204.",
+          "lng_nan": "Longitude must be a number, for example 73.8567.",
+          "lat_range": "Latitude must be between -90 and 90.",
+          "lng_range": "Longitude must be between -180 and 180.",
+          "zero": "0, 0 is not a real place. Enter the actual coordinates.",
+          "not_url": "This doesn’t look like a link. Paste the full Google Maps link.",
+          "not_maps": "This is not a Google Maps link.",
+          "no_coords": "This link doesn’t point to an exact spot. Open the place in Google Maps, tap Share and copy that link, or enter the coordinates instead.",
+          "unresolved": "This short link hasn’t been looked up yet. Click out of the field or try again.",
+          "resolve_failed": "Couldn’t read this link. Check that it opens in Google Maps, or enter the coordinates instead."
+        }
       }
     },
     "contracts": {
@@ -2473,7 +2508,9 @@
         "noSenderInstagram": "The Trigger node has no Instagram account selected — pick one on the Trigger step.",
         "noSenderFacebook": "The Trigger node has no Facebook Page selected — pick one on the Trigger step.",
         "noSenderNumber": "The Trigger node has no number selected — pick one on the Trigger step.",
-        "faqMinScore": "\"{node}\" has a minimum score outside 0.05 to 0.99 — fix it or leave it blank to use the flow's setting."
+        "faqMinScore": "\"{node}\" has a minimum score outside 0.05 to 0.99 — fix it or leave it blank to use the flow's setting.",
+        "locationInvalid": "\"{node}\" has no valid location — paste a Google Maps link or enter a latitude (-90 to 90) and longitude (-180 to 180).",
+        "aiNoAgent": "\"{node}\" has no AI agent and no prompt — pick an AI agent, or choose Custom setup and write the instructions."
       }
     },
     "simpleModel": {
@@ -2614,7 +2651,7 @@
         "writeQuestion": "Step {stage}: write the question.",
         "nameVariable": "Step {stage}: name the variable the answer is saved in.",
         "chooseAnswerProperty": "Step {stage}: choose the contact property the answer is copied to.",
-        "setCoordinates": "Step {stage}: set the latitude and longitude.",
+        "setCoordinates": "Step {stage}: paste a Google Maps link or enter a valid latitude and longitude.",
         "chooseTemplate": "Step {stage}: choose a template.",
         "chooseTeam": "Step {stage}: choose the team the conversation goes to.",
         "ctaLabelLink": "Step {stage}: give the button a name and a link.",
@@ -2639,7 +2676,9 @@
         "chooseFlow": "Step {stage}: choose the flow the button starts.",
         "chooseApi": "Step {stage}: choose the API to call.",
         "writeCode": "Step {stage}: write the code to run.",
-        "webhookUrl": "Step {stage}: add the address (URL) to call."
+        "webhookUrl": "Step {stage}: add the address (URL) to call.",
+        "chooseAiAgent": "Step {stage}: choose the AI agent that answers, or switch the step to a custom setup.",
+        "writeAiPrompt": "Step {stage}: write the instructions for the AI, or choose an AI agent."
       },
       "faqSummary": "{hasCategory, select, true {From your FAQs · {category}} other {From your FAQs}}"
     },
@@ -2754,7 +2793,8 @@
       "simPurchase": "Simulated purchase: {name} → port \"purchased\"",
       "simAbandon": "Simulated abandon → port \"abandoned\"",
       "faqAnswered": "(simulated) Answer from FAQ for \"{query}\": the test chat does not look up your FAQs, so nothing is sent and {ref} stays empty. Taking the \"answered\" exit.",
-      "faqNoMatch": "(simulated) Answer from FAQ for \"{query}\": the test chat does not look up your FAQs, and the \"answered\" exit is not connected, so taking \"no match\". {ref} stays empty."
+      "faqNoMatch": "(simulated) Answer from FAQ for \"{query}\": the test chat does not look up your FAQs, and the \"answered\" exit is not connected, so taking \"no match\". {ref} stays empty.",
+      "locationSkipped": "(location) skipped: no valid coordinates"
     }
   }
 }

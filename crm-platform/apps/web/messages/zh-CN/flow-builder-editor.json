@@ -855,13 +855,6 @@
             "hour": "小时",
             "day": "天"
           },
-          "location": {
-            "placeName": "地点名称",
-            "placePlaceholder": "我们的办公室",
-            "address": "地址",
-            "latitude": "纬度",
-            "longitude": "经度"
-          },
           "template": {
             "label": "已审核通过的模板",
             "hint": "仅列出您的 WhatsApp 号码已审核通过的模板。",
@@ -1070,13 +1063,7 @@
           "info": "一条消息中最多可添加 {max} 个 CTA 按钮，可任意组合访问网站、通话和复制代码。与 WhatsApp 模板按钮的上限相同。",
           "buttonLabel": "按钮标签",
           "addButton": "添加按钮",
-          "maxReached": "已达到 {max} 个按钮的上限。",
-          "locationTitle": "标题",
-          "locationTitlePlaceholder": "我们的办公室",
-          "locationAddress": "地址",
-          "locationAddressPlaceholder": "街道、城市、国家",
-          "locationLatitude": "纬度",
-          "locationLongitude": "经度"
+          "maxReached": "已达到 {max} 个按钮的上限。"
         },
         "logic": {
           "operator": {
@@ -1144,19 +1131,14 @@
           "aiModelPick": "— 选择模型 —",
           "aiModelNone": "未启用任何 AI 模型，请联系管理员开启",
           "aiModelNotEnabled": "{value}（未启用）",
-          "aiAssistantNone": "— 无（仅使用上方提示词）—",
           "aiAssistantOption": "{name} · {count, plural, other {# 个来源}}",
           "aiAssistantMissing": "（助手 {id}）",
-          "aiAssistantHintNone": "暂无知识库。请在 <link>AI 训练</link>中创建一个，然后点击“刷新列表”在此选择。",
-          "aiAssistantHintEmpty": "注意：此助手有 0 个已训练的来源。请在 <link>AI 训练</link>中添加，否则回复仅使用提示词。",
-          "aiAssistantHint": "将所选助手训练过的内容用于本次回复。<link>管理知识 →</link>",
           "aiModelLabel": "模型",
           "aiModelHint": "管理员已启用的模型，以及您用自有密钥添加的任何服务商（设置 → AI 密钥，适用于 BYOK 套餐）。",
           "aiModelHintNone": "暂无可用的服务商。请在 <link>设置 → AI 密钥</link>中添加您自己的密钥（BYOK 套餐），或请管理员启用一个。",
           "aiPrompt": "系统提示词",
           "aiSave": "将响应保存到",
           "aiSaveHint": "后续节点以 <v>{save}</v> 读取，提取时则用 <v>{path}</v>。",
-          "aiAssistantLabel": "知识库（可选）",
           "aiExtract": "<strong>提取结构化数据（JSON）</strong>：将消息转换为字段",
           "aiFields": "要提取的字段",
           "aiFieldsHint": "以逗号分隔的键。AI 返回一个 JSON 对象，每个键会成为 <v>{key}</v>（检测到多条记录时还会有 <v>{rows}</v>，例如用于 Google Sheets 节点）。",
@@ -1169,7 +1151,25 @@
           "subflowMissing": "流程 {id}（不在工作区中）",
           "subflowLabel": "要运行的流程",
           "subflowHint": "选择另一个已保存的流程。此节点触发时，该流程会端到端运行，然后控制权才返回此处的下一个节点。",
-          "endInfo": "此节点会终止流程。连接在它之后的任何内容都不会运行。"
+          "endInfo": "此节点会终止流程。连接在它之后的任何内容都不会运行。",
+          "aiSetupLegend": "此步骤应如何回复？",
+          "aiSetupAgent": "AI 智能体",
+          "aiSetupAgentDesc": "使用 AI 训练中某个智能体的指令、模型和知识。",
+          "aiSetupCustom": "自定义设置",
+          "aiSetupCustomDesc": "在此选择模型并编写指令。",
+          "aiAgentLabel": "AI 智能体",
+          "aiAgentPick": "— 选择 AI 智能体 —",
+          "aiAgentHint": "智能体自带指令、模型和知识。请在 <link>AI 训练</link>中修改。",
+          "aiAgentNone": "你还没有 AI 智能体。<link>创建你的第一个 AI 智能体</link>，然后点击刷新列表。",
+          "aiAgentRequired": "请选择 AI 智能体，或切换为自定义设置。",
+          "aiAgentSummary": "模型 {model} · {count, plural, other {# 个知识来源}}",
+          "aiAgentNoSources": "该智能体还没有知识，只会根据自己的指令回复。请在 <link>AI 训练</link>中添加来源。",
+          "aiPromptRequired": "请编写给 AI 的指令。",
+          "aiKnowledgeLabel": "AI 智能体的知识（可选）",
+          "aiKnowledgeNone": "— 无 —",
+          "aiKnowledgeHint": "将该智能体训练过的来源加入回复。自定义设置不会使用它自己的指令和模型。<link>在 AI 训练中管理 →</link>",
+          "aiAdvanced": "高级选项",
+          "aiCreateAgent": "+ 创建 AI 智能体"
         },
         "options": {
           "prompt": "提示",
@@ -2042,6 +2042,41 @@
         "endTextHint": "在流程结束前发送。不要提及年龄。留空则使用“我们无法继续。”",
         "continueNote": "后续步骤可以读取答案变量加上 _age_gate(例如 answer_age_gate),其值为 under 或 adult。添加一个“条件”来设置分支,例如要求提供父母或监护人。",
         "note": "仅在需要时才询问年龄。答案会写入联系人:出生日期写入出生日期字段,未达年龄的答案会将联系人标记为未成年人。"
+      },
+      "location": {
+        "modeLabel": "如何设置位置",
+        "modeLink": "Google 地图链接",
+        "modeCoords": "纬度和经度",
+        "linkLabel": "Google 地图链接",
+        "linkPlaceholder": "粘贴链接，例如 https://maps.app.goo.gl/…",
+        "linkHint": "在 Google 地图中打开该地点，点按“分享”，再点按“复制链接”。短链接和长链接都可以。",
+        "finding": "正在查询链接…",
+        "retry": "重试",
+        "latitude": "纬度",
+        "longitude": "经度",
+        "coordsHint": "纬度范围为 -90 到 90，经度范围为 -180 到 180。可在任一输入框中粘贴“纬度, 经度”。",
+        "found": "已找到位置",
+        "openInMaps": "在 Google 地图中打开",
+        "optionalHint": "可选：显示在客户收到的地图卡片上。两项都可以留空。",
+        "optional": "（可选）",
+        "placeName": "地点名称",
+        "placePlaceholder": "我们的办公室",
+        "address": "地址",
+        "problem": {
+          "empty": "请输入 Google 地图链接或坐标。",
+          "lat_missing": "请输入纬度。",
+          "lng_missing": "请输入经度。",
+          "lat_nan": "纬度必须是数字，例如 18.5204。",
+          "lng_nan": "经度必须是数字，例如 73.8567。",
+          "lat_range": "纬度必须介于 -90 和 90 之间。",
+          "lng_range": "经度必须介于 -180 和 180 之间。",
+          "zero": "0, 0 不是真实的地点。请输入实际坐标。",
+          "not_url": "这看起来不是链接。请粘贴完整的 Google 地图链接。",
+          "not_maps": "这不是 Google 地图链接。",
+          "no_coords": "此链接没有指向确切位置。请在 Google 地图中打开该地点，点按“分享”并复制该链接，或改为输入坐标。",
+          "unresolved": "尚未查询此短链接。请点击输入框以外的地方或重试。",
+          "resolve_failed": "无法读取此链接。请检查它能否在 Google 地图中打开，或改为输入坐标。"
+        }
       }
     },
     "contracts": {
@@ -2474,7 +2509,9 @@
         "noSenderInstagram": "触发器节点未选择 Instagram 账户 — 请在触发步骤中选择一个。",
         "noSenderFacebook": "触发器节点未选择 Facebook 主页 — 请在触发步骤中选择一个。",
         "noSenderNumber": "触发器节点未选择号码 — 请在触发步骤中选择一个。",
-        "faqMinScore": "\"{node}\"的最低分数不在 0.05 到 0.99 范围内——请修正，或留空以使用流程设置。"
+        "faqMinScore": "\"{node}\"的最低分数不在 0.05 到 0.99 范围内——请修正，或留空以使用流程设置。",
+        "locationInvalid": "“{node}”没有有效的位置——请粘贴 Google 地图链接，或输入纬度（-90 到 90）和经度（-180 到 180）。",
+        "aiNoAgent": "\"{node}\"既没有 AI 智能体也没有提示词——请选择 AI 智能体，或选择自定义设置并编写指令。"
       }
     },
     "simpleModel": {
@@ -2615,7 +2652,7 @@
         "writeQuestion": "第 {stage} 步：请撰写问题。",
         "nameVariable": "第 {stage} 步：请为保存回答的变量命名。",
         "chooseAnswerProperty": "第 {stage} 步：请选择回答要复制到的联系人属性。",
-        "setCoordinates": "第 {stage} 步：请设置纬度和经度。",
+        "setCoordinates": "步骤 {stage}：请粘贴 Google 地图链接，或输入有效的纬度和经度。",
         "chooseTemplate": "第 {stage} 步：请选择模板。",
         "chooseTeam": "第 {stage} 步：请选择对话转交的团队。",
         "ctaLabelLink": "第 {stage} 步：请为按钮命名并填写链接。",
@@ -2640,7 +2677,9 @@
         "chooseFlow": "步骤 {stage}：请选择该按钮启动的流程。",
         "chooseApi": "步骤 {stage}：请选择要调用的 API。",
         "writeCode": "步骤 {stage}：请编写要运行的代码。",
-        "webhookUrl": "步骤 {stage}：添加要调用的地址（URL）。"
+        "webhookUrl": "步骤 {stage}：添加要调用的地址（URL）。",
+        "chooseAiAgent": "步骤 {stage}：请选择负责回复的 AI 智能体，或将此步骤切换为自定义设置。",
+        "writeAiPrompt": "步骤 {stage}：请编写给 AI 的指令，或选择一个 AI 智能体。"
       },
       "faqSummary": "{hasCategory, select, true {来自你的 FAQ · {category}} other {来自你的 FAQ}}"
     },
@@ -2755,7 +2794,8 @@
       "simPurchase": "模拟购买：{name} → 出口 \"purchased\"",
       "simAbandon": "模拟放弃 → 出口 \"abandoned\"",
       "faqAnswered": "（模拟）针对“{query}”的 FAQ 回答：测试聊天不会查询你的 FAQ，因此不会发送任何内容，{ref} 保持为空。走“已回答”出口。",
-      "faqNoMatch": "（模拟）针对“{query}”的 FAQ 回答：测试聊天不会查询你的 FAQ，且“已回答”出口未连接，因此走“无匹配”出口。{ref} 保持为空。"
+      "faqNoMatch": "（模拟）针对“{query}”的 FAQ 回答：测试聊天不会查询你的 FAQ，且“已回答”出口未连接，因此走“无匹配”出口。{ref} 保持为空。",
+      "locationSkipped": "（位置）已跳过：没有有效的坐标"
     }
   }
 }

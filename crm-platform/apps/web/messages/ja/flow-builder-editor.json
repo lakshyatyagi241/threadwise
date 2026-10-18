@@ -855,13 +855,6 @@
             "hour": "時間",
             "day": "日"
           },
-          "location": {
-            "placeName": "場所の名前",
-            "placePlaceholder": "当社オフィス",
-            "address": "住所",
-            "latitude": "緯度",
-            "longitude": "経度"
-          },
           "template": {
             "label": "承認済みテンプレート",
             "hint": "お使いのWhatsApp番号で承認されたテンプレートのみ表示されます。",
@@ -1070,13 +1063,7 @@
           "info": "1つのメッセージにCTAボタンを最大{max}個追加できます。ウェブサイトを開く、電話、コードをコピーを自由に組み合わせられます。WhatsAppテンプレートのボタンと同じ上限です。",
           "buttonLabel": "ボタンのラベル",
           "addButton": "ボタンを追加",
-          "maxReached": "ボタンは最大{max}個です。",
-          "locationTitle": "タイトル",
-          "locationTitlePlaceholder": "当社オフィス",
-          "locationAddress": "住所",
-          "locationAddressPlaceholder": "番地、市区町村、国",
-          "locationLatitude": "緯度",
-          "locationLongitude": "経度"
+          "maxReached": "ボタンは最大{max}個です。"
         },
         "logic": {
           "operator": {
@@ -1144,19 +1131,14 @@
           "aiModelPick": "— モデルを選択 —",
           "aiModelNone": "有効なAIモデルがありません。管理者にオンにするよう依頼してください",
           "aiModelNotEnabled": "{value}(無効)",
-          "aiAssistantNone": "— なし(上のプロンプトのみ使用)—",
           "aiAssistantOption": "{name} · {count, plural, other {ソース#件}}",
           "aiAssistantMissing": "(アシスタント{id})",
-          "aiAssistantHintNone": "ナレッジベースはまだありません。<link>AIトレーニング</link>で作成し、「リストを更新」を押してここで選択してください。",
-          "aiAssistantHintEmpty": "注意: このアシスタントには学習済みソースが0件です。<link>AIトレーニング</link>で追加しないと、返信はプロンプトのみで生成されます。",
-          "aiAssistantHint": "選択したアシスタントの学習済みコンテンツをこの返信に取り込みます。<link>ナレッジを管理 →</link>",
           "aiModelLabel": "モデル",
           "aiModelHint": "管理者が有効にしたモデルと、独自のキーを追加したプロバイダー(設定 → AIキー、BYOKプラン)が利用できます。",
           "aiModelHintNone": "利用可能なプロバイダーがまだありません。<link>設定 → AIキー</link>で独自のキーを追加する(BYOKプラン)か、管理者に有効化を依頼してください。",
           "aiPrompt": "システムプロンプト",
           "aiSave": "レスポンスの保存先",
           "aiSaveHint": "後続のノードは<v>{save}</v>として読み取ります。抽出時は<v>{path}</v>です。",
-          "aiAssistantLabel": "ナレッジベース(任意)",
           "aiExtract": "<strong>構造化データ(JSON)を抽出</strong> — メッセージをフィールドに変換します",
           "aiFields": "抽出するフィールド",
           "aiFieldsHint": "カンマ区切りのキーです。AIは1つのJSONオブジェクトを返し、各キーは<v>{key}</v>になります(複数のレコードが検出された場合は<v>{rows}</v>も。例: Googleスプレッドシートのノード用)。",
@@ -1169,7 +1151,25 @@
           "subflowMissing": "フロー{id}(ワークスペースにありません)",
           "subflowLabel": "実行するフロー",
           "subflowHint": "保存済みの別のフローを選択します。このノードが実行されると、そのフローが最後まで実行されてから、ここの次のノードに制御が戻ります。",
-          "endInfo": "このノードはフローを終了します。この後に接続したものは実行されません。"
+          "endInfo": "このノードはフローを終了します。この後に接続したものは実行されません。",
+          "aiSetupLegend": "このステップはどのように返信しますか?",
+          "aiSetupAgent": "AIエージェント",
+          "aiSetupAgentDesc": "AIトレーニングのエージェントの指示、モデル、ナレッジを使います。",
+          "aiSetupCustom": "カスタム設定",
+          "aiSetupCustomDesc": "ここでモデルを選び、指示を書きます。",
+          "aiAgentLabel": "AIエージェント",
+          "aiAgentPick": "— AIエージェントを選択 —",
+          "aiAgentHint": "エージェントは自身の指示、モデル、ナレッジを持っています。変更は<link>AIトレーニング</link>で行います。",
+          "aiAgentNone": "AIエージェントがまだありません。<link>最初のAIエージェントを作成</link>してから、リストを更新を押してください。",
+          "aiAgentRequired": "AIエージェントを選ぶか、カスタム設定に切り替えてください。",
+          "aiAgentSummary": "モデル {model} · {count, plural, other {ナレッジソース#件}}",
+          "aiAgentNoSources": "このエージェントにはまだナレッジがないため、指示だけで回答します。<link>AIトレーニング</link>でソースを追加してください。",
+          "aiPromptRequired": "AIへの指示を書いてください。",
+          "aiKnowledgeLabel": "AIエージェントのナレッジ(任意)",
+          "aiKnowledgeNone": "— なし —",
+          "aiKnowledgeHint": "そのエージェントの学習済みソースを返信に加えます。カスタム設定では、そのエージェントの指示とモデルは使われません。<link>AIトレーニングで管理 →</link>",
+          "aiAdvanced": "詳細オプション",
+          "aiCreateAgent": "+ AIエージェントを作成"
         },
         "options": {
           "prompt": "プロンプト",
@@ -2042,6 +2042,41 @@
         "endTextHint": "フローの終了前に送信されます。年齢には触れないでください。空欄の場合は「続行できません。」が使用されます。",
         "continueNote": "後続のステップでは、回答の変数名に _age_gate を付けた変数(例: answer_age_gate)を参照できます。値は under または adult です。条件を追加して分岐できます(例: 親または保護者の情報を尋ねる)。",
         "note": "年齢は必要な場合にのみ尋ねてください。回答は連絡先に書き込まれます。生年月日は生年月日として、年齢未満の回答は連絡先を未成年として設定します。"
+      },
+      "location": {
+        "modeLabel": "位置情報の設定方法",
+        "modeLink": "Google マップのリンク",
+        "modeCoords": "緯度と経度",
+        "linkLabel": "Google マップのリンク",
+        "linkPlaceholder": "リンクを貼り付け（例：https://maps.app.goo.gl/…）",
+        "linkHint": "Google マップで場所を開き、［共有］→［リンクをコピー］をタップします。短いリンクも長いリンクも使えます。",
+        "finding": "リンクを確認中…",
+        "retry": "再試行",
+        "latitude": "緯度",
+        "longitude": "経度",
+        "coordsHint": "緯度は -90～90、経度は -180～180 です。どちらの欄にも「緯度, 経度」を貼り付けられます。",
+        "found": "位置情報が見つかりました",
+        "openInMaps": "Google マップで開く",
+        "optionalHint": "任意：お客様に届く地図カードに表示されます。どちらも空のままで構いません。",
+        "optional": "（任意）",
+        "placeName": "場所の名前",
+        "placePlaceholder": "当社オフィス",
+        "address": "住所",
+        "problem": {
+          "empty": "Google マップのリンクまたは座標を入力してください。",
+          "lat_missing": "緯度を入力してください。",
+          "lng_missing": "経度を入力してください。",
+          "lat_nan": "緯度は数値で入力してください（例：18.5204）。",
+          "lng_nan": "経度は数値で入力してください（例：73.8567）。",
+          "lat_range": "緯度は -90 から 90 の間で入力してください。",
+          "lng_range": "経度は -180 から 180 の間で入力してください。",
+          "zero": "0, 0 は実在の場所ではありません。実際の座標を入力してください。",
+          "not_url": "リンクではないようです。Google マップのリンク全体を貼り付けてください。",
+          "not_maps": "Google マップのリンクではありません。",
+          "no_coords": "このリンクは特定の地点を指していません。Google マップで場所を開き、［共有］からリンクをコピーするか、座標を入力してください。",
+          "unresolved": "この短縮リンクはまだ確認されていません。入力欄から移動するか、再試行してください。",
+          "resolve_failed": "このリンクを読み取れませんでした。Google マップで開けるか確認するか、座標を入力してください。"
+        }
       }
     },
     "contracts": {
@@ -2474,7 +2509,9 @@
         "noSenderInstagram": "トリガーノードにInstagramアカウントが選択されていません。トリガーの手順で選択してください。",
         "noSenderFacebook": "トリガーノードにFacebookページが選択されていません。トリガーの手順で選択してください。",
         "noSenderNumber": "トリガーノードに番号が選択されていません。トリガーの手順で選択してください。",
-        "faqMinScore": "「{node}」の最小スコアが0.05~0.99の範囲外です。修正するか、空欄にしてフローの設定を使用してください。"
+        "faqMinScore": "「{node}」の最小スコアが0.05~0.99の範囲外です。修正するか、空欄にしてフローの設定を使用してください。",
+        "locationInvalid": "「{node}」に有効な位置情報がありません。Google マップのリンクを貼り付けるか、緯度（-90～90）と経度（-180～180）を入力してください。",
+        "aiNoAgent": "「{node}」にはAIエージェントもプロンプトもありません。AIエージェントを選ぶか、カスタム設定を選んで指示を書いてください。"
       }
     },
     "simpleModel": {
@@ -2615,7 +2652,7 @@
         "writeQuestion": "ステップ {stage}: 質問を入力してください。",
         "nameVariable": "ステップ {stage}: 回答の保存先となる変数名を入力してください。",
         "chooseAnswerProperty": "ステップ {stage}: 回答のコピー先となる連絡先の項目を選択してください。",
-        "setCoordinates": "ステップ {stage}: 緯度と経度を設定してください。",
+        "setCoordinates": "ステップ {stage}：Google マップのリンクを貼り付けるか、有効な緯度と経度を入力してください。",
         "chooseTemplate": "ステップ {stage}: テンプレートを選択してください。",
         "chooseTeam": "ステップ {stage}: 会話の振り分け先のチームを選択してください。",
         "ctaLabelLink": "ステップ {stage}: ボタンの名前とリンクを設定してください。",
@@ -2640,7 +2677,9 @@
         "chooseFlow": "ステップ {stage}: ボタンが開始するフローを選んでください。",
         "chooseApi": "ステップ {stage}: 呼び出す API を選んでください。",
         "writeCode": "ステップ {stage}: 実行するコードを書いてください。",
-        "webhookUrl": "ステップ {stage}: 呼び出すアドレス(URL)を追加してください。"
+        "webhookUrl": "ステップ {stage}: 呼び出すアドレス(URL)を追加してください。",
+        "chooseAiAgent": "ステップ {stage}: 回答するAIエージェントを選ぶか、ステップをカスタム設定に切り替えてください。",
+        "writeAiPrompt": "ステップ {stage}: AIへの指示を書くか、AIエージェントを選んでください。"
       },
       "faqSummary": "{hasCategory, select, true {FAQから · {category}} other {FAQから}}"
     },
@@ -2755,7 +2794,8 @@
       "simPurchase": "購入をシミュレート: {name} → 「purchased」ポート",
       "simAbandon": "カゴ落ちをシミュレート → 「abandoned」ポート",
       "faqAnswered": "(シミュレーション) 「{query}」のFAQから回答: テストチャットではFAQを検索しないため、何も送信されず、{ref} は空のままです。「回答済み」の出口に進みます。",
-      "faqNoMatch": "(シミュレーション) 「{query}」のFAQから回答: テストチャットではFAQを検索せず、「回答済み」の出口も接続されていないため、「一致なし」に進みます。{ref} は空のままです。"
+      "faqNoMatch": "(シミュレーション) 「{query}」のFAQから回答: テストチャットではFAQを検索せず、「回答済み」の出口も接続されていないため、「一致なし」に進みます。{ref} は空のままです。",
+      "locationSkipped": "（位置情報）スキップ：有効な座標がありません"
     }
   }
 }

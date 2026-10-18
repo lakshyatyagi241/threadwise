@@ -6,7 +6,7 @@ import { AppError } from '../../../common/errors/app-error';
 import { CryptoService } from '../../../common/crypto/crypto.service';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { TelephonyProviderRegistry } from '../../../infra/providers/telephony';
-import { QUEUES } from '../../../infra/queue/queues';
+import { INBOUND_RETRY, QUEUES } from '../../../infra/queue/queues';
 
 /** One finished call to apply, as it travels on the queue: ids and the normalised call, never the raw callback. */
 export interface TelephonyJob {
@@ -26,8 +26,8 @@ export interface TelephonyJob {
 }
 
 export const TELEPHONY_JOB_OPTIONS = {
-  attempts: 5,
-  backoff: { type: 'exponential' as const, delay: 5_000 },
+  // The callback is acked before anything is stored, so the job is the only copy: the inbound window, not the default (DLQ audit DF-04).
+  ...INBOUND_RETRY,
   removeOnComplete: { age: 24 * 3600 },
   removeOnFail: { age: 7 * 24 * 3600 },
 };

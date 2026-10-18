@@ -149,6 +149,9 @@ export const waOrders = pgTable(
     /** The sales order and the invoice made from this order (migration 20261029090000). */
     salesOrderId: idColumn('sales_order_id'),
     invoiceId: idColumn('invoice_id'),
+    /** When a worker took the right to send the order-received message (stale after 10 minutes with nothing sent), and when it went out. */
+    ackClaimedAt: timestamp('ack_claimed_at', { withTimezone: true }),
+    ackSentAt: timestamp('ack_sent_at', { withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),

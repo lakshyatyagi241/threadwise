@@ -105,7 +105,7 @@ export class LeadChatDigestService {
       {
         jobId: `lscd-${c.orgId}-${c.contactId}`,
         attempts: 3,
-        backoff: { type: 'exponential', delay: 15_000 },
+        backoff: { type: 'exponential', delay: 15_000, jitter: 0.5 },
         removeOnComplete: true,
         removeOnFail: { count: 1_000, age: 24 * 3600 },
       },

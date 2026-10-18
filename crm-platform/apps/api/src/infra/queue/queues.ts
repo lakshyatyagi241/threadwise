@@ -104,6 +104,8 @@ export const QUEUES = {
   WECHAT_BROADCAST: 'wechat-broadcast',
   /** One job per finished call a telephony provider reported (call logging): finds the contact and writes the call log entry. Own queue: a slow database write must not make a provider retry its callback, and a call burst must not hold WhatsApp ingest. */
   TELEPHONY_INGEST: 'telephony-ingest',
+  /** A channel webhook event (Telegram, Viber, LINE, Facebook) that could not be stored when it arrived: kept here and retried with backoff so the provider keeps its 200 (ASYNC-011/017). */
+  WEBHOOK_RETRY: 'webhook-retry',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];
@@ -120,18 +122,40 @@ export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];
  */
 export const DEFAULT_JOB_OPTIONS = {
   attempts: 5,
-  backoff: { type: 'exponential' as const, delay: 2_000 },
+  // `jitter` spreads each retry over the upper half of its delay, so jobs that failed together do not retry together.
+  backoff: { type: 'exponential' as const, delay: 2_000, jitter: 0.5 },
   removeOnComplete: { count: 1_000, age: 3_600 },
   removeOnFail: { count: 2_000, age: 3 * 24 * 3600 },
 };
 
 /**
+ * The retry window of work that exists nowhere else once the provider has our 200: 10 attempts from 5 s, about 40 minutes. A quarter
+ * of jitter keeps the shortest possible window above 30 minutes (32 to 43 minutes). Every queue in the failed-operation policy
+ * (`modules/failed-operations/failure-policy.ts`) uses it, wherever its producer sets its own options.
+ */
+export const INBOUND_RETRY = {
+  attempts: 10,
+  backoff: { type: 'exponential' as const, delay: 5_000, jitter: 0.25 },
+} satisfies JobsOptions;
+
+/** Queues that carry an inbound event the provider has already been told we have: retried for about 40 minutes, personal data dropped on success. */
+const INBOUND_RETRY_OPTIONS: JobsOptions = { removeOnComplete: true, ...INBOUND_RETRY };
+
+/**
  * Queues whose job data is personal (message text, phone numbers, the raw webhook body) drop a job the moment it completes. A failed
  * job still keeps its data for `removeOnFail`, which is the point of keeping failures.
  */
-const QUEUE_JOB_OPTIONS: Partial<Record<QueueName, { removeOnComplete: true }>> = {
-  [QUEUES.WABA_INGEST]: { removeOnComplete: true },
+const QUEUE_JOB_OPTIONS: Partial<Record<QueueName, JobsOptions>> = {
+  // Inbound WhatsApp is the one place a message exists only here once Meta has our 200. The default (5 attempts from 2 s, about 30 s in
+  // all) gave up inside a short database or Redis blip; 10 attempts from 5 s keep a job alive for about 42 minutes (ASYNC-032/036).
+  // Ingest is idempotent (the message ledger's unique key), so a retry never stores a message twice.
+  [QUEUES.WABA_INGEST]: INBOUND_RETRY_OPTIONS,
+  // Carries the raw channel event (message text, usernames), like the WhatsApp payload: dropped once it completes, kept when it failed.
+  [QUEUES.WEBHOOK_RETRY]: INBOUND_RETRY_OPTIONS,
   [QUEUES.WEBHOOK_FORWARD]: { removeOnComplete: true },
+  // Inbound channel messages and receipts: the provider has our 200 and this job is the only copy (it kept the default 5 attempts, about 30 s,
+  // so a database blip longer than that lost a customer's message). Completed jobs keep the default bounded history; ingest is idempotent.
+  [QUEUES.WEBHOOK_INGEST]: INBOUND_RETRY,
 };
 
 /** The default job options of one queue. A queue-level setting replaces the module-level one whole, so this spreads the defaults. */

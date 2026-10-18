@@ -61,7 +61,7 @@ Available node types and their data shapes:
   template:        { tpl: "<template_name>", preview: "..." }
   ai:              { model: "gpt-4o-mini", prompt: "system prompt", save: "reply" }
   cta:             { actions: [{ type: "url"|"phone"|"copy", label: "Visit", value: "https://..." }] } (max 3)
-  location:        { name: "...", address: "...", lat: 0, lng: 0 }
+  location:        { title: "...", address: "...", lat: "<real latitude, -90..90>", lng: "<real longitude, -180..180>" }
   poll:            { question: "...", options: ["A","B"] }
   tag:             { action: "add"|"remove", tag: "<name>", tagId?: "<id>" }
   assign:          { team: "<team>", userId?: "<user>", message: "internal note" }

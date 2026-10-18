@@ -74,8 +74,10 @@ asking twice queues once; if Redis is down the recipients stay `pending` with `h
 ConsentGate is asked for every recipient of these senders before anything is sent (BL-141 follow-up): on the first send and again at release, so
 the quiet hours never let a refused person through and a STOP that arrived while a message waited still stops it. Messenger still checks its 24 hour window at send time, so a person whose
 window closed while they waited is `blocked` with a note saying so. WeChat cannot be split per contact, so the whole mass send waits on the
-workspace clock. Commerce broadcasts and the wizard test send hold only a MARKETING template (a utility one is a notice). Not covered: the
-event messages of a store (abandoned cart, order status) and the one-off sends of other screens.
+workspace clock. Commerce broadcasts and the wizard test send hold only a MARKETING template (a utility one is a notice). The offer and win-back
+broadcasts of a store ask the ConsentGate for every customer of a MARKETING template before the hold (BL-278: a refused customer is never held,
+and a release asks again); the event messages of a store (abandoned cart, order status) are cleared by the same step but are not held for the
+quiet hours. Not covered by the hold: the event messages of a store and the one-off sends of other screens.
 
 ## Strictest wins
 

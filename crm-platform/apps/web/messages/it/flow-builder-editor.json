@@ -1248,13 +1248,6 @@
             "hour": "ore",
             "day": "giorni"
           },
-          "location": {
-            "placeName": "Nome del luogo",
-            "placePlaceholder": "Il nostro ufficio",
-            "address": "Indirizzo",
-            "latitude": "Latitudine",
-            "longitude": "Longitudine"
-          },
           "template": {
             "label": "Template approvato",
             "hint": "Vengono elencati solo i template approvati dal tuo numero WhatsApp.",
@@ -1463,13 +1456,7 @@
           "info": "Aggiungi fino a {max} pulsanti CTA in un messaggio — combina Visita il sito, Chiamata e Copia codice in qualsiasi modo. Stesso limite dei pulsanti dei template WhatsApp.",
           "buttonLabel": "Etichetta pulsante",
           "addButton": "Aggiungi pulsante",
-          "maxReached": "Raggiunto il massimo di {max} pulsanti.",
-          "locationTitle": "Titolo",
-          "locationTitlePlaceholder": "Il nostro ufficio",
-          "locationAddress": "Indirizzo",
-          "locationAddressPlaceholder": "Via, città, paese",
-          "locationLatitude": "Latitudine",
-          "locationLongitude": "Longitudine"
+          "maxReached": "Raggiunto il massimo di {max} pulsanti."
         },
         "logic": {
           "operator": {
@@ -1537,19 +1524,14 @@
           "aiModelPick": "— scegli modello —",
           "aiModelNone": "Nessun modello AI attivo — chiedi all’admin di attivarne uno",
           "aiModelNotEnabled": "{value} (non attivo)",
-          "aiAssistantNone": "— nessuno (usa solo il prompt sopra) —",
           "aiAssistantOption": "{name} · {count, plural, one {# fonte} other {# fonti}}",
           "aiAssistantMissing": "(assistente {id})",
-          "aiAssistantHintNone": "Nessuna knowledge base ancora. Creane una in <link>AI Training</link>, poi premi Aggiorna elenco per sceglierla qui.",
-          "aiAssistantHintEmpty": "Nota: questo assistente ha 0 fonti addestrate. Aggiungine in <link>AI Training</link>, altrimenti la risposta usa solo il prompt.",
-          "aiAssistantHint": "Porta i contenuti addestrati dell’assistente scelto in questa risposta. <link>Gestisci la knowledge →</link>",
           "aiModelLabel": "Modello",
           "aiModelHint": "Modelli attivati dall’admin — più qualsiasi provider per cui hai aggiunto una tua chiave (Impostazioni → Chiavi AI, nei piani BYOK).",
           "aiModelHintNone": "Nessun provider disponibile ancora. Aggiungi una tua chiave in <link>Impostazioni → Chiavi AI</link> (piani BYOK), oppure chiedi all’admin di attivarne uno.",
           "aiPrompt": "Prompt di sistema",
           "aiSave": "Salva risposta in",
           "aiSaveHint": "I nodi successivi la leggono come <v>{save}</v> — oppure <v>{path}</v> in caso di estrazione.",
-          "aiAssistantLabel": "Knowledge base (facoltativa)",
           "aiExtract": "<strong>Estrai dati strutturati (JSON)</strong> — trasforma il messaggio in campi",
           "aiFields": "Campi da estrarre",
           "aiFieldsHint": "Chiavi separate da virgole. L’AI restituisce UN oggetto JSON; ogni chiave diventa <v>{key}</v> (e <v>{rows}</v> quando vengono rilevati più record — ad es. per un nodo Google Sheets).",
@@ -1562,7 +1544,25 @@
           "subflowMissing": "Flow {id} (non presente nel workspace)",
           "subflowLabel": "Flow da eseguire",
           "subflowHint": "Scegli un altro flow salvato. Quando scatta questo nodo, quel flow viene eseguito fino in fondo prima che il controllo torni al nodo successivo.",
-          "endInfo": "Questo nodo termina il flow. Tutto ciò che è collegato dopo non verrà eseguito."
+          "endInfo": "Questo nodo termina il flow. Tutto ciò che è collegato dopo non verrà eseguito.",
+          "aiSetupLegend": "Come deve rispondere questo passo?",
+          "aiSetupAgent": "Agente AI",
+          "aiSetupAgentDesc": "Usa le istruzioni, il modello e le conoscenze di un agente di Addestramento AI.",
+          "aiSetupCustom": "Configurazione personalizzata",
+          "aiSetupCustomDesc": "Scegli un modello e scrivi qui le istruzioni.",
+          "aiAgentLabel": "Agente AI",
+          "aiAgentPick": "— scegli un agente AI —",
+          "aiAgentHint": "L’agente porta con sé istruzioni, modello e conoscenze propri. Modificali in <link>Addestramento AI</link>.",
+          "aiAgentNone": "Non hai ancora agenti AI. <link>Crea il tuo primo agente AI</link>, poi premi Aggiorna elenco.",
+          "aiAgentRequired": "Scegli un agente AI o passa a una configurazione personalizzata.",
+          "aiAgentSummary": "Modello {model} · {count, plural, one {# fonte di conoscenza} other {# fonti di conoscenza}}",
+          "aiAgentNoSources": "Questo agente non ha ancora conoscenze, quindi risponde solo in base alle sue istruzioni. Aggiungi fonti in <link>Addestramento AI</link>.",
+          "aiPromptRequired": "Scrivi le istruzioni per l’AI.",
+          "aiKnowledgeLabel": "Conoscenze di un agente AI (facoltativo)",
+          "aiKnowledgeNone": "— nessuna —",
+          "aiKnowledgeHint": "Aggiunge alla risposta le fonti addestrate di quell’agente. Le sue istruzioni e il suo modello non vengono usati in una configurazione personalizzata. <link>Gestisci in Addestramento AI →</link>",
+          "aiAdvanced": "Opzioni avanzate",
+          "aiCreateAgent": "+ Crea agente AI"
         },
         "options": {
           "prompt": "Prompt",
@@ -1900,6 +1900,41 @@
         "endTextHint": "Inviata prima della fine del flusso. Non menzionare l'età. Se vuota, usa \"Non siamo in grado di continuare.\"",
         "continueNote": "I passaggi successivi possono leggere la variabile della risposta seguita da _age_gate (ad esempio answer_age_gate), che vale under oppure adult. Aggiungi una Condizione per creare un ramo, ad esempio per chiedere un genitore o un tutore.",
         "note": "Chiedi l'età solo dove ti serve. La risposta viene scritta sul contatto: una data di nascita come data di nascita, e una risposta sotto l'età minima contrassegna il contatto come minorenne."
+      },
+      "location": {
+        "modeLabel": "Come impostare la posizione",
+        "modeLink": "Link di Google Maps",
+        "modeCoords": "Latitudine e longitudine",
+        "linkLabel": "Link di Google Maps",
+        "linkPlaceholder": "Incolla un link, ad es. https://maps.app.goo.gl/…",
+        "linkHint": "In Google Maps apri il luogo, tocca Condividi, poi Copia link. Funzionano sia i link brevi sia quelli lunghi.",
+        "finding": "Ricerca del link…",
+        "retry": "Riprova",
+        "latitude": "Latitudine",
+        "longitude": "Longitudine",
+        "coordsHint": "La latitudine va da -90 a 90 e la longitudine da -180 a 180. Puoi incollare «lat, lng» in uno dei due campi.",
+        "found": "Posizione trovata",
+        "openInMaps": "Apri in Google Maps",
+        "optionalHint": "Facoltativo: mostrato nella scheda mappa che riceve il cliente. Puoi lasciare vuoti entrambi.",
+        "optional": "(facoltativo)",
+        "placeName": "Nome del luogo",
+        "placePlaceholder": "Il nostro ufficio",
+        "address": "Indirizzo",
+        "problem": {
+          "empty": "Inserisci un link di Google Maps o delle coordinate.",
+          "lat_missing": "Inserisci una latitudine.",
+          "lng_missing": "Inserisci una longitudine.",
+          "lat_nan": "La latitudine deve essere un numero, ad esempio 18.5204.",
+          "lng_nan": "La longitudine deve essere un numero, ad esempio 73.8567.",
+          "lat_range": "La latitudine deve essere compresa tra -90 e 90.",
+          "lng_range": "La longitudine deve essere compresa tra -180 e 180.",
+          "zero": "0, 0 non è un luogo reale. Inserisci le coordinate effettive.",
+          "not_url": "Non sembra un link. Incolla il link completo di Google Maps.",
+          "not_maps": "Questo non è un link di Google Maps.",
+          "no_coords": "Questo link non indica un punto preciso. Apri il luogo in Google Maps, tocca Condividi e copia quel link, oppure inserisci le coordinate.",
+          "unresolved": "Questo link breve non è ancora stato verificato. Esci dal campo o riprova.",
+          "resolve_failed": "Impossibile leggere questo link. Controlla che si apra in Google Maps o inserisci le coordinate."
+        }
       }
     },
     "contracts": {
@@ -2332,7 +2367,9 @@
         "noSenderInstagram": "Il nodo Trigger non ha un account Instagram selezionato — scegline uno nel passo Trigger.",
         "noSenderFacebook": "Il nodo Trigger non ha una Pagina Facebook selezionata — scegline una nel passo Trigger.",
         "noSenderNumber": "Il nodo Trigger non ha un numero selezionato — scegline uno nel passo Trigger.",
-        "faqMinScore": "\"{node}\" ha un punteggio minimo fuori dall'intervallo da 0.05 a 0.99 — correggilo o lascialo vuoto per usare l'impostazione del flusso."
+        "faqMinScore": "\"{node}\" ha un punteggio minimo fuori dall'intervallo da 0.05 a 0.99 — correggilo o lascialo vuoto per usare l'impostazione del flusso.",
+        "locationInvalid": "«{node}» non ha una posizione valida: incolla un link di Google Maps o inserisci latitudine (-90 a 90) e longitudine (-180 a 180).",
+        "aiNoAgent": "\"{node}\" non ha né un agente AI né un prompt: scegli un agente AI oppure Configurazione personalizzata e scrivi le istruzioni."
       }
     },
     "simpleModel": {
@@ -2473,7 +2510,7 @@
         "writeQuestion": "Passo {stage}: scrivi la domanda.",
         "nameVariable": "Passo {stage}: indica il nome della variabile in cui viene salvata la risposta.",
         "chooseAnswerProperty": "Passo {stage}: scegli la proprietà del contatto in cui viene copiata la risposta.",
-        "setCoordinates": "Passo {stage}: imposta latitudine e longitudine.",
+        "setCoordinates": "Passaggio {stage}: incolla un link di Google Maps o inserisci latitudine e longitudine valide.",
         "chooseTemplate": "Passo {stage}: scegli un Template.",
         "chooseTeam": "Passo {stage}: scegli il team a cui va la conversazione.",
         "ctaLabelLink": "Passo {stage}: dai un nome al pulsante e un link.",
@@ -2498,7 +2535,9 @@
         "chooseFlow": "Passo {stage}: scegli il flusso che il pulsante avvia.",
         "chooseApi": "Passo {stage}: scegli l'API da chiamare.",
         "writeCode": "Passo {stage}: scrivi il codice da eseguire.",
-        "webhookUrl": "Passaggio {stage}: aggiungi l'indirizzo (URL) da chiamare."
+        "webhookUrl": "Passaggio {stage}: aggiungi l'indirizzo (URL) da chiamare.",
+        "chooseAiAgent": "Passo {stage}: scegli l’agente AI che risponde o passa il passo a una configurazione personalizzata.",
+        "writeAiPrompt": "Passo {stage}: scrivi le istruzioni per l’AI o scegli un agente AI."
       },
       "faqSummary": "{hasCategory, select, true {Dalle tue FAQ · {category}} other {Dalle tue FAQ}}"
     },
@@ -2613,7 +2652,8 @@
       "simPurchase": "Acquisto simulato: {name} → porta «acquistato»",
       "simAbandon": "Abbandono simulato → porta «abbandonato»",
       "faqAnswered": "(simulato) Rispondi da FAQ per \"{query}\": la chat di prova non cerca nelle tue FAQ, quindi non viene inviato nulla e {ref} resta vuoto. Si segue l'uscita \"risposta data\".",
-      "faqNoMatch": "(simulato) Rispondi da FAQ per \"{query}\": la chat di prova non cerca nelle tue FAQ e l'uscita \"risposta data\" non è collegata, quindi si segue \"nessuna corrispondenza\". {ref} resta vuoto."
+      "faqNoMatch": "(simulato) Rispondi da FAQ per \"{query}\": la chat di prova non cerca nelle tue FAQ e l'uscita \"risposta data\" non è collegata, quindi si segue \"nessuna corrispondenza\". {ref} resta vuoto.",
+      "locationSkipped": "(posizione) saltata: nessuna coordinata valida"
     },
     "templates": {
       "eyebrow": "Modelli di partenza",

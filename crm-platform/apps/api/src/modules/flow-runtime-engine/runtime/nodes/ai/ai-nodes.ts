@@ -11,6 +11,7 @@ import type {
   NodeExecutor,
   NodeResult,
 } from '../../types';
+import { flbAiSetup } from '@crm/contracts';
 import { firstFlowRef, type FlowRef } from '../flow-refs';
 import { AiCallService } from './ai-call.service';
 import {
@@ -37,6 +38,8 @@ interface AiConfig {
   maxTokens: number;
   /** The attached AI Training assistant: a row id (`assistant_id`, an old flow) or a uuid (`assistant`, the editor); 0 = none. */
   assistantId: number | FlowRef;
+  /** The step runs as the attached AI agent (its model, instructions, tone, length and temperature), not as a custom setup. */
+  useAgent: boolean;
   conversational: boolean;
   exitKeyword: string;
   silent: boolean;
@@ -76,6 +79,8 @@ function aiConfig(props: Record<string, unknown>): AiConfig {
           ? 4000
           : 350,
     assistantId: firstFlowRef(d.assistant_id, d.assistantId, d.assistant) ?? 0,
+    // A step saved before the setup choice existed reads as a custom setup, so it keeps its own model and prompt.
+    useAgent: flbAiSetup(d) === 'agent',
     conversational: d.conversational === true || d.chat_mode === true,
     exitKeyword: text(d.exit_keyword).trim(),
     silent: d.silent === true || d.noReply === true,
@@ -169,12 +174,14 @@ export class AiNodes implements NodeExecutor {
       maxTokens: cfg.maxTokens,
       temperature: cfg.temperature,
       assistantId: cfg.assistantId,
+      agentUse: cfg.useAgent ? 'full' : undefined,
       // Deviation from Reference's code, which forced JSON on every turn too and so sent the customer raw JSON: its own comments say
       // a conversation's turns are natural language and the fields are read from the transcript on exit.
       json: cfg.extract && !cfg.conversational,
       fields: cfg.fields,
     });
     let reply = AI_FALLBACK_REPLY;
+    if (out.agentMissing) ctx.note('the AI agent no longer exists: the step used its own settings');
     if (out.ok) reply = out.reply;
     else ctx.note(`AI call failed (${out.error}): ${out.message}`);
 
@@ -213,7 +220,8 @@ export class AiNodes implements NodeExecutor {
       userPrompt: `Conversation transcript:\n${transcriptText(history)}`,
       maxTokens: 4000,
       temperature: 0,
-      assistantId: 0,
+      assistantId: cfg.useAgent ? cfg.assistantId : 0,
+      agentUse: cfg.useAgent ? 'model' : undefined,
       json: true,
       fields: cfg.fields,
     });

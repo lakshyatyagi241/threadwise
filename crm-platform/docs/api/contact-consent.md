@@ -128,6 +128,7 @@ there is no recorded grant). There is no override.
 | SMS `channel-sms/sms-engine.sender.ts`                                                        | marketing                                                                           | flag + Twilio 21610    | gate on the contact (flag, sms ledger, switch); 21610 kept            |
 | Broadcasts `broadcasts.service.ts`                                                            | marketing                                                                           | private predicate      | `checkMany` (whatsapp)                                                |
 | Campaigns `campaign-dispatch.service.ts`                                                      | marketing                                                                           | private predicate      | `checkMany` (whatsapp) after the flag and duplicate screen            |
+| Shopify / WooCommerce sends `shopify-woocommerce/commerce-consent.service.ts` (BL-278)        | template category: MARKETING is marketing, otherwise service (never asked)          | contact flag only      | `gateRecipients` (whatsapp), before the quiet hours; refusals logged  |
 | Outbound dial `calling-voice/call-actions.service.ts`                                         | service, voice modality                                                             | none                   | refused only if the contact withdrew service; no campaign calls exist |
 | Email reply `channel-email/email-channel.adapter.ts`                                          | service; marketing when `email.marketing`                                           | none                   | link and RFC 8058 headers on marketing mail                           |
 | Growth pilot digests `growth-pilot`                                                           | none (creates tasks and notes, sends nothing)                                       | n/a                    | the flows it starts are gated by the flow sender                      |
@@ -138,9 +139,9 @@ evidence: a consent-based purpose (`call_recording`) is `allow` (`consent_eviden
 notice-only purpose is `allow` (`notice_delivered`). `options.purposeEnabled = false` answers `deny` / `purpose_not_enabled` first (the workspace switch; call recording is off by
 default). The adopter is `calling-voice/call-recording-consent.service.ts` (BL-144).
 
-Not yet on the gate (allow-list entries marked KNOWN GAP): Telegram, Facebook and Instagram broadcasts, commerce (Shopify / WooCommerce)
-broadcasts, the send-time re-check inside the broadcast dispatcher, the campaign wizard preview counts, `ai_content_processing` and
-`third_party_sharing` as workspace switches, quiet hours and calling windows.
+No allow-list entry is marked KNOWN GAP any more: the Messenger, Telegram, Viber, LINE, WeChat and Instagram broadcasts (BL-141 follow-up) and the
+Shopify / WooCommerce sends (BL-278) ask the gate for every recipient. Still outside it: the send-time re-check inside the broadcast dispatcher,
+the campaign wizard preview counts, `ai_content_processing` and `third_party_sharing` as workspace switches.
 
 ## Intake, round 2 (BL-168 to BL-171)
 

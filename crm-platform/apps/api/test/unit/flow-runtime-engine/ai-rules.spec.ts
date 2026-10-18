@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  agentSystemPrompt,
   appendTurn,
   conversationPrompt,
   extractionSuffix,
@@ -97,5 +98,31 @@ describe('flow AI node rules (TW-FLR-030)', () => {
     });
     expect(transcriptVariables('reply', '[1]')).toBeNull();
     expect(transcriptVariables('reply', 'nope')).toBeNull();
+  });
+});
+
+describe("an AI agent as the step's system prompt", () => {
+  it("puts the agent's instructions first, then its tone and language, then the chat-style reminder", () => {
+    const out = agentSystemPrompt(
+      { systemPrompt: 'You are Shivaa.', tone: 'formal', language: 'hi' },
+      'Fallback',
+      false,
+    );
+    expect(out.split('\n')).toEqual([
+      'You are Shivaa.',
+      "Speak in a formal tone. Default language: hi. Match the customer's language if different.",
+      'Keep replies short, chat-style, not essay-style. No role prefixes like "Assistant:".',
+    ]);
+  });
+
+  it("falls back to the step's prompt, a helpful tone and English, and leaves the reminder out of a JSON reply", () => {
+    const out = agentSystemPrompt(
+      { systemPrompt: null, tone: ' ', language: null },
+      'Fallback',
+      true,
+    );
+    expect(out).toBe(
+      "Fallback\nSpeak in a helpful tone. Default language: en. Match the customer's language if different.",
+    );
   });
 });

@@ -223,9 +223,8 @@ describe('wabo export -> Simple', () => {
     // it saves back to a graph the editor accepts
     const g = toGraph(r.doc);
     expect(g.flowNodes).toHaveLength(allSteps(r.doc).length + 1);
-    // the live-agent button leads to an Assign step; it only needs a team chosen
+    // the live-agent button leads to an Assign step; a button with no target ends there on purpose; it only needs a team chosen
     expect(problems(r.doc, { senderRequired: false }).map((p) => en(p.message))).toEqual([
-      'Step 1.3: the button "elsewhere" leads nowhere. Add a step for it, or give it an action.',
       'Step 1.4: choose the team the conversation goes to.',
     ]);
   });
@@ -452,6 +451,62 @@ describe('wabo export quirks (from a real console export)', () => {
     expect(new Set(names).size).toBe(names.length);
     expect(names).toHaveLength(4);
     expect(names[0]).toBe('Hello');
+  });
+});
+
+describe('a wabo flow stays inside WhatsApp limits and publishable', () => {
+  const rec = (over: Record<string, unknown>) => node({ qid: 'q-lim', displayOrder: 0, ...over });
+  it('clips link buttons, header and footer, makes button names unique and ends targetless buttons', () => {
+    const r = waboToGraph(
+      [
+        rec({
+          nodeId: 'cccccccc-1',
+          subType: 'interactive-button-url',
+          response: [
+            {
+              interactive: {
+                body: 'Hi',
+                header: { text: 'H'.repeat(80) },
+                footer: 'F'.repeat(80),
+                action: {
+                  buttons: ['a', 'b', 'c', 'd'].map((x) => ({
+                    value: { text: `${x}${'x'.repeat(24)}`, url: 'https://example.com' },
+                  })),
+                },
+              },
+            },
+          ],
+        }),
+        rec({
+          nodeId: 'dddddddd-2',
+          displayOrder: 1,
+          subType: 'interactive-message',
+          response: [
+            {
+              interactive: {
+                body: 'Pick',
+                action: {
+                  buttons: [
+                    { type: 'flow', value: { text: 'Yes', nodeId: 'zzzz' } },
+                    { type: 'link', value: { text: 'yes' } },
+                  ],
+                },
+              },
+            },
+          ],
+        }),
+      ],
+      {},
+    );
+    const cta = r.graph.flowNodes.find((n) => n.type === 'cta')!;
+    const actions = cta.data.actions as Array<{ label: string }>;
+    expect(actions).toHaveLength(3);
+    expect(actions.every((a) => a.label.length <= 20)).toBe(true);
+    expect((cta.data.headerText as string).length).toBe(60);
+    expect((cta.data.footerText as string).length).toBe(60);
+    const buttons = r.graph.flowNodes.find((n) => n.type === 'buttons')!;
+    expect(buttons.data.options).toEqual(['Yes', 'yes (2)']);
+    expect(buttons.data.endOptions).toEqual([0, 1]);
   });
 });
 
