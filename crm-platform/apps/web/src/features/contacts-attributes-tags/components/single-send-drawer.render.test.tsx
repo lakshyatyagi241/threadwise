@@ -36,6 +36,7 @@ const row = (over: Partial<RowView> = {}): RowView => ({
   leadScoreSource: null,
   leadScoredAt: null,
   uncontactedSince: null,
+  nextFollowUp: null,
   dateOfBirth: null,
   isMinor: false,
   ...over,

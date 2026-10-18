@@ -14,6 +14,7 @@ import { KeyDetails } from './key-details';
 import { LeadScoreChip } from './lead-score-chip';
 import { JobTitle, SocialIcons } from './parts';
 import { StageControl } from './stage-control';
+import { NextFollowUpRow } from '../lead-handling/next-follow-up';
 import { UncontactedMarker } from '../lead-handling/uncontacted-marker';
 
 /**
@@ -66,6 +67,7 @@ export function ProfileColumn({
           </div>
         </div>
         <StageControl contact={contact} className="mt-3" />
+        <NextFollowUpRow contactId={contact.id} followUp={contact.nextFollowUp} />
         <ContactActionBar
           variant="round"
           contact={contact}

@@ -4,8 +4,12 @@ import { useQuery } from '@tanstack/react-query';
 import { z } from 'zod';
 import type {
   ContactTouchChannel,
+  FollowUpResult,
+  FollowUpSettings,
   LeadHandlingSettings,
+  SnoozeFollowUpInput,
   UncontactedSettings,
+  UpdateFollowUpSettingsInput,
   UpdateUncontactedSettingsInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
@@ -26,7 +30,9 @@ const shape = <T>(...required: string[]): z.ZodType<T, z.ZodTypeDef, unknown> =>
     'Unexpected response',
   );
 
-const settingsShape = shape<LeadHandlingSettings>('uncontacted');
+const settingsShape = shape<LeadHandlingSettings>('uncontacted', 'followUps');
+const followUpsShape = shape<FollowUpSettings>('updateWhen', 'defaultDate', 'defaultTime', 'rowVersion');
+const followUpResultShape = shape<FollowUpResult>('nextFollowUp');
 const uncontactedShape = shape<UncontactedSettings>(
   'clearOn',
   'markNew',
@@ -40,6 +46,12 @@ export const LEAD_HANDLING_KEYS = {
 };
 
 export const leadHandlingApi = {
+  saveFollowUps: (input: UpdateFollowUpSettingsInput) =>
+    apiFetch('/lead-handling/settings/follow-ups', {
+      method: 'PUT',
+      body: input,
+      schema: followUpsShape,
+    }),
   settings: (signal?: AbortSignal) =>
     apiFetch('/lead-handling/settings', { schema: settingsShape, signal }),
   saveUncontacted: (input: UpdateUncontactedSettingsInput) =>
@@ -93,3 +105,30 @@ export function reportContactTouch(
 /** A selection (ticked rows, or everything the view matches) marked by hand. */
 export const bulkSetUncontacted = (target: BulkTarget, uncontacted: boolean) =>
   run('/contacts/bulk/uncontacted', target, { uncontacted });
+
+/** A contact's next follow-up, by hand (BL-291). `dueAt: null` is "someday". */
+export const setFollowUp = (contactId: string, dueAt: string | null) =>
+  apiFetch(`/contacts/${contactId}/follow-up`, {
+    method: 'PUT',
+    body: { dueAt },
+    schema: followUpResultShape,
+  });
+
+export const snoozeFollowUp = (contactId: string, preset: SnoozeFollowUpInput['preset']) =>
+  apiFetch(`/contacts/${contactId}/follow-up/snooze`, {
+    method: 'POST',
+    body: { preset },
+    schema: followUpResultShape,
+  });
+
+/** Done: the follow-up is completed and the contact has none. */
+export const completeFollowUp = (contactId: string) =>
+  apiFetch(`/contacts/${contactId}/follow-up/done`, {
+    method: 'POST',
+    body: {},
+    schema: followUpResultShape,
+  });
+
+/** Removes the follow-up (the contact has none). */
+export const clearFollowUp = (contactId: string) =>
+  apiFetch(`/contacts/${contactId}/follow-up`, { method: 'DELETE', schema: followUpResultShape });

@@ -15,6 +15,14 @@ const names: ChipNames = {
     minor: 'Minor',
     minorYes: 'Flagged as a minor',
     minorNo: 'Not flagged',
+    followUp: 'Follow-up',
+    followUpStates: {
+      overdue: 'Overdue',
+      today: 'Due today',
+      upcoming: 'Upcoming',
+      someday: 'Someday',
+      none: 'No follow-up',
+    },
     consent: 'Consent',
     source: 'Source',
     conditions: 'Conditions',
@@ -82,6 +90,13 @@ describe('appliedFilterChips', () => {
     });
   });
 
+  it('makes a chip for the follow-up filter', () => {
+    expect(appliedFilterChips({ ...DEFAULT_FILTERS, followUp: 'overdue' }, names)[0]).toMatchObject({
+      label: 'Follow-up: Overdue',
+      clear: { followUp: '' },
+    });
+  });
+
   it('makes a chip for the minor filter, yes or no', () => {
     expect(appliedFilterChips({ ...DEFAULT_FILTERS, minor: 'yes' }, names)[0]).toMatchObject({
       label: 'Minor: Flagged as a minor',
@@ -123,6 +138,7 @@ describe('appliedFilterChips', () => {
     expect(Object.keys(patch).sort()).toEqual(
       [
         'consent',
+        'followUp',
         'group',
         'imported',
         'lifecycleStage',

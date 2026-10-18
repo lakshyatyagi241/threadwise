@@ -262,3 +262,23 @@ describe('owner filter in the URL', () => {
     expect(listQuery(f)).toMatchObject({ ownerIds: `${ASHA},${RAVI}`, unassigned: true });
   });
 });
+
+describe('the follow-up filter (BL-291)', () => {
+  it('is read from the link only when it names a known state, and written back only when set', () => {
+    for (const state of ['overdue', 'today', 'upcoming', 'someday', 'none']) {
+      const f = parseFilters(new URLSearchParams(`followUp=${state}`));
+      expect(f.followUp, state).toBe(state);
+      expect(filtersToSearch(f)).toBe(`?followUp=${state}`);
+      expect(hasActiveFilter(f)).toBe(true);
+    }
+    expect(parseFilters(new URLSearchParams('followUp=tomorrow')).followUp).toBe('');
+    expect(filtersToSearch(DEFAULT_FILTERS)).toBe('');
+  });
+
+  it('goes to the API as `followUp`, in the list and in a bulk selection filter', () => {
+    const f = { ...DEFAULT_FILTERS, followUp: 'overdue' as const };
+    expect(listQuery(f).followUp).toBe('overdue');
+    expect(contactFilterBody(f).followUp).toBe('overdue');
+    expect(contactFilterBody(DEFAULT_FILTERS).followUp).toBeUndefined();
+  });
+});

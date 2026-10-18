@@ -41,6 +41,7 @@ import {
 } from './icons';
 import { LeadScoreChip } from './contact/lead-score-chip';
 import { StagePicker } from './stage-picker';
+import { NextFollowUpRow } from './lead-handling/next-follow-up';
 import { UncontactedMarker } from './lead-handling/uncontacted-marker';
 
 const iconBtn =
@@ -258,6 +259,7 @@ function QuickViewBody({
                 </span>
               )}
             </div>
+            <NextFollowUpRow contactId={contact.id} followUp={contact.nextFollowUp} />
           </div>
           <div className="flex shrink-0 items-center gap-1.5">
             <Link
