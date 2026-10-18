@@ -48,7 +48,7 @@ jobs:
       - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
       - run: pnpm install --frozen-lockfile
       - name: Build the workspace packages the suite imports
-        run: pnpm --filter @crm/tax build && pnpm --filter @crm/contracts build && pnpm --filter @crm/db build
+        run: pnpm --filter @crm/tax build && pnpm --filter @crm/contracts build && pnpm --filter @crm/db build && pnpm --filter @crm/observability build
       - name: Run the SSRF suite
         working-directory: crm-platform/apps/api
         run: >

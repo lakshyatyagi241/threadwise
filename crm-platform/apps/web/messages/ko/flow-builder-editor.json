@@ -882,7 +882,12 @@
             "add": "버튼 더 추가",
             "remove": "버튼 삭제",
             "opensPhone": "전화번호",
-            "opensEmail": "이메일 주소"
+            "opensEmail": "이메일 주소",
+            "errors": {
+              "url": "https://로 시작하는 올바른 웹 주소를 입력하세요",
+              "phone": "올바른 전화번호를 입력하세요(예: +91 98765 43210)",
+              "email": "올바른 이메일 주소를 입력하세요(예: name@example.com)"
+            }
           },
           "carousel": {
             "intro": "카드 위 메시지",
@@ -2614,6 +2619,7 @@
         "chooseTemplate": "{stage} 단계: 템플릿을 선택하세요.",
         "chooseTeam": "{stage} 단계: 대화를 보낼 팀을 선택하세요.",
         "ctaLabelLink": "{stage} 단계: 버튼에 이름과 링크를 지정하세요.",
+        "ctaLinkInvalid": "단계 {stage}: 버튼 대상이 유형에 맞지 않습니다.",
         "choosePickedProperty": "{stage} 단계: 선택한 옵션을 복사할 연락처 속성을 선택하세요.",
         "buttonsPrompt": "{stage} 단계: 버튼 위에 표시할 메시지를 입력하세요.",
         "addButton": "{stage} 단계: 버튼을 최소 하나 추가하세요.",

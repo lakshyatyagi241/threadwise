@@ -13,7 +13,7 @@ import { CallingProvider, OnCallPanel } from '@/features/calling-voice';
 import { useLeadScoringEnabled } from '@/features/lead-scoring';
 import { invalidateSegments, useSegments, appliedConditionCount } from '@/features/segments';
 import { useStoredValue } from '@/lib/use-stored-value';
-import { useAttributes, useStatusOptions } from '../api/attributes';
+import { useAttributes, useContactFilterValues, useStatusOptions } from '../api/attributes';
 import {
   bulkDelete,
   bulkGroupMembership,
@@ -284,10 +284,22 @@ export function ContactsScreen() {
     () => new Map((attributes.data ?? []).map((a) => [a.key, a.name])),
     [attributes.data],
   );
-  const stages = useMemo(() => stageChoices(statusOptions.data), [statusOptions.data]);
+  // The filters also offer the stages and statuses contacts hold that the workspace never listed (e.g. the default stage `new`).
+  const filterValues = useContactFilterValues();
+  const stages = useMemo(
+    () => stageChoices(statusOptions.data, undefined, filterValues.data?.lifecycleStages),
+    [statusOptions.data, filterValues.data],
+  );
   const statuses = useMemo(
-    () => statusChoices(statusOptions.data, (v) => tf(`statuses.${v}`)),
-    [statusOptions.data, tf],
+    () =>
+      statusChoices(
+        statusOptions.data,
+        (v) => tf(`statuses.${v}`),
+        undefined,
+        undefined,
+        filterValues.data?.statuses,
+      ),
+    [statusOptions.data, filterValues.data, tf],
   );
   const views = useMemo(() => rows.map((r) => rowView(r, attrLabels)), [rows, attrLabels]);
 

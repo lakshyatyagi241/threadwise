@@ -882,7 +882,12 @@
             "add": "Ajouter un autre bouton",
             "remove": "Retirer le bouton",
             "opensPhone": "Numéro de téléphone",
-            "opensEmail": "Adresse e-mail"
+            "opensEmail": "Adresse e-mail",
+            "errors": {
+              "url": "Saisissez une adresse web valide commençant par https://",
+              "phone": "Saisissez un numéro de téléphone valide, par exemple +91 98765 43210",
+              "email": "Saisissez une adresse e-mail valide, par exemple name@example.com"
+            }
           },
           "carousel": {
             "intro": "Message au-dessus des cartes",
@@ -2614,6 +2619,7 @@
         "chooseTemplate": "Étape {stage} : choisissez un modèle.",
         "chooseTeam": "Étape {stage} : choisissez l’équipe à laquelle la conversation est transmise.",
         "ctaLabelLink": "Étape {stage} : donnez un nom et un lien au bouton.",
+        "ctaLinkInvalid": "Étape {stage} : la destination du bouton ne correspond pas à son type.",
         "choosePickedProperty": "Étape {stage} : choisissez la propriété du contact dans laquelle l’option choisie est copiée.",
         "buttonsPrompt": "Étape {stage} : rédigez le message au-dessus des boutons.",
         "addButton": "Étape {stage} : ajoutez au moins un bouton.",

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # The event-loop regression gate as one command (EL-B06). Run from crm-platform with the shared packages and the API built:
-#   pnpm --filter @crm/db --filter @crm/contracts --filter @crm/config --filter @crm/tax build && pnpm --filter @crm/api build
+#   pnpm --filter @crm/db --filter @crm/contracts --filter @crm/config --filter @crm/tax --filter @crm/observability build && pnpm --filter @crm/api build
 #   bash tools/event-loop-audit/ci-regression.sh
 #
 # With a baseline file for this kind of machine (BASELINE, default docs/performance/event-loop/ci-baseline.json): one load run, then

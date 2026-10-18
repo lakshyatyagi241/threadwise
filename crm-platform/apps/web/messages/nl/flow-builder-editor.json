@@ -1275,7 +1275,12 @@
             "add": "Nog een knop toevoegen",
             "remove": "Knop verwijderen",
             "opensPhone": "Telefoonnummer",
-            "opensEmail": "E-mailadres"
+            "opensEmail": "E-mailadres",
+            "errors": {
+              "url": "Voer een geldig webadres in dat begint met https://",
+              "phone": "Voer een geldig telefoonnummer in, bijvoorbeeld +91 98765 43210",
+              "email": "Voer een geldig e-mailadres in, bijvoorbeeld name@example.com"
+            }
           },
           "carousel": {
             "intro": "Bericht boven de kaarten",
@@ -2472,6 +2477,7 @@
         "chooseTemplate": "Stap {stage}: kies een sjabloon.",
         "chooseTeam": "Stap {stage}: kies het team waar het gesprek naartoe gaat.",
         "ctaLabelLink": "Stap {stage}: geef de knop een naam en een link.",
+        "ctaLinkInvalid": "Stap {stage}: het doel van de knop is ongeldig voor het type.",
         "choosePickedProperty": "Stap {stage}: kies de contacteigenschap waarnaar de gekozen optie wordt gekopieerd.",
         "buttonsPrompt": "Stap {stage}: schrijf het bericht boven de knoppen.",
         "addButton": "Stap {stage}: voeg minstens één knop toe.",

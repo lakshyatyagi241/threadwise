@@ -882,7 +882,12 @@
             "add": "ボタンを追加",
             "remove": "ボタンを削除",
             "opensPhone": "電話番号",
-            "opensEmail": "メールアドレス"
+            "opensEmail": "メールアドレス",
+            "errors": {
+              "url": "https:// で始まる有効なウェブアドレスを入力してください",
+              "phone": "有効な電話番号を入力してください（例: +91 98765 43210）",
+              "email": "有効なメールアドレスを入力してください（例: name@example.com）"
+            }
           },
           "carousel": {
             "intro": "カードの上のメッセージ",
@@ -2614,6 +2619,7 @@
         "chooseTemplate": "ステップ {stage}: テンプレートを選択してください。",
         "chooseTeam": "ステップ {stage}: 会話の振り分け先のチームを選択してください。",
         "ctaLabelLink": "ステップ {stage}: ボタンの名前とリンクを設定してください。",
+        "ctaLinkInvalid": "ステップ {stage}: ボタンのリンク先が種類に合っていません。",
         "choosePickedProperty": "ステップ {stage}: 選択された項目のコピー先となる連絡先の項目を選択してください。",
         "buttonsPrompt": "ステップ {stage}: ボタンの上のメッセージを入力してください。",
         "addButton": "ステップ {stage}: ボタンを1つ以上追加してください。",

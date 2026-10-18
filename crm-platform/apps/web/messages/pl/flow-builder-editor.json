@@ -882,7 +882,12 @@
             "add": "Dodaj kolejny przycisk",
             "remove": "Usuń przycisk",
             "opensPhone": "Numer telefonu",
-            "opensEmail": "Adres e-mail"
+            "opensEmail": "Adres e-mail",
+            "errors": {
+              "url": "Wpisz poprawny adres internetowy zaczynający się od https://",
+              "phone": "Wpisz poprawny numer telefonu, np. +91 98765 43210",
+              "email": "Wpisz poprawny adres e-mail, np. name@example.com"
+            }
           },
           "carousel": {
             "intro": "Wiadomość nad kartami",
@@ -2614,6 +2619,7 @@
         "chooseTemplate": "Krok {stage}: wybierz szablon.",
         "chooseTeam": "Krok {stage}: wybierz zespół, do którego trafi rozmowa.",
         "ctaLabelLink": "Krok {stage}: nadaj przyciskowi nazwę i link.",
+        "ctaLinkInvalid": "Krok {stage}: cel przycisku jest nieprawidłowy dla jego typu.",
         "choosePickedProperty": "Krok {stage}: wybierz właściwość kontaktu, do której zostanie skopiowana wybrana opcja.",
         "buttonsPrompt": "Krok {stage}: napisz wiadomość nad przyciskami.",
         "addButton": "Krok {stage}: dodaj co najmniej jeden przycisk.",

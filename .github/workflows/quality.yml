@@ -117,7 +117,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Build the shared packages and the API
         run: |
-          pnpm --filter @crm/config --filter @crm/tax --filter @crm/contracts --filter @crm/db build
+          pnpm --filter @crm/config --filter @crm/tax --filter @crm/contracts --filter @crm/db --filter @crm/observability build
           pnpm --filter @crm/api build
       # Exit 0 no regression, 1 regression, 2 cannot decide. With no docs/performance/event-loop/ci-baseline.json it records three runs,
       # uploads them, and fails on purpose: download the artifact, commit the file, run again.
@@ -148,7 +148,7 @@ jobs:
       - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
       - run: pnpm install --frozen-lockfile
       - name: Build the shared packages
-        run: pnpm --filter @crm/config --filter @crm/tax --filter @crm/contracts --filter @crm/db build
+        run: pnpm --filter @crm/config --filter @crm/tax --filter @crm/contracts --filter @crm/db --filter @crm/observability build
       - name: API unit tests with coverage
         run: pnpm --filter @crm/api exec vitest run --dir test/unit --coverage --coverage.reporter=json-summary --coverage.reporter=text-summary --reporter=json --outputFile=api-unit.json
       - name: Web unit tests
@@ -181,7 +181,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @crm/config --filter @crm/tax --filter @crm/contracts --filter @crm/db build
+      - run: pnpm --filter @crm/config --filter @crm/tax --filter @crm/contracts --filter @crm/db --filter @crm/observability build
       - name: Integration tests
         run: pnpm --filter @crm/api test:integration
       - name: One e2e folder, with the contract assertions counted

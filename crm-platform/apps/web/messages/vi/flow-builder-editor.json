@@ -882,7 +882,12 @@
             "add": "Thêm nút khác",
             "remove": "Xóa nút",
             "opensPhone": "Số điện thoại",
-            "opensEmail": "Địa chỉ email"
+            "opensEmail": "Địa chỉ email",
+            "errors": {
+              "url": "Nhập địa chỉ web hợp lệ bắt đầu bằng https://",
+              "phone": "Nhập số điện thoại hợp lệ, ví dụ +91 98765 43210",
+              "email": "Nhập địa chỉ email hợp lệ, ví dụ name@example.com"
+            }
           },
           "carousel": {
             "intro": "Tin nhắn phía trên các thẻ",
@@ -2614,6 +2619,7 @@
         "chooseTemplate": "Bước {stage}: chọn một mẫu.",
         "chooseTeam": "Bước {stage}: chọn nhóm mà cuộc trò chuyện sẽ chuyển đến.",
         "ctaLabelLink": "Bước {stage}: đặt tên và liên kết cho nút.",
+        "ctaLinkInvalid": "Bước {stage}: đích của nút không hợp lệ với loại đã chọn.",
         "choosePickedProperty": "Bước {stage}: chọn thuộc tính liên hệ để sao chép lựa chọn đã chọn vào.",
         "buttonsPrompt": "Bước {stage}: viết tin nhắn phía trên các nút.",
         "addButton": "Bước {stage}: thêm ít nhất một nút.",

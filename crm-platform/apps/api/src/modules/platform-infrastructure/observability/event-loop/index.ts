@@ -1,12 +1,23 @@
+// The monitor core lives in packages/observability (shared with apps/web); these names stay importable from here.
 export {
   EventLoopSampler,
   classifySnapshot,
   type EventLoopSnapshot,
   type LoopLevel,
-} from './event-loop-sampler';
-export { RuntimeMonitor, type RuntimeMonitorOptions, type RuntimeService } from './runtime-monitor';
-export { Registry, Gauge, Counter, Histogram } from './prometheus-text';
-export { startMetricsServer, type MetricsServerOptions } from './metrics-server';
+  RuntimeMonitor,
+  type RuntimeMonitorOptions,
+  type RuntimeService,
+  Registry,
+  Gauge,
+  Counter,
+  Histogram,
+  startMetricsServer,
+  type MetricsServerOptions,
+  getRuntimeMonitor,
+  metricsListenerDecision,
+  stopRuntimeMonitor,
+  type ListenerDecision,
+} from '@crm/observability';
 export { httpMetricsMiddleware } from './http-metrics.middleware';
 export {
   attachJobMetrics,
@@ -24,10 +35,4 @@ export {
   type ProbeResult,
   type ProbeTarget,
 } from './probe';
-export {
-  getRuntimeMonitor,
-  metricsListenerDecision,
-  startRuntimeMonitor,
-  stopRuntimeMonitor,
-  type ListenerDecision,
-} from './start-runtime-monitor';
+export { startRuntimeMonitor } from './start-runtime-monitor';

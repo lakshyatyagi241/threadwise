@@ -893,7 +893,12 @@
             "add": "Add another button",
             "remove": "Remove button",
             "opensPhone": "Phone number",
-            "opensEmail": "Email address"
+            "opensEmail": "Email address",
+            "errors": {
+              "url": "Enter a valid web address starting with https://",
+              "phone": "Enter a valid phone number, for example +91 98765 43210",
+              "email": "Enter a valid email address, for example name@example.com"
+            }
           },
           "carousel": {
             "intro": "Message above the cards",
@@ -2613,6 +2618,7 @@
         "chooseTemplate": "Step {stage}: choose a template.",
         "chooseTeam": "Step {stage}: choose the team the conversation goes to.",
         "ctaLabelLink": "Step {stage}: give the button a name and a link.",
+        "ctaLinkInvalid": "Step {stage}: the button's link is not valid for what it opens.",
         "choosePickedProperty": "Step {stage}: choose the contact property the picked option is copied to.",
         "buttonsPrompt": "Step {stage}: write the message above the buttons.",
         "addButton": "Step {stage}: add at least one button.",

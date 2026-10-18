@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
-import type { RuntimeMonitor } from './runtime-monitor';
+import type { RuntimeMonitor } from '@crm/observability';
 
 /**
  * Times every response and hands the monitor method, route TEMPLATE and status. The template (`/contacts/:id`) comes from

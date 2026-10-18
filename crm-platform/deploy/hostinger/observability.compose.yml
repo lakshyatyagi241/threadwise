@@ -5,9 +5,9 @@
 #   docker compose -f docker-compose.yml -f observability.compose.yml --env-file .env up -d     # afterwards
 #
 # What it adds
-#   api, worker   serve /metrics on 9464 inside the stack network (token required), published nowhere
+#   api, worker, web   serve /metrics on 9464 inside the stack network (token required), published nowhere
 #   probe         a separate process that GETs the API from outside its event loop and reports the latency a caller sees
-#   prometheus    scrapes the three, evaluates ../observability/event-loop.rules.yml, keeps 15 days (or 2 GB)
+#   prometheus    scrapes the four, evaluates ../observability/event-loop.rules.yml, keeps 15 days (or 2 GB)
 #   alertmanager  sends firing and resolved alerts to the URL in secrets/alert_webhook_url
 #
 # Nothing is published and nothing is routed through Traefik: reach Prometheus and Alertmanager with
@@ -35,6 +35,12 @@ services:
       OBS_METRICS_PORT: '9464'
       OBS_METRICS_TOKEN: ${OBS_METRICS_TOKEN:?run ./observability-up.sh, it generates OBS_METRICS_TOKEN}
 
+  web:
+    environment:
+      OBS_METRICS_PORT: '9464'
+      OBS_METRICS_HOST: 0.0.0.0
+      OBS_METRICS_TOKEN: ${OBS_METRICS_TOKEN:?run ./observability-up.sh, it generates OBS_METRICS_TOKEN}
+
   probe:
     image: desk-api:${IMAGE_TAG:-local}
     pull_policy: never
@@ -45,7 +51,7 @@ services:
     environment:
       NODE_ENV: production
       TZ: UTC
-      PROBE_TARGETS: health=http://api:3000/health,ready=http://api:3000/ready
+      PROBE_TARGETS: health=http://api:3000/health,ready=http://api:3000/ready,web=http://web:3001/robots.txt
       PROBE_INTERVAL_SECONDS: '10'
       PROBE_TIMEOUT_SECONDS: '10'
       OBS_METRICS_PORT: '9464'
@@ -53,6 +59,7 @@ services:
       OBS_METRICS_TOKEN: ${OBS_METRICS_TOKEN:?run ./observability-up.sh, it generates OBS_METRICS_TOKEN}
     depends_on:
       - api
+      - web
 
   prometheus:
     image: prom/prometheus:v2.55.0

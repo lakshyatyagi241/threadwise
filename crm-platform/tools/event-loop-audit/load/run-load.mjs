@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Event-loop baselines for the real application (EL-B05): idle, normal, peak, spike and a short soak.
 //
-//   pnpm --filter @crm/db --filter @crm/contracts --filter @crm/config --filter @crm/tax build
+//   pnpm --filter @crm/db --filter @crm/contracts --filter @crm/config --filter @crm/tax --filter @crm/observability build
 //   pnpm --filter @crm/api build
 //   node tools/event-loop-audit/load/run-load.mjs                       # all profiles, ~20 minutes
 //   node tools/event-loop-audit/load/run-load.mjs --profiles=idle,normal --seconds=60 --contacts=1000

@@ -34,6 +34,23 @@ describe('matchesAssignment', () => {
     expect(matchesAssignment(cond({ lifecycleStages: ['customer'] }), facts())).toBe(false);
   });
 
+  it('a country code is the same code whether it is written +91, 91 or 0091', () => {
+    for (const written of ['+91', '91', '0091', ' +91 ']) {
+      expect(
+        matchesAssignment(cond({ countryCodes: [written] }), facts({ countryCode: '91' })),
+      ).toBe(true);
+      expect(
+        matchesAssignment(cond({ countryCodes: ['91'] }), facts({ countryCode: written })),
+      ).toBe(true);
+    }
+    expect(matchesAssignment(cond({ countryCodes: ['+44'] }), facts({ countryCode: '91' }))).toBe(
+      false,
+    );
+    expect(matchesAssignment(cond({ countryCodes: ['+91'] }), facts({ countryCode: null }))).toBe(
+      false,
+    );
+  });
+
   it('a phone prefix is the country from the number: digits, so +91 and 0091 styles both work', () => {
     expect(matchesAssignment(cond({ phonePrefixes: ['91'] }), facts())).toBe(true);
     expect(matchesAssignment(cond({ phonePrefixes: ['44', '1'] }), facts())).toBe(false);

@@ -8,6 +8,7 @@ import {
   stageChoices,
   statusChoices,
   useContactFields,
+  useContactFilterValues,
   useGroups,
   useModuleFields,
   useStatusOptions,
@@ -61,6 +62,8 @@ const toChoice = (c: { value: string; label: string; color?: string }): Choice =
 export function useSegmentCatalog(): SegmentCatalog {
   const tf = useTranslations('contacts-attributes-tags.form');
   const statusOptions = useStatusOptions();
+  // Stages and statuses contacts hold but the workspace never listed (e.g. `new`) are offered too; their lookup is optional.
+  const filterValues = useContactFilterValues();
   const tags = useTags();
   const groups = useGroups();
   const fields = useContactFields();
@@ -72,14 +75,23 @@ export function useSegmentCatalog(): SegmentCatalog {
   const scoringOn = useLeadScoringEnabled();
 
   const all = [statusOptions, tags, groups, fields, people];
-  // A rule on a company property is judged deleted only once the company properties have answered (or been refused).
-  const ready = [...all, companyFields].every((q) => q.isSuccess || q.isError);
+  // A rule on a company property is judged deleted only once the company properties have answered (or been refused); likewise a rule on
+  // a stage or status only once the values in use are known (a refusal just leaves the configured options).
+  const ready = [...all, companyFields, filterValues].every((q) => q.isSuccess || q.isError);
   const failed = all.some((q) => q.isError);
 
   const lookups = useMemo<Lookups>(
     () => ({
-      stages: stageChoices(statusOptions.data).map(toChoice),
-      statuses: statusChoices(statusOptions.data, (v) => tf(`statuses.${v}`)).map(toChoice),
+      stages: stageChoices(statusOptions.data, undefined, filterValues.data?.lifecycleStages).map(
+        toChoice,
+      ),
+      statuses: statusChoices(
+        statusOptions.data,
+        (v) => tf(`statuses.${v}`),
+        undefined,
+        undefined,
+        filterValues.data?.statuses,
+      ).map(toChoice),
       tags: (tags.data ?? []).map((t) => ({
         value: t.id,
         label: t.name,
@@ -113,6 +125,7 @@ export function useSegmentCatalog(): SegmentCatalog {
     }),
     [
       statusOptions.data,
+      filterValues.data,
       tags.data,
       groups.data,
       fields.data,

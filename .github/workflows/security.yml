@@ -35,7 +35,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @crm/config --filter @crm/tax --filter @crm/contracts --filter @crm/db build
+      - run: pnpm --filter @crm/config --filter @crm/tax --filter @crm/contracts --filter @crm/db --filter @crm/observability build
       - name: Run the security specs
         run: bash tools/quality/security-specs.sh
 

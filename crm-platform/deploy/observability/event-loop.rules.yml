@@ -1,4 +1,6 @@
-# Prometheus alert rules for the event-loop metrics exposed by every API and worker process (apps/api, OBS_METRICS_PORT).
+# Prometheus alert rules for the event-loop metrics exposed by every API, worker and web-server process (OBS_METRICS_PORT).
+# The warnings, the heap, long-stall and stale-report rules are not tied to a service, so they cover `web` too. The two "blocking with
+# impact" rules are written for api and worker; a web one is a follow-up (backlog EL-B07 note).
 # Metric reference: docs/performance/event-loop/event-loop-metrics-inventory.md. Runbook: event-loop-observability-runbook.md.
 #
 # Paging rule: a critical alert needs SUSTAINED loop degradation AND user impact (slow API, slow webhook ack, or a queue wait
@@ -144,7 +146,7 @@ groups:
           description: 'The monitor window stopped completing while the process is still being scraped. A process that is gone does not look like this (its series vanish and RuntimeMetricsTargetDown fires), and a loop blocked long enough to fail the scrape shows as a failed scrape; check the process itself.'
 
       - alert: RuntimeMetricsTargetDown
-        expr: up{job=~"crm-(api|worker|probe)"} == 0
+        expr: up{job=~"crm-(api|worker|web|probe)"} == 0
         for: 2m
         labels: { severity: critical }
         annotations:
