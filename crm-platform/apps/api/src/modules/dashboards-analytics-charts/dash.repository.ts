@@ -10,7 +10,8 @@ type Raw = Record<string, unknown>;
  * (`messages`: conversations, broadcast mirrors, sends), so every count reads that one table. Row-level security already scopes it
  * to the caller's workspace; the explicit `org_id` is the index prefix. Nothing is cached and nothing is pre-aggregated.
  */
-const DELIVERED = sql.raw(`status IN ('delivered','read','sent')`);
+/** A message is delivered once the provider said so (delivered / read); a message that is only `sent` is counted as sent, not delivered. */
+const DELIVERED = sql.raw(`status IN ('delivered','read')`);
 const READ = sql.raw(`(read_at IS NOT NULL OR status = 'read')`);
 
 /** The message stream over [from, to). */
