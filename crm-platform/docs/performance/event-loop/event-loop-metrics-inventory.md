@@ -1,6 +1,6 @@
 # Event-loop metrics inventory
 
-Every API and worker process exposes these from its own `GET /metrics` listener (`OBS_METRICS_PORT`, see the architecture note). Every series carries `service` (`api` | `worker`) and `instance` (`<hostname>:<pid>`). No tenant, user, contact or request id is ever a label.
+Every API, worker and web-server process exposes these from its own `GET /metrics` listener (`OBS_METRICS_PORT`, see the architecture note). Every series carries `service` (`api` | `worker` | `web`) and `instance` (`<hostname>:<pid>`). No tenant, user, contact or request id is ever a label.
 
 Units are seconds and bytes (Prometheus convention); the engineering targets in the standard are in milliseconds, so 20 ms is `0.020`.
 
@@ -54,7 +54,7 @@ Targets come from `PROBE_TARGETS` (`name=url,name=url`, name `[a-z0-9_-]{1,32}`,
   - Wait excludes the delay the producer asked for (a promoted delayed job reports `job.delay = 0`, so the original `opts.delay` is used), and is **not recorded for a job that needed a retry** (its enqueue time says nothing about queue pressure).
   - Duration is that of the final attempt.
   - Labels are the queue name and outcome only. `WorkerEventLoopBlockingWithQueueImpact` has fired from a real worker stall with 20,000 queued jobs (scrape demo). Not shown yet: any production-shaped queue load.
-- **`apps/web` (Next.js server) is not instrumented.**
+- **`apps/web` (Next.js server) exports the loop, utilization, CPU, memory, GC and cgroup series only** (`service="web"`, started from `instrumentation.ts`, EL-016). It has no `crm_http_request_duration_seconds` and no queue series; the probe target `web` is its latency view. Per-route metrics are EL-B20.
 
 ## Behaviour on bad data
 

@@ -6,7 +6,7 @@
 #   1. makes OBS_METRICS_TOKEN in .env if there is none (random, 48 hex characters) and writes it to secrets/obs_metrics_token
 #   2. asks for the URL alerts are sent to (hidden input; Enter keeps the current one) and writes secrets/alert_webhook_url
 #   3. pulls the two public images and starts api, worker, probe, prometheus and alertmanager
-# It restarts api and worker (they pick up the token and the port), so run it in a quiet minute, like set-secrets.sh.
+# It restarts api, worker and web (they pick up the token and the port), so run it in a quiet minute, like set-secrets.sh.
 # The secret files live in a mode 700 directory (see the note at the chmod). Nothing here publishes a port.
 set -euo pipefail
 cd "$(dirname "$0")"

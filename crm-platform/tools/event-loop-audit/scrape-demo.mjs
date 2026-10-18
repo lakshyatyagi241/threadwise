@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 // A real Prometheus + Alertmanager watching a real API process, a real worker process and a real probe process (EL-B02, B12, B13).
 //
-//   pnpm --filter @crm/db --filter @crm/contracts --filter @crm/config --filter @crm/tax build
+//   pnpm --filter @crm/db --filter @crm/contracts --filter @crm/config --filter @crm/tax --filter @crm/observability build
 //   pnpm --filter @crm/api build
 //   node tools/event-loop-audit/scrape-demo.mjs                  # steady state, probe, receiver, worker killed
 //   node tools/event-loop-audit/scrape-demo.mjs --stall          # + API stall, worker stall with a backlog, a 12 s block
 //   node tools/event-loop-audit/scrape-demo.mjs --phases=api,long   # pick phases (api, worker, long)
-//   node tools/event-loop-audit/scrape-demo.mjs --grafana        # + a real Grafana loads the four dashboards and runs every panel query (EL-B04)
+//   node tools/event-loop-audit/scrape-demo.mjs --grafana        # + a real Grafana loads the five dashboards and runs every panel query (EL-B04)
 //
 // It starts throwaway Postgres + Redis containers, migrates, runs the BUILT api (dist/src/main.js), worker (dist/src/worker.js) and
 // probe (dist/src/tools/event-loop-probe.js) as separate processes, then runs prom/prometheus and prom/alertmanager with the files
@@ -402,7 +402,7 @@ async function longBlockPhase() {
   );
 }
 
-// ---- Grafana: the four dashboards, loaded by provisioning and run against the live Prometheus (EL-B04) -----------------------------
+// ---- Grafana: the five dashboards, loaded by provisioning and run against the live Prometheus (EL-B04) -----------------------------
 // The files mounted are the ones that ship (deploy/observability/grafana); the data source address `prometheus` is the network alias
 // the demo gives its Prometheus container. Template variables are filled in here the way Grafana's front end fills them (All = .*);
 // everything else, including $__rate_interval, is left for Grafana's own Prometheus backend to expand.
@@ -464,18 +464,18 @@ async function grafanaPhase() {
     2000,
   );
   const found = await waitFor(
-    'four dashboards provisioned',
+    'five dashboards provisioned',
     async () => {
       const r = await g('/api/search?type=dash-db');
-      return r.ok && r.body.length >= 4 ? r.body : null;
+      return r.ok && r.body.length >= 5 ? r.body : null;
     },
     60_000,
     2000,
   );
   const uids = found.map((d) => d.uid).sort();
   check(
-    'Grafana provisioned the four dashboards',
-    uids.join() === 'crm-api,crm-realtime,crm-release-comparison,crm-workers',
+    'Grafana provisioned the five dashboards',
+    uids.join() === 'crm-api,crm-realtime,crm-release-comparison,crm-web,crm-workers',
     uids.join(),
   );
   const dsHealth = await g('/api/datasources/uid/crm-prometheus/health');

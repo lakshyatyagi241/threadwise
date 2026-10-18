@@ -7,7 +7,11 @@ import { describe, expect, it } from 'vitest';
 // queries and return data is checked against the real pair by tools/event-loop-audit/scrape-demo.mjs --grafana.
 const repo = resolve(__dirname, '../../../../..');
 const dashDir = join(repo, 'deploy/observability/grafana/dashboards');
-const obsDir = join(repo, 'apps/api/src/modules/platform-infrastructure/observability/event-loop');
+// The monitor core is in packages/observability (shared with the web server); the job, HTTP-side and probe series are in the API.
+const obsDirs = [
+  join(repo, 'packages/observability/src'),
+  join(repo, 'apps/api/src/modules/platform-infrastructure/observability/event-loop'),
+];
 
 interface Target {
   expr?: string;
@@ -40,9 +44,11 @@ const dashboards = files.map((f) => ({
 /** Every `crm_*` metric the code can emit: registered names in the monitor, plus the probe's. */
 function exportedMetrics(): Set<string> {
   const names = new Set<string>();
-  for (const f of readdirSync(obsDir).filter((x) => x.endsWith('.ts'))) {
-    for (const m of readFileSync(join(obsDir, f), 'utf8').matchAll(/['"`](crm_[a-z0-9_]+)['"`]/g)) {
-      names.add(m[1]!);
+  for (const dir of obsDirs) {
+    for (const f of readdirSync(dir).filter((x) => x.endsWith('.ts'))) {
+      for (const m of readFileSync(join(dir, f), 'utf8').matchAll(/['"`](crm_[a-z0-9_]+)['"`]/g)) {
+        names.add(m[1]!);
+      }
     }
   }
   return names;
@@ -58,11 +64,12 @@ const exprsOf = (d: Dashboard) =>
   ].filter(Boolean);
 
 describe('Grafana dashboards (EL-B04)', () => {
-  it('ships the four dashboards', () => {
+  it('ships the five dashboards', () => {
     expect(dashboards.map((x) => x.d.uid)).toEqual([
       'crm-api',
       'crm-realtime',
       'crm-release-comparison',
+      'crm-web',
       'crm-workers',
     ]);
   });
