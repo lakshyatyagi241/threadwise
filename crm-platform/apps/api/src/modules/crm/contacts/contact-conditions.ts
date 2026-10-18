@@ -1,6 +1,6 @@
 import { and, eq, inArray, isNull, notInArray, sql, type SQL } from 'drizzle-orm';
 import { schema } from '@crm/db';
-import type { RecordScope } from '@crm/contracts';
+import type { FollowUpFilter, RecordScope } from '@crm/contracts';
 import {
   dateWindowPredicate,
   escapeLike,
@@ -11,6 +11,28 @@ import {
 } from './contact-predicates';
 
 export { escapeLike };
+
+/**
+ * The contact's open follow-up stands in `state` (BL-291), cut like the task list's buckets: overdue is before now, today is the rest of the
+ * workspace's day, upcoming is later, someday has no date, none has no open follow-up. One lookup on `uq_tasks_open_follow_up` per contact.
+ */
+export function followUpCondition(state: FollowUpFilter, timeZone: string): SQL {
+  const dayEnd = sql`((date_trunc('day', now() AT TIME ZONE ${timeZone}) + interval '1 day') AT TIME ZONE ${timeZone})`;
+  const open = (extra: SQL) =>
+    sql`EXISTS (SELECT 1 FROM tasks t WHERE t.org_id = ${contacts.orgId} AND t.contact_id = ${contacts.id} AND t.kind = 'follow_up' AND t.status = 'open' AND ${extra})`;
+  switch (state) {
+    case 'overdue':
+      return open(sql`t.due_at < now()`);
+    case 'today':
+      return open(sql`t.due_at >= now() AND t.due_at < ${dayEnd}`);
+    case 'upcoming':
+      return open(sql`t.due_at >= ${dayEnd}`);
+    case 'someday':
+      return open(sql`t.due_at IS NULL`);
+    case 'none':
+      return sql`NOT ${open(sql`true`)}`;
+  }
+}
 
 /** The contact is (or is not) flagged as a minor: one primary-key lookup in `contact_privacy_flags` per contact. */
 export function minorCondition(isMinor: boolean): SQL {
@@ -49,6 +71,8 @@ export interface ResolvedContactFilter {
   minor?: boolean;
   /** true: uncontacted; false: contacted (BL-290). */
   uncontacted?: boolean;
+  /** Where the next follow-up stands now, with the workspace zone that cuts "today" (BL-291). */
+  followUp?: { state: FollowUpFilter; timeZone: string };
   source?: string;
   status?: string;
   /** BL-193: the stored time zone is this one / no time zone is stored. */
@@ -192,6 +216,7 @@ export function contactConditions(
   }
   if (f.unsubscribed !== undefined) c.push(eq(contacts.isUnsubscribed, f.unsubscribed));
   if (f.minor !== undefined) c.push(minorCondition(f.minor));
+  if (f.followUp) c.push(followUpCondition(f.followUp.state, f.followUp.timeZone));
   if (f.uncontacted !== undefined) {
     c.push(
       f.uncontacted

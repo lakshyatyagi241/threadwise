@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -11,17 +12,24 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
+  setFollowUpSchema,
   setUncontactedSchema,
+  snoozeFollowUpSchema,
   touchContactSchema,
+  updateFollowUpSettingsSchema,
   updateUncontactedSettingsSchema,
   type RecordScope,
+  type SetFollowUpInput,
   type SetUncontactedInput,
+  type SnoozeFollowUpInput,
   type TouchContactInput,
+  type UpdateFollowUpSettingsInput,
   type UpdateUncontactedSettingsInput,
 } from '@crm/contracts';
 import { ActorKinds, GrantedScope, RequirePermission } from '../../../common/decorators';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { ContactTouchService } from './contact-touch.service';
+import { FollowUpService } from './follow-up.service';
 import { LeadHandlingSettingsService } from './lead-handling-settings.service';
 
 /** The workspace's lead handling settings (Settings > uncontacted leads, follow-ups, duplicate leads). Owner and Admin only. */
@@ -53,6 +61,17 @@ export class LeadHandlingController {
   ) {
     return this.settings.updateUncontacted(body);
   }
+
+  @Put('settings/follow-ups')
+  @RequirePermission('admin.settings.manage')
+  @ApiOperation({
+    summary: 'Save the follow-ups section',
+    description:
+      'Replaces the whole section. Needs the rowVersion read (absent on the first save). 409 ROW_VERSION_CONFLICT, 422 for an invalid document.',
+  })
+  updateFollowUps(@Body(zodPipe(updateFollowUpSettingsSchema)) body: UpdateFollowUpSettingsInput) {
+    return this.settings.updateFollowUps(body);
+  }
 }
 
 /**
@@ -63,7 +82,10 @@ export class LeadHandlingController {
 @ActorKinds('user')
 @Controller({ path: 'contacts', version: '2' })
 export class ContactTouchController {
-  constructor(private readonly touch: ContactTouchService) {}
+  constructor(
+    private readonly touch: ContactTouchService,
+    private readonly followUps: FollowUpService,
+  ) {}
 
   @Post(':id/touch')
   @HttpCode(HttpStatus.OK)
@@ -93,5 +115,53 @@ export class ContactTouchController {
     @GrantedScope('record.contacts.update') scope: RecordScope,
   ) {
     return this.touch.setByUuid(id, body.uncontacted, scope);
+  }
+
+  @Put(':id/follow-up')
+  @RequirePermission('record.contacts.update')
+  @ApiOperation({
+    summary: "Set or move the contact's next follow-up (dueAt null = someday)",
+    description:
+      'A new follow-up is a task, so it also needs record.tasks.create. Moving or completing an existing one needs only the contact update permission and the contact scope.',
+  })
+  setFollowUp(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(setFollowUpSchema)) body: SetFollowUpInput,
+    @GrantedScope('record.contacts.update') scope: RecordScope,
+  ) {
+    return this.followUps.set(id, body.dueAt, scope);
+  }
+
+  @Post(':id/follow-up/snooze')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('record.contacts.update')
+  @ApiOperation({ summary: "Move the follow-up to 1 day, 3 days or next week at the default alert time" })
+  snooze(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(snoozeFollowUpSchema)) body: SnoozeFollowUpInput,
+    @GrantedScope('record.contacts.update') scope: RecordScope,
+  ) {
+    return this.followUps.snooze(id, body.preset, scope);
+  }
+
+  @Post(':id/follow-up/done')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('record.contacts.update')
+  @ApiOperation({ summary: "Complete the contact's follow-up" })
+  done(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GrantedScope('record.contacts.update') scope: RecordScope,
+  ) {
+    return this.followUps.done(id, scope);
+  }
+
+  @Delete(':id/follow-up')
+  @RequirePermission('record.contacts.update')
+  @ApiOperation({ summary: "Remove the contact's follow-up" })
+  removeFollowUp(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GrantedScope('record.contacts.update') scope: RecordScope,
+  ) {
+    return this.followUps.clear(id, scope);
   }
 }
