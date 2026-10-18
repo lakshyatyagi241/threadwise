@@ -1,5 +1,4 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { sql } from 'drizzle-orm';
 import {
   FLOW_ENGINE_LABELS,
@@ -16,9 +15,7 @@ import {
 } from '../auth/unofficial-whatsapp.port';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
-import type { Env } from '../../config/env.schema';
 import { PlatformSettingsService } from '../auth';
-import { GoogleFormWebhookService } from '../flow-runtime-engine';
 import {
   catalogStoreName,
   emailLabel,
@@ -28,7 +25,6 @@ import {
   productOption,
   storeOption,
 } from './builder-context-rules';
-import { appsScriptFileName, buildAppsScript } from './google-apps-script';
 
 /** The store tables a commerce provider's `storeId` is checked against (instagram has no store, it reads the catalogue). */
 const STORE_TABLES: Partial<Record<FlbCommerceProductsQuery['provider'], string>> = {
@@ -95,8 +91,6 @@ export class BuilderContextService {
   constructor(
     private readonly db: DatabaseService,
     private readonly settings: PlatformSettingsService,
-    private readonly config: ConfigService<Env, true>,
-    private readonly formHooks: GoogleFormWebhookService,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
@@ -414,25 +408,6 @@ export class BuilderContextService {
       `);
       return { data: rows(res).map(productOption) };
     });
-  }
-
-  /**
-   * The Apps Script for one Google Form (TW-FLB-059): the file the customer pastes into the form's script editor. It carries this
-   * workspace's webhook token (the FLR webhook, which resumes the run waiting on the form) and the public webhook URL.
-   */
-  googleFormScript(formId: string): { fileName: string; source: string } {
-    const orgId = RequestContextStore.require().orgId;
-    const brand = String(this.config.get('APP_NAME', { infer: true }) ?? '');
-    const base = String(this.config.get('APP_URL', { infer: true })).replace(/\/$/, '');
-    return {
-      fileName: appsScriptFileName(brand, formId),
-      source: buildAppsScript({
-        webhookUrl: `${base}/google/form-response`,
-        token: this.formHooks.tokenFor(orgId),
-        formId,
-        brand,
-      }),
-    };
   }
 
   // --- internals -------------------------------------------------------------------------------------------------------

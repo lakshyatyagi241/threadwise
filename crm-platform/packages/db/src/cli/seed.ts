@@ -71,6 +71,14 @@ async function main(): Promise<void> {
       );
       const adminRoleId = Number(ownerRows[0]!.id);
 
+      // The persona row every workspace has (docs/specs/persona-profiles.md): `generic`, which hides nothing.
+      await client.query(
+        `INSERT INTO workspace_persona (org_id, persona_key, persona_version)
+         SELECT $1, p.key, COALESCE(p.current_version, 1) FROM personas p WHERE p.key = 'generic'
+         ON CONFLICT (org_id) DO NOTHING`,
+        [orgId],
+      );
+
       const { rows: agentRoleRows } = await client.query<{ id: number }>(
         `INSERT INTO roles (org_id, name, system_key)
          VALUES ($1, 'Counsellor', NULL)

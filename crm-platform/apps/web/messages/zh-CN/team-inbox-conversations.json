@@ -281,7 +281,9 @@
         "couldNotUndo": "此更改已无法撤销：联系人已进入后续阶段，或已被撤销。"
       },
       "heldUntil": "暂缓至 {when}",
-      "heldWhy": "这条营销消息正在等待您的免打扰时段结束，届时若联系人在此期间未退订，将会发送。"
+      "heldWhy": "这条营销消息正在等待您的免打扰时段结束，届时若联系人在此期间未退订，将会发送。",
+      "templateSent": "模板“{name}”已通过{channel}发送",
+      "templateSentPlain": "模板“{name}”已发送"
     },
     "media": {
       "openImage": "打开图片 {name}",
@@ -1119,6 +1121,12 @@
       },
       "titleBreached": "{kind}：已错过（应于 {time} 完成）",
       "titleOpen": "{kind}：{time} 到期"
+    },
+    "channelType": {
+      "official": "官方",
+      "unofficial": "非官方",
+      "officialFull": "官方 (WhatsApp Cloud API)",
+      "unofficialFull": "非官方 (QR / Baileys)"
     }
   }
 }

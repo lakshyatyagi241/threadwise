@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. Écran de consentement",
-              "body": "Ajoutez les portées demandées par le produit (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), puis publiez l’application : en mode test, Google met fin à chaque autorisation au bout de 7 jours et les espaces de travail devront se reconnecter. Les portées drive sont restreintes et nécessitent la validation de Google."
+              "body": "Ajoutez les portées demandées par le produit (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), puis publiez l’application : en mode test, Google met fin à chaque autorisation au bout de 7 jours et les espaces de travail devront se reconnecter. Les portées drive sont restreintes et nécessitent la validation de Google."
             },
             "workspaces": {
               "title": "4. Connexion des espaces de travail",

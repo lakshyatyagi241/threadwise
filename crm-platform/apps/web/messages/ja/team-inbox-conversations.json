@@ -281,7 +281,9 @@
         "couldNotUndo": "この変更はもう取り消せません。連絡先が先に進んだか、すでに取り消されています。"
       },
       "heldUntil": "{when} まで保留",
-      "heldWhy": "このマーケティングメッセージは、通知を控える時間帯の終了を待っています。その間に連絡先が配信停止していなければ、終了後に送信されます。"
+      "heldWhy": "このマーケティングメッセージは、通知を控える時間帯の終了を待っています。その間に連絡先が配信停止していなければ、終了後に送信されます。",
+      "templateSent": "テンプレート「{name}」を{channel}で送信しました",
+      "templateSentPlain": "テンプレート「{name}」を送信しました"
     },
     "media": {
       "openImage": "画像 {name} を開く",
@@ -1119,6 +1121,12 @@
       },
       "titleBreached": "{kind}：未達成（期限 {time}）",
       "titleOpen": "{kind}：期限 {time}"
+    },
+    "channelType": {
+      "official": "公式",
+      "unofficial": "非公式",
+      "officialFull": "公式 (WhatsApp Cloud API)",
+      "unofficialFull": "非公式 (QR / Baileys)"
     }
   }
 }

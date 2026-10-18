@@ -91,8 +91,8 @@
         },
         "sheets": {
           "name": "Sheets",
-          "body": "Adicione uma linha a uma planilha, busque uma linha, verifique uma célula ou copie uma linha para um contato.",
-          "usedBy": "Google Sheets, Verificar campo do Google Sheet, Salvar contato do Google Sheet"
+          "usedBy": "Google Sheets, Verificar campo do Google Sheet, Salvar contato do Google Sheet",
+          "body": "Adicione uma linha a uma planilha, procure uma linha, verifique uma célula ou copie uma linha para um contato."
         },
         "docs": {
           "name": "Docs e Drive",
@@ -101,13 +101,13 @@
         },
         "forms": {
           "name": "Forms",
-          "body": "Leia o link público de um formulário para que o fluxo possa enviá-lo ao cliente.",
-          "usedBy": "Etapa Google Form"
+          "usedBy": "Etapa Google Form",
+          "body": "Leia o link público de um formulário para que o fluxo o envie ao cliente, e leia as respostas do formulário para que o fluxo continue quando ele for preenchido."
         },
         "drive_listing": {
           "name": "Lista de arquivos do Drive",
-          "body": "Liste suas planilhas, documentos e formulários por nome no construtor de fluxos, para escolher em vez de colar um link.",
-          "usedBy": "Seletores de arquivos no construtor de fluxos"
+          "body": "Lista suas planilhas, documentos e formulários pelo nome, para que você os escolha na sua conta no construtor de fluxos e nas configurações de agendamento. Necessário para todos os seletores de arquivos.",
+          "usedBy": "Seletores de arquivos no construtor de fluxos e nas configurações de agendamento"
         }
       },
       "lastError": {

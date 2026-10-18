@@ -99,7 +99,8 @@ export class DashExtrasRepository {
           EXISTS (SELECT 1 FROM woocommerce_integrations WHERE org_id = ${orgId} AND status = 'active') AS woo,
           (SELECT count(*) FROM woocommerce_integration_logs WHERE org_id = ${orgId} AND created_at >= ${from}::timestamptz)::int AS woo_events,
           EXISTS (SELECT 1 FROM shopify_integrations WHERE org_id = ${orgId} AND status = 'active') AS shopify,
-          EXISTS (SELECT 1 FROM user_settings WHERE org_id = ${orgId} AND sheets_key_hash IS NOT NULL) AS sheets,
+          EXISTS (SELECT 1 FROM appointment_calendar_connections WHERE org_id = ${orgId} AND status = 'active'
+                  AND scopes LIKE '%/auth/spreadsheets%') AS sheets,
           EXISTS (SELECT 1 FROM wa_catalogs WHERE org_id = ${orgId}) AS meta,
           EXISTS (SELECT 1 FROM hubspot_integrations WHERE org_id = ${orgId} AND status = 'active') AS hubspot,
           EXISTS (SELECT 1 FROM slack_integrations WHERE org_id = ${orgId} AND status = 'active') AS slack,

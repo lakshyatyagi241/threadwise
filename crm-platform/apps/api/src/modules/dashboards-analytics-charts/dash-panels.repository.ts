@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { AnalyticsPanels } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { parseUserAgent, type ParsedAgent } from '../auth';
 import { channelOwnerSql } from '../../realtime';
 import { countryOfPhone } from './platform-rules';
 
@@ -33,6 +34,61 @@ export class DashPanelsRepository {
         sent: n(r.sent_24h),
         online: r.status === 'connected' && r.active === true,
       })),
+    };
+  }
+
+  /**
+   * Login devices: `auth_sessions` of the workspace started in the window, bucketed by the browser, operating system and kind
+   * parsed from the user agent. The raw agent string is grouped and parsed here and never returned; the IP is not read at all.
+   */
+  async loginDevices(
+    tx: Tx,
+    orgId: number,
+    from: Date,
+    to: Date,
+  ): Promise<AnalyticsPanels['loginDevices']> {
+    const live = (
+      await tx.execute(sql`
+        SELECT count(*)::int AS n FROM auth_sessions
+        WHERE org_id = ${orgId} AND revoked_at IS NULL AND expires_at > now()`)
+    ).rows[0] as Raw;
+    const res = await tx.execute(sql`
+      SELECT user_agent, count(*)::int AS total,
+             count(*) FILTER (WHERE revoked_at IS NULL AND expires_at > now())::int AS active
+      FROM auth_sessions
+      WHERE org_id = ${orgId}
+        AND created_at >= ${from.toISOString()}::timestamptz AND created_at < ${to.toISOString()}::timestamptz
+      GROUP BY user_agent`);
+    type Bucket = { count: number; active: number };
+    const browser = new Map<string, Bucket>();
+    const os = new Map<string, Bucket>();
+    const kind = new Map<string, Bucket>();
+    let total = 0;
+    const add = (m: Map<string, Bucket>, key: string, count: number, active: number) => {
+      const b = m.get(key) ?? { count: 0, active: 0 };
+      b.count += count;
+      b.active += active;
+      m.set(key, b);
+    };
+    for (const r of res.rows as Raw[]) {
+      const p = parseUserAgent(s(r.user_agent));
+      const count = n(r.total);
+      const active = n(r.active);
+      total += count;
+      add(browser, p.browser, count, active);
+      add(os, p.os, count, active);
+      add(kind, p.kind, count, active);
+    }
+    const rows = <K extends string>(m: Map<string, Bucket>) =>
+      [...m.entries()]
+        .map(([key, b]) => ({ key: key as K, ...b }))
+        .sort((a, b) => b.count - a.count || a.key.localeCompare(b.key));
+    return {
+      active: n(live.n),
+      total,
+      byBrowser: rows<ParsedAgent['browser']>(browser),
+      byOs: rows<ParsedAgent['os']>(os),
+      byKind: rows<ParsedAgent['kind']>(kind),
     };
   }
 

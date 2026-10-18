@@ -13,7 +13,6 @@ const PATH_SECRETS = [
   /(\/(?:telegram|line|viber|wechat)\/inbound\/)[^/?#\s]+/i,
   /(\/(?:shopify|woocommerce)\/webhook\/)[^/?#\s]+/i,
   /(\/public\/lead-hooks\/)[^/?#\s]+/i,
-  /(\/api\/v1\/sheets-addon\/webhook\/)[^/?#\s]+/i,
 ];
 
 export function maskSecretUrl(url: string): string;

@@ -292,8 +292,8 @@ export async function runMeet(ctx: NodeContext, google: GoogleWorkspacePort): Pr
 export const GOOGLE_FORM_HANDLER = 'GoogleForm';
 
 /**
- * Google Form node (TW-FLR-046): sends the form's link and parks the run until the form's webhook reports a submission
- * (`FlowEngine.deliverExternal`, handled by `onGoogleFormReply`). The wait lasts `expiresInSec` (default a day) and then leaves by
+ * Google Form node (TW-FLR-046): sends the form's link and parks the run until the form's submission is read through the
+ * connected Google account (`GoogleFormPollService` hands it to `FlowEngine.deliverExternal`, handled by `onGoogleFormReply`). The wait lasts `expiresInSec` (default a day) and then leaves by
  * the `timeout` port (2); Reference's run simply stopped answering. No form or no link: the apology, then the step fails.
  */
 export async function runForm(ctx: NodeContext, google: GoogleWorkspacePort): Promise<NodeResult> {

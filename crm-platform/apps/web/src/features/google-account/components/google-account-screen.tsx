@@ -307,7 +307,7 @@ function Body({ account, canManage }: { account: GoogleAccountResponse; canManag
                 <p className="text-xs text-muted-foreground">
                   {t('usedBy.title')}: {t(`permissions.${c.key}.usedBy`)}
                 </p>
-                {c.restricted && !c.granted && (
+                {c.restricted && !c.granted && c.key !== 'drive_listing' && (
                   <p className="mt-1 text-xs text-warning">{t('permissions.restrictedNote')}</p>
                 )}
               </div>

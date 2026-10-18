@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. कंसेंट स्क्रीन",
-              "body": "वे स्कोप जोड़ें जो प्रोडक्ट माँगता है (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), फिर ऐप प्रकाशित करें: Testing में Google हर अनुमति 7 दिन बाद समाप्त कर देता है और वर्कस्पेस को दोबारा कनेक्ट करना होगा। drive स्कोप प्रतिबंधित हैं और उन्हें Google की समीक्षा चाहिए।"
+              "body": "वे स्कोप जोड़ें जो प्रोडक्ट माँगता है (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), फिर ऐप प्रकाशित करें: Testing में Google हर अनुमति 7 दिन बाद समाप्त कर देता है और वर्कस्पेस को दोबारा कनेक्ट करना होगा। drive स्कोप प्रतिबंधित हैं और उन्हें Google की समीक्षा चाहिए।"
             },
             "workspaces": {
               "title": "4. वर्कस्पेस कनेक्ट करें",

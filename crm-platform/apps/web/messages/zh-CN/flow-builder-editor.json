@@ -1659,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— 选择工作表 —",
-              "empty": "未找到电子表格 — 请在下方粘贴网址/ID",
               "loading": "正在加载工作表…",
-              "notConnected": "此工作区未连接 Google，无法列出您的工作表。请改为粘贴工作表 ID 或链接。",
-              "idPlaceholder": "工作表 ID",
-              "saved": "工作表 {id}…（未加载）"
+              "saved": "工作表 {id}…（未加载）",
+              "empty": "在已连接的 Google 账号中未找到电子表格",
+              "notConnected": "此工作区尚未连接 Google，因此无法列出您的工作表。请连接 Google 后再选择。"
             },
             "docs": {
               "pick": "— 选择模板文档 —",
               "empty": "未找到文档",
               "loading": "正在加载文档…",
-              "notConnected": "此工作区未连接 Google，无法列出您的文档。请改为粘贴文档 ID 或链接。",
-              "idPlaceholder": "文档 ID",
-              "saved": "文档 {id}…（未加载）"
+              "saved": "文档 {id}…（未加载）",
+              "notConnected": "此工作区尚未连接 Google，因此无法列出您的 Docs 文档。请连接 Google 后再选择。"
             },
             "forms": {
               "pick": "— 选择表单 —",
               "empty": "未找到表单",
               "loading": "正在加载表单…",
-              "notConnected": "此工作区未连接 Google，无法列出您的表单。请改为粘贴表单 ID 或链接。",
-              "idPlaceholder": "表单 ID",
-              "saved": "表单 {id}…（未加载）"
+              "saved": "表单 {id}…（未加载）",
+              "notConnected": "此工作区尚未连接 Google，因此无法列出您的 Forms 表单。请连接 Google 后再选择。"
             }
           },
           "sheetsIntro": "向 Google 表格追加一行（写入模式），或按关键列查找一行（读取模式）。使用工作区在 <link>/google-account</link> 连接的 Google 账户。",
@@ -1701,8 +1698,6 @@
           "addColumn": "添加列",
           "matchByHeader": "按表头名称匹配列",
           "matchByHeaderHint": "将每个值写入表头相同的工作表列中（顺序不限）。关闭则按位置从左到右追加 — 默认方式。",
-          "pasteLabel": "…或粘贴电子表格网址 / ID",
-          "pasteHint": "即使选择器为空也可使用 — 粘贴表格链接，我们会提取其 ID。",
           "docsIntro": "复制模板文档，填写 <mono>{placeholders}</mono>，设为任何拥有链接的人可查看，并将网址发送给客户。在模板中需要填入值的位置放置 <mono>{key}</mono>。",
           "templateDocument": "模板文档",
           "newCopyTitle": "新副本标题",
@@ -1717,7 +1712,6 @@
           "messageTemplateHint": "发送给客户的机器人气泡。<mono>{token}</mono> 会替换为分享链接。",
           "messageTemplatePlaceholder": "您的文档：\n'{{'doc_url'}}'",
           "saveUrl": "将网址保存到变量",
-          "formIntro": "通过 WhatsApp 发送表单网址，暂停流程，客户填写后通过<b>已提交</b>出口恢复执行。回答将成为流程变量。",
           "googleForm": "Google 表单",
           "bodyBubble": "正文气泡（显示在链接上方）",
           "bodyBubblePlaceholder": "请填写以下简短表单：",
@@ -1725,12 +1719,6 @@
           "saveResponsesHint": "各项回答也会以 <mono>{token}</mono> 形式保存。",
           "expireAfter": "超时时间（秒）",
           "expireAfterHint": "等待提交的最长时间，超时后结束。86400 = 24 小时。",
-          "setupTitle": "一次性设置 — 请将此脚本粘贴到表单的脚本编辑器中",
-          "setupOpen": "打开您的表单 → <mono>⋮ 菜单</mono> → <mono>脚本编辑器</mono>",
-          "setupDownload": "<link>下载脚本 (.gs)</link> 并粘贴",
-          "setupTrigger": "添加触发器：<mono>onFormSubmit</mono> · 来自表单 · 提交表单时",
-          "setupWarning": "若没有此脚本，表单仍会在 Google 表单中记录回答，但流程不会恢复执行。",
-          "noListing": "由于未在 Google 账户页面授予 Drive 文件列表权限，无法列出你的文件。请改为粘贴链接或 ID。",
           "connection": {
             "open": "打开 Google 账户",
             "permission": {
@@ -1743,7 +1731,9 @@
             "disconnected": "尚未连接 Google 账号，因此流程运行时此步骤会失败。请先连接 Google。",
             "needsReconnect": "Google 不再接受已连接的账号，因此流程运行时此步骤会失败。请先重新连接 Google。",
             "missing": "已连接的 Google 账号未获得 {permission} 权限，因此流程运行时此步骤会失败。"
-          }
+          },
+          "formIntro": "通过 WhatsApp 发送表单链接，暂停流程，并在客户填写完毕后通过 <b>submitted</b> 端口继续。系统会通过您已连接的 Google 账号读取表单答案，无需向表单粘贴任何内容。答案将成为流程变量。",
+          "noListing": "由于未在 Google 账号页面授予“Drive 文件列表”权限，无法列出您的文件。请在该页面添加该权限以选择文件。"
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",

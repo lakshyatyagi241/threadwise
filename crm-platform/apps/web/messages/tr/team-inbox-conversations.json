@@ -281,7 +281,9 @@
         "couldNotUndo": "Bu değişiklik artık geri alınamaz: kişi ilerledi veya değişiklik zaten geri alındı."
       },
       "heldUntil": "{when} tarihine kadar bekletiliyor",
-      "heldWhy": "Bu pazarlama mesajı sessiz saatlerinizin bitmesini bekliyor. Bu arada kişi abonelikten çıkmadıysa o zaman gönderilecek."
+      "heldWhy": "Bu pazarlama mesajı sessiz saatlerinizin bitmesini bekliyor. Bu arada kişi abonelikten çıkmadıysa o zaman gönderilecek.",
+      "templateSent": "“{name}” şablonu {channel} üzerinden gönderildi",
+      "templateSentPlain": "“{name}” şablonu gönderildi"
     },
     "media": {
       "openImage": "{name} görselini aç",
@@ -1119,6 +1121,12 @@
       },
       "titleBreached": "{kind}: kaçırıldı (son zaman {time})",
       "titleOpen": "{kind}: son zaman {time}"
+    },
+    "channelType": {
+      "official": "Resmi",
+      "unofficial": "Resmi olmayan",
+      "officialFull": "Resmi (WhatsApp Cloud API)",
+      "unofficialFull": "Resmi olmayan (QR / Baileys)"
     }
   }
 }

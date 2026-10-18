@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. شاشة الموافقة",
-              "body": "أضف النطاقات التي يطلبها المنتج (calendar.events وcalendar.freebusy وcalendar.calendarlist.readonly وspreadsheets وdocuments وdrive وforms.body.readonly وdrive.metadata.readonly)، ثم انشر التطبيق: في وضع الاختبار تنهي Google كل منح بعد 7 أيام وستحتاج مساحات العمل إلى إعادة الاتصال. نطاقات drive مقيّدة وتحتاج إلى مراجعة Google."
+              "body": "أضف النطاقات التي يطلبها المنتج (calendar.events وcalendar.freebusy وcalendar.calendarlist.readonly وspreadsheets وdocuments وdrive وforms.body.readonly وforms.responses.readonly وdrive.metadata.readonly)، ثم انشر التطبيق: في وضع الاختبار تنهي Google كل منح بعد 7 أيام وستحتاج مساحات العمل إلى إعادة الاتصال. نطاقات drive مقيّدة وتحتاج إلى مراجعة Google."
             },
             "workspaces": {
               "title": "4. تربط مساحات العمل",

@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "接続済み",
           "shopify": "接続済み",
-          "google_sheets": "APIキー発行済み",
-          "meta_catalog": "カタログ連携済み"
+          "meta_catalog": "カタログ連携済み",
+          "google_sheets": "Google アカウント連携済み"
         },
         "notConnected": "未接続",
         "connect": "接続",
@@ -405,6 +405,43 @@
           "sent": "送信 → {peer}",
           "received": "{peer}から受信",
           "empty": "この期間に最近のアクティビティはありません。"
+        },
+        "loginDevices": {
+          "title": "ログインデバイス",
+          "subtitle": "この期間のワークスペースへのサインインを、ブラウザ、システム、種類別に表示",
+          "active": "現在アクティブ {n} 件",
+          "total": "{n, plural, other {#件のサインイン}}",
+          "empty": "この期間のサインインはありません。",
+          "activeLegend": "現在アクティブ",
+          "endedLegend": "サインアウト済みまたは期限切れ",
+          "row": "サインイン {count} 件、現在アクティブ {active} 件",
+          "group": {
+            "browser": "ブラウザ",
+            "os": "システム",
+            "kind": "種類"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "その他のブラウザ"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "その他のシステム"
+          },
+          "kind": {
+            "desktop": "デスクトップ",
+            "mobile": "モバイル",
+            "unknown": "不明"
+          }
         }
       }
     },

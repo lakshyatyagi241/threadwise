@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Connesso",
           "shopify": "Connesso",
-          "google_sheets": "Chiave API emessa",
-          "meta_catalog": "Catalogo collegato"
+          "meta_catalog": "Catalogo collegato",
+          "google_sheets": "Account Google collegato"
         },
         "notConnected": "non connesso",
         "connect": "Connetti",
@@ -405,6 +405,43 @@
           "sent": "Inviato → {peer}",
           "received": "Ricevuto da {peer}",
           "empty": "Nessuna attività recente in questo intervallo."
+        },
+        "loginDevices": {
+          "title": "Dispositivi di accesso",
+          "subtitle": "Accessi allo spazio di lavoro in questo periodo, per browser, sistema e tipo",
+          "active": "{n} attive ora",
+          "total": "{n, plural, one {# accesso} other {# accessi}}",
+          "empty": "Nessun accesso in questo periodo.",
+          "activeLegend": "Attive ora",
+          "endedLegend": "Disconnesse o scadute",
+          "row": "{count} accessi, {active} attive ora",
+          "group": {
+            "browser": "Browser",
+            "os": "Sistema",
+            "kind": "Tipo"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "Altro browser"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "Altro sistema"
+          },
+          "kind": {
+            "desktop": "Desktop",
+            "mobile": "Mobile",
+            "unknown": "Sconosciuto"
+          }
         }
       }
     },

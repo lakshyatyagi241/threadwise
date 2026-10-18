@@ -5,17 +5,14 @@
 import {
   boolean,
   foreignKey,
-  index,
   jsonb,
   pgTable,
   primaryKey,
   text,
   timestamp,
   unique,
-  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { sql } from 'drizzle-orm';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
 import { organizations, users } from '../foundation';
 
@@ -38,10 +35,6 @@ export const userSettings = pgTable(
     inboxLastSeenAt: timestamp('inbox_last_seen_at', { withTimezone: true }),
     quickAccess: jsonb('quick_access'),
     hasSeenIntro: boolean('has_seen_intro').notNull().default(false),
-    sheetsKeyHash: text('sheets_key_hash'),
-    sheetsKeySuffix: text('sheets_key_suffix'),
-    sheetsKeyCreatedAt: timestamp('sheets_key_created_at', { withTimezone: true }),
-    sheetsKeyLastUsedAt: timestamp('sheets_key_last_used_at', { withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -60,11 +53,6 @@ export const userSettings = pgTable(
       columns: [t.orgId, t.userId],
       foreignColumns: [users.orgId, users.id],
     }).onDelete('cascade'),
-    index('idx_user_settings_sheets_key_hash').on(t.orgId, t.sheetsKeyHash),
-    // The Sheets add-on finds a key before it knows the tenant (EXT, 20261108090000_ext_sheets_addon.sql).
-    uniqueIndex('uq_user_settings_sheets_key_hash')
-      .on(t.sheetsKeyHash)
-      .where(sql`${t.sheetsKeyHash} IS NOT NULL`),
   ],
 );
 

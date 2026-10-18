@@ -91,8 +91,8 @@
         },
         "sheets": {
           "name": "Sheets",
-          "body": "向表格添加一行、查找一行、检查某个单元格，或将一行复制到联系人。",
-          "usedBy": "Google Sheets、检查 Google Sheet 字段、从 Google Sheet 保存联系人"
+          "usedBy": "Google Sheets、检查 Google Sheet 字段、从 Google Sheet 保存联系人",
+          "body": "向工作表添加一行、查找某一行、检查某个单元格，或将一行复制为联系人。"
         },
         "docs": {
           "name": "Docs 和 Drive",
@@ -101,13 +101,13 @@
         },
         "forms": {
           "name": "Forms",
-          "body": "读取表单的公开链接，以便流程将其发送给客户。",
-          "usedBy": "Google Form 步骤"
+          "usedBy": "Google Form 步骤",
+          "body": "读取表单的公开链接，以便流程将其发送给客户；并读取表单答案，以便客户填写后流程继续。"
         },
         "drive_listing": {
           "name": "Drive 文件列表",
-          "body": "在流程构建器中按名称列出你的表格、文档和表单，这样你可以直接选择，而无需粘贴链接。",
-          "usedBy": "流程构建器中的文件选择器"
+          "body": "按名称列出您的工作表、文档和表单，方便您在流程构建器和预约设置中从账号里选择。所有文件选择器都需要此权限。",
+          "usedBy": "流程构建器和预约设置中的文件选择器"
         }
       },
       "lastError": {

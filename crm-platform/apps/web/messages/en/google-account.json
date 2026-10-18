@@ -101,13 +101,13 @@
         },
         "forms": {
           "name": "Forms",
-          "body": "Read a form's public link so the flow can send it to the customer.",
+          "body": "Read a form's public link so the flow can send it to the customer, and read the form's answers so the flow carries on when they fill it.",
           "usedBy": "Google Form step"
         },
         "drive_listing": {
           "name": "Drive file list",
-          "body": "List your sheets, documents and forms by name in the flow builder, so you can pick instead of pasting a link.",
-          "usedBy": "File pickers in the flow builder"
+          "body": "List your sheets, documents and forms by name, so you pick them from your account in the flow builder and the booking settings. Needed for every file picker.",
+          "usedBy": "File pickers in the flow builder and the booking settings"
         }
       },
       "lastError": {

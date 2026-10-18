@@ -187,6 +187,7 @@
       "notFound": "Este espaço de trabalho não existe mais.",
       "reasonRequired": "É necessário um motivo com pelo menos 8 caracteres.",
       "orgSuspended": "O espaço de trabalho está suspenso, então não pode ser acessado.",
+      "noOwner": "Este espaço de trabalho não tem um proprietário ativo para entrar como ele.",
       "validation": "Confira os valores e tente novamente."
     },
     "detail": {

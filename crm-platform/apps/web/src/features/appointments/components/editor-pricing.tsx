@@ -1,10 +1,11 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { useMemo } from 'react';
-import { Alert, Checkbox, Field, Input, Select } from '@crm/ui';
+import { Alert, Checkbox, Field, Select } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
-import { useCalendarConnection, useCalendarOptions } from '../api/hooks';
+import { useCalendarConnection, useCalendarOptions, useSpreadsheetOptions } from '../api/hooks';
 import { DEPOSIT_MODES, type DepositMode } from '../api/schemas';
 import { currencyChoices, draftPrice } from '../lib/editor';
 import { formatMoney, minorToInput } from '../lib/money';
@@ -27,9 +28,23 @@ export function PricingStep() {
   const price = draftPrice(draft);
   const money = (minor: number) => formatMoney(minor, currency, locale);
   const calendarOff = connection.data?.status === 'unavailable';
-  // With an account connected the calendar is chosen from its list; without one it stays a text box (blank = the workspace's calendar).
-  const calendars = useCalendarOptions(connection.data?.status === 'connected');
+  // The calendar and the sheet are chosen from the connected Google account's own lists; nothing is typed in by hand.
+  const connected = connection.data?.status === 'connected';
+  const calendars = useCalendarOptions(connected);
+  const sheets = useSpreadsheetOptions(connected);
   const listed = calendars.data ?? null;
+  const sheetList = sheets.data ?? null;
+  const connectFirst = (
+    <p className="text-xs text-muted-foreground">
+      {tc.rich('connectFirst', {
+        link: (c) => (
+          <Link href="/google-account" className="text-primary underline">
+            {c}
+          </Link>
+        ),
+      })}
+    </p>
+  );
 
   return (
     <div className="space-y-4">
@@ -150,30 +165,33 @@ export function PricingStep() {
                   </option>
                 ))}
               </Select>
-            ) : (
-              <Input
-                id={fid('calendarId')}
-                value={draft.calendarId}
-                disabled={disabled || calendarOff}
-                placeholder={tc('calendarPlaceholder')}
-                dir="ltr"
-                autoComplete="off"
-                onChange={(e) => set('calendarId', e.target.value)}
-                className="font-mono"
-              />
+            ) : connected ? null : (
+              connectFirst
             )}
           </Field>
           <Field label={tc('spreadsheetId')} htmlFor={fid('spreadsheetId')}>
-            <Input
-              id={fid('spreadsheetId')}
-              value={draft.spreadsheetId}
-              disabled={disabled || calendarOff}
-              placeholder={tc('spreadsheetPlaceholder')}
-              dir="ltr"
-              autoComplete="off"
-              onChange={(e) => set('spreadsheetId', e.target.value)}
-              className="font-mono"
-            />
+            {sheetList ? (
+              <Select
+                id={fid('spreadsheetId')}
+                value={draft.spreadsheetId}
+                disabled={disabled || calendarOff}
+                onChange={(e) => set('spreadsheetId', e.target.value)}
+              >
+                <option value="">{tc('spreadsheetNone')}</option>
+                {draft.spreadsheetId && !sheetList.some((f) => f.id === draft.spreadsheetId) && (
+                  <option value={draft.spreadsheetId}>{draft.spreadsheetId}</option>
+                )}
+                {sheetList.map((f) => (
+                  <option key={f.id} value={f.id}>
+                    {f.name}
+                  </option>
+                ))}
+              </Select>
+            ) : sheets.isError ? (
+              <p className="text-xs text-muted-foreground">{tc('spreadsheetNoListing')}</p>
+            ) : connected ? null : (
+              connectFirst
+            )}
           </Field>
           <Checkbox
             id={fid('createMeet')}

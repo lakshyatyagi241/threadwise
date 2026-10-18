@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. Layar persetujuan",
-              "body": "Tambahkan scope yang diminta produk (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), lalu publikasikan aplikasi: dalam mode Testing, Google mengakhiri setiap izin setelah 7 hari dan workspace harus terhubung ulang. Scope drive bersifat terbatas dan memerlukan peninjauan Google."
+              "body": "Tambahkan scope yang diminta produk (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), lalu publikasikan aplikasi: dalam mode Testing, Google mengakhiri setiap izin setelah 7 hari dan workspace harus terhubung ulang. Scope drive bersifat terbatas dan memerlukan peninjauan Google."
             },
             "workspaces": {
               "title": "4. Workspace terhubung",

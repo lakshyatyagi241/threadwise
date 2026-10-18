@@ -187,6 +187,7 @@
       "notFound": "Questo workspace non esiste più.",
       "reasonRequired": "È richiesto un motivo di almeno 8 caratteri.",
       "orgSuspended": "Il workspace è sospeso, quindi non può essere aperto.",
+      "noOwner": "Questo spazio di lavoro non ha un proprietario attivo con cui accedere.",
       "validation": "Verifica i valori e riprova."
     },
     "detail": {

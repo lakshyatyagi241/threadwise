@@ -91,8 +91,8 @@
         },
         "sheets": {
           "name": "Sheets",
-          "body": "시트에 행을 추가하고, 행을 조회하고, 셀을 확인하거나 행을 연락처로 복사합니다.",
-          "usedBy": "Google Sheets, Google Sheet 필드 확인, Google Sheet에서 연락처 저장"
+          "usedBy": "Google Sheets, Google Sheet 필드 확인, Google Sheet에서 연락처 저장",
+          "body": "시트에 행을 추가하거나, 행을 조회하거나, 셀을 확인하거나, 행을 연락처로 복사합니다."
         },
         "docs": {
           "name": "Docs 및 Drive",
@@ -101,13 +101,13 @@
         },
         "forms": {
           "name": "Forms",
-          "body": "폼의 공개 링크를 읽어 플로우가 고객에게 보낼 수 있게 합니다.",
-          "usedBy": "Google Form 단계"
+          "usedBy": "Google Form 단계",
+          "body": "플로우가 고객에게 보낼 수 있도록 양식의 공개 링크를 읽고, 고객이 양식을 작성하면 플로우가 계속되도록 양식의 응답을 읽습니다."
         },
         "drive_listing": {
           "name": "Drive 파일 목록",
-          "body": "플로우 빌더에서 시트, 문서, 폼을 이름으로 나열하여 링크를 붙여 넣는 대신 선택할 수 있게 합니다.",
-          "usedBy": "플로우 빌더의 파일 선택기"
+          "body": "시트, 문서, 양식을 이름으로 나열하여 플로우 빌더와 예약 설정에서 계정의 파일을 선택할 수 있게 합니다. 모든 파일 선택기에 필요합니다.",
+          "usedBy": "플로우 빌더 및 예약 설정의 파일 선택기"
         }
       },
       "lastError": {

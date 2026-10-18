@@ -25,6 +25,7 @@ export const KEYS = {
   settings: ['appointments', 'settings'] as const,
   calendar: ['appointments', 'calendar'] as const,
   calendars: ['appointments', 'calendar', 'list'] as const,
+  spreadsheets: ['appointments', 'calendar', 'spreadsheets'] as const,
   overview: ['appointments', 'calendar', 'overview'] as const,
   outlookCalendars: ['appointments', 'calendar', 'outlook', 'list'] as const,
   icsFeeds: ['appointments', 'calendar', 'ics-feeds'] as const,
@@ -187,6 +188,18 @@ export function useCalendarOptions(enabled: boolean) {
   return useQuery({
     queryKey: KEYS.calendars,
     queryFn: ({ signal }) => appointmentsApi.calendars(signal),
+    enabled,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
+    staleTime: 60_000,
+  });
+}
+
+/** The spreadsheets of the connected account by name (only asked for while one is connected). */
+export function useSpreadsheetOptions(enabled: boolean) {
+  return useQuery({
+    queryKey: KEYS.spreadsheets,
+    queryFn: ({ signal }) => appointmentsApi.spreadsheets(signal),
     enabled,
     retry: transientRetry,
     retryDelay: transientRetryDelay,

@@ -91,8 +91,8 @@
         },
         "sheets": {
           "name": "Sheets",
-          "body": "Bir sayfaya satır ekleyin, satır arayın, bir hücreyi kontrol edin veya bir satırı kişiye kopyalayın.",
-          "usedBy": "Google Sheets, Google Sheet alanını kontrol et, Google Sheet'ten kişi kaydet"
+          "usedBy": "Google Sheets, Google Sheet alanını kontrol et, Google Sheet'ten kişi kaydet",
+          "body": "Sayfaya satır ekleyin, satır arayın, bir hücreyi kontrol edin veya bir satırı kişiye kopyalayın."
         },
         "docs": {
           "name": "Docs ve Drive",
@@ -101,13 +101,13 @@
         },
         "forms": {
           "name": "Forms",
-          "body": "Bir formun herkese açık bağlantısını okuyun; böylece akış bunu müşteriye gönderebilir.",
-          "usedBy": "Google Form adımı"
+          "usedBy": "Google Form adımı",
+          "body": "Akışın müşteriye gönderebilmesi için formun herkese açık bağlantısını okuyun ve müşteri doldurduğunda akışın devam etmesi için form yanıtlarını okuyun."
         },
         "drive_listing": {
           "name": "Drive dosya listesi",
-          "body": "Akış oluşturucuda e-tablolarınızı, belgelerinizi ve formlarınızı adıyla listeleyin; bağlantı yapıştırmak yerine seçebilirsiniz.",
-          "usedBy": "Akış oluşturucudaki dosya seçiciler"
+          "body": "Sayfalarınızı, belgelerinizi ve formlarınızı ada göre listeler; böylece akış oluşturucuda ve rezervasyon ayarlarında hesabınızdan seçim yapabilirsiniz. Tüm dosya seçiciler için gereklidir.",
+          "usedBy": "Akış oluşturucudaki ve rezervasyon ayarlarındaki dosya seçiciler"
         }
       },
       "lastError": {

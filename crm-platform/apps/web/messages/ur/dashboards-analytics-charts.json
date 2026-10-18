@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "منسلک",
           "shopify": "منسلک",
-          "google_sheets": "API کی جاری ہو گئی",
-          "meta_catalog": "کیٹلاگ منسلک ہو گیا"
+          "meta_catalog": "کیٹلاگ منسلک ہو گیا",
+          "google_sheets": "Google اکاؤنٹ منسلک ہو گیا"
         },
         "notConnected": "منسلک نہیں",
         "connect": "منسلک کریں",
@@ -405,6 +405,43 @@
           "sent": "{peer} کو بھیجا گیا",
           "received": "{peer} سے موصول",
           "empty": "اس مدت میں کوئی حالیہ سرگرمی نہیں۔"
+        },
+        "loginDevices": {
+          "title": "لاگ اِن ڈیوائسز",
+          "subtitle": "اس مدت میں ورک اسپیس کے سائن اِن، براؤزر، سسٹم اور قسم کے لحاظ سے",
+          "active": "{n} اب فعال",
+          "total": "{n, plural, one {# سائن اِن} other {# سائن اِن}}",
+          "empty": "اس مدت میں کوئی سائن اِن نہیں۔",
+          "activeLegend": "اب فعال",
+          "endedLegend": "سائن آؤٹ یا میعاد ختم",
+          "row": "{count} سائن اِن، {active} اب فعال",
+          "group": {
+            "browser": "براؤزر",
+            "os": "سسٹم",
+            "kind": "قسم"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "دوسرا براؤزر"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "دوسرا سسٹم"
+          },
+          "kind": {
+            "desktop": "ڈیسک ٹاپ",
+            "mobile": "موبائل",
+            "unknown": "نامعلوم"
+          }
         }
       }
     },

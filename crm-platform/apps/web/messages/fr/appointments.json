@@ -566,11 +566,12 @@
         "hint": "Les réservations fonctionnent sans cela. Connectez Google Calendar dans Rendez-vous, Paramètres pour synchroniser les disponibilités et ajouter des liens Meet.",
         "unavailable": "Google Calendar n’est pas encore configuré pour cette plateforme. Ces paramètres sont conservés avec le type de réservation pour le moment où il le sera.",
         "calendarId": "Calendrier",
-        "calendarPlaceholder": "principal",
         "spreadsheetId": "Ajout à une feuille (facultatif)",
-        "spreadsheetPlaceholder": "ID de la feuille de calcul",
         "createMeet": "Créer un lien Google Meet pour chaque réservation",
-        "calendarDefault": "Le calendrier de l’espace de travail"
+        "calendarDefault": "Le calendrier de l’espace de travail",
+        "connectFirst": "Connectez votre <link>compte Google</link> pour choisir dans sa liste.",
+        "spreadsheetNone": "Aucune feuille",
+        "spreadsheetNoListing": "Vos feuilles ne peuvent pas être listées, car l'autorisation « liste des fichiers Drive » n'a pas été accordée. Ajoutez-la sur la page du compte Google."
       },
       "messages": {
         "title": "Messages du cycle de vie",

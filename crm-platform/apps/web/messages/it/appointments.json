@@ -566,11 +566,12 @@
         "hint": "Le prenotazioni funzionano anche senza. Connetti Google Calendar in Appuntamenti, Impostazioni per sincronizzare gli orari liberi/occupati e aggiungere link Meet.",
         "unavailable": "Google Calendar non è ancora configurato per questa piattaforma. Queste impostazioni vengono conservate con il tipo di prenotazione per quando lo sarà.",
         "calendarId": "Calendario",
-        "calendarPlaceholder": "principale",
         "spreadsheetId": "Aggiunta a foglio (facoltativo)",
-        "spreadsheetPlaceholder": "ID del foglio di calcolo",
         "createMeet": "Crea un link Google Meet per ogni prenotazione",
-        "calendarDefault": "Il calendario del workspace"
+        "calendarDefault": "Il calendario del workspace",
+        "connectFirst": "Collega il tuo <link>account Google</link> per scegliere dal suo elenco.",
+        "spreadsheetNone": "Nessun foglio",
+        "spreadsheetNoListing": "Non è possibile elencare i tuoi fogli perché non è stato concesso il permesso per l'elenco dei file di Drive. Aggiungilo nella pagina dell'account Google."
       },
       "messages": {
         "title": "Messaggi del ciclo di vita",

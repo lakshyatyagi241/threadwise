@@ -71,13 +71,6 @@ export function formatPrice(
   return `${currency ?? ''} ${amount}`.trim();
 }
 
-/** Pulls the id out of a pasted Google URL (`/d/<id>/edit`); a bare id is kept as typed. */
-export function extractGoogleId(input: string): string {
-  const v = input.trim();
-  const m = v.match(/\/d\/([a-zA-Z0-9_-]{20,})/);
-  return m ? m[1]! : v;
-}
-
 /**
  * Options for a dropdown backed by reference data. A saved id that is no longer in the list stays selectable (labelled)
  * so opening a node never silently drops its value.
@@ -154,7 +147,3 @@ export const agentOptionLabel = (
   const label = name || t('agentFallback', { id: id.slice(0, 8) });
   return provider && model ? t('agentWithModel', { name: label, provider, model }) : label;
 };
-
-/** Where the Google Form node's Apps Script downloads from (same origin, the session cookie authorises it). */
-export const appsScriptHref = (formId: string): string =>
-  `/api/v2/flows/builder-context/google/forms/${encodeURIComponent(formId)}/apps-script`;

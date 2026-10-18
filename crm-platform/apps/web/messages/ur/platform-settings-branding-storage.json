@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. رضامندی کی اسکرین",
-              "body": "پروڈکٹ جو scopes مانگتی ہے وہ شامل کریں (calendar.events، calendar.freebusy، calendar.calendarlist.readonly، spreadsheets، documents، drive، forms.body.readonly، drive.metadata.readonly)، پھر ایپ شائع کریں: Testing میں Google ہر گرانٹ 7 دن بعد ختم کر دیتا ہے اور ورک اسپیسز کو دوبارہ منسلک ہونا پڑے گا۔ drive scopes محدود ہیں اور ان کے لیے Google کا جائزہ درکار ہے۔"
+              "body": "پروڈکٹ جو scopes مانگتی ہے وہ شامل کریں (calendar.events، calendar.freebusy، calendar.calendarlist.readonly، spreadsheets، documents، drive، forms.body.readonly، forms.responses.readonly، drive.metadata.readonly)، پھر ایپ شائع کریں: Testing میں Google ہر گرانٹ 7 دن بعد ختم کر دیتا ہے اور ورک اسپیسز کو دوبارہ منسلک ہونا پڑے گا۔ drive scopes محدود ہیں اور ان کے لیے Google کا جائزہ درکار ہے۔"
             },
             "workspaces": {
               "title": "4. ورک اسپیسز منسلک کریں",

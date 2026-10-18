@@ -11,7 +11,7 @@ choosing which **capabilities** it may be used for; the platform operator suppli
 | `calendar`      | `calendar.events`, `calendar.freebusy`, `calendar.calendarlist.readonly` | no                   | booking calendar, Book appointment, Google Meet step             |
 | `sheets`        | `spreadsheets`                                                           | no                   | Google Sheets, Check Google Sheet field, Save contact from Sheet |
 | `docs`          | `documents`, `drive`                                                     | yes (`drive`)        | Google Docs step                                                 |
-| `forms`         | `forms.body.readonly`                                                    | no                   | Google Form step                                                 |
+| `forms`         | `forms.body.readonly`, `forms.responses.readonly`                        | no                   | Google Form step                                                 |
 | `drive_listing` | `drive.metadata.readonly`                                                | yes                  | the sheet, document and form pickers of the flow builder         |
 
 A capability is **granted** only when the grant covers all of its scopes (full `drive` also covers the file list). The tables live in `packages/contracts/src/google-account/capabilities.ts`.
@@ -64,14 +64,14 @@ No new table. The grant is `appointment_calendar_connections` (one row per works
 `GOOGLE_WORKSPACE` (`infra/providers/flow-runtime-engine/google-workspace.port.ts`) is bound to `HttpGoogleWorkspace` over the workspace's grant by `GoogleAccountModule`. Each call names the capability it needs;
 a grant that lacks it fails before any request is made.
 
-| Node                                                 | Calls                                                                                                       | Capability      |
-| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | --------------- |
-| Google Sheets, write                                 | `values.append` (`USER_ENTERED`, `INSERT_ROWS`), header read when "match by header" is on                   | `sheets`        |
-| Google Sheets, read; Check sheet field; Save contact | `values.get` of the tab (`A:ZZ`)                                                                            | `sheets`        |
-| Google Docs                                          | Drive `files.copy`, Docs `batchUpdate` (`{{key}}` and `{key}`), Drive `permissions.create` (anyone, reader) | `docs`          |
-| Google Form                                          | Forms `forms.get` (`responderUri`); the submission comes back through the existing Apps Script webhook      | `forms`         |
-| Google Meet                                          | Calendar `events.insert` with `conferenceData`, in the workspace's calendar                                 | `calendar`      |
-| Pickers                                              | Drive `files.list` by mime type                                                                             | `drive_listing` |
+| Node                                                 | Calls                                                                                                              | Capability      |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | --------------- |
+| Google Sheets, write                                 | `values.append` (`USER_ENTERED`, `INSERT_ROWS`), header read when "match by header" is on                          | `sheets`        |
+| Google Sheets, read; Check sheet field; Save contact | `values.get` of the tab (`A:ZZ`)                                                                                   | `sheets`        |
+| Google Docs                                          | Drive `files.copy`, Docs `batchUpdate` (`{{key}}` and `{key}`), Drive `permissions.create` (anyone, reader)        | `docs`          |
+| Google Form                                          | Forms `forms.get` (`responderUri`); the worker polls `forms.responses.list` every 30 s and resumes the waiting run | `forms`         |
+| Google Meet                                          | Calendar `events.insert` with `conferenceData`, in the workspace's calendar                                        | `calendar`      |
+| Pickers                                              | Drive `files.list` by mime type                                                                                    | `drive_listing` |
 
 Behaviour that matters:
 

@@ -38,8 +38,6 @@ function service(answers: Array<[RegExp, Row[]]>, flags: Record<string, unknown>
   const svc = new BuilderContextService(
     db as never,
     settings as never,
-    { get: (k: string) => ({ APP_URL: 'https://api.test/', APP_NAME: 'Acme' })[k] } as never,
-    { tokenFor: (org: number) => `${org}.${'f'.repeat(64)}` } as never,
     GATE_ON,
   );
   return { svc, seen };
@@ -313,15 +311,5 @@ describe('BuilderContextService.commerceProducts (TW-FLB-052)', () => {
     const { svc, seen } = service([[/FROM wa_products/, []]]);
     await run(() => svc.commerceProducts({ provider: 'instagram', q: '50%_off', limit: 5 }));
     expect(seen.find((x) => x.includes('FROM wa_products'))).toContain('ILIKE');
-  });
-});
-
-describe('BuilderContextService.googleFormScript (TW-FLB-059)', () => {
-  it("hands out a script bound to THIS workspace's token and the public webhook url", async () => {
-    const { svc } = service([]);
-    const out = await run(async () => svc.googleFormScript('1FAIpQLSc_abc-123'));
-    expect(out.fileName).toBe('acme-form-1FAIpQLSc_abc-123.gs');
-    expect(out.source).toContain(`"5.${'f'.repeat(64)}"`);
-    expect(out.source).toContain('https://api.test/google/form-response');
   });
 });

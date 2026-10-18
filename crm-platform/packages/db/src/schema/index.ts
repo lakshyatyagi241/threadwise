@@ -87,3 +87,4 @@ export * from './lead-scoring';
 export * from './help-agent';
 export * from './channel-email';
 export * from './waboo-migration';
+export * from './persona-profiles';

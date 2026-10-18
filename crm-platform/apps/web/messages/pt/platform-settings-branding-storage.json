@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. Tela de consentimento",
-              "body": "Adicione os escopos que o produto pede (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly) e depois publique o app: em modo de teste, o Google encerra cada autorização após 7 dias e os espaços de trabalho precisarão reconectar. Os escopos do drive são restritos e precisam da análise do Google."
+              "body": "Adicione os escopos que o produto pede (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly) e depois publique o app: em modo de teste, o Google encerra cada autorização após 7 dias e os espaços de trabalho precisarão reconectar. Os escopos do drive são restritos e precisam da análise do Google."
             },
             "workspaces": {
               "title": "4. Espaços de trabalho conectam",

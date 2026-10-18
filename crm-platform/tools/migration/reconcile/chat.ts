@@ -4,6 +4,7 @@ import type { ChatPlan } from '../inbox/plan';
 import { reparsedConversations } from '../load/chatreparse';
 import { appendedConversations } from '../load/inbox';
 import { relinkedConversations } from '../load/chatrelink';
+import { deliveryChangedMessages } from '../load/chatdelivery';
 import { statusChangedConversations } from '../load/chatstatus';
 import { sql, withTenant, type Database, type TenantTx } from '../load/db';
 import { isSecretName, uuidv5 } from '../util';
@@ -320,6 +321,8 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
 
   // ---- 2. every loaded message ------------------------------------------------------------------------------------------------------
   const loaded = [...oracle.messages.values()].filter((m) => m.verdict === 'load');
+  // chat-delivery moved these outbound messages on from `sent` (run_log _chat/chat_delivery)
+  const deliveryMoved = await deliveryChangedMessages(db, client);
   const uuidOf = (key: string): string => uuidv5(`${client}|chathistory|${key}`);
   const convOfThread = new Map<string, Set<number>>();
   const threadOfConv = new Map<number, Set<string>>();
@@ -375,6 +378,9 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
       // after cutover a late receipt may move a migrated outbound message on (sent -> delivered / read / failed); never back to queued
       const statusOk =
         r.status === status ||
+        (deliveryMoved.has(String(r.uuid)) &&
+          m.direction === 'out' &&
+          ['delivered', 'read', 'failed'].includes(r.status)) ||
         (a.allowExtraRows &&
           m.direction === 'out' &&
           ['delivered', 'read', 'failed'].includes(r.status));
