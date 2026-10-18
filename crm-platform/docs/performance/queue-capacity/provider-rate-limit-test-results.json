@@ -1,0 +1,57 @@
+{
+  "commit": "b9dd0f8db302db03d79a2d9c0eb3a7334182f793",
+  "bullmq": "6.3.12",
+  "redis": "7.0.15",
+  "ioredis": "6.0.0",
+  "node": "v22.22.2",
+  "host": {
+    "platform": "linux",
+    "release": "7.0.0-38-generic",
+    "cpus": 22,
+    "cpuModel": "Intel(R) Core(TM) Ultra 7 155H",
+    "memGB": 30.8
+  },
+  "redisConfig": {
+    "appendonly": "no (main scenarios)",
+    "maxmemoryPolicy": "noeviction",
+    "singleInstance": true
+  },
+  "generatedAt": "2026-10-18T14:05:16.654Z",
+  "durationMultiplier": 1,
+  "caveat": "Synthetic handlers on one machine that also hosts producer, workers and Redis. Numbers are relative, queue-layer ceilings, not production capacity.",
+  "reproduce": "node tools/queue-capacity/bench.mjs --scenarios sweep,drain,profiles,isolation,fairness,provider,crash,redis,soak --duration 1 --soak-seconds 150",
+  "scenarios": [
+    {
+      "mode": "no-limiter c=50",
+      "jobs": 2000,
+      "providerCeilingPerSec": 100,
+      "seconds": 3.4,
+      "effectiveJobsPerSec": 127.7,
+      "providerCalls": 8930,
+      "rejected429": 8490,
+      "callAmplification": 4.46,
+      "exhaustedFailed": 1560,
+      "completed": 440,
+      "lost": 0,
+      "drained": true
+    },
+    {
+      "mode": "limiter 90/s c=50",
+      "jobs": 2000,
+      "providerCeilingPerSec": 100,
+      "seconds": 22.1,
+      "effectiveJobsPerSec": 90.6,
+      "providerCalls": 2000,
+      "rejected429": 0,
+      "callAmplification": 1,
+      "exhaustedFailed": 0,
+      "completed": 2000,
+      "lost": 0,
+      "drained": true
+    }
+  ],
+  "ceiling": "mock provider, 100 req/s token bucket",
+  "notRun": [
+    "real Meta / partner ceilings (QCAP-055): no sandbox endpoint measured"
+  ]
+}

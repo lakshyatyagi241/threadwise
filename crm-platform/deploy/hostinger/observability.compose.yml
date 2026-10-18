@@ -77,6 +77,7 @@ services:
     volumes:
       - ../observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ../observability/event-loop.rules.yml:/etc/prometheus/event-loop.rules.yml:ro
+      - ../observability/queue-capacity.rules.yml:/etc/prometheus/queue-capacity.rules.yml:ro
       - promdata:/prometheus
     secrets: [obs_metrics_token]
     depends_on:
