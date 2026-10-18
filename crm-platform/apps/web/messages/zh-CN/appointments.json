@@ -236,7 +236,7 @@
       "declineTitle": "拒绝此请求？",
       "declineMessage": "客户会收到请求被拒绝的通知，该时间将重新空出。",
       "declineConfirm": "拒绝请求",
-      "remindersNote": "提醒遵循预订类型的设置。不会按单条提醒跟踪送达情况。"
+      "remindersNote": "提醒跟随预约类型。可在“预约设置”或预约类型中设置。"
     },
     "source": {
       "chat": "聊天流程",
@@ -407,9 +407,6 @@
         "depositTooHigh": "定金不能超过总额（费用加税）。",
         "cancelFeeInvalid": "请输入金额，例如 25.00。",
         "cancelWindowInvalid": "请输入 0 到 {cancelWindowMax} 之间的整数分钟数。",
-        "reminderInvalid": "请输入开始前 1 到 {reminderMax} 之间的整数分钟数。",
-        "remindersDuplicate": "每条提醒的时间必须不同。",
-        "remindersTooMany": "一个预订类型最多可设置 {reminders} 条提醒。",
         "questionLabelRequired": "请为问题设置标签（最多 {questionLabelMax} 个字符）。",
         "questionsTooMany": "一个预订类型最多可设置 {questions} 个问题。",
         "questionOptionsRequired": "请至少添加一个选项，每行一个。",
@@ -417,7 +414,12 @@
         "overridesInvalid": "请修正日期例外列表中标记的日期。",
         "descriptionTooLong": "描述最多 {descriptionMax} 个字符。",
         "locationTooLong": "地点最多 {locationMax} 个字符。",
-        "server": "服务器未接受此值。请检查后重试。"
+        "server": "服务器未接受此值。请检查后重试。",
+        "reminderInvalid": "请输入整数作为时间，最多 30 天。",
+        "remindersDuplicate": "每条提醒或跟进需要不同的时间。",
+        "remindersTooMany": "每个预约类型最多可设置 {reminders} 条提醒和跟进。",
+        "reminderChannelsNone": "请至少选择一个渠道。",
+        "reminderBodyTooLong": "消息、主题或标签过长。"
       },
       "service": {
         "title": "服务详情",
@@ -597,25 +599,6 @@
           "reschedule": "你好 {name}，你的{type}已改到 {slot}。详情：{manage_link}"
         },
         "templatesNote": "暂时无法选择已审核的 WhatsApp 模板。消息将以上方的纯文本发送。"
-      },
-      "reminders": {
-        "title": "提醒",
-        "hint": "时间不能重复（1440 = 提前 24 小时，180 = 提前 3 小时）。最多 {max} 条。",
-        "add": "添加提醒",
-        "quickAdd": "快速添加",
-        "quick": {
-          "h24": "24 小时",
-          "h3": "3 小时",
-          "h1": "1 小时",
-          "m15": "15 分钟"
-        },
-        "empty": "没有提醒。客户只会收到确认消息。",
-        "offsetOf": "提醒 {n}，开始前的分钟数",
-        "minBefore": "分钟前",
-        "labelPlaceholder": "24 小时",
-        "labelOf": "提醒 {n}，标签",
-        "remove": "移除提醒 {n}",
-        "count": "{count} / {max} 条提醒"
       },
       "questions": {
         "title": "问卷",
@@ -1294,6 +1277,151 @@
         "cancel": "取消预约",
         "reschedule": "改期预约",
         "acknowledge": "接受"
+      }
+    },
+    "reminders": {
+      "title": "提醒和跟进",
+      "hint": "在预约开始前或结束后给联系人发送消息。每一项在开启前都是关闭的。每个预约类型最多 {max} 条。",
+      "quickAdd": "快速添加",
+      "quick": {
+        "h24": "提前 24 小时",
+        "h3": "提前 3 小时",
+        "h1": "提前 1 小时",
+        "m15": "提前 15 分钟",
+        "after2h": "2 小时后",
+        "afterDay": "1 天后"
+      },
+      "add": "添加提醒",
+      "empty": "没有提醒或跟进。联系人只会收到确认消息。",
+      "enabledOf": "发送提醒 {n}",
+      "on": "开",
+      "off": "关",
+      "offsetOf": "提醒 {n}，时间数值",
+      "unitOf": "提醒 {n}，时间单位",
+      "kindOf": "提醒 {n}，之前或之后",
+      "units": {
+        "minutes": "分钟",
+        "hours": "小时",
+        "days": "天"
+      },
+      "kind": {
+        "before": "预约开始前",
+        "after": "预约结束后"
+      },
+      "editMessage": "消息和渠道",
+      "hideMessage": "隐藏",
+      "remove": "删除提醒 {n}",
+      "withTemplate": "WhatsApp 模板",
+      "channelsTitle": "发送渠道",
+      "channelsHint": "使用第一个可送达的渠道，其余作为备用。同一条提醒不会重复发送。",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "邮件"
+      },
+      "moveUp": "将 {channel} 提前",
+      "moveDown": "将 {channel} 延后",
+      "removeChannel": "不使用 {channel}",
+      "messageTitle": "消息",
+      "placeholderMeaning": {
+        "name": "联系人姓名",
+        "type": "预约类型名称",
+        "slot": "日期和时间",
+        "date": "日期",
+        "time": "时间",
+        "location": "地点，线上预约则为加入链接",
+        "join_link": "线上预约的加入链接",
+        "manage_link": "改期或取消预约的链接"
+      },
+      "bodyHintBefore": "留空则使用预约类型的提醒消息或标准文本。",
+      "bodyHintAfter": "留空则使用标准跟进文本。",
+      "subjectTitle": "邮件主题",
+      "subjectPlaceholder": "留空则使用标准主题",
+      "templateTitle": "WhatsApp 模板",
+      "templateNone": "无：自由文本，仅限 24 小时窗口内",
+      "templateUnknown": "已不可用的模板",
+      "templateHint": "联系人最后一次发消息超过 24 小时后，WhatsApp 只能发送已审核的模板。变量按以下顺序填充：1 姓名，2 服务，3 日期，4 时间，5 地点，6 加入链接，7 管理链接。",
+      "labelTitle": "标签（可选）",
+      "labelPlaceholder": "例如：提前一天",
+      "previewTitle": "预览",
+      "previewNote": "使用示例值的示范。实际消息会使用预约自身的信息。",
+      "count": "{count} / {max} 条提醒和跟进",
+      "note": "提醒绝不会在预约开始后发送。如果预约被取消或改期，待发送的消息会停止，并按新时间重新安排。免打扰时段内的消息会保留到时段结束，已退订或在禁止来电名单中的联系人会被跳过。",
+      "sample": {
+        "name": "小李",
+        "type": "咨询",
+        "location": "主街 12 号"
+      },
+      "settingsTitle": "提醒和跟进",
+      "settingsDescription": "为每个预约类型设置在预约前给联系人发消息，并在预约后跟进。开启前一切都是关闭的。",
+      "loading": "正在加载预约类型",
+      "noTypes": "还没有预约类型。创建一个来设置提醒。",
+      "paused": "已暂停",
+      "summaryNone": "未设置",
+      "summary": "已开启 {on} / {total}",
+      "unsaved": "有未保存的更改",
+      "conflict": "此预约类型已在别处被修改。保存前请重新加载以查看最新版本。",
+      "reload": "重新加载",
+      "discard": "放弃更改",
+      "saving": "正在保存",
+      "save": "保存提醒",
+      "saved": "已保存 {name} 的提醒。",
+      "readOnly": "你可以查看这些提醒，但无法更改。",
+      "fixFirst": "请先修正高亮的提醒。",
+      "problems": {
+        "offsetInvalid": "请输入整数作为时间，最多 30 天。",
+        "duplicate": "每条提醒或跟进需要不同的时间。",
+        "channelsNone": "请至少选择一个渠道。",
+        "bodyTooLong": "消息过长。",
+        "subjectTooLong": "主题过长。",
+        "labelTooLong": "标签过长。",
+        "tooMany": "每个预约类型最多 8 条提醒和跟进。"
+      },
+      "noneOn": "此预约类型未开启任何提醒或跟进。",
+      "when": {
+        "before": "{count, plural, other {提前 # 分钟}}",
+        "after": "{count, plural, other {# 分钟后}}"
+      },
+      "sentOn": "已通过 {channel} 发送",
+      "status": {
+        "scheduled": "已安排",
+        "pending": "到期",
+        "sending": "发送中",
+        "held": "等待中",
+        "sent": "已发送",
+        "skipped": "未发送",
+        "failed": "失败",
+        "cancelled": "已取消"
+      },
+      "reasons": {
+        "rule_removed": "提醒在到期前已被删除。",
+        "rule_off": "提醒在发送前已被关闭。",
+        "rescheduled": "预约已改期，因此此提醒已被替换。",
+        "booking_cancelled": "预约已取消。",
+        "booking_declined": "请求被拒绝。",
+        "booking_no_show": "已标记为未到场。",
+        "booking_not_confirmed": "预约未确认。",
+        "started": "预约已经开始。",
+        "expired": "已来不及发送。",
+        "no_contact_point": "联系人没有此渠道的号码或地址。",
+        "no_channel": "没有可送达的渠道。",
+        "no_sender": "此渠道没有已连接的发送方。",
+        "template_required": "超出 24 小时窗口后，WhatsApp 需要已审核的模板。",
+        "template_unavailable": "所选的 WhatsApp 模板无法发送。",
+        "quiet_hours_too_late": "免打扰时段超过了开始时间。",
+        "no_consent": "没有记录的同意。",
+        "opted_out": "联系人已退订。",
+        "do_not_call": "该号码在禁止来电名单中。",
+        "minor": "联系人被标记为未成年人。",
+        "processing_restricted": "向此联系人发消息受到限制。",
+        "plan_limit": "已达到套餐上限。",
+        "quiet_hours": "正在等待免打扰时段结束。",
+        "channel_unavailable": "该渠道当前未连接。",
+        "wallet_empty": "钱包余额为零。",
+        "send_halted": "发送已暂停。",
+        "provider_error": "服务商拒绝了请求。",
+        "interrupted": "已中断且未重试。",
+        "internal_error": "出了点问题。"
       }
     }
   }

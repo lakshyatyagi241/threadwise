@@ -414,16 +414,33 @@ export class BookingTypesService {
           ]);
         }
       }
+      const waIds = await this.repo.resolveWaTemplates(
+        tx,
+        orgId,
+        input.reminders.flatMap((r) => (r.waTemplateId ? [r.waTemplateId] : [])),
+      );
       await this.repo.syncReminders(
         tx,
         orgId,
         typeId,
-        input.reminders.map((r) => ({
-          uuid: r.id,
-          offsetMinutes: r.offsetMinutes,
-          label: r.label ?? null,
-          isActive: r.isActive,
-        })),
+        input.reminders.map((r, i) => {
+          if (r.waTemplateId && !waIds.has(r.waTemplateId)) {
+            throw AppError.validation('That WhatsApp template does not exist in this workspace.', [
+              { path: `reminders.${i}.waTemplateId`, message: r.waTemplateId },
+            ]);
+          }
+          return {
+            uuid: r.id,
+            offsetMinutes: r.offsetMinutes,
+            label: r.label && r.label.trim() !== '' ? r.label : null,
+            isActive: r.isActive,
+            kind: r.kind,
+            channels: r.channels,
+            subject: r.subject && r.subject.trim() !== '' ? r.subject : null,
+            body: r.body && r.body.trim() !== '' ? r.body : null,
+            waTemplateId: r.waTemplateId ? waIds.get(r.waTemplateId)! : null,
+          };
+        }),
       );
       touched.push('reminders');
     }

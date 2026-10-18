@@ -21,6 +21,12 @@ import {
   type Override,
   type WeeklyHours,
 } from './availability';
+import {
+  remindersFromType,
+  remindersToInput,
+  validateReminders,
+  type ReminderDraft,
+} from './reminder-rules';
 import { minorToInput, parseMajor, parsePercent, priceBreakdown } from './money';
 import { isValidZone } from './zone';
 
@@ -46,7 +52,7 @@ export const LIMITS = {
   maxPerDayMax: 500,
   capacityMax: 500,
   reminders: 8,
-  reminderMax: 525_600,
+  reminderMax: 43_200,
   questions: 20,
   questionLabelMax: 191,
   optionMax: 20,
@@ -66,13 +72,6 @@ export const COLORS = [
   '#64748B',
 ] as const;
 export const DEFAULT_COLOR = COLORS[0];
-
-export interface ReminderDraft {
-  id: string;
-  /** Minutes before the start, as typed. */
-  offset: string;
-  label: string;
-}
 
 export interface QuestionDraft {
   id: string;
@@ -229,11 +228,7 @@ export function typeToDraft(t: BookingType): BookingTypeDraft {
     week: weekFromRules(t.availability),
     overrides: overridesFromWire(t.overrides),
     templates,
-    reminders: t.reminders.map((r) => ({
-      id: newId(),
-      offset: String(r.offsetMinutes),
-      label: r.label ?? '',
-    })),
+    reminders: remindersFromType(t.reminders),
     questions: t.questions.map((q) => ({
       id: newId(),
       ...(q.id ? { serverId: q.id } : {}),
@@ -268,6 +263,8 @@ export type FormProblem =
   | 'reminderInvalid'
   | 'remindersDuplicate'
   | 'remindersTooMany'
+  | 'reminderChannelsNone'
+  | 'reminderBodyTooLong'
   | 'questionLabelRequired'
   | 'questionsTooMany'
   | 'questionOptionsRequired'
@@ -276,6 +273,18 @@ export type FormProblem =
   | 'descriptionTooLong'
   | 'locationTooLong';
 
+/** The editor's problem code of each reminder problem (the codes the messages already name). */
+const REMINDER_PROBLEM = {
+  offsetInvalid: 'reminderInvalid',
+  duplicate: 'remindersDuplicate',
+  channelsNone: 'reminderChannelsNone',
+  bodyTooLong: 'reminderBodyTooLong',
+  subjectTooLong: 'reminderBodyTooLong',
+  labelTooLong: 'reminderBodyTooLong',
+  tooMany: 'remindersTooMany',
+} as const;
+
+export type { ReminderDraft };
 export type ProblemMap = Partial<Record<string, FormProblem>>;
 
 /** The wizard step each field belongs to, so a failed save can jump to the first step with a problem. */
@@ -341,17 +350,10 @@ export function validateDraft(d: BookingTypeDraft): ProblemMap {
   const win = d.cancelWindow.trim() === '' ? 0 : int(d.cancelWindow);
   if (win === null || win > LIMITS.cancelWindowMax) p.cancelWindow = 'cancelWindowInvalid';
 
-  // reminders: Reference keeps up to 8 distinct, positive offsets and drops the rest
-  const seen = new Set<number>();
-  for (const r of d.reminders) {
-    if (r.offset.trim() === '') continue;
-    const v = int(r.offset);
-    if (v === null || v < 1 || v > LIMITS.reminderMax) p[`reminder:${r.id}`] = 'reminderInvalid';
-    else if (seen.has(v)) p[`reminder:${r.id}`] = 'remindersDuplicate';
-    else seen.add(v);
+  // reminders and follow-ups (BL-283): up to 8, distinct per kind and moment, each with a channel and a readable text
+  for (const [key, problem] of Object.entries(validateReminders(d.reminders))) {
+    p[key] = REMINDER_PROBLEM[problem];
   }
-  if (d.reminders.filter((r) => r.offset.trim() !== '').length > LIMITS.reminders)
-    p.reminders = 'remindersTooMany';
 
   // questions
   if (d.questions.length > LIMITS.questions) p.questions = 'questionsTooMany';
@@ -420,23 +422,7 @@ const orNull = (v: string): string | null => (v.trim() === '' ? null : v.trim())
 export function draftToInput(d: BookingTypeDraft): BookingTypeInput {
   const cur = d.currency.toUpperCase();
   const duration = Number(d.duration);
-  const reminders: Array<{ offsetMinutes: number; label: string | null }> = [];
-  const used = new Set<number>();
-  for (const r of d.reminders) {
-    const v = Number(r.offset);
-    if (
-      r.offset.trim() === '' ||
-      !Number.isInteger(v) ||
-      v < 1 ||
-      used.has(v) ||
-      reminders.length >= LIMITS.reminders
-    )
-      continue;
-    used.add(v);
-    reminders.push({ offsetMinutes: v, label: orNull(r.label) });
-  }
-  // furthest first, as Reference lists them
-  reminders.sort((a, b) => b.offsetMinutes - a.offsetMinutes);
+  const reminders = remindersToInput(d.reminders);
 
   return {
     name: d.name.trim(),

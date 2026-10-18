@@ -236,7 +236,7 @@
       "declineTitle": "Dit verzoek afwijzen?",
       "declineMessage": "De klant krijgt te horen dat het verzoek is afgewezen en het tijdstip komt weer vrij.",
       "declineConfirm": "Verzoek afwijzen",
-      "remindersNote": "Herinneringen volgen het boekingstype. De bezorging wordt niet per herinnering bijgehouden."
+      "remindersNote": "Herinneringen volgen het boekingstype. Ze stel je in onder Afspraakinstellingen of in het boekingstype."
     },
     "source": {
       "chat": "Een chatflow",
@@ -407,9 +407,6 @@
         "depositTooHigh": "De aanbetaling mag niet hoger zijn dan het totaal (tarief plus btw).",
         "cancelFeeInvalid": "Voer een bedrag in zoals 25,00.",
         "cancelWindowInvalid": "Voer een geheel aantal minuten van 0 tot {cancelWindowMax} in.",
-        "reminderInvalid": "Voer hele minuten vóór het begin in, van 1 tot {reminderMax}.",
-        "remindersDuplicate": "Elke herinnering heeft een ander tijdstip nodig.",
-        "remindersTooMany": "Een boekingstype kan maximaal {reminders} herinneringen hebben.",
         "questionLabelRequired": "Geef de vraag een label (maximaal {questionLabelMax} tekens).",
         "questionsTooMany": "Een boekingstype kan maximaal {questions} vragen hebben.",
         "questionOptionsRequired": "Voeg minstens één keuze toe, één per regel.",
@@ -417,7 +414,12 @@
         "overridesInvalid": "Corrigeer de gemarkeerde datums in de lijst met datumuitzonderingen.",
         "descriptionTooLong": "De beschrijving mag maximaal {descriptionMax} tekens bevatten.",
         "locationTooLong": "De locatie mag maximaal {locationMax} tekens bevatten.",
-        "server": "De server heeft deze waarde niet geaccepteerd. Controleer hem en probeer het opnieuw."
+        "server": "De server heeft deze waarde niet geaccepteerd. Controleer hem en probeer het opnieuw.",
+        "reminderInvalid": "Voer een geheel getal in voor de tijd, maximaal 30 dagen.",
+        "remindersDuplicate": "Elke herinnering of opvolging heeft een andere tijd nodig.",
+        "remindersTooMany": "Een boekingstype kan maximaal {reminders} herinneringen en opvolgingen hebben.",
+        "reminderChannelsNone": "Kies minstens één kanaal.",
+        "reminderBodyTooLong": "Het bericht, het onderwerp of het label is te lang."
       },
       "service": {
         "title": "Dienstdetails",
@@ -597,25 +599,6 @@
           "reschedule": "Hoi {name}, je {type} is verplaatst naar {slot}. Details: {manage_link}"
         },
         "templatesNote": "Goedgekeurde WhatsApp-sjablonen kunnen nog niet worden gekozen. Berichten worden verzonden als de platte tekst hierboven."
-      },
-      "reminders": {
-        "title": "Herinneringen",
-        "hint": "Tijden moeten verschillend zijn (1440 = 24 u ervoor, 180 = 3 u ervoor). Maximaal {max}.",
-        "add": "Herinnering toevoegen",
-        "quickAdd": "Snel toevoegen",
-        "quick": {
-          "h24": "24 u",
-          "h3": "3 u",
-          "h1": "1 u",
-          "m15": "15 min"
-        },
-        "empty": "Geen herinneringen. Klanten krijgen alleen de bevestiging.",
-        "offsetOf": "Herinnering {n}, minuten voor het begin",
-        "minBefore": "min ervoor",
-        "labelPlaceholder": "24u",
-        "labelOf": "Herinnering {n}, label",
-        "remove": "Herinnering {n} verwijderen",
-        "count": "{count} van {max} herinneringen"
       },
       "questions": {
         "title": "Vragenlijst",
@@ -1294,6 +1277,151 @@
         "cancel": "Boeking annuleren",
         "reschedule": "Boeking verplaatsen",
         "acknowledge": "Accepteren"
+      }
+    },
+    "reminders": {
+      "title": "Herinneringen en opvolging",
+      "hint": "Stuur de contactpersoon een bericht voordat een afspraak begint of nadat die eindigt. Elk bericht staat uit tot je het aanzet. Maximaal {max} per boekingstype.",
+      "quickAdd": "Snel toevoegen",
+      "quick": {
+        "h24": "24 uur ervoor",
+        "h3": "3 uur ervoor",
+        "h1": "1 uur ervoor",
+        "m15": "15 minuten ervoor",
+        "after2h": "2 uur erna",
+        "afterDay": "1 dag erna"
+      },
+      "add": "Herinnering toevoegen",
+      "empty": "Geen herinneringen of opvolgingen. De contactpersoon krijgt alleen de bevestiging.",
+      "enabledOf": "Herinnering {n} versturen",
+      "on": "Aan",
+      "off": "Uit",
+      "offsetOf": "Herinnering {n}, hoeveelheid tijd",
+      "unitOf": "Herinnering {n}, tijdseenheid",
+      "kindOf": "Herinnering {n}, voor of na",
+      "units": {
+        "minutes": "minuten",
+        "hours": "uur",
+        "days": "dagen"
+      },
+      "kind": {
+        "before": "voordat de afspraak begint",
+        "after": "nadat de afspraak eindigt"
+      },
+      "editMessage": "Bericht en kanalen",
+      "hideMessage": "Verbergen",
+      "remove": "Herinnering {n} verwijderen",
+      "withTemplate": "WhatsApp-sjabloon",
+      "channelsTitle": "Versturen via",
+      "channelsHint": "Het eerste kanaal dat kan bezorgen wordt gebruikt, de volgende zijn reserve. Niemand krijgt dezelfde herinnering twee keer.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "E-mail"
+      },
+      "moveUp": "{channel} eerder proberen",
+      "moveDown": "{channel} later proberen",
+      "removeChannel": "{channel} niet gebruiken",
+      "messageTitle": "Bericht",
+      "placeholderMeaning": {
+        "name": "De naam van de contactpersoon",
+        "type": "De naam van het boekingstype",
+        "slot": "Datum en tijd samen",
+        "date": "De datum",
+        "time": "De tijd",
+        "location": "De plaats, of de deelnamelink als het online is",
+        "join_link": "De link om deel te nemen als het online is",
+        "manage_link": "De link om de afspraak te verplaatsen of te annuleren"
+      },
+      "bodyHintBefore": "Laat leeg om het herinneringsbericht van het boekingstype of de standaardtekst te gebruiken.",
+      "bodyHintAfter": "Laat leeg om de standaardtekst voor opvolging te gebruiken.",
+      "subjectTitle": "E-mailonderwerp",
+      "subjectPlaceholder": "Laat leeg voor een standaardonderwerp",
+      "templateTitle": "WhatsApp-sjabloon",
+      "templateNone": "Geen: vrije tekst, alleen binnen het venster van 24 uur",
+      "templateUnknown": "Een sjabloon dat niet meer beschikbaar is",
+      "templateHint": "Meer dan 24 uur nadat de contactpersoon voor het laatst schreef, bezorgt WhatsApp alleen een goedgekeurd sjabloon. De variabelen worden in deze volgorde ingevuld: 1 naam, 2 dienst, 3 datum, 4 tijd, 5 plaats, 6 deelnamelink, 7 beheerlink.",
+      "labelTitle": "Label (optioneel)",
+      "labelPlaceholder": "bijv. Dag ervoor",
+      "previewTitle": "Voorbeeld",
+      "previewNote": "Een voorbeeld met testwaarden. Het echte bericht gebruikt de gegevens van de afspraak zelf.",
+      "count": "{count} van {max} herinneringen en opvolgingen",
+      "note": "Een herinnering wordt nooit verstuurd nadat de afspraak is begonnen. Als de afspraak wordt geannuleerd of verplaatst, stopt wat in de wacht stond en wordt het opnieuw gepland voor de nieuwe tijd. Stille uren houden een bericht vast tot ze voorbij zijn, en een contactpersoon die zich heeft afgemeld of op de niet-bellenlijst staat, wordt overgeslagen.",
+      "sample": {
+        "name": "Alex",
+        "type": "Consult",
+        "location": "Hoofdstraat 12"
+      },
+      "settingsTitle": "Herinneringen en opvolging",
+      "settingsDescription": "Stuur de contactpersoon per boekingstype een bericht vóór een afspraak en volg erna op. Alles staat uit tot je het aanzet.",
+      "loading": "Boekingstypes laden",
+      "noTypes": "Er zijn nog geen boekingstypes. Maak er een aan om de herinneringen in te stellen.",
+      "paused": "Gepauzeerd",
+      "summaryNone": "Niets ingesteld",
+      "summary": "{on} van {total} aan",
+      "unsaved": "Niet-opgeslagen wijzigingen",
+      "conflict": "Dit boekingstype is elders gewijzigd. Laad opnieuw om de nieuwste versie te zien voordat je opslaat.",
+      "reload": "Opnieuw laden",
+      "discard": "Wijzigingen negeren",
+      "saving": "Opslaan",
+      "save": "Herinneringen opslaan",
+      "saved": "Herinneringen opgeslagen voor {name}.",
+      "readOnly": "Je kunt deze herinneringen bekijken, maar niet wijzigen.",
+      "fixFirst": "Los eerst de gemarkeerde herinneringen op.",
+      "problems": {
+        "offsetInvalid": "Voer een geheel getal in voor de tijd, maximaal 30 dagen.",
+        "duplicate": "Elke herinnering of opvolging heeft een andere tijd nodig.",
+        "channelsNone": "Kies minstens één kanaal.",
+        "bodyTooLong": "Het bericht is te lang.",
+        "subjectTooLong": "Het onderwerp is te lang.",
+        "labelTooLong": "Het label is te lang.",
+        "tooMany": "Maximaal 8 herinneringen en opvolgingen voor één boekingstype."
+      },
+      "noneOn": "Er staan geen herinneringen of opvolgingen aan voor dit boekingstype.",
+      "when": {
+        "before": "{count, plural, one {# minuut ervoor} other {# minuten ervoor}}",
+        "after": "{count, plural, one {# minuut erna} other {# minuten erna}}"
+      },
+      "sentOn": "Verstuurd via {channel}",
+      "status": {
+        "scheduled": "Gepland",
+        "pending": "Verschuldigd",
+        "sending": "Versturen",
+        "held": "Wachten",
+        "sent": "Verstuurd",
+        "skipped": "Niet verstuurd",
+        "failed": "Mislukt",
+        "cancelled": "Geannuleerd"
+      },
+      "reasons": {
+        "rule_removed": "De herinnering is verwijderd voordat die aan de beurt was.",
+        "rule_off": "De herinnering is uitgezet voordat die werd verstuurd.",
+        "rescheduled": "De afspraak is verplaatst, dus deze is vervangen.",
+        "booking_cancelled": "De afspraak is geannuleerd.",
+        "booking_declined": "Het verzoek is afgewezen.",
+        "booking_no_show": "Gemarkeerd als niet verschenen.",
+        "booking_not_confirmed": "De afspraak is niet bevestigd.",
+        "started": "De afspraak was al begonnen.",
+        "expired": "Het was te laat om te versturen.",
+        "no_contact_point": "De contactpersoon heeft geen nummer of adres voor dit kanaal.",
+        "no_channel": "Geen enkel kanaal kon het bezorgen.",
+        "no_sender": "Geen gekoppelde afzender voor dit kanaal.",
+        "template_required": "WhatsApp heeft buiten het venster van 24 uur een goedgekeurd sjabloon nodig.",
+        "template_unavailable": "Het gekozen WhatsApp-sjabloon kan niet worden verstuurd.",
+        "quiet_hours_too_late": "De stille uren liepen door na de start.",
+        "no_consent": "Geen vastgelegde toestemming.",
+        "opted_out": "De contactpersoon heeft zich afgemeld.",
+        "do_not_call": "Het nummer staat op de niet-bellenlijst.",
+        "minor": "De contactpersoon is gemarkeerd als minderjarig.",
+        "processing_restricted": "Berichten naar deze contactpersoon zijn beperkt.",
+        "plan_limit": "De limiet van het abonnement is bereikt.",
+        "quiet_hours": "Wachten tot de stille uren voorbij zijn.",
+        "channel_unavailable": "Het kanaal is op dit moment niet gekoppeld.",
+        "wallet_empty": "Het tegoed is op.",
+        "send_halted": "Versturen is stopgezet.",
+        "provider_error": "De provider heeft het geweigerd.",
+        "interrupted": "Het is onderbroken en niet opnieuw geprobeerd.",
+        "internal_error": "Er is iets misgegaan."
       }
     }
   }

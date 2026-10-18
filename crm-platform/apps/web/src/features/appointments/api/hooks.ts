@@ -23,6 +23,7 @@ export const KEYS = {
   types: ['appointments', 'types'] as const,
   type: (id: string) => ['appointments', 'type', id] as const,
   settings: ['appointments', 'settings'] as const,
+  waTemplates: ['appointments', 'wa-templates'] as const,
   calendar: ['appointments', 'calendar'] as const,
   calendars: ['appointments', 'calendar', 'list'] as const,
   spreadsheets: ['appointments', 'calendar', 'spreadsheets'] as const,
@@ -142,6 +143,16 @@ export function useBookingType(id: string | null) {
     enabled: id !== null,
     retry: transientRetry,
     retryDelay: transientRetryDelay,
+  });
+}
+
+/** The approved WhatsApp templates a reminder can use (the picker of a rule). Not worth failing a screen for: an empty list is fine. */
+export function useWaTemplates() {
+  return useQuery({
+    queryKey: KEYS.waTemplates,
+    queryFn: ({ signal }) => appointmentsApi.waTemplates(signal),
+    staleTime: 60_000,
+    retry: false,
   });
 }
 

@@ -236,7 +236,7 @@
       "declineTitle": "Recusar esta solicitação?",
       "declineMessage": "O cliente é avisado de que a solicitação foi recusada e o horário volta a ficar livre.",
       "declineConfirm": "Recusar solicitação",
-      "remindersNote": "Os lembretes seguem o tipo de reserva. A entrega não é rastreada por lembrete."
+      "remindersNote": "Os lembretes seguem o tipo de agendamento. Eles são definidos em Configurações de agendamentos ou no próprio tipo de agendamento."
     },
     "source": {
       "chat": "Um fluxo de chat",
@@ -407,9 +407,6 @@
         "depositTooHigh": "O sinal não pode ser maior que o total (taxa mais imposto).",
         "cancelFeeInvalid": "Informe um valor, como 25,00.",
         "cancelWindowInvalid": "Informe um número inteiro de minutos de 0 a {cancelWindowMax}.",
-        "reminderInvalid": "Informe minutos inteiros antes do início, de 1 a {reminderMax}.",
-        "remindersDuplicate": "Cada lembrete precisa de um horário diferente.",
-        "remindersTooMany": "Um tipo de reserva pode ter no máximo {reminders} lembretes.",
         "questionLabelRequired": "Dê um rótulo à pergunta (até {questionLabelMax} caracteres).",
         "questionsTooMany": "Um tipo de reserva pode ter no máximo {questions} perguntas.",
         "questionOptionsRequired": "Adicione pelo menos uma opção, uma por linha.",
@@ -417,7 +414,12 @@
         "overridesInvalid": "Corrija as datas marcadas na lista de exceções de data.",
         "descriptionTooLong": "A descrição pode ter no máximo {descriptionMax} caracteres.",
         "locationTooLong": "O local pode ter no máximo {locationMax} caracteres.",
-        "server": "O servidor não aceitou este valor. Verifique e tente novamente."
+        "server": "O servidor não aceitou este valor. Verifique e tente novamente.",
+        "reminderInvalid": "Digite um número inteiro para o tempo, até 30 dias.",
+        "remindersDuplicate": "Cada lembrete ou acompanhamento precisa de um horário diferente.",
+        "reminderChannelsNone": "Escolha pelo menos um canal.",
+        "reminderBodyTooLong": "A mensagem, o assunto ou o rótulo é muito longo.",
+        "remindersTooMany": "Um tipo de agendamento pode ter no máximo {reminders} lembretes e acompanhamentos."
       },
       "service": {
         "title": "Detalhes do serviço",
@@ -597,25 +599,6 @@
           "reschedule": "Olá, {name}! Seu agendamento de {type} foi remarcado para {slot}. Detalhes: {manage_link}"
         },
         "templatesNote": "Ainda não é possível escolher modelos aprovados do WhatsApp. As mensagens saem como o texto simples acima."
-      },
-      "reminders": {
-        "title": "Lembretes",
-        "hint": "Os horários devem ser distintos (1440 = 24 h antes, 180 = 3 h antes). Até {max}.",
-        "add": "Adicionar lembrete",
-        "quickAdd": "Adição rápida",
-        "quick": {
-          "h24": "24 h",
-          "h3": "3 h",
-          "h1": "1 h",
-          "m15": "15 min"
-        },
-        "empty": "Nenhum lembrete. Os clientes recebem apenas a confirmação.",
-        "offsetOf": "Lembrete {n}, minutos antes do início",
-        "minBefore": "min antes",
-        "labelPlaceholder": "24h",
-        "labelOf": "Lembrete {n}, rótulo",
-        "remove": "Remover lembrete {n}",
-        "count": "{count} de {max} lembretes"
       },
       "questions": {
         "title": "Questionário",
@@ -1295,6 +1278,151 @@
         "reschedule": "Mover agendamento",
         "acknowledge": "Aceitar"
       }
+    },
+    "reminders": {
+      "title": "Lembretes e acompanhamentos",
+      "quickAdd": "Adição rápida",
+      "quick": {
+        "h24": "24 horas antes",
+        "h3": "3 horas antes",
+        "h1": "1 hora antes",
+        "m15": "15 minutos antes",
+        "after2h": "2 horas depois",
+        "afterDay": "1 dia depois"
+      },
+      "add": "Adicionar lembrete",
+      "empty": "Sem lembretes nem acompanhamentos. O contato recebe apenas a confirmação.",
+      "on": "Ativado",
+      "off": "Desativado",
+      "units": {
+        "minutes": "minutos",
+        "hours": "horas",
+        "days": "dias"
+      },
+      "kind": {
+        "before": "antes do início do agendamento",
+        "after": "depois do fim do agendamento"
+      },
+      "editMessage": "Mensagem e canais",
+      "hideMessage": "Ocultar",
+      "withTemplate": "Modelo do WhatsApp",
+      "channelsTitle": "Enviar por",
+      "channelsHint": "Usa-se o primeiro canal que consegue entregar, os seguintes são alternativas. Ninguém recebe o mesmo lembrete duas vezes.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "E-mail"
+      },
+      "messageTitle": "Mensagem",
+      "placeholderMeaning": {
+        "name": "O nome do contato",
+        "type": "O nome do tipo de agendamento",
+        "slot": "Data e hora juntas",
+        "date": "A data",
+        "time": "A hora",
+        "location": "O local, ou o link de acesso quando é online",
+        "join_link": "O link para entrar quando é online",
+        "manage_link": "O link para remarcar ou cancelar o agendamento"
+      },
+      "bodyHintBefore": "Deixe vazio para usar a mensagem de lembrete do tipo de agendamento ou o texto padrão.",
+      "bodyHintAfter": "Deixe vazio para usar o texto padrão de acompanhamento.",
+      "subjectTitle": "Assunto do e-mail",
+      "subjectPlaceholder": "Deixe vazio para um assunto padrão",
+      "templateTitle": "Modelo do WhatsApp",
+      "templateNone": "Nenhum: texto livre, somente dentro da janela de 24 horas",
+      "templateUnknown": "Um modelo que não está mais disponível",
+      "templateHint": "Fora das 24 horas após a última mensagem do contato, o WhatsApp só entrega um modelo aprovado. As variáveis são preenchidas nesta ordem: 1 nome, 2 serviço, 3 data, 4 hora, 5 local, 6 link de acesso, 7 link de gerenciamento.",
+      "labelTitle": "Rótulo (opcional)",
+      "labelPlaceholder": "ex.: Um dia antes",
+      "previewTitle": "Pré-visualização",
+      "previewNote": "Um exemplo com valores de amostra. A mensagem real usa os dados do próprio agendamento.",
+      "note": "Um lembrete nunca é enviado depois que o agendamento começa. Se o agendamento for cancelado ou remarcado, o que estava na fila é interrompido e planejado de novo para o novo horário. O horário de silêncio retém a mensagem até terminar, e contatos que cancelaram o recebimento ou estão na lista de não ligar são ignorados.",
+      "sample": {
+        "type": "Consulta",
+        "name": "Alex",
+        "location": "Rua Principal, 12"
+      },
+      "settingsTitle": "Lembretes e acompanhamentos",
+      "settingsDescription": "Para cada tipo de agendamento, envie uma mensagem ao contato antes do agendamento e um acompanhamento depois. Tudo fica desativado até você ativar.",
+      "loading": "Carregando tipos de agendamento",
+      "noTypes": "Ainda não há tipos de agendamento. Crie um para definir os lembretes.",
+      "paused": "Pausado",
+      "summaryNone": "Nenhum definido",
+      "unsaved": "Alterações não salvas",
+      "conflict": "Este tipo de agendamento foi alterado em outro lugar. Recarregue para ver a versão mais recente antes de salvar.",
+      "reload": "Recarregar",
+      "discard": "Descartar alterações",
+      "saving": "Salvando",
+      "save": "Salvar lembretes",
+      "readOnly": "Você pode ver estes lembretes, mas não alterá-los.",
+      "fixFirst": "Corrija primeiro os lembretes destacados.",
+      "problems": {
+        "offsetInvalid": "Digite um número inteiro para o tempo, até 30 dias.",
+        "duplicate": "Cada lembrete ou acompanhamento precisa de um horário diferente.",
+        "bodyTooLong": "A mensagem é muito longa.",
+        "subjectTooLong": "O assunto é muito longo.",
+        "labelTooLong": "O rótulo é muito longo.",
+        "tooMany": "No máximo 8 lembretes e acompanhamentos para um tipo de agendamento.",
+        "channelsNone": "Escolha pelo menos um canal."
+      },
+      "noneOn": "Nenhum lembrete ou acompanhamento está ativado para este tipo de agendamento.",
+      "status": {
+        "scheduled": "Agendado",
+        "pending": "Vencido",
+        "sending": "Enviando",
+        "held": "Aguardando",
+        "skipped": "Não enviado",
+        "failed": "Falhou",
+        "cancelled": "Cancelado",
+        "sent": "Enviado"
+      },
+      "reasons": {
+        "rule_off": "O lembrete foi desativado antes de ser enviado.",
+        "rescheduled": "O agendamento foi remarcado, então este foi substituído.",
+        "booking_cancelled": "O agendamento foi cancelado.",
+        "booking_declined": "A solicitação foi recusada.",
+        "booking_no_show": "Marcado como não comparecimento.",
+        "booking_not_confirmed": "O agendamento não está confirmado.",
+        "started": "O agendamento já tinha começado.",
+        "expired": "Era tarde demais para enviar.",
+        "no_contact_point": "O contato não tem número nem endereço para este canal.",
+        "no_channel": "Nenhum canal conseguiu entregar.",
+        "no_sender": "Nenhum remetente conectado para este canal.",
+        "template_required": "O WhatsApp exige um modelo aprovado fora da janela de 24 horas.",
+        "template_unavailable": "O modelo do WhatsApp escolhido não pode ser enviado.",
+        "quiet_hours_too_late": "O horário de silêncio passou do início.",
+        "no_consent": "Sem consentimento registrado.",
+        "opted_out": "O contato cancelou o recebimento.",
+        "minor": "O contato está marcado como menor de idade.",
+        "processing_restricted": "O envio de mensagens a este contato é restrito.",
+        "channel_unavailable": "O canal não está conectado no momento.",
+        "wallet_empty": "A carteira está vazia.",
+        "send_halted": "O envio está interrompido.",
+        "provider_error": "O provedor recusou.",
+        "interrupted": "Foi interrompido e não houve nova tentativa.",
+        "internal_error": "Algo deu errado.",
+        "rule_removed": "O lembrete foi removido antes do horário.",
+        "do_not_call": "O número está na lista de não ligar.",
+        "plan_limit": "O limite do plano foi atingido.",
+        "quiet_hours": "Aguardando o fim do horário de silêncio."
+      },
+      "hint": "Envie uma mensagem ao contato antes de um agendamento começar ou depois de terminar. Cada um fica desativado até você ativar. Até {max} por tipo de agendamento.",
+      "enabledOf": "Enviar lembrete {n}",
+      "offsetOf": "Lembrete {n}, quantidade de tempo",
+      "unitOf": "Lembrete {n}, unidade de tempo",
+      "kindOf": "Lembrete {n}, antes ou depois",
+      "remove": "Remover lembrete {n}",
+      "moveUp": "Tentar {channel} antes",
+      "moveDown": "Tentar {channel} depois",
+      "removeChannel": "Não usar {channel}",
+      "count": "{count} de {max} lembretes e acompanhamentos",
+      "summary": "{on} de {total} ativados",
+      "saved": "Lembretes salvos para {name}.",
+      "when": {
+        "before": "{count, plural, one {# minuto antes} other {# minutos antes}}",
+        "after": "{count, plural, one {# minuto depois} other {# minutos depois}}"
+      },
+      "sentOn": "Enviado por {channel}"
     }
   }
 }

@@ -236,7 +236,7 @@
       "declineTitle": "Tolak permintaan ini?",
       "declineMessage": "Pelanggan diberi tahu bahwa permintaan ditolak dan waktunya kembali kosong.",
       "declineConfirm": "Tolak permintaan",
-      "remindersNote": "Pengingat mengikuti jenis pemesanan. Pengiriman tidak dilacak per pengingat."
+      "remindersNote": "Pengingat mengikuti jenis booking. Atur di pengaturan Janji temu atau di jenis booking."
     },
     "source": {
       "chat": "Flow chat",
@@ -407,9 +407,6 @@
         "depositTooHigh": "Deposit tidak boleh lebih dari total (biaya ditambah pajak).",
         "cancelFeeInvalid": "Masukkan jumlah seperti 25.00.",
         "cancelWindowInvalid": "Masukkan bilangan bulat menit dari 0 hingga {cancelWindowMax}.",
-        "reminderInvalid": "Masukkan bilangan bulat menit sebelum mulai, dari 1 hingga {reminderMax}.",
-        "remindersDuplicate": "Setiap pengingat memerlukan waktu yang berbeda.",
-        "remindersTooMany": "Satu jenis pemesanan dapat memiliki maksimal {reminders} pengingat.",
         "questionLabelRequired": "Beri label pada pertanyaan (hingga {questionLabelMax} karakter).",
         "questionsTooMany": "Satu jenis pemesanan dapat memiliki maksimal {questions} pertanyaan.",
         "questionOptionsRequired": "Tambahkan minimal satu pilihan, satu per baris.",
@@ -417,7 +414,12 @@
         "overridesInvalid": "Perbaiki tanggal yang ditandai dalam daftar pengecualian tanggal.",
         "descriptionTooLong": "Deskripsi maksimal {descriptionMax} karakter.",
         "locationTooLong": "Lokasi maksimal {locationMax} karakter.",
-        "server": "Server tidak menerima nilai ini. Periksa lalu coba lagi."
+        "server": "Server tidak menerima nilai ini. Periksa lalu coba lagi.",
+        "reminderInvalid": "Masukkan bilangan bulat untuk waktunya, hingga 30 hari.",
+        "remindersDuplicate": "Setiap pengingat atau tindak lanjut harus punya waktu yang berbeda.",
+        "remindersTooMany": "Satu jenis booking dapat memiliki paling banyak {reminders} pengingat dan tindak lanjut.",
+        "reminderChannelsNone": "Pilih setidaknya satu saluran.",
+        "reminderBodyTooLong": "Pesan, subjek, atau label terlalu panjang."
       },
       "service": {
         "title": "Detail layanan",
@@ -597,25 +599,6 @@
           "reschedule": "Halo {name}, {type} Anda dipindahkan ke {slot}. Detail: {manage_link}"
         },
         "templatesNote": "Template WhatsApp yang disetujui belum dapat dipilih. Pesan dikirim sebagai teks biasa di atas."
-      },
-      "reminders": {
-        "title": "Pengingat",
-        "hint": "Waktu harus berbeda (1440 = 24 jam sebelumnya, 180 = 3 jam sebelumnya). Hingga {max}.",
-        "add": "Tambah pengingat",
-        "quickAdd": "Tambah cepat",
-        "quick": {
-          "h24": "24 j",
-          "h3": "3 j",
-          "h1": "1 j",
-          "m15": "15 mnt"
-        },
-        "empty": "Tidak ada pengingat. Pelanggan hanya menerima konfirmasi.",
-        "offsetOf": "Pengingat {n}, menit sebelum mulai",
-        "minBefore": "mnt sebelumnya",
-        "labelPlaceholder": "24j",
-        "labelOf": "Pengingat {n}, label",
-        "remove": "Hapus pengingat {n}",
-        "count": "{count} dari {max} pengingat"
       },
       "questions": {
         "title": "Kuesioner",
@@ -1294,6 +1277,151 @@
         "cancel": "Batalkan pemesanan",
         "reschedule": "Pindahkan pemesanan",
         "acknowledge": "Terima"
+      }
+    },
+    "reminders": {
+      "title": "Pengingat dan tindak lanjut",
+      "hint": "Kirim pesan ke kontak sebelum janji temu dimulai atau setelah selesai. Semuanya nonaktif sampai Anda mengaktifkannya. Maksimal {max} per jenis booking.",
+      "quickAdd": "Tambah cepat",
+      "quick": {
+        "h24": "24 jam sebelumnya",
+        "h3": "3 jam sebelumnya",
+        "h1": "1 jam sebelumnya",
+        "m15": "15 menit sebelumnya",
+        "after2h": "2 jam setelahnya",
+        "afterDay": "1 hari setelahnya"
+      },
+      "add": "Tambah pengingat",
+      "empty": "Tidak ada pengingat atau tindak lanjut. Kontak hanya menerima konfirmasi.",
+      "enabledOf": "Kirim pengingat {n}",
+      "on": "Aktif",
+      "off": "Nonaktif",
+      "offsetOf": "Pengingat {n}, jumlah waktu",
+      "unitOf": "Pengingat {n}, satuan waktu",
+      "kindOf": "Pengingat {n}, sebelum atau sesudah",
+      "units": {
+        "minutes": "menit",
+        "hours": "jam",
+        "days": "hari"
+      },
+      "kind": {
+        "before": "sebelum janji temu dimulai",
+        "after": "setelah janji temu selesai"
+      },
+      "editMessage": "Pesan dan saluran",
+      "hideMessage": "Sembunyikan",
+      "remove": "Hapus pengingat {n}",
+      "withTemplate": "Template WhatsApp",
+      "channelsTitle": "Kirim lewat",
+      "channelsHint": "Saluran pertama yang bisa mengirim akan dipakai, saluran berikutnya sebagai cadangan. Tidak ada yang menerima pengingat yang sama dua kali.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "Email"
+      },
+      "moveUp": "Coba {channel} lebih awal",
+      "moveDown": "Coba {channel} lebih akhir",
+      "removeChannel": "Jangan gunakan {channel}",
+      "messageTitle": "Pesan",
+      "placeholderMeaning": {
+        "name": "Nama kontak",
+        "type": "Nama jenis booking",
+        "slot": "Tanggal dan waktu sekaligus",
+        "date": "Tanggal",
+        "time": "Waktu",
+        "location": "Lokasi, atau tautan untuk bergabung jika online",
+        "join_link": "Tautan untuk bergabung jika online",
+        "manage_link": "Tautan untuk mengubah jadwal atau membatalkan janji temu"
+      },
+      "bodyHintBefore": "Kosongkan untuk memakai pesan pengingat dari jenis booking, atau teks standar.",
+      "bodyHintAfter": "Kosongkan untuk memakai teks tindak lanjut standar.",
+      "subjectTitle": "Subjek email",
+      "subjectPlaceholder": "Kosongkan untuk subjek standar",
+      "templateTitle": "Template WhatsApp",
+      "templateNone": "Tidak ada: teks bebas, hanya dalam jendela 24 jam",
+      "templateUnknown": "Template yang tidak tersedia lagi",
+      "templateHint": "Lewat 24 jam sejak kontak terakhir menulis, WhatsApp hanya mengirim template yang disetujui. Variabelnya diisi dengan urutan ini: 1 nama, 2 layanan, 3 tanggal, 4 waktu, 5 lokasi, 6 tautan bergabung, 7 tautan kelola.",
+      "labelTitle": "Label (opsional)",
+      "labelPlaceholder": "mis. Sehari sebelumnya",
+      "previewTitle": "Pratinjau",
+      "previewNote": "Contoh dengan nilai sampel. Pesan sebenarnya memakai detail janji temu itu sendiri.",
+      "count": "{count} dari {max} pengingat dan tindak lanjut",
+      "note": "Pengingat tidak pernah dikirim setelah janji temu dimulai. Jika janji temu dibatalkan atau dipindah, yang sedang menunggu dihentikan dan dijadwalkan ulang untuk waktu baru. Jam tenang menahan pesan sampai selesai, dan kontak yang berhenti berlangganan atau ada di daftar jangan hubungi akan dilewati.",
+      "sample": {
+        "name": "Alex",
+        "type": "Konsultasi",
+        "location": "Jl. Utama No. 12"
+      },
+      "settingsTitle": "Pengingat dan tindak lanjut",
+      "settingsDescription": "Untuk setiap jenis booking, kirim pesan ke kontak sebelum janji temu dan lakukan tindak lanjut setelahnya. Semuanya nonaktif sampai Anda mengaktifkannya.",
+      "loading": "Memuat jenis booking",
+      "noTypes": "Belum ada jenis booking. Buat satu untuk mengatur pengingatnya.",
+      "paused": "Dijeda",
+      "summaryNone": "Belum diatur",
+      "summary": "{on} dari {total} aktif",
+      "unsaved": "Perubahan belum disimpan",
+      "conflict": "Jenis booking ini diubah di tempat lain. Muat ulang untuk melihat versi terbaru sebelum menyimpan.",
+      "reload": "Muat ulang",
+      "discard": "Buang perubahan",
+      "saving": "Menyimpan",
+      "save": "Simpan pengingat",
+      "saved": "Pengingat untuk {name} disimpan.",
+      "readOnly": "Anda dapat melihat pengingat ini tetapi tidak dapat mengubahnya.",
+      "fixFirst": "Perbaiki dulu pengingat yang ditandai.",
+      "problems": {
+        "offsetInvalid": "Masukkan bilangan bulat untuk waktunya, hingga 30 hari.",
+        "duplicate": "Setiap pengingat atau tindak lanjut harus punya waktu yang berbeda.",
+        "channelsNone": "Pilih setidaknya satu saluran.",
+        "bodyTooLong": "Pesan terlalu panjang.",
+        "subjectTooLong": "Subjek terlalu panjang.",
+        "labelTooLong": "Label terlalu panjang.",
+        "tooMany": "Maksimal 8 pengingat dan tindak lanjut untuk satu jenis booking."
+      },
+      "noneOn": "Tidak ada pengingat atau tindak lanjut yang aktif untuk jenis booking ini.",
+      "when": {
+        "before": "{count, plural, other {# menit sebelumnya}}",
+        "after": "{count, plural, other {# menit setelahnya}}"
+      },
+      "sentOn": "Dikirim lewat {channel}",
+      "status": {
+        "scheduled": "Terjadwal",
+        "pending": "Jatuh tempo",
+        "sending": "Mengirim",
+        "held": "Menunggu",
+        "sent": "Terkirim",
+        "skipped": "Tidak terkirim",
+        "failed": "Gagal",
+        "cancelled": "Dibatalkan"
+      },
+      "reasons": {
+        "rule_removed": "Pengingat dihapus sebelum waktunya.",
+        "rule_off": "Pengingat dinonaktifkan sebelum dikirim.",
+        "rescheduled": "Janji temu dipindah, jadi pengingat ini diganti.",
+        "booking_cancelled": "Janji temu dibatalkan.",
+        "booking_declined": "Permintaan ditolak.",
+        "booking_no_show": "Ditandai tidak hadir.",
+        "booking_not_confirmed": "Janji temu belum dikonfirmasi.",
+        "started": "Janji temu sudah dimulai.",
+        "expired": "Sudah terlambat untuk dikirim.",
+        "no_contact_point": "Kontak tidak punya nomor atau alamat untuk saluran ini.",
+        "no_channel": "Tidak ada saluran yang bisa mengirimnya.",
+        "no_sender": "Tidak ada pengirim yang terhubung untuk saluran ini.",
+        "template_required": "WhatsApp memerlukan template yang disetujui di luar jendela 24 jam.",
+        "template_unavailable": "Template WhatsApp yang dipilih tidak bisa dikirim.",
+        "quiet_hours_too_late": "Jam tenang melewati waktu mulai.",
+        "no_consent": "Tidak ada persetujuan yang tercatat.",
+        "opted_out": "Kontak berhenti berlangganan.",
+        "do_not_call": "Nomor ada di daftar jangan hubungi.",
+        "minor": "Kontak ditandai sebagai anak di bawah umur.",
+        "processing_restricted": "Mengirim pesan ke kontak ini dibatasi.",
+        "plan_limit": "Batas paket tercapai.",
+        "quiet_hours": "Menunggu jam tenang berakhir.",
+        "channel_unavailable": "Saluran sedang tidak terhubung.",
+        "wallet_empty": "Dompet kosong.",
+        "send_halted": "Pengiriman dihentikan.",
+        "provider_error": "Penyedia menolaknya.",
+        "interrupted": "Terhenti dan tidak dicoba lagi.",
+        "internal_error": "Terjadi kesalahan."
       }
     }
   }

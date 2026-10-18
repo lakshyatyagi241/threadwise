@@ -83,6 +83,11 @@ export function toBookingTypeResponse(
       offsetMinutes: r.offsetMinutes,
       label: r.label,
       isActive: r.isActive,
+      kind: r.kind,
+      channels: r.channels,
+      subject: r.subject,
+      body: r.body,
+      waTemplateId: r.waTemplateUuid,
     })),
     templates: c.templates.map((t) => ({
       event: t.event,

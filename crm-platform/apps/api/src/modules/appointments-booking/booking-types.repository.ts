@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type {
   BookingLocationType,
+  BookingReminderChannel,
+  BookingReminderKind,
   BookingQuestionType,
   BookingTemplateChannel,
   BookingTemplateEvent,
@@ -75,6 +77,13 @@ export interface ReminderRow {
   offsetMinutes: number;
   label: string | null;
   isActive: boolean;
+  /** `before` the start or `after` the end (the follow-up). */
+  kind: BookingReminderKind;
+  channels: BookingReminderChannel[];
+  subject: string | null;
+  body: string | null;
+  waTemplateId: number | null;
+  waTemplateUuid: string | null;
 }
 export interface TemplateRow {
   event: BookingTemplateEvent;
@@ -112,6 +121,9 @@ export interface TypeChildren {
   financial: FinancialRow | null;
   integration: IntegrationRow | null;
 }
+
+/** A text[] literal for the channels column. The values are a closed set of words, so no quoting is needed. */
+const channelsArray = (channels: readonly string[]) => sql`${`{${channels.join(',')}}`}::text[]`;
 
 const toRow = (r: Raw): BookingTypeRow => ({
   id: Number(r.id),
@@ -318,7 +330,10 @@ export class BookingTypesRepository {
 
     for (const r of (
       await tx.execute(
-        sql`SELECT * FROM booking_reminders WHERE org_id = ${orgId} AND booking_type_id IN ${ids} ORDER BY offset_minutes DESC`,
+        sql`SELECT br.*, w.uuid AS wa_uuid FROM booking_reminders br
+          LEFT JOIN wa_templates w ON w.org_id = br.org_id AND w.id = br.wa_template_id
+          WHERE br.org_id = ${orgId} AND br.booking_type_id IN ${ids}
+          ORDER BY br.kind, br.offset_minutes DESC`,
       )
     ).rows as Raw[])
       get(r.booking_type_id).reminders.push({
@@ -328,6 +343,12 @@ export class BookingTypesRepository {
         offsetMinutes: Number(r.offset_minutes),
         label: s(r.label),
         isActive: r.is_active as boolean,
+        kind: r.kind as BookingReminderKind,
+        channels: (r.channels as BookingReminderChannel[] | null) ?? ['whatsapp', 'sms', 'email'],
+        subject: s(r.subject),
+        body: s(r.body),
+        waTemplateId: n(r.wa_template_id),
+        waTemplateUuid: s(r.wa_uuid),
       });
 
     for (const r of (
@@ -454,7 +475,17 @@ export class BookingTypesRepository {
     tx: Tx,
     orgId: number,
     typeId: number,
-    list: Array<{ uuid?: string; offsetMinutes: number; label: string | null; isActive: boolean }>,
+    list: Array<{
+      uuid?: string;
+      offsetMinutes: number;
+      label: string | null;
+      isActive: boolean;
+      kind: BookingReminderKind;
+      channels: BookingReminderChannel[];
+      subject: string | null;
+      body: string | null;
+      waTemplateId: number | null;
+    }>,
   ): Promise<void> {
     const keep = list.filter((r) => r.uuid).map((r) => r.uuid!);
     await tx.execute(sql`DELETE FROM booking_reminders WHERE org_id = ${orgId} AND booking_type_id = ${typeId}
@@ -471,11 +502,14 @@ export class BookingTypesRepository {
     for (const r of list) {
       if (r.uuid) {
         await tx.execute(sql`UPDATE booking_reminders SET offset_minutes = ${r.offsetMinutes}, offset_index = ${i},
-          label = ${r.label}, is_active = ${r.isActive}
+          label = ${r.label}, is_active = ${r.isActive}, kind = ${r.kind}, channels = ${channelsArray(r.channels)},
+          subject = ${r.subject}, body = ${r.body}, wa_template_id = ${r.waTemplateId}
           WHERE org_id = ${orgId} AND booking_type_id = ${typeId} AND uuid = ${r.uuid}::uuid`);
       } else {
-        await tx.execute(sql`INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes, label, is_active)
-          VALUES (${orgId}, ${typeId}, ${i}, ${r.offsetMinutes}, ${r.label}, ${r.isActive})`);
+        await tx.execute(sql`INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes, label, is_active,
+            kind, channels, subject, body, wa_template_id)
+          VALUES (${orgId}, ${typeId}, ${i}, ${r.offsetMinutes}, ${r.label}, ${r.isActive}, ${r.kind},
+            ${channelsArray(r.channels)}, ${r.subject}, ${r.body}, ${r.waTemplateId})`);
       }
       i++;
     }

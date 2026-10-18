@@ -23,6 +23,7 @@ import { ErrorLine, LinkButton, useAppointmentsCan } from './parts';
 import { CalendarCard } from './settings-calendar';
 import { CalendarsSection } from './settings-calendars';
 import { DefaultsCard, TemplatesCard, TimeZoneCard, type FormCtx } from './settings-fields';
+import { ReminderRulesSection } from './settings-reminders';
 import { SettingsCard, SettingsHeader } from './settings-parts';
 import { useLeaveGuard } from './use-leave-guard';
 import { WeeklyHoursEditor } from './weekly-hours-editor';
@@ -266,6 +267,7 @@ function SettingsEditor({
         )}
       </SettingsCard>
       <DefaultsCard {...ctx} />
+      <ReminderRulesSection />
       <TemplatesCard {...ctx} />
 
       {!readOnly && (

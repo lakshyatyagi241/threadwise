@@ -43,7 +43,16 @@ export interface BookingType {
     reason: string | null;
   }>;
   questions: Array<{ id: string; label: string; type: string; required: boolean }>;
-  reminders: Array<{ id: string; offsetMinutes: number; isActive: boolean }>;
+  reminders: Array<{
+    id: string;
+    offsetMinutes: number;
+    isActive: boolean;
+    kind: 'before' | 'after';
+    channels: string[];
+    subject: string | null;
+    body: string | null;
+    waTemplateId: string | null;
+  }>;
   templates: Array<{ event: string; channel: string; plainBody: string | null }>;
   payment: {
     fee: string;

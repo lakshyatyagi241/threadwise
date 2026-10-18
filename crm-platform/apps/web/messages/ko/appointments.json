@@ -236,7 +236,7 @@
       "declineTitle": "이 요청을 거절할까요?",
       "declineMessage": "고객에게 요청이 거절되었음이 안내되고 해당 시간은 다시 비워집니다.",
       "declineConfirm": "요청 거절",
-      "remindersNote": "알림은 예약 유형을 따릅니다. 알림별 전달 여부는 추적되지 않습니다."
+      "remindersNote": "리마인더는 예약 유형을 따릅니다. 예약 설정 또는 예약 유형에서 설정합니다."
     },
     "source": {
       "chat": "채팅 플로우",
@@ -407,9 +407,6 @@
         "depositTooHigh": "보증금은 총액(요금 + 세금)을 초과할 수 없습니다.",
         "cancelFeeInvalid": "25.00과 같은 금액을 입력하세요.",
         "cancelWindowInvalid": "0에서 {cancelWindowMax} 사이의 정수(분)를 입력하세요.",
-        "reminderInvalid": "시작 전 1에서 {reminderMax} 사이의 정수(분)를 입력하세요.",
-        "remindersDuplicate": "각 알림은 서로 다른 시간이어야 합니다.",
-        "remindersTooMany": "예약 유형에는 알림을 최대 {reminders}개까지 설정할 수 있습니다.",
         "questionLabelRequired": "질문에 라벨을 지정하세요 (최대 {questionLabelMax}자).",
         "questionsTooMany": "예약 유형에는 질문을 최대 {questions}개까지 설정할 수 있습니다.",
         "questionOptionsRequired": "선택지를 한 줄에 하나씩 하나 이상 추가하세요.",
@@ -417,7 +414,12 @@
         "overridesInvalid": "날짜 예외 목록에 표시된 날짜를 수정하세요.",
         "descriptionTooLong": "설명은 최대 {descriptionMax}자까지 가능합니다.",
         "locationTooLong": "장소는 최대 {locationMax}자까지 가능합니다.",
-        "server": "서버가 이 값을 받아들이지 않았습니다. 확인한 후 다시 시도하세요."
+        "server": "서버가 이 값을 받아들이지 않았습니다. 확인한 후 다시 시도하세요.",
+        "reminderInvalid": "시간은 30일 이내의 정수로 입력하세요.",
+        "remindersDuplicate": "리마인더나 후속 메시지마다 서로 다른 시간이 필요합니다.",
+        "remindersTooMany": "예약 유형 하나에는 리마인더와 후속 메시지를 최대 {reminders}개까지 설정할 수 있습니다.",
+        "reminderChannelsNone": "채널을 하나 이상 선택하세요.",
+        "reminderBodyTooLong": "메시지, 제목 또는 라벨이 너무 깁니다."
       },
       "service": {
         "title": "서비스 상세",
@@ -597,25 +599,6 @@
           "reschedule": "안녕하세요 {name}님, {type} 일정이 {slot}(으)로 변경되었습니다. 상세 정보: {manage_link}"
         },
         "templatesNote": "승인된 WhatsApp 템플릿은 아직 선택할 수 없습니다. 메시지는 위의 일반 텍스트로 발송됩니다."
-      },
-      "reminders": {
-        "title": "알림",
-        "hint": "시간은 서로 달라야 합니다 (1440 = 24시간 전, 180 = 3시간 전). 최대 {max}개.",
-        "add": "알림 추가",
-        "quickAdd": "빠른 추가",
-        "quick": {
-          "h24": "24시간",
-          "h3": "3시간",
-          "h1": "1시간",
-          "m15": "15분"
-        },
-        "empty": "알림이 없습니다. 고객은 확정 메시지만 받습니다.",
-        "offsetOf": "알림 {n}, 시작 몇 분 전",
-        "minBefore": "분 전",
-        "labelPlaceholder": "24시간",
-        "labelOf": "알림 {n}, 라벨",
-        "remove": "알림 {n} 제거",
-        "count": "알림 {count}/{max}개"
       },
       "questions": {
         "title": "설문",
@@ -1294,6 +1277,151 @@
         "cancel": "예약 취소",
         "reschedule": "예약 변경",
         "acknowledge": "수락"
+      }
+    },
+    "reminders": {
+      "title": "리마인더 및 후속 메시지",
+      "hint": "예약 시작 전이나 종료 후에 연락처에 메시지를 보냅니다. 켜기 전까지는 모두 꺼져 있습니다. 예약 유형당 최대 {max}개.",
+      "quickAdd": "빠른 추가",
+      "quick": {
+        "h24": "24시간 전",
+        "h3": "3시간 전",
+        "h1": "1시간 전",
+        "m15": "15분 전",
+        "after2h": "2시간 후",
+        "afterDay": "1일 후"
+      },
+      "add": "리마인더 추가",
+      "empty": "리마인더나 후속 메시지가 없습니다. 연락처에는 확인 메시지만 전달됩니다.",
+      "enabledOf": "리마인더 {n} 보내기",
+      "on": "켜짐",
+      "off": "꺼짐",
+      "offsetOf": "리마인더 {n}, 시간 길이",
+      "unitOf": "리마인더 {n}, 시간 단위",
+      "kindOf": "리마인더 {n}, 이전 또는 이후",
+      "units": {
+        "minutes": "분",
+        "hours": "시간",
+        "days": "일"
+      },
+      "kind": {
+        "before": "예약 시작 전",
+        "after": "예약 종료 후"
+      },
+      "editMessage": "메시지 및 채널",
+      "hideMessage": "숨기기",
+      "remove": "리마인더 {n} 삭제",
+      "withTemplate": "WhatsApp 템플릿",
+      "channelsTitle": "전송 채널",
+      "channelsHint": "전달 가능한 첫 번째 채널을 사용하고, 나머지는 대체 채널입니다. 같은 리마인더가 두 번 전달되지 않습니다.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "이메일"
+      },
+      "moveUp": "{channel}을(를) 먼저 시도",
+      "moveDown": "{channel}을(를) 나중에 시도",
+      "removeChannel": "{channel} 사용 안 함",
+      "messageTitle": "메시지",
+      "placeholderMeaning": {
+        "name": "연락처 이름",
+        "type": "예약 유형 이름",
+        "slot": "날짜와 시간",
+        "date": "날짜",
+        "time": "시간",
+        "location": "장소 또는 온라인인 경우 참여 링크",
+        "join_link": "온라인인 경우 참여 링크",
+        "manage_link": "예약을 변경하거나 취소하는 링크"
+      },
+      "bodyHintBefore": "비워 두면 예약 유형의 리마인더 메시지 또는 기본 문구를 사용합니다.",
+      "bodyHintAfter": "비워 두면 기본 후속 메시지 문구를 사용합니다.",
+      "subjectTitle": "이메일 제목",
+      "subjectPlaceholder": "비워 두면 기본 제목이 사용됩니다",
+      "templateTitle": "WhatsApp 템플릿",
+      "templateNone": "없음: 자유 입력, 24시간 이내에만 가능",
+      "templateUnknown": "더 이상 사용할 수 없는 템플릿",
+      "templateHint": "연락처가 마지막으로 메시지를 보낸 지 24시간이 지나면 WhatsApp은 승인된 템플릿만 전달합니다. 변수는 다음 순서로 채워집니다: 1 이름, 2 서비스, 3 날짜, 4 시간, 5 장소, 6 참여 링크, 7 관리 링크.",
+      "labelTitle": "라벨(선택)",
+      "labelPlaceholder": "예: 하루 전",
+      "previewTitle": "미리보기",
+      "previewNote": "샘플 값을 사용한 예시입니다. 실제 메시지에는 예약의 상세 정보가 사용됩니다.",
+      "count": "리마인더 및 후속 메시지 {count}/{max}개",
+      "note": "리마인더는 예약이 시작된 후에는 전송되지 않습니다. 예약이 취소되거나 변경되면 대기 중이던 메시지는 중단되고 새 시간에 맞춰 다시 예약됩니다. 방해 금지 시간에는 종료될 때까지 메시지가 보류되며, 수신 거부한 연락처나 전화 금지 목록에 있는 연락처는 건너뜁니다.",
+      "sample": {
+        "name": "Alex",
+        "type": "상담",
+        "location": "중앙로 12"
+      },
+      "settingsTitle": "리마인더 및 후속 메시지",
+      "settingsDescription": "예약 유형별로 예약 전에 연락처에 메시지를 보내고 예약 후에 후속 메시지를 보냅니다. 켜기 전까지는 모두 꺼져 있습니다.",
+      "loading": "예약 유형 불러오는 중",
+      "noTypes": "아직 예약 유형이 없습니다. 하나를 만들어 리마인더를 설정하세요.",
+      "paused": "일시 중지됨",
+      "summaryNone": "설정 없음",
+      "summary": "{total}개 중 {on}개 켜짐",
+      "unsaved": "저장하지 않은 변경 사항",
+      "conflict": "이 예약 유형이 다른 곳에서 변경되었습니다. 저장하기 전에 새로고침하여 최신 버전을 확인하세요.",
+      "reload": "새로고침",
+      "discard": "변경 사항 취소",
+      "saving": "저장 중",
+      "save": "리마인더 저장",
+      "saved": "{name}의 리마인더를 저장했습니다.",
+      "readOnly": "이 리마인더는 볼 수만 있고 변경할 수 없습니다.",
+      "fixFirst": "강조 표시된 리마인더를 먼저 수정하세요.",
+      "problems": {
+        "offsetInvalid": "시간은 30일 이내의 정수로 입력하세요.",
+        "duplicate": "리마인더나 후속 메시지마다 서로 다른 시간이 필요합니다.",
+        "channelsNone": "채널을 하나 이상 선택하세요.",
+        "bodyTooLong": "메시지가 너무 깁니다.",
+        "subjectTooLong": "제목이 너무 깁니다.",
+        "labelTooLong": "라벨이 너무 깁니다.",
+        "tooMany": "예약 유형 하나에는 리마인더와 후속 메시지를 최대 8개까지 설정할 수 있습니다."
+      },
+      "noneOn": "이 예약 유형에는 켜져 있는 리마인더나 후속 메시지가 없습니다.",
+      "when": {
+        "before": "{count, plural, other {#분 전}}",
+        "after": "{count, plural, other {#분 후}}"
+      },
+      "sentOn": "{channel}(으)로 전송됨",
+      "status": {
+        "scheduled": "예약됨",
+        "pending": "전송 시간 도래",
+        "sending": "전송 중",
+        "held": "대기 중",
+        "sent": "전송됨",
+        "skipped": "전송되지 않음",
+        "failed": "실패",
+        "cancelled": "취소됨"
+      },
+      "reasons": {
+        "rule_removed": "전송 시간 전에 리마인더가 삭제되었습니다.",
+        "rule_off": "전송 전에 리마인더가 꺼졌습니다.",
+        "rescheduled": "예약이 변경되어 이 항목은 대체되었습니다.",
+        "booking_cancelled": "예약이 취소되었습니다.",
+        "booking_declined": "요청이 거부되었습니다.",
+        "booking_no_show": "노쇼로 표시되었습니다.",
+        "booking_not_confirmed": "예약이 확정되지 않았습니다.",
+        "started": "예약이 이미 시작되었습니다.",
+        "expired": "전송하기에는 너무 늦었습니다.",
+        "no_contact_point": "연락처에 이 채널의 번호 또는 주소가 없습니다.",
+        "no_channel": "전달할 수 있는 채널이 없었습니다.",
+        "no_sender": "이 채널에 연결된 발신자가 없습니다.",
+        "template_required": "24시간이 지나면 WhatsApp은 승인된 템플릿이 필요합니다.",
+        "template_unavailable": "선택한 WhatsApp 템플릿은 전송할 수 없습니다.",
+        "quiet_hours_too_late": "방해 금지 시간이 시작 시간을 넘어갔습니다.",
+        "no_consent": "기록된 동의가 없습니다.",
+        "opted_out": "연락처가 수신을 거부했습니다.",
+        "do_not_call": "이 번호는 전화 금지 목록에 있습니다.",
+        "minor": "연락처가 미성년자로 표시되어 있습니다.",
+        "processing_restricted": "이 연락처에 대한 메시지 전송이 제한되어 있습니다.",
+        "plan_limit": "요금제 한도에 도달했습니다.",
+        "quiet_hours": "방해 금지 시간이 끝나기를 기다리는 중입니다.",
+        "channel_unavailable": "현재 채널이 연결되어 있지 않습니다.",
+        "wallet_empty": "잔액이 없습니다.",
+        "send_halted": "전송이 중단되었습니다.",
+        "provider_error": "제공업체에서 거부했습니다.",
+        "interrupted": "중단되었으며 재시도되지 않았습니다.",
+        "internal_error": "문제가 발생했습니다."
       }
     }
   }

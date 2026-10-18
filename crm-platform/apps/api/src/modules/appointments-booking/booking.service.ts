@@ -19,6 +19,7 @@ import {
   type AnswerSnapshot,
 } from './appointment-rules';
 import { AppointmentMeetingMirror } from './appointment-meeting-mirror.service';
+import { AppointmentRemindersRepository } from './appointment-reminders.repository';
 import { AppointmentsRepository, type AppointmentRow } from './appointments.repository';
 import { AppointmentsSupport } from './appointments.support';
 import { AppointmentPlan, unavailable } from './booking-plan';
@@ -144,6 +145,7 @@ export class BookingService {
     private readonly slots: SlotsService,
     private readonly plan: AppointmentPlan,
     private readonly mirror: AppointmentMeetingMirror,
+    private readonly reminders: AppointmentRemindersRepository,
   ) {}
 
   // --- book -----------------------------------------------------------------------------------------------------------------
@@ -351,8 +353,8 @@ export class BookingService {
       if (isSlotConflict(err)) throw slotTaken();
       throw err;
     }
-    // Every reminder offset is armed again for the new time.
-    await this.appts.clearReminderRuns(tx, orgId, row.id);
+    // Every rule is armed again for the new time (the booking's `armed_at` moved); what was waiting for the old time stops.
+    await this.reminders.cancelWaiting(tx, orgId, row.id, 'rescheduled');
     const after = (await this.appts.findById(tx, orgId, row.id))!;
     await this.mirror.sync(tx, orgId, after);
     await this.support.record(tx, after, {
@@ -426,6 +428,19 @@ export class BookingService {
     const ok = await this.appts.update(tx, orgId, row.id, p.rowVersion, patch);
     if (!ok) throw AppError.rowVersionConflict('Appointment');
     const after = (await this.appts.findById(tx, orgId, row.id))!;
+    // A booking that will not take place has no reminders or follow-ups left to send (a completed one still gets its follow-up).
+    if (to === 'cancelled' || to === 'declined' || to === 'no_show') {
+      await this.reminders.cancelWaiting(
+        tx,
+        orgId,
+        row.id,
+        to === 'cancelled'
+          ? 'booking_cancelled'
+          : to === 'declined'
+            ? 'booking_declined'
+            : 'booking_no_show',
+      );
+    }
     // The row keeps its place when the booking closes; the list reads the new status from the appointment. This only heals a
     // booking that has no row yet (it predates the mirror and the back-fill has not reached it).
     await this.mirror.sync(tx, orgId, after);

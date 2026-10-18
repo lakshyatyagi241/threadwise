@@ -236,7 +236,7 @@
       "declineTitle": "Refuser cette demande ?",
       "declineMessage": "Le client est informé que la demande a été refusée et le créneau redevient libre.",
       "declineConfirm": "Refuser la demande",
-      "remindersNote": "Les rappels suivent le type de réservation. La livraison n’est pas suivie par rappel."
+      "remindersNote": "Les rappels suivent le type de rendez-vous. Ils se règlent dans les paramètres des rendez-vous ou dans le type de rendez-vous."
     },
     "source": {
       "chat": "Un flux de chat",
@@ -407,9 +407,6 @@
         "depositTooHigh": "L’acompte ne peut pas dépasser le total (tarif plus taxe).",
         "cancelFeeInvalid": "Saisissez un montant tel que 25.00.",
         "cancelWindowInvalid": "Saisissez un nombre entier de minutes compris entre 0 et {cancelWindowMax}.",
-        "reminderInvalid": "Saisissez un nombre entier de minutes avant le début, de 1 à {reminderMax}.",
-        "remindersDuplicate": "Chaque rappel doit avoir une heure différente.",
-        "remindersTooMany": "Un type de réservation peut avoir au plus {reminders} rappels.",
         "questionLabelRequired": "Donnez un libellé à la question (jusqu’à {questionLabelMax} caractères).",
         "questionsTooMany": "Un type de réservation peut avoir au plus {questions} questions.",
         "questionOptionsRequired": "Ajoutez au moins un choix, un par ligne.",
@@ -417,7 +414,12 @@
         "overridesInvalid": "Corrigez les dates signalées dans la liste des exceptions de dates.",
         "descriptionTooLong": "La description ne peut pas dépasser {descriptionMax} caractères.",
         "locationTooLong": "Le lieu ne peut pas dépasser {locationMax} caractères.",
-        "server": "Le serveur n’a pas accepté cette valeur. Vérifiez-la et réessayez."
+        "server": "Le serveur n’a pas accepté cette valeur. Vérifiez-la et réessayez.",
+        "reminderInvalid": "Saisissez un nombre entier pour la durée, jusqu'à 30 jours.",
+        "remindersDuplicate": "Chaque rappel ou suivi doit avoir un horaire différent.",
+        "remindersTooMany": "Un type de rendez-vous peut avoir au maximum {reminders} rappels et suivis.",
+        "reminderChannelsNone": "Choisissez au moins un canal.",
+        "reminderBodyTooLong": "Le message, l'objet ou le libellé est trop long."
       },
       "service": {
         "title": "Détails du service",
@@ -597,25 +599,6 @@
           "reschedule": "Bonjour {name}, votre {type} a été déplacé à {slot}. Détails : {manage_link}"
         },
         "templatesNote": "Les modèles WhatsApp approuvés ne peuvent pas encore être choisis. Les messages sont envoyés en texte brut comme ci-dessus."
-      },
-      "reminders": {
-        "title": "Rappels",
-        "hint": "Les heures doivent être distinctes (1440 = 24 h avant, 180 = 3 h avant). Jusqu’à {max}.",
-        "add": "Ajouter un rappel",
-        "quickAdd": "Ajout rapide",
-        "quick": {
-          "h24": "24 h",
-          "h3": "3 h",
-          "h1": "1 h",
-          "m15": "15 min"
-        },
-        "empty": "Aucun rappel. Les clients ne reçoivent que la confirmation.",
-        "offsetOf": "Rappel {n}, minutes avant le début",
-        "minBefore": "min avant",
-        "labelPlaceholder": "24 h",
-        "labelOf": "Rappel {n}, libellé",
-        "remove": "Supprimer le rappel {n}",
-        "count": "{count} rappels sur {max}"
       },
       "questions": {
         "title": "Questionnaire",
@@ -1294,6 +1277,151 @@
         "cancel": "Annuler la réservation",
         "reschedule": "Déplacer la réservation",
         "acknowledge": "Accepter"
+      }
+    },
+    "reminders": {
+      "title": "Rappels et suivis",
+      "hint": "Écrivez au contact avant le début d'un rendez-vous ou après sa fin. Chacun est désactivé tant que vous ne l'activez pas. Jusqu'à {max} par type de rendez-vous.",
+      "quickAdd": "Ajout rapide",
+      "quick": {
+        "h24": "24 heures avant",
+        "h3": "3 heures avant",
+        "h1": "1 heure avant",
+        "m15": "15 minutes avant",
+        "after2h": "2 heures après",
+        "afterDay": "1 jour après"
+      },
+      "add": "Ajouter un rappel",
+      "empty": "Aucun rappel ni suivi. Le contact reçoit uniquement la confirmation.",
+      "enabledOf": "Envoyer le rappel {n}",
+      "on": "Activé",
+      "off": "Désactivé",
+      "offsetOf": "Rappel {n}, durée",
+      "unitOf": "Rappel {n}, unité de temps",
+      "kindOf": "Rappel {n}, avant ou après",
+      "units": {
+        "minutes": "minutes",
+        "hours": "heures",
+        "days": "jours"
+      },
+      "kind": {
+        "before": "avant le début du rendez-vous",
+        "after": "après la fin du rendez-vous"
+      },
+      "editMessage": "Message et canaux",
+      "hideMessage": "Masquer",
+      "remove": "Supprimer le rappel {n}",
+      "withTemplate": "Modèle WhatsApp",
+      "channelsTitle": "Envoyer par",
+      "channelsHint": "Le premier canal capable de livrer est utilisé, les suivants servent de secours. Personne ne reçoit deux fois le même rappel.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "E-mail"
+      },
+      "moveUp": "Essayer {channel} plus tôt",
+      "moveDown": "Essayer {channel} plus tard",
+      "removeChannel": "Ne pas utiliser {channel}",
+      "messageTitle": "Message",
+      "placeholderMeaning": {
+        "name": "Le nom du contact",
+        "type": "Le nom du type de rendez-vous",
+        "slot": "La date et l'heure ensemble",
+        "date": "La date",
+        "time": "L'heure",
+        "location": "Le lieu, ou le lien pour rejoindre si c'est en ligne",
+        "join_link": "Le lien pour rejoindre si c'est en ligne",
+        "manage_link": "Le lien pour déplacer ou annuler le rendez-vous"
+      },
+      "bodyHintBefore": "Laissez vide pour utiliser le message de rappel du type de rendez-vous, ou le texte standard.",
+      "bodyHintAfter": "Laissez vide pour utiliser le texte de suivi standard.",
+      "subjectTitle": "Objet de l'e-mail",
+      "subjectPlaceholder": "Laissez vide pour un objet standard",
+      "templateTitle": "Modèle WhatsApp",
+      "templateNone": "Aucun : texte libre, uniquement dans la fenêtre de 24 heures",
+      "templateUnknown": "Un modèle qui n'est plus disponible",
+      "templateHint": "Plus de 24 heures après le dernier message du contact, WhatsApp ne livre qu'un modèle approuvé. Ses variables sont remplies dans cet ordre : 1 nom, 2 service, 3 date, 4 heure, 5 lieu, 6 lien pour rejoindre, 7 lien de gestion.",
+      "labelTitle": "Libellé (facultatif)",
+      "labelPlaceholder": "ex. La veille",
+      "previewTitle": "Aperçu",
+      "previewNote": "Un exemple avec des valeurs fictives. Le vrai message utilise les détails du rendez-vous.",
+      "count": "{count} sur {max} rappels et suivis",
+      "note": "Un rappel n'est jamais envoyé après le début du rendez-vous. Si le rendez-vous est annulé ou déplacé, ce qui était en attente s'arrête et est replanifié pour la nouvelle heure. Les heures calmes retiennent un message jusqu'à leur fin, et un contact qui s'est désinscrit ou figure sur la liste d'opposition au démarchage est ignoré.",
+      "sample": {
+        "name": "Alex",
+        "type": "Consultation",
+        "location": "12 rue Principale"
+      },
+      "settingsTitle": "Rappels et suivis",
+      "settingsDescription": "Pour chaque type de rendez-vous, écrivez au contact avant le rendez-vous et relancez-le après. Tout est désactivé tant que vous ne l'activez pas.",
+      "loading": "Chargement des types de rendez-vous",
+      "noTypes": "Aucun type de rendez-vous pour l'instant. Créez-en un pour régler ses rappels.",
+      "paused": "En pause",
+      "summaryNone": "Aucun réglé",
+      "summary": "{on} sur {total} activés",
+      "unsaved": "Modifications non enregistrées",
+      "conflict": "Ce type de rendez-vous a été modifié ailleurs. Rechargez pour voir la dernière version avant d'enregistrer.",
+      "reload": "Recharger",
+      "discard": "Annuler les modifications",
+      "saving": "Enregistrement",
+      "save": "Enregistrer les rappels",
+      "saved": "Rappels enregistrés pour {name}.",
+      "readOnly": "Vous pouvez voir ces rappels mais pas les modifier.",
+      "fixFirst": "Corrigez d'abord les rappels en surbrillance.",
+      "problems": {
+        "offsetInvalid": "Saisissez un nombre entier pour la durée, jusqu'à 30 jours.",
+        "duplicate": "Chaque rappel ou suivi doit avoir un horaire différent.",
+        "channelsNone": "Choisissez au moins un canal.",
+        "bodyTooLong": "Le message est trop long.",
+        "subjectTooLong": "L'objet est trop long.",
+        "labelTooLong": "Le libellé est trop long.",
+        "tooMany": "Au maximum 8 rappels et suivis pour un type de rendez-vous."
+      },
+      "noneOn": "Aucun rappel ni suivi n'est activé pour ce type de rendez-vous.",
+      "when": {
+        "before": "{count, plural, one {# minute avant} other {# minutes avant}}",
+        "after": "{count, plural, one {# minute après} other {# minutes après}}"
+      },
+      "sentOn": "Envoyé par {channel}",
+      "status": {
+        "scheduled": "Planifié",
+        "pending": "À envoyer",
+        "sending": "Envoi en cours",
+        "held": "En attente",
+        "sent": "Envoyé",
+        "skipped": "Non envoyé",
+        "failed": "Échec",
+        "cancelled": "Annulé"
+      },
+      "reasons": {
+        "rule_removed": "Le rappel a été supprimé avant son échéance.",
+        "rule_off": "Le rappel a été désactivé avant son envoi.",
+        "rescheduled": "Le rendez-vous a été déplacé, il a donc été remplacé.",
+        "booking_cancelled": "Le rendez-vous a été annulé.",
+        "booking_declined": "La demande a été refusée.",
+        "booking_no_show": "Marqué comme absence.",
+        "booking_not_confirmed": "Le rendez-vous n'est pas confirmé.",
+        "started": "Le rendez-vous avait déjà commencé.",
+        "expired": "Il était trop tard pour l'envoyer.",
+        "no_contact_point": "Le contact n'a pas de numéro ni d'adresse pour ce canal.",
+        "no_channel": "Aucun canal n'a pu le livrer.",
+        "no_sender": "Aucun expéditeur connecté pour ce canal.",
+        "template_required": "WhatsApp exige un modèle approuvé en dehors de la fenêtre de 24 heures.",
+        "template_unavailable": "Le modèle WhatsApp choisi ne peut pas être envoyé.",
+        "quiet_hours_too_late": "Les heures calmes ont dépassé le début.",
+        "no_consent": "Aucun consentement enregistré.",
+        "opted_out": "Le contact s'est désinscrit.",
+        "do_not_call": "Le numéro figure sur la liste d'opposition au démarchage.",
+        "minor": "Le contact est signalé comme mineur.",
+        "processing_restricted": "L'envoi de messages à ce contact est restreint.",
+        "plan_limit": "La limite du forfait est atteinte.",
+        "quiet_hours": "En attente de la fin des heures calmes.",
+        "channel_unavailable": "Le canal n'est pas connecté pour le moment.",
+        "wallet_empty": "Le portefeuille est vide.",
+        "send_halted": "L'envoi est suspendu.",
+        "provider_error": "Le fournisseur l'a refusé.",
+        "interrupted": "Il a été interrompu et non relancé.",
+        "internal_error": "Une erreur s'est produite."
       }
     }
   }
