@@ -22,6 +22,9 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { PlanUsageService } from '../plans-subscriptions-trials';
+import { AppointmentChannelsRepository } from './appointment-channels.repository';
+import { AppointmentChannelsService } from './appointment-channels.service';
+import { toApiTemplate } from './appointment-template.mapper';
 import { BOOKING_TYPE_MODULE, priceInMinor, slugify } from './appointment-rules';
 import { AppointmentsRepository } from './appointments.repository';
 import {
@@ -67,6 +70,8 @@ export class BookingTypesService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly planUsage: PlanUsageService,
+    private readonly channels: AppointmentChannelsService,
+    private readonly library: AppointmentChannelsRepository,
     config: ConfigService<Env, true>,
   ) {
     this.webUrl = config.get('WEB_APP_URL', { infer: true }).replace(/\/$/, '');
@@ -414,6 +419,16 @@ export class BookingTypesService {
           ]);
         }
       }
+      // A rule may name only channels the owner switched on. A channel the rule already had is not asked again (so a type keeps saving
+      // after the owner switches a channel off); a rule that is being switched on is asked about all of its channels.
+      const added: Array<{ channel: string; path: string }> = [];
+      input.reminders.forEach((r, i) => {
+        if (!r.isActive) return;
+        const before = r.id ? existing.find((e) => e.uuid === r.id) : undefined;
+        const had = before?.isActive ? new Set<string>(before.channels) : new Set<string>();
+        for (const c of r.channels) if (!had.has(c)) added.push({ channel: c, path: `reminders.${i}.channels` });
+      });
+      await this.channels.assertEnabled(tx, orgId, added);
       const waIds = await this.repo.resolveWaTemplates(
         tx,
         orgId,
@@ -456,6 +471,7 @@ export class BookingTypesService {
         orgId,
         input.templates.flatMap((t) => (t.waTemplateId ? [t.waTemplateId] : [])),
       );
+      const chosen = await this.resolveLibraryChoices(tx, orgId, typeId, input.templates);
       await this.repo.replaceTemplates(
         tx,
         orgId,
@@ -469,9 +485,10 @@ export class BookingTypesService {
           return {
             event: t.event,
             channel: t.channel,
-            waTemplateId: t.waTemplateId ? wa.get(t.waTemplateId)! : null,
+            waTemplateId: chosen.get(i)?.waTemplateId ?? (t.waTemplateId ? wa.get(t.waTemplateId)! : null),
             plainBody: t.plainBody && t.plainBody.trim() !== '' ? t.plainBody : null,
             variableMap: t.variableMap ?? null,
+            libraryTemplateId: chosen.get(i)?.id ?? null,
           };
         }),
       );
@@ -522,6 +539,65 @@ export class BookingTypesService {
   }
 
   /** Slug made unique per workspace by a numeric suffix (Reference's rule). */
+  /**
+   * The library messages a type chooses for its lifecycle messages (BL-351): they must exist, be of the same kind and channel, be
+   * active and, for WhatsApp, APPROVED (a choice the type already had is not asked again, so a type keeps saving after Meta pauses a
+   * template; the sender skips an unapproved template at send time). A channel the type did not use before must be switched on.
+   */
+  private async resolveLibraryChoices(
+    tx: Tx,
+    orgId: number,
+    typeId: number,
+    list: NonNullable<UpdateBookingTypeInput['templates']>,
+  ): Promise<Map<number, { id: number; waTemplateId: number | null }>> {
+    const existing = (await this.repo.children(tx, orgId, [typeId])).get(typeId)!.templates;
+    const had = (event: string, channel: string) =>
+      existing.find((e) => e.event === event && e.channel === channel);
+    const added: Array<{ channel: string; path: string }> = [];
+    list.forEach((t, i) => {
+      if (!had(t.event, t.channel)) added.push({ channel: t.channel, path: `templates.${i}.channel` });
+    });
+    await this.channels.assertEnabled(
+      tx,
+      orgId,
+      added.filter((a) => a.channel === 'whatsapp' || a.channel === 'email' || a.channel === 'sms' || a.channel === 'voice'),
+    );
+
+    const rows = await this.library.findLibraryMany(
+      tx,
+      orgId,
+      list.flatMap((t) => (t.libraryTemplateId ? [t.libraryTemplateId] : [])),
+    );
+    const out = new Map<number, { id: number; waTemplateId: number | null }>();
+    list.forEach((t, i) => {
+      if (!t.libraryTemplateId) return;
+      const path = `templates.${i}.libraryTemplateId`;
+      const row = rows.find((r) => r.uuid === t.libraryTemplateId);
+      if (!row) throw AppError.validation('That message is not in the library of this workspace.', [{ path, message: t.libraryTemplateId }]);
+      if (row.kind !== t.event || row.channel !== t.channel) {
+        throw AppError.validation('That message is for another kind of message or another channel.', [
+          { path, message: `${row.kind}/${row.channel}` },
+        ]);
+      }
+      const unchanged = had(t.event, t.channel)?.libraryTemplateId === row.id;
+      if (!unchanged) {
+        if (!row.isActive) {
+          throw AppError.validation('That message is switched off in the library.', [{ path, message: 'inactive' }]);
+        }
+        if (toApiTemplate(row).status !== 'approved') {
+          throw new AppError(
+            ERROR_CODES.APPT_TEMPLATE_NOT_APPROVED,
+            'Only an approved WhatsApp message can be chosen.',
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            [{ path, message: t.libraryTemplateId }],
+          );
+        }
+      }
+      out.set(i, { id: row.id, waTemplateId: row.waTemplateId });
+    });
+    return out;
+  }
+
   private async uniqueSlug(
     tx: Tx,
     orgId: number,

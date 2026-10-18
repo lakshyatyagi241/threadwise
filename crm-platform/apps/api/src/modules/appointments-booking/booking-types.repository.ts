@@ -92,6 +92,14 @@ export interface TemplateRow {
   waTemplateUuid: string | null;
   plainBody: string | null;
   variableMap: Record<string, string> | null;
+  /** The library message the type chose for this event and channel (BL-351), read live when the message is sent. */
+  libraryTemplateId: number | null;
+  libraryTemplateUuid: string | null;
+  libraryActive: boolean;
+  librarySubject: string | null;
+  libraryBody: string | null;
+  /** The WhatsApp template behind a WhatsApp library message. */
+  libraryWaUuid: string | null;
 }
 export interface FinancialRow {
   feeMinor: bigint;
@@ -352,8 +360,12 @@ export class BookingTypesRepository {
       });
 
     for (const r of (
-      await tx.execute(sql`SELECT bt.*, w.uuid AS wa_uuid FROM booking_templates bt
+      await tx.execute(sql`SELECT bt.*, w.uuid AS wa_uuid, lt.uuid AS lib_uuid, lt.is_active AS lib_active,
+          lt.subject AS lib_subject, lt.body AS lib_body, lw.uuid AS lib_wa_uuid
+        FROM booking_templates bt
         LEFT JOIN wa_templates w ON w.org_id = bt.org_id AND w.id = bt.wa_template_id
+        LEFT JOIN appointment_message_templates lt ON lt.org_id = bt.org_id AND lt.id = bt.library_template_id
+        LEFT JOIN wa_templates lw ON lw.org_id = lt.org_id AND lw.id = lt.wa_template_id
         WHERE bt.org_id = ${orgId} AND bt.booking_type_id IN ${ids} ORDER BY bt.event, bt.channel`)
     ).rows as Raw[])
       get(r.booking_type_id).templates.push({
@@ -363,6 +375,12 @@ export class BookingTypesRepository {
         waTemplateUuid: s(r.wa_uuid),
         plainBody: s(r.plain_body),
         variableMap: (r.variable_map as Record<string, string> | null) ?? null,
+        libraryTemplateId: n(r.library_template_id),
+        libraryTemplateUuid: s(r.lib_uuid),
+        libraryActive: (r.lib_active as boolean | null) ?? false,
+        librarySubject: s(r.lib_subject),
+        libraryBody: s(r.lib_body),
+        libraryWaUuid: s(r.lib_wa_uuid),
       });
 
     for (const r of (
@@ -525,15 +543,16 @@ export class BookingTypesRepository {
       waTemplateId: number | null;
       plainBody: string | null;
       variableMap: Record<string, string> | null;
+      libraryTemplateId: number | null;
     }>,
   ): Promise<void> {
     await tx.execute(
       sql`DELETE FROM booking_templates WHERE org_id = ${orgId} AND booking_type_id = ${typeId}`,
     );
     for (const t of list)
-      await tx.execute(sql`INSERT INTO booking_templates (org_id, booking_type_id, event, channel, wa_template_id, plain_body, variable_map)
+      await tx.execute(sql`INSERT INTO booking_templates (org_id, booking_type_id, event, channel, wa_template_id, plain_body, variable_map, library_template_id)
         VALUES (${orgId}, ${typeId}, ${t.event}, ${t.channel}, ${t.waTemplateId}, ${t.plainBody},
-                ${t.variableMap ? JSON.stringify(t.variableMap) : null}::jsonb)`);
+                ${t.variableMap ? JSON.stringify(t.variableMap) : null}::jsonb, ${t.libraryTemplateId})`);
   }
 
   async upsertFinancial(

@@ -42,6 +42,8 @@ export const REMINDER_REASONS = [
   'no_contact_point',
   'no_channel',
   'no_sender',
+  // the workspace owner has not switched this channel on for appointment messages (BL-350)
+  'channel_disabled',
   'template_required',
   'template_unavailable',
   'quiet_hours_too_late',
@@ -208,7 +210,7 @@ export function settleChannels(
   // Every channel was skipped: the most informative reason is the first channel's that is not "nothing to send to".
   const skips = tried.flatMap((t) => (t.outcome.status === 'skipped' ? [t.outcome.reason] : []));
   const reason =
-    skips.find((r) => r !== 'no_contact_point' && r !== 'no_sender') ?? skips[0] ?? 'no_channel';
+    skips.find((r) => r !== 'no_contact_point' && r !== 'no_sender' && r !== 'channel_disabled') ?? skips[0] ?? 'no_channel';
   return { status: 'skipped', reason, channel: null };
 }
 
@@ -290,6 +292,7 @@ const REASON_TEXT: Record<ReminderReason, string> = {
   no_contact_point: 'the contact has no number or address for it',
   no_channel: 'no channel could deliver it',
   no_sender: 'no connected sender',
+  channel_disabled: 'the workspace has switched this channel off for appointment messages',
   template_required: 'WhatsApp needs an approved template outside the 24 hour window',
   template_unavailable: 'the chosen template cannot be sent',
   quiet_hours_too_late: 'quiet hours ran past the booking',
