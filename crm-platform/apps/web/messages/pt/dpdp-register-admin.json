@@ -253,10 +253,10 @@
     },
     "checks": {
       "mfa_operators": {
-        "title": "Operadores devem entrar com autenticação de dois fatores",
+        "title": "Superadministradores devem entrar com autenticação de dois fatores",
         "details": {
-          "mfa_on": "O login em dois fatores é exigido dos operadores.",
-          "mfa_off": "Não exigido: os operadores podem entrar sem um segundo fator."
+          "mfa_on": "O login em dois fatores é exigido dos superadministradores.",
+          "mfa_off": "Não exigido: os superadministradores podem entrar sem um segundo fator."
         }
       },
       "mfa_workspace_admins": {
@@ -305,7 +305,7 @@
       "errors_vendor_region": {
         "title": "Relatórios de erros ficam na Índia ou estão desligados",
         "details": {
-          "sentry_off": "O envio de relatórios de erros está desligado, então nenhum dado de erro sai da plataforma.",
+          "sentry_off": "O envio de relatórios de erros está desligado no servidor da API.",
           "region_india": "Os relatórios de erros vão para uma região da Índia do fornecedor.",
           "region_outside_india": "Os relatórios de erros vão para a região {region} do fornecedor, fora da Índia.",
           "region_unrecognised": "O endereço dos relatórios de erros não é um endereço regional conhecido, então não dá para saber o país.",

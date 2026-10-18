@@ -253,10 +253,10 @@
     },
     "checks": {
       "mfa_operators": {
-        "title": "Gli operatori devono accedere con l’autenticazione a due fattori",
+        "title": "I super admin devono accedere con l’autenticazione a due fattori",
         "details": {
-          "mfa_on": "L’accesso a due fattori è richiesto agli operatori.",
-          "mfa_off": "Non richiesto: gli operatori possono accedere senza un secondo fattore."
+          "mfa_on": "L’accesso a due fattori è richiesto ai super admin.",
+          "mfa_off": "Non richiesto: i super admin possono accedere senza un secondo fattore."
         }
       },
       "mfa_workspace_admins": {
@@ -305,7 +305,7 @@
       "errors_vendor_region": {
         "title": "I report di errore restano in India o sono disattivati",
         "details": {
-          "sentry_off": "I report di errore sono disattivati, quindi nessun dato di errore lascia la piattaforma.",
+          "sentry_off": "I report di errore sono disattivati nel server API.",
           "region_india": "I report di errore vanno a una regione indiana del fornitore.",
           "region_outside_india": "I report di errore vanno alla regione {region} del fornitore, fuori dall’India.",
           "region_unrecognised": "L’indirizzo dei report di errore non è un indirizzo regionale noto, quindi non si può risalire al suo paese.",

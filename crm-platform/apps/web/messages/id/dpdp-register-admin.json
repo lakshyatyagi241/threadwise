@@ -253,10 +253,10 @@
     },
     "checks": {
       "mfa_operators": {
-        "title": "Operator harus masuk dengan autentikasi dua faktor",
+        "title": "Super admin harus masuk dengan autentikasi dua faktor",
         "details": {
-          "mfa_on": "Masuk dengan dua faktor diwajibkan untuk operator.",
-          "mfa_off": "Tidak diwajibkan: operator bisa masuk tanpa faktor kedua."
+          "mfa_on": "Masuk dengan dua faktor diwajibkan untuk super admin.",
+          "mfa_off": "Tidak diwajibkan: super admin bisa masuk tanpa faktor kedua."
         }
       },
       "mfa_workspace_admins": {
@@ -305,7 +305,7 @@
       "errors_vendor_region": {
         "title": "Laporan error tetap di India atau dimatikan",
         "details": {
-          "sentry_off": "Pelaporan error dimatikan, jadi tidak ada data error yang keluar dari platform.",
+          "sentry_off": "Pelaporan error dimatikan di server API.",
           "region_india": "Laporan error dikirim ke wilayah India milik vendor.",
           "region_outside_india": "Laporan error dikirim ke wilayah {region} milik vendor, di luar India.",
           "region_unrecognised": "Alamat pelaporan error bukan alamat regional yang dikenal, jadi negaranya tidak dapat diketahui.",

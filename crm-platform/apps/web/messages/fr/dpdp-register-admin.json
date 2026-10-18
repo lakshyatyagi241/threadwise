@@ -253,10 +253,10 @@
     },
     "checks": {
       "mfa_operators": {
-        "title": "Les opérateurs doivent se connecter avec une authentification à deux facteurs",
+        "title": "Les super administrateurs doivent se connecter avec une authentification à deux facteurs",
         "details": {
-          "mfa_on": "La connexion à deux facteurs est exigée des opérateurs.",
-          "mfa_off": "Non exigée : les opérateurs peuvent se connecter sans second facteur."
+          "mfa_on": "La connexion à deux facteurs est exigée des super administrateurs.",
+          "mfa_off": "Non exigée : les super administrateurs peuvent se connecter sans second facteur."
         }
       },
       "mfa_workspace_admins": {
@@ -305,7 +305,7 @@
       "errors_vendor_region": {
         "title": "Les rapports d’erreurs restent en Inde ou sont désactivés",
         "details": {
-          "sentry_off": "Les rapports d’erreurs sont désactivés, donc aucune donnée d’erreur ne quitte la plateforme.",
+          "sentry_off": "Les rapports d’erreurs sont désactivés dans le serveur de l’API.",
           "region_india": "Les rapports d’erreurs vont vers une région indienne du fournisseur.",
           "region_outside_india": "Les rapports d’erreurs vont vers la région {region} du fournisseur, hors d’Inde.",
           "region_unrecognised": "L’adresse des rapports d’erreurs n’est pas une adresse régionale connue, son pays ne peut donc pas être déterminé.",

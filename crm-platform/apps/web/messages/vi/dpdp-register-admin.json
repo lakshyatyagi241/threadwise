@@ -253,10 +253,10 @@
     },
     "checks": {
       "mfa_operators": {
-        "title": "Người vận hành phải đăng nhập bằng xác thực hai yếu tố",
+        "title": "Quản trị viên cấp cao phải đăng nhập bằng xác thực hai yếu tố",
         "details": {
-          "mfa_on": "Đăng nhập hai yếu tố là bắt buộc với người vận hành.",
-          "mfa_off": "Không bắt buộc: người vận hành có thể đăng nhập mà không cần yếu tố thứ hai."
+          "mfa_on": "Đăng nhập hai yếu tố là bắt buộc với quản trị viên cấp cao.",
+          "mfa_off": "Không bắt buộc: quản trị viên cấp cao có thể đăng nhập mà không cần yếu tố thứ hai."
         }
       },
       "mfa_workspace_admins": {
@@ -305,7 +305,7 @@
       "errors_vendor_region": {
         "title": "Báo cáo lỗi ở lại Ấn Độ hoặc bị tắt",
         "details": {
-          "sentry_off": "Báo cáo lỗi đang tắt, nên không có dữ liệu lỗi nào rời nền tảng.",
+          "sentry_off": "Báo cáo lỗi đang tắt trong máy chủ API.",
           "region_india": "Báo cáo lỗi được gửi đến một khu vực ở Ấn Độ của nhà cung cấp.",
           "region_outside_india": "Báo cáo lỗi được gửi đến khu vực {region} của nhà cung cấp, ngoài Ấn Độ.",
           "region_unrecognised": "Địa chỉ báo cáo lỗi không phải địa chỉ khu vực đã biết, nên không xác định được quốc gia.",

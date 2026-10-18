@@ -474,9 +474,9 @@ describe('DPDP register page', () => {
     expect(checks[0]!.textContent).toContain('Pass');
     expect(checks[0]!.textContent).toContain('Read live');
     expect(checks[0]!.textContent).toContain(
-      'Operators must sign in with two-factor authentication',
+      'Super admins must sign in with two-factor authentication',
     );
-    expect(checks[0]!.textContent).toContain('Two-factor sign-in is required for operators.');
+    expect(checks[0]!.textContent).toContain('Two-factor sign-in is required for super admins.');
     expect(checks[1]!.textContent).toContain('Fail');
     expect(checks[1]!.textContent).toContain(
       'Not required: workspace admins can sign in without a second factor.',

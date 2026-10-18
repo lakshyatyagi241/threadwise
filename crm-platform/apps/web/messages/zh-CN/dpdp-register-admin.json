@@ -253,10 +253,10 @@
     },
     "checks": {
       "mfa_operators": {
-        "title": "运营人员必须使用双因素认证登录",
+        "title": "超级管理员必须使用双因素认证登录",
         "details": {
-          "mfa_on": "运营人员必须使用双因素登录。",
-          "mfa_off": "未强制：运营人员无需第二因素即可登录。"
+          "mfa_on": "超级管理员必须使用双因素登录。",
+          "mfa_off": "未强制：超级管理员无需第二因素即可登录。"
         }
       },
       "mfa_workspace_admins": {
@@ -305,7 +305,7 @@
       "errors_vendor_region": {
         "title": "错误报告留在印度或已关闭",
         "details": {
-          "sentry_off": "错误报告已关闭，因此没有错误数据离开平台。",
+          "sentry_off": "API 服务器中的错误报告已关闭。",
           "region_india": "错误报告发往服务商位于印度的区域。",
           "region_outside_india": "错误报告发往服务商的 {region} 区域，位于印度之外。",
           "region_unrecognised": "错误报告地址不是已知的区域地址，因此无法判断其所在国家。",

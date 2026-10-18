@@ -253,10 +253,10 @@
     },
     "checks": {
       "mfa_operators": {
-        "title": "Operators moeten inloggen met tweefactorauthenticatie",
+        "title": "Superbeheerders moeten inloggen met tweefactorauthenticatie",
         "details": {
-          "mfa_on": "Inloggen met twee factoren is verplicht voor operators.",
-          "mfa_off": "Niet verplicht: operators kunnen inloggen zonder tweede factor."
+          "mfa_on": "Inloggen met twee factoren is verplicht voor superbeheerders.",
+          "mfa_off": "Niet verplicht: superbeheerders kunnen inloggen zonder tweede factor."
         }
       },
       "mfa_workspace_admins": {
@@ -305,7 +305,7 @@
       "errors_vendor_region": {
         "title": "Foutrapporten blijven in India of staan uit",
         "details": {
-          "sentry_off": "Foutrapportage staat uit, dus er verlaten geen foutgegevens het platform.",
+          "sentry_off": "Foutrapportage staat uit op de API-server.",
           "region_india": "Foutrapporten gaan naar een Indiase regio van de leverancier.",
           "region_outside_india": "Foutrapporten gaan naar de regio {region} van de leverancier, buiten India.",
           "region_unrecognised": "Het adres voor foutrapportage is geen bekend regionaal adres, dus het land is niet vast te stellen.",

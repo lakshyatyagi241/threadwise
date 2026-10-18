@@ -253,10 +253,10 @@
     },
     "checks": {
       "mfa_operators": {
-        "title": "Los operadores deben iniciar sesión con autenticación de dos factores",
+        "title": "Los superadministradores deben iniciar sesión con autenticación de dos factores",
         "details": {
-          "mfa_on": "Se exige el inicio de sesión con dos factores a los operadores.",
-          "mfa_off": "No se exige: los operadores pueden iniciar sesión sin un segundo factor."
+          "mfa_on": "Se exige el inicio de sesión con dos factores a los superadministradores.",
+          "mfa_off": "No se exige: los superadministradores pueden iniciar sesión sin un segundo factor."
         }
       },
       "mfa_workspace_admins": {
@@ -305,7 +305,7 @@
       "errors_vendor_region": {
         "title": "Los informes de errores se quedan en la India o están desactivados",
         "details": {
-          "sentry_off": "Los informes de errores están desactivados, así que ningún dato de errores sale de la plataforma.",
+          "sentry_off": "Los informes de errores están desactivados en el servidor de la API.",
           "region_india": "Los informes de errores van a una región de la India del proveedor.",
           "region_outside_india": "Los informes de errores van a la región {region} del proveedor, fuera de la India.",
           "region_unrecognised": "La dirección de los informes de errores no es una dirección regional conocida, así que no se puede saber su país.",

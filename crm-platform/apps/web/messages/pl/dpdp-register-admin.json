@@ -253,10 +253,10 @@
     },
     "checks": {
       "mfa_operators": {
-        "title": "Operatorzy muszą logować się z uwierzytelnianiem dwuskładnikowym",
+        "title": "Superadministratorzy muszą logować się z uwierzytelnianiem dwuskładnikowym",
         "details": {
-          "mfa_on": "Logowanie dwuskładnikowe jest wymagane od operatorów.",
-          "mfa_off": "Niewymagane: operatorzy mogą logować się bez drugiego składnika."
+          "mfa_on": "Logowanie dwuskładnikowe jest wymagane od superadministratorów.",
+          "mfa_off": "Niewymagane: superadministratorzy mogą logować się bez drugiego składnika."
         }
       },
       "mfa_workspace_admins": {
@@ -305,7 +305,7 @@
       "errors_vendor_region": {
         "title": "Raporty o błędach zostają w Indiach lub są wyłączone",
         "details": {
-          "sentry_off": "Raportowanie błędów jest wyłączone, więc żadne dane o błędach nie opuszczają platformy.",
+          "sentry_off": "Raportowanie błędów jest wyłączone na serwerze API.",
           "region_india": "Raporty o błędach trafiają do indyjskiego regionu dostawcy.",
           "region_outside_india": "Raporty o błędach trafiają do regionu {region} dostawcy, poza Indiami.",
           "region_unrecognised": "Adres raportowania błędów nie jest znanym adresem regionalnym, więc nie da się ustalić jego kraju.",

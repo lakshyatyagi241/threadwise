@@ -161,10 +161,10 @@
     },
     "checks": {
       "mfa_operators": {
-        "title": "Operators must sign in with two-factor authentication",
+        "title": "Super admins must sign in with two-factor authentication",
         "details": {
-          "mfa_on": "Two-factor sign-in is required for operators.",
-          "mfa_off": "Not required: operators can sign in without a second factor."
+          "mfa_on": "Two-factor sign-in is required for super admins.",
+          "mfa_off": "Not required: super admins can sign in without a second factor."
         }
       },
       "mfa_workspace_admins": {
@@ -213,7 +213,7 @@
       "errors_vendor_region": {
         "title": "Error reports stay in India or are switched off",
         "details": {
-          "sentry_off": "Error reporting is off, so no error data leaves the platform.",
+          "sentry_off": "Error reporting is off in the API server.",
           "region_india": "Error reports go to an India region of the vendor.",
           "region_outside_india": "Error reports go to the {region} region of the vendor, outside India.",
           "region_unrecognised": "The error-reporting address is not a known regional address, so its country cannot be told.",

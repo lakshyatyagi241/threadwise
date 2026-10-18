@@ -253,10 +253,10 @@
     },
     "checks": {
       "mfa_operators": {
-        "title": "Operatoren müssen sich mit Zwei-Faktor-Authentifizierung anmelden",
+        "title": "Super-Admins müssen sich mit Zwei-Faktor-Authentifizierung anmelden",
         "details": {
-          "mfa_on": "Die Zwei-Faktor-Anmeldung ist für Operatoren vorgeschrieben.",
-          "mfa_off": "Nicht vorgeschrieben: Operatoren können sich ohne zweiten Faktor anmelden."
+          "mfa_on": "Die Zwei-Faktor-Anmeldung ist für Super-Admins vorgeschrieben.",
+          "mfa_off": "Nicht vorgeschrieben: Super-Admins können sich ohne zweiten Faktor anmelden."
         }
       },
       "mfa_workspace_admins": {
@@ -305,7 +305,7 @@
       "errors_vendor_region": {
         "title": "Fehlerberichte bleiben in Indien oder sind ausgeschaltet",
         "details": {
-          "sentry_off": "Fehlerberichte sind ausgeschaltet, daher verlassen keine Fehlerdaten die Plattform.",
+          "sentry_off": "Die Fehlerberichte sind im API-Server ausgeschaltet.",
           "region_india": "Fehlerberichte gehen an eine indische Region des Anbieters.",
           "region_outside_india": "Fehlerberichte gehen an die Region {region} des Anbieters, außerhalb Indiens.",
           "region_unrecognised": "Die Adresse für Fehlerberichte ist keine bekannte regionale Adresse, daher lässt sich ihr Land nicht bestimmen.",

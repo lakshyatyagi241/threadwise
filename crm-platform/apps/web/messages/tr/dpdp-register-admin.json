@@ -253,10 +253,10 @@
     },
     "checks": {
       "mfa_operators": {
-        "title": "Operatörler iki faktörlü kimlik doğrulamayla giriş yapmalı",
+        "title": "Süper yöneticiler iki faktörlü kimlik doğrulamayla giriş yapmalı",
         "details": {
-          "mfa_on": "Operatörler için iki faktörlü giriş zorunlu.",
-          "mfa_off": "Zorunlu değil: operatörler ikinci faktör olmadan giriş yapabilir."
+          "mfa_on": "Süper yöneticiler için iki faktörlü giriş zorunlu.",
+          "mfa_off": "Zorunlu değil: süper yöneticiler ikinci faktör olmadan giriş yapabilir."
         }
       },
       "mfa_workspace_admins": {
@@ -305,7 +305,7 @@
       "errors_vendor_region": {
         "title": "Hata raporları Hindistan’da kalır veya kapalıdır",
         "details": {
-          "sentry_off": "Hata raporlama kapalı, bu yüzden hiçbir hata verisi platformdan çıkmıyor.",
+          "sentry_off": "API sunucusunda hata raporlama kapalı.",
           "region_india": "Hata raporları sağlayıcının bir Hindistan bölgesine gidiyor.",
           "region_outside_india": "Hata raporları sağlayıcının Hindistan dışındaki {region} bölgesine gidiyor.",
           "region_unrecognised": "Hata raporlama adresi bilinen bir bölgesel adres değil, bu yüzden ülkesi belirlenemiyor.",
