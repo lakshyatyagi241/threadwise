@@ -88,6 +88,7 @@ describe('registry', () => {
       'personal_history_full',
       'ai_crm_copilot',
       'lead_scoring',
+      'record_assignment',
     ]);
     expect(PLAN_CHIP_MAX).toBe(3);
   });

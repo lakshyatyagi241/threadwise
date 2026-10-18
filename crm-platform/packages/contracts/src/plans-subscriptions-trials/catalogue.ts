@@ -172,6 +172,9 @@ export const PLAN_FEATURE_DEFS = [
   // AI lead scoring and the growth pilot built on it (Marketplace app `lead-scoring`). Default FALSE: the app owns this key (`grants_plan_features`).
   // The workspaces that already used scoring keep it through a per-workspace override written by migration 20261228090000, then the operator's comp.
   { key: 'lead_scoring', group: 'aiCalling', default: false },
+  // Record assignment rules (BL-340..345): rules that give new contacts, companies and deals to sales owners (Settings > Automation). Default FALSE and
+  // switched on by migration 20270115090000 only for the higher plans (the ones that already carry SLA policies); the basic plan does not get it.
+  { key: 'record_assignment', group: 'advanced', default: false },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -213,6 +216,7 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   personal_history_full: 'Full history import (personal WhatsApp)',
   ai_crm_copilot: 'AI CRM Copilot',
   lead_scoring: 'AI lead scoring',
+  record_assignment: 'Record assignment rules',
 };
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
@@ -257,6 +261,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'personal_history_full',
   'ai_crm_copilot',
   'lead_scoring',
+  'record_assignment',
 ];
 export const PLAN_CHIP_MAX = 3;
 
