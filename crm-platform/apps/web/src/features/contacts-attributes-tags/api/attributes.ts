@@ -1,7 +1,11 @@
 'use client';
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { SYSTEM_ATTRIBUTES, type CreateAttributeInput } from '@crm/contracts';
+import {
+  contactFilterValuesSchema,
+  SYSTEM_ATTRIBUTES,
+  type CreateAttributeInput,
+} from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 import { toAttribute, type Attribute, type PickerEntry } from '../lib/attribute-model';
 import type { StatusFilter } from '../lib/attribute-model';
@@ -144,5 +148,20 @@ export function useStatusOptions() {
         { signal },
       ),
     staleTime: 5 * 60_000,
+  });
+}
+
+/**
+ * The stages and statuses contacts hold, which the filters offer next to the configured options: a workspace that set up its own
+ * stages or statuses can still have contacts on `new` (the default stage) or on a status it never listed. A refusal or an error
+ * just leaves the dropdowns with the configured options only.
+ */
+export function useContactFilterValues() {
+  return useQuery({
+    queryKey: KEYS.filterValues,
+    queryFn: ({ signal }) =>
+      apiFetch('/contacts/filter-values', { schema: contactFilterValuesSchema, signal }),
+    staleTime: 60_000,
+    retry: false,
   });
 }

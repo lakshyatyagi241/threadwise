@@ -17,11 +17,17 @@ import {
   type SegmentNode,
   type SegmentOperator,
 } from '@crm/contracts';
-import { minorCondition, tokenCondition, searchTokens } from '../contacts/contact-conditions';
 import {
+  contactPhoneDigits,
+  minorCondition,
+  searchCondition,
+} from '../contacts/contact-conditions';
+import {
+  countryCodePredicate,
   datePredicate,
   groupsPredicate,
   numberPredicate,
+  phonePredicate,
   tagsPredicate,
   textPredicate,
   type DateOperator,
@@ -219,9 +225,20 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
     case 'email':
       return text(sql`${contacts.email}`);
     case 'phone':
-      return text(sql`${contacts.phone}`);
+      // Typed the way the screen shows it ("+91 88751 37569"): compared on digits, not on the stored text.
+      return {
+        sql: phonePredicate(
+          contactPhoneDigits,
+          sql`${contacts.phone}`,
+          op as TextOperator,
+          c.value,
+        ),
+      };
     case 'countryCode':
-      return text(sql`${contacts.countryCode}`);
+      // "+91", "91" and "0091" are one code.
+      return {
+        sql: countryCodePredicate(sql`${contacts.countryCode}`, op as TextOperator, c.value),
+      };
     case 'source':
       return text(sql`${contacts.source}`);
     case 'timezone':
@@ -304,10 +321,8 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
           c.value,
         ),
       };
-    case 'search': {
-      const tokens = searchTokens(String(c.value));
-      return { sql: sql`(${sql.join(tokens.map(tokenCondition), sql` AND `)})` };
-    }
+    case 'search':
+      return { sql: searchCondition(String(c.value)) };
     case 'createdAt':
       return { sql: datePredicate(sql`${contacts.createdAt}`, op as DateOperator, c.value) };
     case 'updatedAt':

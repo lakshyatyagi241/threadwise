@@ -11,6 +11,7 @@ import type {
   BulkResult,
   BulkUpdateContactsInput,
   ContactListResponse,
+  ContactFilterValues,
   ContactResponse,
   ContactSendWindow,
   ContactSelectItem,
@@ -35,6 +36,7 @@ import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { assertCompanyReadable, companyLinkRefused } from '../companies/company-link';
 import { countWithTimeout } from '../segments/segment-count';
 import { contactConditions, contactScopeCondition, whereOf } from './contact-conditions';
+import { stagesInUse, statusesInUse } from './contact-values-in-use';
 import { resolveContactFilter } from './contact-filter.resolver';
 import { stageEntryValues } from './contact-stage';
 import { planStatus } from './contact-status-stage';
@@ -1601,6 +1603,17 @@ export class ContactsService {
       );
 
       return { data: entries, page: { nextCursor, hasMore, limit: query.limit } };
+    });
+  }
+
+  /** The stages and statuses the caller's contacts hold, so a filter can offer a value the workspace never listed (e.g. `new`). */
+  async filterValues(scope: RecordScope): Promise<ContactFilterValues> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const own = contactScopeCondition(ctx.orgId, scope, ctx.userId);
+      const lifecycleStages = await stagesInUse(tx, ctx.orgId, undefined, own);
+      const statuses = await statusesInUse(tx, ctx.orgId, undefined, own);
+      return { lifecycleStages, statuses };
     });
   }
 
