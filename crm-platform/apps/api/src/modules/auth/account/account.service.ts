@@ -24,6 +24,7 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { PersonaService } from '../../persona';
 import { LoginService } from '../flows/login.service';
 import { MailService } from '../mail/mail.service';
 import { PlatformSettingsService } from '../platform/platform-settings.service';
@@ -108,6 +109,7 @@ export class AccountService {
     private readonly planGate: PlanFeatureGate,
     private readonly tokens: TokenService,
     private readonly policy: SecurityPolicyService,
+    private readonly persona: PersonaService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     config: ConfigService<Env, true>,
   ) {
@@ -152,7 +154,7 @@ export class AccountService {
 
   async sessionInfo(): Promise<SessionResponse> {
     const { orgId, userId, sessionId } = this.actor();
-    const [p, state, grants, rolesRes] = await Promise.all([
+    const [p, state, grants, rolesRes, personaView] = await Promise.all([
       this.loadProfile(orgId, userId),
       this.gates.stateFor(orgId, userId),
       this.rbac.grantsForUser(orgId, userId),
@@ -163,6 +165,8 @@ export class AccountService {
           WHERE ur.org_id = ${orgId} AND ur.user_id = ${userId} ORDER BY r.name
         `),
       ),
+      // Never throws: an unknown persona is `null`, and nothing is hidden on a guess.
+      this.persona.resolve(orgId),
     ]);
 
     const permissions: Record<string, 'all' | 'team' | 'own'> = {};
@@ -200,6 +204,7 @@ export class AccountService {
         currency: settings.currency ?? null,
         messageFooter: settings.messageFooter ?? null,
         onboardingStep: settings.onboardingStep ?? 'done',
+        ...(personaView ? { persona: personaView } : {}),
       },
       roles: (rolesRes.rows as unknown as Array<{ uuid: string; name: string }>).map((r) => ({
         id: r.uuid,

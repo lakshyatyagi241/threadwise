@@ -35,6 +35,8 @@ tools/migration/out/
 next-env.d.ts
 apps/web/src/features/_registry/nav.generated.ts
 apps/web/src/features/_registry/settings.generated.ts
+apps/web/src/features/_registry/home-cards.generated.ts
+apps/web/src/features/_registry/module-catalog.generated.ts
 apps/web/src/features/_registry/help.generated.ts
 docs/help-pending.md
 
