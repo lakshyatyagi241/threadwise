@@ -223,6 +223,31 @@ describe('RetentionWorker', () => {
       expect(await monthsLeft('other')).toEqual(['2025-11']);
     });
 
+    it('keeps the archive objects of a workspace under a legal hold, and the month manifest with them (BL-295)', async () => {
+      await seed('s', ['2025-11', '2025-12']);
+      const db = {
+        privileged: vi.fn(async () => ({ rows: [{ org: '7' }] })),
+      };
+      const worker = new RetentionWorker(
+        fakeArchiver({}) as unknown as PartitionArchiver,
+        storage,
+        config({}),
+        [],
+        db as never,
+      );
+      const result = await worker.expireArchive(policy('s', { archiveDays: 365 }), NOW);
+      // Workspace 9 loses its two objects; workspace 7 keeps both months, and so does each manifest.
+      expect(result.objects).toBe(2);
+      expect(await monthsLeft('s')).toEqual(['2025-11', '2025-12']);
+      const left = (await storage.list('archive/s/')).map((o) => o.key).sort();
+      expect(left).toEqual([
+        'archive/s/2025-11/7.ndjson.gz',
+        'archive/s/2025-11/_manifest.json',
+        'archive/s/2025-12/7.ndjson.gz',
+        'archive/s/2025-12/_manifest.json',
+      ]);
+    });
+
     it('only reports in a dry run', async () => {
       await seed('s', ['2025-11']);
       const worker = make(fakeArchiver({}), {}, []);

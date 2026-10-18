@@ -87,6 +87,7 @@ const stored: PlanAdminItem = {
     sms_monthly: 0,
     email_mailboxes: 0,
     email_monthly: 0,
+    storage_gb: 0,
   },
   features: {
     automation: true,

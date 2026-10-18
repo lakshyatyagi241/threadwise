@@ -1,0 +1,801 @@
+{
+  "generatedAt": "2026-10-18T14:05:16.654Z",
+  "status": "MODEL ONLY. Replace assumedAvgJobMs with p50 processing time per queue from production metrics (jobTimings in job-metrics.ts) before relying on any row.",
+  "forecasts": [
+    {
+      "queue": "campaign",
+      "class": "bulk",
+      "concurrencyPerWorker": 4,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 13.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 1500,
+      "drainSecondsFor100kBacklogAt50pctLoad": 15000,
+      "waitSloMsP95": 5000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 11,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "message-dispatch",
+      "class": "interactive",
+      "concurrencyPerWorker": 8,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 26.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 750,
+      "drainSecondsFor100kBacklogAt50pctLoad": 7500,
+      "waitSloMsP95": 250,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 6,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "webhook-ingest",
+      "class": "critical-inbound",
+      "concurrencyPerWorker": 8,
+      "assumedAvgJobMs": 30,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 266.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 75,
+      "drainSecondsFor100kBacklogAt50pctLoad": 750,
+      "waitSloMsP95": 100,
+      "instancesFor100jps": {
+        "slots": 5,
+        "instances": 1,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "con-import",
+      "class": "bulk",
+      "concurrencyPerWorker": 2,
+      "assumedAvgJobMs": 30,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 66.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 300,
+      "drainSecondsFor100kBacklogAt50pctLoad": 3000,
+      "waitSloMsP95": 5000,
+      "instancesFor100jps": {
+        "slots": 5,
+        "instances": 3,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "bcast-dispatch",
+      "class": "bulk",
+      "concurrencyPerWorker": 4,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 13.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 1500,
+      "drainSecondsFor100kBacklogAt50pctLoad": 15000,
+      "waitSloMsP95": 5000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 11,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "waba-ingest",
+      "class": "critical-inbound",
+      "concurrencyPerWorker": 8,
+      "assumedAvgJobMs": 30,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 266.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 75,
+      "drainSecondsFor100kBacklogAt50pctLoad": 750,
+      "waitSloMsP95": 100,
+      "instancesFor100jps": {
+        "slots": 5,
+        "instances": 1,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "pinnacle-credit-line",
+      "class": "maintenance",
+      "concurrencyPerWorker": 4,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 13.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 1500,
+      "drainSecondsFor100kBacklogAt50pctLoad": 15000,
+      "waitSloMsP95": 60000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 11,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "webhook-forward",
+      "class": "automation",
+      "concurrencyPerWorker": 16,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 53.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 375,
+      "drainSecondsFor100kBacklogAt50pctLoad": 3750,
+      "waitSloMsP95": 1000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 3,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "webhook-deliver",
+      "class": "automation",
+      "concurrencyPerWorker": 16,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 53.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 375,
+      "drainSecondsFor100kBacklogAt50pctLoad": 3750,
+      "waitSloMsP95": 1000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 3,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "tg-broadcast",
+      "class": "bulk",
+      "concurrencyPerWorker": 2,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 6.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 3000,
+      "drainSecondsFor100kBacklogAt50pctLoad": 30000,
+      "waitSloMsP95": 5000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 22,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "line-broadcast",
+      "class": "bulk",
+      "concurrencyPerWorker": 2,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 6.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 3000,
+      "drainSecondsFor100kBacklogAt50pctLoad": 30000,
+      "waitSloMsP95": 5000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 22,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "viber-broadcast",
+      "class": "bulk",
+      "concurrencyPerWorker": 2,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 6.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 3000,
+      "drainSecondsFor100kBacklogAt50pctLoad": 30000,
+      "waitSloMsP95": 5000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 22,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "fb-backfill",
+      "class": "bulk",
+      "concurrencyPerWorker": 2,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 6.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 3000,
+      "drainSecondsFor100kBacklogAt50pctLoad": 30000,
+      "waitSloMsP95": 5000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 22,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "meta-leadgen",
+      "class": "automation",
+      "concurrencyPerWorker": 4,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 13.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 1500,
+      "drainSecondsFor100kBacklogAt50pctLoad": 15000,
+      "waitSloMsP95": 1000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 11,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "meta-lead-sweep",
+      "class": "maintenance",
+      "concurrencyPerWorker": 2,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 6.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 3000,
+      "drainSecondsFor100kBacklogAt50pctLoad": 30000,
+      "waitSloMsP95": 60000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 22,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "fb-broadcast",
+      "class": "bulk",
+      "concurrencyPerWorker": 2,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 6.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 3000,
+      "drainSecondsFor100kBacklogAt50pctLoad": 30000,
+      "waitSloMsP95": 5000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 22,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "ig-pull",
+      "class": "bulk",
+      "concurrencyPerWorker": 4,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 13.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 1500,
+      "drainSecondsFor100kBacklogAt50pctLoad": 15000,
+      "waitSloMsP95": 5000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 11,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "ecom-import",
+      "class": "bulk",
+      "concurrencyPerWorker": 2,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 6.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 3000,
+      "drainSecondsFor100kBacklogAt50pctLoad": 30000,
+      "waitSloMsP95": 5000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 22,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "ecom-webhook",
+      "class": "automation",
+      "concurrencyPerWorker": 5,
+      "assumedAvgJobMs": 30,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 166.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 120,
+      "drainSecondsFor100kBacklogAt50pctLoad": 1200,
+      "waitSloMsP95": 1000,
+      "instancesFor100jps": {
+        "slots": 5,
+        "instances": 1,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "sched-run",
+      "class": "bulk",
+      "concurrencyPerWorker": 4,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 13.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 1500,
+      "drainSecondsFor100kBacklogAt50pctLoad": 15000,
+      "waitSloMsP95": 5000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 11,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "segment-actions",
+      "class": "bulk",
+      "concurrencyPerWorker": 2,
+      "assumedAvgJobMs": 30,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 66.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 300,
+      "drainSecondsFor100kBacklogAt50pctLoad": 3000,
+      "waitSloMsP95": 5000,
+      "instancesFor100jps": {
+        "slots": 5,
+        "instances": 3,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "media-fetch",
+      "class": "interactive",
+      "concurrencyPerWorker": 3,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 10,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 2000,
+      "drainSecondsFor100kBacklogAt50pctLoad": 20000,
+      "waitSloMsP95": 250,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 15,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "flow-run",
+      "class": "automation",
+      "concurrencyPerWorker": 8,
+      "assumedAvgJobMs": 30,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 266.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 75,
+      "drainSecondsFor100kBacklogAt50pctLoad": 750,
+      "waitSloMsP95": 1000,
+      "instancesFor100jps": {
+        "slots": 5,
+        "instances": 1,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "tpl-sweep",
+      "class": "maintenance",
+      "concurrencyPerWorker": 1,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 3.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 6000,
+      "drainSecondsFor100kBacklogAt50pctLoad": 60000,
+      "waitSloMsP95": 60000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 43,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "mkt-pull",
+      "class": "bulk",
+      "concurrencyPerWorker": 4,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 13.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 1500,
+      "drainSecondsFor100kBacklogAt50pctLoad": 15000,
+      "waitSloMsP95": 5000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 11,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "mkt-inbound",
+      "class": "automation",
+      "concurrencyPerWorker": 6,
+      "assumedAvgJobMs": 30,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 200,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 100,
+      "drainSecondsFor100kBacklogAt50pctLoad": 1000,
+      "waitSloMsP95": 1000,
+      "instancesFor100jps": {
+        "slots": 5,
+        "instances": 1,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "lead-sync",
+      "class": "automation",
+      "concurrencyPerWorker": 2,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 6.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 3000,
+      "drainSecondsFor100kBacklogAt50pctLoad": 30000,
+      "waitSloMsP95": 1000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 22,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "web-push",
+      "class": "interactive",
+      "concurrencyPerWorker": 8,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 26.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 750,
+      "drainSecondsFor100kBacklogAt50pctLoad": 7500,
+      "waitSloMsP95": 250,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 6,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "mail-sync",
+      "class": "bulk",
+      "concurrencyPerWorker": 4,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 13.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 1500,
+      "drainSecondsFor100kBacklogAt50pctLoad": 15000,
+      "waitSloMsP95": 5000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 11,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "msg-log-export",
+      "class": "maintenance",
+      "concurrencyPerWorker": 1,
+      "assumedAvgJobMs": 30,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 33.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 600,
+      "drainSecondsFor100kBacklogAt50pctLoad": 6000,
+      "waitSloMsP95": 60000,
+      "instancesFor100jps": {
+        "slots": 5,
+        "instances": 5,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "lsc-score",
+      "class": "automation",
+      "concurrencyPerWorker": 3,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 5,
+      "limiter": {
+        "max": 5,
+        "durationMs": 1000
+      },
+      "drainSecondsFor10kBacklogAt50pctLoad": 4000,
+      "drainSecondsFor100kBacklogAt50pctLoad": 40000,
+      "waitSloMsP95": 1000,
+      "instancesFor100jps": {
+        "slots": 3,
+        "instances": 1,
+        "providerBound": true,
+        "effectiveLambda": 5
+      }
+    },
+    {
+      "queue": "consent-export",
+      "class": "maintenance",
+      "concurrencyPerWorker": 1,
+      "assumedAvgJobMs": 30,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 33.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 600,
+      "drainSecondsFor100kBacklogAt50pctLoad": 6000,
+      "waitSloMsP95": 60000,
+      "instancesFor100jps": {
+        "slots": 5,
+        "instances": 5,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "audit-log-export",
+      "class": "maintenance",
+      "concurrencyPerWorker": 1,
+      "assumedAvgJobMs": 30,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 33.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 600,
+      "drainSecondsFor100kBacklogAt50pctLoad": 6000,
+      "waitSloMsP95": 60000,
+      "instancesFor100jps": {
+        "slots": 5,
+        "instances": 5,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "revenue-report-export",
+      "class": "maintenance",
+      "concurrencyPerWorker": 1,
+      "assumedAvgJobMs": 30,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 33.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 600,
+      "drainSecondsFor100kBacklogAt50pctLoad": 6000,
+      "waitSloMsP95": 60000,
+      "instancesFor100jps": {
+        "slots": 5,
+        "instances": 5,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "privacy-export",
+      "class": "maintenance",
+      "concurrencyPerWorker": 1,
+      "assumedAvgJobMs": 40,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 25,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 800,
+      "drainSecondsFor100kBacklogAt50pctLoad": 8000,
+      "waitSloMsP95": 60000,
+      "instancesFor100jps": {
+        "slots": 6,
+        "instances": 6,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "wab-migrate",
+      "class": "bulk",
+      "concurrencyPerWorker": 1,
+      "assumedAvgJobMs": 30,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 33.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 600,
+      "drainSecondsFor100kBacklogAt50pctLoad": 6000,
+      "waitSloMsP95": 5000,
+      "instancesFor100jps": {
+        "slots": 5,
+        "instances": 5,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "calling-readiness",
+      "class": "maintenance",
+      "concurrencyPerWorker": 4,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 13.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 1500,
+      "drainSecondsFor100kBacklogAt50pctLoad": 15000,
+      "waitSloMsP95": 60000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 11,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "calendar-reconcile",
+      "class": "maintenance",
+      "concurrencyPerWorker": 2,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 6.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 3000,
+      "drainSecondsFor100kBacklogAt50pctLoad": 30000,
+      "waitSloMsP95": 60000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 22,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "calendar-backfill",
+      "class": "maintenance",
+      "concurrencyPerWorker": 2,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 6.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 3000,
+      "drainSecondsFor100kBacklogAt50pctLoad": 30000,
+      "waitSloMsP95": 60000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 22,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "meeting-mirror-backfill",
+      "class": "maintenance",
+      "concurrencyPerWorker": 1,
+      "assumedAvgJobMs": 30,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 33.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 600,
+      "drainSecondsFor100kBacklogAt50pctLoad": 6000,
+      "waitSloMsP95": 60000,
+      "instancesFor100jps": {
+        "slots": 5,
+        "instances": 5,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "calendar-ics-refresh",
+      "class": "maintenance",
+      "concurrencyPerWorker": 4,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 13.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 1500,
+      "drainSecondsFor100kBacklogAt50pctLoad": 15000,
+      "waitSloMsP95": 60000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 11,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "wechat-broadcast",
+      "class": "bulk",
+      "concurrencyPerWorker": 2,
+      "assumedAvgJobMs": 300,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 6.7,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 3000,
+      "drainSecondsFor100kBacklogAt50pctLoad": 30000,
+      "waitSloMsP95": 5000,
+      "instancesFor100jps": {
+        "slots": 43,
+        "instances": 22,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "telephony-ingest",
+      "class": "critical-inbound",
+      "concurrencyPerWorker": 4,
+      "assumedAvgJobMs": 30,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 133.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 150,
+      "drainSecondsFor100kBacklogAt50pctLoad": 1500,
+      "waitSloMsP95": 100,
+      "instancesFor100jps": {
+        "slots": 5,
+        "instances": 2,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    },
+    {
+      "queue": "webhook-retry",
+      "class": "critical-inbound",
+      "concurrencyPerWorker": 4,
+      "assumedAvgJobMs": 30,
+      "assumption": "duration assumed from job kind, NOT measured on the real processor",
+      "capacityJobsPerSecPerWorker": 133.3,
+      "limiter": null,
+      "drainSecondsFor10kBacklogAt50pctLoad": 150,
+      "drainSecondsFor100kBacklogAt50pctLoad": 1500,
+      "waitSloMsP95": 100,
+      "instancesFor100jps": {
+        "slots": 5,
+        "instances": 2,
+        "providerBound": false,
+        "effectiveLambda": 100
+      }
+    }
+  ]
+}

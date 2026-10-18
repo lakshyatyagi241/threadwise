@@ -583,7 +583,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
       // an id_map from before update mode has no written_version column: nothing was ever updated
     }
     const seenKeys = new Set<string>(); // `${mapCollection}\0${key}` of every source document, for the stale-quarantine check
-    const contactOrder: string[] = []; // uuids of the migrated contacts in source order
+    const contactOrder: Array<{ key: string; uuid: string }> = []; // migrated contacts keyed by their Waboo _id (creation order, sorted below)
     const faqItems: Array<{ base: string; outcome: Extract<Outcome, { kind: 'rows' }> }> = []; // the loaded FAQ documents, for reconcile/faq.ts
     const expectedPrimary = new Map<string, string>(); // `${mapCollection}\0${primary key}` -> uuid of the first row
     const aliasCandidates: Array<{ k: string; uuid: string }> = [];
@@ -739,7 +739,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
             expectedPrimary.set(`${spec.mapCollection}\u0000${base}`, first);
             for (const k of keys.slice(1))
               aliasCandidates.push({ k: `${spec.mapCollection}\u0000${k.key}`, uuid: first });
-            if (spec.handler === 'contacts') contactOrder.push(first);
+            if (spec.handler === 'contacts') contactOrder.push({ key: base, uuid: first });
             if (ukey !== null && !uniqueSeen.has(`${table0}\u0000${ukey}`))
               uniqueSeen.set(`${table0}\u0000${ukey}`, base);
           }
@@ -922,7 +922,11 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
     }
 
     // 3c. display ids follow the allocator: the Nth migrated contact in source order holds CON-(base + N), no gaps, no swaps
-    if (contactOrder.length > 0) {
+    // display ids follow creation order (Waboo _id ascending), the same order the loader numbers them in
+    const contactUuids = [...contactOrder]
+      .sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0))
+      .map((c) => c.uuid);
+    if (contactUuids.length > 0) {
       const ids = await withTenant(db, { orgId }, (tx) =>
         tx.execute(
           sql`SELECT uuid::text AS uuid, display_id FROM contacts WHERE org_id = ${orgId} AND legacy_id IS NOT NULL`,
@@ -935,12 +939,12 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
         ]),
       );
       const firstNo = Number(
-        /^CON-(\d+)$/.exec(String(dmap.get(contactOrder[0]!) ?? ''))?.[1] ?? NaN,
+        /^CON-(\d+)$/.exec(String(dmap.get(contactUuids[0]!) ?? ''))?.[1] ?? NaN,
       );
       if (Number.isFinite(firstNo)) {
         let wrong = 0;
         let sample = '';
-        contactOrder.forEach((u, i) => {
+        contactUuids.forEach((u, i) => {
           const want = `CON-${String(firstNo + i).padStart(5, '0')}`;
           if (dmap.get(u) !== want) {
             wrong++;

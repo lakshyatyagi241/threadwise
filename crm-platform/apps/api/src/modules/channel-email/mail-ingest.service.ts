@@ -148,6 +148,7 @@ export class MailIngestService {
           buffer: bytes,
           declaredMime: file.mime,
           filename: file.name,
+          category: 'email_attachment_inbound',
         });
         storedKeys.push(saved.key);
         const id = attachmentIdOfKey(saved.key);

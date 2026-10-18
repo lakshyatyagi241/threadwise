@@ -8,6 +8,9 @@ import { WABA_GROUPS } from './waba-groups.port';
 import { WabaHttp } from './waba-http';
 import { WabaRegistryRoutes } from './waba-registry-routes';
 import { WabaTemplateClient } from './waba-template.client';
+import { RedisSendGovernor } from './throughput/redis-send-governor';
+import { WABA_SEND_GOVERNOR } from './throughput/send-governor.port';
+import { ThroughputStore } from './throughput/throughput-store';
 import { WABA_TEMPLATES } from './waba-template.port';
 
 /** WhatsApp account adapters (Meta Graph + Interakt). Global so any domain can send or inspect through the ports. */
@@ -15,6 +18,9 @@ import { WABA_TEMPLATES } from './waba-template.port';
 @Module({
   providers: [
     { provide: WABA_ENV, useFactory: () => readWabaEnv(process.env) },
+    ThroughputStore,
+    RedisSendGovernor,
+    { provide: WABA_SEND_GOVERNOR, useExisting: RedisSendGovernor },
     WabaHttp,
     PinnaclePartnerClient,
     WabaRegistryRoutes,
@@ -28,6 +34,8 @@ import { WABA_TEMPLATES } from './waba-template.port';
   exports: [
     WABA_ENV,
     WabaHttp,
+    ThroughputStore,
+    WABA_SEND_GOVERNOR,
     PinnaclePartnerClient,
     WabaRegistryRoutes,
     WABA_ADMIN,

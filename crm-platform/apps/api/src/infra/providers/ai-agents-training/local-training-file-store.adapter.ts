@@ -1,5 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { randomBytes } from 'node:crypto';
+import {
+  STORAGE_METER,
+  meteredWrite,
+  recordRemovedOn,
+  type StorageMeter,
+} from '../../../common/storage-meter/storage-meter.port';
 import { chatMediaConfig, isSafeMediaKey, LocalDiskMediaStore } from '../chat-conversations/media';
 import type { TrainingFileStore } from './training-file-store.port';
 
@@ -13,6 +19,9 @@ const EXT = /^[a-z0-9]{1,8}$/;
 export class LocalTrainingFileStore implements TrainingFileStore {
   private readonly disk = new LocalDiskMediaStore(chatMediaConfig().localDir);
 
+  /** The storage quota guard (observe mode: measures, never refuses). Optional: without it files are stored exactly as before. */
+  constructor(@Optional() @Inject(STORAGE_METER) private readonly meter?: StorageMeter) {}
+
   private static prefix(orgId: number): string {
     return `ai-training/${orgId}/`;
   }
@@ -24,7 +33,12 @@ export class LocalTrainingFileStore implements TrainingFileStore {
   async put(orgId: number, ext: string, data: Buffer): Promise<string> {
     if (!EXT.test(ext)) throw new Error('unsafe file extension');
     const key = `${LocalTrainingFileStore.prefix(orgId)}${randomBytes(16).toString('hex')}.${ext}`;
-    await this.disk.put(key, data);
+    await meteredWrite(
+      this.meter,
+      { orgId, bytes: data.length, category: 'ai_training_file' },
+      () => this.disk.put(key, data),
+      () => ({ key }),
+    );
     return key;
   }
 
@@ -41,5 +55,6 @@ export class LocalTrainingFileStore implements TrainingFileStore {
   async remove(orgId: number, key: string): Promise<void> {
     if (!this.owns(orgId, key)) return;
     await this.disk.remove(key);
+    await recordRemovedOn(this.meter, orgId, key);
   }
 }

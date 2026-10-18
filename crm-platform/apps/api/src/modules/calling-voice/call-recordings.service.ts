@@ -87,6 +87,7 @@ export class CallRecordingsService {
         buffer: file.buffer,
         allow: ['media'],
         displayName: `call-${call.uuid}.webm`,
+        category: 'call_recording',
       });
     } catch (err) {
       this.logger.warn({ orgId, err }, 'a call recording was refused by the media store');

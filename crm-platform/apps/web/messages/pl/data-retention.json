@@ -1,0 +1,117 @@
+{
+  "data-retention": {
+    "nav": {
+      "group": "Dane",
+      "item": "Retencja danych"
+    },
+    "page": {
+      "title": "Retencja danych",
+      "eyebrow": "platforma · retencja danych",
+      "description": "Dla każdego rodzaju danych wybierz, ile dni są przechowywane w bazie danych i ile dodatkowych dni zachowuje je archiwum zimne, zanim zostaną trwale usunięte. Dla danego elementu nic się nie zmieni, dopóki nie zapiszesz jego wartości.",
+      "superOnly": "Tylko superadministrator może zmieniać retencję. Możesz zobaczyć zapisane wartości i wynik ostatniego uruchomienia.",
+      "loading": "Wczytywanie zasad retencji…",
+      "retry": "Spróbuj ponownie"
+    },
+    "engine": {
+      "offTitle": "Zadanie archiwizacji jest wyłączone",
+      "offBody": "Wartości zapisane dla zdarzeń analitycznych i dziennika audytu są przechowywane, ale nic nie jest archiwizowane ani usuwane, dopóki zadanie nie zostanie włączone (RETENTION_ENABLED). Do tego czasu oba elementy zachowują dotychczasowe działanie.",
+      "dryRunTitle": "Zadanie archiwizacji tylko zapisuje w logu, co by zrobiło",
+      "dryRunBody": "Jest włączone, ale w trybie dry-run (RETENTION_DRY_RUN). Zapisane wartości dla zdarzeń analitycznych i dziennika audytu nie są jeszcze realizowane.",
+      "notDurableTitle": "Archiwum nie jest trwałe",
+      "notDurableBody": "Archiwum to folder na dysku samego serwera, który jest kasowany przy ponownym wdrożeniu. Zadanie odmawia usuwania danych, dopóki nie wskaże S3 lub R2 (ARCHIVE_DRIVER=s3).",
+      "liveTitle": "Zadanie archiwizacji działa",
+      "liveBody": "Zapisane wartości są realizowane podczas nocnego uruchomienia. Zarchiwizowane dane są przechowywane w {driver}."
+    },
+    "items": {
+      "an_events": {
+        "title": "Zdarzenia analityczne",
+        "description": "Strumień zdarzeń stojący za raportami. Całe miesiące trafiają do archiwum, gdy są starsze niż dni live."
+      },
+      "audit_log": {
+        "title": "Dziennik audytu",
+        "description": "Kto co zrobił w każdej przestrzeni roboczej, w tym działania wykonane w imieniu użytkownika. Dopóki nie zapiszesz wartości, jest usuwany po liczbie dni wynikającej z zasad bezpieczeństwa platformy i nigdy nie jest archiwizowany. Zapisane wartości najpierw archiwizują, a potem usuwają, a eksporty nadal mogą odczytywać zarchiwizowane miesiące."
+      },
+      "security_events": {
+        "title": "Dziennik bezpieczeństwa",
+        "description": "Logowania, zmiany zabezpieczeń i każda zmiana retencji wprowadzona tutaj. Jest usuwany po dniach live i nie ma archiwum."
+      },
+      "audit_log_exports": {
+        "title": "Pliki eksportu audytu",
+        "description": "Plik CSV, o który przestrzeń robocza prosi z dziennika audytu. Osoba zgłaszająca dostaje e-mail z linkiem do zalogowania się i pobrania pliku; plik jest usuwany po dniach live."
+      }
+    },
+    "fields": {
+      "liveDays": "Dni live",
+      "liveDaysHint": "Liczba dni, przez które dane pozostają w bazie danych. Dozwolone: od {min} do {max}.",
+      "keepForever": "Przechowuj archiwum bezterminowo",
+      "archiveDays": "Dni w archiwum",
+      "archiveDaysHint": "Liczba dodatkowych dni, przez które archiwum je przechowuje, po czym są usuwane. Dozwolone: od {min} do {max}."
+    },
+    "summary": {
+      "noArchive": "Trwale usuwane po upływie {live, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}} od zapisania.",
+      "archiveForever": "Przechowywane live przez {live, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}, następnie archiwizowane i przechowywane bezterminowo.",
+      "archiveThenDelete": "Przechowywane live przez {live, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}, archiwizowane przez {archive, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}, a następnie trwale usuwane po upływie {total, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}} od zapisania.",
+      "defaultForever": "Obecnie przechowywane bezterminowo (zasady bezpieczeństwa nie mają limitu).",
+      "defaultNote": "Dotychczasowe działanie, nic nie zapisano."
+    },
+    "status": {
+      "default": "Dotychczasowe działanie",
+      "custom": "Zapisane przez Ciebie",
+      "notApplied": "Jeszcze nie realizowane",
+      "updated": "Zapisano {when}"
+    },
+    "stats": {
+      "live": "W bazie danych",
+      "liveValue": "{size}, około {rows} wierszy",
+      "liveValueNoRows": "{size}",
+      "months": "{count, plural, one {# partycja miesięczna} few {# partycje miesięczne} many {# partycji miesięcznych} other {# partycji miesięcznej}}, najstarsza {oldest}",
+      "archive": "W archiwum",
+      "archiveValue": "{size} w {count, plural, one {# obiekcie} few {# obiektach} many {# obiektach} other {# obiekcie}}",
+      "archiveNone": "Jeszcze nic nie zmierzono",
+      "archiveMeasured": "zmierzono {when}",
+      "lastRun": "Ostatnie uruchomienie",
+      "neverRun": "Jeszcze się nie odbyło",
+      "runLive": "{when}: zarchiwizowano {months, plural, one {# miesiąc} few {# miesiące} many {# miesięcy} other {# miesiąca}} ({rows} wierszy, {size}), usunięto z archiwum {expired}, usunięto wierszy lub plików: {deleted}",
+      "runDry": "{when}: dry-run, nic nie zmieniono",
+      "runFailed": "Ostatnie uruchomienie zakończyło się problemem: {error}"
+    },
+    "actions": {
+      "save": "Zapisz",
+      "checking": "Sprawdzanie…",
+      "saving": "Zapisywanie…",
+      "reset": "Wróć do dotychczasowego działania",
+      "resetting": "Przywracanie…",
+      "cancel": "Anuluj",
+      "confirmSave": "Zapisz i zastosuj",
+      "resetTitle": "Przywrócić dotychczasowe działanie dla: {item}?",
+      "resetBody": "Zapisane wartości zostaną usunięte. Nocne zadania wrócą do wbudowanych reguł dla tego elementu. Dane już zarchiwizowane pozostaną w archiwum.",
+      "confirmReset": "Przywróć dotychczasowe działanie"
+    },
+    "preview": {
+      "title": "Zapisać retencję dla: {item}?",
+      "intro": "Podczas następnego nocnego uruchomienia:",
+      "toArchive": "{count, plural, one {# miesiąc} few {# miesiące} many {# miesięcy} other {# miesiąca}} ({rows} wierszy, {size}) trafi do archiwum i zniknie z bazy danych.",
+      "toDeleteFromArchive": "{count, plural, one {# zarchiwizowany miesiąc zostanie} few {# zarchiwizowane miesiące zostaną} many {# zarchiwizowanych miesięcy zostanie} other {# zarchiwizowanego miesiąca zostanie}} trwale usunięte z archiwum.",
+      "rowsToDelete": "{count, plural, one {# wiersz lub plik zostanie} few {# wiersze lub pliki zostaną} many {# wierszy lub plików zostanie} other {# wiersza lub pliku zostanie}} trwale usunięte.",
+      "notApplied": "Zadanie archiwizacji nie realizuje jeszcze zapisanych wartości, więc nic z tego nie nastąpi, dopóki nie zostanie włączone.",
+      "permanent": "Usunięcie jest trwałe i nie można go cofnąć."
+    },
+    "saved": "Zapisano retencję.",
+    "resetDone": "Przywrócono dotychczasowe działanie.",
+    "validation": {
+      "live_out_of_range": "Dni live muszą być liczbą całkowitą od {min} do {max}.",
+      "archive_out_of_range": "Dni w archiwum muszą być liczbą całkowitą od {min} do {max}.",
+      "archive_not_supported": "Ten element nie może być archiwizowany.",
+      "delete_before_archive": "Danych nie można usunąć przed zarchiwizowaniem.",
+      "not_a_number": "Wpisz całkowitą liczbę dni."
+    },
+    "errors": {
+      "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+      "conflict": "Ktoś inny zmienił ten element. Wczytano najnowsze wartości; sprawdź je i zapisz ponownie.",
+      "validation": "Te wartości są niedozwolone.",
+      "request": "Żądanie zostało odrzucone.",
+      "unexpected": "Wystąpił błąd na serwerze. Spróbuj ponownie.",
+      "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie."
+    }
+  }
+}

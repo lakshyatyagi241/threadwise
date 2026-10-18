@@ -1,0 +1,85 @@
+{
+  "persona-vocabulary": {
+    "common": {
+      "loading": "Ihre Begriffe werden geladen...",
+      "retry": "Erneut versuchen",
+      "dismiss": "Schließen"
+    },
+    "tile": {
+      "label": "Begriffe, die wir verwenden",
+      "description": "Benennen Sie Kontakt, Termin, Deal und Meeting passend zu Ihrem Geschäft um.",
+      "keywords": "umbenennen, Patient, Klient, Kunde, Lead, Mitglied, Besuch, Terminologie, Wortschatz, Bezeichnungen"
+    },
+    "title": "Begriffe, die wir verwenden",
+    "subtitle": "Nennen Sie die Dinge so, wie Ihr Geschäft sie nennt: Patient, Klient, Mitglied, Besuch. Es ändern sich nur die Bezeichnungen, die Menschen lesen.",
+    "discard": "Änderungen verwerfen",
+    "save": "Speichern",
+    "saved": "Gespeichert. Menüs und Ansichten verwenden jetzt Ihre Begriffe.",
+    "resetDone": "Zurück zu den Standardbegriffen.",
+    "reset": "Standardbegriffe verwenden",
+    "conflict": "Jemand anderes hat diese Begriffe geändert, während Sie bearbeitet haben. Die neueste Version wird angezeigt; nehmen Sie Ihre Änderung erneut vor.",
+    "conflictOk": "OK",
+    "language": "Sie bearbeiten die Begriffe, die Personen sehen, wenn die App auf {language} eingestellt ist. Wechseln Sie die App-Sprache, um eine andere zu bearbeiten.",
+    "labelsOnly": "Es ändern sich nur Bezeichnungen. Ihre Daten, Exporte, Integrationen, die API und die Nachrichten an Kunden behalten ihre üblichen Namen.",
+    "applyAll": "Diese Begriffe in allen Sprachen verwenden",
+    "applyAllHint": "Speichert dieselben Begriffe für alle 21 App-Sprachen. Lassen Sie die Option aus, um nur die oben angezeigte Sprache zu ändern.",
+    "grammar": "Die Begriffe werden genau so in die App eingesetzt, wie Sie sie eingeben. Die App passt in anderen Sprachen keine Grammatik an (Genus, Fälle, Artikel), und einige Ansichten zeigen weiterhin den Standardbegriff.",
+    "sharedWord": "In dieser Sprache steht ein Wort für Termine und Meetings, daher wird ein neuer Name hierfür hier nicht angezeigt. In anderen Sprachen gilt er weiterhin.",
+    "nouns": {
+      "contact": {
+        "hint": "Die Personen, mit denen Sie sprechen. Wird im Menü, in der Liste, auf der Datensatzseite und in ihren Schaltflächen angezeigt."
+      },
+      "appointment": {
+        "hint": "Ein gebuchter Zeitraum mit einem Kunden. Wird in der Terminansicht und im Kontaktdatensatz angezeigt."
+      },
+      "deal": {
+        "hint": "Eine Verkaufschance. Wird auf dem Deal-Board und im Kontaktdatensatz angezeigt."
+      },
+      "meeting": {
+        "hint": "Ein Anruf oder Meeting, das Sie zu einem Kontakt protokollieren."
+      }
+    },
+    "fields": {
+      "name": "Name",
+      "singular": "Singular",
+      "plural": "Plural",
+      "placeholderHint": "Standardbegriff: {word}"
+    },
+    "source": {
+      "workspace": "Ihre Begriffe",
+      "operator": "Von Ihrem Account-Team festgelegt",
+      "persona": "Aus Ihrer Geschäftsart",
+      "default": "Standardbegriffe"
+    },
+    "problems": {
+      "incomplete": "Füllen Sie Singular und Plural aus oder leeren Sie beide.",
+      "invalid": "Verwenden Sie nur Buchstaben, Ziffern, Leerzeichen und - . & / ( ), maximal 40 Zeichen."
+    },
+    "errors": {
+      "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Zum Ändern dieser Begriffe benötigen Sie die Berechtigung, Arbeitsbereich-Einstellungen zu verwalten.",
+      "conflict": "Diese Begriffe haben sich während Ihrer Bearbeitung geändert. Laden Sie neu und versuchen Sie es erneut.",
+      "validation": "Einer der Begriffe ist nicht erlaubt. Prüfen Sie das markierte Feld.",
+      "rateLimited": "Zu viele Änderungen hintereinander. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+    },
+    "defaults": {
+      "contact": {
+        "one": "Kontakt",
+        "other": "Kontakte"
+      },
+      "appointment": {
+        "one": "Termin",
+        "other": "Termine"
+      },
+      "deal": {
+        "one": "Deal",
+        "other": "Deals"
+      },
+      "meeting": {
+        "one": "Meeting",
+        "other": "Meetings"
+      }
+    }
+  }
+}

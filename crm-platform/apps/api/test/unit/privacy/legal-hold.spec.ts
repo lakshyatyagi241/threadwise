@@ -353,6 +353,7 @@ describe('every known purge path asks the legal-hold question', () => {
     ['privacy/requests/privacy-requests.repository.ts', /is_subject_held/],
     ['plans-subscriptions-trials/plan-retention.service.ts', /org_has_active_legal_hold/],
     ['workspaces-teams-tenancy/lifecycle/lifecycle.repository.ts', /org_has_active_legal_hold/],
+    ['data-retention/retention.worker.ts', /legal_holds/],
     ['company-briefs/brief-facts.service.ts', /is_subject_held/],
     ['ai-copilot-lead-finder/ai-crm-toolkit.service.ts', /is_subject_held/],
     ['lead-scoring/lead-scoring.service.ts', /isRestricted/],

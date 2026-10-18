@@ -494,7 +494,8 @@
         "title": "Colas",
         "name": "Cola",
         "pending": "Pendientes",
-        "failed": "Fallidos"
+        "failed": "Fallidos",
+        "lastFailure": "Motivo del último fallo"
       },
       "clear": {
         "button": "Borrar trabajos pendientes",

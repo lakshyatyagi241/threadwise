@@ -1585,7 +1585,8 @@
             "ai_form_generations_monthly": "Generaciones del creador de formularios con IA al mes",
             "sms_monthly": "SMS al mes",
             "email_mailboxes": "Buzones de correo",
-            "email_monthly": "Correos al mes"
+            "email_monthly": "Correos al mes",
+            "storage_gb": "Almacenamiento (GB)"
           },
           "featureGroups": {
             "messaging": "Mensajería",
@@ -1683,7 +1684,8 @@
             "ai_form_generations_monthly": "Generaciones del creador de formularios con IA en el mes natural, incluido un reintento de reparación. 0 = ilimitado.",
             "sms_monthly": "Mensajes SMS salientes enviados en el mes natural. 0 = ilimitado.",
             "email_mailboxes": "Buzones de Gmail conectados (uno desconectado libera su lugar). 0 = ilimitado.",
-            "email_monthly": "Correos enviados en el mes natural, respuestas y correos de campañas juntos. 0 = ilimitado."
+            "email_monthly": "Correos enviados en el mes natural, respuestas y correos de campañas juntos. 0 = ilimitado.",
+            "storage_gb": "Almacenamiento que puede usar el espacio de trabajo, en GB (grabaciones de llamadas, archivos del chat, adjuntos de correo y archivos). 0 = ilimitado. Por ahora solo se mide: todavía no se bloquea nada."
           }
         }
       },

@@ -4,3 +4,4 @@ export * from './definition';
 export * from './overrides';
 export * from './resolve';
 export * from './view';
+export * from './vocabulary';

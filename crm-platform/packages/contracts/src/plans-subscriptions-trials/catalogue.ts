@@ -89,6 +89,10 @@ export const PLAN_LIMIT_DEFS = [
   { key: 'email_mailboxes', group: 'messaging' },
   // Emails sent per calendar month, replies and campaign mails together (Reference's `email_monthly_limit`). Enforced by the email campaign sender. 0 = unlimited.
   { key: 'email_monthly', group: 'messaging' },
+  // Storage the workspace may hold, in whole GB (1 GB = 2^30 bytes): call recordings, chat media, mail attachments, contact files and the other counted kinds
+  // (docs/specs/storage-quota-and-archival.md section 5.1). 0 = unlimited, so a plan row that predates the key is not limited by it. MEASURED ONLY for now
+  // (phase S1, observe mode): nothing is refused until enforcement ships (phase S2).
+  { key: 'storage_gb', group: 'workspace' },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanLimitGroup }>;
 
 export type PlanLimitKey = (typeof PLAN_LIMIT_DEFS)[number]['key'];

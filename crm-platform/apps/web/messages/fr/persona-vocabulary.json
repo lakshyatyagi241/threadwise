@@ -1,0 +1,85 @@
+{
+  "persona-vocabulary": {
+    "common": {
+      "loading": "Chargement de vos mots...",
+      "retry": "Réessayer",
+      "dismiss": "Fermer"
+    },
+    "tile": {
+      "label": "Les mots que nous utilisons",
+      "description": "Renommez Contact, Rendez-vous, Opportunité et Réunion pour correspondre à votre activité.",
+      "keywords": "renommer, patient, client, lead, membre, visite, terminologie, vocabulaire, libellés"
+    },
+    "title": "Les mots que nous utilisons",
+    "subtitle": "Appelez les choses comme votre activité les appelle : Patient, Client, Membre, Visite. Seuls les libellés lus par les gens changent.",
+    "discard": "Annuler les modifications",
+    "save": "Enregistrer",
+    "saved": "Enregistré. Les menus et les écrans utilisent maintenant vos mots.",
+    "resetDone": "Retour aux mots standard.",
+    "reset": "Utiliser les mots standard",
+    "conflict": "Quelqu’un d’autre a modifié ces mots pendant votre édition. La dernière version est affichée ; refaites votre modification.",
+    "conflictOk": "OK",
+    "language": "Vous modifiez les mots que les gens voient lorsque l’application est en {language}. Changez la langue de l’application pour en modifier une autre.",
+    "labelsOnly": "Seuls les libellés changent. Vos données, exports, intégrations, l’API et les messages envoyés aux clients gardent leurs noms habituels.",
+    "applyAll": "Utiliser ces mots dans toutes les langues",
+    "applyAllHint": "Enregistre les mêmes mots pour les 21 langues de l’application. Laissez désactivé pour ne changer que la langue indiquée ci-dessus.",
+    "grammar": "Les mots sont placés dans l’application exactement comme vous les saisissez. L’application n’ajuste pas la grammaire (genre, cas, articles) dans les autres langues, et quelques écrans affichent encore le mot standard.",
+    "sharedWord": "Dans cette langue, un seul mot couvre les rendez-vous et les réunions ; un nouveau nom pour cet élément n’est donc pas affiché ici. Il s’applique toujours dans les autres langues.",
+    "nouns": {
+      "contact": {
+        "hint": "Les personnes avec lesquelles vous échangez. Affiché dans le menu, la liste, la page de fiche et ses boutons."
+      },
+      "appointment": {
+        "hint": "Un créneau réservé avec un client. Affiché sur l’écran des rendez-vous et dans la fiche du contact."
+      },
+      "deal": {
+        "hint": "Une opportunité de vente. Affiché sur le tableau des opportunités et dans la fiche du contact."
+      },
+      "meeting": {
+        "hint": "Un appel ou une réunion que vous consignez sur un contact."
+      }
+    },
+    "fields": {
+      "name": "Nom",
+      "singular": "Singulier",
+      "plural": "Pluriel",
+      "placeholderHint": "Mot standard : {word}"
+    },
+    "source": {
+      "workspace": "Vos mots",
+      "operator": "Défini par votre équipe de compte",
+      "persona": "Selon votre type d’activité",
+      "default": "Mots standard"
+    },
+    "problems": {
+      "incomplete": "Renseignez le singulier et le pluriel, ou videz les deux.",
+      "invalid": "Utilisez uniquement des lettres, chiffres, espaces et - . & / ( ), 40 caractères maximum."
+    },
+    "errors": {
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "forbidden": "Vous devez avoir l’autorisation de gérer les paramètres de l’espace de travail pour modifier ces mots.",
+      "conflict": "Ces mots ont changé pendant votre édition. Rechargez et réessayez.",
+      "validation": "Un des mots n’est pas autorisé. Vérifiez le champ en surbrillance.",
+      "rateLimited": "Trop de modifications d’affilée. Patientez un instant et réessayez.",
+      "unexpected": "Un problème est survenu. Réessayez."
+    },
+    "defaults": {
+      "contact": {
+        "one": "Contact",
+        "other": "Contacts"
+      },
+      "appointment": {
+        "one": "Rendez-vous",
+        "other": "Rendez-vous"
+      },
+      "deal": {
+        "one": "Opportunité",
+        "other": "Opportunités"
+      },
+      "meeting": {
+        "one": "Réunion",
+        "other": "Réunions"
+      }
+    }
+  }
+}

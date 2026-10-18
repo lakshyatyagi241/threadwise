@@ -1,0 +1,153 @@
+{
+  "generatedAt": "2026-10-18T14:05:16.654Z",
+  "planningTarget": 500,
+  "implemented": {
+    "unit": 17,
+    "benchChecks": 34,
+    "inventoryGate": 1
+  },
+  "note": "The 500-scenario target is a planning figure; this suite is the first slice. Missing families listed in queue-remediation-backlog.md.",
+  "checks": [
+    {
+      "id": "QCAP-024",
+      "name": "knee found for io-20ms (provider/HTTP wait)"
+    },
+    {
+      "id": "QCAP-040",
+      "name": "no lost jobs in io-20ms (provider/HTTP wait) sweep"
+    },
+    {
+      "id": "QCAP-024",
+      "name": "knee found for db-5ms (pool of 10)"
+    },
+    {
+      "id": "QCAP-040",
+      "name": "no lost jobs in db-5ms (pool of 10) sweep"
+    },
+    {
+      "id": "QCAP-024",
+      "name": "knee found for cpu-3ms (sync work)"
+    },
+    {
+      "id": "QCAP-040",
+      "name": "no lost jobs in cpu-3ms (sync work) sweep"
+    },
+    {
+      "id": "QCAP-018",
+      "name": "drain forecast within 30% of measured"
+    },
+    {
+      "id": "QCAP-040",
+      "name": "every drain-scenario job accounted for"
+    },
+    {
+      "id": "QCAP-040",
+      "name": "baseline-15%: all accepted jobs reconciled"
+    },
+    {
+      "id": "QCAP-040",
+      "name": "moderate-50%: all accepted jobs reconciled"
+    },
+    {
+      "id": "QCAP-040",
+      "name": "expected-peak-100%: all accepted jobs reconciled"
+    },
+    {
+      "id": "QCAP-040",
+      "name": "headroom-130%: all accepted jobs reconciled"
+    },
+    {
+      "id": "QCAP-040",
+      "name": "stress-200%: all accepted jobs reconciled"
+    },
+    {
+      "id": "QCAP-040",
+      "name": "spike-300%: all accepted jobs reconciled"
+    },
+    {
+      "id": "QCAP-033",
+      "name": "expected peak: queue wait p95 < 250 ms"
+    },
+    {
+      "id": "QCAP-034",
+      "name": "130% headroom: queue wait p95 < 1000 ms"
+    },
+    {
+      "id": "QCAP-036",
+      "name": "300% spike: backlog bounded and drains"
+    },
+    {
+      "id": "QCAP-065",
+      "name": "shared FIFO queue starves critical work (documents why queues are split)"
+    },
+    {
+      "id": "QCAP-065",
+      "name": "separate queues keep critical wait p95 < 250 ms under a bulk flood"
+    },
+    {
+      "id": "QCAP-065",
+      "name": "RISK DEMONSTRATED: CPU-heavy bulk in the same process delays critical work (queues alone do not isolate CPU)"
+    },
+    {
+      "id": "QCAP-006",
+      "name": "own process for CPU-heavy bulk keeps critical wait p95 < 250 ms"
+    },
+    {
+      "id": "QCAP-066",
+      "name": "FIFO: small tenant is delayed by the noisy tenant (baseline)"
+    },
+    {
+      "id": "QCAP-064",
+      "name": "admission cap keeps the small tenant wait p95 < 1000 ms"
+    },
+    {
+      "id": "QCAP-068",
+      "name": "admission cap does not starve the noisy tenant (still completes)"
+    },
+    {
+      "id": "QCAP-058",
+      "name": "limiter below the ceiling removes the 429 storm"
+    },
+    {
+      "id": "QCAP-056",
+      "name": "limited run completes every job"
+    },
+    {
+      "id": "QCAP-057",
+      "name": "unlimited run loses no accepted job to 429 (accounted completed or failed)"
+    },
+    {
+      "id": "QCAP-081",
+      "name": "1 worker kill(s): every accepted job reconciled (completed or failed, none missing)"
+    },
+    {
+      "id": "QCAP-081",
+      "name": "2 worker kill(s): every accepted job reconciled (completed or failed, none missing)"
+    },
+    {
+      "id": "QCAP-081",
+      "name": "repeated kills: no job silently fails on the stall limit"
+    },
+    {
+      "id": "QCAP-044",
+      "name": "AOF everysec keeps the accepted backlog across kill -9 (after the fsync window)"
+    },
+    {
+      "id": "QCAP-050",
+      "name": "no-persistence Redis loses the accepted backlog on restart (documents why prod needs AOF)"
+    },
+    {
+      "id": "QCAP-037",
+      "name": "soak: no failures, no growing backlog"
+    },
+    {
+      "id": "QCAP-026",
+      "name": "soak: heap/RSS flat (<5 MB/min growth in second half)"
+    }
+  ],
+  "commands": [
+    "node --test tools/queue-capacity/model.test.mjs",
+    "node tools/queue-capacity/inventory.mjs --check",
+    "node tools/queue-capacity/bench.mjs --scenarios sweep,drain,profiles,isolation,fairness,provider,crash,redis,soak --duration 1 --soak-seconds 150"
+  ]
+}

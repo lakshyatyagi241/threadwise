@@ -1585,7 +1585,8 @@
             "ai_form_generations_monthly": "AI-formulierbuilder-generaties per maand",
             "sms_monthly": "SMS per maand",
             "email_mailboxes": "E-mailpostvakken",
-            "email_monthly": "E-mails per maand"
+            "email_monthly": "E-mails per maand",
+            "storage_gb": "Opslag (GB)"
           },
           "featureGroups": {
             "messaging": "Berichten",
@@ -1683,7 +1684,8 @@
             "ai_form_generations_monthly": "AI-formulierbuilder-generaties in de kalendermaand, inclusief een herstelpoging. 0 = onbeperkt.",
             "sms_monthly": "Uitgaande SMS-berichten verzonden in de kalendermaand. 0 = onbeperkt.",
             "email_mailboxes": "Gekoppelde Gmail-postvakken (een losgekoppeld postvak geeft zijn plek vrij). 0 = onbeperkt.",
-            "email_monthly": "E-mails verzonden in de kalendermaand, antwoorden en campagne-e-mails samen. 0 = onbeperkt."
+            "email_monthly": "E-mails verzonden in de kalendermaand, antwoorden en campagne-e-mails samen. 0 = onbeperkt.",
+            "storage_gb": "Opslagruimte die de werkruimte mag gebruiken, in GB (gespreksopnames, chatmedia, e-mailbijlagen en bestanden). 0 = onbeperkt. Voorlopig alleen gemeten: er wordt nog niets geblokkeerd."
           }
         }
       },

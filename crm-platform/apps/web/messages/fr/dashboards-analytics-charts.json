@@ -494,7 +494,8 @@
         "title": "Files d’attente",
         "name": "File d’attente",
         "pending": "En attente",
-        "failed": "Échoués"
+        "failed": "Échoués",
+        "lastFailure": "Motif du dernier échec"
       },
       "clear": {
         "button": "Vider les tâches en attente",

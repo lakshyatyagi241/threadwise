@@ -7,13 +7,17 @@
 -- Connected Google accounts are not touched: they keep working, and a Sheets step needs no key.
 DROP INDEX IF EXISTS uq_user_settings_sheets_key_hash;
 DROP INDEX IF EXISTS idx_user_settings_sheets_key_hash;
-ALTER TABLE user_settings
-  DROP COLUMN IF EXISTS sheets_key_hash,
-  DROP COLUMN IF EXISTS sheets_key_suffix,
-  DROP COLUMN IF EXISTS sheets_key_created_at,
-  DROP COLUMN IF EXISTS sheets_key_last_used_at;
 
 SELECT set_config('app.privileged', 'on', true);
+
+-- Expand step only. The four sheets_key_* columns on user_settings stay for this release: during a blue-green switch the LIVE slot
+-- still runs the code that reads them (sheets-key.repository, workspace-settings.service), and dropping a column under it would break
+-- that code until the switch finishes. The keys are erased instead (the columns hold NULL, which the old code reads as "no key").
+-- The columns themselves are dropped by a later migration, once the release that stops reading them is live (contract step).
+UPDATE user_settings
+SET sheets_key_hash = NULL, sheets_key_suffix = NULL, sheets_key_created_at = NULL, sheets_key_last_used_at = NULL
+WHERE sheets_key_hash IS NOT NULL OR sheets_key_suffix IS NOT NULL
+   OR sheets_key_created_at IS NOT NULL OR sheets_key_last_used_at IS NOT NULL;
 
 UPDATE workspace_app_installations i
 SET status = 'killed', killed_at = now(),

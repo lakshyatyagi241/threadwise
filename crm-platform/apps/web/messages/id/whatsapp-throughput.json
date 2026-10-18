@@ -1,0 +1,157 @@
+{
+  "whatsapp-throughput": {
+    "nav": {
+      "group": "WhatsApp",
+      "item": "Batas pengiriman"
+    },
+    "eyebrow": "WhatsApp",
+    "title": "Batas pengiriman dan performa langsung",
+    "description": "Lihat seberapa cepat setiap nomor WhatsApp yang terhubung boleh mengirim, berapa banyak batas pesan hariannya yang sudah terpakai, dan apa yang sedang terjadi saat ini. Perubahan berlaku untuk pesan berikutnya yang dikirim oleh setiap worker.",
+    "updated": "Langsung. Diperbarui {time}",
+    "stale": "Penyegaran terakhir gagal. Menampilkan angka sebelumnya.",
+    "liveUnavailable": "Penghitung langsung tidak dapat dibaca, sehingga kolom langsung menampilkan nol. Laju, tingkat, dan kontrol tetap benar.",
+    "limiterOff": "Pembatas pengiriman dimatikan. Pesan tidak diatur lajunya di sini; hanya pembatasan dari Meta yang berlaku.",
+    "footnote": "Laju sebuah nomor ditetapkan oleh Meta: 80 pesan per detik secara default, hingga 1.000 setelah Meta meningkatkannya, dan 20 untuk nomor yang juga digunakan di aplikasi WhatsApp Business. Pesan masuk dan keluar berbagi laju ini. Tingkat pesan harian adalah batas terpisah untuk jumlah orang unik yang dikirimi pesan dalam 24 jam; hitungan di sini adalah perkiraan dari pesan templat yang dikirim melalui platform ini.",
+    "perSecond": "pesan/dtk",
+    "peak": "Puncak {n} dalam satu menit terakhir",
+    "sentCount": "{n} terkirim",
+    "deferredCount": "{n} ditahan",
+    "throttledCount": "{n} dibatasi oleh Meta",
+    "tierUsed": "{used} dari {cap} orang dalam 24 jam",
+    "details": "Detail",
+    "common": {
+      "loading": "Memuat...",
+      "retry": "Coba lagi"
+    },
+    "errors": {
+      "conflict": "Orang lain baru saja mengubah ini. Nilai terbaru telah dimuat; periksa dan terapkan kembali perubahan Anda.",
+      "metaUnavailable": "Meta tidak merespons. Coba segarkan lagi sebentar lagi.",
+      "notFound": "Nomor ini sudah tidak ada. Kembali ke daftar.",
+      "forbidden": "Hanya Super Admin yang dapat mengubah batas pengiriman.",
+      "invalid": "Beberapa nilai tidak diterima. Periksa dan coba lagi.",
+      "unexpected": "Terjadi kesalahan di pihak kami. Coba lagi sebentar lagi."
+    },
+    "kpi": {
+      "now": "Sedang mengirim",
+      "nowHint": "pesan per detik, semua nomor",
+      "sent": "Terkirim",
+      "last5": "5 menit terakhir",
+      "numbers": "Nomor terhubung",
+      "attention": "Perlu perhatian",
+      "attentionHint": "{paused} dijeda, {tier} mendekati batas hariannya",
+      "heldBack": "Ditahan",
+      "heldBackHint": "{meta} dibatasi oleh Meta, 5 menit terakhir"
+    },
+    "settings": {
+      "title": "Pengaturan platform",
+      "description": "Pengaturan ini berlaku untuk semua nomor. Penggantian dan jeda untuk tiap nomor diatur di halamannya.",
+      "enabled": "Atur laju pengiriman sesuai batas tiap nomor",
+      "enabledHelp": "Jika nonaktif, pesan dikirim tanpa pengaturan laju; pembatasan dari Meta tetap berlaku.",
+      "defaultMps": "Laju default (pesan/dtk)",
+      "defaultMpsHelp": "Digunakan untuk nomor yang lajunya belum dilaporkan oleh Meta.",
+      "safetyMargin": "Margin keamanan (%)",
+      "safetyMarginHelp": "Persentase batas yang disisakan untuk lalu lintas masuk dan pengaturan waktu.",
+      "maxWait": "Waktu tunggu terlama (md)",
+      "maxWaitHelp": "Pengiriman yang harus menunggu lebih lama dikembalikan ke antreannya dan dicoba lagi.",
+      "syncInterval": "Baca ulang dari Meta (menit)",
+      "syncIntervalHelp": "Seberapa sering laju dan batas harian setiap nomor disegarkan.",
+      "adaptive": "Perlambat setelah dibatasi Meta",
+      "adaptiveHelp": "Mengurangi kecepatan setengahnya saat Meta menolak pesan karena terlalu cepat dikirim, lalu pulih dalam satu menit.",
+      "enforceTier": "Tahan pesan templat saat mencapai batas harian",
+      "enforceTierHelp": "Menghentikan pesan templat baru saat nomor telah mencapai tingkat pesan hariannya. Jika nonaktif, hanya ditandai.",
+      "tierWarn": "Peringatkan pada (% dari batas harian)",
+      "tierWarnHelp": "Nomor ditandai saat menggunakan persentase tingkatnya ini.",
+      "save": "Simpan pengaturan",
+      "saving": "Menyimpan...",
+      "saved": "Tersimpan. Semua nomor kini mengikuti pengaturan baru."
+    },
+    "numbers": {
+      "title": "Nomor",
+      "search": "Cari berdasarkan workspace, nomor, atau ID",
+      "emptyTitle": "Tidak ada nomor terhubung",
+      "emptyBody": "Nomor akan muncul di sini setelah workspace menghubungkan WhatsApp."
+    },
+    "cols": {
+      "number": "Nomor",
+      "rate": "Batas laju",
+      "live": "Sekarang",
+      "last5": "5 menit terakhir",
+      "tier": "Batas harian",
+      "state": "Status",
+      "actions": "Aksi"
+    },
+    "source": {
+      "override": "Ganti",
+      "coexistence": "WhatsApp Business (tetap)",
+      "meta": "Dari Meta",
+      "default": "Default"
+    },
+    "tier": {
+      "unlimited": "Tanpa batas",
+      "unknown": "Belum dilaporkan",
+      "unlimitedBody": "Nomor ini memiliki batas pesan harian tanpa batas.",
+      "unknownBody": "Meta belum melaporkan batas pesan harian nomor ini. Segarkan dari Meta."
+    },
+    "state": {
+      "ok": "Sehat",
+      "paused": "Dijeda",
+      "slowed": "Diperlambat ke {pct}%",
+      "tierWarn": "Mendekati batas harian",
+      "tierFull": "Batas harian tercapai",
+      "syncFailed": "Gagal membaca dari Meta"
+    },
+    "events": {
+      "meta_throttled": "Meta membatasi pengiriman",
+      "upgrade_in_progress": "Peningkatan throughput sedang berlangsung",
+      "throughput_upgraded": "Level throughput berubah",
+      "deferred": "Pengiriman ditahan, antrean terlalu penuh",
+      "paused_block": "Pengiriman diblokir, nomor dijeda",
+      "tier_full": "Batas harian tercapai",
+      "paused": "Dijeda oleh operator",
+      "resumed": "Dilanjutkan oleh operator",
+      "override_set": "Penggantian laju diatur",
+      "override_cleared": "Penggantian laju dihapus",
+      "synced": "Dibaca ulang dari Meta"
+    },
+    "detail": {
+      "title": "Batas nomor WhatsApp",
+      "back": "Kembali ke batas pengiriman",
+      "description": "ID nomor telepon {id}. Diperbarui setiap beberapa detik.",
+      "refresh": "Segarkan dari Meta",
+      "refreshing": "Membaca dari Meta...",
+      "syncError": "Pembacaan terakhir dari Meta gagal: {message}",
+      "coexistence": "Nomor ini juga digunakan di aplikasi WhatsApp Business, sehingga Meta menetapkannya tetap pada 20 pesan per detik.",
+      "rate": "Diatur ke (pesan/dtk)",
+      "speed": "Kecepatan",
+      "speedSlowed": "Diperlambat setelah dibatasi Meta, sedang pulih",
+      "speedFull": "Kecepatan penuh",
+      "wait": "Rata-rata waktu tunggu",
+      "waitHint": "{n} pengiriman menunggu, 5 menit terakhir",
+      "meta": "Level throughput Meta",
+      "metaHint": "{n} pesan/dtk",
+      "unknown": "Tidak dilaporkan",
+      "chartSeconds": "Pengiriman per detik, menit terakhir",
+      "chartLegend": "Garis putus-putus adalah laju yang diatur. Tanda merah menunjukkan detik saat Meta menolak pengiriman, tanda kuning menunjukkan detik saat pengiriman ditahan.",
+      "chartMinutes": "Pengiriman per menit, jam terakhir",
+      "chartLegendMinutes": "Tanda merah menunjukkan menit saat Meta menolak pengiriman, tanda kuning menunjukkan menit saat pengiriman ditahan.",
+      "tierTitle": "Batas pesan harian",
+      "tierNote": "Meta membatasi berapa banyak orang berbeda yang boleh dimulai percakapannya oleh sebuah nomor dalam 24 jam. Hitungan ini mencakup pesan templat yang dikirim melalui platform ini, sehingga dapat berbeda dari angka Meta sendiri.",
+      "events": "Peristiwa terbaru",
+      "eventsEmpty": "Belum ada",
+      "eventsEmptyBody": "Pembatasan, penahanan, jeda, dan perubahan laju untuk nomor ini tercantum di sini."
+    },
+    "control": {
+      "title": "Kontrol",
+      "description": "Ganti laju yang diberikan Meta untuk nomor ini, atau hentikan pengirimannya. Keduanya berlaku pada pesan berikutnya, untuk setiap workspace yang menggunakan nomor ini.",
+      "override": "Penggantian laju (pesan/dtk)",
+      "overrideHelp": "Bilangan bulat dari 1 sampai {max}. Kosongkan untuk mengikuti Meta.",
+      "overrideInvalid": "Masukkan bilangan bulat dari 1 sampai {max}.",
+      "overridePlaceholder": "Ikuti Meta",
+      "pause": "Jeda pengiriman dari nomor ini",
+      "pauseHelp": "Siaran dan kampanye berhenti dan berlanjut dengan sendirinya; pesan lain gagal dengan opsi Coba lagi.",
+      "reason": "Alasan",
+      "reasonHelp": "Ditampilkan di log peristiwa.",
+      "saved": "Tersimpan. Nomor ini mengikuti kontrol baru mulai pesan berikutnya."
+    }
+  }
+}

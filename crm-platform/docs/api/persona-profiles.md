@@ -1,6 +1,6 @@
 # Persona profiles API (phases 0 and 1)
 
-Spec: [../specs/persona-profiles.md](../specs/persona-profiles.md) (backlog BL-280). Wiring map: [../threadwise-port/wiring/persona-profiles.md](../threadwise-port/wiring/persona-profiles.md).
+Spec: [../specs/persona-profiles.md](../specs/persona-profiles.md) (backlog BL-280). The workspace's own words ("dynamic object naming", BL-310) are documented in [persona-vocabulary.md](persona-vocabulary.md): they add the optional `org.persona.nouns` and `GET`/`PUT /v2/persona/vocabulary`. Wiring map: [../threadwise-port/wiring/persona-profiles.md](../threadwise-port/wiring/persona-profiles.md).
 
 Phases 0 and 1 have **no route of their own**. It adds the data, the pure resolver, and one optional field on the session. Nothing in the product reads
 that field yet, and every workspace resolves to the `generic` persona, which hides nothing, so no person can see a difference. The workspace and

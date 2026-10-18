@@ -209,11 +209,13 @@ export class ContactOracle {
     const name = [first, last].filter(Boolean).join(' ') || null;
     let email: string | null = text(doc.email).toLowerCase() || null;
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) email = null;
-    const phone = oraclePhone(
-      text(doc.mobile_phone_number) || text(doc.whatsapp_phone_number),
-      doc.country_code,
-      this.defaultCc,
-    );
+    // first candidate that reads as a number: mobile, then WhatsApp (a junk mobile does not hide a valid WhatsApp number)
+    let phone: string | null = null;
+    for (const raw of [text(doc.mobile_phone_number), text(doc.whatsapp_phone_number)]) {
+      if (raw === '') continue;
+      phone = oraclePhone(raw, doc.country_code, this.defaultCc);
+      if (phone) break;
+    }
     const hasRejects = Object.keys(doc).some((k) =>
       /^__.+__(error_reason|unverified_value)$/.test(k),
     );

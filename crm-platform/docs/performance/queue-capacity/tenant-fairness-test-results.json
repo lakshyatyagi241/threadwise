@@ -1,0 +1,173 @@
+{
+  "commit": "b9dd0f8db302db03d79a2d9c0eb3a7334182f793",
+  "bullmq": "6.3.12",
+  "redis": "7.0.15",
+  "ioredis": "6.0.0",
+  "node": "v22.22.2",
+  "host": {
+    "platform": "linux",
+    "release": "7.0.0-38-generic",
+    "cpus": 22,
+    "cpuModel": "Intel(R) Core(TM) Ultra 7 155H",
+    "memGB": 30.8
+  },
+  "redisConfig": {
+    "appendonly": "no (main scenarios)",
+    "maxmemoryPolicy": "noeviction",
+    "singleInstance": true
+  },
+  "generatedAt": "2026-10-18T14:05:16.654Z",
+  "durationMultiplier": 1,
+  "caveat": "Synthetic handlers on one machine that also hosts producer, workers and Redis. Numbers are relative, queue-layer ceilings, not production capacity.",
+  "reproduce": "node tools/queue-capacity/bench.mjs --scenarios sweep,drain,profiles,isolation,fairness,provider,crash,redis,soak --duration 1 --soak-seconds 150",
+  "scenarios": [
+    {
+      "mode": "fifo",
+      "tenantB": {
+        "n": 300,
+        "waitP50Ms": 3886,
+        "waitP95Ms": 6412.5,
+        "waitP99Ms": 6648,
+        "procP50Ms": 11,
+        "procP95Ms": 12,
+        "procP99Ms": 12
+      },
+      "tenantA": {
+        "n": 6000,
+        "waitP50Ms": 3564,
+        "waitP95Ms": 6587,
+        "waitP99Ms": 6854,
+        "procP50Ms": 11,
+        "procP95Ms": 12,
+        "procP99Ms": 14
+      },
+      "tenantACompletionSeconds": 6.9,
+      "drained": true
+    },
+    {
+      "mode": "admission-cap-300",
+      "tenantB": {
+        "n": 302,
+        "waitP50Ms": 305,
+        "waitP95Ms": 320,
+        "waitP99Ms": 326,
+        "procP50Ms": 11,
+        "procP95Ms": 12,
+        "procP99Ms": 13
+      },
+      "tenantA": {
+        "n": 6000,
+        "waitP50Ms": 305,
+        "waitP95Ms": 321,
+        "waitP99Ms": 325,
+        "procP50Ms": 11,
+        "procP95Ms": 12,
+        "procP99Ms": 13
+      },
+      "tenantACompletionSeconds": 7,
+      "drained": true
+    }
+  ],
+  "isolation": [
+    {
+      "variant": "A shared FIFO queue (12 slots)",
+      "critical": {
+        "n": 805,
+        "waitP50Ms": 1566,
+        "waitP95Ms": 4981.8,
+        "waitP99Ms": 5311,
+        "procP50Ms": 6,
+        "procP95Ms": 8,
+        "procP99Ms": 8
+      },
+      "bulk": {
+        "n": 3000,
+        "waitP50Ms": 2813,
+        "waitP95Ms": 5215.1,
+        "waitP99Ms": 5429,
+        "procP50Ms": 21,
+        "procP95Ms": 23,
+        "procP99Ms": 24
+      }
+    },
+    {
+      "variant": "B separate queues, 8+4 slots, same process",
+      "critical": {
+        "n": 805,
+        "waitP50Ms": 2,
+        "waitP95Ms": 4,
+        "waitP99Ms": 5,
+        "procP50Ms": 6,
+        "procP95Ms": 8,
+        "procP99Ms": 9
+      },
+      "bulk": {
+        "n": 1520,
+        "waitP50Ms": 4167.5,
+        "waitP95Ms": 7777,
+        "waitP99Ms": 8113.4,
+        "procP50Ms": 21,
+        "procP95Ms": 22,
+        "procP99Ms": 23
+      },
+      "cpuPct": 13.3,
+      "rssMaxMB": 155.9,
+      "heapMaxMB": 35.6,
+      "eventLoopLagP99Ms": 10.94,
+      "eventLoopLagMaxMs": 11.9,
+      "redisMemMaxMB": 3.78,
+      "redisClientsMax": 7,
+      "redisPingMaxMs": 1.59,
+      "peakBacklog": 3001,
+      "oldestWaitingMaxMs": 7811
+    },
+    {
+      "variant": "C separate queues, CPU-heavy bulk (40 ms sync) in SAME process",
+      "critical": {
+        "n": 208,
+        "waitP50Ms": 1334,
+        "waitP95Ms": 2469,
+        "waitP99Ms": 2594,
+        "procP50Ms": 324,
+        "procP95Ms": 485,
+        "procP99Ms": 809.9
+      },
+      "cpuPct": 100.5,
+      "rssMaxMB": 156.8,
+      "heapMaxMB": 38.3,
+      "eventLoopLagP99Ms": 162.92,
+      "eventLoopLagMaxMs": 164.2,
+      "redisMemMaxMB": 2.3,
+      "redisClientsMax": 7,
+      "redisPingMaxMs": 162.88,
+      "peakBacklog": 71,
+      "oldestWaitingMaxMs": 3282
+    },
+    {
+      "variant": "D separate queues, CPU-heavy bulk in its OWN worker process",
+      "critical": {
+        "n": 800,
+        "waitP50Ms": 3,
+        "waitP95Ms": 4,
+        "waitP99Ms": 5,
+        "procP50Ms": 6,
+        "procP95Ms": 8,
+        "procP99Ms": 9
+      },
+      "cpuPct": 9.3,
+      "rssMaxMB": 156.8,
+      "heapMaxMB": 29.3,
+      "eventLoopLagP99Ms": 11.02,
+      "eventLoopLagMaxMs": 12,
+      "redisMemMaxMB": 2.66,
+      "redisClientsMax": 7,
+      "redisPingMaxMs": 0.52,
+      "peakBacklog": 5,
+      "oldestWaitingMaxMs": 6
+    }
+  ],
+  "notRun": [
+    "tenant-context leakage under concurrency (needs the real processors and RLS)",
+    "tenant deactivation during backlog (QCAP-070)"
+  ]
+}

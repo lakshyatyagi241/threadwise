@@ -362,7 +362,8 @@ function QueueTable({ data }: { data: HealthResponse }) {
             <tr className="text-start text-muted-foreground">
               <th className="py-1 pe-4 text-start font-medium">{t('queues.name')}</th>
               <th className="py-1 pe-4 text-end font-medium">{t('queues.pending')}</th>
-              <th className="py-1 text-end font-medium">{t('queues.failed')}</th>
+              <th className="py-1 pe-4 text-end font-medium">{t('queues.failed')}</th>
+              <th className="py-1 text-start font-medium">{t('queues.lastFailure')}</th>
             </tr>
           </thead>
           <tbody>
@@ -370,7 +371,10 @@ function QueueTable({ data }: { data: HealthResponse }) {
               <tr key={r.name} className="border-t border-border">
                 <td className="py-1 pe-4 font-mono">{r.name}</td>
                 <td className="py-1 pe-4 text-end font-mono">{r.pending}</td>
-                <td className="py-1 text-end font-mono">{r.failed}</td>
+                <td className="py-1 pe-4 text-end font-mono">{r.failed}</td>
+                <td className="py-1 break-words text-xs text-muted-foreground">
+                  {r.lastFailure ?? ''}
+                </td>
               </tr>
             ))}
           </tbody>

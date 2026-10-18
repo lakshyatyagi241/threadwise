@@ -1,0 +1,117 @@
+{
+  "data-retention": {
+    "nav": {
+      "group": "数据",
+      "item": "数据保留"
+    },
+    "page": {
+      "title": "数据保留",
+      "eyebrow": "平台 · 数据保留",
+      "description": "为每类数据选择其在数据库中保留的天数，以及冷归档在永久删除前再保留的天数。在你为某个项目保存数值之前，该项目不会有任何变化。",
+      "superOnly": "只有超级管理员可以更改保留设置。你可以查看已保存的数值以及上次运行的结果。",
+      "loading": "正在加载保留策略…",
+      "retry": "重试"
+    },
+    "engine": {
+      "offTitle": "归档任务已关闭",
+      "offBody": "为分析事件和审计日志保存的数值会被存储，但在启用该任务（RETENTION_ENABLED）之前，不会归档或删除任何内容。在此之前，两者保持当前行为。",
+      "dryRunTitle": "归档任务仅记录将要执行的操作",
+      "dryRunBody": "该任务已开启，但处于试运行（dry-run）模式（RETENTION_DRY_RUN）。为分析事件和审计日志保存的数值尚未执行。",
+      "notDurableTitle": "归档不持久",
+      "notDurableBody": "归档是服务器自身磁盘上的一个文件夹，重新部署时会被清除。在指向 S3 或 R2（ARCHIVE_DRIVER=s3）之前，该任务拒绝删除任何数据。",
+      "liveTitle": "归档任务正在运行",
+      "liveBody": "已保存的数值由每晚运行执行。已归档的数据保存在 {driver} 中。"
+    },
+    "items": {
+      "an_events": {
+        "title": "分析事件",
+        "description": "报表背后的事件流。整月数据在超过在线天数后会移入归档。"
+      },
+      "audit_log": {
+        "title": "审计日志",
+        "description": "每个工作区中谁做了什么，包括以用户身份执行的操作。在你保存数值之前，日志会在平台安全策略规定的天数后删除，且从不归档。保存数值后会先归档、后删除，导出仍可读取已归档的月份。"
+      },
+      "security_events": {
+        "title": "安全日志",
+        "description": "登录、安全变更以及在此处所做的每次保留变更。在在线天数后删除，没有归档。"
+      },
+      "audit_log_exports": {
+        "title": "审计导出文件",
+        "description": "工作区从其审计日志请求的 CSV。请求者会收到一封带有登录并下载链接的邮件；文件在在线天数后删除。"
+      }
+    },
+    "fields": {
+      "liveDays": "在线天数",
+      "liveDaysHint": "数据保留在数据库中的天数。允许范围：{min} 至 {max}。",
+      "keepForever": "永久保留归档",
+      "archiveDays": "归档天数",
+      "archiveDaysHint": "归档再保留的天数，之后将被删除。允许范围：{min} 至 {max}。"
+    },
+    "summary": {
+      "noArchive": "写入后 {live, plural, other {# 天}}永久删除。",
+      "archiveForever": "在线保留 {live, plural, other {# 天}}，然后归档并永久保留。",
+      "archiveThenDelete": "在线保留 {live, plural, other {# 天}}，归档 {archive, plural, other {# 天}}，然后在写入后 {total, plural, other {# 天}}永久删除。",
+      "defaultForever": "当前永久保留（安全策略无期限限制）。",
+      "defaultNote": "当前行为，未保存任何内容。"
+    },
+    "status": {
+      "default": "当前行为",
+      "custom": "由你保存",
+      "notApplied": "尚未执行",
+      "updated": "保存于 {when}"
+    },
+    "stats": {
+      "live": "在数据库中",
+      "liveValue": "{size}，约 {rows} 行",
+      "liveValueNoRows": "{size}",
+      "months": "{count, plural, other {# 个月度分区}}，最早为 {oldest}",
+      "archive": "在归档中",
+      "archiveValue": "{size}，共 {count, plural, other {# 个对象}}",
+      "archiveNone": "尚未测量",
+      "archiveMeasured": "测量于 {when}",
+      "lastRun": "上次运行",
+      "neverRun": "尚未运行",
+      "runLive": "{when}：已归档 {months, plural, other {# 个月}}（{rows} 行，{size}），从归档中删除 {expired}，删除 {deleted} 行或文件",
+      "runDry": "{when}：试运行，未更改任何内容",
+      "runFailed": "上次运行出现问题：{error}"
+    },
+    "actions": {
+      "save": "保存",
+      "checking": "正在检查…",
+      "saving": "正在保存…",
+      "reset": "恢复当前行为",
+      "resetting": "正在重置…",
+      "cancel": "取消",
+      "confirmSave": "保存并应用",
+      "resetTitle": "将 {item} 恢复为当前行为？",
+      "resetBody": "已保存的数值将被移除。每晚任务会回到此项目的内置规则。已归档的数据仍保留在归档中。",
+      "confirmReset": "恢复当前行为"
+    },
+    "preview": {
+      "title": "保存 {item} 的保留设置？",
+      "intro": "在下一次夜间运行时：",
+      "toArchive": "{count, plural, other {# 个月}}（{rows} 行，{size}）将移入归档并从数据库中移除。",
+      "toDeleteFromArchive": "{count, plural, other {# 个已归档月份}}将从归档中永久删除。",
+      "rowsToDelete": "{count, plural, other {# 行或文件}}将被永久删除。",
+      "notApplied": "归档任务尚未执行已保存的数值，因此在启用之前，以上操作都不会发生。",
+      "permanent": "删除是永久性的，无法撤销。"
+    },
+    "saved": "保留设置已保存。",
+    "resetDone": "已恢复为当前行为。",
+    "validation": {
+      "live_out_of_range": "在线天数必须是 {min} 到 {max} 之间的整数。",
+      "archive_out_of_range": "归档天数必须是 {min} 到 {max} 之间的整数。",
+      "archive_not_supported": "此项目无法归档。",
+      "delete_before_archive": "数据在归档之前不能被删除。",
+      "not_a_number": "请输入整数天数。"
+    },
+    "errors": {
+      "forbidden": "你无权执行此操作。",
+      "conflict": "其他人更改了此项目。已加载最新数值；请检查后再次保存。",
+      "validation": "不允许使用这些数值。",
+      "request": "请求被拒绝。",
+      "unexpected": "服务器出错。请重试。",
+      "network": "无法连接到服务器。请检查网络连接后重试。"
+    }
+  }
+}
