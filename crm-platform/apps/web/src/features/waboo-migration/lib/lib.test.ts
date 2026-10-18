@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { WMIG_CLIENT_RE, deriveClientKey } from '@crm/contracts';
 import { parseOrgIds } from './org-ids';
 import { localToIso, runAtProblem } from './run-at';
 
@@ -15,6 +16,12 @@ describe('parseOrgIds (bulk textarea)', () => {
     expect(p.duplicates).toEqual(['ok1']);
     expect(p.collisions).toEqual(['aBc']);
     expect(p.ok).toBe(false);
+  });
+  it('accepts a plus sign and derives a client key without it', () => {
+    const p = parseOrgIds('support+demo_XXKhXNvA_y8tj');
+    expect(p).toMatchObject({ ids: ['support+demo_XXKhXNvA_y8tj'], ok: true });
+    expect(deriveClientKey('support+demo_XXKhXNvA_y8tj')).toBe('support-demo_xxkhxnva_y8tj');
+    expect(WMIG_CLIENT_RE.test(deriveClientKey('a+b'.repeat(40)))).toBe(true);
   });
   it('allows at most 50 organizations and needs at least one', () => {
     const ids = (n: number) => Array.from({ length: n }, (_, i) => `org${i}`).join('\n');

@@ -30,7 +30,7 @@ const BASE = '/v2/platform/waboo-migration/runner';
 
 // the same shapes the API enforces (packages/contracts/src/waboo-migration/constants.ts); checked again here before a process starts
 const CLIENT_RE = /^[a-z0-9_-]{1,64}$/;
-const DB_RE = /^[A-Za-z0-9_]{1,128}$/;
+const DB_RE = /^[A-Za-z0-9_+]{1,128}$/;
 const MODES = ['dry', 'load', 'catchup'];
 const NAME_RE = /^[A-Za-z0-9._-]{1,64}$/;
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

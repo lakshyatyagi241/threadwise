@@ -46,9 +46,9 @@ export const WMIG_STEP_STATUSES = ['running', 'done', 'failed', 'skipped'] as co
 export const WMIG_VERDICTS = ['green', 'amber', 'red'] as const;
 export type WabooMigrationVerdict = (typeof WMIG_VERDICTS)[number];
 
-/** Lower-case slug of an organization id: the default client key. Same rule as tools/migration/pilot/staging/pipeline.cjs. */
+/** Lower-case slug of an organization id (a plus sign becomes a dash, the client key has no plus): the default client key. Same rule as tools/migration/pilot/staging/pipeline.cjs. */
 export const deriveClientKey = (organizationId: string): string =>
-  organizationId.toLowerCase().slice(0, 64);
+  organizationId.toLowerCase().replace(/\+/g, '-').slice(0, 64);
 
 /**
  * green only when the run is ok AND nothing is unaccounted AND there are no integrity errors; amber when that holds but the
@@ -114,7 +114,7 @@ export type WabooMigrationRunsResponse = z.infer<typeof wabooMigrationRunsRespon
 const organizationIdSchema = z
   .string()
   .trim()
-  .regex(WMIG_DB_RE, 'Letters, digits and underscore only');
+  .regex(WMIG_DB_RE, 'Letters, digits, underscore and plus only');
 const runAtSchema = z.string().datetime({ offset: true });
 
 /** Accepts the previous field names (sourceDb, confirmClient) so older callers keep working. */

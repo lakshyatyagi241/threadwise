@@ -35,8 +35,8 @@
     "form": {
       "title": "Start a run",
       "org": "Organization ID",
-      "orgHint": "The Waboo organization (workspace) id, which is the Waboo database name. Letters, digits and underscore.",
-      "orgInvalid": "Use letters, digits or underscore (up to 128).",
+      "orgHint": "The Waboo organization (workspace) id, which is the Waboo database name. Letters, digits, underscore and plus sign.",
+      "orgInvalid": "Use letters, digits, underscore or plus sign (up to 128).",
       "derived": "Client key: {client} (derived from the id).",
       "dryRun": "Dry run",
       "dryRunning": "Starting",

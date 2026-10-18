@@ -305,3 +305,20 @@ describe('safety rules (module source)', () => {
     expect(source).not.toMatch(/\bexec(Sync)?\(|shell: true/);
   });
 });
+
+describe('organization id with a plus sign', () => {
+  it('is accepted, with a client key derived without the plus', () => {
+    const r = createWabooMigrationRunSchema.safeParse({
+      organizationId: 'support+demo_XXKhXNvA_y8tj',
+      mode: 'dry',
+    });
+    expect(r.success).toBe(true);
+  });
+  it('still rejects other characters', () => {
+    for (const bad of ['a b', 'a-b', 'a;b', 'a/b', '']) {
+      expect(
+        createWabooMigrationRunSchema.safeParse({ organizationId: bad, mode: 'dry' }).success,
+      ).toBe(false);
+    }
+  });
+});
