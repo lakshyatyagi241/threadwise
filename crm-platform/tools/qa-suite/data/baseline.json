@@ -482,5 +482,567 @@
       "key": "apps/web/src/features/marketing-site-cms/site/preview-bridge.tsx if (type === 'richtext') el.innerHTML = before;",
       "reason": "restores the element's own earlier content; reviewed 2026-10-17"
     }
+  ],
+  "40": [
+    {
+      "key": "agent_statuses(preferences) -> jsonb [packages/db/migrations/20261001102700_tib2_threadwise_schema.sql]",
+      "reason": "detector artifact: preferences is a jsonb column with a trailing REFERENCES-looking comment, not a foreign key; no FK exists on it; reviewed 2026-10-18"
+    },
+    {
+      "key": "platform_notes(org_id,admin_user_id) -> users [packages/db/migrations/20261001102800_supp_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "support_tickets(assigned_agent_id) -> platform_operators [packages/db/migrations/20261001102800_supp_threadwise_schema.sql]",
+      "reason": "platform_operators is the handful of platform staff accounts, never deleted at runtime (operators are deactivated); the FK is an audit column on a low-volume platform table; reviewed 2026-10-18"
+    },
+    {
+      "key": "conversations(org_id,resolved_by) -> users [packages/db/migrations/20261001103600_chat_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "conversation_notes(org_id,user_id) -> users [packages/db/migrations/20261001103600_chat_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "wa_calls(org_id,recording_consent_by) -> users [packages/db/migrations/20261001103700_call_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "deal_activities(org_id,user_id) -> users [packages/db/migrations/20261001103800_deal_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "projects(org_id,owner_id) -> users [packages/db/migrations/20261001103900_ctp_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "projects(org_id,created_by) -> users [packages/db/migrations/20261001103900_ctp_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "facebook_pages(org_id,user_id) -> users [packages/db/migrations/20261001104000_fb_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "facebook_posts(org_id,user_id) -> users [packages/db/migrations/20261001104000_fb_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "facebook_broadcasts(org_id,user_id) -> users [packages/db/migrations/20261001104000_fb_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "telegram_accounts(org_id,connected_by) -> users [packages/db/migrations/20261001104100_tg_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "telegram_bots(org_id,connected_by) -> users [packages/db/migrations/20261001104100_tg_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "telegram_broadcasts(org_id,user_id) -> users [packages/db/migrations/20261001104100_tg_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "line_channels(org_id,connected_by) -> users [packages/db/migrations/20261001104200_line_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "line_rich_menus(org_id,created_by) -> users [packages/db/migrations/20261001104200_line_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "line_broadcasts(org_id,user_id) -> users [packages/db/migrations/20261001104200_line_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "wechat_channels(org_id,connected_by) -> users [packages/db/migrations/20261001104300_wech_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "wechat_broadcasts(org_id,user_id) -> users [packages/db/migrations/20261001104300_wech_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "viber_channels(org_id,connected_by) -> users [packages/db/migrations/20261001104400_vib_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "viber_broadcasts(org_id,user_id) -> users [packages/db/migrations/20261001104400_vib_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "sales_docs(org_id,created_by) -> users [packages/db/migrations/20261001104500_sales_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "sales_docs(org_id,duplicated_from_id) -> sales_docs [packages/db/migrations/20261001104500_sales_threadwise_schema.sql]",
+      "reason": "self-reference to the document a copy was made from; sales_docs are soft-removed and a hard delete of one document scans once; reviewed 2026-10-18"
+    },
+    {
+      "key": "invoices(org_id,user_id) -> users [packages/db/migrations/20261001104600_inv_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "invoices(org_id,voided_by) -> users [packages/db/migrations/20261001104600_inv_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "payments(org_id,recorded_by) -> users [packages/db/migrations/20261001104700_paygw_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "orders(credit_package_id) -> credit_packages [packages/db/migrations/20261001104700_paygw_threadwise_schema.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "orders(coupon_id) -> coupons [packages/db/migrations/20261001104700_paygw_threadwise_schema.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "orders(gateway_id) -> payment_gateways [packages/db/migrations/20261001104700_paygw_threadwise_schema.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "orders(org_id,reviewed_by) -> users [packages/db/migrations/20261001104700_paygw_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "booking_types(org_id,user_id) -> users [packages/db/migrations/20261001104800_appt_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "booking_templates(coupon_id) -> coupons [packages/db/migrations/20261001104800_appt_threadwise_schema.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "wa_product_sets(org_id,user_id) -> users [packages/db/migrations/20261001105000_cat_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_import_jobs(org_id,created_by) -> users [packages/db/migrations/20261002100100_con_import_jobs.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "platform_setup(first_operator_id) -> platform_operators [packages/db/migrations/20261003090000_inst_platform_setup.sql]",
+      "reason": "platform_operators is the handful of platform staff accounts, never deleted at runtime (operators are deactivated); the FK is an audit column on a low-volume platform table; reviewed 2026-10-18"
+    },
+    {
+      "key": "platform_setup(first_org_id) -> organizations [packages/db/migrations/20261003090000_inst_platform_setup.sql]",
+      "reason": "platform_setup holds exactly one row and waboo_migration_runs is a handful of runs per workspace; an organization is deleted only by workspace erasure; reviewed 2026-10-18"
+    },
+    {
+      "key": "sales_doc_revisions(org_id,created_by) -> users [packages/db/migrations/20261006100000_sales_docs_reshape.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "sales_doc_events(org_id,actor_user_id) -> users [packages/db/migrations/20261006100000_sales_docs_reshape.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "sales_doc_templates(org_id,created_by) -> users [packages/db/migrations/20261006100000_sales_docs_reshape.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "tax_rates(org_id,created_by) -> users [packages/db/migrations/20261007100000_inv_model_reshape.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "invoice_gateway_connections(org_id,created_by) -> users [packages/db/migrations/20261007100100_inv_payment_ledger.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "credit_notes(org_id,created_by) -> users [packages/db/migrations/20261008100200_inv_credit_notes.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "recurring_invoices(org_id,owner_id) -> users [packages/db/migrations/20261008100300_inv_recurring_and_orders.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "recurring_invoices(org_id,created_by) -> users [packages/db/migrations/20261008100300_inv_recurring_and_orders.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "sales_orders(org_id,owner_id) -> users [packages/db/migrations/20261008100300_inv_recurring_and_orders.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "sales_orders(org_id,created_by) -> users [packages/db/migrations/20261008100300_inv_recurring_and_orders.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "workspace_preset_baseline(permission_key) -> permission_defs [packages/db/migrations/20261014090000_rbac_baseline_member_keys.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "conversation_media_uploads(org_id,user_id) -> users [packages/db/migrations/20261015090100_tib1_notes_search_media_uploads.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "wallet_platform_log(operator_id) -> platform_operators [packages/db/migrations/20261016090000_wallet_core.sql]",
+      "reason": "platform_operators is the handful of platform staff accounts, never deleted at runtime (operators are deactivated); the FK is an audit column on a low-volume platform table; reviewed 2026-10-18"
+    },
+    {
+      "key": "cat_catalog_sends(org_id,user_id) -> users [packages/db/migrations/20261017090100_cat_catalog_sends.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "whatsapp_providers(created_by_operator_id) -> platform_operators [packages/db/migrations/20261018090000_whatsapp_providers.sql]",
+      "reason": "platform_operators is the handful of platform staff accounts, never deleted at runtime (operators are deactivated); the FK is an audit column on a low-volume platform table; reviewed 2026-10-18"
+    },
+    {
+      "key": "org_whatsapp_provider_assignment(assigned_by_operator_id) -> platform_operators [packages/db/migrations/20261018090000_whatsapp_providers.sql]",
+      "reason": "platform_operators is the handful of platform staff accounts, never deleted at runtime (operators are deactivated); the FK is an audit column on a low-volume platform table; reviewed 2026-10-18"
+    },
+    {
+      "key": "marketplace_apps(category_id) -> marketplace_categories [packages/db/migrations/20261021090000_mkt_catalogue.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "marketplace_apps(created_by_operator_id) -> platform_operators [packages/db/migrations/20261021090000_mkt_catalogue.sql]",
+      "reason": "platform_operators is the handful of platform staff accounts, never deleted at runtime (operators are deactivated); the FK is an audit column on a low-volume platform table; reviewed 2026-10-18"
+    },
+    {
+      "key": "marketplace_apps(current_version_id) -> marketplace_app_versions [packages/db/migrations/20261021090000_mkt_catalogue.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "marketplace_app_versions(reviewed_by_operator_id) -> platform_operators [packages/db/migrations/20261021090000_mkt_catalogue.sql]",
+      "reason": "platform_operators is the handful of platform staff accounts, never deleted at runtime (operators are deactivated); the FK is an audit column on a low-volume platform table; reviewed 2026-10-18"
+    },
+    {
+      "key": "marketplace_app_versions(created_by_operator_id) -> platform_operators [packages/db/migrations/20261021090000_mkt_catalogue.sql]",
+      "reason": "platform_operators is the handful of platform staff accounts, never deleted at runtime (operators are deactivated); the FK is an audit column on a low-volume platform table; reviewed 2026-10-18"
+    },
+    {
+      "key": "workspace_app_installations(installed_version_id) -> marketplace_app_versions [packages/db/migrations/20261021090100_mkt_installations.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "workspace_app_installations(pending_version_id) -> marketplace_app_versions [packages/db/migrations/20261021090100_mkt_installations.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "marketplace_consents(app_id) -> marketplace_apps [packages/db/migrations/20261021090100_mkt_installations.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "camp_series(org_id,created_by) -> users [packages/db/migrations/20261031090000_camp_broadcast_wizard.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "camp_test_sends(org_id,created_by) -> users [packages/db/migrations/20261031090000_camp_broadcast_wizard.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "camp_wizard_csv(org_id,created_by) -> users [packages/db/migrations/20261104090000_camp_wizard_csv_uploads.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "waboo_migration_runs(org_id) -> organizations [packages/db/migrations/20261113100000_wmig_waboo_migration_runs.sql]",
+      "reason": "platform_setup holds exactly one row and waboo_migration_runs is a handful of runs per workspace; an organization is deleted only by workspace erasure; reviewed 2026-10-18"
+    },
+    {
+      "key": "faqs(org_id,created_by) -> users [packages/db/migrations/20261114090000_faq_core.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "message_log_exports(org_id,requested_by) -> users [packages/db/migrations/20261116100000_message_log_archive.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "help_agent_settings(org_id,updated_by) -> users [packages/db/migrations/20261119090000_help_agent.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "mail_workspace_settings(org_id,updated_by) -> users [packages/db/migrations/20261119090000_mail_phase2_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "mail_signatures(org_id,created_by) -> users [packages/db/migrations/20261119090000_mail_phase2_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "wa_device_groups(org_id,created_by_user_id) -> users [packages/db/migrations/20261120090000_wa_device_groups.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_consent_events(org_id,actor_user_id) -> users [packages/db/migrations/20261121090000_consent_ledger.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "lifecycle_stage_suggestions(org_id,decided_by) -> users [packages/db/migrations/20261121090100_lsc_chat_digest.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_exports(org_id,created_by) -> users [packages/db/migrations/20261121090300_con_saved_exports.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_consent_exports(org_id,requested_by) -> users [packages/db/migrations/20261122090000_consent_exports.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "growth_actions(org_id,decided_by) -> users [packages/db/migrations/20261122090000_growth_pilot.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "audit_log_exports(org_id,requested_by) -> users [packages/db/migrations/20261126090000_audit_log_tenant_view.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "member_leaves(org_id,created_by) -> users [packages/db/migrations/20261129090000_member_leave.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "member_delegates(org_id,created_by) -> users [packages/db/migrations/20261129090000_member_leave.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "privacy_requests(org_id,verified_by) -> users [packages/db/migrations/20261129090000_privacy_requests.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "privacy_requests(org_id,legal_hold_set_by) -> users [packages/db/migrations/20261129090000_privacy_requests.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "privacy_requests(org_id,created_by) -> users [packages/db/migrations/20261129090000_privacy_requests.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "privacy_request_events(org_id,actor_user_id) -> users [packages/db/migrations/20261129090000_privacy_requests.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "privacy_request_exports(org_id,requested_by) -> users [packages/db/migrations/20261129090000_privacy_requests.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "privacy_settings(org_id,updated_by) -> users [packages/db/migrations/20261129090000_privacy_requests.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "owner_reassign_batches(org_id,to_user_id) -> users [packages/db/migrations/20261130090000_owner_reassign.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "owner_reassign_batches(org_id,created_by) -> users [packages/db/migrations/20261130090000_owner_reassign.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "owner_reassign_batches(org_id,restored_by) -> users [packages/db/migrations/20261130090000_owner_reassign.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "assignment_rules(org_id,created_by) -> users [packages/db/migrations/20261130090100_contact_assignment.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "call_recording_settings(org_id,updated_by) -> users [packages/db/migrations/20261202090000_call_recording_consent.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "call_recording_notice_versions(org_id,created_by) -> users [packages/db/migrations/20261202090000_call_recording_consent.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "email_templates(org_id,created_by) -> users [packages/db/migrations/20261202090000_mail_email_templates.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "consent_notices(org_id,created_by) -> users [packages/db/migrations/20261203090000_consent_intake_notices.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "wa_device_history_imports(org_id,requested_by_user_id) -> users [packages/db/migrations/20261204090000_wa_device_history_import.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "wa_calling_settings(org_id,updated_by) -> users [packages/db/migrations/20261206090000_calling_readiness.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_privacy_events(org_id,actor_user_id) -> users [packages/db/migrations/20261216090000_contact_privacy_flags.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "dnc_entries(org_id,added_by) -> users [packages/db/migrations/20261224090000_dnc_list.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "telephony_connections(org_id,created_by) -> users [packages/db/migrations/20261227090000_call_log_entries.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "call_log_entries(org_id,created_by) -> users [packages/db/migrations/20261227090000_call_log_entries.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "telephony_click_calls(org_id,user_id) -> users [packages/db/migrations/20261227090000_call_log_entries.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "call_logging_settings(org_id,updated_by) -> users [packages/db/migrations/20261227090000_call_log_entries.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "teams(org_id,default_assignee_id) -> users [packages/db/migrations/0003_foundation.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "role_grants(permission_key) -> permission_defs [packages/db/migrations/0003_foundation.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "api_keys(org_id,user_id) -> users [packages/db/migrations/0005_partner_agents.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "fields(org_id,replaces_field_id) -> fields [packages/db/migrations/0010_add_contact_properties.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "fields(org_id,replaces_field_id) -> fields [packages/db/migrations/0010_add_contact_properties.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "field_dependencies(org_id,depends_on_option_id) -> field_options [packages/db/migrations/0010_add_contact_properties.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "field_option_dependencies(org_id,child_option_id) -> field_options [packages/db/migrations/0010_add_contact_properties.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_tags(org_id,created_by) -> users [packages/db/migrations/0014_add_contact_tags_and_views.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_tags(org_id,created_by) -> users [packages/db/migrations/0014_add_contact_tags_and_views.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_view_favorites(org_id,user_id) -> users [packages/db/migrations/0014_add_contact_tags_and_views.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_notes(org_id,created_by) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_notes(org_id,updated_by) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_notes(org_id,created_by) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_notes(org_id,updated_by) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_files(org_id,uploaded_by) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_files(org_id,uploaded_by) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_activities(org_id,actor_id) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_activities(org_id,actor_id) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_meetings(org_id,created_by) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_meetings(org_id,created_by) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "subscriptions(org_id,workspace_addon_id) -> workspace_addons [packages/db/migrations/20261001100200_plan_threadwise_schema.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "devices(org_id,consent_id) -> device_risk_acknowledgements [packages/db/migrations/20261001101000_wadev_threadwise_schema.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "waba_groups(org_id,created_by_user_id) -> users [packages/db/migrations/20261001101100_waba_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "flows(org_id,trigger_channel_id) -> channels [packages/db/migrations/20261001101400_flb_threadwise_schema.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "flow_retry_logs(org_id,retried_by_user_id) -> users [packages/db/migrations/20261001101500_flr_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "team_chat_messages(org_id,pinned_by_user_id) -> users [packages/db/migrations/20261001101600_tchat_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "team_chat_channel_members(org_id,last_read_message_id) -> team_chat_messages [packages/db/migrations/20261001101600_tchat_threadwise_schema.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "crm_briefs(org_id,created_by) -> users [packages/db/migrations/20261001102100_aicrm_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "leads(org_id,user_id) -> users [packages/db/migrations/20261001102100_aicrm_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "tiktok_accounts(org_id,user_id) -> users [packages/db/migrations/20261001102200_tt_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "tiktok_posts(org_id,user_id) -> users [packages/db/migrations/20261001102200_tt_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "tiktok_shops(org_id,user_id) -> users [packages/db/migrations/20261001102200_tt_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "impersonation_sessions(target_workspace_id,target_user_id) -> users [packages/db/migrations/20261001102500_wsp_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "workspace_addons(package_id) -> packages [packages/db/migrations/20261001102500_wsp_threadwise_schema.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "workspace_addons(package_id) -> plans [packages/db/migrations/20261001102500_wsp_threadwise_schema.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "workspace_flags(org_id,flagged_by_user_id) -> users [packages/db/migrations/20261001102500_wsp_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "workspace_flags(org_id,cleared_by_user_id) -> users [packages/db/migrations/20261001102500_wsp_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "conversation_tag(org_id,added_by) -> users [packages/db/migrations/20261001102600_tib1_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "saved_replies(org_id,created_by) -> users [packages/db/migrations/20261001102600_tib1_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    }
   ]
 }
