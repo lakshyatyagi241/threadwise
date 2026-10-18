@@ -881,7 +881,12 @@
             "add": "Başka bir düğme ekle",
             "remove": "Düğmeyi kaldır",
             "opensPhone": "Telefon numarası",
-            "opensEmail": "E-posta adresi"
+            "opensEmail": "E-posta adresi",
+            "errors": {
+              "url": "https:// ile başlayan geçerli bir web adresi girin",
+              "phone": "Geçerli bir telefon numarası girin, örn. +91 98765 43210",
+              "email": "Geçerli bir e-posta adresi girin, örn. name@example.com"
+            }
           },
           "carousel": {
             "intro": "Kartların üstündeki mesaj",
@@ -2613,6 +2618,7 @@
         "chooseTemplate": "Adım {stage}: bir şablon seçin.",
         "chooseTeam": "Adım {stage}: görüşmenin gideceği ekibi seçin.",
         "ctaLabelLink": "Adım {stage}: düğmeye bir ad ve bağlantı verin.",
+        "ctaLinkInvalid": "Adım {stage}: düğmenin hedefi türü için geçerli değil.",
         "choosePickedProperty": "Adım {stage}: seçilen seçeneğin kopyalanacağı kişi özelliğini seçin.",
         "buttonsPrompt": "Adım {stage}: düğmelerin üstündeki mesajı yazın.",
         "addButton": "Adım {stage}: en az bir düğme ekleyin.",

@@ -881,7 +881,12 @@
             "add": "再添加一个按钮",
             "remove": "删除按钮",
             "opensPhone": "电话号码",
-            "opensEmail": "电子邮件地址"
+            "opensEmail": "电子邮件地址",
+            "errors": {
+              "url": "请输入以 https:// 开头的有效网址",
+              "phone": "请输入有效的电话号码，例如 +91 98765 43210",
+              "email": "请输入有效的邮箱地址，例如 name@example.com"
+            }
           },
           "carousel": {
             "intro": "卡片上方的消息",
@@ -2613,6 +2618,7 @@
         "chooseTemplate": "第 {stage} 步：请选择模板。",
         "chooseTeam": "第 {stage} 步：请选择对话转交的团队。",
         "ctaLabelLink": "第 {stage} 步：请为按钮命名并填写链接。",
+        "ctaLinkInvalid": "步骤 {stage}：按钮的目标与其类型不符。",
         "choosePickedProperty": "第 {stage} 步：请选择所选选项要复制到的联系人属性。",
         "buttonsPrompt": "第 {stage} 步：请在按钮上方撰写消息。",
         "addButton": "第 {stage} 步：请至少添加一个按钮。",

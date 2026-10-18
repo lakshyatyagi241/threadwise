@@ -881,7 +881,12 @@
             "add": "Añadir otro botón",
             "remove": "Quitar botón",
             "opensPhone": "Número de teléfono",
-            "opensEmail": "Dirección de correo"
+            "opensEmail": "Dirección de correo",
+            "errors": {
+              "url": "Introduce una dirección web válida que empiece por https://",
+              "phone": "Introduce un número de teléfono válido, por ejemplo +91 98765 43210",
+              "email": "Introduce un correo electrónico válido, por ejemplo name@example.com"
+            }
           },
           "carousel": {
             "intro": "Mensaje sobre las tarjetas",
@@ -2613,6 +2618,7 @@
         "chooseTemplate": "Paso {stage}: elige una plantilla.",
         "chooseTeam": "Paso {stage}: elige el equipo al que va la conversación.",
         "ctaLabelLink": "Paso {stage}: ponle un nombre y un enlace al botón.",
+        "ctaLinkInvalid": "Paso {stage}: el destino del botón no es válido para su tipo.",
         "choosePickedProperty": "Paso {stage}: elige la propiedad del contacto a la que se copia la opción elegida.",
         "buttonsPrompt": "Paso {stage}: escribe el mensaje que va encima de los botones.",
         "addButton": "Paso {stage}: añade al menos un botón.",
