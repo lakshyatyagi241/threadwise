@@ -126,7 +126,12 @@
       "details": {
         "title": "Contactdetails",
         "stage": "Levenscyclusfase",
-        "otherProperties": "Overige eigenschappen"
+        "otherProperties": "Overige eigenschappen",
+        "stageSince": "In deze fase sinds",
+        "previousStage": "Vorige fase",
+        "previousStageSince": "Vorige fase sinds",
+        "lostReason": "Reden van verlies",
+        "updatedAt": "Laatst bijgewerkt"
       },
       "company": {
         "title": "Bedrijf",

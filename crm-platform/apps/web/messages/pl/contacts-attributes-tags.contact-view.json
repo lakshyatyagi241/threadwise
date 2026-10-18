@@ -126,7 +126,12 @@
       "details": {
         "title": "Szczegóły kontaktu",
         "stage": "Etap cyklu życia",
-        "otherProperties": "Pozostałe właściwości"
+        "otherProperties": "Pozostałe właściwości",
+        "stageSince": "W tym etapie od",
+        "previousStage": "Poprzedni etap",
+        "previousStageSince": "Poprzedni etap od",
+        "lostReason": "Powód przegranej",
+        "updatedAt": "Ostatnia aktualizacja"
       },
       "company": {
         "title": "Firma",
