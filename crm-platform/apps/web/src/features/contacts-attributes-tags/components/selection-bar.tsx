@@ -28,6 +28,8 @@ export interface SelectionBarProps {
   onChangeStage: () => void;
   /** Opens the Update dialog (stage, status, owner and custom properties together). */
   onUpdate: () => void;
+  /** Marks the selection as uncontacted (`true`) or as contacted (`false`). */
+  onMarkUncontacted: (uncontacted: boolean) => void;
   picker: BulkPicker;
   onPicker: (p: BulkPicker) => void;
   onGroup: (action: 'add' | 'remove', groupId: string) => Promise<boolean>;
@@ -43,6 +45,7 @@ const action = 'h-8 gap-1.5 whitespace-nowrap px-2.5 text-[13px]';
  */
 export function SelectionBar(p: SelectionBarProps) {
   const t = useTranslations('contacts-attributes-tags.bulk');
+  const tu = useTranslations('contacts-attributes-tags.leadHandling.uncontacted');
   const off = p.busy;
   return (
     <div
@@ -114,6 +117,12 @@ export function SelectionBar(p: SelectionBarProps) {
           </MenuItem>
           <MenuItem onSelect={() => p.onPicker('tagRemove')} disabled={off}>
             {t('untag')}
+          </MenuItem>
+          <MenuItem onSelect={() => p.onMarkUncontacted(false)} disabled={off}>
+            {tu('markContacted')}
+          </MenuItem>
+          <MenuItem onSelect={() => p.onMarkUncontacted(true)} disabled={off}>
+            {tu('markUncontacted')}
           </MenuItem>
         </Menu>
       )}

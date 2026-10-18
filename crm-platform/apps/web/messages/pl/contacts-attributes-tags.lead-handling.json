@@ -1,0 +1,65 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "Bez kontaktu"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "Bez kontaktu",
+        "chipTitle": "Nikt z zespołu jeszcze się nie skontaktował",
+        "waitingSince": "Oczekuje od {date}",
+        "markContacted": "Oznacz jako skontaktowany",
+        "markUncontacted": "Oznacz jako nieskontaktowany",
+        "markedContacted": "Oznaczono jako skontaktowany",
+        "markedUncontacted": "Oznaczono jako nieskontaktowany",
+        "markFailed": "Nie udało się zmienić oznaczenia. Spróbuj ponownie.",
+        "bulkMarkedContacted": "{count, plural, one {Oznaczono # kontakt jako skontaktowany} few {Oznaczono # kontakty jako skontaktowane} many {Oznaczono # kontaktów jako skontaktowane} other {Oznaczono # kontaktu jako skontaktowane}}",
+        "bulkMarkedUncontacted": "{count, plural, one {Oznaczono # kontakt jako nieskontaktowany} few {Oznaczono # kontakty jako nieskontaktowane} many {Oznaczono # kontaktów jako nieskontaktowane} other {Oznaczono # kontaktu jako nieskontaktowane}}"
+      },
+      "settings": {
+        "save": "Zapisz",
+        "discard": "Odrzuć zmiany",
+        "saved": "Zapisano ustawienia",
+        "retry": "Spróbuj ponownie",
+        "loading": "Wczytywanie ustawień",
+        "conflict": "Ktoś inny zapisał te ustawienia podczas Twojej edycji. Poniżej widać je ponownie; wprowadź zmianę jeszcze raz.",
+        "conflictOk": "Rozumiem",
+        "errors": {
+          "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+          "forbidden": "Tę stronę mogą zmieniać tylko osoby zarządzające ustawieniami obszaru roboczego.",
+          "conflict": "Ktoś inny zmienił te ustawienia wcześniej. Odśwież stronę i spróbuj ponownie.",
+          "validation": "Niektóre ustawienia są nieprawidłowe. Sprawdź je i spróbuj ponownie.",
+          "unexpected": "Coś poszło nie tak. Spróbuj ponownie."
+        },
+        "uncontacted": {
+          "title": "Potencjalni klienci bez kontaktu",
+          "subtitle": "Oznaczaj potencjalnych klientów, z którymi nikt jeszcze się nie skontaktował, aby wyróżniali się, dopóki ktoś się z nimi nie skontaktuje. Nic się nie zmieni, dopóki nie włączysz opcji.",
+          "clear": {
+            "title": "Oznacz jako skontaktowany",
+            "intro": "Automatycznie usuwaj oznaczenie Bez kontaktu, gdy członek zespołu wykona dowolną z tych czynności:",
+            "contactButton": "Naciśnie przycisk kontaktu (połączenie, SMS, e-mail lub WhatsApp) albo wykona połączenie",
+            "message": "Wyśle wiadomość, szablon, zapisaną odpowiedź lub plik ze wspólnej skrzynki zespołu",
+            "automation": "Kampania, wysyłka masowa lub automatyczny przepływ wysyła wiadomość do potencjalnego klienta",
+            "activity": "Doda notatkę, spotkanie lub inną aktywność do osi czasu",
+            "manualHint": "Oznaczenie możesz też zmienić ręcznie: otwórz menu Więcej przy kontakcie albo zaznacz kilka kontaktów i użyj Więcej na pasku nad listą."
+          },
+          "new": {
+            "title": "Oznaczaj nowych potencjalnych klientów jako nieskontaktowanych",
+            "intro": "Gdy potencjalny klient zostanie utworzony w jeden z tych sposobów, oznacz go jako nieskontaktowanego:",
+            "manual": "Utworzony ręcznie w aplikacji",
+            "import": "Zaimportowany z pliku lub Google Sheets",
+            "leadSource": "Źródła potencjalnych klientów, formularze i integracje"
+          },
+          "reassign": {
+            "title": "Ponownie przypisani potencjalni klienci",
+            "intro": "Gdy potencjalny klient zostanie przypisany lub ponownie przypisany nowemu właścicielowi:",
+            "keep": "Nie zmieniaj oznaczenia Bez kontaktu",
+            "mark": "Oznacz jako nieskontaktowanego po ponownym przypisaniu"
+          }
+        }
+      }
+    }
+  }
+}

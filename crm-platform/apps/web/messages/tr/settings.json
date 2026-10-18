@@ -374,6 +374,11 @@
         "label": "Şirket özellikleri",
         "description": "Her şirkette tutmak istediğiniz alanları ekleyin.",
         "keywords": "özel alanlar, alanlar, zorunlu, açılır liste, kuruluş, hesap"
+      },
+      "uncontacted-leads": {
+        "label": "Ulaşılmamış potansiyel müşteriler",
+        "description": "Hangi eylemlerin bir potansiyel müşteriye ulaşmak sayılacağını ve hangi yeni kişilerin ulaşılmadı olarak başlayacağını seçin.",
+        "keywords": "ulaşılmadı, iletişime geçildi, potansiyel müşteri, yeni potansiyel müşteri, ilk temas, takip, yeniden atama, işaret"
       }
     },
     "backToMarketplace": "Marketplace'e dön"

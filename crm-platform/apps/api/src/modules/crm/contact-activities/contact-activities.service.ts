@@ -15,6 +15,7 @@ import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { assertContactScope, ContactsRepository } from '../contacts';
 import { toContactActivityResponse } from './contact-activities.mapper';
 import { ContactActivitiesRepository } from './contact-activities.repository';
+import { ContactTouchService } from '../lead-handling/contact-touch.service';
 
 const MODULE_KEY = 'contact_activities';
 
@@ -27,6 +28,7 @@ export class ContactActivitiesService {
     private readonly outbox: OutboxService,
     private readonly audit: AuditService,
     private readonly rbac: RbacService,
+    private readonly leadHandling: ContactTouchService,
   ) {}
 
   async list(
@@ -97,6 +99,8 @@ export class ContactActivitiesService {
         occurredAt: input.occurredAt ? new Date(input.occurredAt) : undefined,
       });
       await this.contactsRepo.bumpLastActivity(tx, ctx.orgId, contactId);
+      // A activity a person added reached the contact: lead handling (the uncontacted marker, BL-290). Never throws.
+      await this.leadHandling.touch(tx, ctx.orgId, contactId, 'activity');
 
       await this.audit.record(tx, { module: MODULE_KEY, recordId: created.id, action: 'insert' });
       await this.outbox.emit(tx, {

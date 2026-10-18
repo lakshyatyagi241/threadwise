@@ -252,6 +252,8 @@ export function contactFilterToRules(filter: SegmentFilterInput): SegmentRules |
     add('unsubscribed', filter.unsubscribed ? 'is_true' : 'is_false');
   }
   if (filter.minor !== undefined) add('minor', filter.minor ? 'is_true' : 'is_false');
+  if (filter.uncontacted !== undefined)
+    add('uncontacted', filter.uncontacted ? 'is_true' : 'is_false');
   for (const [field, from, to] of [
     ['createdAt', filter.createdFrom, filter.createdTo],
     ['updatedAt', filter.updatedFrom, filter.updatedTo],

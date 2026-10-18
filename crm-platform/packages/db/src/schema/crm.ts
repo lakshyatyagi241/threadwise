@@ -106,6 +106,8 @@ export const contacts = pgTable(
     faxNumber: text('fax_number'),
     /** Bumped on note/activity/meeting/file write, a form submit, an order, a customer message and a staff reply. Backs the list 'Last Activity' column. A bump alone does not move row_version (contacts_touch). */
     lastActivityAt: timestamp('last_activity_at', { withTimezone: true }),
+    /** BL-290: null = contacted (every contact before the feature); a timestamp = uncontacted since then. Moves without bumping row_version (contacts_touch). */
+    uncontactedSince: timestamp('uncontacted_since', { withTimezone: true }),
 
     data: dataJsonb(),
     displayId: text('display_id'),
@@ -178,6 +180,9 @@ export const contacts = pgTable(
     index('idx_contacts_org_owner').on(t.orgId, t.ownerId, t.createdAt),
     index('idx_contacts_org_stage').on(t.orgId, t.lifecycleStage, t.createdAt),
     index('idx_contacts_org_last_activity').on(t.orgId, t.lastActivityAt),
+    index('idx_contacts_org_uncontacted')
+      .on(t.orgId, t.uncontactedSince)
+      .where(sql`${t.uncontactedSince} IS NOT NULL`),
     index('idx_contacts_date_of_birth')
       .on(t.orgId, t.dateOfBirth.desc())
       .where(sql`${t.dateOfBirth} IS NOT NULL`),

@@ -41,6 +41,7 @@ import {
 } from './icons';
 import { LeadScoreChip } from './contact/lead-score-chip';
 import { StagePicker } from './stage-picker';
+import { UncontactedMarker } from './lead-handling/uncontacted-marker';
 
 const iconBtn =
   'inline-flex size-8 items-center justify-center rounded-md border border-border bg-background text-muted-foreground outline-none transition hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40';
@@ -225,6 +226,7 @@ function QuickViewBody({
                 contact={contact}
                 onOpen={() => onPanel('overview', { focus: 'score' })}
               />
+              <UncontactedMarker since={contact.uncontactedSince} />
               <SocialIcons contact={contact} />
             </div>
             <div className="mt-0.5 min-w-0">

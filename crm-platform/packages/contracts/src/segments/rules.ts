@@ -63,6 +63,8 @@ export const SEGMENT_BUILTIN_FIELDS = {
   imported: 'boolean',
   /** Flagged as a minor (BL-190). */
   minor: 'boolean',
+  /** Marked uncontacted: nobody on the team has reached the contact yet (BL-290). */
+  uncontacted: 'boolean',
   /** The built-in date of birth (BL-217). */
   dateOfBirth: 'date',
   /** Whole years, worked out from the date of birth on the earliest calendar date on Earth; empty when there is no date (BL-190). */

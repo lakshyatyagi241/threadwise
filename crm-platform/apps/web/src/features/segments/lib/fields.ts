@@ -110,6 +110,7 @@ export function buildCatalog(l: Lookups): FieldDef[] {
     sys('unsubscribed', 'who'),
     sys('imported', 'who'),
     sys('minor', 'who'),
+    sys('uncontacted', 'who'),
     sys('dateOfBirth', 'who'),
     sys('age', 'who'),
     // created and updated are always set, so "is empty" would never match

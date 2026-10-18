@@ -308,6 +308,13 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
       };
     case 'minor':
       return { sql: minorCondition(op === 'is_true') };
+    case 'uncontacted':
+      return {
+        sql:
+          op === 'is_true'
+            ? sql`${contacts.uncontactedSince} IS NOT NULL`
+            : sql`${contacts.uncontactedSince} IS NULL`,
+      };
     case 'dateOfBirth':
       return {
         sql: datePredicate(sql`${contacts.dateOfBirth}::timestamptz`, op as DateOperator, c.value),

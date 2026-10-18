@@ -16,12 +16,14 @@ import {
   bulkDeleteContactsSchema,
   bulkGroupContactsSchema,
   bulkOwnerContactsSchema,
+  bulkSetUncontactedSchema,
   bulkTagContactsSchema,
   exportContactsSchema,
   exportHistoryQuerySchema,
   type BulkDeleteContactsInput,
   type BulkGroupContactsInput,
   type BulkOwnerContactsInput,
+  type BulkSetUncontactedInput,
   type BulkTagContactsInput,
   type ExportContactsInput,
   type ExportHistoryQuery,
@@ -98,6 +100,21 @@ export class ContactBulkController {
     @GrantedScope('record.contacts.update') scope: RecordScope,
   ) {
     return this.bulk.setOwner(body, scope);
+  }
+
+  @Post('bulk/uncontacted')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('record.contacts.update')
+  @ApiOperation({
+    summary: 'Mark contacts as uncontacted or as contacted (ids, or everything matching a filter)',
+    description:
+      'Works on the contacts inside the caller update record scope. `changed` counts the contacts whose marker actually moved; one audit row and one `contact.uncontacted_changed` event per contact changed.',
+  })
+  async uncontacted(
+    @Body(zodPipe(bulkSetUncontactedSchema)) body: BulkSetUncontactedInput,
+    @GrantedScope('record.contacts.update') scope: RecordScope,
+  ) {
+    return this.bulk.setUncontacted(body, scope);
   }
 
   @Post('bulk/tag')

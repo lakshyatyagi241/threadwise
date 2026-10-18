@@ -27,7 +27,8 @@
       "minor": "Đã đánh dấu là chưa thành niên",
       "dateOfBirth": "Ngày sinh",
       "age": "Tuổi (năm)",
-      "timezone": "Múi giờ"
+      "timezone": "Múi giờ",
+      "uncontacted": "Chưa liên hệ"
     },
     "fieldGroups": {
       "journey": "Hành trình",

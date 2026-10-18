@@ -32,6 +32,8 @@ export interface RowView {
   source: string;
   /** ISO timestamp of the last note, activity or meeting; null when there was none. */
   lastActivityAt: string | null;
+  /** ISO timestamp since when nobody on the team has reached the contact (BL-290); null for a contacted contact. */
+  uncontactedSince: string | null;
   groups: Array<{ id: string; name: string; color: string | null }>;
   tags: RowTag[];
   attributes: AttributeChip[];
@@ -79,6 +81,7 @@ export function rowView(row: ContactRow, attributeLabels: ReadonlyMap<string, st
     emailOptIn: channelOptIn(row, 'email'),
     source: (row.source ?? text(row.customFields[EXTRA_KEYS.source])).trim(),
     lastActivityAt: row.lastActivityAt ?? null,
+    uncontactedSince: row.uncontactedSince ?? null,
     // The list asks for `expand=groups,tags`, so the chips arrive with the row (a deleted group simply is not there).
     groups: (row.groups ?? []).map((g) => ({ id: g.id, name: g.name, color: g.color })),
     tags: row.tags ?? [],

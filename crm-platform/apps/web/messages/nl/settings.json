@@ -358,6 +358,11 @@
         "label": "Bedrijfseigenschappen",
         "description": "Voeg de velden toe die je bij elk bedrijf wilt bewaren.",
         "keywords": "aangepaste velden, velden, verplicht, keuzelijst, organisatie, account"
+      },
+      "uncontacted-leads": {
+        "label": "Niet-benaderde leads",
+        "description": "Kies welke acties tellen als het benaderen van een lead en welke nieuwe contacten als niet benaderd beginnen.",
+        "keywords": "niet benaderd, benaderd, lead, nieuwe lead, eerste contact, opvolgen, opnieuw toewijzen, markering"
       }
     },
     "title": "Instellingen",

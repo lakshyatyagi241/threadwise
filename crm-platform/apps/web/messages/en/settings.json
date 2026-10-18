@@ -374,6 +374,11 @@
         "label": "Company properties",
         "description": "Add the fields you want to keep on every company.",
         "keywords": "custom fields, fields, required, dropdown, organization, account"
+      },
+      "uncontacted-leads": {
+        "label": "Uncontacted leads",
+        "description": "Choose which actions count as reaching a lead, and which new contacts start as uncontacted.",
+        "keywords": "uncontacted, contacted, lead, new lead, first contact, follow up, reassign, marker"
       }
     },
     "backToMarketplace": "Back to Marketplace"

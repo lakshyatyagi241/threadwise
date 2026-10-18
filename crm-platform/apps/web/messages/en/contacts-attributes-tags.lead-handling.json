@@ -1,0 +1,65 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "Uncontacted"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "Uncontacted",
+        "chipTitle": "Nobody on the team has reached out yet",
+        "waitingSince": "Waiting since {date}",
+        "markContacted": "Mark as contacted",
+        "markUncontacted": "Mark as uncontacted",
+        "markedContacted": "Marked as contacted",
+        "markedUncontacted": "Marked as uncontacted",
+        "markFailed": "Could not change the marker. Try again.",
+        "bulkMarkedContacted": "{count, plural, one {# contact marked as contacted} other {# contacts marked as contacted}}",
+        "bulkMarkedUncontacted": "{count, plural, one {# contact marked as uncontacted} other {# contacts marked as uncontacted}}"
+      },
+      "settings": {
+        "save": "Save",
+        "discard": "Discard changes",
+        "saved": "Settings saved",
+        "retry": "Try again",
+        "loading": "Loading settings",
+        "conflict": "Someone else saved these settings while you were editing. They are shown again below; make your change once more.",
+        "conflictOk": "Got it",
+        "errors": {
+          "network": "Could not reach the server. Check your connection and try again.",
+          "forbidden": "Only people who manage the workspace settings can change this page.",
+          "conflict": "Someone else changed these settings first. Reload and try again.",
+          "validation": "Some of these settings are not valid. Check them and try again.",
+          "unexpected": "Something went wrong. Try again."
+        },
+        "uncontacted": {
+          "title": "Uncontacted leads",
+          "subtitle": "Mark the leads nobody has reached yet, so they stand out until someone gets in touch. Nothing changes until you switch an option on.",
+          "clear": {
+            "title": "Mark as contacted",
+            "intro": "Automatically remove the Uncontacted marker when a team member does any of these:",
+            "contactButton": "Presses a contact button (call, SMS, email or WhatsApp) or places a call",
+            "message": "Sends a message, template, saved reply or file from the inbox",
+            "automation": "A campaign, broadcast or automated flow sends to the lead",
+            "activity": "Adds a note, meeting or other activity to the timeline",
+            "manualHint": "You can also change the marker by hand: open the More menu on a contact, or select several contacts and use More in the bar above the list."
+          },
+          "new": {
+            "title": "Mark new leads as uncontacted",
+            "intro": "When a lead is created in one of these ways, mark it as uncontacted:",
+            "manual": "Created manually in the app",
+            "import": "Imported from a file or Google Sheets",
+            "leadSource": "Lead sources, forms and integrations"
+          },
+          "reassign": {
+            "title": "Reassigned leads",
+            "intro": "When a lead is assigned or reassigned to a new owner:",
+            "keep": "Don't change the Uncontacted marker",
+            "mark": "Mark as uncontacted when reassigned"
+          }
+        }
+      }
+    }
+  }
+}

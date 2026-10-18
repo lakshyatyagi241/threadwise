@@ -27,7 +27,8 @@
       "minor": "Marcado como menor",
       "dateOfBirth": "Fecha de nacimiento",
       "age": "Edad (años)",
-      "timezone": "Zona horaria"
+      "timezone": "Zona horaria",
+      "uncontacted": "Sin contactar"
     },
     "fieldGroups": {
       "journey": "Recorrido",

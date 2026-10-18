@@ -374,6 +374,11 @@
         "label": "Unternehmens-Eigenschaften",
         "description": "Fügen Sie Felder hinzu, die bei jedem Unternehmen gespeichert werden sollen.",
         "keywords": "benutzerdefinierte felder, felder, pflichtfeld, dropdown, organisation, konto"
+      },
+      "uncontacted-leads": {
+        "label": "Nicht kontaktierte Leads",
+        "description": "Legen Sie fest, welche Aktionen als Kontaktaufnahme mit einem Lead gelten und welche neuen Kontakte als nicht kontaktiert starten.",
+        "keywords": "nicht kontaktiert, kontaktiert, Lead, neuer Lead, Erstkontakt, Nachfassen, neu zuweisen, Markierung"
       }
     },
     "backToMarketplace": "Zurück zum Marketplace"

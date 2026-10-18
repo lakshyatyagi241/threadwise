@@ -27,7 +27,8 @@
       "createdAt": "Created",
       "updatedAt": "Last updated",
       "lastActivityAt": "Last activity",
-      "timezone": "Time zone"
+      "timezone": "Time zone",
+      "uncontacted": "Uncontacted"
     },
     "fieldGroups": {
       "journey": "Journey",

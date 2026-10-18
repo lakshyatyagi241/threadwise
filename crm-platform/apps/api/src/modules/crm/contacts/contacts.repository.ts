@@ -69,6 +69,8 @@ export interface ContactRow {
   /** Flagged as a minor (BL-190), read from the privacy flags in the same statement. */
   isMinor: boolean;
   lastActivityAt: Date | null;
+  /** BL-290: null = contacted; set = uncontacted since then. */
+  uncontactedSince: Date | null;
   data: Record<string, unknown>;
   /** BL-193: the contact's own IANA time zone and who set it (staff | import | api); both null when none is stored. */
   timezone: string | null;
@@ -192,6 +194,7 @@ export class ContactsRepository {
       dateOfBirth: contacts.dateOfBirth,
       isMinor: sql<boolean>`EXISTS (SELECT 1 FROM contact_privacy_flags pf WHERE pf.org_id = ${contacts.orgId} AND pf.contact_id = ${contacts.id} AND pf.is_minor)`,
       lastActivityAt: contacts.lastActivityAt,
+      uncontactedSince: contacts.uncontactedSince,
       data: contacts.data,
       timezone: contacts.timezone,
       timezoneSource: contacts.timezoneSource,
@@ -329,6 +332,7 @@ export class ContactsRepository {
     unsubscribed: number;
     noGroup: number;
     imported: number;
+    uncontacted: number;
     groups: number;
   }> {
     const where = whereOf(
@@ -343,6 +347,7 @@ export class ContactsRepository {
              count(*) FILTER (WHERE NOT ${contacts.isUnsubscribed})::int AS subscribed,
              count(*) FILTER (WHERE ${contacts.isUnsubscribed})::int AS unsubscribed,
              count(*) FILTER (WHERE ${contacts.importJobId} IS NOT NULL)::int AS imported,
+             count(*) FILTER (WHERE ${contacts.uncontactedSince} IS NOT NULL)::int AS uncontacted,
              count(*) FILTER (WHERE NOT EXISTS (
                SELECT 1 FROM contact_group_members m
                WHERE m.org_id = ${orgId} AND m.contact_id = ${contacts.id}
@@ -354,6 +359,7 @@ export class ContactsRepository {
       subscribed: number;
       unsubscribed: number;
       imported: number;
+      uncontacted: number;
       no_group: number;
     };
     const g = await tx.execute(
@@ -365,6 +371,7 @@ export class ContactsRepository {
       unsubscribed: Number(r.unsubscribed),
       noGroup: Number(r.no_group),
       imported: Number(r.imported),
+      uncontacted: Number(r.uncontacted),
       groups: Number((g.rows[0] as { n: number }).n),
     };
   }
