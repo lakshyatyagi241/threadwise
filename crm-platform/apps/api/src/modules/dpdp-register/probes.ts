@@ -139,7 +139,11 @@ export async function runProbes(deps: ProbeDeps): Promise<Record<DpdpLiveCheck, 
   const probes: Record<DpdpLiveCheck, Probe> = {
     'mfa.operators': async () => mfaOutcome((await policy()).requireMfaForSuperAdmins),
 
-    'mfa.workspace_admins': async () => mfaOutcome((await policy()).requireMfaForAdmins),
+    'mfa.workspace_admins': async () => {
+      // The sign-in gate asks an admin for MFA under either switch (`account-gate.service.ts`): the everyone switch covers admins too.
+      const { requireMfaForAll, requireMfaForAdmins } = await policy();
+      return mfaOutcome(requireMfaForAll || requireMfaForAdmins);
+    },
 
     'logs.audit_retention': async () => {
       const { auditLogRetentionDays: days } = await policy();

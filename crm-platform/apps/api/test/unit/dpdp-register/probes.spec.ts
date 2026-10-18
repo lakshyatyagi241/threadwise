@@ -114,18 +114,34 @@ describe('runProbes', () => {
   });
 
   describe('mfa.workspace_admins', () => {
-    it('passes only when workspace admins are required to use MFA', async () => {
+    // The sign-in gate asks for MFA of an admin when requireMfaForAll or requireMfaForAdmins is on (account-gate.service.ts).
+    it('fails when neither the everyone switch nor the admin switch is on', async () => {
       expect(
-        await probe('mfa.workspace_admins', { policy: { requireMfaForAdmins: true } }),
-      ).toEqual({ result: 'pass', detail: 'mfa_on' });
-      expect(
-        await probe('mfa.workspace_admins', { policy: { requireMfaForAdmins: false } }),
+        await probe('mfa.workspace_admins', {
+          policy: { requireMfaForAll: false, requireMfaForAdmins: false },
+        }),
       ).toEqual({ result: 'fail', detail: 'mfa_off' });
     });
 
-    it('ignores the super admin switch', async () => {
+    it('passes when only the admin switch is on', async () => {
+      expect(
+        await probe('mfa.workspace_admins', {
+          policy: { requireMfaForAll: false, requireMfaForAdmins: true },
+        }),
+      ).toEqual({ result: 'pass', detail: 'mfa_on' });
+    });
+
+    it('passes when only the everyone switch is on, because it covers admins too', async () => {
+      expect(
+        await probe('mfa.workspace_admins', {
+          policy: { requireMfaForAll: true, requireMfaForAdmins: false },
+        }),
+      ).toEqual({ result: 'pass', detail: 'mfa_on' });
+    });
+
+    it('ignores the super admin switch and the owners switch', async () => {
       const outcome = await probe('mfa.workspace_admins', {
-        policy: { requireMfaForSuperAdmins: true },
+        policy: { requireMfaForSuperAdmins: true, requireMfaForOwners: true },
       });
       expect(outcome.result).toBe('fail');
     });

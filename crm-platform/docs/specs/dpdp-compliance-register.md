@@ -72,7 +72,7 @@ An item with no checks takes its `baseline`. `not_applicable` items are listed b
 | Check key                  | Reads                                                                                           | Passes when                                    | Rows     |
 | -------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------- | -------- |
 | `mfa.operators`            | `SecurityPolicyService.policy()`: `requireMfaForSuperAdmins`                                    | true                                           | r28      |
-| `mfa.workspace_admins`     | same policy: `requireMfaForAdmins`                                                              | true                                           | r28      |
+| `mfa.workspace_admins`     | same policy: `requireMfaForAll` or `requireMfaForAdmins`                                        | either is true                                 | r28      |
 | `logs.audit_retention`     | policy `auditLogRetentionDays`                                                                  | 0 (never prune) or at least 365                | r25, r31 |
 | `logs.session_retention`   | the ended-session purge constant in `auth-maintenance.service.ts`, exported as a named constant | at least 365 days                              | r25, r31 |
 | `redis.auth`               | `REDIS_URL` through `ConfigService`                                                             | URL carries a password or uses `rediss:`       | r27      |
