@@ -494,7 +494,8 @@
         "title": "Filas",
         "name": "Fila",
         "pending": "Pendentes",
-        "failed": "Com falha"
+        "failed": "Com falha",
+        "lastFailure": "Motivo da última falha"
       },
       "clear": {
         "button": "Limpar tarefas pendentes",

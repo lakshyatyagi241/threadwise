@@ -494,7 +494,8 @@
         "title": "Hàng đợi",
         "name": "Hàng đợi",
         "pending": "Đang chờ",
-        "failed": "Thất bại"
+        "failed": "Thất bại",
+        "lastFailure": "Lý do lỗi gần nhất"
       },
       "clear": {
         "button": "Xóa các công việc đang chờ",
