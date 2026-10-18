@@ -49,6 +49,11 @@
     "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
     "reviewed": "2026-10-11 (policy text read in catalog)"
   },
+  "dpdp_register_attestations": {
+    "class": "PLATFORM_ONLY",
+    "reason": "privileged-only policy, append-only compliance attestations, no tenant data",
+    "reviewed": "2026-10-17"
+  },
   "extensions": {
     "class": "PLATFORM_ONLY",
     "reason": "operator_write / privileged_only policy, no tenant policy",

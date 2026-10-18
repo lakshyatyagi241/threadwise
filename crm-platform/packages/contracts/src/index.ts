@@ -110,6 +110,7 @@ export * from './growth';
 export * from './contact-consent';
 export * from './privacy';
 export * from './compliance';
+export * from './dpdp-register';
 export * from './waboo-migration';
 export * from './lead-handling';
 export * from './channel-wechat';

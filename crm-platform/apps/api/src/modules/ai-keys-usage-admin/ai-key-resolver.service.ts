@@ -61,6 +61,14 @@ export class AiKeyResolver {
   }
 
   /**
+   * The vendors that have an active platform key which can be read, any group (language model or voice), sorted by slug. One
+   * read of the platform table; the DPDP register uses it to tell whether the platform holds a key at all.
+   */
+  async platformProviders(): Promise<string[]> {
+    return [...(await this.platformKeys()).keys()].sort();
+  }
+
+  /**
    * Which key every vendor would use right now for a workspace, in one pass (the keys screen and the model
    * pickers). Vendors that resolve to nothing are left out.
    */
