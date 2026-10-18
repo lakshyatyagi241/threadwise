@@ -48,6 +48,45 @@ export class WidgetPublicErrorFilter implements ExceptionFilter {
 }
 
 /**
+ * The old product's embed address (`output.js` with the bot id), kept alive for migrated customers so their pages need no edit. The
+ * bot id comes in the path (`/widget-legacy/<id>/output.js`) or as `?id=` / `?botId=` on `/widget-legacy/output.js`; either way it is
+ * resolved to the widget's own token and answered with the normal loader, so the allow-list, the paused state and every other rule
+ * of the new embed apply unchanged. A wrong, unknown or paused id answers the same 404 script as the new embed.
+ */
+@ApiExcludeController()
+@Controller({ path: 'widget-legacy', version: VERSION_NEUTRAL })
+export class WidgetLegacyEmbedController {
+  constructor(
+    private readonly widgets: WidgetPublicService,
+    private readonly config: ConfigService,
+  ) {}
+
+  private async serve(id: unknown, req: Request, res: Response): Promise<void> {
+    const configured = this.config.get<string>('WIDGET_PUBLIC_BASE_URL');
+    const base = configured
+      ? configured.replace(/\/+$/, '')
+      : `${req.protocol}://${req.get('host')}`;
+    const js = typeof id === 'string' ? await this.widgets.legacyEmbedScript(id, base) : null;
+    res.type('application/javascript');
+    if (js === null) {
+      res.status(404).send(NOT_FOUND_SCRIPT);
+      return;
+    }
+    res.set('Cache-Control', 'no-cache, must-revalidate').status(200).send(js);
+  }
+
+  @Get(':id/output.js')
+  byPath(@Param('id') id: string, @Req() req: Request, @Res() res: Response): Promise<void> {
+    return this.serve(id, req, res);
+  }
+
+  @Get('output.js')
+  byQuery(@Req() req: Request, @Res() res: Response): Promise<void> {
+    return this.serve(req.query.id ?? req.query.botId, req, res);
+  }
+}
+
+/**
  * The widget as a visitor's browser sees it (TW-WGT-008 to 020): no sign-in, no version prefix (the snippet address is
  * printed on other people's sites), the embed token in the path is the only credential.
  */

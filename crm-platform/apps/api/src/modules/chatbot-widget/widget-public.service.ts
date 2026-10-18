@@ -98,6 +98,8 @@ export type OriginCheck =
   | { kind: 'denied'; message: string }
   | { kind: 'allowed'; origin: string };
 
+/** The bot id of an old embed: letters, digits, underscore and dash, the same shape the table accepts. */
+const LEGACY_ID_SHAPE = /^[A-Za-z0-9_-]{1,64}$/;
 const UUID_SHAPE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const TRANSCRIPT_LIMIT = 200;
 
@@ -172,6 +174,16 @@ export class WidgetPublicService {
       { ...w, whatsappUrl: whatsappUrl(w), flow: w.flowId !== null },
       `${base}/widget/${w.embedToken}/chat`,
     );
+  }
+
+  /** The loader for an old embed: the bot id of the old snippet resolves (narrow definer lookup) to the widget's own token. */
+  async legacyEmbedScript(legacyId: string, base: string): Promise<string | null> {
+    if (!LEGACY_ID_SHAPE.test(legacyId)) return null;
+    const hit = await this.db.primary.execute(
+      sql`SELECT widget_token FROM wgt_legacy_lookup(${legacyId})`,
+    );
+    const row = hit.rows[0] as { widget_token: string } | undefined;
+    return row ? this.embedScript(row.widget_token, base) : null;
   }
 
   async chatPage(token: string, locale?: string): Promise<string | null> {
