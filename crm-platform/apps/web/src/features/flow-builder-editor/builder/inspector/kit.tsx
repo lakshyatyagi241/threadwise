@@ -377,11 +377,14 @@ export function TextArea({
   dark,
   noAttr,
   compact,
+  maxLength,
 }: {
   value: unknown;
   onChange: (v: string) => void;
   placeholder?: string;
   rows?: number;
+  /** A hard stop: typing and pasting both end here. */
+  maxLength?: number;
   mono?: boolean;
   dark?: boolean;
   noAttr?: boolean;
@@ -397,6 +400,7 @@ export function TextArea({
         rows={rows}
         value={text}
         placeholder={placeholder}
+        maxLength={maxLength}
         {...(noAttr ? {} : { 'data-attr-input': 'true' })}
         className={cn(
           controlClass,

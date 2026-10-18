@@ -5,6 +5,7 @@
 export * from './node-catalogue';
 export * from './graph';
 export * from './validation';
+export * from './whatsapp-limits';
 export * from './trigger';
 export * from './trigger-config';
 export * from './flow';
