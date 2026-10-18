@@ -29,6 +29,10 @@ describe('storage quota rules', () => {
     expect(capBytesFromGb(-3)).toBe(0);
     expect(capBytesFromGb(Number.NaN)).toBe(0);
     expect(capBytesFromGb(1.9)).toBe(BYTES_PER_GB);
+    // the plan schema allows 2,000,000,000 GB: the product would not be exact in a JS number, so it is clamped to the largest cap that is
+    const huge = capBytesFromGb(2_000_000_000);
+    expect(Number.isSafeInteger(huge)).toBe(true);
+    expect(huge).toBeGreaterThan(capBytesFromGb(8_000_000));
   });
 
   it('levels: unlimited is always ok; 80% warns; the cap itself is full; beyond it is over', () => {

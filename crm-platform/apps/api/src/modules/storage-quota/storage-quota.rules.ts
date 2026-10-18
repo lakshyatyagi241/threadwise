@@ -15,9 +15,16 @@ export const RESERVATION_TTL_MS = 15 * 60_000;
 /** A `pending` registry row that no owner row claimed within this long is an orphan candidate (spec 4.2: one hour). */
 export const ORPHAN_AFTER_MS = 60 * 60_000;
 
-/** The cap in bytes from the plan limit `storage_gb` (whole GB; 0 = unlimited, which stays 0). */
+/** The largest whole-GB cap whose byte count is still exactly representable (about 8.4 million GB, 8 petabytes). */
+const MAX_CAP_GB = Math.floor(Number.MAX_SAFE_INTEGER / BYTES_PER_GB);
+
+/**
+ * The cap in bytes from the plan limit `storage_gb` (whole GB; 0 = unlimited, which stays 0). A limit beyond what a JavaScript number holds
+ * exactly (the plan schema allows up to 2,000,000,000) is clamped to the largest cap that is: 8 petabytes is "unlimited" for any workspace.
+ */
 export function capBytesFromGb(storageGb: number): number {
-  return Number.isFinite(storageGb) && storageGb > 0 ? Math.floor(storageGb) * BYTES_PER_GB : 0;
+  if (!Number.isFinite(storageGb) || storageGb <= 0) return 0;
+  return Math.min(Math.floor(storageGb), MAX_CAP_GB) * BYTES_PER_GB;
 }
 
 /**

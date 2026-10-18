@@ -297,7 +297,7 @@ describe('the write doors store the file when metering throws', () => {
     }
   });
 
-  it('MediaStorageService.put does not commit when media is local (nothing was stored here)', async () => {
+  it('MediaStorageService.put does not even reserve when media is local (nothing is stored here)', async () => {
     const { meter, reservation } = reservingMeter();
     const svc = new MediaStorageService({} as never, undefined, meter);
     vi.spyOn(svc, 'destination').mockResolvedValue({
@@ -307,8 +307,8 @@ describe('the write doors store the file when metering throws', () => {
       cdnUrl: '',
     });
     expect(await svc.put('telegram/7/abc.png', PNG, 'image/png')).toBeNull();
+    expect(meter.reserve).not.toHaveBeenCalled();
     expect(reservation.commit).not.toHaveBeenCalled();
-    expect(reservation.release).toHaveBeenCalled();
   });
 
   it('LocalTrainingFileStore.put stores the file when the meter throws', async () => {

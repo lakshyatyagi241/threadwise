@@ -25,11 +25,13 @@ FROM (VALUES ('admin'), ('workspace_admin')) AS p(preset)
 CROSS JOIN (VALUES ('storage.usage.read'), ('storage.files.manage'), ('storage.restore.request')) AS k(key)
 ON CONFLICT (preset_key, permission_key) DO NOTHING;
 
+-- `organizations` is under FORCE ROW LEVEL SECURITY, which binds the table owner too: without the privileged flag the two statements below
+-- would see no workspace (the sibling permission migrations set it for the same reason).
+SELECT set_config('app.privileged', 'on', true);
 SELECT apply_workspace_preset_baseline(id) FROM organizations;
 UPDATE organizations SET roles_version = roles_version + 1;
 
 -- Platform keys.
-SELECT set_config('app.privileged', 'on', true);
 
 INSERT INTO platform_permissions (name, is_system) VALUES
   ('platform.workspace.storage',       true),

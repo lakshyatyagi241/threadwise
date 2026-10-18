@@ -19,7 +19,7 @@ Base `/v2/platform/storage`. Operator session, `OperatorGuard` + `PlatformPermis
 - `capBytes` is the plan limit `storage_gb` in bytes at the last nightly check (0 = unlimited). `level` is `ok | warn80 | full | over` against that cap, **for display only**.
   Packs and grants do not enter the cap until phase S4.
 - Bytes are plain numbers. A workspace that was never measured has no row and does not appear in `top`; `levels` counts only measured workspaces.
-- Errors: 401 without an operator session, 403 `RBAC_PLATFORM_PERMISSION_REQUIRED` without the key (and a `platform.permission_denied` security event), 400 for an `:id` that is not a uuid, 404 for an unknown workspace.
+- Errors: 401 without an operator session, 403 `RBAC_PLATFORM_PERMISSION_REQUIRED` without the key (and a `platform.permission_denied` security event), 422 for an `:id` that is not a uuid, 404 for an unknown workspace.
 
 The keys `platform.workspace.storage` (reconcile now, re-evaluate a cap; Super Admin and Admin) and `platform.workspace.storage_grant` (grace grants; Super Admin) are seeded and guard no route yet (phases S2 and S4).
 
@@ -45,10 +45,10 @@ If the meter cannot do its job (database fault, a bug), the write still succeeds
 
 ## Background jobs (worker)
 
-| Job                 | Queue / clock                                      | What                                                                                                                                                                   |
-| ------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `storage.backfill`  | queue `storage-quota`; 3 workspaces per 10 minutes | Builds a workspace's registry from the rows that own files, measuring what the table does not store; idempotent, throttled, resumable. Marks `backfilled_at`.          |
-| `storage.reconcile` | queue `storage-quota`; nightly 03:17, spread       | The counter check: syncs team chat blobs, links `pending` rows to their owner, recomputes counters from the registry, records the drift, writes the cap and the level. |
-| Reservation reaper  | every 5 minutes                                    | Returns reservations nobody committed or released within 15 minutes to `reserved_bytes`.                                                                               |
+| Job                 | Queue / clock                                      | What                                                                                                                                                                                                                                       |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `storage.backfill`  | queue `storage-quota`; 3 workspaces per 10 minutes | Builds a workspace's registry from the rows that own files, measuring what the table does not store; idempotent, throttled, resumable. Marks `backfilled_at` when every size check got an answer; otherwise the workspace is queued again. |
+| `storage.reconcile` | queue `storage-quota`; nightly 03:17, spread       | The counter check: syncs team chat blobs, links `pending` rows to their owner, recomputes counters from the registry, records the drift, writes the cap and the level.                                                                     |
+| Reservation reaper  | every 5 minutes                                    | Returns reservations nobody committed or released within 15 minutes to `reserved_bytes`.                                                                                                                                                   |
 
 All three do nothing when the mode is `off`. None deletes a file.

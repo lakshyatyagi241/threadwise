@@ -1,6 +1,7 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
 import type { Queue } from 'bullmq';
+import { addOrRevive } from '../../infra/queue/add-or-revive';
 import { QUEUES } from '../../infra/queue/queues';
 import {
   STORAGE_BACKFILL_JOB,
@@ -18,7 +19,9 @@ export class StorageQuotaPublisher {
 
   async enqueueBackfill(orgId: number): Promise<void> {
     const job: StorageJob = { orgId };
-    await this.queue.add(STORAGE_BACKFILL_JOB, job, {
+    // A backfill that failed for good is kept for days under its id and would absorb every later add: revive it (the pick-up retries a
+    // workspace until `backfilled_at` is set).
+    await addOrRevive(this.queue, STORAGE_BACKFILL_JOB, job, {
       ...STORAGE_JOB_OPTIONS,
       jobId: storageBackfillJobId(orgId),
     });

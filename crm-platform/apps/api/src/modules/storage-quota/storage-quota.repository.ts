@@ -63,7 +63,22 @@ export class StorageQuotaRepository {
       UPDATE storage_org_state SET reserved_bytes = GREATEST(reserved_bytes - ${num(back.bytes)}::bigint, 0) WHERE org_id = ${orgId}`);
   }
 
-  /** Settles a reservation: the bytes move from reserved to hot and the object is registered (or its size corrected). */
+  /** The registry row of a key, locked for the rest of the transaction. */
+  private async lockObject(tx: Tx, orgId: number, key: string): Promise<Row | undefined> {
+    return rowsOf(
+      await tx.execute(sql`
+        SELECT bytes, category, tier FROM storage_objects
+        WHERE org_id = ${orgId} AND key = ${key} FOR UPDATE`),
+    )[0];
+  }
+
+  /**
+   * Settles a reservation: the bytes move from reserved to hot and the object is registered (or its size corrected).
+   *
+   * Safe against a concurrent registration of the same key (the backfill's adopt, a second commit): the insert is `ON CONFLICT DO NOTHING`,
+   * and a lost race falls through to the update path, which locks the row the other transaction just committed and moves the counters by
+   * the difference only.
+   */
   async commit(tx: Tx, input: CommitInput): Promise<void> {
     const { orgId } = input;
     let reservedBack = 0;
@@ -73,23 +88,32 @@ export class StorageQuotaRepository {
       reservedBack = num(rowsOf(res)[0]?.bytes);
     }
 
-    const current = rowsOf(
-      await tx.execute(sql`
-        SELECT bytes, category, tier, owner_table FROM storage_objects
-        WHERE org_id = ${orgId} AND key = ${input.key} FOR UPDATE`),
-    )[0];
-
-    const linked = input.ownerTable !== null && input.ownerId !== null;
+    let existing = await this.lockObject(tx, orgId, input.key);
     let hotDelta = input.bytes;
-    let objectsDelta = 1;
-    let previous: { category: string; bytes: number } | null = null;
+    let coldDelta = 0;
 
-    if (current) {
-      previous = { category: String(current.category), bytes: num(current.bytes) };
-      // A cold copy is not counted hot; the commit of a key that is cold is a correction of its size only.
-      const countsHot = current.tier !== 'cold';
-      hotDelta = countsHot ? input.bytes - previous.bytes : 0;
-      objectsDelta = 0;
+    if (!existing) {
+      const linked = input.ownerTable !== null && input.ownerId !== null;
+      const inserted = await tx.execute(sql`
+        INSERT INTO storage_objects (org_id, key, category, bytes, sha256, state, owner_table, owner_id)
+        VALUES (${orgId}, ${input.key}, ${input.category}, ${input.bytes}, ${input.sha256},
+                ${linked ? 'live' : 'pending'}, ${input.ownerTable}, ${input.ownerId})
+        ON CONFLICT (org_id, key) DO NOTHING
+        RETURNING 1`);
+      if (rowsOf(inserted).length > 0) {
+        await this.bumpUsage(tx, orgId, input.category, input.bytes, 0, 1);
+      } else {
+        existing = await this.lockObject(tx, orgId, input.key);
+      }
+    }
+
+    if (existing) {
+      const prevBytes = num(existing.bytes);
+      const prevCategory = String(existing.category);
+      const cold = existing.tier === 'cold';
+      // A cold copy is not counted hot: correcting its size moves the cold counter only.
+      hotDelta = cold ? 0 : input.bytes - prevBytes;
+      coldDelta = cold ? input.bytes - prevBytes : 0;
       await tx.execute(sql`
         UPDATE storage_objects SET
           bytes = ${input.bytes},
@@ -100,11 +124,27 @@ export class StorageQuotaRepository {
           state = CASE WHEN COALESCE(${input.ownerTable}, owner_table) IS NOT NULL THEN 'live'
                        WHEN state = 'missing' THEN 'pending' ELSE state END
         WHERE org_id = ${orgId} AND key = ${input.key}`);
-    } else {
-      await tx.execute(sql`
-        INSERT INTO storage_objects (org_id, key, category, bytes, sha256, state, owner_table, owner_id)
-        VALUES (${orgId}, ${input.key}, ${input.category}, ${input.bytes}, ${input.sha256},
-                ${linked ? 'live' : 'pending'}, ${input.ownerTable}, ${input.ownerId})`);
+      if (prevCategory !== input.category) {
+        // The object changed category (an adopted `unknown` object found its owner): move its bytes between the two counters, in its tier.
+        await this.bumpUsage(
+          tx,
+          orgId,
+          prevCategory,
+          cold ? 0 : -prevBytes,
+          cold ? -prevBytes : 0,
+          -1,
+        );
+        await this.bumpUsage(
+          tx,
+          orgId,
+          input.category,
+          cold ? 0 : input.bytes,
+          cold ? input.bytes : 0,
+          1,
+        );
+      } else {
+        await this.bumpUsage(tx, orgId, input.category, hotDelta, coldDelta, 0);
+      }
     }
 
     await tx.execute(sql`
@@ -112,14 +152,6 @@ export class StorageQuotaRepository {
       ON CONFLICT (org_id) DO UPDATE SET
         reserved_bytes = GREATEST(storage_org_state.reserved_bytes - ${reservedBack}::bigint, 0),
         hot_bytes = GREATEST(storage_org_state.hot_bytes + ${hotDelta}::bigint, 0)`);
-
-    if (previous && previous.category !== input.category) {
-      // The object changed category (an adopted `unknown` object found its owner): move its bytes between the two counters.
-      await this.bumpUsage(tx, orgId, previous.category, -previous.bytes, -1);
-      await this.bumpUsage(tx, orgId, input.category, input.bytes, 1);
-    } else {
-      await this.bumpUsage(tx, orgId, input.category, hotDelta, objectsDelta);
-    }
   }
 
   /**
@@ -132,14 +164,10 @@ export class StorageQuotaRepository {
     const row = rowsOf(res)[0];
     if (!row) return 0;
     const bytes = num(row.bytes);
-    const hot = row.tier !== 'cold';
+    const cold = row.tier === 'cold';
     await tx.execute(sql`
-      UPDATE storage_org_state SET hot_bytes = GREATEST(hot_bytes - ${hot ? bytes : 0}::bigint, 0) WHERE org_id = ${orgId}`);
-    if (hot) await this.bumpUsage(tx, orgId, String(row.category), -bytes, -1);
-    else
-      await tx.execute(sql`
-        UPDATE storage_usage SET cold_bytes = GREATEST(cold_bytes - ${bytes}::bigint, 0), objects = GREATEST(objects - 1, 0)
-        WHERE org_id = ${orgId} AND category = ${String(row.category)}`);
+      UPDATE storage_org_state SET hot_bytes = GREATEST(hot_bytes - ${cold ? 0 : bytes}::bigint, 0) WHERE org_id = ${orgId}`);
+    await this.bumpUsage(tx, orgId, String(row.category), cold ? 0 : -bytes, cold ? -bytes : 0, -1);
     return bytes;
   }
 
@@ -148,13 +176,15 @@ export class StorageQuotaRepository {
     orgId: number,
     category: string,
     hotDelta: number,
+    coldDelta: number,
     objectsDelta: number,
   ): Promise<void> {
     await tx.execute(sql`
-      INSERT INTO storage_usage (org_id, category, hot_bytes, objects)
-      VALUES (${orgId}, ${category}, GREATEST(${hotDelta}::bigint, 0), GREATEST(${objectsDelta}::bigint, 0))
+      INSERT INTO storage_usage (org_id, category, hot_bytes, cold_bytes, objects)
+      VALUES (${orgId}, ${category}, GREATEST(${hotDelta}::bigint, 0), GREATEST(${coldDelta}::bigint, 0), GREATEST(${objectsDelta}::bigint, 0))
       ON CONFLICT (org_id, category) DO UPDATE SET
         hot_bytes = GREATEST(storage_usage.hot_bytes + ${hotDelta}::bigint, 0),
+        cold_bytes = GREATEST(storage_usage.cold_bytes + ${coldDelta}::bigint, 0),
         objects = GREATEST(storage_usage.objects + ${objectsDelta}::bigint, 0)`);
   }
 

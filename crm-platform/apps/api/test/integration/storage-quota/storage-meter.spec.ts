@@ -269,6 +269,92 @@ describe('storage meter (observe mode) against Postgres', () => {
     ).rejects.toThrow();
   });
 
+  it('a door commit racing the backfill adopt of the same key converges on one row and one count', async () => {
+    const org = Number(
+      (
+        await owner.query(`INSERT INTO organizations (slug, name) VALUES ($1, $1) RETURNING id`, [
+          `sq-race-${Date.now().toString(36)}`,
+        ])
+      ).rows[0].id,
+    );
+    const keys = Array.from({ length: 30 }, (_, i) => `chat/${org}/2027/01/race-${i}.png`);
+    await Promise.all(
+      keys.map(async (k) => {
+        const r = await meter.reserve({ orgId: org, bytes: 700, category: 'inbox_media' });
+        await Promise.all([
+          r.commit({ key: k }),
+          db.txAs({ orgId: org, userId: null }, (tx) =>
+            repo.adopt(tx, {
+              orgId: org,
+              key: k,
+              category: 'inbox_media',
+              bytes: 700,
+              ownerTable: 'messages',
+              ownerId: 1,
+            }),
+          ),
+        ]);
+      }),
+    );
+    // no commit was lost to a unique violation: nothing is left reserved and every key is counted once
+    expect(
+      (
+        await row<{ n: string }>(`SELECT count(*)::text n FROM storage_objects WHERE org_id = $1`, [
+          org,
+        ])
+      )[0]!.n,
+    ).toBe('30');
+    expect((await state(org))!.reserved_bytes).toBe('0');
+    const rec = new StorageReconcileService(db, repo, { limit: async () => 0 } as never, mode);
+    // whatever the interleaving was, the stored counter equals the registry up to the adopts (which do not move counters): the check
+    // brings both to the registry, and a second run finds nothing left to correct
+    await rec.reconcileOrg(org);
+    expect((await rec.reconcileOrg(org)).driftBytes).toBe(0);
+    expect((await state(org))!.hot_bytes).toBe(String(30 * 700));
+  });
+
+  it('correcting the size of a cold object moves the cold counter, not the hot one', async () => {
+    const org = Number(
+      (
+        await owner.query(`INSERT INTO organizations (slug, name) VALUES ($1, $1) RETURNING id`, [
+          `sq-cold-${Date.now().toString(36)}`,
+        ])
+      ).rows[0].id,
+    );
+    const k = `chat/${org}/2027/01/cold.webm`;
+    const first = await meter.reserve({ orgId: org, bytes: 1000, category: 'call_recording' });
+    await first.commit({ key: k });
+    // phase S5 will move it; here the tier is set by hand
+    await owner.query(`UPDATE storage_objects SET tier = 'cold' WHERE org_id = $1 AND key = $2`, [
+      org,
+      k,
+    ]);
+    await owner.query(`UPDATE storage_org_state SET hot_bytes = 0 WHERE org_id = $1`, [org]);
+    await owner.query(
+      `UPDATE storage_usage SET hot_bytes = 0, cold_bytes = 1000 WHERE org_id = $1`,
+      [org],
+    );
+    const again = await meter.reserve({ orgId: org, bytes: 1400, category: 'call_recording' });
+    await again.commit({ key: k });
+    expect((await state(org))!.hot_bytes).toBe('0');
+    expect(
+      await row<{ hot_bytes: string; cold_bytes: string }>(
+        `SELECT hot_bytes::text, cold_bytes::text FROM storage_usage WHERE org_id = $1`,
+        [org],
+      ),
+    ).toEqual([{ hot_bytes: '0', cold_bytes: '1400' }]);
+    await meter.recordRemoved(org, k);
+    expect((await state(org))!.hot_bytes).toBe('0');
+    expect(
+      (
+        await row<{ cold_bytes: string; objects: string }>(
+          `SELECT cold_bytes::text, objects::text FROM storage_usage WHERE org_id = $1`,
+          [org],
+        )
+      )[0],
+    ).toEqual({ cold_bytes: '0', objects: '0' });
+  });
+
   describe('reconcile and backfill', () => {
     const entitlements = { limit: async () => 1 } as unknown as PlanEntitlementService;
 
@@ -436,6 +522,63 @@ describe('storage meter (observe mode) against Postgres', () => {
       expect((await state(org))!.hot_bytes).toBe(String(2048 + 1500 + 7000));
     });
 
+    it('a size check that errors defers the workspace (not marked done, nothing registered at zero) and a later run finishes it; keys are registered in canonical form', async () => {
+      const org = Number(
+        (
+          await owner.query(`INSERT INTO organizations (slug, name) VALUES ($1, $1) RETURNING id`, [
+            `sq-defer-${Date.now().toString(36)}`,
+          ])
+        ).rows[0].id,
+      );
+      const contact = Number(
+        (await owner.query(`INSERT INTO contacts (org_id) VALUES ($1) RETURNING id`, [org])).rows[0]
+          .id,
+      );
+      // a client may store the key with a leading storage/ or slash; the doors register chat/<org>/...
+      await owner.query(
+        `INSERT INTO contact_files (org_id, contact_id, file_name, storage_key) VALUES ($1,$2,'a.pdf',$3)`,
+        [org, contact, `storage/chat/${org}/2027/01/a.pdf`],
+      );
+      const rec = new StorageReconcileService(db, repo, entitlements, mode);
+      const down = {
+        sizeOf: async () => Promise.reject(new Error('bucket unreachable')),
+      } as unknown as ChatMediaStore;
+      const first = await new StorageBackfillService(db, repo, mode, rec, down).backfillOrg(org);
+      expect(first.deferred).toBe(1);
+      expect(await row(`SELECT 1 FROM storage_objects WHERE org_id = $1`, [org])).toHaveLength(0);
+      expect(
+        (
+          await row<{ backfilled_at: Date | null }>(
+            `SELECT backfilled_at FROM storage_org_state WHERE org_id = $1`,
+            [org],
+          )
+        )[0]!.backfilled_at,
+      ).toBeNull();
+      // and the pick-up still sees the workspace
+      expect(await db.privileged((tx) => repo.orgsToBackfill(tx, 100000))).toContain(org);
+
+      const up = { sizeOf: async () => 4321 } as unknown as ChatMediaStore;
+      const second = await new StorageBackfillService(db, repo, mode, rec, up).backfillOrg(org);
+      expect(second.deferred).toBe(0);
+      expect(
+        await row<{ key: string; bytes: string }>(
+          `SELECT key, bytes::text FROM storage_objects WHERE org_id = $1`,
+          [org],
+        ),
+      ).toEqual([{ key: `chat/${org}/2027/01/a.pdf`, bytes: '4321' }]);
+      expect(
+        (
+          await row<{ backfilled_at: Date | null }>(
+            `SELECT backfilled_at FROM storage_org_state WHERE org_id = $1`,
+            [org],
+          )
+        )[0]!.backfilled_at,
+      ).not.toBeNull();
+      // a door that later removes the object by its canonical key gives the bytes back
+      await meter.recordRemoved(org, `chat/${org}/2027/01/a.pdf`);
+      expect((await state(org))!.hot_bytes).toBe('0');
+    });
+
     it('backfill and counter check do nothing when the mode is off', async () => {
       const off = { current: async () => 'off' as const } as unknown as StorageModeService;
       const org = Number(
@@ -534,6 +677,29 @@ describe('storage meter (observe mode) against Postgres', () => {
       );
       await expect(fleet.workspace('00000000-0000-4000-8000-000000000000')).rejects.toBeInstanceOf(
         AppError,
+      );
+    });
+
+    it('a workspace waiting out its deletion window is in no figure, so the totals equal the sum of what the operator sees', async () => {
+      const r = await owner.query(
+        `INSERT INTO organizations (slug, name) VALUES ($1, 'Fleet gone') RETURNING id`,
+        [`sq-fl-gone-${Date.now().toString(36)}`],
+      );
+      const gone = Number(r.rows[0].id);
+      const put = await meter.reserve({ orgId: gone, bytes: 123456789, category: 'inbox_media' });
+      await put.commit({ key: `chat/${gone}/2027/01/g.bin` });
+      const audit = { recordStandalone: vi.fn(async () => undefined) };
+      const fleet = new StorageFleetService(new PlatformStore(db), repo, mode, audit as never);
+      const live = await fleet.fleet();
+      await owner.query(
+        `UPDATE organizations SET status = 'deleted', deleted_at = now() WHERE id = $1`,
+        [gone],
+      );
+      const after = await fleet.fleet();
+      expect(after.totals.hotBytes).toBe(live.totals.hotBytes - 123456789);
+      expect(after.top.map((w) => w.name)).not.toContain('Fleet gone');
+      expect(after.byCategory.find((c) => c.category === 'inbox_media')!.hotBytes).toBe(
+        live.byCategory.find((c) => c.category === 'inbox_media')!.hotBytes - 123456789,
       );
     });
   });

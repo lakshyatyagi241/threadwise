@@ -43,18 +43,21 @@ export class StorageFleetService {
   async fleet(now: Date = new Date()): Promise<StorageFleetResponse> {
     const configured = await this.mode.configured();
     const data = await this.store.tx(async (tx) => {
+      // A workspace waiting out its deletion window keeps its rows until it is erased; the view counts live workspaces only, so the totals
+      // equal the sum of what the operator can see.
       const totals = rowsOf(
         await tx.execute(sql`
           SELECT (SELECT count(*) FROM organizations WHERE status <> 'deleted')::bigint AS workspaces,
-                 coalesce((SELECT sum(hot_bytes) FROM storage_org_state), 0)::bigint AS hot,
-                 coalesce((SELECT sum(reserved_bytes) FROM storage_org_state), 0)::bigint AS reserved,
-                 coalesce((SELECT sum(cold_bytes) FROM storage_usage), 0)::bigint AS cold,
-                 coalesce((SELECT sum(objects) FROM storage_usage), 0)::bigint AS objects`),
+                 coalesce((SELECT sum(s.hot_bytes) FROM storage_org_state s JOIN organizations o ON o.id = s.org_id WHERE o.status <> 'deleted'), 0)::bigint AS hot,
+                 coalesce((SELECT sum(s.reserved_bytes) FROM storage_org_state s JOIN organizations o ON o.id = s.org_id WHERE o.status <> 'deleted'), 0)::bigint AS reserved,
+                 coalesce((SELECT sum(u.cold_bytes) FROM storage_usage u JOIN organizations o ON o.id = u.org_id WHERE o.status <> 'deleted'), 0)::bigint AS cold,
+                 coalesce((SELECT sum(u.objects) FROM storage_usage u JOIN organizations o ON o.id = u.org_id WHERE o.status <> 'deleted'), 0)::bigint AS objects`),
       )[0]!;
       const byCategory = rowsOf(
         await tx.execute(sql`
-          SELECT category, sum(hot_bytes)::bigint AS hot, sum(cold_bytes)::bigint AS cold, sum(objects)::bigint AS objects
-          FROM storage_usage GROUP BY category ORDER BY sum(hot_bytes) DESC, category`),
+          SELECT u.category, sum(u.hot_bytes)::bigint AS hot, sum(u.cold_bytes)::bigint AS cold, sum(u.objects)::bigint AS objects
+          FROM storage_usage u JOIN organizations o ON o.id = u.org_id WHERE o.status <> 'deleted'
+          GROUP BY u.category ORDER BY sum(u.hot_bytes) DESC, u.category`),
       );
       const top = rowsOf(
         await tx.execute(sql`
@@ -65,20 +68,23 @@ export class StorageFleetService {
           ORDER BY s.hot_bytes DESC, o.id LIMIT ${TOP}`),
       );
       const levels = rowsOf(
-        await tx.execute(
-          sql`SELECT level, count(*)::bigint AS n FROM storage_org_state GROUP BY level`,
-        ),
+        await tx.execute(sql`
+          SELECT s.level, count(*)::bigint AS n
+          FROM storage_org_state s JOIN organizations o ON o.id = s.org_id
+          WHERE o.status <> 'deleted' GROUP BY s.level`),
       );
       const drift = rowsOf(
         await tx.execute(sql`
-          SELECT max(last_reconciled_at) AS last_run,
-                 count(*) FILTER (WHERE last_drift_bytes > 0)::bigint AS drifting,
-                 coalesce(sum(last_drift_bytes), 0)::bigint AS drift_bytes
-          FROM storage_org_state
-          WHERE last_reconciled_at >= ${new Date(now.getTime() - DRIFT_WINDOW_HOURS * 3600_000).toISOString()}::timestamptz`),
+          SELECT count(*) FILTER (WHERE s.last_drift_bytes > 0)::bigint AS drifting,
+                 coalesce(sum(s.last_drift_bytes), 0)::bigint AS drift_bytes
+          FROM storage_org_state s JOIN organizations o ON o.id = s.org_id
+          WHERE o.status <> 'deleted'
+            AND s.last_reconciled_at >= ${new Date(now.getTime() - DRIFT_WINDOW_HOURS * 3600_000).toISOString()}::timestamptz`),
       )[0]!;
       const lastRun = rowsOf(
-        await tx.execute(sql`SELECT max(last_reconciled_at) AS last_run FROM storage_org_state`),
+        await tx.execute(sql`
+          SELECT max(s.last_reconciled_at) AS last_run
+          FROM storage_org_state s JOIN organizations o ON o.id = s.org_id WHERE o.status <> 'deleted'`),
       )[0]!;
       return { totals, byCategory, top, levels, drift, lastRun };
     });

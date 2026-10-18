@@ -1,6 +1,6 @@
 import { Injectable, Logger, Optional } from '@nestjs/common';
 import { isCountedStorageCategory, type StorageCategory } from '@crm/contracts';
-import { storageKeyIsOwnedBy } from '../../common/storage-key-owner';
+import { canonicalStorageKey, storageKeyIsOwnedBy } from '../../common/storage-key-owner';
 import { DatabaseService } from '../../infra/db/database.service';
 import { ChatMediaStore } from '../../infra/providers/chat-conversations/media';
 import { StorageModeService } from './storage-mode.service';
@@ -19,8 +19,13 @@ export interface BackfillResult {
   skipped: boolean;
   /** Objects newly registered, per owner source. */
   adopted: Record<string, number>;
-  /** Keys the owner table names but the store does not have (or does not own): left out. */
+  /** Keys the owner table names but the store does not have: left out. */
   missing: number;
+  /**
+   * Objects whose size could not be asked for (the bucket errored, or no media store is bound in this process). The workspace is NOT marked
+   * done while any are left, so the pick-up queues it again; registering them at zero or not at all would leave the meter short for good.
+   */
+  deferred: number;
 }
 
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
@@ -51,7 +56,7 @@ export class StorageBackfillService {
   ) {}
 
   async backfillOrg(orgId: number): Promise<BackfillResult> {
-    const result: BackfillResult = { orgId, skipped: false, adopted: {}, missing: 0 };
+    const result: BackfillResult = { orgId, skipped: false, adopted: {}, missing: 0, deferred: 0 };
     if ((await this.mode.current()) === 'off') return { ...result, skipped: true };
 
     for (const source of OWNER_SOURCES) {
@@ -60,9 +65,11 @@ export class StorageBackfillService {
 
     // Counters, team chat blobs and links from the registry as it now stands; then the workspace is marked done.
     await this.reconcile.reconcileOrg(orgId);
-    await this.db.txAs({ orgId, userId: null }, (tx) =>
-      this.repo.markBackfilled(tx, orgId, new Date()),
-    );
+    if (result.deferred === 0) {
+      await this.db.txAs({ orgId, userId: null }, (tx) =>
+        this.repo.markBackfilled(tx, orgId, new Date()),
+      );
+    }
     this.logger.log({ ...result }, '[STORAGE] backfill finished');
     return result;
   }
@@ -113,44 +120,48 @@ export class StorageBackfillService {
     result: BackfillResult,
   ): Promise<Array<{ id: number; key: string; bytes: number; category: StorageCategory }>> {
     const out: Array<{ id: number; key: string; bytes: number; category: StorageCategory }> = [];
-    const toProbe: OwnerRow[] = [];
+    const toProbe: Array<{ row: OwnerRow; key: string; category: StorageCategory }> = [];
 
     for (const row of page) {
       const category = this.categoryOf(source, row);
       if (!isCountedStorageCategory(category)) continue;
       // A key that is not this workspace's (an external URL stored in the same column, a foreign key) is not an object of ours.
       if (!storageKeyIsOwnedBy(orgId, row.key)) continue;
+      // The registry holds the key in the form the doors write and remove it in (`storage/chat/7/x` and `/chat/7/x` are `chat/7/x`).
+      const key = canonicalStorageKey(row.key);
       if (row.size !== null && row.size > 0)
-        out.push({ id: row.id, key: row.key, bytes: row.size, category });
-      else toProbe.push(row);
+        out.push({ id: row.id, key, bytes: row.size, category });
+      else toProbe.push({ row, key, category });
     }
 
     for (let i = 0; i < toProbe.length; i += PROBE_CONCURRENCY) {
       const batch = toProbe.slice(i, i + PROBE_CONCURRENCY);
-      const sizes = await Promise.all(batch.map((r) => this.probe(orgId, r.key)));
-      batch.forEach((row, j) => {
-        const bytes = sizes[j];
-        if (bytes === null || bytes === undefined || bytes <= 0) {
+      const sizes = await Promise.all(batch.map((p) => this.probe(orgId, p.key)));
+      batch.forEach((p, j) => {
+        const size = sizes[j]!;
+        if (size === 'unknown') {
+          result.deferred += 1;
+        } else if (size === null || size <= 0) {
           result.missing += 1;
-          return;
+        } else {
+          out.push({ id: p.row.id, key: p.key, bytes: size, category: p.category });
         }
-        out.push({ id: row.id, key: row.key, bytes, category: this.categoryOf(source, row) });
       });
     }
     return out;
   }
 
-  private async probe(orgId: number, key: string): Promise<number | null> {
-    if (!this.media) return null;
+  /** The size of an object; null when it is not there; `'unknown'` when the store could not be asked (an error, or no media store in this process). */
+  private async probe(orgId: number, key: string): Promise<number | null | 'unknown'> {
+    if (!this.media) return 'unknown';
     try {
       return await this.media.sizeOf(orgId, key);
     } catch (err) {
-      // A bucket that cannot answer is "unknown", not "missing": the object is left for the next run rather than registered at zero.
       this.logger.warn(
         { orgId, err: String(err) },
-        '[STORAGE] a size check failed; left for the next run',
+        '[STORAGE] a size check failed; the workspace is queued again',
       );
-      return null;
+      return 'unknown';
     }
   }
 

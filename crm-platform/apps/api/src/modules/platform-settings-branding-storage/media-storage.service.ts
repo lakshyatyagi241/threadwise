@@ -140,6 +140,9 @@ export class MediaStorageService {
     const category = categoryForAreaKey(normaliseKey(key));
     const orgId = storageKeyOrg(key);
     if (!this.meter || !category || orgId === null) return this.putObject(key, body, contentType);
+    // Local media writes nothing here (the caller refuses or writes it itself): decide that before paying for a reservation.
+    const destination = await this.destination();
+    if (destination.disk !== 'cloud' || !destination.target) return null;
 
     const reservation = await reserveOn(this.meter, { orgId, bytes: body.length, category });
     let stored: { key: string } | null;
@@ -149,7 +152,6 @@ export class MediaStorageService {
       await reservation.release();
       throw err;
     }
-    // null = local media: nothing was stored here, the caller decides what to do (and these callers refuse local storage).
     if (stored) await reservation.commit({ key: normaliseKey(key) });
     else await reservation.release();
     return stored;
