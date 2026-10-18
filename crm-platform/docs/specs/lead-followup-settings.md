@@ -124,9 +124,9 @@ no rule matches.
 | Trigger | Where | Applies |
 | --- | --- | --- |
 | contact button | new `POST /v2/contacts/:id/touch {channel}`, called by the web when Call, Message, e-mail, SMS or WhatsApp is activated (contact page, quick view, list quick actions); `record.contacts.update` + the contact's scope | clearOn.contactButton, follow-up |
-| outbound call | `CallLogEntriesService.write` when a handler user exists and (direction outbound or outcome completed) | clearOn.contactButton, follow-up |
+| outbound call | `CallLogEntriesService.write` when a person handled it and it did not fail or reach a wrong number (an outbound call counts even unanswered, like the button; an inbound call counts when answered) | clearOn.contactButton, follow-up |
 | staff message | `MessageDispatchService.markSent` when `sender_kind = 'agent'` (and a user id) | clearOn.message, follow-up |
-| automation | `campaign.contact_status_updated` (`sent`) via a worker consumer; broadcast mirror and flow sender call the service where they record the message (`sender_kind` `broadcast`, or `source: flow`) | clearOn.automation, follow-up |
+| automation | `CampaignEvents.contactStatus` (`sent`) and the broadcast dispatch (recipient `sent`) call the service in their own transaction; the flow sender and campaign mirror reach it through `ConversationsService.recordOutbound` (source `flow`, `campaign`, `broadcast`) | clearOn.automation, follow-up |
 | timeline | `ContactActivitiesService.create`, `ContactNotesService.create`, `ContactMeetingsService.create` (user-written only) | clearOn.activity, follow-up |
 | create | `ContactsService.createOrMatch` (actor user = manual, api key = lead source), the import engine, the Sheets add-on (import), lead ingest and forms submit on `created` | markNew.* |
 | reassign | after the owner update in the five writers; not the restore sweep | onReassign |
@@ -156,7 +156,7 @@ and `followUpFrom/To`; `TaskResponse.kind` and a `kind` list filter. Step 3: `PU
   row-version conflict alert). Follow-ups: four toggles, default date radio (1 day, 3 days, 1 week, 1 month, custom N days, someday,
   no follow-up), alert time. Plan gating: none (core contacts feature).
 - **Uncontacted**: a quiet dot-and-text marker in the list row name cell, a chip in the record header (next to the stage), the quick
-  view, a smart view "Uncontacted" and a quick chip, a column "Waiting since" (optional), "Mark as contacted / uncontacted" in the
+  view, a smart view "Uncontacted" and a quick chip, "Mark as contacted / uncontacted" in the
   record "..." menu and in the bulk bar. Hidden entirely when nobody is uncontacted (no empty chrome).
 - **Follow-up**: a "Next follow-up" row in the record header / left column (date, overdue in red, "Someday", "Set follow-up"), with
   Done, Snooze 1 day / 3 days / next week, Change date; a list column and smart views "Follow-up today", "Overdue", "Someday".
