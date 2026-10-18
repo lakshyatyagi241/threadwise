@@ -845,6 +845,37 @@ export class ContactsRepository {
     return (result.rows[0] as { contact_id: number } | undefined)?.contact_id;
   }
 
+  /**
+   * The contact behind each (kind, value) identity, in one query per 2000 identities. Only an identity whose contact still exists counts,
+   * the same test the single lookup plus `uuidOf` makes. Keyed `kind|value`; an identity nobody holds is absent.
+   */
+  async contactsByIdentities(
+    tx: Tx,
+    orgId: number,
+    wanted: ReadonlyArray<{ kind: 'email' | 'phone'; value: string }>,
+  ): Promise<Map<string, { id: number; uuid: string }>> {
+    const out = new Map<string, { id: number; uuid: string }>();
+    const unique = [...new Map(wanted.map((w) => [`${w.kind}|${w.value}`, w])).values()];
+    for (let i = 0; i < unique.length; i += 2000) {
+      const chunk = unique.slice(i, i + 2000);
+      const res = await tx.execute(sql`
+        SELECT ci.kind, ci.value, c.id, c.uuid
+        FROM contact_identities ci
+        JOIN contacts c ON c.org_id = ci.org_id AND c.id = ci.contact_id
+        WHERE ci.org_id = ${orgId}
+          AND (ci.kind, ci.value) IN (${sql.join(
+            chunk.map((w) => sql`(${w.kind}, ${w.value})`),
+            sql`, `,
+          )})
+        ORDER BY ci.id`);
+      for (const r of res.rows as Array<{ kind: string; value: string; id: number | string; uuid: string }>) {
+        const key = `${r.kind}|${r.value}`;
+        if (!out.has(key)) out.set(key, { id: Number(r.id), uuid: r.uuid });
+      }
+    }
+    return out;
+  }
+
   async addIdentity(
     tx: Tx,
     orgId: number,
