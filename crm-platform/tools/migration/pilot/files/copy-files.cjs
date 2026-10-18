@@ -244,7 +244,7 @@ async function download(rawUrl, cfg, hooks = {}) {
 // ---------- S3 (SigV4, same signing as apps/api .../object-storage.probe.ts) ----------------------------------------------------------
 function s3FromEnv(env, kinds) {
   const need = ['S3_ENDPOINT', 'S3_ACCESS_KEY_ID', 'S3_SECRET_ACCESS_KEY', 'S3_REGION'];
-  const buckets = { messages: 'S3_BUCKET_MEDIA', flows: 'S3_BUCKET_MEDIA', contact_files: 'S3_BUCKET_DOCUMENTS' };
+  const buckets = { messages: 'S3_BUCKET_MEDIA', flows: 'S3_BUCKET_MEDIA', widgets: 'S3_BUCKET_MEDIA', contact_files: 'S3_BUCKET_DOCUMENTS' };
   const missing = [...need, ...kinds.map((k) => buckets[k])].filter((k) => !env[k] || !env[k].trim());
   if (missing.length)
     refuse(
@@ -261,7 +261,7 @@ function s3FromEnv(env, kinds) {
     id: env.S3_ACCESS_KEY_ID.trim(),
     secret: env.S3_SECRET_ACCESS_KEY.trim(),
     pathStyle: String(env.S3_FORCE_PATH_STYLE ?? 'true') !== 'false',
-    bucket: { messages: env[buckets.messages], flows: env[buckets.messages], contact_files: env[buckets.contact_files] },
+    bucket: { messages: env[buckets.messages], flows: env[buckets.messages], widgets: env[buckets.messages], contact_files: env[buckets.contact_files] },
   };
 }
 
@@ -507,8 +507,18 @@ async function collectRefs(db, org, rekey = false, cfg = { allowedHosts: [] }) {
       // media steps of converted flows hold the Waboo address inside flow_data
       const f = rekey ? { rows: [] } : await db.query(`SELECT id, flow_data FROM flows WHERE org_id = $1 AND flow_data IS NOT NULL`, [org.id]);
       const flowRefs = f.rows.flatMap((r) => [...jsonUrls(r.flow_data, cfg.allowedHosts)].map((url) => ({ kind: 'flows', id: r.id, url, match: url })));
+      // chat widgets: the launcher image, the body background image (text columns) and the launcher avatar (inside the launcher jsonb)
+      const w = rekey ? { rows: [] } : await db.query(`SELECT id, button_image_url, body_bg_image_url, launcher FROM chatbot_widgets WHERE org_id = $1`, [org.id]);
+      const onWaboo = (u) => typeof u === 'string' && cfg.allowedHosts.includes(urlId(u)?.host);
+      const widgetRefs = w.rows.flatMap((r) =>
+        [r.button_image_url, r.body_bg_image_url, r.launcher && r.launcher.avatar]
+          .filter(onWaboo)
+          .filter((u, i, a) => a.indexOf(u) === i)
+          .map((url) => ({ kind: 'widgets', id: r.id, url, match: url })),
+      );
       return [
         ...flowRefs,
+        ...widgetRefs,
         ...m.rows.map((r) => ({ kind: 'messages', id: r.id, created_at: r.created_at, url: r.url, match: r.match ?? r.url })),
         ...c.rows.map((r) => ({ kind: 'contact_files', id: r.id, url: r.url })),
       ];
@@ -546,7 +556,7 @@ function safeName(p) {
   return n || 'file';
 }
 // messages: the app's ChatMediaStore.ownsKey() accepts only `chat/<org id>/...`; contact_files: `<area>/<org id>/` (contact-files.service.ts:73-75)
-const keyPrefix = (org, g) => (g.kind === 'messages' ? `chat/${org.id}/waboo` : g.kind === 'flows' ? `flow-media/${org.id}/waboo` : `contact-files/${org.id}/waboo`);
+const keyPrefix = (org, g) => (g.kind === 'messages' ? `chat/${org.id}/waboo` : g.kind === 'flows' ? `flow-media/${org.id}/waboo` : g.kind === 'widgets' ? `widget-media/${org.id}/waboo` : `contact-files/${org.id}/waboo`);
 const targetKeyOf = (org, g) => `${keyPrefix(org, g)}/${g.id.key.slice(0, 16)}/${safeName(g.id.path)}`;
 const fullKey = (prefix, k) => (prefix ? `${prefix}/${k}` : k);
 
@@ -566,7 +576,26 @@ async function applyFlowRows(db, org, g, done, publicUrl) {
   });
 }
 
+async function applyWidgetRows(db, org, g, publicUrl) {
+  return tenant(db, org.id, async () => {
+    let changed = 0;
+    for (const r of g.refs) {
+      const res = await db.query(
+        `UPDATE chatbot_widgets SET
+           button_image_url = CASE WHEN button_image_url = $3 THEN $4 ELSE button_image_url END,
+           body_bg_image_url = CASE WHEN body_bg_image_url = $3 THEN $4 ELSE body_bg_image_url END,
+           launcher = CASE WHEN launcher->>'avatar' = $3 THEN jsonb_set(launcher, '{avatar}', to_jsonb($4::text)) ELSE launcher END
+         WHERE org_id = $1 AND id = $2 AND ($3 IN (COALESCE(button_image_url, ''), COALESCE(body_bg_image_url, ''), COALESCE(launcher->>'avatar', '')))`,
+        [org.id, r.id, r.url, publicUrl],
+      );
+      changed += res.rowCount;
+    }
+    return changed;
+  });
+}
+
 async function applyRows(db, org, g, done, cfg = {}) {
+  if (g.kind === 'widgets') return applyWidgetRows(db, org, g, `${cfg.flowMediaBase}/${done.objectKey}`);
   if (g.kind === 'flows') return applyFlowRows(db, org, g, done, `${cfg.flowMediaBase}/${done.objectKey}`);
   return tenant(db, org.id, async () => {
     let changed = 0;
@@ -708,7 +737,7 @@ async function runVerify(ctx) {
   const { db, org, cfg, state, s3, flags } = ctx;
   const prefix = (flags['base-folder'] || '').replace(/^\/+|\/+$/g, '');
   const head = Boolean(flags['head-only']);
-  const [msgs, cfs, left, noSource, flowRows] = await tenant(
+  const [msgs, cfs, left, noSource, flowRows, widgetRows] = await tenant(
     db,
     org.id,
     async () => [
@@ -730,12 +759,16 @@ async function runVerify(ctx) {
         [org.id],
       )).rows,
       (await db.query(`SELECT flow_data FROM flows WHERE org_id = $1 AND flow_data IS NOT NULL`, [org.id])).rows,
+      (await db.query(`SELECT button_image_url, body_bg_image_url, launcher FROM chatbot_widgets WHERE org_id = $1`, [org.id])).rows,
     ],
     true,
   );
   // flows: any link still on a Waboo host is a leftover; a link under the R2 public base must exist in the bucket
   const flowUrls = flowRows.flatMap((r) => [...jsonUrls(r.flow_data, cfg.allowedHosts)]);
   for (const u of flowUrls) left.push({ t: 'flows', url: u });
+  for (const r of widgetRows)
+    for (const u of [r.button_image_url, r.body_bg_image_url, r.launcher && r.launcher.avatar])
+      if (typeof u === 'string' && cfg.allowedHosts.includes(urlId(u)?.host)) left.push({ t: 'widgets', url: u });
   const base = cfg.flowMediaBase;
   const flowObjects = new Set();
   if (base)
@@ -748,6 +781,9 @@ async function runVerify(ctx) {
       };
       walk(r.flow_data);
     }
+  for (const r of widgetRows)
+    for (const u of [r.button_image_url, r.body_bg_image_url, r.launcher && r.launcher.avatar])
+      if (base && typeof u === 'string' && u.startsWith(`${base}/`) && /\/widget-media\/\d+\/waboo\//.test(u)) flowObjects.add(u.slice(base.length + 1));
   const shaByKey = new Map([...state.values()].filter((e) => e.status === 'done').map((e) => [e.targetKey, e.sha256]));
   const jobs = [
     ...msgs.map((r) => ({ bucket: s3.bucket.messages, ...r })),
@@ -829,7 +865,7 @@ async function main(argv, hooks = {}) {
       say(cmd === 'copy' ? 'dry run: nothing was downloaded, uploaded or written (add --apply with the limits)' : '');
       return 0;
     }
-    if (apply && byTable.flows && !/^https:\/\//.test(cfg.flowMediaBase)) refuse('config.flowMediaPublicBase (the public https origin of the R2 media bucket) is required: converted flows send their media by link');
+    if (apply && (byTable.flows || byTable.widgets) && !/^https:\/\//.test(cfg.flowMediaBase)) refuse('config.flowMediaPublicBase (the public https origin of the R2 media bucket) is required: converted flows and chat widgets show their images by link');
     const kinds = cmd === 'verify' ? ['messages', 'contact_files', 'flows'] : [...new Set(groups.map((g) => g.kind))];
     const s3 = s3FromEnv(process.env, kinds.length ? kinds : ['messages']);
     const ctx = { db, org, groups, cfg, reg, state, s3, flags, hooks };
