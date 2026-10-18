@@ -39,7 +39,11 @@ export function maskSubject(input: {
   return parts.length ? parts.join(' · ') : '••••';
 }
 
-export function toPrivacyRequest(r: RequestRow, now: Date = new Date()): PrivacyRequest {
+export function toPrivacyRequest(
+  r: RequestRow,
+  now: Date = new Date(),
+  restrictionNotice: string | null = null,
+): PrivacyRequest {
   const open = isOpen(r.status);
   const msLeft = r.dueAt.getTime() - now.getTime();
   return {
@@ -62,6 +66,9 @@ export function toPrivacyRequest(r: RequestRow, now: Date = new Date()): Privacy
     verifiedAt: r.verifiedAt ? r.verifiedAt.toISOString() : null,
     legalHold: r.legalHold,
     legalHoldReason: r.legalHoldReason,
+    restricted: r.restrictedAt !== null && open,
+    restrictedAt: r.restrictedAt && open ? r.restrictedAt.toISOString() : null,
+    restrictionNotice: r.restrictedAt && open ? restrictionNotice : null,
     historyMode: r.historyMode as PrivacyRequest['historyMode'],
     rejectionReason: r.rejectionReason,
     dryRun: r.dryRunSummary,

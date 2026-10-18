@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
+import { sql } from 'drizzle-orm';
 import type { RetentionItemId } from '@crm/contracts';
 import type { Env } from '../../config/env.schema';
 import {
@@ -8,7 +9,7 @@ import {
   type ArchiveStorage,
 } from '../../infra/providers/data-retention/archive-storage.port';
 import { DatabaseService } from '../../infra/db/database.service';
-import { prefixOf } from './archive-keys';
+import { parseObjectKey, prefixOf } from './archive-keys';
 import { PartitionArchiver, type ArchiveResult } from './partition-archiver.service';
 import { loadPolicies, recordRun } from './retention-store';
 import {
@@ -201,13 +202,51 @@ export class RetentionWorker {
       if (month) byMonth.set(month, (byMonth.get(month) ?? 0) + 1);
     }
     const months = [...byMonth.keys()].filter((m) => isPastLiveWindow(m, now, keep)).sort();
+    // A workspace with a legal hold (BL-295) keeps its archive objects: they are per workspace, and the audit log in them is evidence.
+    const held = await this.orgsUnderLegalHold();
     let objects = 0;
     for (const month of months) {
-      objects += dryRun
-        ? (byMonth.get(month) ?? 0)
-        : await this.storage.deletePrefix(prefixOf(policy.stream, month));
+      if (held.size === 0) {
+        objects += dryRun
+          ? (byMonth.get(month) ?? 0)
+          : await this.storage.deletePrefix(prefixOf(policy.stream, month));
+        continue;
+      }
+      let kept = 0;
+      for (const object of await this.storage.list(prefixOf(policy.stream, month))) {
+        const parsed = parseObjectKey(object.key);
+        if (parsed && held.has(parsed.org)) {
+          kept += 1;
+          continue;
+        }
+        // The month's manifest and failure notes stay while any held object of the month does.
+        if (!parsed) continue;
+        if (!dryRun) await this.storage.delete(object.key);
+        objects += 1;
+      }
+      if (kept === 0) {
+        if (!dryRun) await this.storage.deletePrefix(prefixOf(policy.stream, month));
+      } else {
+        this.logger.log(
+          { stream: policy.stream, month, keptForLegalHold: kept },
+          '[RETENTION] archive objects kept under a legal hold',
+        );
+      }
     }
     return { months, objects };
+  }
+
+  /** The workspaces (as the text of their id, the name an archive object carries) that have any active legal hold, or the operator's. */
+  private async orgsUnderLegalHold(): Promise<Set<string>> {
+    if (!this.db) return new Set();
+    const res = await this.db.privileged((tx) =>
+      tx.execute(sql`
+        SELECT org_id::text AS org FROM legal_holds
+         WHERE status = 'active' AND (expires_at IS NULL OR expires_at > now())
+        UNION
+        SELECT id::text FROM organizations WHERE legal_hold`),
+    );
+    return new Set((res.rows as Array<{ org: string }>).map((r) => r.org));
   }
 }
 

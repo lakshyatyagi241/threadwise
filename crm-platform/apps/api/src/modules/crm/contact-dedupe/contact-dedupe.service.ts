@@ -14,6 +14,7 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { LegalHoldGuard } from '../../privacy';
 
 const { contacts } = schema;
 
@@ -70,6 +71,7 @@ export class ContactDedupeService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly rbac: RbacService,
+    private readonly legalHold: LegalHoldGuard,
   ) {}
 
   /** Merging reaches across owners, so it needs the grant for every contact, not just "own". */
@@ -200,6 +202,8 @@ export class ContactDedupeService {
       .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime() || a.id - b.id);
     if (losers.length === 0) return;
     const loserIds = losers.map((l) => l.id);
+    // The duplicates are deleted at the end: one under a legal hold (BL-295) makes the whole set wait (`run` skips a set that cannot merge).
+    await this.legalHold.assertContactsNotHeld(tx, orgId, loserIds, 'contact_merge');
 
     // 1. fields: the survivor keeps what it has, takes what it lacks
     const patch: Record<string, unknown> = {};

@@ -129,6 +129,8 @@ export class BriefFactsService {
         SELECT contacts.lifecycle_stage AS stage, count(*)::int AS n, max(contacts.last_activity_at) AS last_at
         FROM contacts
         WHERE contacts.org_id = ${ctx.orgId} AND contacts.company_id = ${companyId} AND contacts.is_archived = false${where}
+          -- A contact under a legal hold (BL-295) is restricted from AI processing: left out of the facts.
+          AND NOT is_subject_held(contacts.org_id, 'contact', contacts.id)
         GROUP BY contacts.lifecycle_stage
       `);
       return res.rows as Array<{ stage: string | null; n: number; last_at: Date | string | null }>;
@@ -222,7 +224,8 @@ export class BriefFactsService {
         WHERE c.org_id = ${ctx.orgId} AND NOT c.archived
           AND c.contact_id IN (
             SELECT contacts.id FROM contacts
-            WHERE contacts.org_id = ${ctx.orgId} AND contacts.company_id = ${companyId} AND contacts.is_archived = false${scope})
+            WHERE contacts.org_id = ${ctx.orgId} AND contacts.company_id = ${companyId} AND contacts.is_archived = false${scope}
+              AND NOT is_subject_held(contacts.org_id, 'contact', contacts.id))
           AND ${visibleToSql(viewer, 'c')}
       `);
       return res.rows[0] as { total: number; open: number; last_at: Date | string | null };

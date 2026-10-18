@@ -1,4 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
+import { sql } from 'drizzle-orm';
 import { ERROR_CODES, type RecordScope } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
@@ -425,8 +426,24 @@ export class AiCrmToolkitService {
   private async findContact(args: Record<string, unknown>): Promise<AiCrmToolCallResult> {
     const query = this.str(args.query);
     if (!query) return { ok: false, summary: 'Empty search query.', data: {} };
-    const rows = await this.contacts.selectData({ q: query, limit: 10 }, this.scopeFor('record.contacts.read'));
+    const found = await this.contacts.selectData({ q: query, limit: 10 }, this.scopeFor('record.contacts.read'));
+    // A contact under a legal hold (BL-295) is restricted from AI processing: the model is never shown them.
+    const rows = await this.withoutHeld(found);
     return { ok: true, summary: `${rows.length} contact(s) found for "${query}".`, data: { contacts: rows } };
+  }
+
+  /** Drops the contacts that are under a legal hold from a picker result before it goes to the model. */
+  private async withoutHeld<T extends { id: string }>(rows: T[]): Promise<T[]> {
+    if (rows.length === 0) return rows;
+    const ctx = RequestContextStore.require();
+    const held = await this.db.tx(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT c.uuid FROM contacts c
+         WHERE c.org_id = ${ctx.orgId} AND c.uuid = ANY(${`{${rows.map((r) => r.id).join(',')}}`}::uuid[])
+           AND is_subject_held(c.org_id, 'contact', c.id)`);
+      return new Set((res.rows as Array<{ uuid: string }>).map((r) => r.uuid));
+    });
+    return rows.filter((r) => !held.has(r.id));
   }
 
   private async createContact(args: Record<string, unknown>): Promise<AiCrmToolCallResult> {

@@ -18,6 +18,7 @@ import {
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
+import { legalHoldRestricted } from '../../common/errors/legal-hold.error';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   LEAD_SCORING_AI_PORT,
@@ -175,6 +176,15 @@ export class LeadScoringService {
       this.repo.contactForScoring(tx, orgId, contactId),
     );
     if (!contact) return { status: 'skipped', reason: 'contact_gone' };
+    // A person under a legal hold (BL-295) is restricted from AI processing: nothing is sent.
+    if (
+      await this.db.txAs({ orgId, userId: null }, (tx) =>
+        this.repo.isRestricted(tx, orgId, contactId),
+      )
+    ) {
+      if (manual) throw legalHoldRestricted();
+      return { status: 'skipped', reason: 'restricted' };
+    }
     const base: Omit<RunWrite, 'status' | 'billedAgainst'> = {
       contactId,
       contactName: contact.name,

@@ -9,6 +9,10 @@ import {
   ALL_TIERS,
 } from '../../../src/modules/privacy/engine/erasure.service';
 import { SubjectResolver } from '../../../src/modules/privacy/engine/subject-resolver';
+import { LegalHoldGuard } from '../../../src/modules/privacy/legal-holds/legal-hold.guard';
+
+/** These tests hold nobody: the guard only reads through the transaction it is given, so it needs no database service of its own. */
+const noHold = new LegalHoldGuard(null as never);
 
 /**
  * The call-logging framework (call_log_entries, telephony_click_calls) keeps a customer's number, so an erasure has to reach it.
@@ -177,7 +181,7 @@ describe('privacy: erasing a person reaches the call-logging tables', () => {
         kind: 'contact',
         contactId,
       });
-      return new PersonalDataErasureService(new SubjectResolver()).run(tx, {
+      return new PersonalDataErasureService(new SubjectResolver(), noHold).run(tx, {
         orgId,
         requestId: null,
         subject,

@@ -9,6 +9,10 @@ import {
   ALL_TIERS,
 } from '../../../src/modules/privacy/engine/erasure.service';
 import { SubjectResolver } from '../../../src/modules/privacy/engine/subject-resolver';
+import { LegalHoldGuard } from '../../../src/modules/privacy/legal-holds/legal-hold.guard';
+
+/** These tests hold nobody: the guard only reads through the transaction it is given, so it needs no database service of its own. */
+const noHold = new LegalHoldGuard(null as never);
 
 /**
  * A data request that erases a person must leave no trace of them in their bookings.
@@ -255,7 +259,7 @@ describe('privacy: erasing a person anonymises every personal column of their ap
 
   function eraseOnce(subject: Awaited<ReturnType<typeof resolveContact>>, dryRun: boolean) {
     return inTx((tx) =>
-      new PersonalDataErasureService(new SubjectResolver()).run(tx, {
+      new PersonalDataErasureService(new SubjectResolver(), noHold).run(tx, {
         orgId,
         requestId: null,
         subject,

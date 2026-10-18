@@ -334,6 +334,8 @@ export const IMPORT_REJECT_REASONS = [
   'invalid_date_of_birth',
   /** Not an error: the row repeats a number from earlier in the file and was merged into that contact. */
   'duplicate_in_file',
+  /** The number belongs to a contact under a legal hold (BL-295): the row would overwrite it, so it is skipped. The text is neutral. */
+  'legal_hold',
 ] as const;
 export type ImportRejectReason = (typeof IMPORT_REJECT_REASONS)[number];
 

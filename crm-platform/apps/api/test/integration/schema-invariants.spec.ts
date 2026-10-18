@@ -16,7 +16,7 @@ import { runMigrations, verifySchema } from '@crm/db';
  */
 /**
  * Platform-owned tables that carry an `org_id` but are NOT tenant data (ADR-0028, migration 20261116090000_org_lifecycle): the workspace
- * lifecycle log, the object-store purge queue and the operator's Waboo migration runs (a platform table, migration 20261113100000_wmig_*) and the failed-operation records of background work (migration 20261229090000_failed_operations). `org_id` is only a pointer to a workspace that may already be erased (no foreign key,
+ * lifecycle log, the object-store purge queue and the operator's Waboo migration runs (a platform table, migration 20261113100000_wmig_*) and the failed-operation records of background work (migration 20261231090200_failed_operations). `org_id` is only a pointer to a workspace that may already be erased (no foreign key,
  * the rows must outlive it), so a tenant policy and an (org_id, id) key would be wrong for them: a workspace must never read or write
  * its own compliance record. The exemption is narrow: the test still requires RLS to be forced and EVERY policy on them to be
  * privileged-only (`app_is_privileged()`, never the tenant function), so the application role sees nothing without the privileged flag.

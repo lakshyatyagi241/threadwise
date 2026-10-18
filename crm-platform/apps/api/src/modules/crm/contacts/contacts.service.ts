@@ -330,6 +330,19 @@ export class ContactsService {
       if (!row) throw AppError.notFound('Contact', uuid);
       const { scope } = this.rbac.can(ctx.grants!, 'record.contacts.read');
       await assertContactScope(tx, this.repo, ctx.orgId, scope, ctx.userId!, row.ownerId);
+      // Restricted processing (BL-295): opening a contact under a legal hold is allowed (the business keeps serving the customer), and is
+      // logged. The response is the same for everyone; whether a hold exists is shown only to readers of the register.
+      const held = await tx.execute(
+        sql`SELECT is_subject_held(${ctx.orgId}::bigint, 'contact', ${row.id}::bigint) AS held`,
+      );
+      if ((held.rows[0] as { held: boolean }).held === true) {
+        await this.audit.record(tx, {
+          module: MODULE_KEY,
+          recordId: row.id,
+          action: 'read',
+          delta: { legalHold: { old: null, new: true } },
+        });
+      }
       const canRevealPhone = this.rbac.can(ctx.grants!, 'contacts.phone.reveal').allowed;
       return toContactResponse(row, { canRevealPhone });
     });

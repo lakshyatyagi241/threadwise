@@ -359,6 +359,7 @@ export class AuditLogRepository {
       UPDATE audit_log_exports SET status = 'expired', file_gz = NULL
       WHERE status = 'ready'
         AND (expires_at < ${now} OR (${cutoff}::timestamptz IS NOT NULL AND completed_at < ${cutoff}::timestamptz))
+        AND NOT is_subject_held(org_id, 'contact', NULL)
       RETURNING 1`);
     return rowsOf(res).length;
   }

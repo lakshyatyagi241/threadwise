@@ -533,5 +533,15 @@
     "status": "reviewed",
     "reason": "operator-only (OperatorGuard, platform_operator; redrive and close need super_admin) and worker-only records of background work that failed for good; failed_operations and failed_operation_events are platform tables whose every policy is app_is_privileged() (no workspace can read one), so privileged is the only way to reach them. A redrive takes nothing from the caller but the record id: payload, workspace and eligibility come from the stored record, a suspended or deleted workspace is refused, and every action is audited with the operator",
     "reviewedOn": "2026-12-29"
+  },
+  "modules/privacy/legal-holds/legal-holds.service.ts": {
+    "status": "reviewed",
+    "reason": "the only privileged() call is expireDue(), reached from the worker alone (LegalHoldMaintenanceService, PrivacyWorkerModule is imported by WorkersModule only; no controller calls it). It lists (org_id, id) of active legal holds past their end date with a fixed statement and a constant limit, no caller input; every hold is then ended in its own tenant transaction (txAs with that org) under the exclusive hold lock, so nothing is read or written across tenants beyond the id list",
+    "reviewedOn": "2026-10-18"
+  },
+  "modules/privacy/legal-holds/legal-hold-maintenance.service.ts": {
+    "status": "reviewed",
+    "reason": "worker only (PrivacyWorkerModule is imported by WorkersModule alone). privileged() lists (org_id, uuid) of confirmed erasure requests that no hold covers any more, with a fixed statement and a constant limit, no caller input; each request is then re-read under a row lock and executed inside a tenant transaction for its own org (txAs), which re-checks the legal hold before anything is erased",
+    "reviewedOn": "2026-10-18"
   }
 }

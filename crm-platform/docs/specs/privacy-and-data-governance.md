@@ -380,6 +380,8 @@ confirm the wording. See [api/privacy.md](../api/privacy.md) "Derived copies".
 Legal hold: a flag on a subject or a workspace that makes all retention jobs and erasures skip it and records why. It requires a
 distinct permission and is itself audited.
 
+> **Built (BL-295, BL-296):** [legal-hold.md](legal-hold.md). One hold per subject (contact, lead or the whole workspace) with a reason category and a case reference; one guard (`is_subject_held`) asked by the erasure, contact delete, merge, every sweep listed there and the plan wipe; a rights case becomes "restricted" and the confirmed erasure resumes by itself when the hold ends. It reuses `privacy.requests.read` and `privacy.requests.manage` (no `privacy.legalhold.manage` key). Counsel must confirm the wording.
+
 ### 4.7 Security controls
 
 1. **PII classification tags.** A `pii` annotation (class: `identifier`, `contact`, `content`, `financial`, `voice`, `location`,

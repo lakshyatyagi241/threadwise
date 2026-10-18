@@ -25,7 +25,7 @@ receipt date, verification date, due date. Escalate at 15 and 25 days.
 3. **Find the data**: the service does it from the registry; the module register
    [wiring/privacy-and-data.md](../threadwise-port/wiring/privacy-and-data.md). Run the finder per contact id across every listed
    table and storage prefix.
-4. **Decide exceptions** (legal hold toggle on the request, with the reason): invoices and payment records (statutory retention), consent proof (legitimate interest in proof; anonymise),
+4. **Decide exceptions** (legal hold on the person, see [legal-hold.md](../specs/legal-hold.md); or the toggle on the request, with the reason): invoices and payment records (statutory retention), consent proof (legitimate interest in proof; anonymise),
    open disputes, legal hold. Write the reason.
 5. **Execute**
    - Access/export (button Export; the workspace admin downloads the ZIP, valid 7 days; nothing is mailed to the person): contacts card, messages, notes, files, leads, orders, call logs and recordings, consent ledger (the ledger export:

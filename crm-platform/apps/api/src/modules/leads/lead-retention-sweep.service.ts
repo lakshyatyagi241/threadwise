@@ -54,6 +54,8 @@ export class LeadRetentionSweepService {
           WHERE (org_id, id) IN (
             SELECT org_id, id FROM lead_events
             WHERE payload IS NOT NULL AND payload_expires_at < now()
+              -- Kept while the person (or the workspace) is under a legal hold (BL-295).
+              AND NOT is_subject_held(org_id, 'contact', contact_id)
             ORDER BY payload_expires_at LIMIT ${BATCH} FOR UPDATE SKIP LOCKED)
           RETURNING 1`);
         return res.rows.length;

@@ -240,6 +240,7 @@ describe('ConsentGate truth table', () => {
       { purpose: 'marketing', minorRule: 'block', facts: facts({ minor: true }) },
       { purpose: 'third_party_sharing', facts: facts({ saleShareOptOut: true }) },
       { purpose: 'marketing', channel: 'sms', facts: facts({ onDncList: true }) },
+      { purpose: 'marketing', facts: facts({ restricted: true }) },
     ];
     for (const i of all) seen.add(decide(i).reason);
     seen.add(failureResult(PURPOSE_REGISTRY.marketing_messaging).reason);

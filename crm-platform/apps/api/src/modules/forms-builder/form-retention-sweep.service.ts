@@ -52,6 +52,8 @@ export class FormRetentionSweepService {
           WHERE (org_id, id) IN (
             SELECT org_id, id FROM web_form_submissions
             WHERE answers_expires_at < now() AND payload_purged_at IS NULL
+              -- Kept while the person (or the workspace) is under a legal hold (BL-295).
+              AND NOT is_subject_held(org_id, 'contact', contact_id)
             ORDER BY answers_expires_at LIMIT ${BATCH} FOR UPDATE SKIP LOCKED)
           RETURNING 1`);
         return res.rows.length;

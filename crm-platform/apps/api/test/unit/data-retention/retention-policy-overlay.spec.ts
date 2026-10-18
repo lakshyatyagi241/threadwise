@@ -48,7 +48,11 @@ function fakeArchiver(results: ArchiveResult[] = []) {
 describe('RetentionWorker with saved policies', () => {
   let dir: string;
   let storage: LocalArchiveStorage;
-  const db = { privileged: async <T>(fn: (tx: unknown) => Promise<T>) => fn({}) };
+  // `execute` answers the legal-hold lookup of the archive expiry (BL-295): no workspace is held here.
+  const db = {
+    privileged: async <T>(fn: (tx: unknown) => Promise<T>) =>
+      fn({ execute: async () => ({ rows: [] }) }),
+  };
 
   beforeAll(async () => {
     dir = await mkdtemp(join(tmpdir(), 'retention-overlay-'));
