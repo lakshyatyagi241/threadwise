@@ -3,6 +3,7 @@ import {
   EngineCommerceSender,
   templateText,
 } from '../../../src/modules/shopify-woocommerce/_shims/engine-commerce-sender';
+import { issueClearance } from '../../../src/modules/shopify-woocommerce/commerce-consent.rules';
 import type { EcomTemplate } from '../../../src/modules/shopify-woocommerce/_shims/tokens';
 import type { EventContext } from '../../../src/modules/shopify-woocommerce/event-rules';
 
@@ -14,7 +15,10 @@ const template: EcomTemplate = {
   body: 'Hi {{1}}, order {{2}} is {{status}}.',
   header: 'Acme',
   footer: 'Reply STOP to opt out',
+  category: 'utility',
 };
+/** The consent step is settled by the caller (CommerceConsentService); the sender only carries it. */
+const consent = issueClearance('service');
 const ctx: EventContext = { vars: { name: 'Ada', status: 'paid' }, positional: ['Ada', '#1001'] };
 const UUID = '11111111-1111-4111-8111-111111111111';
 
@@ -72,7 +76,7 @@ describe('the commerce sender (TW-ECOM-010)', () => {
 
   it("sends a text engine's template as rendered text through the outbound layer, never the Cloud API", async () => {
     const f = build({ rows: [[{ default_engine: 'baileys' }]] });
-    const out = await f.s.send(7, { to: '15550001', template, ctx, reference: 'r1' });
+    const out = await f.s.send(7, { consent, to: '15550001', template, ctx, reference: 'r1' });
     expect(out).toEqual({ providerMessageId: 'tx1' });
     // A stored `baileys` default is handed over blank: the resolver picks the unofficial engine while its platform switch is on and the
     // Cloud API while it is off.
@@ -93,9 +97,18 @@ describe('the commerce sender (TW-ECOM-010)', () => {
     expect(f.engines.get).not.toHaveBeenCalled();
   });
 
+  it('refuses a template send that carries no consent clearance, before anything is resolved or sent', async () => {
+    const f = build({ rows: [[{ default_engine: 'baileys' }]] });
+    await expect(
+      f.s.send(7, { to: '15550001', template, ctx, reference: 'r0' } as never),
+    ).rejects.toThrow('consent clearance');
+    expect(f.resolver.resolve).not.toHaveBeenCalled();
+    expect(f.sent).toEqual([]);
+  });
+
   it('sends the approved template with the numbered values through a Cloud API number', async () => {
     const f = build({ sender: { engine: 'waba', id: 9 }, rows: [[{ default_engine: 'waba' }]] });
-    await f.s.send(7, { to: '15550001', template, ctx, reference: 'r2' });
+    await f.s.send(7, { consent, to: '15550001', template, ctx, reference: 'r2' });
     expect(f.wabaSent).toEqual([
       {
         to: '15550001',
@@ -118,21 +131,42 @@ describe('the commerce sender (TW-ECOM-010)', () => {
 
   it('uses the chosen number when it is connected, and says so when it is not', async () => {
     const ok = build({ sender: { engine: 'twilio', id: 3 }, rows: [[{ id: 3 }]] });
-    await ok.s.send(7, { to: '1', template, ctx, reference: 'r', senderKey: `twilio:${UUID}` });
+    await ok.s.send(7, {
+      consent,
+      to: '1',
+      template,
+      ctx,
+      reference: 'r',
+      senderKey: `twilio:${UUID}`,
+    });
     expect(ok.resolver.resolve).toHaveBeenCalledWith(ok.tx, 7, { provider: 'twilio', deviceId: 3 });
 
     const gone = build({ sender: null, rows: [[{ id: 3 }]] });
     await expect(
-      gone.s.send(7, { to: '1', template, ctx, reference: 'r', senderKey: `twilio:${UUID}` }),
+      gone.s.send(7, {
+        consent,
+        to: '1',
+        template,
+        ctx,
+        reference: 'r',
+        senderKey: `twilio:${UUID}`,
+      }),
     ).rejects.toThrow('The chosen WhatsApp number is not connected.');
     const unknown = build({ rows: [[]] });
     await expect(
-      unknown.s.send(7, { to: '1', template, ctx, reference: 'r', senderKey: `twilio:${UUID}` }),
+      unknown.s.send(7, {
+        consent,
+        to: '1',
+        template,
+        ctx,
+        reference: 'r',
+        senderKey: `twilio:${UUID}`,
+      }),
     ).rejects.toThrow('The chosen WhatsApp number is not connected.');
     const bad = build();
     for (const key of ['nope', 'sms:' + UUID, 'waba:not-a-uuid', 'twilio:']) {
       await expect(
-        bad.s.send(7, { to: '1', template, ctx, reference: 'r', senderKey: key }),
+        bad.s.send(7, { consent, to: '1', template, ctx, reference: 'r', senderKey: key }),
       ).rejects.toThrow('chosen');
     }
     expect(bad.tx.execute).not.toHaveBeenCalled();
@@ -141,7 +175,7 @@ describe('the commerce sender (TW-ECOM-010)', () => {
   it('has no number to send from: canSend is false and a send says why', async () => {
     const f = build({ sender: null, rows: [[], []] });
     expect(await f.s.canSend(7)).toBe(false);
-    await expect(f.s.send(7, { to: '1', template, ctx, reference: 'r' })).rejects.toThrow(
+    await expect(f.s.send(7, { consent, to: '1', template, ctx, reference: 'r' })).rejects.toThrow(
       'No WhatsApp number is connected to send from.',
     );
     expect(await build({ rows: [[]] }).s.canSend(7)).toBe(true);

@@ -96,6 +96,10 @@ Nobody is dropped silently. On Messenger, Telegram and LINE the person is marked
 
 WeChat sends one call to an audience that WeChat itself works out. A broadcast to **picked people** leaves out whoever is refused and sends to the rest (it needs at least two people left). A broadcast to **all followers** or to **a tag** cannot leave anyone out, so it is refused, with the reason in the broadcast's error, when your workspace requires recorded consent or when any follower you already know is refused. Send to a picked list instead.
 
+## Shopify and WooCommerce messages
+
+The messages a connected store sends to customers follow the same rule. A message that uses a **marketing** template (an offer, a win-back, and an abandoned cart reminder, a back-in-stock alert or a review reward whose template is in the marketing category) is checked for every customer before it is sent, and again when it was held back for the quiet hours. Someone who opted out of marketing is not messaged, and with **Require recorded consent for marketing sends** on a customer also needs a recorded consent on WhatsApp. The store's Activity tab shows the customer as **Skipped** with the reason, in the same words as the contact's Consent card. Messages that use a utility template (order confirmations, shipping and payment updates, the cash-on-delivery confirmation) are never blocked by this, so a customer who unsubscribed from offers still hears about their order.
+
 ## The unsubscribe link in marketing emails
 
 A marketing email carries a personal unsubscribe link and the standard one-click unsubscribe header, so the mail app can show its own Unsubscribe button. The link opens a short page (no login) with one button. Pressing it records that the contact opted out of marketing emails, and every marketing path then skips them, including WhatsApp and SMS. A marketing email can only go to someone who is a contact, so there is always a link that works.

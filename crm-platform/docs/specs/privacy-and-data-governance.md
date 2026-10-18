@@ -641,7 +641,7 @@ What is decided, and for whom:
 **The remaining senders (BL-191, built).** The broadcasts of LINE, Messenger, Telegram and Viber leave a held recipient `pending` with
 `held_until` and wake themselves with a delayed job at the first opening; a WeChat mass send is one call, so it waits as a whole on the
 workspace clock; the Instagram broadcasts page, the offer and win-back broadcasts of a Shopify or WooCommerce store, and the broadcast wizard's
-test send hold the same way (a delayed job at the opening). Every recipient of these broadcasts is also put through the ConsentGate before it is sent, first sends included (BL-141 follow-up; a WeChat all-followers or tag send is refused as a whole when it cannot be shown to be clean, BL-243). Only the marketing purpose is asked: a utility template is never held, and an
+test send hold the same way (a delayed job at the opening). Every recipient of these broadcasts is also put through the ConsentGate before it is sent, first sends included (BL-141 follow-up; a WeChat all-followers or tag send is refused as a whole when it cannot be shown to be clean, BL-243). The store senders do the same for every customer of a MARKETING template, before the hold (BL-278): the offer and win-back broadcasts, and the abandoned-cart, back-in-stock, COD and reward messages, which are cleared without being held; a utility template is a notice and is never asked. Only the marketing purpose is asked: a utility template is never held, and an
 Instagram reply typed in the inbox composer is a person answering a person.
 
 **Recurring campaigns and flows (BL-192, built).** A recurring campaign no longer carries its held recipients to the next occurrence: the
