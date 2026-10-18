@@ -62,3 +62,57 @@ describe('contact lifecycle history', () => {
     });
   });
 });
+
+describe('empty subscription values', () => {
+  it('stay empty: nothing is defaulted to subscribed', () => {
+    const o = out({
+      whatsapp_subscription_status: '',
+      email_subscription_status: '',
+      sms_subscription_status: '',
+    });
+    expect(o.rows[0].row).toMatchObject({
+      whatsapp_subscription_status: null,
+      email_subscription_status: null,
+      sms_subscription_status: null,
+      is_unsubscribed: false,
+    });
+  });
+});
+
+describe('attribution evidence', () => {
+  it('keeps the current and the first touch exactly, channel and module type included', async () => {
+    const { attributionEvidence } = await import('../transform/leads');
+    const ev = attributionEvidence(
+      {
+        _id: 'a1',
+        contact_id: 'c1',
+        source: 'WhatsApp Direct',
+        channel: 'WhatsApp',
+        platform: 'WhatsApp',
+        module_name: 'Test bot',
+        module_type: 'WhatsApp Chatbot',
+        created_at: new Date('2026-05-01T10:00:00Z'),
+        first_touch: {
+          source: 'Geta (Import)',
+          channel: 'API',
+          module_type: 'Contacts',
+          raw_utm_source: null,
+        },
+      },
+      'a1',
+    ) as any;
+    expect(ev.legacy.waboo.current).toMatchObject({
+      source: 'WhatsApp Direct',
+      channel: 'WhatsApp',
+      module_type: 'WhatsApp Chatbot',
+      module_name: 'Test bot',
+      platform: 'WhatsApp',
+      created_at: '2026-05-01T10:00:00.000Z',
+    });
+    expect(ev.legacy.waboo.firstTouch).toEqual({
+      source: 'Geta (Import)',
+      channel: 'API',
+      module_type: 'Contacts',
+    });
+  });
+});

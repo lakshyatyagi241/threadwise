@@ -8,7 +8,10 @@ export interface TouchView {
   platform: string | null;
   sourceLabel: string;
   /** The labelled values that exist, in reading order. */
-  details: Array<{ field: 'campaign' | 'adset' | 'ad' | 'form'; value: string }>;
+  details: Array<{
+    field: 'campaign' | 'adset' | 'ad' | 'form' | 'channel' | 'moduleType';
+    value: string;
+  }>;
   capturedAt: string;
   /** Where the lead source is managed, when the touch still has one. */
   sourceHref: string | null;
@@ -23,7 +26,7 @@ export interface AttributionView {
   total: number;
 }
 
-const DETAIL_FIELDS = ['campaign', 'adset', 'ad', 'form'] as const;
+const DETAIL_FIELDS = ['campaign', 'adset', 'ad', 'form', 'channel', 'moduleType'] as const;
 
 export function touchView(t: AttributionTouch): TouchView {
   return {

@@ -613,7 +613,9 @@
         "campaign": "Campagna",
         "adset": "Gruppo di inserzioni",
         "ad": "Inserzione",
-        "form": "Modulo"
+        "form": "Modulo",
+        "channel": "Canale",
+        "moduleType": "Tipo di modulo"
       },
       "capturedAt": "Acquisito",
       "openSource": "Apri la fonte lead"

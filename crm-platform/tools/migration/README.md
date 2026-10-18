@@ -1243,7 +1243,7 @@ Order: `... contacts -> ... -> credits -> lead_sources -> lead_events -> lead_ev
 
 ## NOT PRESENT (counted in the report)
 
-`first_touch.channel`, `.module_type`, top-level `channel` / `module_type` and the nine always-null keys (no column in `contact_attributions`); `adset` / `ad` (no Waboo field); the current touch when it differs (soft `LATEST_TOUCH_DIFFERS`); `deal_id`, `reason`, `error` of events (Waboo leads carry none); credential-looking keys of an event (names only, never values).
+(nothing of `contact_attribution` is dropped any more: `first_touch.*` and the current top-level touch, `channel` and `module_type` included, are kept as JSON in `contact_attributions.evidence.legacy.waboo`, and the contact page's lead-source panel lists the first touch's channel and module type); `adset` / `ad` (no Waboo field); the current touch when it differs (soft `LATEST_TOUCH_DIFFERS`); `deal_id`, `reason`, `error` of events (Waboo leads carry none); credential-looking keys of an event (names only, never values).
 
 ## UNVERIFIED guesses (confirm after the export)
 

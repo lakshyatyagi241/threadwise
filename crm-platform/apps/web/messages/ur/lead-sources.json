@@ -613,7 +613,9 @@
         "campaign": "مہم",
         "adset": "ایڈ سیٹ",
         "ad": "ایڈ",
-        "form": "فارم"
+        "form": "فارم",
+        "channel": "چینل",
+        "moduleType": "ماڈیول کی قسم"
       },
       "capturedAt": "محفوظ کیا گیا",
       "openSource": "لیڈ سورس کھولیں"
