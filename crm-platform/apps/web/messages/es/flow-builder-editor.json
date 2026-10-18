@@ -753,6 +753,7 @@
         },
         "editors": {
           "linkLabel": "A dónde lleva",
+          "linkChoose": "Elige a dónde lleva…",
           "linkEnds": "Termina aquí (no se envía nada más)",
           "linkNext": "Continúa con el siguiente paso",
           "linkOption": "{stage} · {label}{self, select, true { (este paso)} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2634,6 +2635,8 @@
         "carouselButtons": "Paso {stage}: dale un nombre a cada botón, y un enlace, número o dirección donde abra algo.",
         "conditionIncomplete": "Paso {stage}: completa las reglas de la condición (una variable y un valor en cada una).",
         "faqMinScore": "Paso {stage}: la puntuación mínima debe estar entre 0.05 y 0.99, o usa la configuración del flujo.",
+        "optionNotConnected": "Paso {stage}: {kind, select, row {la fila} other {el botón}} \"{label}\" no lleva a ningún sitio. Añade un paso para ello o asígnale una acción.",
+        "tooManyOptions": "Paso {stage}: {kind, select, row {una lista puede tener como máximo {max} filas} other {un conjunto de botones puede tener como máximo {max} botones}}.",
         "chooseFlow": "Paso {stage}: elige el flujo que inicia el botón.",
         "chooseApi": "Paso {stage}: elige la API a la que llamar.",
         "writeCode": "Paso {stage}: escribe el código que se ejecutará.",

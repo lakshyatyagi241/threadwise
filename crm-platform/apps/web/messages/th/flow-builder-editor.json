@@ -753,6 +753,7 @@
         },
         "editors": {
           "linkLabel": "ชี้ไปที่",
+          "linkChoose": "เลือกว่าจะไปที่ใด…",
           "linkEnds": "จบที่นี่ (ไม่มีการส่งอะไรเพิ่มเติม)",
           "linkNext": "ไปต่อที่ขั้นตอนถัดไป",
           "linkOption": "{stage} · {label}{self, select, true { (ขั้นตอนนี้)} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2634,6 +2635,8 @@
         "carouselButtons": "ขั้นตอน {stage}: ตั้งชื่อให้ทุกปุ่ม และใส่ลิงก์ หมายเลข หรือที่อยู่ในปุ่มที่เปิดบางอย่าง",
         "conditionIncomplete": "ขั้นตอน {stage}: กรอกกฎของเงื่อนไขให้ครบ (แต่ละกฎมีตัวแปรและค่า)",
         "faqMinScore": "ขั้นตอนที่ {stage}: คะแนนขั้นต่ำต้องอยู่ระหว่าง 0.05 ถึง 0.99 หรือใช้การตั้งค่าของโฟลว์",
+        "optionNotConnected": "ขั้นตอนที่ {stage}: {kind, select, row {แถว} other {ปุ่ม}} \"{label}\" ไม่นำไปที่ใด เพิ่มขั้นตอนให้ หรือกำหนดการดำเนินการ",
+        "tooManyOptions": "ขั้นตอนที่ {stage}: {kind, select, row {รายการมีได้สูงสุด {max} แถว} other {ชุดปุ่มมีได้สูงสุด {max} ปุ่ม}}",
         "chooseFlow": "ขั้นตอน {stage}: เลือกโฟลว์ที่ปุ่มจะเริ่ม",
         "chooseApi": "ขั้นตอน {stage}: เลือก API ที่จะเรียก",
         "writeCode": "ขั้นตอน {stage}: เขียนโค้ดที่จะรัน",

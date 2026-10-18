@@ -753,6 +753,7 @@
         },
         "editors": {
           "linkLabel": "后续去向",
+          "linkChoose": "选择它通向哪里…",
           "linkEnds": "到此结束（不再发送任何内容）",
           "linkNext": "继续执行下一步",
           "linkOption": "{stage} · {label}{self, select, true {（此步骤）} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2634,6 +2635,8 @@
         "carouselButtons": "步骤 {stage}：请为每个按钮命名，并为会打开内容的按钮填写链接、号码或地址。",
         "conditionIncomplete": "步骤 {stage}：请完善条件的规则（每条规则都要有变量和值）。",
         "faqMinScore": "步骤 {stage}：最低分数必须在 0.05 到 0.99 之间，或使用流程设置。",
+        "optionNotConnected": "步骤 {stage}：{kind, select, row {该行} other {该按钮}}“{label}”没有通向任何地方。请为它添加一个步骤，或为它设置一个操作。",
+        "tooManyOptions": "步骤 {stage}：{kind, select, row {列表最多可有 {max} 行} other {一组按钮最多可有 {max} 个按钮}}。",
         "chooseFlow": "步骤 {stage}：请选择该按钮启动的流程。",
         "chooseApi": "步骤 {stage}：请选择要调用的 API。",
         "writeCode": "步骤 {stage}：请编写要运行的代码。",

@@ -44,6 +44,11 @@ recordings and media are deleted; leads, deals, tasks, projects, forms, appointm
 and text replaced by `[erased]` or NULL; invoices, payments, quotes and orders are kept for the statutory period (`FINANCIAL_RECORD_RETENTION_YEARS`)
 with the buyer identity replaced (amounts, numbers, tax facts, dates stay); consent events stay as proof with no link to the person.
 
+An appointment's `title` is "booking type, dash, invitee name" and the column is NOT NULL, so an erasure writes `[erased]` over it (the same for
+the invitee's name, e-mail and phone, notes, answers, location, cancel reason, the e-mail last pushed to the calendar event and the manage link).
+The event already written to the connected Google or Outlook calendar is not rewritten by an erasure; delete it there (see "not reached" in the proof).
+`test/integration/privacy/appointments-erasure.spec.ts` books a person, erases them and reads each booking back as text to prove no trace is left.
+
 ## Contact delete (behaviour change)
 
 `DELETE /v2/contacts/:id` and `POST /v2/contacts/bulk/delete` now erase the contact's **conversation history** (conversations, messages, media,

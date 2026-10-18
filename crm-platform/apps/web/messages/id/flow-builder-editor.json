@@ -753,6 +753,7 @@
         },
         "editors": {
           "linkLabel": "Tujuan",
+          "linkChoose": "Pilih ke mana ini mengarah…",
           "linkEnds": "Berakhir di sini (tidak ada yang dikirim lagi)",
           "linkNext": "Lanjut ke langkah berikutnya",
           "linkOption": "{stage} · {label}{self, select, true { (langkah ini)} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2634,6 +2635,8 @@
         "carouselButtons": "Langkah {stage}: beri setiap tombol nama, serta tautan, nomor, atau alamat di tempat tombol membuka sesuatu.",
         "conditionIncomplete": "Langkah {stage}: lengkapi aturan kondisi (variabel dan nilai di setiap aturan).",
         "faqMinScore": "Langkah {stage}: skor minimum harus dari 0.05 sampai 0.99, atau gunakan pengaturan alur.",
+        "optionNotConnected": "Langkah {stage}: {kind, select, row {baris} other {tombol}} \"{label}\" tidak mengarah ke mana pun. Tambahkan langkah untuknya atau beri tindakan.",
+        "tooManyOptions": "Langkah {stage}: {kind, select, row {daftar dapat memiliki paling banyak {max} baris} other {satu set tombol dapat memiliki paling banyak {max} tombol}}.",
         "chooseFlow": "Langkah {stage}: pilih flow yang dimulai tombol.",
         "chooseApi": "Langkah {stage}: pilih API yang dipanggil.",
         "writeCode": "Langkah {stage}: tulis kode yang dijalankan.",

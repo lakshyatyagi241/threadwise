@@ -225,6 +225,7 @@ describe('wabo export -> Simple', () => {
     expect(g.flowNodes).toHaveLength(allSteps(r.doc).length + 1);
     // the live-agent button leads to an Assign step; it only needs a team chosen
     expect(problems(r.doc, { senderRequired: false }).map((p) => en(p.message))).toEqual([
+      'Step 1.3: the button "elsewhere" leads nowhere. Add a step for it, or give it an action.',
       'Step 1.4: choose the team the conversation goes to.',
     ]);
   });
@@ -258,18 +259,18 @@ describe("Simple import: this workspace's own file", () => {
     expect(again.ok && again.name).toBe('Menu');
     expect(again.ok && again.source).toBe('crm');
 
-    const withTag = {
+    const withWebhook = {
       flow_type: 'chat',
       flow_data: {
         flowNodes: [
           { id: 't', type: 'trigger', x: 0, y: 0, data: {}, isStart: true },
-          { id: 'w', type: 'tag', x: 0, y: 100, data: {} },
+          { id: 'w', type: 'book_appointment', x: 0, y: 100, data: {} },
         ],
         flowEdges: [{ id: 'e', source: 't', sourceHandle: 'out', target: 'w' }],
         vars: [],
       },
     };
-    const bad = importToSimple(withTag);
+    const bad = importToSimple(withWebhook);
     expect(bad.ok).toBe(false);
     expect(!bad.ok && en(bad.reasons[0]!)).toMatch(/Simple builder does not have/);
     expect(importToSimple({ hello: 1 }).ok).toBe(false);

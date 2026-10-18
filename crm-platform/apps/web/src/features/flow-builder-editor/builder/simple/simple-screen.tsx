@@ -16,6 +16,7 @@ import {
   BRANCHING,
   endsChain,
   FIXED_EXITS,
+  deadOptions,
   LINK_NEXT,
   OPTION_STEPS,
   stepKindsFor,
@@ -1475,15 +1476,24 @@ function StepCard(p: {
   };
   const fixed = FIXED_EXITS[s.type];
   /** What each exit of a branching step leads to: the stage number of the step it reaches, or null (the conversation ends). */
-  const exits: Array<{ title: string; target: string | null }> = fixed
+  const chain = p.doc.journeys.find((j) => j.steps.some((x) => x.id === s.id))?.steps ?? [];
+  const dead = new Set(
+    deadOptions(s, chain[chain.findIndex((x) => x.id === s.id) + 1]).map((d) => d.index),
+  );
+  const exits: Array<{ title: string; target: string | null; open: boolean }> = fixed
     ? fixed.map((handle, i) => ({
         title: t(`faqExits.${handle}`),
         target: stageOf(s.links[i] ?? null),
+        open: !s.links[i],
       }))
     : BRANCHING.has(s.type)
       ? (Array.isArray(s.data.options) ? s.data.options : []).map((o: unknown, i: number) => {
           const label = typeof o === 'string' ? o : str((o as Record<string, unknown>).title);
-          return { title: label || `#${i + 1}`, target: stageOf(s.links[i] ?? null) };
+          return {
+            title: label || `#${i + 1}`,
+            target: stageOf(s.links[i] ?? null),
+            open: dead.has(i),
+          };
         })
       : [];
   const look = lookOf(s.type);
@@ -1602,7 +1612,7 @@ function StepCard(p: {
                   <div
                     key={i}
                     className={`flex items-center gap-2 rounded-full border bg-background px-4 py-1.5 text-[13px] font-semibold ${
-                      e.target ? 'border-brand text-brand' : 'border-orange-400 text-orange-600'
+                      e.open ? 'border-orange-400 text-orange-600' : 'border-brand text-brand'
                     }`}
                   >
                     <span className="min-w-0 flex-1 truncate">{e.title}</span>

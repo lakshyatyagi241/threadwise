@@ -57,6 +57,7 @@ import { MediaUpload } from './media-upload';
 import { FlowEditorContext } from '../../lib/flow-editor-context';
 import {
   BRANCHING,
+  LINK_END,
   LINK_NEXT,
   OPTION_STEPS,
   LIMITS,
@@ -81,12 +82,15 @@ export function LinkSelect({
   doc,
   stepId,
   value,
+  decide = false,
   onChange,
 }: {
   doc: SimpleDoc;
   /** The step the button is on: a button can lead back to its own step. */
   stepId: string;
   value: string | null;
+  /** A button or row the customer sees: it has to lead somewhere, so "ends here" is a choice and "not chosen yet" is shown as such. */
+  decide?: boolean;
   onChange: (target: string | null | typeof NEW_JOURNEY) => void;
 }) {
   const t = useTranslations('flb.builder.simple.editors');
@@ -98,7 +102,16 @@ export function LinkSelect({
       value={value ?? ''}
       onChange={(e) => onChange(e.target.value === '' ? null : e.target.value)}
     >
-      <option value="">{t('linkEnds')}</option>
+      {decide ? (
+        <>
+          <option value="" disabled>
+            {t('linkChoose')}
+          </option>
+          <option value={LINK_END}>{t('linkEnds')}</option>
+        </>
+      ) : (
+        <option value="">{t('linkEnds')}</option>
+      )}
       {/* A buttons / list step with a step after it can carry on with that step. */}
       {(() => {
         const own = doc.journeys.find((j) => j.steps.some((x) => x.id === stepId));
@@ -495,6 +508,7 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
                         doc={doc}
                         stepId={step.id}
                         value={step.links[ri] ?? null}
+                        decide
                         onChange={(target) => link(ri, target)}
                       />
                     </div>
@@ -623,6 +637,7 @@ function ButtonsEditor({ step, doc, ctx, flowId, set, link }: EditorProps) {
                 doc={doc}
                 stepId={step.id}
                 value={step.links[i] ?? null}
+                decide
                 onChange={(target) => link(i, target)}
               />
             ) : null}
@@ -714,6 +729,7 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
               doc={doc}
               stepId={step.id}
               value={step.links[i] ?? null}
+              decide
               onChange={(target) => link(i, target)}
             />
           </Row>

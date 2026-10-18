@@ -1146,6 +1146,7 @@
         },
         "editors": {
           "linkLabel": "यह कहां ले जाता है",
+          "linkChoose": "चुनें कि यह कहाँ जाता है…",
           "linkEnds": "यहीं समाप्त (इसके बाद कुछ नहीं भेजा जाता)",
           "linkNext": "अगले चरण पर आगे बढ़ता है",
           "linkOption": "{stage} · {label}{self, select, true { (यह स्टेप)} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2492,6 +2493,8 @@
         "carouselButtons": "चरण {stage}: हर बटन को नाम दें, और जहाँ वह कुछ खोलता है वहाँ लिंक, नंबर या पता दें।",
         "conditionIncomplete": "चरण {stage}: शर्त के नियम पूरे करें (हर एक में एक वेरिएबल और एक मान)।",
         "faqMinScore": "चरण {stage}: न्यूनतम स्कोर 0.05 से 0.99 के बीच होना चाहिए, या इस फ़्लो की सेटिंग का उपयोग करें।",
+        "optionNotConnected": "चरण {stage}: {kind, select, row {पंक्ति} other {बटन}} \"{label}\" कहीं नहीं जाता। इसके लिए एक चरण जोड़ें या इसे कोई कार्रवाई दें।",
+        "tooManyOptions": "चरण {stage}: {kind, select, row {एक सूची में अधिकतम {max} पंक्तियाँ हो सकती हैं} other {बटनों के एक समूह में अधिकतम {max} बटन हो सकते हैं}}।",
         "chooseFlow": "चरण {stage}: वह फ़्लो चुनें जिसे बटन शुरू करता है।",
         "chooseApi": "चरण {stage}: कॉल करने के लिए API चुनें।",
         "writeCode": "चरण {stage}: चलाने के लिए कोड लिखें।",

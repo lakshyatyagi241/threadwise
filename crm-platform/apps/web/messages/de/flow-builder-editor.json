@@ -753,6 +753,7 @@
         },
         "editors": {
           "linkLabel": "Wohin das führt",
+          "linkChoose": "Wähle, wohin das führt …",
           "linkEnds": "Endet hier (es wird nichts mehr gesendet)",
           "linkNext": "Weiter mit dem nächsten Schritt",
           "linkOption": "{stage} · {label}{self, select, true { (dieser Schritt)} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2634,6 +2635,8 @@
         "carouselButtons": "Schritt {stage}: Geben Sie jeder Schaltfläche einen Namen sowie einen Link, eine Nummer oder eine Adresse, wo sie etwas öffnet.",
         "conditionIncomplete": "Schritt {stage}: Vervollständigen Sie die Regeln der Bedingung (jeweils eine Variable und ein Wert).",
         "faqMinScore": "Schritt {stage}: Der Mindestscore muss zwischen 0.05 und 0.99 liegen, oder verwenden Sie die Einstellung des Flows.",
+        "optionNotConnected": "Schritt {stage}: {kind, select, row {Die Zeile} other {Die Schaltfläche}} „{label}\" führt nirgendwohin. Füge einen Schritt dafür hinzu oder gib ihr eine Aktion.",
+        "tooManyOptions": "Schritt {stage}: {kind, select, row {Eine Liste kann höchstens {max} Zeilen haben} other {Eine Gruppe von Schaltflächen kann höchstens {max} Schaltflächen haben}}.",
         "chooseFlow": "Schritt {stage}: Wähle den Flow, den die Schaltfläche startet.",
         "chooseApi": "Schritt {stage}: Wähle die API, die aufgerufen wird.",
         "writeCode": "Schritt {stage}: Schreibe den Code, der ausgeführt wird.",
