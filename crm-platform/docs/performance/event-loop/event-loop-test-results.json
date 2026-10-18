@@ -1,11 +1,81 @@
 {
-  "ranOn": "2026-10-15, Windows 11, Node v22.17.0, repo on OneDrive (slow collect times)",
+  "ranOn": "2026-10-18, branch claude/event-loop-open-items; earlier entries 2026-10-15 to 2026-10-18",
   "commit": "604c1db95bac5efb2245506552f95f4801b63461 + uncommitted working tree",
   "results": [
     {
+      "suite": "rehearse-slot-discovery.mjs: the shipped prometheus.yml (DNS discovery by the network alias) against containers that carry the aliases of the blue-green slots, prom/prometheus:v2.55.0",
+      "status": "PASSED (7 of 7 checks)",
+      "ranOn": "2026-10-18, branch claude/event-loop-open-items",
+      "rawData": "evidence/slot-discovery.json",
+      "observed": {
+        "both": "two API slots sharing the alias api are two crm-api targets, all targets up; web, worker and probe found by name",
+        "stop": "a stopped slot leaves the target list; up == 0 cleared 6 s after the list changed (refresh_interval 5 s in the rehearsal, 30 s default in production, the rule holds for 2 minutes); no alert firing",
+        "return": "a new container with the alias is found again, up"
+      },
+      "caveat": "The slots are busybox httpd servers answering /metrics, not the app: this proves discovery and the release behaviour of the targets, not the app's metrics. Not run against the real compose network on the host. The first run found nothing because the Prometheus image runs as nobody and could not create the web root: a defect of the rehearsal, fixed."
+    },
+    {
+      "suite": "rehearse-alert-receivers.mjs: shipped alertmanager.slack.yml and alertmanager.pagerduty.yml in prom/alertmanager:v0.27.0 against a stand-in for each, one test alert sent with send-test-alert.mjs and resolved",
+      "status": "PASSED (8 of 8 checks)",
+      "ranOn": "2026-10-18, branch claude/event-loop-open-items",
+      "rawData": "evidence/alert-receivers.json",
+      "observed": {
+        "slack": "firing message to the URL read from the secret file, title \"EventLoopTestAlert (firing) test\", text carries the summary, then a \"(resolved)\" message",
+        "pagerduty": "trigger event with the routing key from the file, severity warning for a warning, summary names alert and annotation, then a resolve event with the same dedup key"
+      },
+      "caveat": "A stand-in, not Slack or PagerDuty: it proves what Alertmanager sends and that the configs route, not that a live account accepts it (still EL-B14). The stand-in first answered Slack with a JSON content type and Alertmanager kept retrying: Slack answers text/plain \"ok\", the stand-in now does the same. amtool check-config passes on all three files; promtool check config passes (16 rules); promtool test rules passes."
+    },
+    {
+      "suite": "run-load.mjs --profiles=webhook --seconds=40 --contacts=500 (k6 0.49.0, the built API and worker, isolated Postgres and Redis)",
+      "status": "RAN (k6 exit 0, 206 requests, 0 failed, 0 dropped)",
+      "ranOn": "2026-10-18, branch claude/event-loop-open-items",
+      "rawData": "evidence/load-webhook-profile.json",
+      "observed": {
+        "refused": "unauthenticated WhatsApp deliveries of 256 KB with a bad signature: p50 31 ms, p99 58 ms, all refused (401/403)",
+        "api": "loop delay p99 median 24 ms, one window max 196 ms, event loop utilization median 0.10"
+      },
+      "caveat": "One 44 s run on a shared Windows laptop; no second run to compare, so it is NOT a baseline. The 30 % share and the 256 KB body are chosen, not observed."
+    },
+    {
+      "suite": "measure-webhook-ack.mjs with the refused-bad-signature block",
+      "status": "RAN",
+      "ranOn": "2026-10-18, branch claude/event-loop-open-items",
+      "rawData": "evidence/webhook-ack.json",
+      "observed": {
+        "refused4MiB": "one sender 17.8 refusals/s, p50 54.5 ms; eight senders 21/s, p50 411 ms; the same bodies accepted (single parse): 16.3/s and 19.8/s",
+        "refused1MiB": "one sender 45.8/s, p50 18.4 ms; eight senders 74.3/s, p50 107 ms"
+      },
+      "caveat": "Synthetic payloads on this machine; no database, Redis or queue in the path. The numbers move 10 to 20 % between runs here."
+    },
+    {
+      "suite": "web-metrics-check.mjs (built Next.js server started five times with different OBS_* settings)",
+      "status": "PASSED (25 of 25)",
+      "ranOn": "2026-10-18, branch claude/event-loop-open-items",
+      "rawData": "evidence/web-metrics.json",
+      "caveat": "Needs its two arguments (absolute path of apps/web, output file); run without them it waits 15 minutes for a server that never started."
+    },
+    {
+      "suite": "apps/api unit: test/unit/platform-infrastructure and test/unit/realtime (22 files); apps/web unit: src/lib/realtime and src/lib/observability (6 files)",
+      "status": "PASSED (298 and 68 tests)",
+      "ranOn": "2026-10-18, branch claude/event-loop-open-items",
+      "caveat": "Includes the new tests: realtime-metrics.spec.ts (delivery report validation, per-connection rate limit, rooms and lag series) and delivery-report.test.ts (clock offset, future stamps, dedupe, disconnected sends nothing, interval start and stop)."
+    },
+    {
+      "suite": "apps/api tsc (tsconfig.json), eslint on apps/api/src/realtime, test/unit/realtime, apps/web/src/lib/realtime and the live-notifications feature, scan.mjs (blocking gate), dashboards build --check",
+      "status": "PASSED",
+      "ranOn": "2026-10-18, branch claude/event-loop-open-items",
+      "caveat": "apps/web tsc fails with one error, src/features/flow-builder-editor/builder/simple/simple-screen.tsx(547,37) \"Cannot find name dismiss\": that file is not touched by this change and the error is in committed code."
+    },
+    {
+      "suite": "docker compose config for deploy/hostinger (base + observability.compose.yml, PROBE_EXTRA_TARGETS unset and set), bash -n observability-up.sh",
+      "status": "PASSED (static)",
+      "ranOn": "2026-10-18, branch claude/event-loop-open-items",
+      "caveat": "Nothing was run on the server. observability-up.sh was only syntax-checked."
+    },
+    {
       "suite": "scrape-demo.mjs --grafana --web: real API, worker, probe and BUILT Next.js server; Prometheus 2.55 and Alertmanager 0.27; Grafana 11.3.0",
-      "status": "68 of 68 checks",
-      "ranOn": "2026-10-18, branch claude/event-loop-backlog-sweep",
+      "status": "68 of 68 checks on the third run (2 earlier runs failed, see caveat)",
+      "ranOn": "2026-10-18, branch claude/event-loop-open-items",
       "rawData": "evidence/scrape-demo-web-grafana.json",
       "observed": {
         "targets": "four up: crm-api, crm-worker, crm-probe, crm-web",
@@ -14,7 +84,7 @@
         "grafana": "5 dashboards provisioned; 105 panel queries (the release dashboard once per service), 0 errors",
         "rules": "16 alert rules loaded and evaluating"
       },
-      "caveat": "The demo opens no sockets, so the realtime panels had no data; no stall was injected into the web server, so WebEventLoopBlockingWithImpact was only promtool-tested. One laptop. The first run of this demo failed 1 check that was a race in the check itself (it read the unmatched series before Prometheus scraped it); the check now waits for the series."
+      "caveat": "Run with the shipped prometheus.yml now using DNS discovery for api and web (the demo swaps those two blocks for static addresses). The first two runs failed: run 1 (right after rebuilding contracts and the API) 66 of 68, \"web request counts by route template\" and \"nothing is firing on a healthy idle stack\" (EventLoopLongStallWarning on the web server); run 2 67 of 68, the first check again. Cause seen in the web server's own log: the cold `next start` loads next.config.ts for 3 to 4 s, blocking its loop, and requests sent into that window fail. The check now tops up requests until 30 were answered; the idle-stack check is NOT changed, so a cold web start can still trip it (run the demo twice before reading a failure as a regression). The demo opens no sockets, so the realtime panels (rooms, delivery lag) had no data; no stall was injected into the web server. One laptop."
     },
     {
       "suite": "web-metrics-check.mjs: the BUILT web app started five times (listener rules, switches, request histogram, release label)",
@@ -433,6 +503,10 @@
     "the regression gate on a GitHub runner, a CI baseline, or its false-alarm rate (EL-B19)",
     "Prometheus scraping the web container, the probe against web, and the full desk-web and desk-api image builds with @crm/observability",
     "the export runners and the archive sweep end to end after EL-B08 (no database run), and any of the zlib figures on production-shaped data",
-    "WebEventLoopBlockingWithImpact firing from a real web stall; the realtime series with real sockets; the i18n cache saving on live traffic and its heap cost in a container"
+    "WebEventLoopBlockingWithImpact firing from a real web stall; the realtime series with real sockets; the i18n cache saving on live traffic and its heap cost in a container",
+    "A live Slack, Discord or PagerDuty account accepting Alertmanager's message (EL-B14): only a stand-in was used.",
+    "The public probe targets seeing an ingress stall, and observability-up.sh on the real host (EL-B02, EL-B15): nothing is deployed.",
+    "The delivery-lag series with real browsers: the unit tests and the dashboard queries run, but no browser reported to a running API in any check here (EL-B23).",
+    "The CI event-loop job steps added for amtool and promtool check config: GitHub Actions does not start on this account (billing); the same commands were run by hand."
   ]
 }

@@ -48,10 +48,27 @@ export const REALTIME_CLIENT_EVENTS = {
    * 35 s and skips the closed-tab browser push for a person who has a visible tab (the bell and toast cover them). No acknowledgement.
    */
   visibility: 'presence:visible',
+  /**
+   * "How late did events reach this tab?" (`{ lagMs, events }`): the worst delay between an event being published and this tab receiving it
+   * over the last minute, and how many events that covers, sent about once a minute while events arrive. The delay is measured against the
+   * server's clock (the tab learns its offset from `rt.ready`), so it is an estimate that ignores the one-way trip of the `ready`
+   * message. Telemetry only: no acknowledgement, no event content, no identity beyond the connection it travels on.
+   */
+  deliveryLag: 'telemetry:delivery',
 } as const;
 
 export const realtimeVisibilitySchema = z.object({ visible: z.boolean() });
 export type RealtimeVisibility = z.infer<typeof realtimeVisibilitySchema>;
+
+export const realtimeDeliveryLagSchema = z.object({
+  lagMs: z.number().min(0).max(300_000),
+  events: z.number().int().min(1).max(1_000_000),
+});
+export type RealtimeDeliveryLag = z.infer<typeof realtimeDeliveryLagSchema>;
+
+/** How often a tab sends its delivery report, and the shortest gap the server accepts between two from one connection. */
+export const REALTIME_DELIVERY_REPORT_MS = 60_000;
+export const REALTIME_DELIVERY_MIN_GAP_MS = 20_000;
 
 /** How often a visible tab repeats its report, and how long the server believes the last one. */
 export const REALTIME_VISIBILITY_REPORT_MS = 15_000;

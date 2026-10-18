@@ -1,0 +1,301 @@
+{
+  "record-assignment": {
+    "back": "Tự động hóa",
+    "title": "Quy tắc phân công bản ghi",
+    "intro": "Tự động giao {contacts}, công ty và {deals} mới cho đúng người phụ trách bán hàng.",
+    "crossNote": "Mục này phân công {contacts}, công ty và {deals}. Để phân công cuộc trò chuyện cho nhân viên, xem <link>Tự động phân công</link>.",
+    "master": {
+      "title": "Bật phân công bản ghi",
+      "hint": "Tắt cho đến khi bạn bật. Khi bật, các quy tắc bên dưới sẽ giao {contact}, công ty hoặc {deal} mới chưa có người phụ trách cho một thành viên trong nhóm của bạn.",
+      "on": "Phân công bản ghi đang bật.",
+      "off": "Phân công bản ghi đang tắt."
+    },
+    "imports": {
+      "title": "Phân công cả bản ghi được nhập",
+      "hint": "Mặc định tắt để một lần nhập lớn không làm thay đổi người phụ trách."
+    },
+    "ownerRule": {
+      "title": "Chỉ bản ghi chưa có người phụ trách mới được phân công",
+      "body": "Người phụ trách do con người đặt sẽ không bao giờ bị thay thế, kể cả khi ai đó cố ý để trống. Hệ thống chỉ điền người phụ trách còn trống cho bản ghi mới. Nếu bạn bật Phân công lại khi cập nhật cho một quy tắc, hệ thống cũng có thể chuyển bản ghi mà chính nó đã phân công trước đó, miễn là chưa ai thay đổi người phụ trách."
+    },
+    "tabs": {
+      "contact": "{Contacts}",
+      "company": "{Companies}",
+      "deal": "{Deals}",
+      "label": "Mô-đun"
+    },
+    "views": {
+      "rules": "Quy tắc",
+      "log": "Nhật ký chạy"
+    },
+    "how": {
+      "title": "Cách hoạt động của mức ưu tiên",
+      "p1": "Các quy tắc được thử từ ưu tiên 1 trở xuống. Quy tắc đầu tiên khớp và tìm được người sẵn sàng sẽ nhận bản ghi.",
+      "p2": "Chỉ quy tắc đang hoạt động mới được xếp ưu tiên. Quy tắc tạm dừng vẫn giữ vị trí trong danh sách nhưng không bao giờ chạy.",
+      "p3": "Quy tắc không có điều kiện khớp mọi bản ghi và chạy sau tất cả quy tắc khác, bất kể nằm ở đâu trong danh sách. Đây là quy tắc dự phòng (fallback).",
+      "p4": "Bản ghi khớp nhiều quy tắc sẽ thuộc về quy tắc có mức ưu tiên cao nhất.",
+      "p5": "Kéo một hàng, hoặc dùng các nút mũi tên, để đổi thứ tự. Quy tắc dự phòng và quy tắc tạm dừng nằm trong nhóm riêng ở cuối."
+    },
+    "list": {
+      "title": {
+        "contact": "Quy tắc cho {contacts}",
+        "company": "Quy tắc cho công ty",
+        "deal": "Quy tắc cho {deals}"
+      },
+      "create": "Tạo quy tắc",
+      "loading": "Đang tải quy tắc…",
+      "loadFailed": "Không tải được quy tắc.",
+      "retry": "Thử lại",
+      "readOnly": "Bạn có thể xem các quy tắc này nhưng không thể thay đổi. Để thay đổi cần có quyền quản lý phân công bản ghi.",
+      "empty": {
+        "title": "Chưa có quy tắc",
+        "contact": "{contacts} mới giữ nguyên người phụ trách khi được tạo.",
+        "company": "Công ty mới giữ nguyên người phụ trách khi được tạo.",
+        "deal": "{deals} mới giữ nguyên người phụ trách khi được tạo.",
+        "create": "Tạo quy tắc đầu tiên"
+      },
+      "col": {
+        "priority": "Ưu tiên",
+        "rule": "Quy tắc",
+        "assignTo": "Giao cho",
+        "method": "Phương thức",
+        "active": "Hoạt động",
+        "used": "Đã dùng",
+        "modified": "Sửa đổi lần cuối"
+      },
+      "fallback": "Dự phòng",
+      "fallbackHint": "Quy tắc không có điều kiện khớp mọi bản ghi và chạy sau tất cả quy tắc khác.",
+      "notPrioritised": "Tạm dừng",
+      "noConditions": "Không có điều kiện: khớp mọi bản ghi",
+      "brokenConditions": "{count, plural, other {# điều kiện bị lỗi}}",
+      "brokenHint": "Một điều kiện trỏ tới thứ đã bị xóa. Điều kiện này không khớp gì cho đến khi bạn sửa.",
+      "usedCount": "{count, plural, =0 {Chưa từng dùng} other {Đã dùng # lần}}",
+      "lastUsed": "Dùng lần cuối {when}",
+      "modifiedBy": "{name}, {when}",
+      "nobody": "Không ai",
+      "unknownPerson": "Cựu thành viên",
+      "unknownTeam": "Nhóm đã bị xóa",
+      "teamName": "Nhóm: {name}",
+      "skipsOffline": "Bỏ qua người đang ngoại tuyến",
+      "reassigns": "Phân công lại khi cập nhật",
+      "activeFor": "Quy tắc {name} đang hoạt động",
+      "dragHandle": "Kéo {name} để đổi mức ưu tiên",
+      "moveUp": "Chuyển {name} lên",
+      "moveDown": "Chuyển {name} xuống",
+      "moved": "{name} đã được chuyển đến vị trí {place}.",
+      "actions": "Thao tác cho {name}",
+      "edit": "Sửa",
+      "clone": "Nhân bản",
+      "delete": "Xóa"
+    },
+    "strategy": {
+      "round_robin": "Xoay vòng (round robin)",
+      "least_busy": "Ít việc đang mở nhất",
+      "fixed": "Người dùng cụ thể",
+      "hint": {
+        "round_robin": "Lần lượt từng người theo thứ tự cố định.",
+        "least_busy": {
+          "contact": "Giao cho người đang phụ trách ít {contacts} nhất.",
+          "company": "Giao cho người đang phụ trách ít công ty nhất.",
+          "deal": "Giao cho người đang phụ trách ít {deals} đang mở nhất."
+        },
+        "fixed": "Luôn là cùng một người. Khi họ nghỉ phép, người được ủy quyền sẽ thay thế."
+      }
+    },
+    "editor": {
+      "titleNew": "Quy tắc mới",
+      "titleEdit": "Sửa quy tắc",
+      "name": "Tên quy tắc",
+      "description": "Mô tả (không bắt buộc)",
+      "module": "Mô-đun",
+      "moduleLocked": "Không thể đổi mô-đun của quy tắc. Hãy tạo quy tắc mới cho mô-đun khác.",
+      "conditions": {
+        "title": "Điều kiện",
+        "hint": "Một bản ghi khớp khi các trường của nó đáp ứng điều kiện. Chọn trường, rồi cách so sánh, rồi giá trị.",
+        "emptyTitle": "Không có điều kiện: khớp mọi bản ghi, chạy sau cùng (dự phòng)",
+        "emptyBody": "Quy tắc này nhận mọi bản ghi mà không quy tắc nào khác nhận. Thêm điều kiện để thu hẹp phạm vi.",
+        "add": "Thêm điều kiện",
+        "counts": "{conditions} / {max} điều kiện",
+        "loading": "Đang tải các trường…",
+        "partial": "Không tải được một số trường. Bạn vẫn có thể tạo quy tắc với các trường đã tải được."
+      },
+      "group": {
+        "company": "Trường của công ty",
+        "deal": "Trường của {Deal}"
+      },
+      "assign": {
+        "title": "Giao cho",
+        "method": "Phương thức",
+        "people": "Nhiều người",
+        "person": "Một người",
+        "peoplePlaceholder": "Chọn người",
+        "personPlaceholder": "Chọn một người",
+        "teams": "Nhóm",
+        "teamsPlaceholder": "Chọn nhóm",
+        "teamsNote": "Nhóm ở đây là tập hợp người để lựa chọn. Bản ghi không thuộc về nhóm: người phụ trách là một thành viên của nhóm.",
+        "noPeople": "Không có người nào phù hợp.",
+        "removePerson": "Xóa {name}",
+        "onLeave": "đang nghỉ phép",
+        "skipOffline": "Bỏ qua người đang ngoại tuyến",
+        "skipOfflineHint": "Người đang nghỉ phép luôn bị bỏ qua.",
+        "reassign": "Phân công lại khi một lần cập nhật khiến quy tắc này bắt đầu khớp",
+        "reassignHint": "Chỉ áp dụng cho bản ghi do chính hệ thống này phân công, và chỉ khi chưa ai thay đổi người phụ trách. Mặc định tắt: một bản ghi chỉ được phân công một lần."
+      },
+      "problems": {
+        "name": "Hãy đặt tên cho quy tắc.",
+        "people": "Chọn ít nhất một người hoặc một nhóm.",
+        "fixedOne": "Quy tắc người dùng cụ thể cần đúng một người và không có nhóm.",
+        "conditions": "Hãy sửa các điều kiện được đánh dấu trước khi lưu.",
+        "server": "Máy chủ đã từ chối các quy tắc."
+      },
+      "saveActivate": "Lưu và kích hoạt",
+      "savePaused": "Lưu ở trạng thái tạm dừng",
+      "save": "Lưu thay đổi",
+      "cancel": "Hủy",
+      "unsavedTitle": "Rời đi mà không lưu?",
+      "unsavedMessage": "Các thay đổi của bạn với quy tắc này chưa được lưu.",
+      "stay": "Tiếp tục chỉnh sửa",
+      "leave": "Rời đi"
+    },
+    "fields": {
+      "origin": "Đến từ",
+      "company": {
+        "name": "Tên",
+        "email": "Email",
+        "phone": "Điện thoại",
+        "domain": "Tên miền website",
+        "industry": "Ngành",
+        "sizeRange": "Quy mô",
+        "address": "Địa chỉ",
+        "status": "Trạng thái",
+        "createdAt": "Ngày tạo",
+        "updatedAt": "Cập nhật lần cuối"
+      },
+      "deal": {
+        "title": "Tiêu đề",
+        "value": "Giá trị",
+        "currency": "Tiền tệ",
+        "pipeline": "Pipeline",
+        "stage": "Giai đoạn",
+        "status": "Trạng thái",
+        "source": "Nguồn",
+        "expectedCloseDate": "Ngày dự kiến chốt",
+        "createdAt": "Ngày tạo",
+        "hasContact": "Có {contact}",
+        "hasCompany": "Có công ty"
+      },
+      "dealStatus": {
+        "open": "Đang mở",
+        "won": "Thắng",
+        "lost": "Thua"
+      }
+    },
+    "origin": {
+      "manual": "Do người thêm",
+      "import": "Nhập",
+      "inbound": "Tin nhắn đầu tiên",
+      "form": "Biểu mẫu",
+      "lead": "Nguồn khách hàng tiềm năng",
+      "api": "API"
+    },
+    "test": {
+      "title": "Thử với một bản ghi",
+      "hint": "Chọn một bản ghi thật để xem quy tắc nào sẽ nhận nó và ai sẽ được giao. Không có gì bị thay đổi, và tính năng này hoạt động cả khi công tắc đang tắt.",
+      "search": {
+        "contact": "Tìm {contacts} theo tên, email hoặc điện thoại",
+        "company": "Tìm công ty theo tên",
+        "deal": "Tìm {deals} theo tiêu đề"
+      },
+      "searchLabel": "Bản ghi để thử",
+      "searching": "Đang tìm…",
+      "noMatches": "Không tìm thấy bản ghi.",
+      "searchFailed": "Tìm kiếm không thành công. Có thể bạn không được phép xem các bản ghi này.",
+      "clear": "Chọn bản ghi khác",
+      "run": "Thử",
+      "running": "Đang thử…",
+      "failed": "Không chạy được thử nghiệm. Hãy thử lại.",
+      "off": "Phân công bản ghi đang tắt, nên đây là những gì sẽ xảy ra nếu nó được bật.",
+      "outcome": {
+        "would_assign": "{record} sẽ được giao cho {owner} theo quy tắc {rule}.",
+        "disabled": "Phân công bản ghi đang bị tắt cho không gian làm việc này, nên sẽ không có gì xảy ra.",
+        "has_owner": "{record} đã có người phụ trách, nên không quy tắc nào chạy. Người phụ trách do con người đặt sẽ không bao giờ bị thay thế.",
+        "no_rule": "Không có quy tắc đang hoạt động nào khớp với {record}.",
+        "nobody_available": "Có quy tắc khớp với {record}, nhưng tất cả những người được nêu đều đang nghỉ phép, ngoại tuyến hoặc không còn ở đây.",
+        "plan": "Gói của bạn không bao gồm quy tắc phân công bản ghi.",
+        "not_found": "Không tìm thấy bản ghi đó. Có thể nó đã bị xóa, hoặc nằm ngoài phạm vi bạn được xem."
+      },
+      "traceTitle": "Các quy tắc đã thử, theo thứ tự",
+      "traceEmpty": "Không có quy tắc đang hoạt động nào được thử.",
+      "trace": {
+        "winner": "Khớp và nhận bản ghi",
+        "matched": "Khớp",
+        "not_matched": "Không khớp",
+        "nobody": "Khớp, nhưng không có ai sẵn sàng",
+        "broken": "Có điều kiện bị lỗi"
+      },
+      "skipped": "Bị bỏ qua vì không có ai sẵn sàng: {names}"
+    },
+    "log": {
+      "title": "Nhật ký chạy",
+      "intro": "Những gì hệ thống đã làm với từng bản ghi, mới nhất trước. Các mục được lưu {days} ngày và chỉ chứa id, không bao giờ chứa nội dung bản ghi.",
+      "filterOutcome": "Kết quả",
+      "filterRule": "Quy tắc",
+      "allOutcomes": "Tất cả kết quả",
+      "allRules": "Tất cả quy tắc",
+      "loading": "Đang tải nhật ký chạy…",
+      "loadFailed": "Không tải được nhật ký chạy.",
+      "empty": "Chưa có gì được phân công.",
+      "emptyFiltered": "Không có mục nào khớp với các bộ lọc này.",
+      "loadMore": "Tải thêm",
+      "col": {
+        "when": "Thời gian",
+        "record": "Bản ghi",
+        "outcome": "Kết quả",
+        "reason": "Lý do",
+        "rule": "Quy tắc",
+        "assignedTo": "Giao cho",
+        "method": "Phương thức",
+        "arrived": "Đến từ"
+      },
+      "deletedRecord": "Đã xóa",
+      "noRule": "Không có quy tắc",
+      "outcome": {
+        "assigned": "Đã phân công",
+        "reassigned": "Đã phân công lại",
+        "skipped": "Giữ nguyên"
+      },
+      "reason": {
+        "matched": "Có quy tắc khớp",
+        "has_owner": "Đã có người phụ trách",
+        "no_rule": "Không có quy tắc nào khớp",
+        "nobody_available": "Không có ai sẵn sàng",
+        "raced": "Người phụ trách đã thay đổi trong lúc phân công",
+        "unchanged": "Đã thuộc đúng quy tắc"
+      },
+      "trigger": {
+        "created": "Bản ghi mới",
+        "updated": "Bản ghi được cập nhật"
+      },
+      "showTrace": "Xem cách quyết định",
+      "hideTrace": "Ẩn cách quyết định",
+      "traceFor": "Cách quyết định cho {record}"
+    },
+    "toast": {
+      "created": "Đã tạo quy tắc.",
+      "saved": "Đã lưu quy tắc.",
+      "deleted": "Đã xóa quy tắc.",
+      "cloned": "Đã sao chép quy tắc. Bản sao đang tạm dừng.",
+      "activated": "Đã kích hoạt quy tắc.",
+      "paused": "Đã tạm dừng quy tắc.",
+      "reordered": "Đã lưu thứ tự.",
+      "conflict": "Người khác đã thay đổi quy tắc này. Phiên bản mới nhất đã được tải. Hãy kiểm tra và áp dụng lại thay đổi của bạn.",
+      "failed": "Đã xảy ra lỗi. Hãy thử lại."
+    },
+    "delete": {
+      "title": "Xóa quy tắc này?",
+      "message": "Quy tắc {name} sẽ ngừng phân công. Các bản ghi đã được phân công vẫn giữ nguyên người phụ trách.",
+      "confirm": "Xóa",
+      "cancel": "Hủy"
+    }
+  }
+}

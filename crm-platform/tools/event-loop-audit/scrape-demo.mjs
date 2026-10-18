@@ -775,10 +775,22 @@ async function main() {
       ['scrape_interval: 15s', 'scrape_interval: 5s'],
       ['evaluation_interval: 15s', 'evaluation_interval: 5s'],
       ['/run/secrets/obs_metrics_token', '/etc/prometheus/metrics-token'],
-      ["'api:9464'", `'host.docker.internal:${P.apiMetrics}'`],
+      // The shipped file finds the API and the web server by the network alias both blue-green slots carry; the demo has one process of
+      // each on the host, so those two jobs become static addresses.
+      [
+        "dns_sd_configs:\n      - names: ['api']\n        type: A\n        port: 9464",
+        `static_configs:\n      - targets: ['host.docker.internal:${P.apiMetrics}']`,
+      ],
       ["'worker:9464'", `'host.docker.internal:${P.workerMetrics}'`],
       ["'probe:9464'", `'host.docker.internal:${P.probeMetrics}'`],
-      ...(WEB ? [["'web:9464'", `'host.docker.internal:${P.webMetrics}'`]] : []),
+      ...(WEB
+        ? [
+            [
+              "dns_sd_configs:\n      - names: ['web']\n        type: A\n        port: 9464",
+              `static_configs:\n      - targets: ['host.docker.internal:${P.webMetrics}']`,
+            ],
+          ]
+        : []),
     ]).replace(WEB ? /$^/ : /  - job_name: crm-web\n(?:    .*\n|\n)*?(?=  - job_name:)/, ''),
   );
   writeFileSync(
@@ -944,6 +956,8 @@ async function main() {
     const seen = await waitFor(
       'web request series in Prometheus',
       async () => {
+        // A cold Next.js server can stall for seconds loading next.config.ts, and requests sent into that can fail: top up until 30 were answered.
+        await read('/robots.txt');
         const r = await instant(
           'crm_http_request_duration_seconds_count{service="web",route="/robots.txt"}',
         );
@@ -955,7 +969,15 @@ async function main() {
     check(
       'Prometheus has the web server request counts by route template',
       seen.length > 0,
-      seen.map((x) => x.value[1]).join(),
+      seen.length > 0
+        ? seen.map((x) => x.value[1]).join()
+        : JSON.stringify(
+            (await instant('crm_http_request_duration_seconds_count{service="web"}')).map((x) => [
+              x.metric.route,
+              x.metric.status,
+              x.value[1],
+            ]),
+          ),
     );
     // The 404s were sent after the 30 robots.txt requests, so their series can lag the one waited for above by a scrape.
     const unmatched = await waitFor(

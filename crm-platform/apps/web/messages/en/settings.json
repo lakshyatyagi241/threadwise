@@ -365,10 +365,10 @@
         "description": "See how fast each agent replied and resolved today, this week or this month.",
         "keywords": "reports, analytics, agents, response time, first reply, resolved, workload, performance"
       },
-      "contact-assignment": {
-        "label": "Contact assignment",
-        "description": "Give new contacts and deals to the right person automatically, skipping people on leave.",
-        "keywords": "assign, owner, round robin, new contact, new deal, leave, lead routing"
+      "record-assignment": {
+        "label": "Record assignment rules",
+        "description": "Automatically give new contacts, companies and deals to your sales owners, by priority rules.",
+        "keywords": "assign, owner, round robin, new contact, new deal, company, leave, lead routing, workload, territory"
       },
       "company-properties": {
         "label": "Company properties",

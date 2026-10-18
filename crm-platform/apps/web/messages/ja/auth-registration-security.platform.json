@@ -1441,7 +1441,8 @@
             "email_channel": "GmailとGoogle Workspaceのメールボックスをチームの受信箱に接続します。このスイッチは有料のメールアプリが管理します。",
             "personal_history_full": "個人用WhatsApp番号を初めて連携する際に、チャット履歴をすべてインポートできます。最近のチャットのインポートは、個人用番号を含むすべてのプランで利用できます。",
             "ai_crm_copilot": "連絡先から AI で見込み顧客を見つけてスコアを付けます。",
-            "lead_scoring": "AIで連絡先をスコアリングし、グロースパイロットを支えます。このスイッチはAIリードスコアリングアプリが管理します。"
+            "lead_scoring": "AIで連絡先をスコアリングし、グロースパイロットを支えます。このスイッチはAIリードスコアリングアプリが管理します。",
+            "record_assignment": "優先順位のルールで、新しい連絡先・会社・案件を適切な営業担当者に割り当てます。"
           },
           "units": {
             "days": "日",
@@ -1629,7 +1630,8 @@
             "email_channel": "メール(Gmail)チャネル",
             "personal_history_full": "チャット全履歴のインポート(個人用WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
-            "lead_scoring": "AIリードスコアリング"
+            "lead_scoring": "AIリードスコアリング",
+            "record_assignment": "レコード割り当てルール（連絡先・会社・案件の自動割り当て）"
           },
           "problems": {
             "required": "この項目は必須です。",

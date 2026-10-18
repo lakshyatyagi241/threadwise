@@ -1441,7 +1441,8 @@
             "email_channel": "Collega caselle Gmail e Google Workspace alla posta in arrivo del team. L'app a pagamento E-mail controlla questo interruttore.",
             "personal_history_full": "Consente a un numero WhatsApp personale di importare l'intera cronologia delle chat al primo collegamento. L'importazione delle chat recenti è disponibile in tutti i piani che includono numeri personali.",
             "ai_crm_copilot": "Trova e valuta i lead con l'IA dai tuoi contatti.",
-            "lead_scoring": "Assegna un punteggio ai contatti con l’IA e alimenta il pilota di crescita. L’app Lead scoring con IA controlla questo interruttore."
+            "lead_scoring": "Assegna un punteggio ai contatti con l’IA e alimenta il pilota di crescita. L’app Lead scoring con IA controlla questo interruttore.",
+            "record_assignment": "Assegna nuovi contatti, aziende e trattative al responsabile vendite giusto tramite regole di priorità."
           },
           "units": {
             "days": "Giorni",
@@ -1629,7 +1630,8 @@
             "email_channel": "Canale e-mail (Gmail)",
             "personal_history_full": "Importazione completa della cronologia chat (WhatsApp personale)",
             "ai_crm_copilot": "AI CRM Copilot",
-            "lead_scoring": "Lead scoring con IA"
+            "lead_scoring": "Lead scoring con IA",
+            "record_assignment": "Regole di assegnazione dei record (assegna automaticamente contatti, aziende e trattative)"
           },
           "problems": {
             "required": "Questo campo è obbligatorio.",

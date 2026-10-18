@@ -1441,7 +1441,8 @@
             "email_channel": "Gmail- und Google-Workspace-Postfächer mit dem Team-Posteingang verbinden. Die kostenpflichtige E-Mail-App steuert diesen Schalter.",
             "personal_history_full": "Ermöglicht es einer privaten WhatsApp-Nummer, beim ersten Verknüpfen den gesamten Chatverlauf zu importieren. Der Import der letzten Chats ist in allen Tarifen mit privaten Nummern enthalten.",
             "ai_crm_copilot": "Findet und bewertet Leads mit KI aus Ihren Kontakten.",
-            "lead_scoring": "Bewertet Kontakte mit KI und steuert den Growth-Piloten. Die App KI-Lead-Scoring besitzt diesen Schalter."
+            "lead_scoring": "Bewertet Kontakte mit KI und steuert den Growth-Piloten. Die App KI-Lead-Scoring besitzt diesen Schalter.",
+            "record_assignment": "Weist neue Kontakte, Firmen und Deals nach Prioritätsregeln dem richtigen Vertriebsverantwortlichen zu."
           },
           "units": {
             "days": "Tage",
@@ -1629,7 +1630,8 @@
             "email_channel": "E-Mail-Kanal (Gmail)",
             "personal_history_full": "Vollständiger Chatverlauf-Import (privates WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
-            "lead_scoring": "KI-Lead-Scoring"
+            "lead_scoring": "KI-Lead-Scoring",
+            "record_assignment": "Regeln zur Datensatzzuweisung (Kontakte, Firmen und Deals automatisch zuweisen)"
           },
           "problems": {
             "required": "Dieses Feld ist erforderlich.",

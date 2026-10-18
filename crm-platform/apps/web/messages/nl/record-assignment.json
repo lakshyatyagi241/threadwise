@@ -1,0 +1,301 @@
+{
+  "record-assignment": {
+    "back": "Automatisering",
+    "title": "Regels voor recordtoewijzing",
+    "intro": "Wijs nieuwe {contacts}, bedrijven en {deals} automatisch toe aan de juiste verkoopeigenaar.",
+    "crossNote": "Dit wijst {contacts}, bedrijven en {deals} toe. Om gesprekken aan medewerkers toe te wijzen, zie <link>Automatische toewijzing</link>.",
+    "master": {
+      "title": "Recordtoewijzing inschakelen",
+      "hint": "Uit totdat u het inschakelt. Als het aan staat, geven de onderstaande regels een nieuwe {contact}, nieuw bedrijf of nieuwe {deal} zonder eigenaar aan iemand in uw team.",
+      "on": "Recordtoewijzing staat aan.",
+      "off": "Recordtoewijzing staat uit."
+    },
+    "imports": {
+      "title": "Ook geïmporteerde records toewijzen",
+      "hint": "Standaard uit, zodat een grote import niet verandert wie eigenaar is van wat."
+    },
+    "ownerRule": {
+      "title": "Alleen records zonder eigenaar worden toegewezen",
+      "body": "Een eigenaar die iemand heeft ingesteld, wordt nooit vervangen, en een eigenaar die iemand bewust heeft gewist ook niet. De engine vult een lege eigenaar bij een nieuw record. Als u Opnieuw toewijzen bij update inschakelt voor een regel, kan die ook een record verplaatsen dat de engine eerder zelf heeft toegewezen, zolang niemand de eigenaar sindsdien heeft gewijzigd."
+    },
+    "tabs": {
+      "contact": "{Contacts}",
+      "company": "{Companies}",
+      "deal": "{Deals}",
+      "label": "Module"
+    },
+    "views": {
+      "rules": "Regels",
+      "log": "Uitvoeringslogboek"
+    },
+    "how": {
+      "title": "Hoe prioriteit werkt",
+      "p1": "Regels worden geprobeerd vanaf prioriteit 1. De eerste regel die overeenkomt en iemand beschikbaar vindt, neemt het record.",
+      "p2": "Alleen actieve regels krijgen een prioriteit. Een gepauzeerde regel behoudt zijn plek in de lijst maar wordt nooit uitgevoerd.",
+      "p3": "Een regel zonder voorwaarden komt overeen met elk record en wordt na alle andere regels uitgevoerd, waar hij ook in de lijst staat. Dit is de terugvalregel.",
+      "p4": "Een record dat met meerdere regels overeenkomt, gaat naar de regel met de hoogste prioriteit.",
+      "p5": "Sleep een rij of gebruik de pijlknoppen om de volgorde te wijzigen. Terugvalregels en gepauzeerde regels blijven in hun eigen groep onderaan."
+    },
+    "list": {
+      "title": {
+        "contact": "Regels voor {contacts}",
+        "company": "Regels voor bedrijven",
+        "deal": "Regels voor {deals}"
+      },
+      "create": "Regel maken",
+      "loading": "Regels laden…",
+      "loadFailed": "De regels konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "readOnly": "U kunt deze regels bekijken maar niet wijzigen. Voor wijzigen is de machtiging om recordtoewijzing te beheren nodig.",
+      "empty": {
+        "title": "Nog geen regels",
+        "contact": "Nieuwe {contacts} behouden de eigenaar waarmee ze zijn aangemaakt.",
+        "company": "Nieuwe bedrijven behouden de eigenaar waarmee ze zijn aangemaakt.",
+        "deal": "Nieuwe {deals} behouden de eigenaar waarmee ze zijn aangemaakt.",
+        "create": "Eerste regel maken"
+      },
+      "col": {
+        "priority": "Prioriteit",
+        "rule": "Regel",
+        "assignTo": "Toewijzen aan",
+        "method": "Methode",
+        "active": "Actief",
+        "used": "Gebruikt",
+        "modified": "Laatst gewijzigd"
+      },
+      "fallback": "Terugval",
+      "fallbackHint": "Een regel zonder voorwaarden komt overeen met elk record en wordt na alle andere regels uitgevoerd.",
+      "notPrioritised": "Gepauzeerd",
+      "noConditions": "Geen voorwaarden: komt overeen met elk record",
+      "brokenConditions": "{count, plural, one {# kapotte voorwaarde} other {# kapotte voorwaarden}}",
+      "brokenHint": "Een voorwaarde verwijst naar iets dat is verwijderd. Ze komt met niets overeen totdat u dit herstelt.",
+      "usedCount": "{count, plural, =0 {Nooit gebruikt} one {# keer gebruikt} other {# keer gebruikt}}",
+      "lastUsed": "Laatst gebruikt {when}",
+      "modifiedBy": "{name}, {when}",
+      "nobody": "Niemand",
+      "unknownPerson": "Voormalig lid",
+      "unknownTeam": "Verwijderd team",
+      "teamName": "Team: {name}",
+      "skipsOffline": "Slaat offline personen over",
+      "reassigns": "Wijst opnieuw toe bij update",
+      "activeFor": "Regel {name} is actief",
+      "dragHandle": "Sleep {name} om de prioriteit te wijzigen",
+      "moveUp": "{name} omhoog",
+      "moveDown": "{name} omlaag",
+      "moved": "{name} verplaatst naar positie {place}.",
+      "actions": "Acties voor {name}",
+      "edit": "Bewerken",
+      "clone": "Dupliceren",
+      "delete": "Verwijderen"
+    },
+    "strategy": {
+      "round_robin": "Round robin (om de beurt)",
+      "least_busy": "Minste open werkdruk",
+      "fixed": "Specifieke gebruiker",
+      "hint": {
+        "round_robin": "Wisselt in vaste volgorde tussen de personen af.",
+        "least_busy": {
+          "contact": "Geeft het aan de persoon die op dit moment de minste {contacts} heeft.",
+          "company": "Geeft het aan de persoon die op dit moment de minste bedrijven heeft.",
+          "deal": "Geeft het aan de persoon die op dit moment de minste open {deals} heeft."
+        },
+        "fixed": "Altijd dezelfde persoon. Tijdens verlof neemt de vervanger het over."
+      }
+    },
+    "editor": {
+      "titleNew": "Nieuwe regel",
+      "titleEdit": "Regel bewerken",
+      "name": "Naam van de regel",
+      "description": "Beschrijving (optioneel)",
+      "module": "Module",
+      "moduleLocked": "De module van een regel kan niet worden gewijzigd. Maak een nieuwe regel voor een andere module.",
+      "conditions": {
+        "title": "Voorwaarden",
+        "hint": "Een record komt overeen als de velden aan de voorwaarden voldoen. Kies een veld, dan hoe het wordt vergeleken en dan een waarde.",
+        "emptyTitle": "Geen voorwaarden: komt overeen met elk record, wordt als laatste uitgevoerd (terugval)",
+        "emptyBody": "Deze regel neemt elk record dat geen andere regel heeft genomen. Voeg een voorwaarde toe om het te beperken.",
+        "add": "Voorwaarde toevoegen",
+        "counts": "{conditions} van {max} voorwaarden",
+        "loading": "Velden laden…",
+        "partial": "Sommige velden konden niet worden geladen. U kunt nog steeds regels maken met de velden die wel zijn geladen."
+      },
+      "group": {
+        "company": "Bedrijfsvelden",
+        "deal": "Velden van {Deal}"
+      },
+      "assign": {
+        "title": "Toewijzen aan",
+        "method": "Methode",
+        "people": "Personen",
+        "person": "Persoon",
+        "peoplePlaceholder": "Kies personen",
+        "personPlaceholder": "Kies een persoon",
+        "teams": "Teams",
+        "teamsPlaceholder": "Kies teams",
+        "teamsNote": "Een team is hier een groep personen om uit te kiezen. Een record hoort niet bij een team: de eigenaar is een van de teamleden.",
+        "noPeople": "Geen personen gevonden.",
+        "removePerson": "{name} verwijderen",
+        "onLeave": "met verlof",
+        "skipOffline": "Offline personen overslaan",
+        "skipOfflineHint": "Personen met verlof worden altijd overgeslagen.",
+        "reassign": "Opnieuw toewijzen wanneer een update ervoor zorgt dat deze regel gaat overeenkomen",
+        "reassignHint": "Geldt alleen voor records die deze engine zelf heeft toegewezen en alleen zolang niemand de eigenaar sindsdien heeft gewijzigd. Standaard uit: een record wordt één keer toegewezen."
+      },
+      "problems": {
+        "name": "Geef de regel een naam.",
+        "people": "Kies minstens één persoon of team.",
+        "fixedOne": "Een regel voor een specifieke gebruiker heeft precies één persoon en geen teams nodig.",
+        "conditions": "Herstel de gemarkeerde voorwaarden voordat u opslaat.",
+        "server": "De server heeft de regels geweigerd."
+      },
+      "saveActivate": "Opslaan en activeren",
+      "savePaused": "Opslaan als gepauzeerd",
+      "save": "Wijzigingen opslaan",
+      "cancel": "Annuleren",
+      "unsavedTitle": "Verlaten zonder op te slaan?",
+      "unsavedMessage": "Uw wijzigingen aan deze regel zijn niet opgeslagen.",
+      "stay": "Blijven bewerken",
+      "leave": "Verlaten"
+    },
+    "fields": {
+      "origin": "Binnengekomen via",
+      "company": {
+        "name": "Naam",
+        "email": "E-mail",
+        "phone": "Telefoon",
+        "domain": "Websitedomein",
+        "industry": "Branche",
+        "sizeRange": "Grootte",
+        "address": "Adres",
+        "status": "Status",
+        "createdAt": "Aangemaakt",
+        "updatedAt": "Laatst bijgewerkt"
+      },
+      "deal": {
+        "title": "Titel",
+        "value": "Waarde",
+        "currency": "Valuta",
+        "pipeline": "Pipeline",
+        "stage": "Fase",
+        "status": "Status",
+        "source": "Bron",
+        "expectedCloseDate": "Verwachte sluitingsdatum",
+        "createdAt": "Aangemaakt",
+        "hasContact": "Heeft een {contact}",
+        "hasCompany": "Heeft een bedrijf"
+      },
+      "dealStatus": {
+        "open": "Open",
+        "won": "Gewonnen",
+        "lost": "Verloren"
+      }
+    },
+    "origin": {
+      "manual": "Toegevoegd door een persoon",
+      "import": "Import",
+      "inbound": "Eerste bericht",
+      "form": "Formulier",
+      "lead": "Leadbron",
+      "api": "API"
+    },
+    "test": {
+      "title": "Testen met een record",
+      "hint": "Kies een echt record en zie welke regel het zou nemen en wie het zou krijgen. Er wordt niets gewijzigd en het werkt ook als de schakelaar uit staat.",
+      "search": {
+        "contact": "Zoek {contacts} op naam, e-mail of telefoon",
+        "company": "Zoek bedrijven op naam",
+        "deal": "Zoek {deals} op titel"
+      },
+      "searchLabel": "Record om te testen",
+      "searching": "Zoeken…",
+      "noMatches": "Geen record gevonden.",
+      "searchFailed": "Het zoeken is mislukt. Mogelijk mag u deze records niet zien.",
+      "clear": "Kies een ander record",
+      "run": "Testen",
+      "running": "Testen…",
+      "failed": "De test is niet uitgevoerd. Probeer het opnieuw.",
+      "off": "Recordtoewijzing staat uit, dus dit toont wat er zou gebeuren als het aan stond.",
+      "outcome": {
+        "would_assign": "{record} zou naar {owner} gaan via de regel {rule}.",
+        "disabled": "Recordtoewijzing is uitgeschakeld voor deze werkruimte, dus er zou niets gebeuren.",
+        "has_owner": "{record} heeft al een eigenaar, dus er wordt geen regel uitgevoerd. Een eigenaar die iemand heeft ingesteld, wordt nooit vervangen.",
+        "no_rule": "Geen actieve regel komt overeen met {record}.",
+        "nobody_available": "Een regel komt overeen met {record}, maar iedereen die erin staat is met verlof, offline of niet meer aanwezig.",
+        "plan": "Uw abonnement bevat geen regels voor recordtoewijzing.",
+        "not_found": "Dat record is niet gevonden. Het is mogelijk verwijderd of valt buiten wat u kunt zien."
+      },
+      "traceTitle": "Geprobeerde regels, op volgorde",
+      "traceEmpty": "Er zijn geen actieve regels geprobeerd.",
+      "trace": {
+        "winner": "Kwam overeen en neemt het record",
+        "matched": "Kwam overeen",
+        "not_matched": "Kwam niet overeen",
+        "nobody": "Kwam overeen, maar niemand was beschikbaar",
+        "broken": "Heeft een kapotte voorwaarde"
+      },
+      "skipped": "Overgeslagen omdat niemand beschikbaar was: {names}"
+    },
+    "log": {
+      "title": "Uitvoeringslogboek",
+      "intro": "Wat de engine met elk record heeft gedaan, nieuwste eerst. Vermeldingen worden {days} dagen bewaard en bevatten alleen id's, nooit de inhoud van een record.",
+      "filterOutcome": "Uitkomst",
+      "filterRule": "Regel",
+      "allOutcomes": "Alle uitkomsten",
+      "allRules": "Alle regels",
+      "loading": "Uitvoeringslogboek laden…",
+      "loadFailed": "Het uitvoeringslogboek kon niet worden geladen.",
+      "empty": "Er is nog niets toegewezen.",
+      "emptyFiltered": "Geen vermeldingen komen overeen met deze filters.",
+      "loadMore": "Meer laden",
+      "col": {
+        "when": "Wanneer",
+        "record": "Record",
+        "outcome": "Uitkomst",
+        "reason": "Reden",
+        "rule": "Regel",
+        "assignedTo": "Toegewezen aan",
+        "method": "Methode",
+        "arrived": "Binnengekomen via"
+      },
+      "deletedRecord": "Verwijderd",
+      "noRule": "Geen regel",
+      "outcome": {
+        "assigned": "Toegewezen",
+        "reassigned": "Opnieuw toegewezen",
+        "skipped": "Ongemoeid gelaten"
+      },
+      "reason": {
+        "matched": "Een regel kwam overeen",
+        "has_owner": "Het had al een eigenaar",
+        "no_rule": "Geen regel kwam overeen",
+        "nobody_available": "Niemand was beschikbaar",
+        "raced": "De eigenaar is gewijzigd tijdens het toewijzen",
+        "unchanged": "Het staat al bij de juiste regel"
+      },
+      "trigger": {
+        "created": "Nieuw record",
+        "updated": "Bijgewerkt record"
+      },
+      "showTrace": "Toon hoe het is bepaald",
+      "hideTrace": "Verberg hoe het is bepaald",
+      "traceFor": "Hoe het is bepaald voor {record}"
+    },
+    "toast": {
+      "created": "Regel gemaakt.",
+      "saved": "Regel opgeslagen.",
+      "deleted": "Regel verwijderd.",
+      "cloned": "Regel gekopieerd. De kopie is gepauzeerd.",
+      "activated": "Regel geactiveerd.",
+      "paused": "Regel gepauzeerd.",
+      "reordered": "Volgorde opgeslagen.",
+      "conflict": "Iemand anders heeft deze regel gewijzigd. De nieuwste versie is geladen. Controleer die en voer uw wijziging opnieuw door.",
+      "failed": "Er is iets misgegaan. Probeer het opnieuw."
+    },
+    "delete": {
+      "title": "Deze regel verwijderen?",
+      "message": "De regel {name} stopt met toewijzen. Records die al zijn toegewezen behouden hun eigenaar.",
+      "confirm": "Verwijderen",
+      "cancel": "Annuleren"
+    }
+  }
+}

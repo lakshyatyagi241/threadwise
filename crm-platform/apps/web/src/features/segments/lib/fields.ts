@@ -17,8 +17,13 @@ import { conditionsOf } from './model';
  * the pickers show real choices and a reference to something deleted can be told from one that never existed.
  */
 
-export type FieldGroup = 'journey' | 'who' | 'activity' | 'properties' | 'company';
+/**
+ * `record` holds the own fields of a record that is not a contact (a company, a deal), for screens that build rules over those (Record
+ * assignment rules); a contact catalog has none, so the segments pickers never show it. Its label comes from the screen (`groupLabel`).
+ */
+export type FieldGroup = 'record' | 'journey' | 'who' | 'activity' | 'properties' | 'company';
 export const FIELD_GROUPS: readonly FieldGroup[] = [
+  'record',
   'journey',
   'who',
   'activity',
@@ -118,32 +123,35 @@ export function buildCatalog(l: Lookups): FieldDef[] {
     sys('updatedAt', 'activity', { operators: without(operatorsForKind('date'), never) }),
     sys('lastActivityAt', 'activity'),
   ];
-  const fromProperties = (
-    props: readonly PropertyLookup[],
-    group: FieldGroup,
-    idOf: (key: string) => string,
-  ): FieldDef[] =>
-    props.flatMap((p): FieldDef[] => {
-      const kind = segmentKindForFieldType(p.fieldType);
-      if (!kind) return [];
-      return [
-        {
-          id: idOf(p.key),
-          group,
-          kind,
-          label: { text: p.label },
-          operators: operatorsForKind(kind),
-          ...(kind === 'option' || kind === 'multi'
-            ? { options: p.options, optionsFrom: 'property' as const }
-            : {}),
-        },
-      ];
-    });
   return [
     ...system,
-    ...fromProperties(l.properties, 'properties', propertyFieldId),
-    ...fromProperties(l.companyProperties ?? [], 'company', companyFieldId),
+    ...propertyFields(l.properties, 'properties', propertyFieldId),
+    ...propertyFields(l.companyProperties ?? [], 'company', companyFieldId),
   ];
+}
+
+/** The workspace's custom properties as fields of a group (a formula, which is computed and never stored, is left out). */
+export function propertyFields(
+  props: readonly PropertyLookup[],
+  group: FieldGroup,
+  idOf: (key: string) => string,
+): FieldDef[] {
+  return props.flatMap((p): FieldDef[] => {
+    const kind = segmentKindForFieldType(p.fieldType);
+    if (!kind) return [];
+    return [
+      {
+        id: idOf(p.key),
+        group,
+        kind,
+        label: { text: p.label },
+        operators: operatorsForKind(kind),
+        ...(kind === 'option' || kind === 'multi'
+          ? { options: p.options, optionsFrom: 'property' as const }
+          : {}),
+      },
+    ];
+  });
 }
 
 export function fieldsByGroup(
