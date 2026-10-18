@@ -1,4 +1,6 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { META_ERROR_RULES } from '../../../src/infra/providers/whatsapp/meta-errors';
+import { BroadcastDispatchService } from '../../../src/modules/broadcasts/broadcast-dispatch.service';
 import {
   CSV_HEADER,
   csvFileName,
@@ -11,6 +13,10 @@ import {
 } from '../../../src/modules/broadcasts/broadcast-csv';
 import {
   DEFAULT_RETRY_POLICY,
+  OUTCOME_UNKNOWN_PREFIX,
+  PERMANENT_FAILURE_SQL_REGEX,
+  PERMANENT_META_CODES,
+  isOutcomeUnknown,
   isPermanentFailure,
   resolvePolicy,
   retryDelaySeconds,
@@ -46,6 +52,102 @@ describe('retry policy (TW-BCAST-039)', () => {
     expect(isPermanentFailure('(#131026) Message undeliverable')).toBe(true);
     expect(isPermanentFailure('timeout')).toBe(false);
     expect(isPermanentFailure(null)).toBe(false);
+  });
+
+  it('never resends a recipient whose send may have been accepted (RF-02)', () => {
+    expect(isPermanentFailure(`${OUTCOME_UNKNOWN_PREFIX}Meta did not answer in time`)).toBe(true);
+    expect(isPermanentFailure('Send was interrupted before it finished')).toBe(true);
+    // The SQL used by the sweeper skips exactly the same texts.
+    const sql = new RegExp(PERMANENT_FAILURE_SQL_REGEX);
+    for (const t of [
+      `${OUTCOME_UNKNOWN_PREFIX}timeout`,
+      'Send was interrupted before it finished',
+      'No usable phone number',
+      '(#131026) undeliverable',
+    ])
+      expect(sql.test(t)).toBe(true);
+    expect(sql.test('Meta had a temporary problem. Retrying.')).toBe(false);
+  });
+
+  it('matches the reason text Meta errors really have, with or without a subcode and trace id (RF-04)', () => {
+    expect(isPermanentFailure('Token expired (#190/463, trace AbC)')).toBe(true);
+    expect(isPermanentFailure('Template paused (#132015, trace x1)')).toBe(true);
+    expect(isPermanentFailure('Undeliverable (#131026)')).toBe(true);
+    expect(isPermanentFailure('Token expired (code 190/463, trace AbC)')).toBe(true);
+    expect(isPermanentFailure('Undeliverable (code 131026)')).toBe(true);
+    expect(isPermanentFailure('Throughput (code 130429, trace x)')).toBe(false);
+    expect(isPermanentFailure('Throughput reached (#130429, trace x)')).toBe(false);
+    expect(isPermanentFailure('Engagement (#131049)')).toBe(false); // the wizard retries this one itself
+    expect(isPermanentFailure('Server hiccup (#1, trace y)')).toBe(false);
+    const sql = new RegExp(PERMANENT_FAILURE_SQL_REGEX);
+    expect(sql.test('Token expired (#190/463, trace AbC)')).toBe(true);
+    expect(sql.test('Throughput reached (#130429, trace x)')).toBe(false);
+  });
+
+  it('every permanent Meta code is one the send table marks not retryable', () => {
+    for (const code of PERMANENT_META_CODES) {
+      const rule = META_ERROR_RULES.find((r) => r.codes.includes(code));
+      expect(rule, `code ${code} has a row`).toBeDefined();
+      expect(rule!.retryable, `code ${code} is not retryable`).toBe(false);
+    }
+  });
+
+  it('reads the unknown-outcome flag off any error that carries it', () => {
+    expect(isOutcomeUnknown(Object.assign(new Error('x'), { outcomeMayHaveCommitted: true }))).toBe(
+      true,
+    );
+    expect(isOutcomeUnknown(new Error('x'))).toBe(false);
+    expect(isOutcomeUnknown(null)).toBe(false);
+  });
+});
+
+describe('BroadcastDispatchService.recordSent: an accepted send is never turned into a failure (RF-02)', () => {
+  const build = (tx: () => Promise<unknown>) => {
+    const svc = Object.create(BroadcastDispatchService.prototype) as Record<string, unknown>;
+    const mirror = vi.fn().mockResolvedValue(true);
+    const sleep = vi.fn().mockResolvedValue(undefined);
+    const logger = { error: vi.fn(), warn: vi.fn() };
+    Object.assign(svc, {
+      db: { tx: vi.fn(tx) },
+      progress: {},
+      mirror: { mirror },
+      runtime: { sleep },
+      logger,
+    });
+    const call = () =>
+      (svc.recordSent as (...a: unknown[]) => Promise<void>).call(svc, 1, 2, 3, 'wamid.X');
+    return { call, svc, mirror, sleep, logger };
+  };
+
+  it('retries the write, then logs with the provider id and does not throw when the database stays down', async () => {
+    const { call, svc, mirror, sleep, logger } = build(() => Promise.reject(new Error('db down')));
+    await expect(call()).resolves.toBeUndefined();
+    expect((svc.db as { tx: ReturnType<typeof vi.fn> }).tx).toHaveBeenCalledTimes(3);
+    expect(sleep).toHaveBeenCalledTimes(2);
+    expect(mirror).not.toHaveBeenCalled();
+    expect(logger.error).toHaveBeenCalledWith(
+      expect.objectContaining({ providerMessageId: 'wamid.X' }),
+      expect.stringContaining('could not be recorded'),
+    );
+  });
+
+  it('a failing inbox mirror does not undo the recorded send', async () => {
+    const { call, svc, mirror, logger } = build(() => Promise.resolve());
+    mirror.mockRejectedValue(new Error('mirror down'));
+    await expect(call()).resolves.toBeUndefined();
+    expect((svc.db as { tx: ReturnType<typeof vi.fn> }).tx).toHaveBeenCalledTimes(1);
+    expect(logger.warn).toHaveBeenCalled();
+    expect(logger.error).not.toHaveBeenCalled();
+  });
+
+  it('recovers when the database comes back on the second try', async () => {
+    let n = 0;
+    const { call, svc, logger } = build(() =>
+      ++n === 1 ? Promise.reject(new Error('blip')) : Promise.resolve(),
+    );
+    await call();
+    expect((svc.db as { tx: ReturnType<typeof vi.fn> }).tx).toHaveBeenCalledTimes(2);
+    expect(logger.error).not.toHaveBeenCalled();
   });
 });
 

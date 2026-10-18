@@ -25,6 +25,9 @@ import {
   WARMER_GATE,
   assemblePhone,
   batchCooldownMs,
+  OUTCOME_UNKNOWN_PREFIX,
+  isOutcomeUnknown,
+  isPermanentFailure,
   nextGapMs,
   resolveBodyTokens,
   sanitizeOverrides,
@@ -83,6 +86,9 @@ import {
 
 /** Recipients are claimed and sent in small slices so a long campaign never holds a transaction or a big array. */
 const BATCH = 200;
+/** Tries to write the outcome of an accepted send, and the wait before the next (times the try number). */
+const RECORD_ATTEMPTS = 3;
+const RECORD_RETRY_MS = 250;
 /** The counters on the campaign are refreshed this often while a run is going, so the list page moves. */
 const COUNTER_EVERY = 25;
 /** While resting, the locks and the campaign's own "alive" mark are renewed this often. */
@@ -749,9 +755,12 @@ export class CampaignDispatchService {
       this.db.txAs({ orgId }, async (t) => {
         // A broadcast made by the wizard leaves Meta's frequency cap (131049) to its own retry job: 24 hours apart until the end date
         // the person chose, or not at all when they did not switch retries on. Retrying it here at 6 and 12 hours would defeat that.
-        // A campaign made without "Retry failed messages" treats its first failure as final too.
+        // A campaign made without "Retry failed messages" treats its first failure as final too, and so does a refusal a retry cannot fix
+        // (an expired token, a paused template, an undeliverable number).
         const out =
-          !c.retryFailed || (c.wizard !== null && isEcosystemThrottle(error))
+          !c.retryFailed ||
+          isPermanentFailure(error) ||
+          (c.wizard !== null && isEcosystemThrottle(error))
             ? { attempts: maxAttempts, nextAttemptAt: null, final: true }
             : retryOutcome({
                 attemptsBefore: r.attempts,
@@ -828,8 +837,8 @@ export class CampaignDispatchService {
       if (!allowed) return 'wallet';
     }
 
+    let providerMessageId: string | null;
     try {
-      let providerMessageId: string | null;
       if (isTemplate) {
         const tpl = content.template!;
         const components =
@@ -876,32 +885,53 @@ export class CampaignDispatchService {
         );
         providerMessageId = res.providerMessageId;
       }
-      await this.db.txAs({ orgId }, async (t) => {
-        await this.repo.markSent(t, orgId, r.id, providerMessageId);
-        await this.events.contactStatus(t, c.id, c.uuid, c.name, r.contactId, 'sent', {
-          providerMessageId,
-        });
-        // The unofficial engine cannot report delivery, so its send is what the wallet charges on.
-        await this.events.deliveryReported(
-          t,
-          orgId,
-          c.id,
-          r.contactId,
-          'pending',
-          'sent',
-          providerMessageId,
-          o.sender.engine,
-        );
-      });
-      // After the send is recorded, and never failing it: the inbox bubble is best effort. A mail writes its own thread (the mailbox's).
-      if (!mail) await this.mirror.mirror(orgId, c.id, r.contactId, 'sent', providerMessageId);
     } catch (err) {
       if (err instanceof SenderThrottled) return { throttledMs: err.retryAfterMs };
       if (err instanceof SenderRefused) {
         await permanent(err.message);
         return false;
       }
-      await transient(err instanceof Error ? err.message : String(err));
+      const message = err instanceof Error ? err.message : String(err);
+      // A timeout or reset may have been accepted by the provider: the recipient is closed as "outcome unknown", not queued for a resend.
+      if (isOutcomeUnknown(err)) await permanent(`${OUTCOME_UNKNOWN_PREFIX}${message}`);
+      else await transient(message);
+      return true;
+    }
+
+    // The provider has accepted the message. A database error from here on must not turn it into a failed recipient: that is retried,
+    // and the customer would get it twice. The write is tried a few times; if it never lands, the error is logged with the provider id.
+    for (let attempt = 1; attempt <= RECORD_ATTEMPTS; attempt++) {
+      try {
+        await this.db.txAs({ orgId }, async (t) => {
+          await this.repo.markSent(t, orgId, r.id, providerMessageId);
+          await this.events.contactStatus(t, c.id, c.uuid, c.name, r.contactId, 'sent', {
+            providerMessageId,
+          });
+          // The unofficial engine cannot report delivery, so its send is what the wallet charges on.
+          await this.events.deliveryReported(
+            t,
+            orgId,
+            c.id,
+            r.contactId,
+            'pending',
+            'sent',
+            providerMessageId,
+            o.sender.engine,
+          );
+        });
+        // After the send is recorded, and never failing it: the inbox bubble is best effort. A mail writes its own thread (the mailbox's).
+        if (!mail) await this.mirror.mirror(orgId, c.id, r.contactId, 'sent', providerMessageId);
+        break;
+      } catch (err) {
+        if (attempt === RECORD_ATTEMPTS) {
+          this.logger.error(
+            { orgId, campaign: c.uuid, recipient: r.id, providerMessageId, err: String(err) },
+            '[CAMP] provider accepted the message but its result could not be recorded',
+          );
+        } else {
+          await this.runtime.sleep(RECORD_RETRY_MS * attempt);
+        }
+      }
     }
     return true;
   }

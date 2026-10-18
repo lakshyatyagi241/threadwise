@@ -24,7 +24,7 @@ const CONTINUE_DELAY_MS = 30_000;
 
 const JOB_OPTIONS = {
   attempts: 4,
-  backoff: { type: 'exponential' as const, delay: 60_000 },
+  backoff: { type: 'exponential' as const, delay: 60_000, jitter: 0.5 },
   // Gone as soon as it ends: the next connect enqueues a fresh one (the id only keeps TWO jobs from waiting for the same workspace).
   removeOnComplete: true,
   removeOnFail: { age: 24 * 3600 },

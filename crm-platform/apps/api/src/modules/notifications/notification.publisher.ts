@@ -101,7 +101,7 @@ export class NotificationPublisher {
           jobId: `push-${orgId}-${row.uuid}`,
           // A late push for a stale event is worse than none: a few quick attempts, then drop.
           attempts: 4,
-          backoff: { type: 'exponential', delay: 5_000 },
+          backoff: { type: 'exponential', delay: 5_000, jitter: 0.5 },
         },
       );
     } catch (err) {

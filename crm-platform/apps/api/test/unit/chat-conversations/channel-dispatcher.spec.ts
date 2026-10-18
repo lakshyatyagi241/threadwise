@@ -17,12 +17,15 @@ const SERVICE_CONSENT = { purpose: 'service_messaging' as const };
 class FakeRedis {
   store = new Map<string, string>();
   down = false;
+  /** Fails only the result write (key without `:lock`), as a Redis blip right after the provider answered would. */
+  failResultWrite = false;
   async get(k: string) {
     if (this.down) throw new Error('redis down');
     return this.store.get(k) ?? null;
   }
   async set(k: string, v: string, ..._opts: unknown[]) {
     if (this.down) throw new Error('redis down');
+    if (this.failResultWrite && !k.endsWith(':lock')) throw new Error('redis blip');
     if (_opts.includes('NX') && this.store.has(k)) return null;
     this.store.set(k, v);
     return 'OK';
@@ -392,6 +395,17 @@ describe('ChannelDispatcher.send: the worker side', () => {
     redis.down = true;
     const err = await dispatcher.send(req()).catch((e: unknown) => e);
     expect(err).toMatchObject({ code: 'DISPATCH_STORE_UNAVAILABLE', retryable: true });
+  });
+
+  it('Redis failing only after the provider accepted: the send succeeds, it is not reported as a retryable failure (RF-03)', async () => {
+    const { dispatcher, redis } = build();
+    redis.failResultWrite = true;
+    const spy = vi.spyOn(sim, 'send');
+    const out = await dispatcher.send(req());
+    expect(out).toMatchObject({ replayed: false });
+    expect(out.providerMessageId).toBeTruthy();
+    expect(spy).toHaveBeenCalledTimes(1);
+    spy.mockRestore();
   });
 
   it('the lock is released after a failure, so the next attempt can take it', async () => {

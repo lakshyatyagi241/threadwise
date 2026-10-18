@@ -99,7 +99,7 @@ export class WebhookService {
         },
         {
           attempts: 3,
-          backoff: { type: 'exponential', delay: 5000 },
+          backoff: { type: 'exponential', delay: 5000, jitter: 0.5 },
           removeOnComplete: true,
           removeOnFail: 1000,
         },
