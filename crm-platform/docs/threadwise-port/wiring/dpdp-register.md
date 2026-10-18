@@ -20,13 +20,14 @@ check, flips a catalog row, or reads or writes the table below.
 | Texts                                                    | `apps/web/messages/<locale>/dpdp-register-admin.json`, 21 locales                                                                                                                                                                                          | no help guide (the operator console is outside the help center), no `pending.json` entry                                  |
 | Settings                                                 | none                                                                                                                                                                                                                                                       | no platform permission key, no workspace setting, no feature flag                                                         |
 
-No tenant user and no workspace data is involved: the page is platform-wide and the table holds no `org_id`. A tenant user and an
-anonymous call are refused.
+No tenant user and no per-workspace data is involved (the consent probe reads one cross-workspace count): the page is platform-wide and the
+table holds no `org_id`. A tenant user and an anonymous call are refused.
 
 ## What reads what (upstream feeders)
 
-The API runs ten live probes at request time (`probes.ts`, one read per check, each cut off after 5 seconds and turned into `unknown` when it
-fails; a probe never returns `pass` on an error). The service builds the dependencies, the pure `rules.ts` decides every status.
+The API runs ten live probes at request time (`probes.ts`, one read per check). Only the three asynchronous reads (security policy, platform AI
+keys, consent adoption count) are cut off after 5 seconds; a probe that throws is `unknown`, never `pass`; the consent probe keeps the contract
+result if only its adoption read fails. The service builds the dependencies, the pure `rules.ts` decides every status.
 
 | Check key                  | Reads                                                                                                                                           | Upstream service or file                                                                    |
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
@@ -38,7 +39,7 @@ fails; a probe never returns `pass` on an error). The service builds the depende
 | `crypto.rotation_complete` | `CREDENTIALS_ENCRYPTION_PREVIOUS_KEYS`: empty                                                                                                   | `ConfigService`                                                                             |
 | `lifecycle.enabled`        | `ORG_LIFECYCLE_ENABLED`, `ORG_LIFECYCLE_DRY_RUN`, `ORG_LIFECYCLE_DELETE_ENABLED`, parsed with the app's own `envSchema`                         | `ConfigService`, `config/env.schema.ts`                                                     |
 | `errors.vendor_region`     | whether Sentry runs and the region of the DSN host (`*.ingest.in.sentry.io` passes, `us` and `de` hosts fail, any other host is `unknown`)      | `sentryEnabled()` (`modules/platform-infrastructure`), `SENTRY_DSN` through `ConfigService` |
-| `ai.platform_key_off`      | whether any LLM provider has a platform-level key                                                                                               | `AiKeyResolver.resolve(null, slug)` (`modules/ai-keys-usage-admin`)                         |
+| `ai.platform_key_off`      | whether any AI provider, language model or voice, has a platform-level key                                                                      | `AiKeyResolver.platformProviders()` (`modules/ai-keys-usage-admin`)                         |
 | `consent.default_opt_in`   | the contract default `CONSENT_SETTINGS_DEFAULTS.requireConsentForMarketing`, with the adoption counts of `contact_consent_settings` for context | `@crm/contracts`, `PlatformStore.tx` (privileged aggregate read)                            |
 
 The probes show the key or number they read in a short detail text; no secret reaches the response (not the Redis URL, not the DSN, not a
@@ -78,16 +79,18 @@ key). The eight attestable checks (`hosting.region_documented`, `storage.encrypt
 - API e2e: `apps/api/test/e2e/dpdp-register/dpdp-register.e2e.spec.ts` (roles, attest then read, expiry, history order, the append-only table,
   the `security_events` row, a failing or hanging dependency).
 - Web: `apps/web/src/features/dpdp-register/platform/logic.test.ts`, `dpdp-register-page.test.tsx`, and
-  `apps/web/src/features/dpdp-register/messages.test.ts` (keys across the 21 locales).
+  `apps/web/src/features/dpdp-register/messages.test.ts` (the English message keys; the 20 other locales are checked by the `check.sh` gate of the
+  `i18n-translate-sync` skill).
 
 ## Open
 
 - Reference parity: skipped on the owner's word on 17 Oct 2026 (no Reference twin); see [product-extensions.md](../parity/product-extensions.md).
 - Counsel question 11 of the plan (which provision is the right citation for row 46; the register shows the enforcement heading).
 - Every row whose status comes from a baseline or a code check changes only when the plan item that closes it ships.
-- Probe scope: the live probes read the API process (its configuration and its Sentry). The worker, which runs the lifecycle sweep, has its own
-  environment, so `lifecycle.enabled` and `errors.vendor_region` show what the API has, not proof of what the worker runs.
-- `ai.platform_key_off` looks at LLM providers only. A platform key for a voice provider (ElevenLabs, Deepgram) is not counted, while section
-  4.1 of the spec says "any provider". Owner decision; the change is one line in `dpdp-register.service.ts` plus a test.
+- Probe scope: the live probes read the API process only (its configuration and its Sentry). The worker, which runs the lifecycle sweep, has its
+  own process, so `lifecycle.enabled` shows what the API has, not proof of what the worker runs. Both shipped compose files (`docker-compose.prod.yml`
+  through `env_file: .env`, `deploy/hostinger/docker-compose.yml` through the shared `x-api-env` block) give the API and the worker one environment
+  source, so the two agree unless someone adds a per-service override; an override on the API alone would give a false pass. The Sentry settings of
+  the web server, the browser and the mobile app are not read: `errors.vendor_region` says nothing about them.
 - `attested_by` references `platform_operators (id)` with no `ON DELETE` action, so an operator row that has attested cannot be deleted
   (nothing deletes operators today).

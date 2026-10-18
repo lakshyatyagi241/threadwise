@@ -1,6 +1,6 @@
 # DPDP compliance register (super admin console)
 
-Status: **design approved by the owner on 17 Oct 2026; this spec awaits owner review.** Nothing is built.
+Status: built on branch `claude/dpdp-register`, awaiting merge. Design approved by the owner on 17 Oct 2026.
 Parent: [privacy/dpdpa-gap-analysis-and-plan.md](../privacy/dpdpa-gap-analysis-and-plan.md) (section 3 is the source of the catalog). This is
 slice 1 of the plan; later slices flip rows of this register as they ship.
 
@@ -146,10 +146,10 @@ dpdp_register_attestations(
 
 No `org_id`. RLS enabled and forced, one `FOR ALL` policy `USING/WITH CHECK (app_is_privileged())`, as `org_lifecycle_log`. Append-only:
 `REVOKE UPDATE, DELETE` for the app role plus the trigger pattern of `20261211090000_audit_log_append_only.sql`. Index on
-`(check_key, attested_at desc)`. The table is added to `tools/tenancy-audit/policy/table-classification.json`, and the service file that
-calls `.privileged(` to `privileged-allowlist.json`. Every attestation also writes a `security_events` row, `dpdp_register.attested`
-(actor type `platform_operator`), in the same transaction through `AuthAuditService`. The table is the durable record, since
-`security_events` is pruned by the audit retention window.
+`(check_key, attested_at desc)`. The table is added to `tools/tenancy-audit/policy/table-classification.json`. Its reads and writes go
+through `PlatformStore.tx`, so no `privileged-allowlist.json` entry is needed. Every attestation also writes a `security_events` row,
+`dpdp_register.attested` (actor type `platform_operator`), in the same transaction through `AuthAuditService`. The table is the durable
+record, since `security_events` is pruned by the audit retention window.
 
 ## 6. API
 
@@ -192,7 +192,8 @@ partial or unverified.
 
 ## 9. Tests and gates
 
-- Unit: `rules.spec.ts` table-driven over the status table; catalog integrity; every probe with a failing dependency returns `unknown`.
+- Unit: `rules.spec.ts` table-driven over the status table; catalog integrity; every probe with a failing dependency returns `unknown`, except
+  `consent.default_opt_in`, which keeps the contract default (`fail`) when only the adoption count cannot be read.
 - E2E: operator RBAC (auditor and support cannot attest, anonymous and tenant users get 401 or 403), attest then read shows the newest
   result, expiry flips a check to `unknown`, the table rejects UPDATE and DELETE, unknown check key returns 422, a
   `security_events` row exists.
@@ -204,8 +205,9 @@ partial or unverified.
 
 ## 10. Risks
 
-- **Catalog drift.** A feature ships and nobody flips its baseline. Mitigation: the pinned-counts test fails on any silent change, and
-  the plan's items name the rows they close; the PR template for DP items says to update the catalog.
+- **Catalog drift.** A feature ships and nobody flips its baseline. Mitigation: the pinned-counts test fails on any silent change, each
+  row's `planItems` names the DP items that close it, and a PR that ships a DP item flips its rows in
+  `packages/contracts/src/dpdp-register/catalog.ts` (the wiring file records the rule).
 - **Probe accuracy.** A probe reads configuration, not enforcement. Its detail text says what it read. Deployment facts stay
   attested, never inferred.
 - **Translation volume.** About 47 titles plus detail keys in 20 more locales. Keep texts short; reuse detail keys.
