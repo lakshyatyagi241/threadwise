@@ -42,7 +42,7 @@ export const normaliseKey = canonicalStorageKey;
 
 @Injectable()
 export class MediaStorageService {
-  /** Buckets this process has already made sure exist (the first write to a fresh MinIO creates it). */
+  /** Buckets this process has already made sure exist (the first write to a fresh bucket creates it). */
   private readonly ensured = new Set<string>();
 
   constructor(
@@ -56,7 +56,7 @@ export class MediaStorageService {
   ) {}
 
   /**
-   * The deployment's own bucket (`S3_*`, MinIO in the compose stack), used when the saved settings give none and
+   * The deployment's own bucket (`S3_*`), used when the saved settings give none and
    * `MEDIA_STORAGE_DRIVER=s3`. Without it every container keeps media on its own disk, so the worker that sends a file
    * cannot find what the API stored.
    */
@@ -181,7 +181,7 @@ export class MediaStorageService {
     return { key: objectKey };
   }
 
-  /** Creates the bucket when the store says it is missing (a fresh MinIO has none). True when it now exists. */
+  /** Creates the bucket when the store says it is missing (a fresh bucket has none). True when it now exists. */
   private async ensureBucket(t: StorageTarget): Promise<boolean> {
     if (this.ensured.has(t.bucket)) return false;
     const req = signS3Request(t, 'PUT', '', Buffer.alloc(0));

@@ -94,7 +94,13 @@
             "endInvalid": "有効な終了日時を入力してください。",
             "endBeforeStart": "終了を開始より前にすることはできません。"
           }
-        }
+        },
+        "bookedOnline": "オンライン予約",
+        "viewBooking": "予約を表示",
+        "manageBooking": "予約を管理",
+        "viewBookingAria": "{title}の予約を表示",
+        "manageBookingAria": "{title}の予約を管理",
+        "bookedReadOnly": "オンラインで予約されました。変更は予約から行ってください。"
       },
       "files": {
         "title": "ファイル",

@@ -76,6 +76,14 @@ export interface Capabilities {
   permissions: ReadonlySet<string> | null;
   planFeatures: ReadonlySet<string> | null;
   channels: ReadonlySet<string> | null;
+  /**
+   * The module ids the workspace's persona hides (`nav:<id>`, `tile:<id>`; docs/specs/persona-profiles.md, section 7.2), built from
+   * the session's `org.persona`. A fourth input beside the three above, and unlike them it is only about what is DRAWN: a hidden
+   * entry is skipped before the gates run, so it shows no lock and no upsell, but nothing is closed (a typed address still opens
+   * when permission and plan allow). `null`, `undefined` (a caller that predates personas) and an empty set hide nothing, which is
+   * what the `generic` persona resolves to; unknown never hides on a guess.
+   */
+  hidden?: ReadonlySet<string> | null;
 }
 
 export interface ResolvedNavItem extends NavItem {

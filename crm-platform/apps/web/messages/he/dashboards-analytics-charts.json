@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "מחובר",
           "shopify": "מחובר",
-          "google_sheets": "מפתח API הונפק",
-          "meta_catalog": "הקטלוג קושר"
+          "meta_catalog": "הקטלוג קושר",
+          "google_sheets": "חשבון Google מחובר"
         },
         "notConnected": "לא מחובר",
         "connect": "חבר",
@@ -494,7 +494,8 @@
         "title": "תורים",
         "name": "תור",
         "pending": "ממתין",
-        "failed": "נכשל"
+        "failed": "נכשל",
+        "lastFailure": "סיבת הכשל האחרון"
       },
       "clear": {
         "button": "נקה משימות ממתינות",

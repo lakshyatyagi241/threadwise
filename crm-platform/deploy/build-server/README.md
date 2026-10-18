@@ -139,8 +139,6 @@ Checks that need no server: `deploy/build-server/tests/checks.test.sh` (webhook 
 - **GitHub Actions deploy** (`.github/workflows/deploy.yml`) is still in the repository. It cannot run while the account's billing is blocked, and if it
   ever runs again it would deploy the same commit in parallel with this pipeline. Disable one of them (for example by making that workflow
   `workflow_dispatch` only) when billing is restored.
-- **MinIO image:** the stack needs `minio/minio:latest` preloaded on each host (`pull_policy: never`), and that repository is no longer on Docker Hub.
-  A new host cannot pull it; copy it from a host that has it (`docker save minio/minio:latest | ssh <host> docker load`) or move to a maintained fork.
 - **Blue-green needs memory on the production host.** Two slots of API and web run during each switch (about 0.75 GB extra). The host's
   available memory moves between roughly 1.5 GB and 9 GB with the other apps on it. When it is below the gate a release refuses with a clear
   message and changes nothing; re-run it later, or free memory first.

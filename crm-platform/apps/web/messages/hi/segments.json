@@ -27,7 +27,8 @@
       "minor": "नाबालिग के रूप में चिह्नित",
       "dateOfBirth": "जन्म तिथि",
       "age": "उम्र (वर्ष)",
-      "timezone": "समय क्षेत्र"
+      "timezone": "समय क्षेत्र",
+      "uncontacted": "बात नहीं हुई"
     },
     "fieldGroups": {
       "journey": "यात्रा",

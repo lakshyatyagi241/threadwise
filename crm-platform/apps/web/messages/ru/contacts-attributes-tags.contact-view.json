@@ -126,7 +126,12 @@
       "details": {
         "title": "Данные контакта",
         "stage": "Этап жизненного цикла",
-        "otherProperties": "Другие свойства"
+        "otherProperties": "Другие свойства",
+        "stageSince": "На этом этапе с",
+        "previousStage": "Предыдущий этап",
+        "previousStageSince": "Предыдущий этап с",
+        "lostReason": "Причина потери",
+        "updatedAt": "Последнее обновление"
       },
       "company": {
         "title": "Компания",

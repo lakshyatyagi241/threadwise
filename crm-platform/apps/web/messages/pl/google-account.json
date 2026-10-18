@@ -5,6 +5,21 @@
         "label": "Konto Google",
         "description": "Połącz jedno konto Google dla Calendar, Sheets, Docs, Forms i Meet w swoich przepływach.",
         "keywords": "google, konto google, kalendarz, sheets, docs, forms, meet, drive, oauth, połącz google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Dodawaj wiersze, wyszukuj wiersze i zapisuj kontakty z arkusza w swoich przepływach. Korzysta z połączenia z kontem Google.",
+        "keywords": "google sheets, arkusz kalkulacyjny, wiersze, komórki, oauth, połącz google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Skopiuj dokument szablonu, wypełnij go i udostępnij w swoich przepływach. Korzysta z połączenia z kontem Google.",
+        "keywords": "google docs, dokument, szablon, udostępnianie, oauth, połącz google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Wyślij formularz klientowi i kontynuuj, gdy go wypełni. Korzysta z połączenia z kontem Google.",
+        "keywords": "google forms, formularz, ankieta, odpowiedzi, oauth, połącz google"
       }
     }
   },
@@ -91,8 +106,8 @@
         },
         "sheets": {
           "name": "Sheets",
-          "body": "Dodaj wiersz do arkusza, wyszukaj wiersz, sprawdź komórkę lub skopiuj wiersz do kontaktu.",
-          "usedBy": "Google Sheets, Sprawdź pole Google Sheet, Zapisz kontakt z Google Sheet"
+          "usedBy": "Google Sheets, Sprawdź pole Google Sheet, Zapisz kontakt z Google Sheet",
+          "body": "Dodaj wiersz do arkusza, wyszukaj wiersz, sprawdź komórkę lub skopiuj wiersz do kontaktu."
         },
         "docs": {
           "name": "Docs i Drive",
@@ -101,13 +116,13 @@
         },
         "forms": {
           "name": "Forms",
-          "body": "Odczytaj publiczny link formularza, aby przepływ mógł wysłać go klientowi.",
-          "usedBy": "Krok Google Form"
+          "usedBy": "Krok Google Form",
+          "body": "Odczytaj publiczny link formularza, aby przepływ mógł go wysłać klientowi, oraz odpowiedzi z formularza, aby przepływ był kontynuowany po jego wypełnieniu."
         },
         "drive_listing": {
           "name": "Lista plików Drive",
-          "body": "Wyświetlaj swoje arkusze, dokumenty i formularze według nazw w kreatorze przepływów, aby wybierać zamiast wklejać link.",
-          "usedBy": "Selektory plików w kreatorze przepływów"
+          "body": "Wyświetla arkusze, dokumenty i formularze według nazwy, aby można je było wybierać z Twojego konta w kreatorze przepływów i ustawieniach rezerwacji. Wymagane dla każdego selektora plików.",
+          "usedBy": "Selektory plików w kreatorze przepływów i ustawieniach rezerwacji"
         }
       },
       "lastError": {

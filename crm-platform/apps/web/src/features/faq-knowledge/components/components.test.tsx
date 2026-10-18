@@ -122,6 +122,7 @@ const settings = (over: Partial<FaqSettings> = {}): FaqSettings => ({
   logQueries: true,
   verifyMode: 'off',
   verifyBand: 0.1,
+  fallbackMessage: null,
   verifyAvailable: true,
   verifyModel: 'openai/gpt-4o-mini',
   isDefault: false,

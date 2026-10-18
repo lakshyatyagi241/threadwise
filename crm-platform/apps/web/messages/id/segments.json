@@ -27,7 +27,8 @@
       "minor": "Ditandai di bawah umur",
       "dateOfBirth": "Tanggal lahir",
       "age": "Usia (tahun)",
-      "timezone": "Zona waktu"
+      "timezone": "Zona waktu",
+      "uncontacted": "Belum dihubungi"
     },
     "fieldGroups": {
       "journey": "Perjalanan",

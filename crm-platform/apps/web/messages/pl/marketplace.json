@@ -803,7 +803,7 @@
         "minPlan": "Twój plan lub wyższy plan zawiera tę aplikację, więc nic nie trzeba płacić.",
         "plan": "Twój plan zawiera tę aplikację, więc nic nie trzeba płacić."
       },
-      "needsPurchase": "Zawarta w katalogu Twojego planu, kup ją, aby z niej korzystać.",
+      "needsPurchase": "Najpierw wykup subskrypcję. Instalacja odblokuje się po zakończeniu płatności.",
       "subscribedNote": "Twoja przestrzeń robocza ma subskrypcję tej aplikacji.",
       "trialOffer": "Wypróbuj bezpłatnie przez {days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}. Nic nie zostanie naliczone, dopóki nie zdecydujesz się zasubskrybować.",
       "prepaidNote": "Rozliczane miesięcznie przez rozliczenia Twojej przestrzeni roboczej. Każda płatność obejmuje jeden miesiąc i nie jest pobierana automatycznie: zapłać ponownie przed podaną datą, aby aplikacja nadal działała.",

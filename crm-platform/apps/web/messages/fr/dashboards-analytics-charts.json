@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Connecté",
           "shopify": "Connecté",
-          "google_sheets": "Clé API émise",
-          "meta_catalog": "Catalogue lié"
+          "meta_catalog": "Catalogue lié",
+          "google_sheets": "Compte Google connecté"
         },
         "notConnected": "non connecté",
         "connect": "Connecter",
@@ -494,7 +494,8 @@
         "title": "Files d’attente",
         "name": "File d’attente",
         "pending": "En attente",
-        "failed": "Échoués"
+        "failed": "Échoués",
+        "lastFailure": "Motif du dernier échec"
       },
       "clear": {
         "button": "Vider les tâches en attente",

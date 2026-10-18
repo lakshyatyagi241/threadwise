@@ -234,8 +234,8 @@
         "connected": {
           "woocommerce": "متصل",
           "shopify": "متصل",
-          "google_sheets": "تم إصدار مفتاح API",
-          "meta_catalog": "تم ربط الكتالوج"
+          "meta_catalog": "تم ربط الكتالوج",
+          "google_sheets": "تم ربط حساب Google"
         },
         "notConnected": "غير متصل",
         "connect": "اتصال",
@@ -494,7 +494,8 @@
         "title": "قوائم الانتظار",
         "name": "قائمة الانتظار",
         "pending": "قيد الانتظار",
-        "failed": "فاشلة"
+        "failed": "فاشلة",
+        "lastFailure": "سبب آخر فشل"
       },
       "clear": {
         "button": "مسح المهام المعلقة",

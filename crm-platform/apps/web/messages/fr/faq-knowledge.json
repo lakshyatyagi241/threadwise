@@ -409,7 +409,14 @@
       "learned": "Ajouté à « {question} ». Il recevra une réponse désormais.",
       "pickTitle": "À quelle FAQ ajouter ce message ?",
       "loadMore": "Charger plus",
-      "loadingMore": "Chargement"
+      "loadingMore": "Chargement",
+      "fallback": {
+        "title": "Quand aucune FAQ ne répond",
+        "hint": "Cette réponse est envoyée au client dont aucune FAQ ne traite le message. Le message reste affiché ci-dessous pour que vous puissiez enrichir la FAQ.",
+        "placeholder": "Désolé, je n'ai pas compris. Un membre de l'équipe vous répondra.",
+        "save": "Enregistrer la réponse de repli",
+        "saved": "Réponse de repli enregistrée"
+      }
     },
     "picker": {
       "close": "Fermer",

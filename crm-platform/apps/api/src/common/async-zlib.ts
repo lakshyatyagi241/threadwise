@@ -1,5 +1,16 @@
-import { deflateRaw, gunzip, gzip, inflateRaw, type InputType, type ZlibOptions } from 'node:zlib';
+import { Readable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
+import { StringDecoder } from 'node:string_decoder';
 import { promisify } from 'node:util';
+import {
+  createGunzip,
+  deflateRaw,
+  gunzip,
+  gzip,
+  inflateRaw,
+  type InputType,
+  type ZlibOptions,
+} from 'node:zlib';
 
 /**
  * Compression on libuv's thread pool instead of the event loop (docs/performance/event-loop, EL-B08). `gzipSync` and its siblings run
@@ -20,25 +31,36 @@ export const inflateRawAsync: (input: InputType, options?: ZlibOptions) => Promi
 export const yieldToLoop = (): Promise<void> => new Promise((resolve) => setImmediate(resolve));
 
 /**
- * Walks the lines of a large NDJSON text and hands each non-empty one to `onLine`, yielding to the event loop every `every` lines so a
- * day's archive (tens of MB, hundreds of thousands of lines) is not parsed in one uninterrupted pass. Order and content are exactly
- * those of `text.split('\n')` with empty lines skipped.
+ * Hands every non-empty line of a gzip payload (one member or several concatenated) to `onLine`, decompressing as a stream: the text
+ * never exists as one string, and the event loop runs between chunks. A day's archive object is tens of MB at volume; decoding it whole
+ * held the loop about 170 ms at 120 MB even with the inflate off-thread (EL-B21). The lines and their order are exactly those of
+ * `gunzipSync(payload).toString('utf8').split('\n')` with empty lines skipped. A corrupt payload, or a throwing `onLine`, rejects.
  */
-export async function forEachLine(
-  text: string,
+export async function forEachGzipLine(
+  payload: Buffer,
   onLine: (line: string) => void,
-  every = 2_000,
 ): Promise<void> {
-  let from = 0;
-  let seen = 0;
-  while (from <= text.length) {
-    let to = text.indexOf('\n', from);
-    if (to === -1) to = text.length;
-    if (to > from) {
-      onLine(text.slice(from, to));
-      seen += 1;
-      if (seen % every === 0) await yieldToLoop();
+  const decoder = new StringDecoder('utf8');
+  let tail = '';
+  const take = (text: string) => {
+    let from = 0;
+    for (;;) {
+      const to = text.indexOf('\n', from);
+      if (to === -1) break;
+      const line = from === 0 ? tail + text.slice(0, to) : text.slice(from, to);
+      if (line !== '') onLine(line);
+      if (from === 0) tail = '';
+      from = to + 1;
     }
-    from = to + 1;
-  }
+    tail = from === 0 ? tail + text : text.slice(from);
+  };
+  await pipeline(
+    Readable.from([payload], { objectMode: false }),
+    createGunzip({ chunkSize: 64 * 1024 }),
+    async (source: AsyncIterable<Buffer>) => {
+      for await (const chunk of source) take(decoder.write(chunk));
+    },
+  );
+  take(decoder.end());
+  if (tail !== '') onLine(tail);
 }

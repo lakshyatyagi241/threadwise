@@ -1,4 +1,5 @@
 import { OUTCOME_UNKNOWN_PREFIX, isOutcomeUnknown } from './retry-policy';
+import { WabaApiError } from '../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
 import { FailureRecorder } from '../failed-operations';
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { ERROR_CODES } from '@crm/contracts';
@@ -13,7 +14,13 @@ import {
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
-import { MergeTagService, renderMergeTags, resolveToken, type MergeContext } from '../crm';
+import {
+  ContactTouchService,
+  MergeTagService,
+  renderMergeTags,
+  resolveToken,
+  type MergeContext,
+} from '../crm';
 import { BroadcastInboxMirrorService } from './broadcast-inbox-mirror.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
 import { EngineSenderRegistry, renderPlainBody, type OutgoingText } from './engine-senders';
@@ -110,6 +117,7 @@ export class BroadcastDispatchService {
     @Inject(WARMER_GATE) private readonly warmer: WarmerGate,
     @Inject(PACING_SETTINGS) private readonly pacingSettings: PacingSettingsSource,
     private readonly runtime: PacingRuntime,
+    private readonly leadHandling: ContactTouchService,
     private readonly cap: CapTally,
     private readonly lease: SenderLease,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
@@ -448,7 +456,11 @@ export class BroadcastDispatchService {
             await this.recordSent(orgId, broadcastId, contactId, sent.providerMessageId);
             if (sender.engine === 'baileys') await this.cap.bump(orgId, sender.engine, sender.id);
           } catch (err) {
-            if (err instanceof AppError && err.code === ERROR_CODES.AUTH_SEND_HALTED) {
+            // A send held back by the per-number limiter (queue too deep) is put back the same way, so it is sent later, never failed.
+            if (
+              (err instanceof AppError && err.code === ERROR_CODES.AUTH_SEND_HALTED) ||
+              (err instanceof WabaApiError && err.heldLocally)
+            ) {
               // The emergency halt is on: put this recipient back and stop. Nothing is lost; the run resumes when it is lifted.
               await this.db.tx(async (tx) => {
                 await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
@@ -559,10 +571,13 @@ export class BroadcastDispatchService {
             status: 'sent',
             providerMessageId,
           });
-          if (from !== null)
+          if (from !== null) {
             await this.progress.emitMessage(tx, orgId, broadcastId, contactId, 'sent', 'send', {
               providerMessageId,
             });
+            // The broadcast reached the contact: lead handling (the uncontacted marker, BL-290). Never throws.
+            await this.leadHandling.touch(tx, orgId, contactId, 'automation');
+          }
         });
         // The inbox bubble is best effort and has its own transaction: it never undoes the recorded send.
         await this.mirror

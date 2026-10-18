@@ -5,6 +5,21 @@
         "label": "חשבון Google",
         "description": "חברו חשבון Google אחד ל-Calendar, Sheets, Docs, Forms ו-Meet בתהליכים שלכם.",
         "keywords": "google, חשבון google, לוח שנה, calendar, sheets, docs, forms, טפסים, meet, drive, oauth, חיבור google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "הוסיפו שורות, חפשו שורות ושמרו אנשי קשר מגיליון בתוך הזרימות שלכם. משתמש בחיבור לחשבון Google שלכם.",
+        "keywords": "google sheets, גיליון אלקטרוני, שורות, תאים, oauth, חיבור google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "העתיקו מסמך תבנית, מלאו אותו ושתפו אותו מהזרימות שלכם. משתמש בחיבור לחשבון Google שלכם.",
+        "keywords": "google docs, מסמך, תבנית, שיתוף, oauth, חיבור google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "שלחו טופס ללקוח והמשיכו כשהוא ימלא אותו. משתמש בחיבור לחשבון Google שלכם.",
+        "keywords": "google forms, טופס, סקר, תגובות, oauth, חיבור google"
       }
     }
   },
@@ -91,8 +106,8 @@
         },
         "sheets": {
           "name": "Sheets",
-          "body": "הוספת שורה לגיליון, חיפוש שורה, בדיקת תא או העתקת שורה לאיש קשר.",
-          "usedBy": "Google Sheets, בדיקת שדה ב-Google Sheet, שמירת איש קשר מ-Google Sheet"
+          "usedBy": "Google Sheets, בדיקת שדה ב-Google Sheet, שמירת איש קשר מ-Google Sheet",
+          "body": "הוספת שורה לגיליון, חיפוש שורה, בדיקת תא או העתקת שורה לאיש קשר."
         },
         "docs": {
           "name": "Docs ו-Drive",
@@ -101,13 +116,13 @@
         },
         "forms": {
           "name": "Forms",
-          "body": "קריאת הקישור הציבורי של טופס כדי שהתהליך יוכל לשלוח אותו ללקוח.",
-          "usedBy": "שלב Google Form"
+          "usedBy": "שלב Google Form",
+          "body": "קריאת הקישור הציבורי של טופס כדי שהתהליך יוכל לשלוח אותו ללקוח, וקריאת תשובות הטופס כדי שהתהליך ימשיך כשהלקוח ממלא אותו."
         },
         "drive_listing": {
           "name": "רשימת קבצי Drive",
-          "body": "הצגת הגיליונות, המסמכים והטפסים שלכם לפי שם בבונה התהליכים, כדי שאפשר יהיה לבחור במקום להדביק קישור.",
-          "usedBy": "בוחרי קבצים בבונה התהליכים"
+          "body": "הצגת הגיליונות, המסמכים והטפסים שלכם לפי שם, כדי שתוכלו לבחור אותם מהחשבון שלכם בבונה התהליכים ובהגדרות ההזמנות. נדרש לכל בורר קבצים.",
+          "usedBy": "בוררי קבצים בבונה התהליכים ובהגדרות ההזמנות"
         }
       },
       "lastError": {

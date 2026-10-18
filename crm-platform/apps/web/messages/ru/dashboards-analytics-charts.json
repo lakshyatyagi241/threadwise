@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Подключено",
           "shopify": "Подключено",
-          "google_sheets": "Ключ API выдан",
-          "meta_catalog": "Каталог привязан"
+          "meta_catalog": "Каталог привязан",
+          "google_sheets": "Аккаунт Google подключён"
         },
         "notConnected": "не подключено",
         "connect": "Подключить",
@@ -494,7 +494,8 @@
         "title": "Очереди",
         "name": "Очередь",
         "pending": "Ожидают",
-        "failed": "Неудачные"
+        "failed": "Неудачные",
+        "lastFailure": "Причина последнего сбоя"
       },
       "clear": {
         "button": "Очистить ожидающие задания",

@@ -16,13 +16,15 @@ export const INTEGRATION_TOOL_IDS: readonly string[] = [
   'shopify',
   'woocommerce',
   'google-account',
-  'google-sheets-addon',
+  'google-sheets',
+  'google-docs',
+  'google-forms',
+  'google-calendar',
   'email',
 ];
 
 /** Extend the product: shown on the Add-ons tab, in this order. */
 export const ADDON_TOOL_IDS: readonly string[] = [
-  'google-calendar',
   'rest-api',
   'webhooks',
   'geta-publishing',

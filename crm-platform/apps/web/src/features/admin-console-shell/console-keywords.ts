@@ -54,6 +54,8 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
 
   'wap-providers': 'whatsapp providers bsp meta cloud interakt gupshup registry credentials',
   'wap-switch': 'switch provider number migrate whatsapp number change',
+  'wa-throughput':
+    'whatsapp throughput limits rate mps tps messages per second messaging tier quota pause throttle performance live 130429',
   'node-bridge': 'node bridge baileys qr unofficial whatsapp server token address sender pacing',
   'sms-channel': 'sms text message twilio msg91 channel switch enable disable platform',
   'webhook-forwarding':
@@ -105,7 +107,7 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'settings-privacy': 'privacy gdpr ada cookies consent accessibility data protection',
   'settings-analytics': 'analytics google analytics tag manager pixel tracking facebook',
   'settings-custom': 'custom code css javascript scripts head body snippet',
-  'settings-storage': 'cloud storage s3 bucket files uploads minio r2 spaces',
+  'settings-storage': 'cloud storage s3 bucket files uploads r2 spaces',
 
   system: 'system status version update updater license install server php',
   'i18n-languages': 'languages translations locales rtl arabic default language',

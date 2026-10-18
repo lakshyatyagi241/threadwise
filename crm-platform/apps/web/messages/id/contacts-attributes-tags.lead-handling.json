@@ -1,0 +1,65 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "Belum dihubungi"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "Belum dihubungi",
+        "chipTitle": "Belum ada anggota tim yang menghubungi",
+        "waitingSince": "Menunggu sejak {date}",
+        "markContacted": "Tandai sudah dihubungi",
+        "markUncontacted": "Tandai belum dihubungi",
+        "markedContacted": "Ditandai sudah dihubungi",
+        "markedUncontacted": "Ditandai belum dihubungi",
+        "markFailed": "Penanda tidak dapat diubah. Coba lagi.",
+        "bulkMarkedContacted": "{count, plural, other {# kontak ditandai sudah dihubungi}}",
+        "bulkMarkedUncontacted": "{count, plural, other {# kontak ditandai belum dihubungi}}"
+      },
+      "settings": {
+        "save": "Simpan",
+        "discard": "Buang perubahan",
+        "saved": "Pengaturan disimpan",
+        "retry": "Coba lagi",
+        "loading": "Memuat pengaturan",
+        "conflict": "Orang lain menyimpan pengaturan ini saat Anda mengedit. Pengaturan ditampilkan kembali di bawah; ulangi perubahan Anda.",
+        "conflictOk": "Mengerti",
+        "errors": {
+          "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda lalu coba lagi.",
+          "forbidden": "Hanya orang yang mengelola pengaturan workspace yang dapat mengubah halaman ini.",
+          "conflict": "Orang lain sudah mengubah pengaturan ini lebih dulu. Muat ulang lalu coba lagi.",
+          "validation": "Sebagian pengaturan tidak valid. Periksa lalu coba lagi.",
+          "unexpected": "Terjadi kesalahan. Coba lagi."
+        },
+        "uncontacted": {
+          "title": "Prospek belum dihubungi",
+          "subtitle": "Tandai prospek yang belum dihubungi siapa pun agar menonjol sampai ada yang menghubungi. Tidak ada yang berubah sampai Anda mengaktifkan sebuah opsi.",
+          "clear": {
+            "title": "Tandai sudah dihubungi",
+            "intro": "Hapus penanda Belum dihubungi secara otomatis saat anggota tim melakukan salah satu hal berikut:",
+            "contactButton": "Menekan tombol kontak (telepon, SMS, email, atau WhatsApp) atau melakukan panggilan",
+            "message": "Mengirim pesan, templat, balasan tersimpan, atau file dari inbox",
+            "automation": "Kampanye, siaran, atau alur otomatis mengirim ke prospek",
+            "activity": "Menambahkan catatan, rapat, atau aktivitas lain ke linimasa",
+            "manualHint": "Anda juga dapat mengubah penanda secara manual: buka menu Lainnya pada kontak, atau pilih beberapa kontak lalu gunakan Lainnya di bilah di atas daftar."
+          },
+          "new": {
+            "title": "Tandai prospek baru sebagai belum dihubungi",
+            "intro": "Saat prospek dibuat dengan cara berikut, tandai sebagai belum dihubungi:",
+            "manual": "Dibuat manual di aplikasi",
+            "import": "Diimpor dari file atau Google Sheets",
+            "leadSource": "Sumber prospek, formulir, dan integrasi"
+          },
+          "reassign": {
+            "title": "Prospek yang dialihkan",
+            "intro": "Saat prospek ditugaskan atau dialihkan ke pemilik baru:",
+            "keep": "Jangan ubah penanda Belum dihubungi",
+            "mark": "Tandai belum dihubungi saat dialihkan"
+          }
+        }
+      }
+    }
+  }
+}

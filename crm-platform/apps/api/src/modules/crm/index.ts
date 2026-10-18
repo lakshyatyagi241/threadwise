@@ -81,7 +81,7 @@ export {
   ContactMeetingsRepository,
   toContactMeetingResponse,
 } from './contact-meetings';
-export type { ContactMeetingRow } from './contact-meetings';
+export type { BackfillBatch, BookedMeetingValues, ContactMeetingRow } from './contact-meetings';
 export {
   ContactGroupsService,
   ContactGroupsRepository,
@@ -89,6 +89,13 @@ export {
 } from './contact-groups';
 export type { ContactGroupRow } from './contact-groups';
 export { ContactBulkService, csvLine, UTF8_BOM } from './contact-bulk';
+export {
+  ContactTouchService,
+  LeadHandlingSettingsService,
+  callReachedContact,
+  createMethodOfActor,
+} from './lead-handling';
+export type { CreateMethod, TouchSource } from './lead-handling';
 export {
   SegmentsService,
   SegmentsRepository,

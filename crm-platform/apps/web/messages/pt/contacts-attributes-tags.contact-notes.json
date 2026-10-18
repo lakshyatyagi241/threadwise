@@ -94,7 +94,13 @@
             "endInvalid": "Informe uma data e hora de término válidas.",
             "endBeforeStart": "O término não pode ser anterior ao início."
           }
-        }
+        },
+        "bookedOnline": "Reservado online",
+        "viewBooking": "Ver reserva",
+        "manageBooking": "Gerenciar reserva",
+        "viewBookingAria": "Ver a reserva de {title}",
+        "manageBookingAria": "Gerenciar a reserva de {title}",
+        "bookedReadOnly": "Reservado online. Só pode ser alterado na reserva."
       },
       "files": {
         "title": "Arquivos",

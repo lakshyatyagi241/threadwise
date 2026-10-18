@@ -566,11 +566,12 @@
         "hint": "As reservas funcionam sem isto. Conecte o Google Agenda em Agendamentos, Configurações para sincronizar horários livres/ocupados e adicionar links do Meet.",
         "unavailable": "O Google Agenda ainda não está configurado nesta plataforma. Estas configurações ficam guardadas no tipo de reserva para quando estiver.",
         "calendarId": "Agenda",
-        "calendarPlaceholder": "principal",
         "spreadsheetId": "Adicionar à planilha (opcional)",
-        "spreadsheetPlaceholder": "ID da planilha",
         "createMeet": "Criar um link do Google Meet para cada reserva",
-        "calendarDefault": "A agenda do espaço de trabalho"
+        "calendarDefault": "A agenda do espaço de trabalho",
+        "connectFirst": "Conecte sua <link>conta Google</link> para escolher na lista dela.",
+        "spreadsheetNone": "Nenhuma planilha",
+        "spreadsheetNoListing": "Não foi possível listar suas planilhas porque a permissão de lista de arquivos do Drive não foi concedida. Adicione-a na página da conta Google."
       },
       "messages": {
         "title": "Mensagens do ciclo de vida",

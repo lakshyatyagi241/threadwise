@@ -1659,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— elegir una hoja —",
-              "empty": "No se encontraron hojas de cálculo: pega una URL o un id abajo",
               "loading": "Cargando hojas…",
-              "notConnected": "Google no está conectado en este espacio de trabajo, así que no se pueden listar tus hojas. Pega el id o el enlace de la hoja.",
-              "idPlaceholder": "Id de la hoja",
-              "saved": "Hoja {id}… (no cargada)"
+              "saved": "Hoja {id}… (no cargada)",
+              "empty": "No se encontraron hojas de cálculo en la cuenta de Google conectada",
+              "notConnected": "Google no está conectado en este espacio de trabajo, por lo que no se pueden listar tus hojas. Conecta Google para elegir una."
             },
             "docs": {
               "pick": "— elegir un documento de plantilla —",
               "empty": "No se encontraron documentos",
               "loading": "Cargando documentos…",
-              "notConnected": "Google no está conectado en este espacio de trabajo, así que no se pueden listar tus documentos. Pega el id o el enlace del documento.",
-              "idPlaceholder": "Id del documento",
-              "saved": "Documento {id}… (no cargado)"
+              "saved": "Documento {id}… (no cargado)",
+              "notConnected": "Google no está conectado en este espacio de trabajo, por lo que no se pueden listar tus documentos. Conecta Google para elegir uno."
             },
             "forms": {
               "pick": "— elegir un formulario —",
               "empty": "No se encontraron formularios",
               "loading": "Cargando formularios…",
-              "notConnected": "Google no está conectado en este espacio de trabajo, así que no se pueden listar tus formularios. Pega el id o el enlace del formulario.",
-              "idPlaceholder": "Id del formulario",
-              "saved": "Formulario {id}… (no cargado)"
+              "saved": "Formulario {id}… (no cargado)",
+              "notConnected": "Google no está conectado en este espacio de trabajo, por lo que no se pueden listar tus formularios. Conecta Google para elegir uno."
             }
           },
           "sheetsIntro": "Añade una fila a una hoja de Google (modo escritura) o busca una fila por una columna clave (modo lectura). Usa la cuenta de Google conectada del espacio de trabajo en <link>/google-account</link>.",
@@ -1701,8 +1698,6 @@
           "addColumn": "Añadir columna",
           "matchByHeader": "Emparejar columnas por el nombre del encabezado",
           "matchByHeaderHint": "Escribe cada valor en la columna de la hoja con ese encabezado (en cualquier orden). Desactívalo para añadir de izquierda a derecha por posición, que es lo predeterminado.",
-          "pasteLabel": "…o pega una URL / id de hoja de cálculo",
-          "pasteHint": "Funciona aunque el selector esté vacío: pega el enlace de la hoja y extraemos su id.",
           "docsIntro": "Copia un documento de plantilla, rellena los <mono>{placeholders}</mono>, lo comparte con cualquiera que tenga el enlace y envía la URL al cliente. Coloca <mono>{key}</mono> en tu plantilla donde deba ir el valor.",
           "templateDocument": "Documento de plantilla",
           "newCopyTitle": "Título de la nueva copia",
@@ -1717,7 +1712,6 @@
           "messageTemplateHint": "La burbuja del bot que se envía al cliente. <mono>{token}</mono> recibe el enlace para compartir.",
           "messageTemplatePlaceholder": "Aquí tienes tu documento:\n'{{'doc_url'}}'",
           "saveUrl": "Guardar la URL en la variable",
-          "formIntro": "Envía la URL del formulario por WhatsApp, pausa el flujo y lo reanuda por el puerto <b>enviado</b> cuando el cliente lo rellena. Las respuestas pasan a ser variables del flujo.",
           "googleForm": "Formulario de Google",
           "bodyBubble": "Burbuja de texto (se envía encima del enlace)",
           "bodyBubblePlaceholder": "Rellena este breve formulario:",
@@ -1725,12 +1719,6 @@
           "saveResponsesHint": "Las respuestas individuales también llegan como <mono>{token}</mono>.",
           "expireAfter": "Caduca tras (segundos)",
           "expireAfterHint": "Cuánto esperar un envío antes de agotar el tiempo. 86400 = 24 h.",
-          "setupTitle": "Configuración única: pega esto en el editor de scripts de tu formulario",
-          "setupOpen": "Abre tu formulario → <mono>menú ⋮</mono> → <mono>Editor de secuencias de comandos</mono>",
-          "setupDownload": "<link>Descarga el script (.gs)</link> y pégalo",
-          "setupTrigger": "Añade un activador: <mono>onFormSubmit</mono> · Desde el formulario · Al enviar el formulario",
-          "setupWarning": "Sin este script, el formulario seguirá registrando las respuestas en Formularios de Google, pero el flujo no se reanudará.",
-          "noListing": "No se pueden listar tus archivos porque no se concedió el permiso de lista de archivos de Drive en la página de la cuenta de Google. Pega el enlace o el ID en su lugar.",
           "connection": {
             "open": "Abrir cuenta de Google",
             "permission": {
@@ -1743,7 +1731,9 @@
             "disconnected": "No hay ninguna cuenta de Google conectada, por lo que este paso falla al ejecutarse el flujo. Conecte Google primero.",
             "needsReconnect": "Google ya no acepta la cuenta conectada, por lo que este paso falla al ejecutarse el flujo. Vuelva a conectar Google primero.",
             "missing": "La cuenta de Google conectada no concedió el permiso {permission}, por lo que este paso falla al ejecutarse el flujo."
-          }
+          },
+          "formIntro": "Envía la URL del formulario por WhatsApp, pausa el flujo y lo reanuda por el puerto <b>submitted</b> cuando el cliente lo completa. Las respuestas se leen del formulario a través de tu cuenta de Google conectada, así que no hay que pegar nada en el formulario. Las respuestas pasan a ser variables del flujo.",
+          "noListing": "No se pueden listar tus archivos porque no se concedió el permiso de lista de archivos de Drive en la página de la cuenta de Google. Añádelo allí para elegir archivos."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",

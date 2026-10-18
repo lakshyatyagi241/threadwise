@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Conectado",
           "shopify": "Conectado",
-          "google_sheets": "Clave de API emitida",
-          "meta_catalog": "Catálogo vinculado"
+          "meta_catalog": "Catálogo vinculado",
+          "google_sheets": "Cuenta de Google conectada"
         },
         "notConnected": "no conectado",
         "connect": "Conectar",
@@ -494,7 +494,8 @@
         "title": "Colas",
         "name": "Cola",
         "pending": "Pendientes",
-        "failed": "Fallidos"
+        "failed": "Fallidos",
+        "lastFailure": "Motivo del último fallo"
       },
       "clear": {
         "button": "Borrar trabajos pendientes",

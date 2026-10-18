@@ -26,7 +26,7 @@ Plan checkout is the page you land on when you buy a plan or an add-on pack. It 
 
 - **Renew automatically each period** appears only for gateways that support it, and only for paid monthly plans. Leave it off for a single payment. You can cancel a renewal at any time and keep the plan until the end of the paid term.
 - **Bank transfer and offline gateways** show the account details and an order reference. Include the reference on the transfer, then upload your receipt as payment proof. The plan activates once the platform team verifies it.
-- **Sandbox** next to a gateway means it takes test payments only.
+- **Sandbox** next to a gateway means it takes test payments only. When you pick one, a note reminds you that no real money is charged, to pay with the test card from the gateway's documentation, and that the one-time password (OTP) page comes from the gateway, not from this app.
 
 > Moving to a cheaper plan is not available online. Contact support to downgrade.
 

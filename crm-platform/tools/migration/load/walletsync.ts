@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { connect, sql, withPrivileged, withTenant } from './db';
+import { centsOf } from '../credits/decimal';
 import { LEDGER_PREFIX } from './credits';
 
 /**
@@ -29,7 +30,7 @@ interface CoreSnapshot {
   workspace?: { id?: string; credits?: { remaining_amounts?: number; currency?: string } };
 }
 
-const cents = (n: number): bigint => BigInt(Math.round(n * 100));
+const cents = centsOf;
 const text = (c: bigint): string => `${c < 0n ? '-' : ''}${(c < 0n ? -c : c) / 100n}.${String((c < 0n ? -c : c) % 100n).padStart(2, '0')}`;
 
 export async function walletSync(o: WalletSyncOptions): Promise<void> {

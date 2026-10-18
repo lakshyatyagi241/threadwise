@@ -21,6 +21,7 @@ import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { assertOwnerWithinScope } from '../owner-scope';
 import { ContactsRepository } from '../contacts/contacts.repository';
+import { ContactTouchService } from '../lead-handling/contact-touch.service';
 import { OwnerReassignRepository, type Actor, type BatchRow } from './owner-reassign.repository';
 
 const invalid = (message: string, path?: string) =>
@@ -55,6 +56,7 @@ export class OwnerReassignService {
     private readonly contacts: ContactsRepository,
     private readonly outbox: OutboxService,
     private readonly rbac: RbacService,
+    private readonly touch: ContactTouchService,
   ) {}
 
   private actor(): Actor {
@@ -117,6 +119,7 @@ export class OwnerReassignService {
         target.userIds,
         OWNER_REASSIGN_RUN_MAX,
         actor,
+        await this.touch.marksOnReassign(tx, ctx.orgId),
       );
       const deals = input.includeDeals
         ? await this.repo.moveDeals(

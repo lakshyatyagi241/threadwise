@@ -34,6 +34,8 @@ export const chatbotWidgets = pgTable(
     name: text('name').notNull(),
     slug: text('slug').notNull(),
     embedToken: text('embed_token').notNull(),
+    /** The bot id a migrated customer's old embed still carries (see wgt_legacy_lookup). */
+    legacyEmbedId: text('legacy_embed_id'),
     mode: text('mode').notNull().default('ai'),
     targetWhatsappCc: text('target_whatsapp_cc'),
     targetWhatsappNumber: text('target_whatsapp_number'),

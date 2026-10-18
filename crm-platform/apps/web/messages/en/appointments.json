@@ -566,11 +566,12 @@
         "hint": "Bookings work without this. Connect Google Calendar in Appointments, Settings to sync free/busy times and add Meet links.",
         "unavailable": "Google Calendar is not set up for this platform yet. These settings are kept with the booking type for when it is.",
         "calendarId": "Calendar",
-        "calendarPlaceholder": "primary",
         "spreadsheetId": "Sheet append (optional)",
-        "spreadsheetPlaceholder": "Spreadsheet ID",
         "createMeet": "Create a Google Meet link for each booking",
-        "calendarDefault": "The workspace calendar"
+        "calendarDefault": "The workspace calendar",
+        "connectFirst": "Connect your <link>Google account</link> to choose from its list.",
+        "spreadsheetNone": "No sheet",
+        "spreadsheetNoListing": "Your sheets cannot be listed because the Drive file list permission was not given. Add it on the Google account page."
       },
       "messages": {
         "title": "Lifecycle messages",

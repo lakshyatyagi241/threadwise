@@ -94,7 +94,13 @@
             "endInvalid": "הזן תאריך ושעת סיום תקינים.",
             "endBeforeStart": "הסיום לא יכול להיות לפני ההתחלה."
           }
-        }
+        },
+        "bookedOnline": "הוזמן אונליין",
+        "viewBooking": "צפייה בהזמנה",
+        "manageBooking": "ניהול ההזמנה",
+        "viewBookingAria": "צפייה בהזמנה של {title}",
+        "manageBookingAria": "ניהול ההזמנה של {title}",
+        "bookedReadOnly": "הוזמן אונליין. אפשר לשנות אותו רק בהזמנה עצמה."
       },
       "files": {
         "title": "קבצים",

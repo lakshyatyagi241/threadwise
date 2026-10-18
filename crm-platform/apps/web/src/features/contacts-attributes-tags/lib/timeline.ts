@@ -8,6 +8,7 @@ import type {
   FieldHistoryEntry,
   TaskResponse,
 } from '@crm/contracts';
+import { isClosedBooking } from './meeting-booking';
 
 /**
  * The activity timeline of a contact, made from the things the contact already has: the activity feed (e-mail, forms, orders, logged
@@ -118,6 +119,8 @@ export type EntryData =
       endsAt: string | null;
       location: string | null;
       upcoming: boolean;
+      /** The booking's status when the meeting mirrors one (a cancelled or declined booking is not "Met"). */
+      status: ContactMeetingResponse['status'];
     }
   | {
       type: 'call';
@@ -269,7 +272,7 @@ export function fromTask(t: TaskResponse): TimelineEntry {
 
 /** A meeting still to come waits "Up next"; one that happened sits at its start (no start: when it was logged). */
 export function fromMeeting(m: ContactMeetingResponse, now: Date): TimelineEntry {
-  const upcoming = m.startsAt !== null && ms(m.startsAt) > now.getTime();
+  const upcoming = m.startsAt !== null && ms(m.startsAt) > now.getTime() && !isClosedBooking(m);
   return {
     id: `meeting:${m.id}`,
     kind: 'meeting',
@@ -286,6 +289,7 @@ export function fromMeeting(m: ContactMeetingResponse, now: Date): TimelineEntry
       endsAt: m.endsAt,
       location: m.location,
       upcoming,
+      status: m.status ?? null,
     },
   };
 }

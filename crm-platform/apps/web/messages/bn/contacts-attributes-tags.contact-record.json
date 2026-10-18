@@ -196,7 +196,9 @@
           },
           "meeting": {
             "upcoming": "মিটিং: {title}",
-            "past": "দেখা হয়েছে: {title}"
+            "past": "দেখা হয়েছে: {title}",
+            "notHeld": "অনুষ্ঠিত হয়নি: {title}",
+            "noShow": "উপস্থিত হননি: {title}"
           },
           "call": {
             "inbound": "ইনকামিং কল",

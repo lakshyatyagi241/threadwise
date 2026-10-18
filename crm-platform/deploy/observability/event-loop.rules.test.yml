@@ -279,6 +279,65 @@ tests:
             exp_annotations:
               summary: 'Metrics scrape of crm-api a:1 failing'
 
+  # ---- web: sustained loop delay AND slow pages pages (EL-B20) ---------------------------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_p95_seconds{service="web",instance="w:1"}'
+        values: '0.08x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="web",instance="w:1",le="0.5"}'
+        values: '0x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="web",instance="w:1",le="2.5"}'
+        values: '0+100x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="web",instance="w:1",le="+Inf"}'
+        values: '0+100x15'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: WebEventLoopBlockingWithImpact
+        exp_alerts: [] # degraded for under the 5 m window
+      - eval_time: 12m
+        alertname: WebEventLoopBlockingWithImpact
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              service: web
+              instance: 'w:1'
+            exp_annotations:
+              summary: 'Web server event loop blocked and pages are waiting on w:1'
+              description: 'Sustained loop delay in the Next.js server with either the loop delay p95 over 250 ms or page p95 over 500 ms. Capture a CPU profile (runbook, section Capture evidence) before restarting.'
+
+  # ---- web: a busy loop with fast pages does not page ------------------------------------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_p95_seconds{service="web",instance="w:1"}'
+        values: '0.08x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="web",instance="w:1",le="0.05"}'
+        values: '0+100x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="web",instance="w:1",le="+Inf"}'
+        values: '0+100x15'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: WebEventLoopBlockingWithImpact
+        exp_alerts: []
+
+  # ---- web: the API's request histogram does not trigger the web rule, and the reverse -----------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_p95_seconds{service="web",instance="w:1"}'
+        values: '0.08x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="0.5"}'
+        values: '0x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="2.5"}'
+        values: '0+100x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="+Inf"}'
+        values: '0+100x15'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: WebEventLoopBlockingWithImpact
+        exp_alerts: [] # slow API requests are not slow pages
+      - eval_time: 12m
+        alertname: EventLoopBlockingWithImpact
+        exp_alerts: [] # the web loop is not the API's
+
   # ---- the web server's metrics target is watched the same way (EL-B07) ------------------------------------------------------
   - interval: 1m
     input_series:

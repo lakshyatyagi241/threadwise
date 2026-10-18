@@ -196,7 +196,9 @@
           },
           "meeting": {
             "upcoming": "Meeting: {title}",
-            "past": "Met: {title}"
+            "past": "Met: {title}",
+            "notHeld": "Not held: {title}",
+            "noShow": "No-show: {title}"
           },
           "call": {
             "inbound": "Incoming call",

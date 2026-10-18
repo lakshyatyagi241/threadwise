@@ -61,6 +61,8 @@ Use **Try it** inside an FAQ, or the **Test** tab. You see what would happen, th
 
 The **Unanswered** tab lists customer messages this flow's FAQs did not answer, and why. For each one you can **Add to an FAQ** as a new phrasing, **Create FAQ from this**, or **Dismiss**. This is the fastest way to improve coverage. If your workspace does not keep customer messages, the text shows as not kept and cannot be learned from.
 
+**Fallback message.** Below the list, the **Fallback message** card sets what the flow replies when no FAQ matches (below the bar, too close to call, or no FAQs yet). It is sent exactly as you type it, spelling and punctuation included, and the unanswered message still appears in the list so you can teach the FAQ afterwards. Leave it empty to send no reply. A message an FAQ already answered, or a flow handled, never gets the fallback.
+
 ## Insights
 
 **Insights** shows, for this flow, the answer rate, messages per day, how well messages scored compared with your sensitivity, your top FAQs, FAQs that never matched, and the full match log.

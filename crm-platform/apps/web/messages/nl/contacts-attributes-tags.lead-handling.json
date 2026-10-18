@@ -1,0 +1,65 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "Niet benaderd"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "Niet benaderd",
+        "chipTitle": "Niemand in het team heeft al contact opgenomen",
+        "waitingSince": "Wacht sinds {date}",
+        "markContacted": "Markeren als benaderd",
+        "markUncontacted": "Markeren als niet benaderd",
+        "markedContacted": "Gemarkeerd als benaderd",
+        "markedUncontacted": "Gemarkeerd als niet benaderd",
+        "markFailed": "De markering kon niet worden gewijzigd. Probeer het opnieuw.",
+        "bulkMarkedContacted": "{count, plural, one {# contact gemarkeerd als benaderd} other {# contacten gemarkeerd als benaderd}}",
+        "bulkMarkedUncontacted": "{count, plural, one {# contact gemarkeerd als niet benaderd} other {# contacten gemarkeerd als niet benaderd}}"
+      },
+      "settings": {
+        "save": "Opslaan",
+        "discard": "Wijzigingen negeren",
+        "saved": "Instellingen opgeslagen",
+        "retry": "Opnieuw proberen",
+        "loading": "Instellingen laden",
+        "conflict": "Iemand anders heeft deze instellingen opgeslagen terwijl je bezig was met bewerken. Ze worden hieronder opnieuw getoond; breng je wijziging nogmaals aan.",
+        "conflictOk": "Begrepen",
+        "errors": {
+          "network": "De server is niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
+          "forbidden": "Alleen mensen die de instellingen van de werkruimte beheren, kunnen deze pagina wijzigen.",
+          "conflict": "Iemand anders heeft deze instellingen eerder gewijzigd. Laad de pagina opnieuw en probeer het nog eens.",
+          "validation": "Sommige instellingen zijn ongeldig. Controleer ze en probeer het opnieuw.",
+          "unexpected": "Er is iets misgegaan. Probeer het opnieuw."
+        },
+        "uncontacted": {
+          "title": "Niet-benaderde leads",
+          "subtitle": "Markeer de leads die nog niemand heeft benaderd, zodat ze opvallen tot iemand contact opneemt. Er verandert niets totdat je een optie inschakelt.",
+          "clear": {
+            "title": "Markeren als benaderd",
+            "intro": "Verwijder de markering Niet benaderd automatisch wanneer een teamlid een van de volgende dingen doet:",
+            "contactButton": "Op een contactknop drukt (bellen, sms, e-mail of WhatsApp) of een gesprek start",
+            "message": "Een bericht, sjabloon, opgeslagen antwoord of bestand verstuurt vanuit de inbox",
+            "automation": "Een campagne, broadcast of geautomatiseerde flow naar de lead verstuurt",
+            "activity": "Een notitie, vergadering of andere activiteit aan de tijdlijn toevoegt",
+            "manualHint": "Je kunt de markering ook handmatig wijzigen: open het menu Meer bij een contact, of selecteer meerdere contacten en gebruik Meer in de balk boven de lijst."
+          },
+          "new": {
+            "title": "Nieuwe leads markeren als niet benaderd",
+            "intro": "Wanneer een lead op een van deze manieren wordt aangemaakt, markeer de lead dan als niet benaderd:",
+            "manual": "Handmatig aangemaakt in de app",
+            "import": "Geïmporteerd uit een bestand of Google Sheets",
+            "leadSource": "Leadbronnen, formulieren en integraties"
+          },
+          "reassign": {
+            "title": "Opnieuw toegewezen leads",
+            "intro": "Wanneer een lead aan een nieuwe eigenaar wordt toegewezen of opnieuw wordt toegewezen:",
+            "keep": "De markering Niet benaderd niet wijzigen",
+            "mark": "Markeren als niet benaderd bij hertoewijzing"
+          }
+        }
+      }
+    }
+  }
+}

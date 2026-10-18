@@ -19,7 +19,7 @@ scp "${SSH_OPTS[@]}" -q deploy/hostinger/{docker-compose.yml,init-roles.sh,seed.
 run "cd $DIR && set -e
 if [ ! -f .env ]; then
   cp .env.example .env
-  for k in POSTGRES_PASSWORD APP_DB_PASSWORD WORKER_DB_PASSWORD MINIO_ROOT_PASSWORD JWT_ACCESS_SECRET JWT_REFRESH_SECRET WHATSAPP_VERIFY_TOKEN; do
+  for k in POSTGRES_PASSWORD APP_DB_PASSWORD WORKER_DB_PASSWORD JWT_ACCESS_SECRET JWT_REFRESH_SECRET WHATSAPP_VERIFY_TOKEN; do
     sed -i \"s|^\$k=CHANGE_ME|\$k=\$(openssl rand -hex 24)|\" .env
   done
   sed -i \"s|^CREDENTIALS_ENCRYPTION_KEY=CHANGE_ME|CREDENTIALS_ENCRYPTION_KEY=\$(openssl rand -base64 32)|\" .env

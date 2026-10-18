@@ -126,7 +126,12 @@
       "details": {
         "title": "Kişi ayrıntıları",
         "stage": "Yaşam döngüsü aşaması",
-        "otherProperties": "Diğer özellikler"
+        "otherProperties": "Diğer özellikler",
+        "stageSince": "Bu aşamada başlangıç",
+        "previousStage": "Önceki aşama",
+        "previousStageSince": "Önceki aşama başlangıcı",
+        "lostReason": "Kayıp nedeni",
+        "updatedAt": "Son güncelleme"
       },
       "company": {
         "title": "Şirket",

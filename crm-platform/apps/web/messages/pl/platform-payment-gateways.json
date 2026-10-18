@@ -107,6 +107,7 @@
       "noGateway": "Nie skonfigurowano jeszcze bramki płatności dla {currency}. Poproś administratora o aktywację.",
       "noGatewayButton": "Brak skonfigurowanej bramki",
       "sandbox": "sandbox",
+      "sandboxNote": "Tryb testowy: nie pobieramy prawdziwych pieniędzy. Zapłać kartą testową z dokumentacji Twojej bramki płatności. Stronę z hasłem jednorazowym (OTP) wyświetla bramka, a nie ta aplikacja.",
       "pay": "Zapłać {amount}",
       "processing": "Rozpoczynanie płatności",
       "summary": "Podsumowanie zamówienia",

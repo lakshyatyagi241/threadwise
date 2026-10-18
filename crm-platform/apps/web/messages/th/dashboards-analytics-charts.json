@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "เชื่อมต่อแล้ว",
           "shopify": "เชื่อมต่อแล้ว",
-          "google_sheets": "ออกคีย์ API แล้ว",
-          "meta_catalog": "เชื่อมแค็ตตาล็อกแล้ว"
+          "meta_catalog": "เชื่อมแค็ตตาล็อกแล้ว",
+          "google_sheets": "เชื่อมต่อบัญชี Google แล้ว"
         },
         "notConnected": "ยังไม่ได้เชื่อมต่อ",
         "connect": "เชื่อมต่อ",
@@ -494,7 +494,8 @@
         "title": "คิว",
         "name": "คิว",
         "pending": "รอดำเนินการ",
-        "failed": "ล้มเหลว"
+        "failed": "ล้มเหลว",
+        "lastFailure": "สาเหตุของความล้มเหลวล่าสุด"
       },
       "clear": {
         "button": "ล้างงานที่รอดำเนินการ",

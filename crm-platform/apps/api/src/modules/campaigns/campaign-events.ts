@@ -4,6 +4,7 @@ import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { deliveryProviderOf, emitDeliveryReported } from '../../kernel/outbox/delivery-report';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { ContactTouchService } from '../crm';
 import { isNewer } from './campaign-rules';
 import { CampaignsRepository } from './campaigns.repository';
 import { statusNotification, statusWebhook, toSnapshot } from './campaign-webhook-events';
@@ -20,6 +21,7 @@ export class CampaignEvents {
   constructor(
     private readonly repo: CampaignsRepository,
     private readonly outbox: OutboxService,
+    private readonly leadHandling: ContactTouchService,
   ) {}
 
   /** After any status change: the campaign as it is now, its counts, and the status it left. */
@@ -70,6 +72,10 @@ export class CampaignEvents {
         error: o.error ?? null,
       },
     });
+    // The campaign message reached the contact: lead handling (the uncontacted marker, BL-290). Never throws.
+    if (status === 'sent') {
+      await this.leadHandling.touch(tx, RequestContextStore.orgId(), contactId, 'automation');
+    }
   }
 
   /**

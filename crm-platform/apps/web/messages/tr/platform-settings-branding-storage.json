@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "Uç nokta",
-            "hint": "Spaces, R2 ve MinIO için gerekli. Sondaki /bucket kaldırılır.",
-            "placeholder": "https://… (Spaces / R2 / MinIO için gerekli; Wasabi ve Bunny için otomatik)"
+            "hint": "Spaces ve R2 için gerekli. Sondaki /bucket kaldırılır.",
+            "placeholder": "https://… (Spaces / R2 için gerekli; Wasabi ve Bunny için otomatik)"
           },
           "cdnUrl": {
             "label": "Genel / CDN URL'si (isteğe bağlı)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "Yol tabanlı uç nokta kullan (MinIO / bazı S3 uyumlu depolamalar)"
+            "label": "Yol tabanlı uç nokta kullan (bazı S3 uyumlu depolamalar)"
           },
           "storageZone": {
             "label": "Depolama bölgesi",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3 uyumlu"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "Özel (imzalı URL'ler)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "Bulut depolama",
-        "description": "Müşteri medyasını kendi depolama alanınıza gönderin: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 veya MinIO.",
+        "description": "Müşteri medyasını kendi depolama alanınıza gönderin: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "Bunny alanlarını kullanın: depolama bölgesi ve parola. Bölge, depolama bölgesinin konumudur (de, ny, la...)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "S3 alanlarını doldurun ve Uç Nokta URL'sini yapıştırın. MinIO için yol tabanlı seçeneğini işaretleyin."
+              "title": "Spaces / R2",
+              "body": "S3 alanlarını doldurun ve Uç Nokta URL'sini yapıştırın."
             },
             "test": {
               "title": "Her zaman önce test edin",
@@ -1760,7 +1759,7 @@
             },
             "consent": {
               "title": "3. Onay ekranı",
-              "body": "Ürünün istediği kapsamları ekleyin (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), ardından uygulamayı yayımlayın: Test aşamasında Google her izni 7 gün sonra sonlandırır ve çalışma alanlarının yeniden bağlanması gerekir. Drive kapsamları kısıtlıdır ve Google incelemesi gerektirir."
+              "body": "Ürünün istediği kapsamları ekleyin (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), ardından uygulamayı yayımlayın: Test aşamasında Google her izni 7 gün sonra sonlandırır ve çalışma alanlarının yeniden bağlanması gerekir. Drive kapsamları kısıtlıdır ve Google incelemesi gerektirir."
             },
             "workspaces": {
               "title": "4. Çalışma alanları bağlanır",

@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "এন্ডপয়েন্ট",
-            "hint": "Spaces, R2 ও MinIO-র জন্য প্রয়োজন। শেষের /bucket মুছে ফেলা হয়।",
-            "placeholder": "https://… (Spaces / R2 / MinIO-র জন্য প্রয়োজন; Wasabi ও Bunny-র জন্য স্বয়ংক্রিয়)"
+            "hint": "Spaces ও R2-র জন্য প্রয়োজন। শেষের /bucket মুছে ফেলা হয়।",
+            "placeholder": "https://… (Spaces / R2-র জন্য প্রয়োজন; Wasabi ও Bunny-র জন্য স্বয়ংক্রিয়)"
           },
           "cdnUrl": {
             "label": "পাবলিক / CDN URL (ঐচ্ছিক)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "path-style এন্ডপয়েন্ট ব্যবহার করুন (MinIO / কিছু S3-সামঞ্জস্যপূর্ণ স্টোর)"
+            "label": "path-style এন্ডপয়েন্ট ব্যবহার করুন (কিছু S3-সামঞ্জস্যপূর্ণ স্টোর)"
           },
           "storageZone": {
             "label": "স্টোরেজ জোন",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3-compatible"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "ব্যক্তিগত (সাইন করা URL)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "ক্লাউড স্টোরেজ",
-        "description": "ক্লায়েন্টের মিডিয়া আপনার নিজের বাকেটে পাঠান: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 বা MinIO।",
+        "description": "ক্লায়েন্টের মিডিয়া আপনার নিজের বাকেটে পাঠান: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2।",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "Bunny-র ফিল্ড ব্যবহার করুন: স্টোরেজ জোন ও পাসওয়ার্ড। রিজিয়ন হলো জোনের রিজিয়ন (de, ny, la...)।"
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "S3 ফিল্ড পূরণ করুন এবং Endpoint URL পেস্ট করুন। MinIO-র জন্য path-style টিক দিন।"
+              "title": "Spaces / R2",
+              "body": "S3 ফিল্ড পূরণ করুন এবং Endpoint URL পেস্ট করুন।"
             },
             "test": {
               "title": "আগে সবসময় পরীক্ষা করুন",
@@ -1760,7 +1759,7 @@
             },
             "consent": {
               "title": "৩. সম্মতি স্ক্রিন",
-              "body": "পণ্যটি যে স্কোপ চায় সেগুলো যোগ করুন (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), তারপর অ্যাপ প্রকাশ করুন: Testing অবস্থায় Google ৭ দিন পর প্রতিটি অনুমতি বন্ধ করে দেয় এবং ওয়ার্কস্পেসকে আবার সংযুক্ত করতে হয়। drive স্কোপগুলো সীমাবদ্ধ এবং Google-এর পর্যালোচনা লাগে।"
+              "body": "পণ্যটি যে স্কোপ চায় সেগুলো যোগ করুন (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), তারপর অ্যাপ প্রকাশ করুন: Testing অবস্থায় Google ৭ দিন পর প্রতিটি অনুমতি বন্ধ করে দেয় এবং ওয়ার্কস্পেসকে আবার সংযুক্ত করতে হয়। drive স্কোপগুলো সীমাবদ্ধ এবং Google-এর পর্যালোচনা লাগে।"
             },
             "workspaces": {
               "title": "৪. ওয়ার্কস্পেস সংযুক্ত করে",

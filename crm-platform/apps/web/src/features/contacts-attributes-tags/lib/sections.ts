@@ -55,14 +55,33 @@ export function sectionAllowed(id: SectionId, has: (permission: string) => boole
   return !need || need.some(has);
 }
 
+/**
+ * Whether the workspace's persona hides a section (`section:contact.<id>`; use `usePersonaVisibility().isSectionHidden`). It only
+ * decides what is DRAWN in a tab strip or menu: the permission check above is separate and unchanged, the section keeps its URL, and
+ * `parseSection` still accepts it, so a link to a hidden section opens when the permission allows.
+ */
+export type SectionHidden = (id: SectionId) => boolean;
+
+/** Allowed by permission and not hidden by the persona. Without a `hidden` predicate (the `generic` persona, or none) this is `sectionAllowed`. */
+function shown(
+  s: SectionId,
+  has: (permission: string) => boolean,
+  hidden: SectionHidden | undefined,
+): boolean {
+  return sectionAllowed(s, has) && !hidden?.(s);
+}
+
 /** The sections a person sees, in the sub-nav's order, split into its two groups. */
-export function visibleSections(has: (permission: string) => boolean): {
+export function visibleSections(
+  has: (permission: string) => boolean,
+  hidden?: SectionHidden,
+): {
   core: CoreSection[];
   related: RelatedSection[];
 } {
   return {
-    core: CORE_SECTIONS.filter((s) => sectionAllowed(s, has)),
-    related: RELATED_SECTIONS.filter((s) => sectionAllowed(s, has)),
+    core: CORE_SECTIONS.filter((s) => shown(s, has, hidden)),
+    related: RELATED_SECTIONS.filter((s) => shown(s, has, hidden)),
   };
 }
 
@@ -85,14 +104,17 @@ export const TAB_MORE = [
 ] as const satisfies readonly SectionId[];
 export type QuickSection = (typeof TAB_PRIMARY)[number] | (typeof TAB_MORE)[number];
 
-/** The tabs a person sees, split into the strip and its overflow menu; a section whose permission they lack is left out. */
-export function quickTabs(has: (permission: string) => boolean): {
+/** The tabs a person sees, split into the strip and its overflow menu; a section whose permission they lack, or the persona hides, is left out. */
+export function quickTabs(
+  has: (permission: string) => boolean,
+  hidden?: SectionHidden,
+): {
   primary: QuickSection[];
   more: QuickSection[];
 } {
   return {
-    primary: TAB_PRIMARY.filter((s) => sectionAllowed(s, has)),
-    more: TAB_MORE.filter((s) => sectionAllowed(s, has)),
+    primary: TAB_PRIMARY.filter((s) => shown(s, has, hidden)),
+    more: TAB_MORE.filter((s) => shown(s, has, hidden)),
   };
 }
 
@@ -173,13 +195,19 @@ export const PAGE_MORE = [
   'history',
 ] as const satisfies readonly SectionId[];
 
-/** The tabs a person sees and the sections in their "More" menu; what their permissions do not allow is left out. */
-export function pageTabs(has: (permission: string) => boolean): {
+/**
+ * The tabs a person sees and the sections in their "More" menu; what their permissions do not allow is left out, and so is what the
+ * workspace's persona hides (`hidden`; pass a predicate that spares the section on screen, so a deep link still shows where it is).
+ */
+export function pageTabs(
+  has: (permission: string) => boolean,
+  hidden?: SectionHidden,
+): {
   primary: SectionId[];
   more: SectionId[];
 } {
   return {
-    primary: PAGE_TABS.filter((s) => sectionAllowed(s, has)),
-    more: PAGE_MORE.filter((s) => sectionAllowed(s, has)),
+    primary: PAGE_TABS.filter((s) => shown(s, has, hidden)),
+    more: PAGE_MORE.filter((s) => shown(s, has, hidden)),
   };
 }

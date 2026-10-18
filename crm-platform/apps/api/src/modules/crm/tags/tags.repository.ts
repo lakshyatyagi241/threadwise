@@ -81,6 +81,32 @@ export class TagsRepository {
     return rows[0] as TagRow | undefined;
   }
 
+  /**
+   * The tags with these names in one query per 5000 names, keyed by the lower-cased trimmed name. Case-insensitive like `findByName`
+   * (`name` is citext). A name with no tag is absent.
+   */
+  async findByNames(tx: Tx, orgId: number, names: readonly string[]): Promise<Map<string, TagRow>> {
+    const out = new Map<string, TagRow>();
+    const wanted = [...new Set(names.map((n) => n.trim()).filter((n) => n !== ''))];
+    for (let i = 0; i < wanted.length; i += 5000) {
+      const chunk = wanted.slice(i, i + 5000);
+      const rows = await tx
+        .select(this.selection())
+        .from(tags)
+        .where(
+          and(
+            eq(tags.orgId, orgId),
+            sql`${tags.name} = ANY(ARRAY[${sql.join(
+              chunk.map((n) => sql`${n}`),
+              sql`, `,
+            )}]::citext[])`,
+          ),
+        );
+      for (const r of rows as TagRow[]) out.set(r.name.trim().toLowerCase(), r);
+    }
+    return out;
+  }
+
   async countAll(tx: Tx, orgId: number): Promise<number> {
     const res = await tx.execute(sql`SELECT count(*)::int AS n FROM tags WHERE org_id = ${orgId}`);
     return Number((res.rows[0] as { n: number }).n);
@@ -186,16 +212,18 @@ export class TagsRepository {
     tagIds: number[],
     createdBy: number | null,
   ): Promise<Array<{ contactId: number; tagId: number }>> {
+    // Every (contact, tag) pair in one statement per 1000 rows; a pair that already exists is skipped and not returned, as before.
+    const pairs = contactIds.flatMap((contactId) =>
+      tagIds.map((tagId) => ({ orgId, contactId, tagId, createdBy })),
+    );
     const added: Array<{ contactId: number; tagId: number }> = [];
-    for (const contactId of contactIds) {
-      for (const tagId of tagIds) {
-        const rows = await tx
-          .insert(contactTags)
-          .values({ orgId, contactId, tagId, createdBy })
-          .onConflictDoNothing()
-          .returning({ contactId: contactTags.contactId, tagId: contactTags.tagId });
-        if (rows[0]) added.push(rows[0]);
-      }
+    for (let i = 0; i < pairs.length; i += 1000) {
+      const rows = await tx
+        .insert(contactTags)
+        .values(pairs.slice(i, i + 1000))
+        .onConflictDoNothing()
+        .returning({ contactId: contactTags.contactId, tagId: contactTags.tagId });
+      added.push(...rows);
     }
     return added;
   }

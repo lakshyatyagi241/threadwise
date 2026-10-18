@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "एंडपॉइंट",
-            "hint": "Spaces, R2 और MinIO के लिए ज़रूरी। अंत में लगा /bucket हटा दिया जाता है।",
-            "placeholder": "https://… (Spaces / R2 / MinIO के लिए ज़रूरी; Wasabi और Bunny के लिए स्वतः)"
+            "hint": "Spaces और R2 के लिए ज़रूरी। अंत में लगा /bucket हटा दिया जाता है।",
+            "placeholder": "https://… (Spaces / R2 के लिए ज़रूरी; Wasabi और Bunny के लिए स्वतः)"
           },
           "cdnUrl": {
             "label": "सार्वजनिक / CDN URL (वैकल्पिक)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "पाथ-स्टाइल एंडपॉइंट इस्तेमाल करें (MinIO / कुछ S3-संगत स्टोर)"
+            "label": "पाथ-स्टाइल एंडपॉइंट इस्तेमाल करें (कुछ S3-संगत स्टोर)"
           },
           "storageZone": {
             "label": "स्टोरेज ज़ोन",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net स्टोरेज",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3-संगत"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "निजी (साइन किए गए URL)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "क्लाउड स्टोरेज",
-        "description": "ग्राहक मीडिया को अपनी बकेट में भेजें: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 या MinIO।",
+        "description": "ग्राहक मीडिया को अपनी बकेट में भेजें: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2।",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "Bunny फ़ील्ड उपयोग करें: स्टोरेज ज़ोन और पासवर्ड। रीजन ज़ोन का रीजन है (de, ny, la...)।"
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "S3 फ़ील्ड भरें और Endpoint URL चिपकाएँ। MinIO के लिए path-style पर टिक करें।"
+              "title": "Spaces / R2",
+              "body": "S3 फ़ील्ड भरें और Endpoint URL चिपकाएँ।"
             },
             "test": {
               "title": "हमेशा पहले जाँचें",
@@ -1760,7 +1759,7 @@
             },
             "consent": {
               "title": "3. कंसेंट स्क्रीन",
-              "body": "वे स्कोप जोड़ें जो प्रोडक्ट माँगता है (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), फिर ऐप प्रकाशित करें: Testing में Google हर अनुमति 7 दिन बाद समाप्त कर देता है और वर्कस्पेस को दोबारा कनेक्ट करना होगा। drive स्कोप प्रतिबंधित हैं और उन्हें Google की समीक्षा चाहिए।"
+              "body": "वे स्कोप जोड़ें जो प्रोडक्ट माँगता है (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), फिर ऐप प्रकाशित करें: Testing में Google हर अनुमति 7 दिन बाद समाप्त कर देता है और वर्कस्पेस को दोबारा कनेक्ट करना होगा। drive स्कोप प्रतिबंधित हैं और उन्हें Google की समीक्षा चाहिए।"
             },
             "workspaces": {
               "title": "4. वर्कस्पेस कनेक्ट करें",

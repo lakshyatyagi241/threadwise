@@ -126,7 +126,12 @@
       "details": {
         "title": "تفاصيل جهة الاتصال",
         "stage": "مرحلة دورة الحياة",
-        "otherProperties": "خصائص أخرى"
+        "otherProperties": "خصائص أخرى",
+        "stageSince": "في هذه المرحلة منذ",
+        "previousStage": "المرحلة السابقة",
+        "previousStageSince": "المرحلة السابقة منذ",
+        "lostReason": "سبب الخسارة",
+        "updatedAt": "آخر تحديث"
       },
       "company": {
         "title": "الشركة",

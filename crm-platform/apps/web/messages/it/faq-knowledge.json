@@ -409,7 +409,14 @@
       "learned": "Aggiunto a \"{question}\". D'ora in poi riceverà risposta.",
       "pickTitle": "A quale FAQ aggiungere questo messaggio?",
       "loadMore": "Carica altro",
-      "loadingMore": "Caricamento"
+      "loadingMore": "Caricamento",
+      "fallback": {
+        "title": "Quando nessuna FAQ risponde",
+        "hint": "Questa risposta va al cliente il cui messaggio non trova risposta in nessuna FAQ. Il messaggio resta visibile qui sotto, così puoi istruire la FAQ.",
+        "placeholder": "Mi dispiace, non ho capito. Un membro del team ti risponderà.",
+        "save": "Salva risposta predefinita",
+        "saved": "Risposta predefinita salvata"
+      }
     },
     "picker": {
       "close": "Chiudi",

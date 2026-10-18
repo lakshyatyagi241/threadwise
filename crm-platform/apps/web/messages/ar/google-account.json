@@ -5,6 +5,21 @@
         "label": "حساب Google",
         "description": "اربط حساب Google واحدًا لـ Calendar وSheets وDocs وForms وMeet في تدفقاتك.",
         "keywords": "google, حساب google, تقويم, calendar, sheets, جداول البيانات, docs, مستندات, forms, نماذج, meet, drive, oauth, ربط google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "أضف صفوفًا وابحث عن صفوف واحفظ جهات الاتصال من جدول بيانات داخل تدفقاتك. يستخدم اتصال حساب Google الخاص بك.",
+        "keywords": "google sheets, جدول بيانات, صفوف, خلايا, oauth, ربط google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "انسخ مستندًا نموذجيًا واملأه وشاركه من تدفقاتك. يستخدم اتصال حساب Google الخاص بك.",
+        "keywords": "google docs, مستند, قالب, مشاركة, oauth, ربط google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "أرسل نموذجًا إلى عميل وتابع عندما يملؤه. يستخدم اتصال حساب Google الخاص بك.",
+        "keywords": "google forms, نموذج, استبيان, ردود, oauth, ربط google"
       }
     }
   },
@@ -91,8 +106,8 @@
         },
         "sheets": {
           "name": "Sheets",
-          "body": "أضف صفًا إلى جدول، أو ابحث عن صف، أو افحص خلية، أو انسخ صفًا إلى جهة اتصال.",
-          "usedBy": "Google Sheets وفحص حقل Google Sheet وحفظ جهة اتصال من Google Sheet"
+          "usedBy": "Google Sheets وفحص حقل Google Sheet وحفظ جهة اتصال من Google Sheet",
+          "body": "أضف صفًا إلى جدول، أو ابحث عن صف، أو تحقق من خلية، أو انسخ صفًا إلى جهة اتصال."
         },
         "docs": {
           "name": "Docs وDrive",
@@ -101,13 +116,13 @@
         },
         "forms": {
           "name": "Forms",
-          "body": "اقرأ الرابط العام لنموذج ليتمكن التدفق من إرساله إلى العميل.",
-          "usedBy": "خطوة Google Form"
+          "usedBy": "خطوة Google Form",
+          "body": "اقرأ الرابط العام للنموذج ليرسله التدفق إلى العميل، واقرأ إجابات النموذج ليواصل التدفق عند ملئه."
         },
         "drive_listing": {
           "name": "قائمة ملفات Drive",
-          "body": "اعرض جداولك ومستنداتك ونماذجك بأسمائها في منشئ التدفقات لتختار بدل لصق رابط.",
-          "usedBy": "منتقيات الملفات في منشئ التدفقات"
+          "body": "اعرض جداولك ومستنداتك ونماذجك بأسمائها لتختارها من حسابك في منشئ التدفقات وإعدادات الحجز. مطلوب لكل أداة اختيار ملفات.",
+          "usedBy": "أدوات اختيار الملفات في منشئ التدفقات وإعدادات الحجز"
         }
       },
       "lastError": {

@@ -21,6 +21,8 @@ import {
   type WabaCallsSink,
 } from './waba-calls-sink';
 import { WabaPlatformController } from './waba-platform.controller';
+import { WabaThroughputController } from './waba-throughput.controller';
+import { WabaThroughputService } from './waba-throughput.service';
 import { PinnacleOnboardingService } from './pinnacle-onboarding.service';
 import { WabaConnectionsController } from './waba-connections.controller';
 import { WabaConnectionsRepository } from './waba-connections.repository';
@@ -75,6 +77,7 @@ import { WabaWebhookService } from './waba-webhook.service';
     WabaPlatformDiagnosticsController,
     WabaWebhookController,
     WabaPlatformController,
+    WabaThroughputController,
     CustomerProfilesController,
   ],
   providers: [
@@ -108,6 +111,7 @@ import { WabaWebhookService } from './waba-webhook.service';
     WabaOrdersService,
     WabaClickSyncService,
     CustomerProfilesService,
+    WabaThroughputService,
   ],
   exports: [
     WabaConnectService,
@@ -117,6 +121,7 @@ import { WabaWebhookService } from './waba-webhook.service';
     WabaWebhookService,
     WabaClickSyncService,
     WabaDiagnosticsService,
+    WabaThroughputService,
     WABA_INBOUND_SINK,
     WABA_CONNECTIONS,
   ],

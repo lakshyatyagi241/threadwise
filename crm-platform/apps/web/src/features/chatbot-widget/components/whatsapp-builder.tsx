@@ -577,7 +577,7 @@ function MessengerCard({
         }
         className={cn(INPUT, ring(flash, 'avatar'))}
       />
-      <div className={HINT}>{t('urlHint')}</div>
+      <div className={HINT}>{t(upload ? 'urlHintUpload' : 'urlHint')}</div>
       <ImageUpload
         id="wgt-f-avatarFile"
         value={avatar.startsWith(LAUNCHER_AVATAR_PREFIX) ? '' : avatar}

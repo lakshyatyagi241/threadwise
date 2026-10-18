@@ -94,7 +94,13 @@
             "endInvalid": "请输入有效的结束日期和时间。",
             "endBeforeStart": "结束时间不能早于开始时间。"
           }
-        }
+        },
+        "bookedOnline": "在线预订",
+        "viewBooking": "查看预订",
+        "manageBooking": "管理预订",
+        "viewBookingAria": "查看 {title} 的预订",
+        "manageBookingAria": "管理 {title} 的预订",
+        "bookedReadOnly": "在线预订。只能在预订中更改。"
       },
       "files": {
         "title": "文件",

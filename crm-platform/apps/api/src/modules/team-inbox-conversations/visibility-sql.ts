@@ -1,5 +1,6 @@
 import { sql, type SQL } from 'drizzle-orm';
 import { channelOwnerSql, type ConversationViewer } from '../../realtime';
+import { rawIdentifier } from '../../common/sql/identifier';
 
 /**
  * `conversationVisible` (apps/api/src/realtime/audience) as a SQL condition on `conversations`, so a list, a count and a search can
@@ -26,7 +27,7 @@ export function visibleToSql(viewer: ConversationViewer, alias = 'c'): SQL {
 }
 
 function byScopeSql(viewer: ConversationViewer, alias: string): SQL {
-  const c = sql.raw(alias);
+  const c = rawIdentifier(alias);
   switch (viewer.scope) {
     case null:
       return sql`FALSE`;

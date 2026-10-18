@@ -7,3 +7,4 @@ export * from './customers';
 export * from './errors';
 export * from './extras';
 export * from './groups';
+export * from './throughput';

@@ -624,7 +624,7 @@ function realtimeDashboard() {
       [
         'Sockets are served by the **API process** (`realtime.gateway.ts`, socket.io with the Redis adapter), so the realtime path shares the API loop. Everything here is that process, read for the realtime question: is the loop that fans messages out healthy, and how many handles does it hold.',
         '',
-        '**Not measured today (no series exists):** connected sockets, rooms, events emitted per second, fan-out latency, Redis adapter lag. Those need new counters in the gateway; they are tracked as EL-B18 and are not drawn here with substitute numbers.',
+        "**Measured:** connected sockets, handshakes (accepted or refused), disconnects, room joins by result, events published by type with the rooms they fanned out to, publish failures, and the publisher's own cost per publish (the Redis sequence pipeline and the emit). **Still not measured:** delivery to a browser (the server cannot see a client receive a packet), Redis adapter lag, and the number of rooms.",
       ].join('\n'),
       { h: 5, w: 24, x: 0, y: 0 },
     ),
@@ -725,6 +725,95 @@ function realtimeDashboard() {
       { th: [[60, 'red']] },
     ),
   ];
+  panels.push(
+    row('The realtime path itself', 33),
+    timeseries(
+      'Connected sockets',
+      [
+        [`sum(crm_realtime_sockets{${S}})`, 'all API instances'],
+        [`max by (instance) (crm_realtime_sockets{${S}})`, '{{instance}}'],
+      ],
+      { h: 8, w: 8, x: 0, y: 34 },
+      {
+        unit: 'none',
+        desc: 'Sockets held by each API process. A drop to zero on one instance is a restart or a drain; a steady climb is a leak or a busy hour.',
+      },
+    ),
+    timeseries(
+      'Handshakes and disconnects per second',
+      [
+        [
+          `sum by (outcome) (rate(crm_realtime_connections_total{${S}}[${RI}]))`,
+          'handshake {{outcome}}',
+        ],
+        [`sum(rate(crm_realtime_disconnects_total{${S}}[${RI}]))`, 'disconnects'],
+      ],
+      { h: 8, w: 8, x: 8, y: 34 },
+      {
+        unit: 'ops',
+        desc: 'A burst of refused handshakes is expired tickets or a client bug; a burst of disconnects with accepted handshakes is a reconnect storm.',
+      },
+    ),
+    timeseries(
+      'Room joins per second, by result',
+      [[`sum by (result) (rate(crm_realtime_room_joins_total{${S}}[${RI}]))`, '{{result}}']],
+      { h: 8, w: 8, x: 16, y: 34 },
+      {
+        unit: 'ops',
+        stack: true,
+        desc: 'forbidden is a person asking for a conversation they cannot see; unavailable is the access check failing (database or Redis).',
+      },
+    ),
+    timeseries(
+      'Events published per second, by type',
+      [[`sum by (type) (rate(crm_realtime_events_published_total[${RI}]))`, '{{type}}']],
+      { h: 8, w: 8, x: 0, y: 42 },
+      {
+        unit: 'ops',
+        stack: true,
+        desc: 'Counted where the event is published: the API and the workers both publish, so this sums every process.',
+      },
+    ),
+    timeseries(
+      'Room deliveries per second, and publish failures',
+      [
+        ['sum(rate(crm_realtime_rooms_published_total[' + RI + ']))', 'room deliveries'],
+        ['sum(rate(crm_realtime_publish_failures_total[' + RI + ']))', 'publish failures'],
+      ],
+      { h: 8, w: 8, x: 8, y: 42 },
+      {
+        unit: 'ops',
+        desc: 'One event can go to several rooms. A failure is logged and never thrown (the database is the truth and a client catches up through its REST cursor), so this is the only place it shows.',
+      },
+    ),
+    timeseries(
+      'Publish duration',
+      [
+        [
+          'histogram_quantile(0.5, sum by (le) (rate(crm_realtime_publish_duration_seconds_bucket[' +
+            RI +
+            '])))',
+          'p50',
+        ],
+        [
+          'histogram_quantile(0.95, sum by (le) (rate(crm_realtime_publish_duration_seconds_bucket[' +
+            RI +
+            '])))',
+          'p95',
+        ],
+        [
+          'histogram_quantile(0.99, sum by (le) (rate(crm_realtime_publish_duration_seconds_bucket[' +
+            RI +
+            '])))',
+          'p99',
+        ],
+      ],
+      { h: 8, w: 8, x: 16, y: 42 },
+      {
+        desc: 'What one publish costs the caller: the Redis sequence pipeline and the emit. Not the time until a browser receives it.',
+      },
+    ),
+  );
   return dashboard({
     uid: 'crm-realtime',
     title: 'Threadwise realtime: the loop behind the sockets',
@@ -763,7 +852,7 @@ function releaseDashboard() {
       [
         'Each graph draws the same query **now** and **`$compare` ago** (pick it at the top), so a release, a config change or a new traffic mix shows as the two lines parting. Vertical marks are process (re)starts of the chosen service, which is where a deploy lands.',
         '',
-        '**Limit:** the series carry no release or version label, so "before" is a time offset, not a named release. Compare like with like (same weekday and hour: choose 1d or 7d), and read a difference next to the traffic panel, because load moves latency too. Adding a `release` label from the image tag is tracked as EL-B18.',
+        '**By release:** the last section groups the same queries by the `release` label (the image tag, from `OBS_RELEASE`; empty for a process started without one and for series recorded before the label existed). Compare like with like (same weekday and hour: choose 1d or 7d above) and read a difference next to the traffic panel, because load moves latency too.',
       ].join('\n'),
       { h: 5, w: 24, x: 0, y: 0 },
     ),
@@ -893,6 +982,84 @@ function releaseDashboard() {
       },
     ),
   ];
+  panels.push(
+    row('By release (the release label)', 55),
+    table(
+      'Releases reporting now',
+      [
+        [
+          'count by (release) (crm_runtime_last_report_timestamp_seconds{service="$service"})',
+          'processes',
+        ],
+      ],
+      { h: 6, w: 6, x: 0, y: 56 },
+      {
+        unit: 'none',
+        desc: 'One row per release with at least one process of the chosen service reporting; an empty name is a process without the label.',
+        organize: { excludeByName: { Time: true }, renameByName: { Value: 'processes' } },
+      },
+    ),
+    timeseries(
+      'Event loop delay p99, by release',
+      [['max by (release) (crm_event_loop_delay_p99_seconds{service="$service"})', '{{release}}']],
+      { h: 8, w: 9, x: 6, y: 56 },
+      {
+        th: [[0.05, 'orange']],
+        desc: 'During a rollout the old and the new release report side by side.',
+      },
+    ),
+    timeseries(
+      'Heap used against its limit, by release',
+      [
+        [
+          'max by (release) (crm_process_heap_used_bytes{service="$service"} / crm_process_heap_limit_bytes{service="$service"})',
+          '{{release}}',
+        ],
+      ],
+      { h: 8, w: 9, x: 15, y: 56 },
+      { unit: 'percentunit', min: 0, max: 1 },
+    ),
+    timeseries(
+      'Request latency p95, by release (API or web)',
+      [
+        [
+          'histogram_quantile(0.95, sum by (le, release) (rate(crm_http_request_duration_seconds_bucket{service="$service"}[' +
+            RI +
+            '])))',
+          '{{release}}',
+        ],
+      ],
+      { h: 8, w: 9, x: 0, y: 64 },
+      { desc: 'Needs the service set to api or web: workers have no request histogram.' },
+    ),
+    timeseries(
+      '5xx share, by release (API or web)',
+      [
+        [
+          'sum by (release) (rate(crm_http_request_duration_seconds_count{service="$service",status="5xx"}[' +
+            RI +
+            '])) / sum by (release) (rate(crm_http_request_duration_seconds_count{service="$service"}[' +
+            RI +
+            ']))',
+          '{{release}}',
+        ],
+      ],
+      { h: 8, w: 9, x: 9, y: 64 },
+      { unit: 'percentunit' },
+    ),
+    timeseries(
+      'Queue wait p95, by release (workers)',
+      [
+        [
+          'histogram_quantile(0.95, sum by (le, release) (rate(crm_queue_job_wait_seconds_bucket{service="worker"}[' +
+            RI +
+            '])))',
+          '{{release}}',
+        ],
+      ],
+      { h: 8, w: 6, x: 18, y: 64 },
+    ),
+  );
   return dashboard({
     uid: 'crm-release-comparison',
     title: 'Threadwise release comparison: now against earlier',
@@ -979,16 +1146,92 @@ function webDashboard() {
       { h: 8, w: 24, x: 0, y: 6 },
       {
         th: [[1, 'red']],
-        desc: 'Timed by a separate process, so a stalled loop shows here even when the web server cannot report it. The web server has no request histogram yet: this probe is its latency view.',
+        desc: 'Timed by a separate process, so a stalled loop shows here even when the web server cannot report it. The request graphs below time a request from when Next handles it, so they cannot see time spent queued behind a blocked loop; this one can.',
       },
     ),
-    ...runtimePanels(S, 14, { who: 'web server' }),
+    row('Requests the web server answers', 14),
+    timeseries(
+      'Request latency',
+      [
+        [
+          `histogram_quantile(0.5, sum by (le) (rate(crm_http_request_duration_seconds_bucket{${S}}[${RI}])))`,
+          'p50',
+        ],
+        [
+          `histogram_quantile(0.95, sum by (le) (rate(crm_http_request_duration_seconds_bucket{${S}}[${RI}])))`,
+          'p95',
+        ],
+        [
+          `histogram_quantile(0.99, sum by (le) (rate(crm_http_request_duration_seconds_bucket{${S}}[${RI}])))`,
+          'p99',
+        ],
+      ],
+      { h: 8, w: 8, x: 0, y: 15 },
+      {
+        th: [[0.5, 'red']],
+        desc: 'From when Next handles the request to the end of the response, all routes (assets and pages). WebEventLoopBlockingWithImpact uses the p95.',
+      },
+    ),
+    timeseries(
+      'Requests per second by status class',
+      [
+        [
+          `sum by (status) (rate(crm_http_request_duration_seconds_count{${S}}[${RI}]))`,
+          '{{status}}',
+        ],
+      ],
+      { h: 8, w: 8, x: 8, y: 15 },
+      {
+        unit: 'reqps',
+        stack: true,
+        desc: '4xx includes every 404 (scanners), and 499, a client that gave up before the response finished.',
+      },
+    ),
+    timeseries(
+      '5xx share',
+      [
+        [
+          `sum(rate(crm_http_request_duration_seconds_count{${S},status="5xx"}[${RI}])) / sum(rate(crm_http_request_duration_seconds_count{${S}}[${RI}]))`,
+          '5xx / all',
+        ],
+      ],
+      { h: 8, w: 8, x: 16, y: 15 },
+      {
+        unit: 'percentunit',
+        th: [
+          [0.01, 'orange'],
+          [0.05, 'red'],
+        ],
+      },
+    ),
+    table(
+      'Slowest routes (p95, last 15 m)',
+      [
+        [
+          `topk(10, histogram_quantile(0.95, sum by (le, route) (rate(crm_http_request_duration_seconds_bucket{${S}}[15m]))))`,
+          'p95',
+        ],
+        [
+          `topk(10, sum by (route) (rate(crm_http_request_duration_seconds_count{${S}}[15m])))`,
+          'req/s',
+        ],
+      ],
+      { h: 8, w: 24, x: 0, y: 23 },
+      {
+        desc: 'Route templates derived from the URL (ids become :id, 404s are "unmatched", Next assets are folded): the server cannot see which route file ran.',
+        organize: {
+          excludeByName: { Time: true },
+          renameByName: { 'Value #A': 'p95 (s)', 'Value #B': 'req/s' },
+        },
+      },
+    ),
+    ...runtimePanels(S, 32, { who: 'web server' }),
   ];
   return dashboard({
     uid: 'crm-web',
     title: 'Threadwise web server: event loop, caller latency, process',
     description:
-      'The Next.js server process: loop delay and utilization, caller-visible latency from the probe, heap, GC and CPU. No per-route request metrics yet (EL-B20).',
+      'The Next.js server process: loop delay and utilization, requests by route template (latency, status, 5xx share), caller-visible latency from the probe, heap, GC and CPU.',
     tags: ['web'],
     panels,
     templating: [

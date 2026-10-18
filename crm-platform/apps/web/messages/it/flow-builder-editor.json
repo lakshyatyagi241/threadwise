@@ -363,27 +363,24 @@
           "kinds": {
             "sheets": {
               "pick": "— scegli un foglio —",
-              "empty": "Nessun foglio di calcolo trovato — incolla qui sotto un URL / ID",
               "loading": "Caricamento fogli…",
-              "notConnected": "Google non è collegato a questo Workspace, quindi non è possibile elencare i tuoi fogli. Incolla invece l’id o il link del foglio.",
-              "idPlaceholder": "ID foglio",
-              "saved": "Foglio {id}… (non caricato)"
+              "saved": "Foglio {id}… (non caricato)",
+              "empty": "Nessun foglio di calcolo trovato nell'account Google collegato",
+              "notConnected": "Google non è collegato a questo workspace, quindi non è possibile elencare i tuoi fogli. Collega Google per sceglierne uno."
             },
             "docs": {
               "pick": "— scegli un documento Template —",
               "empty": "Nessun documento trovato",
               "loading": "Caricamento documenti…",
-              "notConnected": "Google non è collegato a questo Workspace, quindi non è possibile elencare i tuoi documenti. Incolla invece l’id o il link del documento.",
-              "idPlaceholder": "ID documento",
-              "saved": "Documento {id}… (non caricato)"
+              "saved": "Documento {id}… (non caricato)",
+              "notConnected": "Google non è collegato a questo workspace, quindi non è possibile elencare i tuoi documenti. Collega Google per sceglierne uno."
             },
             "forms": {
               "pick": "— scegli un modulo —",
               "empty": "Nessun modulo trovato",
               "loading": "Caricamento moduli…",
-              "notConnected": "Google non è collegato a questo Workspace, quindi non è possibile elencare i tuoi moduli. Incolla invece l’id o il link del modulo.",
-              "idPlaceholder": "ID modulo",
-              "saved": "Modulo {id}… (non caricato)"
+              "saved": "Modulo {id}… (non caricato)",
+              "notConnected": "Google non è collegato a questo workspace, quindi non è possibile elencare i tuoi moduli. Collega Google per sceglierne uno."
             }
           },
           "sheetsIntro": "Aggiunge una riga a un Foglio Google (modalità scrittura) oppure cerca una riga tramite una colonna chiave (modalità lettura). Usa l’account Google collegato dello Workspace in <link>/google-account</link>.",
@@ -405,8 +402,6 @@
           "addColumn": "Aggiungi colonna",
           "matchByHeader": "Abbina le colonne per nome dell’intestazione",
           "matchByHeaderHint": "Scrive ogni valore nella colonna del foglio con quell’intestazione (in qualsiasi ordine). Disattivalo per aggiungere da sinistra a destra per posizione — è il valore predefinito.",
-          "pasteLabel": "…oppure incolla un URL / ID di foglio di calcolo",
-          "pasteHint": "Funziona anche se il selettore è vuoto — incolla il link del foglio e ne estraiamo l’ID.",
           "templateDocument": "Documento Template",
           "newCopyTitle": "Titolo della nuova copia",
           "newCopyTitlePlaceholder": "Documento per '{{'name'}}'",
@@ -420,7 +415,6 @@
           "messageTemplateHint": "Il messaggio del bot inviato al cliente. <mono>{token}</mono> riceve il link di condivisione.",
           "messageTemplatePlaceholder": "Ecco il tuo documento:\n'{{'doc_url'}}'",
           "saveUrl": "Salva l’URL nella variabile",
-          "formIntro": "Invia l’URL del modulo via WhatsApp, mette in pausa il Flow e lo riprende tramite l’uscita <b>inviato</b> quando il cliente lo compila. Le risposte diventano variabili del Flow.",
           "googleForm": "Modulo Google",
           "bodyBubble": "Messaggio (inviato sopra il link)",
           "bodyBubblePlaceholder": "Compila questo breve modulo:",
@@ -428,13 +422,7 @@
           "saveResponsesHint": "Le singole risposte finiscono anche come <mono>{token}</mono>.",
           "expireAfter": "Scade dopo (secondi)",
           "expireAfterHint": "Quanto attendere un invio prima del timeout. 86400 = 24 ore.",
-          "setupTitle": "Configurazione una tantum — incolla questo nell’editor Script del tuo modulo",
-          "setupOpen": "Apri il modulo → <mono>menu ⋮</mono> → <mono>Editor script</mono>",
-          "setupDownload": "<link>Scarica lo script (.gs)</link> e incollalo",
-          "setupTrigger": "Aggiungi un trigger: <mono>onFormSubmit</mono> · Dal modulo · All’invio del modulo",
-          "setupWarning": "Senza questo script il modulo registrerà comunque le risposte in Moduli Google, ma il Flow non riprenderà.",
           "docsIntro": "Copia un documento Template, compila i <mono>{placeholders}</mono>, condividilo con chiunque abbia il link e invia l’URL al cliente. Inserisci <mono>{key}</mono> nel modello dove deve andare il valore.",
-          "noListing": "Non è possibile elencare i tuoi file perché il permesso Elenco file di Drive non è stato concesso nella pagina Account Google. Incolla invece il link o l’ID.",
           "connection": {
             "open": "Apri Account Google",
             "permission": {
@@ -447,7 +435,9 @@
             "disconnected": "Nessun account Google è collegato, quindi questo passaggio non riuscirà quando il flusso verrà eseguito. Collega prima Google.",
             "needsReconnect": "Google non accetta più l'account collegato, quindi questo passaggio non riuscirà quando il flusso verrà eseguito. Ricollega prima Google.",
             "missing": "All'account Google collegato non è stata concessa l'autorizzazione {permission}, quindi questo passaggio non riuscirà quando il flusso verrà eseguito."
-          }
+          },
+          "formIntro": "Invia l'URL del modulo tramite WhatsApp, mette in pausa il flusso e riprende dalla porta <b>submitted</b> quando il cliente lo compila. Le risposte vengono lette dal modulo tramite il tuo account Google collegato, quindi non serve incollare nulla nel modulo. Le risposte diventano variabili del flusso.",
+          "noListing": "Non è possibile elencare i tuoi file perché nella pagina dell'account Google non è stato concesso il permesso per l'elenco dei file di Drive. Aggiungilo lì per scegliere i file."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",

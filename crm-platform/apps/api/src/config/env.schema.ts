@@ -101,7 +101,7 @@ export const envSchema = z.object({
   /** Where chat media lives when the platform storage settings name no bucket: `local` (this container's disk) or `s3` (the S3_* bucket). */
   MEDIA_STORAGE_DRIVER: z.enum(['local', 's3']).default('local'),
   S3_ENDPOINT: z.string().url().optional(),
-  /** The address outsiders (a browser, a WhatsApp provider) use to reach the bucket when `S3_ENDPOINT` is a private one such as `http://minio:9000`; links are signed against it. */
+  /** The address outsiders (a browser, a WhatsApp provider) use to reach the bucket when `S3_ENDPOINT` is a private address; links are signed against it. */
   S3_PUBLIC_ENDPOINT: z.string().url().optional(),
   S3_REGION: z.string().default('us-east-1'),
   S3_BUCKET_MEDIA: z.string().default('crm-media'),

@@ -566,11 +566,12 @@
         "hint": "بکنگز اس کے بغیر بھی کام کرتی ہیں۔ فارغ/مصروف اوقات سنک کرنے اور Meet لنکس شامل کرنے کے لیے اپائنٹمنٹس، سیٹنگز میں Google Calendar منسلک کریں۔",
         "unavailable": "Google Calendar ابھی اس پلیٹ فارم کے لیے سیٹ اپ نہیں ہے۔ یہ سیٹنگز بکنگ ٹائپ کے ساتھ محفوظ رہتی ہیں تاکہ سیٹ اپ ہونے پر کام آئیں۔",
         "calendarId": "کیلنڈر",
-        "calendarPlaceholder": "بنیادی",
         "spreadsheetId": "شیٹ میں اضافہ (اختیاری)",
-        "spreadsheetPlaceholder": "اسپریڈ شیٹ آئی ڈی",
         "createMeet": "ہر بکنگ کے لیے Google Meet لنک بنائیں",
-        "calendarDefault": "ورک اسپیس کیلنڈر"
+        "calendarDefault": "ورک اسپیس کیلنڈر",
+        "connectFirst": "فہرست میں سے منتخب کرنے کے لیے اپنا <link>Google اکاؤنٹ</link> منسلک کریں۔",
+        "spreadsheetNone": "کوئی شیٹ نہیں",
+        "spreadsheetNoListing": "آپ کی شیٹس کی فہرست نہیں بن سکتی کیونکہ Drive فائل فہرست کی اجازت نہیں دی گئی۔ اسے Google اکاؤنٹ کے صفحے پر شامل کریں۔"
       },
       "messages": {
         "title": "لائف سائیکل پیغامات",

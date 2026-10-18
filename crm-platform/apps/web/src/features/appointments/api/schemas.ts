@@ -314,6 +314,10 @@ export const calendarOptionSchema = z.object({
 });
 export type CalendarOption = z.infer<typeof calendarOptionSchema>;
 
+/** A spreadsheet of the connected Google account that a booking type can append to. */
+export const spreadsheetOptionSchema = z.object({ id: z.string(), name: z.string() });
+export type SpreadsheetOption = z.infer<typeof spreadsheetOptionSchema>;
+
 export const calendarStartSchema = z.object({ url: z.string(), expiresInSeconds: z.number() });
 
 export const bookingSettingsSchema = z.object({

@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Verbunden",
           "shopify": "Verbunden",
-          "google_sheets": "API-Schlüssel ausgestellt",
-          "meta_catalog": "Katalog verknüpft"
+          "meta_catalog": "Katalog verknüpft",
+          "google_sheets": "Google-Konto verbunden"
         },
         "notConnected": "nicht verbunden",
         "connect": "Verbinden",
@@ -494,7 +494,8 @@
         "title": "Warteschlangen",
         "name": "Warteschlange",
         "pending": "Ausstehend",
-        "failed": "Fehlgeschlagen"
+        "failed": "Fehlgeschlagen",
+        "lastFailure": "Grund des letzten Fehlers"
       },
       "clear": {
         "button": "Ausstehende Jobs löschen",

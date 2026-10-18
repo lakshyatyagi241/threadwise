@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "接続済み",
           "shopify": "接続済み",
-          "google_sheets": "APIキー発行済み",
-          "meta_catalog": "カタログ連携済み"
+          "meta_catalog": "カタログ連携済み",
+          "google_sheets": "Google アカウント連携済み"
         },
         "notConnected": "未接続",
         "connect": "接続",
@@ -494,7 +494,8 @@
         "title": "キュー",
         "name": "キュー",
         "pending": "保留中",
-        "failed": "失敗"
+        "failed": "失敗",
+        "lastFailure": "直近の失敗の原因"
       },
       "clear": {
         "button": "保留中のジョブをクリア",

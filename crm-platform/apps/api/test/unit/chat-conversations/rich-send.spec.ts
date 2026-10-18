@@ -251,4 +251,20 @@ describe('list message', () => {
       ],
     });
   });
+
+  it('a migrated button message whose header file made it an image keeps its buttons', () => {
+    const row = stored({ kind: 'interactive', interactive: { type: 'buttons', body: 'Hi', buttons: [{ id: 'a', title: 'Welcome' }] } });
+    const wire = toMessageResponse(
+      {
+        ...row,
+        kind: 'image',
+        direction: 'out',
+        createdAt: new Date(0),
+        meta: { sentInteractive: { type: 'buttons', body: 'Hi', buttons: [{ title: 'Welcome' }] } },
+      } as unknown as MessageRow,
+      () => null,
+    );
+    expect(wire.kind).toBe('image');
+    expect(wire.sentInteractive?.buttons).toEqual([{ title: 'Welcome', url: null }]);
+  });
 });

@@ -33,6 +33,7 @@ export class WabaWebhookController {
   async receive(@Req() req: Request & { rawBody?: Buffer }, @Query('k') k: string | undefined) {
     await this.webhook.receive({
       rawBody: req.rawBody,
+      parsedBody: req.body,
       signatureHeader: req.header('x-hub-signature-256') ?? undefined,
       contentType: req.header('content-type') ?? undefined,
       queryKey: typeof k === 'string' ? k : undefined,

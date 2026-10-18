@@ -406,7 +406,9 @@
         "campaign": "Kampania",
         "adset": "Zestaw reklam",
         "ad": "Reklama",
-        "form": "Formularz"
+        "form": "Formularz",
+        "channel": "Kanał",
+        "moduleType": "Typ modułu"
       },
       "capturedAt": "Przechwycono",
       "openSource": "Otwórz źródło leadów"

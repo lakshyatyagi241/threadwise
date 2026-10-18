@@ -374,6 +374,11 @@
         "label": "Właściwości firm",
         "description": "Dodaj pola, które chcesz zapisywać przy każdej firmie.",
         "keywords": "pola niestandardowe, pola, wymagane, lista rozwijana, organizacja, konto"
+      },
+      "uncontacted-leads": {
+        "label": "Potencjalni klienci bez kontaktu",
+        "description": "Wybierz, które działania uznawane są za kontakt z potencjalnym klientem oraz które nowe kontakty zaczynają jako nieskontaktowane.",
+        "keywords": "bez kontaktu, skontaktowany, potencjalny klient, nowy potencjalny klient, pierwszy kontakt, kontakt zwrotny, przypisanie, oznaczenie"
       }
     },
     "backToMarketplace": "Wróć do Marketplace"

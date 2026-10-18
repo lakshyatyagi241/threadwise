@@ -7,7 +7,10 @@ import { useTranslations } from 'next-intl';
 import { ConfirmDialog, Menu, MenuItem, MenuSeparator, useToast, cn } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useCanPickCompany } from '@/features/companies';
+import { usePersonaVisibility } from '@/features/persona';
 import { useCanLogCall } from '../../api/call-log';
+import type { ContactTouchChannel } from '@crm/contracts';
+import { reportContactTouch, setUncontacted } from '../../api/lead-handling';
 import { deleteContact, invalidateContacts } from '../../api/contacts';
 import { useChannels, openConversation } from '../../api/single-send';
 import type { ContactRow } from '../../api/schemas';
@@ -108,6 +111,7 @@ export function ContactActionBar({
   const tr = useTranslations('contacts-attributes-tags.contact.record.actions');
   const tl = useTranslations('contacts-attributes-tags.list');
   const ts = useTranslations('contacts-attributes-tags.singleSend');
+  const tu = useTranslations('contacts-attributes-tags.leadHandling.uncontacted');
   const { toast } = useToast();
   const canUpdate = useCan('record.contacts.update');
   const canDelete = useCan('record.contacts.delete');
@@ -118,6 +122,11 @@ export function ContactActionBar({
   const canPickCompany = useCanPickCompany();
   const { permissions } = useSession();
   const tasksOpen = sectionAllowed(SECTION_OF_TARGET.task, (p) => p in permissions);
+  // Buttons the workspace's persona hides (`action:contact.<id>`). Only what is drawn changes; the endpoints behind them stay open.
+  const { isActionHidden } = usePersonaVisibility();
+  const showNote = canUpdate && !isActionHidden('note');
+  const showTask = canTask && tasksOpen && !isActionHidden('task');
+  const showMeeting = canUpdate && !isActionHidden('meeting');
   const qc = useQueryClient();
   const router = useRouter();
   const channels = useChannels(canSend);
@@ -147,6 +156,15 @@ export function ContactActionBar({
       else send('whatsapp');
     },
     onError: () => toast(ts('openFailed', { message: '' }), 'danger'),
+  });
+
+  const mark = useMutation({
+    mutationFn: (uncontacted: boolean) => setUncontacted(contact.id, uncontacted),
+    onSuccess: async (r) => {
+      await invalidateContacts(qc);
+      toast(r.uncontacted ? tu('markedUncontacted') : tu('markedContacted'), 'success');
+    },
+    onError: () => toast(tu('markFailed'), 'danger'),
   });
 
   const remove = useMutation({
@@ -181,7 +199,17 @@ export function ContactActionBar({
     phone: tr('callPhone'),
     log: tr('logCall'),
   };
+  /** The person pressed a contact button: the workspace's lead handling settings decide whether that marks the contact as contacted. */
+  const pressed = (channel: ContactTouchChannel) => {
+    if (!canUpdate) return;
+    reportContactTouch(
+      contact.id,
+      channel,
+      contact.uncontactedSince ? () => void invalidateContacts(qc) : undefined,
+    );
+  };
   const runCall = (way: CallWay) => {
+    if (way !== 'log') pressed('call');
     if (way === 'whatsapp') send('call');
     else if (way === 'log') onAdd('call');
     else {
@@ -199,7 +227,7 @@ export function ContactActionBar({
       {callIcon[way]} {callText[way]}
     </MenuItem>
   ));
-  const showCall = canCall || canLogCall;
+  const showCall = (canCall || canLogCall) && !isActionHidden('call');
   const callLabel = callMain === 'log' ? tr('logCall') : tr('call');
 
   // --- Message: the chat (else the mailbox) is the button, the template message and e-mail are in the menu ----------------
@@ -216,6 +244,7 @@ export function ContactActionBar({
     ...(links.email && route.kind !== 'email' ? (['email'] as const) : []),
   ];
   const runMessage = (way: MessageWay) => {
+    pressed(way === 'email' ? 'email' : 'whatsapp');
     if (way === 'chat') chat.mutate();
     else if (way === 'template') send('whatsapp');
     else send('email');
@@ -236,6 +265,7 @@ export function ContactActionBar({
     </MenuItem>
   ));
   const messageMain = () => {
+    if (route.kind !== 'blocked') pressed(route.kind === 'email' ? 'email' : 'whatsapp');
     if (route.kind === 'chat') chat.mutate();
     else if (route.kind === 'email') send('email');
   };
@@ -248,9 +278,14 @@ export function ContactActionBar({
           <PencilIcon /> {t('edit')}
         </MenuItem>
       )}
-      {canUpdate && canPickCompany && (
+      {canUpdate && canPickCompany && !isActionHidden('company') && (
         <MenuItem onSelect={() => onAdd('company')}>
           <BuildingIcon /> {contact.companyId ? t('changeCompany') : t('addCompany')}
+        </MenuItem>
+      )}
+      {canUpdate && (
+        <MenuItem onSelect={() => mark.mutate(!contact.uncontactedSince)}>
+          <CheckIcon /> {contact.uncontactedSince ? tu('markContacted') : tu('markUncontacted')}
         </MenuItem>
       )}
       <MenuItem onSelect={() => setHistory(true)}>
@@ -317,7 +352,7 @@ export function ContactActionBar({
         aria-label={tr('label')}
         className={cn('flex flex-wrap items-start justify-between gap-y-2', className)}
       >
-        {canUpdate && (
+        {showNote && (
           <RoundAction label={t('note')}>
             <button
               type="button"
@@ -382,7 +417,7 @@ export function ContactActionBar({
             )}
           </RoundAction>
         )}
-        {canTask && tasksOpen && (
+        {showTask && (
           <RoundAction label={t('task')}>
             <button
               type="button"
@@ -395,7 +430,7 @@ export function ContactActionBar({
             </button>
           </RoundAction>
         )}
-        {canUpdate && (
+        {showMeeting && (
           <RoundAction label={t('meeting')}>
             <button
               type="button"
@@ -431,7 +466,7 @@ export function ContactActionBar({
         aria-label={tr('label')}
         className="thin-scrollbar flex min-w-0 flex-1 items-center gap-1.5 max-sm:overflow-x-auto"
       >
-        {canUpdate && (
+        {showNote && (
           <button
             type="button"
             className={cn(button, 'rounded-md')}
@@ -442,7 +477,7 @@ export function ContactActionBar({
             <Label>{t('note')}</Label>
           </button>
         )}
-        {canTask && tasksOpen && (
+        {showTask && (
           <button
             type="button"
             className={cn(button, 'rounded-md')}
@@ -475,7 +510,7 @@ export function ContactActionBar({
             }
           />
         )}
-        {canUpdate && (
+        {showMeeting && (
           <button
             type="button"
             className={cn(button, 'rounded-md')}

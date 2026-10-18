@@ -126,7 +126,12 @@
       "details": {
         "title": "รายละเอียดผู้ติดต่อ",
         "stage": "ขั้นวงจรชีวิต",
-        "otherProperties": "คุณสมบัติอื่น"
+        "otherProperties": "คุณสมบัติอื่น",
+        "stageSince": "อยู่ในขั้นนี้ตั้งแต่",
+        "previousStage": "ขั้นก่อนหน้า",
+        "previousStageSince": "ขั้นก่อนหน้าตั้งแต่",
+        "lostReason": "เหตุผลที่แพ้",
+        "updatedAt": "อัปเดตล่าสุด"
       },
       "company": {
         "title": "บริษัท",

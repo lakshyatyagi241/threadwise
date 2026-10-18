@@ -1,0 +1,157 @@
+{
+  "whatsapp-throughput": {
+    "nav": {
+      "group": "WhatsApp",
+      "item": "Sendelimits"
+    },
+    "eyebrow": "WhatsApp",
+    "title": "Sendelimits und Live-Performance",
+    "description": "Wie schnell jede verbundene WhatsApp-Nummer senden darf, wie viel ihres täglichen Nachrichtenlimits bereits genutzt wurde und was gerade passiert. Änderungen gelten für die nächste Nachricht, die von jedem Worker gesendet wird.",
+    "updated": "Live. Aktualisiert {time}",
+    "stale": "Die letzte Aktualisierung ist fehlgeschlagen. Die vorherigen Werte werden angezeigt.",
+    "liveUnavailable": "Die Live-Zähler konnten nicht gelesen werden, daher zeigen die Live-Spalten null an. Raten, Stufen und Steuerelemente sind weiterhin korrekt.",
+    "limiterOff": "Der Sendelimiter ist ausgeschaltet. Nachrichten werden hier nicht getaktet; es gilt nur die eigene Drosselung von Meta.",
+    "footnote": "Die Rate einer Nummer wird von Meta festgelegt: standardmäßig 80 Nachrichten pro Sekunde, bis zu 1.000 nach einem Upgrade durch Meta und 20 für eine Nummer, die auch in der WhatsApp Business App genutzt wird. Eingehende und ausgehende Nachrichten teilen sich diese Rate. Die tägliche Nachrichtenstufe ist ein separates Limit für die Zahl der innerhalb von 24 Stunden angeschriebenen Personen; die hier angezeigte Zahl ist eine Schätzung auf Basis der über diese Plattform gesendeten Vorlagennachrichten.",
+    "perSecond": "Nachr./s",
+    "peak": "Spitze {n} in der letzten Minute",
+    "sentCount": "{n} gesendet",
+    "deferredCount": "{n} zurückgehalten",
+    "throttledCount": "{n} von Meta gedrosselt",
+    "tierUsed": "{used} von {cap} Personen in 24 Stunden",
+    "details": "Details",
+    "common": {
+      "loading": "Wird geladen...",
+      "retry": "Erneut versuchen"
+    },
+    "errors": {
+      "conflict": "Jemand anderes hat dies gerade geändert. Die neuesten Werte wurden geladen; prüfe sie und wende deine Änderung erneut an.",
+      "metaUnavailable": "Meta hat nicht geantwortet. Versuche es in einem Moment erneut.",
+      "notFound": "Diese Nummer existiert nicht mehr. Gehe zurück zur Liste.",
+      "forbidden": "Nur ein Super-Admin kann Sendelimits ändern.",
+      "invalid": "Einige Werte wurden nicht akzeptiert. Prüfe sie und versuche es erneut.",
+      "unexpected": "Auf unserer Seite ist etwas schiefgelaufen. Versuche es in einem Moment erneut."
+    },
+    "kpi": {
+      "now": "Aktuell gesendet",
+      "nowHint": "Nachrichten pro Sekunde, alle Nummern",
+      "sent": "Gesendet",
+      "last5": "letzte 5 Minuten",
+      "numbers": "Verbundene Nummern",
+      "attention": "Handlungsbedarf",
+      "attentionHint": "{paused} pausiert, {tier} nahe am Tageslimit",
+      "heldBack": "Zurückgehalten",
+      "heldBackHint": "{meta} von Meta gedrosselt, letzte 5 Minuten"
+    },
+    "settings": {
+      "title": "Plattformeinstellungen",
+      "description": "Diese gelten für alle Nummern. Die individuelle Überschreibung und Pause einer Nummer werden auf ihrer Seite festgelegt.",
+      "enabled": "Versand an das Limit jeder Nummer anpassen",
+      "enabledHelp": "Bei Aus wird ohne Taktung gesendet; die Drosselung von Meta gilt weiterhin.",
+      "defaultMps": "Standardrate (Nachr./s)",
+      "defaultMpsHelp": "Wird für eine Nummer verwendet, deren Rate Meta noch nicht gemeldet hat.",
+      "safetyMargin": "Sicherheitsmarge (%)",
+      "safetyMarginHelp": "Anteil des Limits, der für eingehenden Verkehr und Timing frei bleibt.",
+      "maxWait": "Längste Wartezeit (ms)",
+      "maxWaitHelp": "Ein Versand, der länger warten müsste, geht zurück in die Warteschlange und wird erneut versucht.",
+      "syncInterval": "Neu von Meta abrufen (Minuten)",
+      "syncIntervalHelp": "Wie oft die Rate und das Tageslimit jeder Nummer aktualisiert werden.",
+      "adaptive": "Nach Meta-Drosselung verlangsamen",
+      "adaptiveHelp": "Halbiert die Geschwindigkeit, wenn Meta eine Nachricht wegen zu schnellen Sendens ablehnt, und erholt sich dann innerhalb einer Minute.",
+      "enforceTier": "Vorlagennachrichten am Tageslimit zurückhalten",
+      "enforceTierHelp": "Stoppt neue Vorlagennachrichten, wenn die Nummer ihre tägliche Nachrichtenstufe erreicht hat. Bei Aus wird sie nur markiert.",
+      "tierWarn": "Warnen bei (% des Tageslimits)",
+      "tierWarnHelp": "Eine Nummer wird markiert, wenn sie diesen Anteil ihrer Stufe nutzt.",
+      "save": "Einstellungen speichern",
+      "saving": "Wird gespeichert...",
+      "saved": "Gespeichert. Alle Nummern folgen jetzt den neuen Einstellungen."
+    },
+    "numbers": {
+      "title": "Nummern",
+      "search": "Nach Workspace, Nummer oder ID suchen",
+      "emptyTitle": "Keine verbundenen Nummern",
+      "emptyBody": "Nummern erscheinen hier, sobald ein Workspace WhatsApp verbindet."
+    },
+    "cols": {
+      "number": "Nummer",
+      "rate": "Ratenlimit",
+      "live": "Jetzt",
+      "last5": "Letzte 5 Minuten",
+      "tier": "Tageslimit",
+      "state": "Status",
+      "actions": "Aktionen"
+    },
+    "source": {
+      "override": "Überschreiben",
+      "coexistence": "Business App (fest)",
+      "meta": "Von Meta",
+      "default": "Standard"
+    },
+    "tier": {
+      "unlimited": "Unbegrenzt",
+      "unknown": "Noch nicht gemeldet",
+      "unlimitedBody": "Diese Nummer hat ein unbegrenztes tägliches Nachrichtenlimit.",
+      "unknownBody": "Meta hat das tägliche Nachrichtenlimit dieser Nummer noch nicht gemeldet. Von Meta aktualisieren."
+    },
+    "state": {
+      "ok": "Fehlerfrei",
+      "paused": "Pausiert",
+      "slowed": "Auf {pct} % verlangsamt",
+      "tierWarn": "Nahe am Tageslimit",
+      "tierFull": "Tageslimit erreicht",
+      "syncFailed": "Lesen von Meta fehlgeschlagen"
+    },
+    "events": {
+      "meta_throttled": "Meta hat das Senden gedrosselt",
+      "upgrade_in_progress": "Durchsatz-Upgrade läuft",
+      "throughput_upgraded": "Durchsatzstufe geändert",
+      "deferred": "Versand zurückgehalten, Warteschlange zu lang",
+      "paused_block": "Versand blockiert, Nummer pausiert",
+      "tier_full": "Tageslimit erreicht",
+      "paused": "Von einem Operator pausiert",
+      "resumed": "Von einem Operator fortgesetzt",
+      "override_set": "Ratenüberschreibung gesetzt",
+      "override_cleared": "Ratenüberschreibung entfernt",
+      "synced": "Neu von Meta abgerufen"
+    },
+    "detail": {
+      "title": "Limits der WhatsApp-Nummer",
+      "back": "Zurück zu Sendelimits",
+      "description": "Telefonnummern-ID {id}. Wird alle paar Sekunden aktualisiert.",
+      "refresh": "Von Meta aktualisieren",
+      "refreshing": "Wird von Meta gelesen...",
+      "syncError": "Das letzte Lesen von Meta ist fehlgeschlagen: {message}",
+      "coexistence": "Diese Nummer wird auch in der WhatsApp Business App genutzt, daher legt Meta sie auf 20 Nachrichten pro Sekunde fest.",
+      "rate": "Getaktet auf (Nachr./s)",
+      "speed": "Geschwindigkeit",
+      "speedSlowed": "Nach Meta-Drosselung verlangsamt, erholt sich",
+      "speedFull": "Volle Geschwindigkeit",
+      "wait": "Durchschnittliche Wartezeit",
+      "waitHint": "{n} Sendungen haben gewartet, letzte 5 Minuten",
+      "meta": "Durchsatzstufe bei Meta",
+      "metaHint": "{n} Nachr./s",
+      "unknown": "Nicht gemeldet",
+      "chartSeconds": "Sendungen pro Sekunde, letzte Minute",
+      "chartLegend": "Die gestrichelte Linie ist die getaktete Rate. Rote Markierungen sind Sekunden, in denen Meta einen Versand abgelehnt hat, gelbe Sekunden, in denen Sendungen zurückgehalten wurden.",
+      "chartMinutes": "Sendungen pro Minute, letzte Stunde",
+      "chartLegendMinutes": "Rote Markierungen sind Minuten, in denen Meta einen Versand abgelehnt hat, gelbe Minuten, in denen Sendungen zurückgehalten wurden.",
+      "tierTitle": "Tägliches Nachrichtenlimit",
+      "tierNote": "Meta begrenzt, mit wie vielen verschiedenen Personen eine Nummer innerhalb von 24 Stunden Unterhaltungen beginnen darf. Diese Zahl umfasst über diese Plattform gesendete Vorlagennachrichten und kann daher von der Angabe von Meta abweichen.",
+      "events": "Letzte Ereignisse",
+      "eventsEmpty": "Noch nichts",
+      "eventsEmptyBody": "Drosselungen, Rückhaltungen, Pausen und Ratenänderungen dieser Nummer werden hier aufgelistet."
+    },
+    "control": {
+      "title": "Steuerung",
+      "description": "Überschreibe die Rate, die Meta dieser Nummer gibt, oder stoppe den Versand. Beides gilt ab der nächsten Nachricht für jeden Workspace, der die Nummer nutzt.",
+      "override": "Ratenüberschreibung (Nachr./s)",
+      "overrideHelp": "Ganze Zahl von 1 bis {max}. Leer lassen, um Meta zu folgen.",
+      "overrideInvalid": "Gib eine ganze Zahl von 1 bis {max} ein.",
+      "overridePlaceholder": "Meta folgen",
+      "pause": "Senden von dieser Nummer pausieren",
+      "pauseHelp": "Broadcasts und Kampagnen werden automatisch angehalten und fortgesetzt; andere Nachrichten schlagen fehl und lassen sich erneut versuchen.",
+      "reason": "Grund",
+      "reasonHelp": "Wird im Ereignisprotokoll angezeigt.",
+      "saved": "Gespeichert. Die Nummer folgt den neuen Einstellungen ab ihrer nächsten Nachricht."
+    }
+  }
+}

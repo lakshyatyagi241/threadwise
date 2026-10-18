@@ -13,6 +13,16 @@ export const updateFaqSettingsSchema = z.object({
   /** A second opinion from a small chat model for matches that only just cleared the threshold. Absent keeps the saved value. */
   verifyMode: z.enum(FAQ_VERIFY_MODES).optional(),
   verifyBand: z.number().min(FAQ_LIMITS.verifyBandMin).max(FAQ_LIMITS.verifyBandMax).optional(),
+  /**
+   * The reply a customer gets when no FAQ answers their message. Absent keeps the saved text; null or empty removes it. Stored exactly
+   * as given (no trimming of inner spaces, no case or punctuation changes).
+   */
+  fallbackMessage: z
+    .string()
+    .max(FAQ_LIMITS.fallbackMessage)
+    .nullable()
+    .optional()
+    .transform((v) => (v === undefined ? undefined : v === null || v.trim() === '' ? null : v)),
   /** Absent on the first save (no row yet). */
   rowVersion: z.number().int().positive().optional(),
 });
@@ -26,6 +36,8 @@ export interface FaqSettings {
   verifyMode: FaqVerifyMode;
   /** How far above the threshold a score still counts as borderline and goes to the check. */
   verifyBand: number;
+  /** What a customer hears when no FAQ answers; null = nothing. */
+  fallbackMessage: string | null;
   /** The platform switch for the check and the model it uses; false means `verifyMode` has no effect. */
   verifyAvailable: boolean;
   verifyModel: string;

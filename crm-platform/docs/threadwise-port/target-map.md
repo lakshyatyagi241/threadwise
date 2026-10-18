@@ -46,7 +46,7 @@ are in section 2; the 31 tables (30 tenant + 1 global) are in section 2.12.
                   RLS forced                          OutboxDrainService @Interval(2s)   (queues, rbac:*,
                                                       PartitionMaintenanceService         idem:*, ratelimit:*,
                                                         boot + cron 02:00                 socket.io pub/sub)
-   MinIO/S3 buckets + SMTP (Mailpit): configured in env / docker-compose, **no client code exists**
+   S3/R2 buckets + SMTP (Mailpit): configured in env / docker-compose, **no client code exists**
 ```
 
 **Processes (same image, `apps/api/Dockerfile`, two commands).**
@@ -82,7 +82,7 @@ one-time ticket (`POST /v2/realtime/ticket`, minted through the web proxy) and t
 `RealtimeEmitter` (`@socket.io/redis-emitter`, per-room sequence numbers), imported by the HTTP app AND `worker.ts` through `RealtimeEmitterModule`; who hears
 an event is decided by `AudienceResolver`. Nothing publishes yet except the tests: the inbox phases are the first callers.
 
-**Storage / email / providers.** `S3_*` and `SMTP_*` env keys, MinIO buckets `crm-media|crm-documents|crm-exports` and Mailpit exist in
+**Storage / email / providers.** `S3_*` and `SMTP_*` env keys buckets `crm-media|crm-documents|crm-exports` and Mailpit exist in
 `docker-compose.yml`; there is no S3 client, no uploader, no mailer. Providers (`apps/api/src/infra/providers/`): WhatsApp
 port + `MetaCloudProvider` (webhook signature verify + parse are real; `sendTemplate`/`sendText` **throw "not implemented"**);
 Easebuzz payment **port only** (`payments/easebuzz.port.ts`, no adapter, not bound in `providers.module.ts`).
@@ -110,7 +110,7 @@ if you never use Clerk). Optional/defaulted: `PORT`, `APP_URL`, `LOG_LEVEL`, `CO
 `WHATSAPP_APP_SECRET`, `EASEBUZZ_*`, `PUBLIC_API_HMAC_WINDOW_SECONDS`=300, `PUBLIC_API_RATE_LIMIT_PER_MINUTE`=120 (env value unused; the per-key
 DB column `rate_limit_per_minute` is what the guard reads), `SENTRY_*`.
 
-**Deploy.** `docker-compose.yml` = dev infra (postgres, optional `replica` profile, redis, minio + bucket init, mailpit). `docker-compose.prod.yml` =
+**Deploy.** `docker-compose.yml` = dev infra (postgres, optional `replica` profile, redis, mailpit). `docker-compose.prod.yml` =
 api, worker, postgres (`wal_level=replica`), redis; **no caddy, no S3, no web** despite the single-VM deploy plan. CI (`.github/workflows/ci.yml`): static (format,
 lint, typecheck, arch:check), test (migrate from scratch, `db:status`, unit, testcontainers integration), docker build. No e2e job, no web job.
 
@@ -503,7 +503,7 @@ Working-tree note: five untracked `threadwise-*` skills (`ownership-guard`, `par
 | Flow / chatbot / automation engine                                                               | none (says automations are rebuilt by hand in a future workflow engine; `workflow_executions` is named in scale.md)                                                                                   | missing; kernel has no workflow/trigger runtime and the outbox has no subscriber registry                                                                                       |
 | AI (agents, embeddings, usage/tokens, provider keys)                                             | `vector` extension guarded in 0001; `ai_tokens_1k` named as a rate-card unit; `ai_usage_events` named in scale.md                                                                                     | missing                                                                                                                                                                         |
 | Storefront / ordering / checkout                                                                 | none (`orders` explicitly "dropped" in api-inventory)                                                                                                                                                 | missing; would be a new app + payment adapter                                                                                                                                   |
-| File manager / uploads / media                                                                   | `contact_files` metadata rows, S3/MinIO env + buckets                                                                                                                                                 | **no S3 client, no multipart, no signed URLs, no quota/MIME checks**, no folder model                                                                                           |
+| File manager / uploads / media                                                                   | `contact_files` metadata rows, S3/R2 env + buckets                                                                                                                                                 | **no S3 client, no multipart, no signed URLs, no quota/MIME checks**, no folder model                                                                                           |
 | Realtime                                                                                         | gateway (connect, `org:` and `user:` rooms)                                                                                                                                                           | skeleton; no emitters, no conversation-room join, no worker-to-socket path                                                                                                      |
 | Notifications / activity feed                                                                    | none (`notifications` named as a partitioned stream in scale.md)                                                                                                                                      | missing; `contact_activities` is per-contact only                                                                                                                               |
 | Email sending / SMTP                                                                             | env only                                                                                                                                                                                              | missing (no mailer)                                                                                                                                                             |

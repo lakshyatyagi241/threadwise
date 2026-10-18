@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Đã kết nối",
           "shopify": "Đã kết nối",
-          "google_sheets": "Đã cấp khóa API",
-          "meta_catalog": "Đã liên kết danh mục"
+          "meta_catalog": "Đã liên kết danh mục",
+          "google_sheets": "Đã kết nối tài khoản Google"
         },
         "notConnected": "chưa kết nối",
         "connect": "Kết nối",
@@ -494,7 +494,8 @@
         "title": "Hàng đợi",
         "name": "Hàng đợi",
         "pending": "Đang chờ",
-        "failed": "Thất bại"
+        "failed": "Thất bại",
+        "lastFailure": "Lý do lỗi gần nhất"
       },
       "clear": {
         "button": "Xóa các công việc đang chờ",

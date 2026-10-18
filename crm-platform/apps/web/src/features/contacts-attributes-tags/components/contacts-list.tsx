@@ -69,6 +69,7 @@ import {
 import { AddColumnPicker, ColumnHeaderMenu } from './column-menus';
 import { RowMenu } from './row-menu';
 import { StagePicker } from './stage-picker';
+import { UncontactedMarker } from './lead-handling/uncontacted-marker';
 
 export interface ListHandlers {
   selected: ReadonlySet<string>;
@@ -760,6 +761,7 @@ function NameCell({ row, h }: { row: RowView; h: ListHandlers }) {
         >
           {row.name || t('unnamed')}
         </Link>
+        <UncontactedMarker since={row.uncontactedSince} variant="dot" />
       </div>
       <QuickActions row={row} h={h} />
     </div>

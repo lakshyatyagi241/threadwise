@@ -25,6 +25,7 @@ import { TagsService } from '../tags/tags.service';
 import { ContactImportRepository, type ImportJobRow } from './contact-import.repository';
 import { parseCsv, type Delimiter } from './csv-parser';
 import { extractRow, resolveMapping, type ParsedRow, type ResolvedMapping } from './import-rows';
+import { ContactTouchService } from '../lead-handling/contact-touch.service';
 
 const { contacts, contactGroupMembers, contactTags } = schema;
 
@@ -100,6 +101,7 @@ export class ContactImportEngine {
     private readonly consent: ContactConsentService,
     private readonly privacy: ContactPrivacyService,
     private readonly minors: MinorDetectionService,
+    private readonly touch: ContactTouchService,
   ) {}
 
   /** Runs (or resumes) an import job to the end. Needs a request context (the processor sets one). */
@@ -219,9 +221,13 @@ export class ContactImportEngine {
       );
     }
 
+    // What already exists, read once for the whole file: one query for the groups and one for the tags, not one per distinct name.
+    const knownGroups = await this.groupsRepo.findByNames(tx, orgId, [...groupNames.values()]);
+    const knownTags = await this.tags.findManyByNames(tx, orgId, [...tagNames.values()]);
+
     const groupIds = new Map<string, number>();
     for (const [key, name] of groupNames) {
-      let group = await this.groupsRepo.findByName(tx, orgId, name);
+      let group = knownGroups.get(lower(name.trim()));
       if (!group) {
         const created = await this.groupsRepo.insertIfAbsent(tx, orgId, {
           name,
@@ -249,6 +255,11 @@ export class ContactImportEngine {
 
     const tagIds = new Map<string, number>();
     for (const [key, name] of tagNames) {
+      const known = knownTags.get(lower(name.trim()));
+      if (known) {
+        tagIds.set(key, known.id);
+        continue;
+      }
       // Permission to create tags was checked when the import was accepted; a worker has no
       // grants. The plan's tag limit is checked here, as everywhere.
       const { row } = await this.tags.findOrCreateByName(tx, orgId, name, {
@@ -459,6 +470,13 @@ export class ContactImportEngine {
         ...(o.row.email ? [sql`(${orgId}, ${o.contactId}, 'email', ${o.row.email}, true)`] : []),
       ]);
       await this.addIdentities(tx, identityRows);
+      // Start uncontacted when the workspace says imported contacts do (BL-290). Off by default: no write.
+      await this.touch.markNewMany(
+        tx,
+        orgId,
+        inserted.map((r) => r.id),
+        'import',
+      );
 
       if (options.triggerAutomations) {
         for (const row of inserted) {

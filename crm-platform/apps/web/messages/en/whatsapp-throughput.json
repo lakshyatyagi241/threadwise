@@ -1,0 +1,157 @@
+{
+  "whatsapp-throughput": {
+    "nav": {
+      "group": "WhatsApp",
+      "item": "Send limits"
+    },
+    "eyebrow": "WhatsApp",
+    "title": "Send limits and live performance",
+    "description": "How fast every connected WhatsApp number may send, how much of its daily messaging limit it has used, and what is happening right now. Changes apply to the next message sent by every worker.",
+    "updated": "Live. Updated {time}",
+    "stale": "The last refresh failed. Showing the previous numbers.",
+    "liveUnavailable": "Live counters could not be read, so the live columns show zero. Rates, tiers and controls are still correct.",
+    "limiterOff": "The send limiter is switched off. Messages are not paced here; only Meta's own throttling applies.",
+    "footnote": "A number's rate is set by Meta: 80 messages per second by default, up to 1,000 once Meta upgrades it, and 20 for a number also used on the WhatsApp Business app. Inbound and outbound messages share it. The daily messaging tier is a separate limit on unique people messaged in 24 hours; its count here is an estimate from template messages sent through this platform.",
+    "perSecond": "msg/s",
+    "peak": "Peak {n} in the last minute",
+    "sentCount": "{n} sent",
+    "deferredCount": "{n} held back",
+    "throttledCount": "{n} throttled by Meta",
+    "tierUsed": "{used} of {cap} people in 24 hours",
+    "details": "Details",
+    "common": {
+      "loading": "Loading...",
+      "retry": "Try again"
+    },
+    "errors": {
+      "conflict": "Someone else changed this just now. The latest values have been loaded; review them and apply your change again.",
+      "metaUnavailable": "Meta did not answer. Try refreshing again in a moment.",
+      "notFound": "This number no longer exists. Go back to the list.",
+      "forbidden": "Only a Super Admin can change send limits.",
+      "invalid": "Some values were not accepted. Check them and try again.",
+      "unexpected": "Something went wrong on our side. Try again in a moment."
+    },
+    "kpi": {
+      "now": "Sending now",
+      "nowHint": "messages per second, all numbers",
+      "sent": "Sent",
+      "last5": "last 5 minutes",
+      "numbers": "Connected numbers",
+      "attention": "Need attention",
+      "attentionHint": "{paused} paused, {tier} near their daily limit",
+      "heldBack": "Held back",
+      "heldBackHint": "{meta} throttled by Meta, last 5 minutes"
+    },
+    "settings": {
+      "title": "Platform settings",
+      "description": "These apply to every number. A number's own override and pause are set on its page.",
+      "enabled": "Pace sends to each number's limit",
+      "enabledHelp": "Off sends without pacing; Meta's own throttling still applies.",
+      "defaultMps": "Default rate (msg/s)",
+      "defaultMpsHelp": "Used for a number whose rate Meta has not reported yet.",
+      "safetyMargin": "Safety margin (%)",
+      "safetyMarginHelp": "Share of the limit kept free for inbound traffic and timing.",
+      "maxWait": "Longest wait (ms)",
+      "maxWaitHelp": "A send that would wait longer goes back to its queue and tries again.",
+      "syncInterval": "Re-read from Meta (minutes)",
+      "syncIntervalHelp": "How often each number's rate and daily limit are refreshed.",
+      "adaptive": "Slow down after a Meta throttle",
+      "adaptiveHelp": "Halves the speed when Meta refuses a message for sending too fast, then recovers over a minute.",
+      "enforceTier": "Hold template messages at the daily limit",
+      "enforceTierHelp": "Stops new template messages when the number has reached its daily messaging tier. Off only flags it.",
+      "tierWarn": "Warn at (% of daily limit)",
+      "tierWarnHelp": "A number is flagged when it uses this share of its tier.",
+      "save": "Save settings",
+      "saving": "Saving...",
+      "saved": "Saved. Every number now follows the new settings."
+    },
+    "numbers": {
+      "title": "Numbers",
+      "search": "Search by workspace, number or id",
+      "emptyTitle": "No connected numbers",
+      "emptyBody": "Numbers appear here once a workspace connects WhatsApp."
+    },
+    "cols": {
+      "number": "Number",
+      "rate": "Rate limit",
+      "live": "Now",
+      "last5": "Last 5 minutes",
+      "tier": "Daily limit",
+      "state": "State",
+      "actions": "Actions"
+    },
+    "source": {
+      "override": "Override",
+      "coexistence": "Business app (fixed)",
+      "meta": "From Meta",
+      "default": "Default"
+    },
+    "tier": {
+      "unlimited": "Unlimited",
+      "unknown": "Not reported yet",
+      "unlimitedBody": "This number has an unlimited daily messaging limit.",
+      "unknownBody": "Meta has not reported this number's daily messaging limit yet. Refresh from Meta."
+    },
+    "state": {
+      "ok": "Healthy",
+      "paused": "Paused",
+      "slowed": "Slowed to {pct}%",
+      "tierWarn": "Near daily limit",
+      "tierFull": "Daily limit reached",
+      "syncFailed": "Meta read failed"
+    },
+    "events": {
+      "meta_throttled": "Meta throttled sending",
+      "upgrade_in_progress": "Throughput upgrade in progress",
+      "throughput_upgraded": "Throughput level changed",
+      "deferred": "Sends held back, queue too deep",
+      "paused_block": "Send blocked, number paused",
+      "tier_full": "Daily limit reached",
+      "paused": "Paused by an operator",
+      "resumed": "Resumed by an operator",
+      "override_set": "Rate override set",
+      "override_cleared": "Rate override removed",
+      "synced": "Re-read from Meta"
+    },
+    "detail": {
+      "title": "WhatsApp number limits",
+      "back": "Back to send limits",
+      "description": "Phone number id {id}. Updates every couple of seconds.",
+      "refresh": "Refresh from Meta",
+      "refreshing": "Reading from Meta...",
+      "syncError": "The last read from Meta failed: {message}",
+      "coexistence": "This number is also used on the WhatsApp Business app, so Meta fixes it at 20 messages per second.",
+      "rate": "Paced to (msg/s)",
+      "speed": "Speed",
+      "speedSlowed": "Slowed after a Meta throttle, recovering",
+      "speedFull": "Full speed",
+      "wait": "Average wait",
+      "waitHint": "{n} sends waited, last 5 minutes",
+      "meta": "Meta throughput level",
+      "metaHint": "{n} msg/s",
+      "unknown": "Not reported",
+      "chartSeconds": "Sends per second, last minute",
+      "chartLegend": "The dashed line is the paced rate. Red marks are seconds Meta refused a send, amber seconds sends were held back.",
+      "chartMinutes": "Sends per minute, last hour",
+      "chartLegendMinutes": "Red marks are minutes Meta refused a send, amber minutes sends were held back.",
+      "tierTitle": "Daily messaging limit",
+      "tierNote": "Meta limits how many different people a number may start conversations with in 24 hours. This count covers template messages sent through this platform, so it can differ from Meta's own figure.",
+      "events": "Recent events",
+      "eventsEmpty": "Nothing yet",
+      "eventsEmptyBody": "Throttles, holds, pauses and rate changes for this number are listed here."
+    },
+    "control": {
+      "title": "Controls",
+      "description": "Override the rate Meta gives this number, or stop its sends. Both take effect on the next message, for every workspace using the number.",
+      "override": "Rate override (msg/s)",
+      "overrideHelp": "Whole number from 1 to {max}. Leave empty to follow Meta.",
+      "overrideInvalid": "Enter a whole number from 1 to {max}.",
+      "overridePlaceholder": "Follow Meta",
+      "pause": "Pause sending from this number",
+      "pauseHelp": "Broadcasts and campaigns stop and resume by themselves; other messages fail with a Retry.",
+      "reason": "Reason",
+      "reasonHelp": "Shown in the event log.",
+      "saved": "Saved. The number follows the new controls from its next message."
+    }
+  }
+}

@@ -803,7 +803,7 @@
         "minPlan": "Tu plan, o uno superior, incluye esta app, así que no hay nada que pagar.",
         "plan": "Tu plan incluye esta app, así que no hay nada que pagar."
       },
-      "needsPurchase": "Incluida en el catálogo de tu plan; cómprala para usarla.",
+      "needsPurchase": "Suscríbete primero. La instalación se habilita cuando se completa el pago.",
       "subscribedNote": "Tu espacio de trabajo tiene una suscripción a esta app.",
       "trialOffer": "Pruébala gratis durante {days, plural, one {# día} other {# días}}. No se cobra nada hasta que decidas suscribirte.",
       "prepaidNote": "Facturación mensual a través de la facturación de tu espacio de trabajo. Cada pago cubre un mes y no se cobra automáticamente: vuelve a pagar antes de la fecha indicada para mantener la app en funcionamiento.",

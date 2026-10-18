@@ -293,7 +293,7 @@
         "connected": {
           "woocommerce": "Connected",
           "shopify": "Connected",
-          "google_sheets": "API key issued",
+          "google_sheets": "Google account connected",
           "meta_catalog": "Catalog linked"
         },
         "notConnected": "not connected",
@@ -494,7 +494,8 @@
         "title": "Queues",
         "name": "Queue",
         "pending": "Pending",
-        "failed": "Failed"
+        "failed": "Failed",
+        "lastFailure": "Last failure reason"
       },
       "clear": {
         "button": "Clear pending jobs",

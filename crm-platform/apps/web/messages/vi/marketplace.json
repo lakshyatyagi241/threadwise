@@ -803,7 +803,7 @@
         "minPlan": "Gói của bạn, hoặc gói cao hơn, bao gồm ứng dụng này, nên không cần trả gì.",
         "plan": "Gói của bạn bao gồm ứng dụng này, nên không cần trả gì."
       },
-      "needsPurchase": "Có trong danh mục gói của bạn, mua để sử dụng.",
+      "needsPurchase": "Hãy đăng ký trước. Có thể cài đặt sau khi thanh toán hoàn tất.",
       "subscribedNote": "Không gian làm việc của bạn đã đăng ký ứng dụng này.",
       "trialOffer": "Dùng thử miễn phí {days, plural, other {# ngày}}. Không thu phí cho đến khi bạn chọn đăng ký.",
       "prepaidNote": "Thanh toán hàng tháng qua hệ thống thanh toán của không gian làm việc. Mỗi lần thanh toán bao gồm một tháng và không tự động trừ tiền: hãy thanh toán lại trước ngày hiển thị để ứng dụng tiếp tục hoạt động.",

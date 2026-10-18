@@ -426,11 +426,9 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
     const cur = Number(
       (await q(`SELECT roles_version FROM organizations WHERE id = ${orgId}`))[0]!.roles_version,
     );
-    if (
-      !marker?.counts ||
-      !(marker.counts.after > marker.counts.before) ||
-      cur !== marker.counts.after
-    )
+    // the loader's bump must still be in effect. The app may bump it again later (a role edit after the run), so a higher value is
+    // fine; only a value below the loader's own bump means the cache key went back.
+    if (!marker?.counts || !(marker.counts.after > marker.counts.before) || cur < marker.counts.after)
       alarm(
         'ROLES_VERSION: organizations.roles_version was not increased after roles and users were written (RBAC could serve a stale grant set)',
       );

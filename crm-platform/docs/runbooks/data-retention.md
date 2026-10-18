@@ -27,7 +27,7 @@ It never touches the `_default` partition, the current or the previous month ins
 | ------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | `RETENTION_ENABLED` | `false`       | The job does nothing at all unless this is `true`.                                                                              |
 | `RETENTION_DRY_RUN` | `true`        | With the job on, only log what it would do.                                                                                     |
-| `ARCHIVE_DRIVER`    | `local`       | `s3` for the bucket (MinIO, S3, R2). `local` writes to `ARCHIVE_LOCAL_DIR` (default `.archive`) and is for development only.    |
+| `ARCHIVE_DRIVER`    | `local`       | `s3` for the bucket (S3, R2). `local` writes to `ARCHIVE_LOCAL_DIR` (default `.archive`) and is for development only.    |
 | `S3_BUCKET_ARCHIVE` | `crm-archive` | Created on the first write. Uses `S3_ENDPOINT`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_FORCE_PATH_STYLE`. |
 
 `RETENTION_DRY_RUN=false` with `ARCHIVE_DRIVER=local` in production is refused (`retention refused` in the log): a local archive lives in the container and a
@@ -86,7 +86,7 @@ archive/an_events/2026-08/7.ndjson.gz
 ```
 
 ```bash
-# with the MinIO client (alias "archive" pointing at the store); any S3 client works the same
+# with any S3 client (alias "archive" pointing at the store); any S3 client works the same
 mc cat archive/crm-archive/archive/an_events/2026-08/_manifest.json
 mc cat archive/crm-archive/archive/an_events/2026-08/7.ndjson.gz | gunzip | wc -l          # rows
 mc cat archive/crm-archive/archive/an_events/2026-08/7.ndjson.gz | gunzip | sha256sum      # sha256

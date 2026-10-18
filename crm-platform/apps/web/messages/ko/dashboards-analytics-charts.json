@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "연결됨",
           "shopify": "연결됨",
-          "google_sheets": "API 키 발급됨",
-          "meta_catalog": "카탈로그 연결됨"
+          "meta_catalog": "카탈로그 연결됨",
+          "google_sheets": "Google 계정 연결됨"
         },
         "notConnected": "연결되지 않음",
         "connect": "연결",
@@ -494,7 +494,8 @@
         "title": "큐",
         "name": "큐",
         "pending": "대기 중",
-        "failed": "실패"
+        "failed": "실패",
+        "lastFailure": "마지막 실패 사유"
       },
       "clear": {
         "button": "대기 중인 작업 지우기",

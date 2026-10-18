@@ -62,7 +62,8 @@
       "field_match": "تطابق حقل",
       "date_field_match": "تطابق تاريخ",
       "schedule": "الجدولة",
-      "ecom_event": "حدث المتجر"
+      "ecom_event": "حدث المتجر",
+      "segment_leave": "مغادرة الشريحة"
     },
     "endReason": {
       "end_node": "وصل إلى نهاية التدفق",

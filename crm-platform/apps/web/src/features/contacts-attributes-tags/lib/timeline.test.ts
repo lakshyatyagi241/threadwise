@@ -120,6 +120,21 @@ describe('entries', () => {
     expect(fromMeeting(meeting({}), now).at).toBe('2026-10-02T09:00:00.000Z');
   });
 
+  it('a booking that was cancelled or declined is never "up next", and the entry carries the booking status', () => {
+    const now = new Date('2026-10-10T12:00:00.000Z');
+    const future = { startsAt: '2026-10-12T10:00:00.000Z', source: 'booking' as const };
+    for (const status of ['cancelled', 'declined'] as const) {
+      const e = fromMeeting(meeting({ ...future, status }), now);
+      expect(e.upNext, status).toBe(false);
+      expect(e.data).toMatchObject({ type: 'meeting', upcoming: false, status });
+    }
+    expect(fromMeeting(meeting({ ...future, status: 'confirmed' }), now).upNext).toBe(true);
+    expect(fromMeeting(meeting({ ...future, status: 'pending' }), now).upNext).toBe(true);
+    expect(fromMeeting(meeting({ startsAt: future.startsAt }), now).data).toMatchObject({
+      status: null,
+    });
+  });
+
   it('leaves out the row bookkeeping the audit trail records with every save', () => {
     const e = (fieldKey: string): FieldHistoryEntry => ({
       fieldKey,

@@ -325,7 +325,8 @@
           "url": "Ou use o endereço da sua própria imagem",
           "urlHint": "Cole o endereço de uma imagem quadrada (https://...). O envio de arquivo ainda não está disponível.",
           "botName": "Nome do bot",
-          "botNameHint": "Exibido no cabeçalho da janela de chat. Deixe em branco para usar o nome do seu bot."
+          "botNameHint": "Exibido no cabeçalho da janela de chat. Deixe em branco para usar o nome do seu bot.",
+          "urlHintUpload": "Cole o endereço de uma imagem quadrada (https://...) ou envie um arquivo abaixo."
         },
         "3": {
           "title": "Defina sua mensagem de boas-vindas",
@@ -585,6 +586,19 @@
             "placeholder": "example.com",
             "add": "Adicionar um site",
             "remove": "Remover site"
+          },
+          "feedback": {
+            "label": "Permitir que os visitantes avaliem as respostas",
+            "hint": "Polegares para cima e para baixo sob cada resposta do bot.",
+            "message": "Mensagem exibida após uma avaliação",
+            "keptWhenOff": "O feedback está desativado. Esta mensagem é mantida e volta a aparecer se você reativá-lo."
+          },
+          "languages": {
+            "primary": "Idioma principal",
+            "follow": "Seguir o navegador do visitante",
+            "primaryHint": "O idioma dos textos próprios da janela do chat.",
+            "additional": "Outros idiomas",
+            "additionalHint": "Um visitante cujo navegador usa um destes vê a janela nesse idioma. Os demais veem o idioma principal."
           }
         },
         "rail": {
@@ -699,7 +713,9 @@
         "statusLive": "Ao vivo",
         "statusDraft": "Não publicado",
         "codeLabel": "HTML",
-        "localNote": "Este código aponta para um endereço neste computador (localhost), então só funciona em páginas abertas aqui. Em um site real, use o endereço publicado."
+        "localNote": "Este código aponta para um endereço neste computador (localhost), então só funciona em páginas abertas aqui. Em um site real, use o endereço publicado.",
+        "statusNoNumber": "Publicado, sem número",
+        "noNumber": "Este bot está publicado, mas ainda não tem um número de WhatsApp, por isso o botão, o código QR e o link direto continuam ocultos. Escolha um número no Gatilho, na aba Criar."
       },
       "whatsapp": {
         "loading": "Carregando o botão…",
@@ -708,7 +724,8 @@
         "saved": "Botão do WhatsApp salvo",
         "saveFailed": "Não foi possível salvar o botão. Tente novamente.",
         "fromBot": "O botão abre o WhatsApp em {number}, o número em que este bot funciona. Altere o número no gatilho, na aba Criar.",
-        "noNumber": "Este bot ainda não tem número de WhatsApp. Escolha um no gatilho, na aba Criar, e volte para salvar o botão."
+        "noNumber": "Este bot ainda não tem número de WhatsApp. Escolha um no gatilho, na aba Criar, e volte para salvar o botão.",
+        "keywordMissing": "A mensagem acima não contém a palavra de início do seu bot \"{keyword}\". Se o bot só começa com essa palavra, os visitantes que tocarem no botão não chegarão a ele."
       }
     },
     "webBots": {

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Badge, cn } from '@crm/ui';
 import { ContactPrivacyBadges } from '@/features/contact-consent';
+import { usePersonaVisibility } from '@/features/persona';
 import type { ContactRow } from '../../api/schemas';
 import { displayName, isOptedOut } from '../../lib/contact-model';
 import type { AddTarget, SectionId } from '../../lib/sections';
@@ -14,6 +15,7 @@ import { KeyDetails } from './key-details';
 import { LeadScoreChip } from './lead-score-chip';
 import { JobTitle, SocialIcons } from './parts';
 import { StageControl } from './stage-control';
+import { UncontactedMarker } from '../lead-handling/uncontacted-marker';
 
 /**
  * The left column of the contact page (HubSpot's profile card): the way back, avatar and name with the lead score, the job title, the
@@ -36,6 +38,8 @@ export function ProfileColumn({
   const t = useTranslations('contacts-attributes-tags.detail');
   const tn = useTranslations('contacts-attributes-tags.contact.nav');
   const name = displayName(contact) || t('unnamed');
+  // The lead score chip is the `score` action of the persona catalog: hidden, it is not drawn (the score itself is kept).
+  const showScore = !usePersonaVisibility().isActionHidden('score');
 
   return (
     <div className={cn('space-y-3', className)}>
@@ -53,7 +57,8 @@ export function ProfileColumn({
               <h1 className="min-w-0 break-words text-lg font-semibold leading-tight" dir="auto">
                 {name}
               </h1>
-              <LeadScoreChip contact={contact} onOpen={() => onAdd('score')} />
+              {showScore && <LeadScoreChip contact={contact} onOpen={() => onAdd('score')} />}
+              <UncontactedMarker since={contact.uncontactedSince} />
             </div>
             <JobTitle contact={contact} />
             <div className="mt-1 flex flex-wrap items-center gap-1.5">

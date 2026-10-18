@@ -5,6 +5,21 @@
         "label": "Akun Google",
         "description": "Hubungkan satu akun Google untuk Calendar, Sheets, Docs, Forms, dan Meet di alur Anda.",
         "keywords": "google, akun google, kalender, sheets, docs, forms, meet, drive, oauth, hubungkan google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Tambahkan baris, cari baris, dan simpan kontak dari sheet di alur Anda. Menggunakan koneksi akun Google Anda.",
+        "keywords": "google sheets, spreadsheet, baris, sel, oauth, hubungkan google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Salin dokumen templat, isi, dan bagikan dari alur Anda. Menggunakan koneksi akun Google Anda.",
+        "keywords": "google docs, dokumen, templat, bagikan, oauth, hubungkan google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Kirim formulir ke pelanggan dan lanjutkan setelah mereka mengisinya. Menggunakan koneksi akun Google Anda.",
+        "keywords": "google forms, formulir, survei, tanggapan, oauth, hubungkan google"
       }
     }
   },
@@ -91,8 +106,8 @@
         },
         "sheets": {
           "name": "Sheets",
-          "body": "Tambahkan baris ke sheet, cari sebuah baris, periksa sebuah sel, atau salin baris ke kontak.",
-          "usedBy": "Google Sheets, Periksa kolom Google Sheet, Simpan kontak dari Google Sheet"
+          "usedBy": "Google Sheets, Periksa kolom Google Sheet, Simpan kontak dari Google Sheet",
+          "body": "Tambah baris ke sheet, cari baris, periksa sel, atau salin baris ke kontak."
         },
         "docs": {
           "name": "Docs dan Drive",
@@ -101,13 +116,13 @@
         },
         "forms": {
           "name": "Forms",
-          "body": "Baca tautan publik sebuah formulir agar alur dapat mengirimkannya ke pelanggan.",
-          "usedBy": "Langkah Google Form"
+          "usedBy": "Langkah Google Form",
+          "body": "Baca tautan publik formulir agar alur dapat mengirimnya ke pelanggan, dan baca jawaban formulir agar alur berlanjut saat pelanggan mengisinya."
         },
         "drive_listing": {
           "name": "Daftar file Drive",
-          "body": "Tampilkan sheet, dokumen, dan formulir Anda berdasarkan nama di pembuat alur, sehingga Anda bisa memilih tanpa menempel tautan.",
-          "usedBy": "Pemilih file di pembuat alur"
+          "body": "Tampilkan sheet, dokumen, dan formulir Anda berdasarkan nama, sehingga Anda dapat memilihnya dari akun Anda di pembuat alur dan pengaturan pemesanan. Diperlukan untuk setiap pemilih file.",
+          "usedBy": "Pemilih file di pembuat alur dan pengaturan pemesanan"
         }
       },
       "lastError": {

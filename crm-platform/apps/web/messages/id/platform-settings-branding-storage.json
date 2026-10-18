@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "Endpoint",
-            "hint": "Wajib untuk Spaces, R2, dan MinIO. /bucket di akhir akan dihapus.",
-            "placeholder": "https://… (wajib untuk Spaces / R2 / MinIO; otomatis untuk Wasabi & Bunny)"
+            "hint": "Wajib untuk Spaces dan R2. /bucket di akhir akan dihapus.",
+            "placeholder": "https://… (wajib untuk Spaces / R2; otomatis untuk Wasabi & Bunny)"
           },
           "cdnUrl": {
             "label": "URL publik / CDN (opsional)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "Gunakan endpoint gaya path (MinIO / sebagian penyimpanan kompatibel S3)"
+            "label": "Gunakan endpoint gaya path (sebagian penyimpanan kompatibel S3)"
           },
           "storageZone": {
             "label": "Zona penyimpanan",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / kompatibel S3"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "Privat (URL bertanda tangan)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "Penyimpanan cloud",
-        "description": "Kirim media klien ke bucket Anda sendiri: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2, atau MinIO.",
+        "description": "Kirim media klien ke bucket Anda sendiri: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "Gunakan kolom Bunny: zona penyimpanan dan kata sandi. Wilayah adalah wilayah zona (de, ny, la...)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "Isi kolom S3 dan tempel URL Endpoint. Centang path-style untuk MinIO."
+              "title": "Spaces / R2",
+              "body": "Isi kolom S3 dan tempel URL Endpoint."
             },
             "test": {
               "title": "Selalu uji terlebih dahulu",
@@ -1760,7 +1759,7 @@
             },
             "consent": {
               "title": "3. Layar persetujuan",
-              "body": "Tambahkan scope yang diminta produk (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), lalu publikasikan aplikasi: dalam mode Testing, Google mengakhiri setiap izin setelah 7 hari dan workspace harus terhubung ulang. Scope drive bersifat terbatas dan memerlukan peninjauan Google."
+              "body": "Tambahkan scope yang diminta produk (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), lalu publikasikan aplikasi: dalam mode Testing, Google mengakhiri setiap izin setelah 7 hari dan workspace harus terhubung ulang. Scope drive bersifat terbatas dan memerlukan peninjauan Google."
             },
             "workspaces": {
               "title": "4. Workspace terhubung",

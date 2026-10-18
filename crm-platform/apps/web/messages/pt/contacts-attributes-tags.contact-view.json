@@ -126,7 +126,12 @@
       "details": {
         "title": "Detalhes do contato",
         "stage": "Estágio do ciclo de vida",
-        "otherProperties": "Outras propriedades"
+        "otherProperties": "Outras propriedades",
+        "stageSince": "Nesta etapa desde",
+        "previousStage": "Etapa anterior",
+        "previousStageSince": "Etapa anterior desde",
+        "lostReason": "Motivo da perda",
+        "updatedAt": "Última atualização"
       },
       "company": {
         "title": "Empresa",

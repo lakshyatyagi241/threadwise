@@ -32,8 +32,6 @@ import { FaqNodes } from './runtime/nodes/ai/faq-node';
 import { OrderingFlowController } from './runtime/nodes/ai/ordering.controller';
 import { CommerceNodes } from './runtime/nodes/commerce/commerce-nodes';
 import { CommerceNodesModule } from './runtime/nodes/commerce/commerce-nodes.module';
-import { GoogleFormWebhookController } from './runtime/nodes/integrations/google-form-webhook.controller';
-import { GoogleFormWebhookService } from './runtime/nodes/integrations/google-form-webhook.service';
 import { ApiLibraryNodes } from './runtime/nodes/integrations/api-library-node';
 import { IntegrationNodes } from './runtime/nodes/integrations/integrations-nodes';
 import { IntegrationNodesModule } from './runtime/nodes/integrations/integrations-nodes.module';
@@ -61,12 +59,7 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
     CommerceNodesModule,
     IntegrationNodesModule,
   ],
-  controllers: [
-    FlowRuntimeController,
-    FlowRuntimePublicController,
-    GoogleFormWebhookController,
-    OrderingFlowController,
-  ],
+  controllers: [FlowRuntimeController, FlowRuntimePublicController, OrderingFlowController],
   providers: [
     CryptoService,
     ApiKeyGuard,
@@ -81,7 +74,6 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
     FlowLaunchService,
     FlowTriggerService,
     FlowRuntimeService,
-    GoogleFormWebhookService,
     CampaignFlowStarterImpl,
     {
       provide: FLOW_NODE_EXECUTORS,
@@ -108,7 +100,6 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
     RunRepository,
     FlowRunPublisher,
     CampaignFlowStarterImpl,
-    GoogleFormWebhookService,
   ],
 })
 export class FlowRuntimeEngineModule {}

@@ -67,10 +67,6 @@ const reviews = {
   ],
   'modules/chat-conversations/media-fetch-recovery.service.ts': ['reviewed', SWEEP],
   'modules/chat-conversations/queued-message-recovery.service.ts': ['reviewed', SWEEP],
-  'modules/chrome-extension-sheets-addon/sheets-key.guard.ts': [
-    'reviewed',
-    LOOKUP + ' (128-bit key, sha256, unique partial index, per-IP failure throttle)',
-  ],
   'modules/crm/invoicing/invoice-overdue-sweep.service.ts': ['reviewed', SWEEP],
   'modules/crm/invoicing/recurring-invoices.service.ts': [
     'reviewed',

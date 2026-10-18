@@ -47,6 +47,8 @@ export interface ResolvedContactFilter {
   unsubscribed?: boolean;
   /** true: flagged as a minor; false: not flagged (BL-190). */
   minor?: boolean;
+  /** true: uncontacted; false: contacted (BL-290). */
+  uncontacted?: boolean;
   source?: string;
   status?: string;
   /** BL-193: the stored time zone is this one / no time zone is stored. */
@@ -190,6 +192,13 @@ export function contactConditions(
   }
   if (f.unsubscribed !== undefined) c.push(eq(contacts.isUnsubscribed, f.unsubscribed));
   if (f.minor !== undefined) c.push(minorCondition(f.minor));
+  if (f.uncontacted !== undefined) {
+    c.push(
+      f.uncontacted
+        ? sql`${contacts.uncontactedSince} IS NOT NULL`
+        : sql`${contacts.uncontactedSince} IS NULL`,
+    );
+  }
 
   if (f.uuids) c.push(f.uuids.length > 0 ? inArray(contacts.uuid, f.uuids) : sql`false`);
   if (f.excludeUuids && f.excludeUuids.length > 0)

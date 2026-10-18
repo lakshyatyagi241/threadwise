@@ -5,6 +5,21 @@
         "label": "Compte Google",
         "description": "Connectez un compte Google pour Calendar, Sheets, Docs, Forms et Meet dans vos flux.",
         "keywords": "google, compte google, agenda, calendar, tableur, sheets, documents, docs, formulaires, forms, meet, drive, oauth, connecter google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Ajoutez des lignes, recherchez des lignes et enregistrez des contacts depuis une feuille dans vos flux. Utilise la connexion à votre compte Google.",
+        "keywords": "google sheets, feuille de calcul, lignes, cellules, oauth, connecter google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Copiez un document modèle, remplissez-le et partagez-le depuis vos flux. Utilise la connexion à votre compte Google.",
+        "keywords": "google docs, document, modèle, partager, oauth, connecter google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Envoyez un formulaire à un client et poursuivez dès qu'il l'a rempli. Utilise la connexion à votre compte Google.",
+        "keywords": "google forms, formulaire, sondage, réponses, oauth, connecter google"
       }
     }
   },
@@ -91,8 +106,8 @@
         },
         "sheets": {
           "name": "Sheets",
-          "body": "Ajouter une ligne à une feuille, rechercher une ligne, vérifier une cellule ou copier une ligne dans un contact.",
-          "usedBy": "Google Sheets, Vérifier un champ Google Sheet, Enregistrer un contact depuis Google Sheet"
+          "usedBy": "Google Sheets, Vérifier un champ Google Sheet, Enregistrer un contact depuis Google Sheet",
+          "body": "Ajoutez une ligne à une feuille, recherchez une ligne, vérifiez une cellule ou copiez une ligne dans un contact."
         },
         "docs": {
           "name": "Docs et Drive",
@@ -101,13 +116,13 @@
         },
         "forms": {
           "name": "Forms",
-          "body": "Lire le lien public d’un formulaire pour que le flux puisse l’envoyer au client.",
-          "usedBy": "Étape Google Form"
+          "usedBy": "Étape Google Form",
+          "body": "Lisez le lien public d'un formulaire pour que le flux l'envoie au client, et lisez les réponses du formulaire pour que le flux se poursuive lorsqu'il est rempli."
         },
         "drive_listing": {
           "name": "Liste des fichiers Drive",
-          "body": "Lister vos feuilles, documents et formulaires par nom dans le générateur de flux, pour les choisir au lieu de coller un lien.",
-          "usedBy": "Sélecteurs de fichiers du générateur de flux"
+          "body": "Listez vos feuilles, documents et formulaires par nom, pour les choisir depuis votre compte dans le créateur de flux et les paramètres de réservation. Nécessaire pour tous les sélecteurs de fichiers.",
+          "usedBy": "Sélecteurs de fichiers dans le créateur de flux et les paramètres de réservation"
         }
       },
       "lastError": {

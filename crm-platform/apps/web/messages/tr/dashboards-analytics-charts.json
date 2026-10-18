@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Bağlı",
           "shopify": "Bağlı",
-          "google_sheets": "API anahtarı verildi",
-          "meta_catalog": "Katalog bağlandı"
+          "meta_catalog": "Katalog bağlandı",
+          "google_sheets": "Google hesabı bağlandı"
         },
         "notConnected": "bağlı değil",
         "connect": "Bağlan",
@@ -494,7 +494,8 @@
         "title": "Kuyruklar",
         "name": "Kuyruk",
         "pending": "Bekleyen",
-        "failed": "Başarısız"
+        "failed": "Başarısız",
+        "lastFailure": "Son hatanın nedeni"
       },
       "clear": {
         "button": "Bekleyen işleri temizle",

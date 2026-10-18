@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "엔드포인트",
-            "hint": "Spaces, R2, MinIO에 필요합니다. 끝에 붙은 /bucket은 제거됩니다.",
-            "placeholder": "https://… (Spaces / R2 / MinIO에 필요, Wasabi 및 Bunny는 자동)"
+            "hint": "Spaces, R2에 필요합니다. 끝에 붙은 /bucket은 제거됩니다.",
+            "placeholder": "https://… (Spaces / R2에 필요, Wasabi 및 Bunny는 자동)"
           },
           "cdnUrl": {
             "label": "공개 / CDN URL (선택)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "경로 스타일 엔드포인트 사용 (MinIO / 일부 S3 호환 스토어)"
+            "label": "경로 스타일 엔드포인트 사용 (일부 S3 호환 스토어)"
           },
           "storageZone": {
             "label": "스토리지 존",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3 호환"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "비공개 (서명된 URL)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "클라우드 스토리지",
-        "description": "고객 미디어를 Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 또는 MinIO의 자체 버킷으로 보냅니다.",
+        "description": "고객 미디어를 Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2의 자체 버킷으로 보냅니다.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "Bunny 필드(스토리지 존과 비밀번호)를 사용하세요. 리전은 존 리전(de, ny, la 등)입니다."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "S3 필드를 입력하고 엔드포인트 URL을 붙여 넣으세요. MinIO는 경로 스타일을 체크하세요."
+              "title": "Spaces / R2",
+              "body": "S3 필드를 입력하고 엔드포인트 URL을 붙여 넣으세요."
             },
             "test": {
               "title": "항상 먼저 테스트하세요",
@@ -1760,7 +1759,7 @@
             },
             "consent": {
               "title": "3. 동의 화면",
-              "body": "제품이 요청하는 범위(calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly)를 추가한 뒤 앱을 게시하세요. 테스트 상태에서는 Google이 7일 후 모든 권한 부여를 종료하므로 워크스페이스를 다시 연결해야 합니다. Drive 범위는 제한 범위이며 Google의 검토가 필요합니다."
+              "body": "제품이 요청하는 범위(calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly)를 추가한 뒤 앱을 게시하세요. 테스트 상태에서는 Google이 7일 후 모든 권한 부여를 종료하므로 워크스페이스를 다시 연결해야 합니다. Drive 범위는 제한 범위이며 Google의 검토가 필요합니다."
             },
             "workspaces": {
               "title": "4. 워크스페이스 연결",

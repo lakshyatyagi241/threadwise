@@ -5,6 +5,21 @@
         "label": "Tài khoản Google",
         "description": "Kết nối một tài khoản Google cho Calendar, Sheets, Docs, Forms và Meet trong các luồng của bạn.",
         "keywords": "google, tài khoản google, lịch, sheets, docs, forms, meet, drive, oauth, kết nối google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Thêm hàng, tra cứu hàng và lưu liên hệ từ một trang tính trong luồng của bạn. Sử dụng kết nối tài khoản Google của bạn.",
+        "keywords": "google sheets, bảng tính, hàng, ô, oauth, kết nối google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Sao chép tài liệu mẫu, điền thông tin và chia sẻ từ luồng của bạn. Sử dụng kết nối tài khoản Google của bạn.",
+        "keywords": "google docs, tài liệu, mẫu, chia sẻ, oauth, kết nối google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Gửi biểu mẫu cho khách hàng và tiếp tục khi họ điền xong. Sử dụng kết nối tài khoản Google của bạn.",
+        "keywords": "google forms, biểu mẫu, khảo sát, phản hồi, oauth, kết nối google"
       }
     }
   },
@@ -91,8 +106,8 @@
         },
         "sheets": {
           "name": "Sheets",
-          "body": "Thêm một hàng vào trang tính, tra cứu một hàng, kiểm tra một ô hoặc sao chép một hàng vào liên hệ.",
-          "usedBy": "Google Sheets, Kiểm tra trường Google Sheet, Lưu liên hệ từ Google Sheet"
+          "usedBy": "Google Sheets, Kiểm tra trường Google Sheet, Lưu liên hệ từ Google Sheet",
+          "body": "Thêm một hàng vào trang tính, tra cứu một hàng, kiểm tra một ô hoặc sao chép một hàng vào liên hệ."
         },
         "docs": {
           "name": "Docs và Drive",
@@ -101,13 +116,13 @@
         },
         "forms": {
           "name": "Forms",
-          "body": "Đọc liên kết công khai của một biểu mẫu để luồng có thể gửi cho khách hàng.",
-          "usedBy": "Bước Google Form"
+          "usedBy": "Bước Google Form",
+          "body": "Đọc liên kết công khai của biểu mẫu để luồng gửi cho khách hàng, và đọc câu trả lời của biểu mẫu để luồng tiếp tục khi khách hàng điền xong."
         },
         "drive_listing": {
           "name": "Danh sách tệp Drive",
-          "body": "Liệt kê trang tính, tài liệu và biểu mẫu của bạn theo tên trong trình tạo luồng, để bạn chọn thay vì dán liên kết.",
-          "usedBy": "Bộ chọn tệp trong trình tạo luồng"
+          "body": "Liệt kê trang tính, tài liệu và biểu mẫu của bạn theo tên để bạn chọn từ tài khoản trong trình tạo luồng và cài đặt đặt lịch. Cần cho mọi bộ chọn tệp.",
+          "usedBy": "Bộ chọn tệp trong trình tạo luồng và cài đặt đặt lịch"
         }
       },
       "lastError": {

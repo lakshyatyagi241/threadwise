@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
+import { rawMappedColumn } from '../../common/sql/identifier';
 import type { Tx } from '@crm/db';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
@@ -392,7 +393,7 @@ export class TemplatesRepository {
     const sets: SQL[] = [];
     for (const [key, value] of Object.entries(patch) as Array<[keyof TemplatePatch, unknown]>) {
       if (value === undefined) continue;
-      const column = sql.raw(COLUMN[key]);
+      const column = rawMappedColumn(COLUMN, key);
       sets.push(
         JSON_COLUMNS.has(key)
           ? sql`${column} = ${JSON.stringify(value ?? null)}::jsonb`

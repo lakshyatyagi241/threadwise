@@ -1,0 +1,65 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "Ulaşılmadı"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "Ulaşılmadı",
+        "chipTitle": "Ekipten henüz kimse bu kişiye ulaşmadı",
+        "waitingSince": "{date} tarihinden beri bekliyor",
+        "markContacted": "İletişime geçildi olarak işaretle",
+        "markUncontacted": "İletişime geçilmedi olarak işaretle",
+        "markedContacted": "İletişime geçildi olarak işaretlendi",
+        "markedUncontacted": "İletişime geçilmedi olarak işaretlendi",
+        "markFailed": "İşaret değiştirilemedi. Tekrar deneyin.",
+        "bulkMarkedContacted": "{count, plural, one {# kişi iletişime geçildi olarak işaretlendi} other {# kişi iletişime geçildi olarak işaretlendi}}",
+        "bulkMarkedUncontacted": "{count, plural, one {# kişi iletişime geçilmedi olarak işaretlendi} other {# kişi iletişime geçilmedi olarak işaretlendi}}"
+      },
+      "settings": {
+        "save": "Kaydet",
+        "discard": "Değişiklikleri at",
+        "saved": "Ayarlar kaydedildi",
+        "retry": "Tekrar dene",
+        "loading": "Ayarlar yükleniyor",
+        "conflict": "Siz düzenlerken başka biri bu ayarları kaydetti. Ayarlar aşağıda yeniden gösteriliyor; değişikliğinizi tekrar yapın.",
+        "conflictOk": "Anladım",
+        "errors": {
+          "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+          "forbidden": "Bu sayfayı yalnızca çalışma alanı ayarlarını yöneten kişiler değiştirebilir.",
+          "conflict": "Bu ayarları başka biri daha önce değiştirdi. Sayfayı yenileyip tekrar deneyin.",
+          "validation": "Bazı ayarlar geçerli değil. Kontrol edip tekrar deneyin.",
+          "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+        },
+        "uncontacted": {
+          "title": "Ulaşılmamış potansiyel müşteriler",
+          "subtitle": "Henüz kimsenin ulaşmadığı potansiyel müşterileri işaretleyin; biri iletişime geçene kadar öne çıksınlar. Bir seçeneği açana kadar hiçbir şey değişmez.",
+          "clear": {
+            "title": "İletişime geçildi olarak işaretle",
+            "intro": "Bir ekip üyesi aşağıdakilerden birini yaptığında Ulaşılmadı işaretini otomatik olarak kaldır:",
+            "contactButton": "Bir iletişim düğmesine (arama, SMS, e-posta veya WhatsApp) basar ya da arama yapar",
+            "message": "Gelen kutusundan mesaj, şablon, kayıtlı yanıt veya dosya gönderir",
+            "automation": "Bir kampanya, toplu gönderim veya otomatik akış potansiyel müşteriye mesaj gönderir",
+            "activity": "Zaman çizelgesine not, toplantı veya başka bir etkinlik ekler",
+            "manualHint": "İşareti elle de değiştirebilirsiniz: bir kişinin Daha fazla menüsünü açın ya da birden çok kişi seçip listenin üstündeki çubukta Daha fazla'yı kullanın."
+          },
+          "new": {
+            "title": "Yeni potansiyel müşterileri ulaşılmadı olarak işaretle",
+            "intro": "Bir potansiyel müşteri şu yollardan biriyle oluşturulduğunda ulaşılmadı olarak işaretle:",
+            "manual": "Uygulamada elle oluşturuldu",
+            "import": "Dosyadan veya Google Sheets'ten içe aktarıldı",
+            "leadSource": "Potansiyel müşteri kaynakları, formlar ve entegrasyonlar"
+          },
+          "reassign": {
+            "title": "Yeniden atanan potansiyel müşteriler",
+            "intro": "Bir potansiyel müşteri yeni bir sahibe atandığında veya yeniden atandığında:",
+            "keep": "Ulaşılmadı işaretini değiştirme",
+            "mark": "Yeniden atandığında ulaşılmadı olarak işaretle"
+          }
+        }
+      }
+    }
+  }
+}

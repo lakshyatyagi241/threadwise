@@ -201,6 +201,7 @@ function SimpleInner({
       ctx={ctx}
       advancedAllowed={advancedAllowed}
       toast={toast}
+      dismiss={dismiss}
     />
   );
 }
@@ -212,6 +213,7 @@ function Editor({
   ctx,
   advancedAllowed,
   toast,
+  dismiss,
 }: {
   initialDoc: SimpleDoc;
   initial: FlowDetail | null;
@@ -219,6 +221,7 @@ function Editor({
   ctx: FlbBuilderContext;
   advancedAllowed: boolean;
   toast: (m: string, tone?: 'success' | 'danger' | 'info') => number;
+  dismiss: (id: number) => void;
 }) {
   const t = useTranslations('flb.builder.simple');
   const tw = useTranslations('flb.builder.webBot');

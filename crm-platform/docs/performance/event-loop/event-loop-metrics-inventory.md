@@ -1,6 +1,6 @@
 # Event-loop metrics inventory
 
-Every API, worker and web-server process exposes these from its own `GET /metrics` listener (`OBS_METRICS_PORT`, see the architecture note). Every series carries `service` (`api` | `worker` | `web`) and `instance` (`<hostname>:<pid>`). No tenant, user, contact or request id is ever a label.
+Every API, worker and web-server process exposes these from its own `GET /metrics` listener (`OBS_METRICS_PORT`, see the architecture note). Every series carries `service` (`api` | `worker` | `web`), `instance` (`<hostname>:<pid>`) and, when the process knows its release, `release` (the image tag from `OBS_RELEASE`, else `GIT_SHA` shortened, else `IMAGE_TAG`; absent when none is set). No tenant, user, contact or request id is ever a label.
 
 Units are seconds and bytes (Prometheus convention); the engineering targets in the standard are in milliseconds, so 20 ms is `0.020`.
 
@@ -54,7 +54,8 @@ Targets come from `PROBE_TARGETS` (`name=url,name=url`, name `[a-z0-9_-]{1,32}`,
   - Wait excludes the delay the producer asked for (a promoted delayed job reports `job.delay = 0`, so the original `opts.delay` is used), and is **not recorded for a job that needed a retry** (its enqueue time says nothing about queue pressure).
   - Duration is that of the final attempt.
   - Labels are the queue name and outcome only. `WorkerEventLoopBlockingWithQueueImpact` has fired from a real worker stall with 20,000 queued jobs (scrape demo). Not shown yet: any production-shaped queue load.
-- **`apps/web` (Next.js server) exports the loop, utilization, CPU, memory, GC and cgroup series only** (`service="web"`, started from `instrumentation.ts`, EL-016). It has no `crm_http_request_duration_seconds` and no queue series; the probe target `web` is its latency view. Per-route metrics are EL-B20.
+- **`apps/web` (Next.js server)** exports the loop, utilization, CPU, memory, GC and cgroup series, and `crm_http_request_duration_seconds` (EL-020): the route is a template derived from the URL, because Next does not tell the HTTP layer which route ran (ids become `:id`, every 404 is `unmatched`, `/_next/static` is folded, `/metrics` is not counted). It has no queue series. Like the API's, the histogram does not include time queued behind a blocked loop; the probe target `web` is the view that does.
+- **Realtime series (EL-021)**, registered by `apps/api/src/realtime/realtime-metrics.ts` on the process's monitor: `crm_realtime_sockets` (gauge, API processes), `crm_realtime_connections_total{outcome}`, `crm_realtime_disconnects_total`, `crm_realtime_room_joins_total{result}`, `crm_realtime_events_published_total{type}`, `crm_realtime_rooms_published_total`, `crm_realtime_publish_failures_total{type}` and `crm_realtime_publish_duration_seconds` (the publisher's cost: sequence pipeline and emit). The publish series appear in every process that publishes (API and workers). **Not measured:** delivery to a browser, Redis adapter lag, rooms held.
 
 ## Behaviour on bad data
 

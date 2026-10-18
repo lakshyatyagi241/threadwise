@@ -135,6 +135,7 @@ body[data-fill="solid"] .chip .ico { background: rgba(255,255,255,.22); color: v
 .act:hover { background: rgba(0,0,0,.06); color: var(--accent); }
 .act[aria-pressed="true"] { color: var(--accent); }
 .act.down svg { transform: rotate(180deg); }
+.fbmsg { font-size: 11.5px; color: #8b8fa8; align-self: center; margin-inline-start: 6px; }
 .input-row .mic, .mic { flex: none; width: 36px; height: 36px; padding: 0; gap: 0; border: 0; border-radius: 12px; background: transparent; color: #8b8fa8; display: grid; place-items: center; cursor: pointer; padding: 0; }
 .mic:hover { color: var(--accent); background: var(--accent-soft); }
 .mic[hidden] { display: none; }
@@ -252,7 +253,7 @@ const SCRIPT = `
 
   // How the window looks and behaves beyond its colours (the author's settings): reply button fill and shape, typeface, suggestions,
   // the copy / like icons, the expand button and the voice conversation.
-  var CHAT = { fill: 'outline', shape: 'pill', font: 'system', size: 'standard', header: 'diagonal', direction: 'auto', icons: true, suggestions: [], suggestionNodes: [], suggestionsOn: true, actions: true, expand: true, voice: false, logo: '', avatar: '', background: '', corner: 'rounded', autoOpen: 0, sound: false, notice: { enabled: false, icon: 1, items: [] }, quickMenu: { enabled: false, view: 'list', items: [] }, banners: { enabled: false, items: [] }, fontSize: 14, hoverBg: '', soundVolume: 70, speak: false, pip: false };
+  var CHAT = { fill: 'outline', shape: 'pill', font: 'system', size: 'standard', header: 'diagonal', direction: 'auto', icons: true, suggestions: [], suggestionNodes: [], suggestionsOn: true, actions: true, expand: true, voice: false, logo: '', avatar: '', background: '', corner: 'rounded', autoOpen: 0, sound: false, notice: { enabled: false, icon: 1, items: [] }, quickMenu: { enabled: false, view: 'list', items: [] }, banners: { enabled: false, items: [] }, fontSize: 14, hoverBg: '', soundVolume: 70, speak: false, pip: false, feedback: { enabled: true, message: '' } };
   var FONTS = {
     system: 'system-ui,-apple-system,"Segoe UI",Roboto,sans-serif',
     serif: 'Georgia,"Times New Roman",serif',
@@ -567,8 +568,22 @@ const SCRIPT = `
     up.setAttribute('aria-pressed', 'false');
     down.setAttribute('aria-pressed', 'false');
     box.appendChild(cp);
-    box.appendChild(up);
-    box.appendChild(down);
+    // Feedback off hides the thumbs; its message is kept in the settings for when it is switched back on.
+    if (!CHAT.feedback || CHAT.feedback.enabled !== false) {
+      box.appendChild(up);
+      box.appendChild(down);
+      var thanks = CHAT.feedback && CHAT.feedback.message;
+      if (thanks) {
+        var note = document.createElement('span');
+        note.className = 'fbmsg';
+        note.setAttribute('role', 'status');
+        note.hidden = true;
+        note.textContent = thanks;
+        box.appendChild(note);
+        var shown = vote;
+        vote = function (v) { shown(v); note.hidden = up.getAttribute('aria-pressed') !== 'true' && down.getAttribute('aria-pressed') !== 'true'; };
+      }
+    }
     return box;
   }
 

@@ -126,7 +126,12 @@
       "details": {
         "title": "কন্টাক্টের বিবরণ",
         "stage": "লাইফসাইকেল স্টেজ",
-        "otherProperties": "অন্যান্য প্রপার্টি"
+        "otherProperties": "অন্যান্য প্রপার্টি",
+        "stageSince": "এই ধাপে আছে যবে থেকে",
+        "previousStage": "আগের ধাপ",
+        "previousStageSince": "আগের ধাপে ছিল যবে থেকে",
+        "lostReason": "হারের কারণ",
+        "updatedAt": "সর্বশেষ আপডেট"
       },
       "company": {
         "title": "কোম্পানি",

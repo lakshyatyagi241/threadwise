@@ -1,7 +1,7 @@
 import { createHash, createHmac } from 'node:crypto';
 
 /**
- * AWS Signature V4 for the S3 calls made with plain HTTP and no SDK (the API image has none; Cloudflare R2, AWS S3 and MinIO all accept
+ * AWS Signature V4 for the S3 calls made with plain HTTP and no SDK (the API image has none; Cloudflare R2 and AWS S3 both accept
  * plain SigV4). One implementation shared by the off-host backup client and the cold-archive adapter, so a fix to canonical-request or
  * encoding rules lands in both. The platform storage probe signs whole in-memory bodies with its own header set and is separate.
  */
@@ -13,7 +13,7 @@ export interface S3SigningConfig {
   bucket: string;
   accessKeyId: string;
   secretAccessKey: string;
-  /** Path-style addressing (`endpoint/bucket/key`): what R2 and MinIO want. */
+  /** Path-style addressing (`endpoint/bucket/key`): what some S3-compatible stores want. */
   pathStyle: boolean;
 }
 

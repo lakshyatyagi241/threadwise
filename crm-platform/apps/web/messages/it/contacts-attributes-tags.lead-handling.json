@@ -1,0 +1,65 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "Non contattati"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "Non contattato",
+        "chipTitle": "Nessuno del team ha ancora contattato questa persona",
+        "waitingSince": "In attesa dal {date}",
+        "markContacted": "Segna come contattato",
+        "markUncontacted": "Segna come non contattato",
+        "markedContacted": "Segnato come contattato",
+        "markedUncontacted": "Segnato come non contattato",
+        "markFailed": "Impossibile modificare il contrassegno. Riprova.",
+        "bulkMarkedContacted": "{count, plural, one {# contatto segnato come contattato} other {# contatti segnati come contattati}}",
+        "bulkMarkedUncontacted": "{count, plural, one {# contatto segnato come non contattato} other {# contatti segnati come non contattati}}"
+      },
+      "settings": {
+        "save": "Salva",
+        "discard": "Annulla modifiche",
+        "saved": "Impostazioni salvate",
+        "retry": "Riprova",
+        "loading": "Caricamento impostazioni",
+        "conflict": "Un altro utente ha salvato queste impostazioni mentre le modificavi. Sono mostrate di nuovo qui sotto: ripeti la modifica.",
+        "conflictOk": "Ho capito",
+        "errors": {
+          "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+          "forbidden": "Solo chi gestisce le impostazioni dell'area di lavoro può modificare questa pagina.",
+          "conflict": "Un altro utente ha modificato prima queste impostazioni. Ricarica e riprova.",
+          "validation": "Alcune impostazioni non sono valide. Controllale e riprova.",
+          "unexpected": "Qualcosa è andato storto. Riprova."
+        },
+        "uncontacted": {
+          "title": "Lead non contattati",
+          "subtitle": "Segna i lead che nessuno ha ancora contattato, così restano ben visibili finché qualcuno non si fa sentire. Non cambia nulla finché non attivi un'opzione.",
+          "clear": {
+            "title": "Segna come contattato",
+            "intro": "Rimuovi automaticamente il contrassegno Non contattato quando un membro del team esegue una di queste azioni:",
+            "contactButton": "Preme un pulsante di contatto (chiamata, SMS, email o WhatsApp) o effettua una chiamata",
+            "message": "Invia un messaggio, un template, una risposta salvata o un file dalla inbox",
+            "automation": "Una campagna, un broadcast o un flusso automatico invia un messaggio al lead",
+            "activity": "Aggiunge una nota, una riunione o un'altra attività alla timeline",
+            "manualHint": "Puoi anche cambiare il contrassegno a mano: apri il menu Altro su un contatto, oppure seleziona più contatti e usa Altro nella barra sopra l'elenco."
+          },
+          "new": {
+            "title": "Segna i nuovi lead come non contattati",
+            "intro": "Quando un lead viene creato in uno di questi modi, segnalo come non contattato:",
+            "manual": "Creato manualmente nell'app",
+            "import": "Importato da un file o da Google Sheets",
+            "leadSource": "Fonti di lead, moduli e integrazioni"
+          },
+          "reassign": {
+            "title": "Lead riassegnati",
+            "intro": "Quando un lead viene assegnato o riassegnato a un nuovo responsabile:",
+            "keep": "Non modificare il contrassegno Non contattato",
+            "mark": "Segna come non contattato alla riassegnazione"
+          }
+        }
+      }
+    }
+  }
+}

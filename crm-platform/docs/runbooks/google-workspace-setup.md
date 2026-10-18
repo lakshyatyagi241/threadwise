@@ -45,17 +45,17 @@ _APIs and Services, OAuth consent screen_ (newer consoles call it **Google Auth 
    The privacy policy must say which Google data is read and written: calendar events and busy time, rows of sheets a flow names, documents it copies, forms it links.
 3. **Data Access, Add or remove scopes.** These are exactly the scopes the product asks for, and nothing else. A workspace only ever asks Google for the ones it ticks.
 
-   | Capability on the page | Scope                                     | Class          | Why                                                            |
-   | ---------------------- | ----------------------------------------- | -------------- | -------------------------------------------------------------- |
-   | always                 | `openid`, `.../auth/userinfo.email`       | non-sensitive  | show which Google account is connected                         |
-   | Calendar               | `.../auth/calendar.events`                | sensitive      | write, move and delete booking events, create Meet links       |
-   | Calendar               | `.../auth/calendar.freebusy`              | sensitive      | read busy time so booked slots are not offered                 |
-   | Calendar               | `.../auth/calendar.calendarlist.readonly` | sensitive      | let an admin pick which calendar to use                        |
-   | Sheets                 | `.../auth/spreadsheets`                   | sensitive      | read a row, append a row, read headers of a sheet a flow names |
-   | Forms                  | `.../auth/forms.body.readonly`            | sensitive      | read a form's public responder link                            |
-   | Docs and Drive         | `.../auth/documents`                      | sensitive      | fill placeholders in the copy                                  |
-   | Docs and Drive         | `.../auth/drive`                          | **restricted** | copy a template the user owns, share the copy by link          |
-   | Drive file list        | `.../auth/drive.metadata.readonly`        | **restricted** | list sheets, documents and forms by name in the pickers        |
+   | Capability on the page | Scope                                                               | Class          | Why                                                                                     |
+   | ---------------------- | ------------------------------------------------------------------- | -------------- | --------------------------------------------------------------------------------------- |
+   | always                 | `openid`, `.../auth/userinfo.email`                                 | non-sensitive  | show which Google account is connected                                                  |
+   | Calendar               | `.../auth/calendar.events`                                          | sensitive      | write, move and delete booking events, create Meet links                                |
+   | Calendar               | `.../auth/calendar.freebusy`                                        | sensitive      | read busy time so booked slots are not offered                                          |
+   | Calendar               | `.../auth/calendar.calendarlist.readonly`                           | sensitive      | let an admin pick which calendar to use                                                 |
+   | Sheets                 | `.../auth/spreadsheets`                                             | sensitive      | read a row, append a row, read headers of a sheet a flow names                          |
+   | Forms                  | `.../auth/forms.body.readonly`, `.../auth/forms.responses.readonly` | sensitive      | read a form's responder link and its answers (the flow resumes when the form is filled) |
+   | Docs and Drive         | `.../auth/documents`                                                | sensitive      | fill placeholders in the copy                                                           |
+   | Docs and Drive         | `.../auth/drive`                                                    | **restricted** | copy a template the user owns, share the copy by link                                   |
+   | Drive file list        | `.../auth/drive.metadata.readonly`                                  | **restricted** | list sheets, documents and forms by name in the pickers                                 |
 
    The product never asks for the full `calendar` scope, Gmail, Contacts, or any admin scope.
 

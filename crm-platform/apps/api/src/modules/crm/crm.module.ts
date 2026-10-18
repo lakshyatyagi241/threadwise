@@ -13,6 +13,12 @@ import { CompaniesCsvService } from './companies/companies-csv.service';
 import { CompaniesRepository } from './companies/companies.repository';
 import { CompaniesService } from './companies/companies.service';
 import { ContactBulkController } from './contact-bulk/contact-bulk.controller';
+import {
+  ContactTouchController,
+  LeadHandlingController,
+} from './lead-handling/lead-handling.controller';
+import { ContactTouchService } from './lead-handling/contact-touch.service';
+import { LeadHandlingSettingsService } from './lead-handling/lead-handling-settings.service';
 import { ContactAssignmentController } from './contact-assignment/contact-assignment.controller';
 import { ContactAssignmentEngine } from './contact-assignment/contact-assignment.engine';
 import { ContactAssignmentRepository } from './contact-assignment/contact-assignment.repository';
@@ -201,6 +207,9 @@ import { TagsService } from './tags/tags.service';
     // `/contacts/import/...` must be registered before ContactsController's `GET /contacts/:id`
     // or Express reads "stats" as an id.
     ContactBulkController,
+    // Lead handling (uncontacted, follow-ups, duplicates): `lead-handling/settings` and `contacts/:id/touch|uncontacted`.
+    LeadHandlingController,
+    ContactTouchController,
     OwnerReassignController,
     ContactAssignmentController,
     ContactDedupeController,
@@ -271,6 +280,8 @@ import { TagsService } from './tags/tags.service';
     ContactGroupsService,
     ContactGroupsRepository,
     ContactBulkService,
+    LeadHandlingSettingsService,
+    ContactTouchService,
     OwnerReassignRepository,
     OwnerReassignService,
     ContactAssignmentRepository,
@@ -382,6 +393,9 @@ import { TagsService } from './tags/tags.service';
     CONTACT_RESOLVER,
     ContactGroupsService,
     ContactBulkService,
+    // The uncontacted marker: every action that contacts a person (inbox, calls, campaigns, timeline) and every creation path calls it.
+    LeadHandlingSettingsService,
+    ContactTouchService,
     OwnerReassignRepository,
     OwnerReassignService,
     ContactAssignmentEngine,
@@ -403,6 +417,8 @@ import { TagsService } from './tags/tags.service';
     ContactFilesService,
     ContactActivitiesService,
     ContactMeetingsService,
+    // The appointments module mirrors every booking into the contact's Meetings (AppointmentMeetingMirror), in the booking's transaction.
+    ContactMeetingsRepository,
     CompaniesService,
     CompaniesRepository,
     DealsService,

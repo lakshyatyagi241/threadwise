@@ -613,7 +613,9 @@
         "campaign": "Campagne",
         "adset": "Advertentieset",
         "ad": "Advertentie",
-        "form": "Formulier"
+        "form": "Formulier",
+        "channel": "Kanaal",
+        "moduleType": "Moduletype"
       },
       "capturedAt": "Vastgelegd",
       "openSource": "Open de leadbron"

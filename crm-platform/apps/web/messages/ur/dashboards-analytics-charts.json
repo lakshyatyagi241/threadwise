@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "منسلک",
           "shopify": "منسلک",
-          "google_sheets": "API کی جاری ہو گئی",
-          "meta_catalog": "کیٹلاگ منسلک ہو گیا"
+          "meta_catalog": "کیٹلاگ منسلک ہو گیا",
+          "google_sheets": "Google اکاؤنٹ منسلک ہو گیا"
         },
         "notConnected": "منسلک نہیں",
         "connect": "منسلک کریں",
@@ -494,7 +494,8 @@
         "title": "قطاریں",
         "name": "قطار",
         "pending": "زیر التواء",
-        "failed": "ناکام"
+        "failed": "ناکام",
+        "lastFailure": "آخری ناکامی کی وجہ"
       },
       "clear": {
         "button": "زیر التواء جابز صاف کریں",

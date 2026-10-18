@@ -409,7 +409,14 @@
       "learned": "Añadido a \"{question}\". Desde ahora se responderá.",
       "pickTitle": "¿A qué pregunta frecuente quieres añadir este mensaje?",
       "loadMore": "Cargar más",
-      "loadingMore": "Cargando"
+      "loadingMore": "Cargando",
+      "fallback": {
+        "title": "Cuando ninguna FAQ responde",
+        "hint": "Esta respuesta se envía al cliente cuyo mensaje no responde ninguna FAQ. El mensaje sigue apareciendo abajo para que enseñes la respuesta a la FAQ.",
+        "placeholder": "Lo siento, no te he entendido. Un miembro del equipo te responderá.",
+        "save": "Guardar respuesta alternativa",
+        "saved": "Respuesta alternativa guardada"
+      }
     },
     "picker": {
       "close": "Cerrar",
