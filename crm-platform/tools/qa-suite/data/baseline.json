@@ -1178,5 +1178,21 @@
       "key": "waboo_migration_runs",
       "reason": "nullable on purpose: org_id is the workspace the load created, NULL for a dry run, and the FK is ON DELETE SET NULL; the table is platform-only (20261113100000_wmig_waboo_migration_runs.sql); reviewed 2026-10-18"
     }
+  ],
+  "48": [
+    {
+      "key": "conversation_events: uuid is not unique-constrained (partitioned/stream table); confirm lookups always include org_id and the time range",
+      "reason": "verified: the only readers (team-inbox-conversations/conversation-events.repository.ts list, inbox-system-notes.service.ts, platform-inbox.service.ts) filter by org_id + conversation_id (+ type) and keyset on (created_at, id); the uuid is only returned to the client as the event id and never used as a lookup key. A unique constraint on a partitioned table must include the partition key, so it would not be global anyway; reviewed 2026-10-18"
+    },
+    {
+      "key": "api_library_logs: uuid is not unique-constrained (partitioned/stream table); confirm lookups always include org_id and the time range",
+      "reason": "verified: api-library-logs.repository.ts builds every query from this.where(orgId, filters) and api-library-retention.service.ts deletes by (id, created_at); no query looks a row up by uuid. A unique constraint on a partitioned table must include the partition key, so it would not be global anyway; reviewed 2026-10-18"
+    }
+  ],
+  "49": [
+    {
+      "key": "api_library_logs",
+      "reason": "old rows are removed by apps/api/src/modules/api-library/api-library-retention.service.ts (daily cron, DELETE in batches of 1000 older than API_LIBRARY_LOG_RETENTION_DAYS, up to 50 batches a night); it deletes rows rather than dropping partitions, which is fine at this volume (a stream of API-call runs) and needs no archivable_streams() approval; reviewed 2026-10-18"
+    }
   ]
 }
