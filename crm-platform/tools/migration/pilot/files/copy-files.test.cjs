@@ -118,11 +118,11 @@ test('fetch guards: host allow-list, https only, private IP, redirects, size, st
 test('storage must be configured: no S3 env means a refusal, never a local fallback', () => {
   assert.throws(() => lib.s3FromEnv({}, ['messages']), /STORAGE_NOT_CONFIGURED/);
   assert.throws(() => lib.s3FromEnv({ S3_ENDPOINT: 'http://x:9000', S3_REGION: 'r', S3_ACCESS_KEY_ID: 'a', S3_SECRET_ACCESS_KEY: 's' }, ['contact_files']), /S3_BUCKET_DOCUMENTS/);
-  const ok = lib.s3FromEnv({ S3_ENDPOINT: 'http://objects.internal:9000/', S3_REGION: 'us-east-1', S3_ACCESS_KEY_ID: 'a', S3_SECRET_ACCESS_KEY: 's', S3_BUCKET_MEDIA: 'crm-media', S3_BUCKET_DOCUMENTS: 'crm-documents' }, ['messages', 'contact_files']);
-  assert.equal(ok.endpoint, 'http://objects.internal:9000');
+  const ok = lib.s3FromEnv({ S3_ENDPOINT: 'http://objects:9000/', S3_REGION: 'us-east-1', S3_ACCESS_KEY_ID: 'a', S3_SECRET_ACCESS_KEY: 's', S3_BUCKET_MEDIA: 'crm-media', S3_BUCKET_DOCUMENTS: 'crm-documents' }, ['messages', 'contact_files']);
+  assert.equal(ok.endpoint, 'http://objects:9000');
   assert.equal(ok.pathStyle, true);
   const r = lib.s3Sign(ok, 'crm-media', 'PUT', 'org/waboo/ab/na me.jpg', Buffer.from('x'), new Date('2026-01-02T03:04:05Z'));
-  assert.equal(r.url, 'http://objects.internal:9000/crm-media/org/waboo/ab/na%20me.jpg');
+  assert.equal(r.url, 'http://objects:9000/crm-media/org/waboo/ab/na%20me.jpg');
   assert.match(r.headers.authorization, /^AWS4-HMAC-SHA256 Credential=a\/20260102\/us-east-1\/s3\/aws4_request, SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=[0-9a-f]{64}$/);
 });
 

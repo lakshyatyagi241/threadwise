@@ -38,7 +38,7 @@ describe('storage presets (TW-SET-039, 040)', () => {
     );
     expect(resolveStorageTarget(base({ provider: 'r2' }))).toBeNull();
     expect(
-      resolveStorageTarget(base({ provider: 'r2', endpoint: 'http://objects.internal:9000' })),
+      resolveStorageTarget(base({ provider: 'r2', endpoint: 'http://objects:9000' })),
     ).not.toBeNull();
   });
 

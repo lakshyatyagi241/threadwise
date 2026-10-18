@@ -212,7 +212,7 @@ describe('media destination env fallback', () => {
   } as never;
   const env = (driver: string): Record<string, unknown> => ({
     MEDIA_STORAGE_DRIVER: driver,
-    S3_ENDPOINT: 'http://objects.internal:9000/',
+    S3_ENDPOINT: 'http://objects:9000/',
     S3_REGION: 'us-east-1',
     S3_BUCKET_MEDIA: 'crm-media',
     S3_ACCESS_KEY_ID: 'AK',
@@ -225,7 +225,7 @@ describe('media destination env fallback', () => {
     const on = await new MediaStorageService(settings, config(env('s3'))).destination();
     expect(on.disk).toBe('cloud');
     expect(on.target?.bucket).toBe('crm-media');
-    expect(on.target?.endpoint).toBe('http://objects.internal:9000');
+    expect(on.target?.endpoint).toBe('http://objects:9000');
     expect(on.visibility).toBe('private');
     const off = await new MediaStorageService(settings, config(env('local'))).destination();
     expect(off.disk).toBe('local');

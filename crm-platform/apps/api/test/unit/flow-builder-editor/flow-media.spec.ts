@@ -41,7 +41,7 @@ describe('flow media upload (TW-FLB-027)', () => {
 
   it('a storage that is not available is a 503 with a message the builder can show after "Upload failed:"', async () => {
     const store = {
-      put: () => Promise.reject(new Error('ECONNREFUSED objects.internal:9000')),
+      put: () => Promise.reject(new Error('ECONNREFUSED objects:9000')),
       get: () => Promise.resolve(null),
     };
     const svc = new FlowMediaService({} as never, policy as never, store);
@@ -52,7 +52,7 @@ describe('flow media upload (TW-FLB-027)', () => {
     expect(e.getStatus()).toBe(503);
     expect(e.message).toMatch(/not available/i);
     expect(e.message.startsWith('Upload failed')).toBe(false);
-    expect(e.message).not.toContain('objects.internal');
+    expect(e.message).not.toContain('objects:9000');
     expect(JSON.stringify(e.getResponse())).toContain(ERROR_CODES.FLB_STORAGE_UNAVAILABLE);
   });
 

@@ -23,7 +23,7 @@ describe('createArchiveStorage', () => {
     const storage = createArchiveStorage(
       env({
         ARCHIVE_DRIVER: 's3',
-        S3_ENDPOINT: 'http://objects.internal:9000',
+        S3_ENDPOINT: 'http://objects:9000',
         S3_ACCESS_KEY_ID: 'k',
         S3_SECRET_ACCESS_KEY: 's',
       }),
@@ -35,7 +35,7 @@ describe('createArchiveStorage', () => {
     expect(() => createArchiveStorage(env({ ARCHIVE_DRIVER: 's3' }))).toThrow(/S3_ENDPOINT/);
     expect(() =>
       createArchiveStorage(
-        env({ ARCHIVE_DRIVER: 's3', S3_ENDPOINT: 'http://objects.internal:9000', S3_ACCESS_KEY_ID: 'k' }),
+        env({ ARCHIVE_DRIVER: 's3', S3_ENDPOINT: 'http://objects:9000', S3_ACCESS_KEY_ID: 'k' }),
       ),
     ).toThrow(/S3_SECRET_ACCESS_KEY/);
   });
