@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. 동의 화면",
-              "body": "제품이 요청하는 범위(calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly)를 추가한 뒤 앱을 게시하세요. 테스트 상태에서는 Google이 7일 후 모든 권한 부여를 종료하므로 워크스페이스를 다시 연결해야 합니다. Drive 범위는 제한 범위이며 Google의 검토가 필요합니다."
+              "body": "제품이 요청하는 범위(calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly)를 추가한 뒤 앱을 게시하세요. 테스트 상태에서는 Google이 7일 후 모든 권한 부여를 종료하므로 워크스페이스를 다시 연결해야 합니다. Drive 범위는 제한 범위이며 Google의 검토가 필요합니다."
             },
             "workspaces": {
               "title": "4. 워크스페이스 연결",

@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Conectado",
           "shopify": "Conectado",
-          "google_sheets": "Chave de API emitida",
-          "meta_catalog": "Catálogo vinculado"
+          "meta_catalog": "Catálogo vinculado",
+          "google_sheets": "Conta Google conectada"
         },
         "notConnected": "não conectado",
         "connect": "Conectar",

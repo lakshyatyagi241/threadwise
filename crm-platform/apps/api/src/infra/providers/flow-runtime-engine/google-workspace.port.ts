@@ -98,6 +98,14 @@ export interface MeetCreate {
   requestId: string;
 }
 
+/** One submission of a Google Form: the answers by question title (a list when the question took several). */
+export interface FormResponseItem {
+  responseId: string;
+  respondent: string | null;
+  submittedAt: Date;
+  answers: Record<string, string | string[]>;
+}
+
 export interface GoogleFileItem {
   id: string;
   name: string;
@@ -116,6 +124,8 @@ export interface GoogleWorkspacePort {
   generateDoc(orgId: number, req: DocGenerate): Promise<{ url: string; warnings: string[] }>;
   /** The form's public responder link. */
   formResponderUrl(orgId: number, formId: string): Promise<{ url: string }>;
+  /** The form's submissions made at or after `since`, oldest first (at most 200), read through the connected account. */
+  formResponses(orgId: number, formId: string, since: Date): Promise<FormResponseItem[]>;
   createMeet(orgId: number, req: MeetCreate): Promise<{ meetUrl: string; eventId: string }>;
   /** The account's files of one kind, newest first, for the flow builder's pickers. Needs the `drive_listing` capability. */
   listFiles(orgId: number, kind: GoogleFileKind): Promise<GoogleFileItem[]>;

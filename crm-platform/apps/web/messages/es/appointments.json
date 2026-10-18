@@ -566,11 +566,12 @@
         "hint": "Las reservas funcionan sin esto. Conecta Google Calendar en Citas, Ajustes para sincronizar los horarios libres y ocupados y añadir enlaces de Meet.",
         "unavailable": "Google Calendar aún no está configurado en esta plataforma. Estos ajustes se guardan con el tipo de reserva para cuando lo esté.",
         "calendarId": "Calendario",
-        "calendarPlaceholder": "principal",
         "spreadsheetId": "Añadir a hoja de cálculo (opcional)",
-        "spreadsheetPlaceholder": "ID de la hoja de cálculo",
         "createMeet": "Crear un enlace de Google Meet para cada reserva",
-        "calendarDefault": "El calendario del espacio de trabajo"
+        "calendarDefault": "El calendario del espacio de trabajo",
+        "connectFirst": "Conecta tu <link>cuenta de Google</link> para elegir de su lista.",
+        "spreadsheetNone": "Sin hoja",
+        "spreadsheetNoListing": "No se pueden listar tus hojas porque no se concedió el permiso de lista de archivos de Drive. Añádelo en la página de la cuenta de Google."
       },
       "messages": {
         "title": "Mensajes del ciclo de vida",

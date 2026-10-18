@@ -8,11 +8,6 @@ import {
   productOption,
   storeOption,
 } from '../../../src/modules/flow-builder-editor/builder-context-rules';
-import {
-  GOOGLE_FORM_ID_RE,
-  appsScriptFileName,
-  buildAppsScript,
-} from '../../../src/modules/flow-builder-editor/google-apps-script';
 
 describe('builder reference-data labels (TW-FLB-026)', () => {
   it('Instagram: @username, else @account <id> (never the display name)', () => {
@@ -97,50 +92,5 @@ describe('builder reference-data labels (TW-FLB-026)', () => {
       url: null,
       inStock: false,
     });
-  });
-});
-
-describe('Google Form Apps Script (TW-FLB-059)', () => {
-  const input = {
-    webhookUrl: 'https://api.example.test/google/form-response',
-    token: `7.${'a'.repeat(64)}`,
-    formId: '1FAIpQLSc_abc-123',
-    brand: 'Acme Desk',
-  };
-  it('embeds the webhook url, the workspace token and the form id, and defines the trigger function', () => {
-    const src = buildAppsScript(input);
-    expect(src).toContain(
-      'const FORM_WEBHOOK_URL = "https://api.example.test/google/form-response";',
-    );
-    expect(src).toContain(`const FORM_WORKSPACE_TOKEN = "7.${'a'.repeat(64)}";`);
-    expect(src).toContain('const FORM_ID = "1FAIpQLSc_abc-123";');
-    expect(src).toContain('function onFormSubmit(e)');
-    expect(src).toContain('"X-Workspace-Token": FORM_WORKSPACE_TOKEN');
-    expect(src).toContain('Acme Desk → Google Forms bridge');
-  });
-  it('cannot be broken out of by a hostile brand, url or form id', () => {
-    const src = buildAppsScript({
-      webhookUrl: 'https://x.test/a"; evil(); "',
-      token: '1.ab',
-      formId: 'abc"; evil();//12345678',
-      brand: 'x */ evil(); /*',
-    });
-    expect(src).not.toMatch(/\n\s*evil\(\)/);
-    expect(src).toContain('\\"; evil(); \\"');
-    expect(src).toContain('const FORM_ID = "abcevil12345678";');
-    // The brand sits in the header comment (which must stay one comment) and in a string literal (quotes escaped).
-    expect(src.split('\n')[1]).not.toContain('*/');
-  });
-  it('names the download after the brand and form id', () => {
-    expect(appsScriptFileName('Acme Desk!', '1FAIpQLSc_abc-123')).toBe(
-      'acme-desk-form-1FAIpQLSc_abc-123.gs',
-    );
-    expect(appsScriptFileName('', 'abcdefgh')).toBe('form-form-abcdefgh.gs');
-  });
-  it('accepts only Google-form-shaped ids', () => {
-    expect(GOOGLE_FORM_ID_RE.test('1FAIpQLSc_abc-123')).toBe(true);
-    expect(GOOGLE_FORM_ID_RE.test('short')).toBe(false);
-    expect(GOOGLE_FORM_ID_RE.test('has space in it')).toBe(false);
-    expect(GOOGLE_FORM_ID_RE.test('../etc/passwd1234')).toBe(false);
   });
 });

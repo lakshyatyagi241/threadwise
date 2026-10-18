@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. 同意屏幕",
-              "body": "添加产品所请求的权限范围（calendar.events、calendar.freebusy、calendar.calendarlist.readonly、spreadsheets、documents、drive、forms.body.readonly、drive.metadata.readonly），然后发布应用：处于测试状态时，Google 会在 7 天后使所有授权失效，工作区需要重新连接。Drive 权限范围属于受限范围，需要通过 Google 的审核。"
+              "body": "添加产品所请求的权限范围（calendar.events、calendar.freebusy、calendar.calendarlist.readonly、spreadsheets、documents、drive、forms.body.readonly、forms.responses.readonly、drive.metadata.readonly），然后发布应用：处于测试状态时，Google 会在 7 天后使所有授权失效，工作区需要重新连接。Drive 权限范围属于受限范围，需要通过 Google 的审核。"
             },
             "workspaces": {
               "title": "4. 工作区连接",

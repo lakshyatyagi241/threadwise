@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "已连接",
           "shopify": "已连接",
-          "google_sheets": "已签发 API 密钥",
-          "meta_catalog": "商品目录已关联"
+          "meta_catalog": "商品目录已关联",
+          "google_sheets": "Google 账号已连接"
         },
         "notConnected": "未连接",
         "connect": "连接",

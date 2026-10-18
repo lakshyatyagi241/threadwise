@@ -8,7 +8,7 @@ const ADDON_IDS = [
   'i18n-translation',
   'addons',
 ];
-const INTEGRATION_IDS = ['shopify', 'woocommerce', 'google-sheets-addon', 'email'];
+const INTEGRATION_IDS = ['shopify', 'woocommerce', 'email'];
 const ids = (c, tab) =>
   c.page
     .locator(`[data-testid="mkt-tools-${tab}"] [data-testid^="tool-card-"]`)

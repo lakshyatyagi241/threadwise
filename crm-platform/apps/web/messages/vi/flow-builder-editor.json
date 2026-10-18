@@ -1659,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— chọn một bảng tính —",
-              "empty": "Không tìm thấy bảng tính — dán URL/ID bên dưới",
               "loading": "Đang tải bảng tính…",
-              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê bảng tính. Hãy dán mã hoặc liên kết bảng tính thay thế.",
-              "idPlaceholder": "Mã bảng tính",
-              "saved": "Bảng tính {id}… (chưa tải)"
+              "saved": "Bảng tính {id}… (chưa tải)",
+              "empty": "Không tìm thấy bảng tính nào trong tài khoản Google đã kết nối",
+              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê các trang tính của bạn. Hãy kết nối Google để chọn."
             },
             "docs": {
               "pick": "— chọn tài liệu mẫu —",
               "empty": "Không tìm thấy tài liệu",
               "loading": "Đang tải tài liệu…",
-              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê tài liệu. Hãy dán mã hoặc liên kết tài liệu thay thế.",
-              "idPlaceholder": "Mã tài liệu",
-              "saved": "Tài liệu {id}… (chưa tải)"
+              "saved": "Tài liệu {id}… (chưa tải)",
+              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê các Docs của bạn. Hãy kết nối Google để chọn."
             },
             "forms": {
               "pick": "— chọn một biểu mẫu —",
               "empty": "Không tìm thấy biểu mẫu",
               "loading": "Đang tải biểu mẫu…",
-              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê biểu mẫu. Hãy dán mã hoặc liên kết biểu mẫu thay thế.",
-              "idPlaceholder": "Mã biểu mẫu",
-              "saved": "Biểu mẫu {id}… (chưa tải)"
+              "saved": "Biểu mẫu {id}… (chưa tải)",
+              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê các Forms của bạn. Hãy kết nối Google để chọn."
             }
           },
           "sheetsIntro": "Thêm một dòng vào Google Sheet (chế độ ghi) hoặc tra cứu một dòng theo cột khóa (chế độ đọc). Dùng tài khoản Google đã kết nối của không gian làm việc tại <link>/google-account</link>.",
@@ -1701,8 +1698,6 @@
           "addColumn": "Thêm cột",
           "matchByHeader": "Khớp cột theo tên tiêu đề",
           "matchByHeaderHint": "Ghi mỗi giá trị vào cột bảng tính có tiêu đề đó (theo thứ tự bất kỳ). Tắt để thêm từ trái sang phải theo vị trí — mặc định.",
-          "pasteLabel": "…hoặc dán URL / ID bảng tính",
-          "pasteHint": "Vẫn hoạt động khi danh sách chọn trống — dán liên kết bảng tính và hệ thống sẽ tự lấy ID.",
           "docsIntro": "Sao chép tài liệu mẫu, điền <mono>{placeholders}</mono>, chia sẻ cho bất kỳ ai có liên kết, rồi gửi URL cho khách hàng. Đặt <mono>{key}</mono> trong mẫu ở vị trí cần điền giá trị.",
           "templateDocument": "Tài liệu mẫu",
           "newCopyTitle": "Tiêu đề bản sao mới",
@@ -1717,7 +1712,6 @@
           "messageTemplateHint": "Bong bóng tin nhắn của bot gửi cho khách hàng. <mono>{token}</mono> sẽ nhận liên kết chia sẻ.",
           "messageTemplatePlaceholder": "Đây là tài liệu của bạn:\n'{{'doc_url'}}'",
           "saveUrl": "Lưu URL vào biến",
-          "formIntro": "Gửi URL biểu mẫu qua WhatsApp, tạm dừng luồng và tiếp tục qua cổng <b>đã gửi</b> khi khách hàng điền xong. Câu trả lời trở thành biến của luồng.",
           "googleForm": "Google Form",
           "bodyBubble": "Nội dung bong bóng tin nhắn (gửi phía trên liên kết)",
           "bodyBubblePlaceholder": "Vui lòng điền biểu mẫu ngắn này:",
@@ -1725,12 +1719,6 @@
           "saveResponsesHint": "Từng câu trả lời cũng được lưu dưới dạng <mono>{token}</mono>.",
           "expireAfter": "Hết hạn sau (giây)",
           "expireAfterHint": "Thời gian chờ gửi biểu mẫu trước khi hết giờ. 86400 = 24 giờ.",
-          "setupTitle": "Thiết lập một lần — dán đoạn này vào trình chỉnh sửa Script của biểu mẫu",
-          "setupOpen": "Mở biểu mẫu → <mono>menu ⋮</mono> → <mono>Trình chỉnh sửa Script</mono>",
-          "setupDownload": "<link>Tải script (.gs)</link> và dán vào",
-          "setupTrigger": "Thêm trình kích hoạt: <mono>onFormSubmit</mono> · Từ biểu mẫu · Khi gửi biểu mẫu",
-          "setupWarning": "Nếu không có script này, biểu mẫu vẫn ghi nhận câu trả lời trong Google Forms, nhưng luồng sẽ không tiếp tục.",
-          "noListing": "Không thể liệt kê tệp của bạn vì quyền danh sách tệp Drive chưa được cấp ở trang tài khoản Google. Hãy dán liên kết hoặc id.",
           "connection": {
             "open": "Mở tài khoản Google",
             "permission": {
@@ -1743,7 +1731,9 @@
             "disconnected": "Chưa có tài khoản Google nào được kết nối nên bước này sẽ thất bại khi luồng chạy. Hãy kết nối Google trước.",
             "needsReconnect": "Google không còn chấp nhận tài khoản đã kết nối nên bước này sẽ thất bại khi luồng chạy. Hãy kết nối lại Google trước.",
             "missing": "Tài khoản Google đã kết nối chưa được cấp quyền {permission} nên bước này sẽ thất bại khi luồng chạy."
-          }
+          },
+          "formIntro": "Gửi URL biểu mẫu qua WhatsApp, tạm dừng luồng và tiếp tục qua cổng <b>submitted</b> khi khách hàng điền xong. Các câu trả lời được đọc từ biểu mẫu thông qua tài khoản Google đã kết nối, nên không cần dán gì vào biểu mẫu. Câu trả lời trở thành biến của luồng.",
+          "noListing": "Không thể liệt kê các tệp của bạn vì chưa cấp quyền Danh sách tệp Drive ở trang Tài khoản Google. Hãy thêm quyền này tại đó để chọn tệp."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",

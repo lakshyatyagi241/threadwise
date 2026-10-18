@@ -91,3 +91,7 @@ row-by-row sweep, no time guard, a 413 that retrying could not fix, formulas and
 duplicate-contact race on the webhook path. Details, what the emulator cannot prove, and the open questions about the Marketplace version's hourly trigger:
 [plan/google-workspace-build.md, section 5](../plan/google-workspace-build.md). The human procedure and checklist:
 [runbooks/google-sheets-addon-real-sheet-test.md](../../runbooks/google-sheets-addon-real-sheet-test.md).
+
+## Owner-approved deviation (2026-10): Sheets add-on withdrawn
+
+At the owner's request every Google Sheets connection is OAuth-only. The Apps Script add-on, its per-user key, the Sheets browser/extension surface and the Apps Script Google Form webhook were removed and replaced by the Google account OAuth grant (Forms answers are polled by the worker, file pickers list the connected account's own files). Lost with the add-on: the "import contacts / sync products" menu actions. Migration `20261230090000_google_oauth_only.sql` erases the keys and kills the Marketplace listing. Existing OAuth connections keep working; Forms needs one re-consent for `forms.responses.readonly`.

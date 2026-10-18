@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. Ekran zgody",
-              "body": "Dodaj zakresy, o które prosi produkt (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), a następnie opublikuj aplikację: w trybie Testing Google kończy każdą zgodę po 7 dniach i przestrzenie robocze będą musiały połączyć się ponownie. Zakresy drive są ograniczone i wymagają przeglądu Google."
+              "body": "Dodaj zakresy, o które prosi produkt (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), a następnie opublikuj aplikację: w trybie Testing Google kończy każdą zgodę po 7 dniach i przestrzenie robocze będą musiały połączyć się ponownie. Zakresy drive są ograniczone i wymagają przeglądu Google."
             },
             "workspaces": {
               "title": "4. Połączenie przestrzeni roboczych",

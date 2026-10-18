@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Đã kết nối",
           "shopify": "Đã kết nối",
-          "google_sheets": "Đã cấp khóa API",
-          "meta_catalog": "Đã liên kết danh mục"
+          "meta_catalog": "Đã liên kết danh mục",
+          "google_sheets": "Đã kết nối tài khoản Google"
         },
         "notConnected": "chưa kết nối",
         "connect": "Kết nối",

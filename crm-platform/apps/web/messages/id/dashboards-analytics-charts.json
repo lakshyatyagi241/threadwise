@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Terhubung",
           "shopify": "Terhubung",
-          "google_sheets": "Kunci API diterbitkan",
-          "meta_catalog": "Katalog ditautkan"
+          "meta_catalog": "Katalog ditautkan",
+          "google_sheets": "Akun Google terhubung"
         },
         "notConnected": "belum terhubung",
         "connect": "Hubungkan",
