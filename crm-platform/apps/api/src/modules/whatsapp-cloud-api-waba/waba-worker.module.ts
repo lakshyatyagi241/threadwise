@@ -1,3 +1,4 @@
+import { CryptoService } from '../../common/crypto/crypto.service';
 import { Injectable, Logger, Module } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
 import { CatalogProductsModule } from '../catalog-products';
@@ -33,6 +34,7 @@ export class WabaClickSyncScheduler {
 @Module({
   imports: [WabaModule, PlansCoreModule, CatalogProductsModule],
   providers: [
+    CryptoService,
     WabaIngestProcessor,
     WabaClickSyncScheduler,
     PinnacleCreditLineProcessor,

@@ -14,6 +14,7 @@ import {
   WHATSAPP_PROVIDER,
   type WhatsAppProvider,
 } from '../../infra/providers/whatsapp/whatsapp.port';
+import { sealJson } from '../../common/crypto/sealed-json';
 import { addOrRevive } from '../../infra/queue/add-or-revive';
 import { WebhookFanoutService } from '../webhook-fanout';
 import { verifyPayloadProviders, WhatsAppProviderResolver } from '../whatsapp-provider-registry';
@@ -27,8 +28,13 @@ import {
   type WebhookChange,
 } from './waba-rules';
 
+/**
+ * The queued job. `sealed` is `{ changes }` sealed with the credentials key (message text and phone numbers never sit in Redis in
+ * the clear). `changes` is the pre-sealing shape, still accepted by the worker so a job queued before a deploy is not stranded.
+ */
 export interface WabaIngestJob {
-  changes: WebhookChange[];
+  sealed?: string;
+  changes?: WebhookChange[];
 }
 
 /**
@@ -156,7 +162,12 @@ export class WabaWebhookService {
     // Meta retries a payload it thinks we missed; the same body is the same job, so a retry is absorbed here.
     const jobId = createHash('sha256').update(input.rawBody).digest('hex');
     // A job of this id that already failed would swallow Meta's redelivery and we would still answer 200, so it is replaced (ASYNC-018).
-    await addOrRevive(this.queue, 'payload', { changes: actionable }, { jobId });
+    await addOrRevive(
+      this.queue,
+      'payload',
+      { sealed: sealJson(this.crypto, { changes: actionable }) },
+      { jobId },
+    );
     return { queued: actionable.length };
   }
 

@@ -2,6 +2,7 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
 import { UnrecoverableError, type Queue } from 'bullmq';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { openJson, sealJson } from '../../common/crypto/sealed-json';
 import { QUEUES } from '../../infra/queue/queues';
 
 export type WebhookRetryHandler = (payload: never) => Promise<void>;
@@ -39,7 +40,7 @@ export class WebhookRetryService {
   async defer(channel: string, payload: unknown): Promise<void> {
     await this.queue.add('retry', {
       channel,
-      sealed: this.crypto.encrypt(JSON.stringify(payload)),
+      sealed: sealJson(this.crypto, payload),
     });
   }
 
@@ -48,7 +49,7 @@ export class WebhookRetryService {
     if (!handler) throw new UnrecoverableError(`No webhook retry handler for "${channel}"`);
     let payload: unknown;
     try {
-      payload = JSON.parse(this.crypto.decrypt(sealed));
+      payload = openJson(this.crypto, sealed);
     } catch {
       // A blob that does not open (a rotated-away key, a corrupt value) opens no better on the next attempt.
       throw new UnrecoverableError('Webhook retry payload could not be opened');
