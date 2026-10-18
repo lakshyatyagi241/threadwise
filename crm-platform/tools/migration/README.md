@@ -739,6 +739,7 @@ Q10 media: **URL kept in `meta.legacy.mediaUrl`**, the attachments builder copie
 - Turns that sort before a loaded one (`APPEND_OUT_OF_ORDER`) are not merged; a thread whose Waboo contact, status or agent changed with NO new turn is not updated either (only a thread with newer turns gets its conversation row recomputed).
 - Appending after cutover (live traffic in the same thread): not supported; a thread that has live messages and was not made by this tool is `THREAD_HAS_LIVE_MESSAGES`, and a migrated thread that received live messages no longer matches the plan (`msg_seq` check, `PARTIAL_THREAD`).
 - `visitor_logs` cross-checks (status / assignee per session) are phase 2.
+- **Delivery state (`chat-delivery`):** the chat history has no receipts, so the loader writes every outbound turn `sent`. `chat-delivery --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]` reads the billing log (`whatsapp_broadcasting_data`, non-broadcast rows, keyed by the wamid = `meta_msg_id`) and moves the loaded outbound messages FORWARD from `sent` to `delivered` / `read` (a reply counts as read) / `failed` (`status`, `delivered_at`, `read_at`, `failure_code`, `failure_reason`). Never to `queued`, never back, never a message the live app already moved. The touched message uuids go to `run_log` (`_chat` / `chat_delivery`) and reconcile lets exactly those differ from `sent`. Dry run by default; idempotent.
 - Nothing was run against a real dump, `iskm` or `karma`.
 
 ---
