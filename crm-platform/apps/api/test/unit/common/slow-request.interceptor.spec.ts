@@ -12,7 +12,11 @@ const ctxOf = (type = 'http', statusCode = 200): ExecutionContext =>
   ({
     getType: () => type,
     switchToHttp: () => ({
-      getRequest: () => ({ method: 'GET', route: { path: '/v2/contacts/:id' }, url: '/v2/contacts/9f1c-secret-id?token=abc' }),
+      getRequest: () => ({
+        method: 'GET',
+        route: { path: '/v2/contacts/:id' },
+        url: '/v2/contacts/9f1c-secret-id?token=abc',
+      }),
       getResponse: () => ({ statusCode }),
     }),
   }) as unknown as ExecutionContext;
@@ -38,7 +42,14 @@ describe('SlowRequestInterceptor', () => {
     await inRequest(() => lastValueFrom(i.intercept(ctxOf(), handler(40))));
     expect(warn).toHaveBeenCalledOnce();
     const line = warn.mock.calls[0][0];
-    expect(line).toMatchObject({ msg: 'slow request', method: 'GET', route: '/v2/contacts/:id', orgId: 42, status: 200, requestId: 'req-1' });
+    expect(line).toMatchObject({
+      msg: 'slow request',
+      method: 'GET',
+      route: '/v2/contacts/:id',
+      orgId: 42,
+      status: 200,
+      requestId: 'req-1',
+    });
     expect(line.durationMs).toBeGreaterThanOrEqual(20);
   });
 
@@ -67,8 +78,13 @@ describe('SlowRequestInterceptor', () => {
   it('logs a slow failure with the error status and still rethrows', async () => {
     const i = new SlowRequestInterceptor(cfg(10));
     const warn = spy(i);
-    const failing: CallHandler = { handle: () => timer(30).pipe(switchMap(() => throwError(() => new HttpException('nope', 409)))) };
-    await expect(inRequest(() => lastValueFrom(i.intercept(ctxOf(), failing)))).rejects.toThrow('nope');
+    const failing: CallHandler = {
+      handle: () =>
+        timer(30).pipe(switchMap(() => throwError(() => new HttpException('nope', 409)))),
+    };
+    await expect(inRequest(() => lastValueFrom(i.intercept(ctxOf(), failing)))).rejects.toThrow(
+      'nope',
+    );
     expect(warn.mock.calls[0][0]).toMatchObject({ status: 409 });
   });
 

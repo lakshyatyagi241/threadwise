@@ -1,110 +1,110 @@
 {
- "generatedAt": "2026-10-18T18:09:31.806Z",
- "mode": "api",
- "result": [
-  {
-   "route": "GET /v2/auth/session",
-   "status": 200,
-   "identityBytes": 11528,
-   "gzip": {
-    "compressed": false,
-    "encoding": null,
-    "ratio": 1
-   },
-   "gzipIfCompressedBytes": 2511,
-   "cacheControl": "no-store, no-cache, must-revalidate, private, max-age=0",
-   "etag": true
-  },
-  {
-   "route": "GET /v2/contacts?limit=20",
-   "status": 200,
-   "identityBytes": 20891,
-   "gzip": {
-    "compressed": false,
-    "encoding": null,
-    "ratio": 1
-   },
-   "gzipIfCompressedBytes": 1871,
-   "cacheControl": null,
-   "etag": true
-  },
-  {
-   "route": "GET /v2/contacts?limit=50",
-   "status": 200,
-   "identityBytes": 52061,
-   "gzip": {
-    "compressed": false,
-    "encoding": null,
-    "ratio": 1
-   },
-   "gzipIfCompressedBytes": 3857,
-   "cacheControl": null,
-   "etag": true
-  },
-  {
-   "route": "GET /v2/companies?limit=20",
-   "status": 200,
-   "identityBytes": 11356,
-   "gzip": {
-    "compressed": false,
-    "encoding": null,
-    "ratio": 1
-   },
-   "gzipIfCompressedBytes": 1359,
-   "cacheControl": null,
-   "etag": true
-  },
-  {
-   "route": "GET /v2/tags",
-   "status": 200,
-   "identityBytes": 9347,
-   "gzip": {
-    "compressed": false,
-    "encoding": null,
-    "ratio": 1
-   },
-   "gzipIfCompressedBytes": 2165,
-   "cacheControl": null,
-   "etag": true
-  },
-  {
-   "route": "GET /v2/tasks?limit=20",
-   "status": 200,
-   "identityBytes": 10395,
-   "gzip": {
-    "compressed": false,
-    "encoding": null,
-    "ratio": 1
-   },
-   "gzipIfCompressedBytes": 1199,
-   "cacheControl": null,
-   "etag": true
-  },
-  {
-   "route": "GET /v2/inbox/conversations?limit=20",
-   "status": 200,
-   "identityBytes": 15928,
-   "gzip": {
-    "compressed": false,
-    "encoding": null,
-    "ratio": 1
-   },
-   "gzipIfCompressedBytes": 2000,
-   "cacheControl": null,
-   "etag": true
-  },
-  {
-   "route": "GET /v2/crm/dashboard",
-   "status": 200,
-   "identityBytes": 3898,
-   "gzip": {
-    "compressed": false,
-    "encoding": null,
-    "ratio": 1
-   },
-   "gzipIfCompressedBytes": 965,
-   "cacheControl": null,
-   "etag": true
-  }
- ]
+  "generatedAt": "2026-10-18T18:09:31.806Z",
+  "mode": "api",
+  "result": [
+    {
+      "route": "GET /v2/auth/session",
+      "status": 200,
+      "identityBytes": 11528,
+      "gzip": {
+        "compressed": false,
+        "encoding": null,
+        "ratio": 1
+      },
+      "gzipIfCompressedBytes": 2511,
+      "cacheControl": "no-store, no-cache, must-revalidate, private, max-age=0",
+      "etag": true
+    },
+    {
+      "route": "GET /v2/contacts?limit=20",
+      "status": 200,
+      "identityBytes": 20891,
+      "gzip": {
+        "compressed": false,
+        "encoding": null,
+        "ratio": 1
+      },
+      "gzipIfCompressedBytes": 1871,
+      "cacheControl": null,
+      "etag": true
+    },
+    {
+      "route": "GET /v2/contacts?limit=50",
+      "status": 200,
+      "identityBytes": 52061,
+      "gzip": {
+        "compressed": false,
+        "encoding": null,
+        "ratio": 1
+      },
+      "gzipIfCompressedBytes": 3857,
+      "cacheControl": null,
+      "etag": true
+    },
+    {
+      "route": "GET /v2/companies?limit=20",
+      "status": 200,
+      "identityBytes": 11356,
+      "gzip": {
+        "compressed": false,
+        "encoding": null,
+        "ratio": 1
+      },
+      "gzipIfCompressedBytes": 1359,
+      "cacheControl": null,
+      "etag": true
+    },
+    {
+      "route": "GET /v2/tags",
+      "status": 200,
+      "identityBytes": 9347,
+      "gzip": {
+        "compressed": false,
+        "encoding": null,
+        "ratio": 1
+      },
+      "gzipIfCompressedBytes": 2165,
+      "cacheControl": null,
+      "etag": true
+    },
+    {
+      "route": "GET /v2/tasks?limit=20",
+      "status": 200,
+      "identityBytes": 10395,
+      "gzip": {
+        "compressed": false,
+        "encoding": null,
+        "ratio": 1
+      },
+      "gzipIfCompressedBytes": 1199,
+      "cacheControl": null,
+      "etag": true
+    },
+    {
+      "route": "GET /v2/inbox/conversations?limit=20",
+      "status": 200,
+      "identityBytes": 15928,
+      "gzip": {
+        "compressed": false,
+        "encoding": null,
+        "ratio": 1
+      },
+      "gzipIfCompressedBytes": 2000,
+      "cacheControl": null,
+      "etag": true
+    },
+    {
+      "route": "GET /v2/crm/dashboard",
+      "status": 200,
+      "identityBytes": 3898,
+      "gzip": {
+        "compressed": false,
+        "encoding": null,
+        "ratio": 1
+      },
+      "gzipIfCompressedBytes": 965,
+      "cacheControl": null,
+      "etag": true
+    }
+  ]
 }

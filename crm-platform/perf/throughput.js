@@ -15,9 +15,15 @@ const OUT = __ENV.OUT || 'perf/results/throughput.json';
 const scenarios = {};
 RATES.forEach((rate, i) => {
   scenarios[`step_${rate}`] = {
-    executor: 'constant-arrival-rate', rate, timeUnit: '1s', duration: `${STEP}s`,
-    preAllocatedVUs: Math.min(MAXVUS, Math.max(10, rate)), maxVUs: MAXVUS,
-    startTime: `${i * (STEP + GAP)}s`, tags: { stage: String(rate) }, exec: 'mix',
+    executor: 'constant-arrival-rate',
+    rate,
+    timeUnit: '1s',
+    duration: `${STEP}s`,
+    preAllocatedVUs: Math.min(MAXVUS, Math.max(10, rate)),
+    maxVUs: MAXVUS,
+    startTime: `${i * (STEP + GAP)}s`,
+    tags: { stage: String(rate) },
+    exec: 'mix',
   };
 });
 
@@ -27,10 +33,15 @@ for (const r of RATES) {
   thresholds[`http_req_failed{stage:${r}}`] = ['rate>=0'];
   thresholds[`http_reqs{stage:${r}}`] = ['count>=0'];
   thresholds[`dropped_iterations{stage:${r}}`] = ['count>=0'];
-  for (const c of ['A', 'B', 'C']) thresholds[`http_req_duration{stage:${r},class:${c}}`] = ['max>=0'];
+  for (const c of ['A', 'B', 'C'])
+    thresholds[`http_req_duration{stage:${r},class:${c}}`] = ['max>=0'];
 }
 
-export const options = { scenarios, thresholds, summaryTrendStats: ['avg', 'med', 'p(95)', 'p(99)', 'max', 'count'] };
+export const options = {
+  scenarios,
+  thresholds,
+  summaryTrendStats: ['avg', 'med', 'p(95)', 'p(99)', 'max', 'count'],
+};
 
 export function setup() {
   const token = login();
@@ -40,7 +51,11 @@ export function setup() {
 const pick = (list) => list[Math.floor(Math.random() * list.length)];
 export function mix(d) {
   const all = probes(d.ids);
-  const by = { A: all.filter((p) => p.class === 'A'), B: all.filter((p) => p.class === 'B'), C: all.filter((p) => p.class === 'C') };
+  const by = {
+    A: all.filter((p) => p.class === 'A'),
+    B: all.filter((p) => p.class === 'B'),
+    C: all.filter((p) => p.class === 'C'),
+  };
   const x = Math.random();
   const cls = x < BUDGETS.mix.A ? 'A' : x < BUDGETS.mix.A + BUDGETS.mix.B ? 'B' : 'C';
   const res = call(d.token, pick(by[cls]));
@@ -48,11 +63,22 @@ export function mix(d) {
 }
 
 export function handleSummary(data) {
-  const out = { generatedAt: new Date().toISOString(), meta: { rates: RATES, stepSeconds: STEP, mix: BUDGETS.mix }, stages: {} };
+  const out = {
+    generatedAt: new Date().toISOString(),
+    meta: { rates: RATES, stepSeconds: STEP, mix: BUDGETS.mix },
+    stages: {},
+  };
   for (const r of RATES) {
     const get = (n) => data.metrics[`${n}{stage:${r}}`]?.values;
     const reqs = get('http_reqs');
-    const stage = { target: r, requests: reqs?.count ?? 0, achieved: reqs ? reqs.count / STEP : 0, failedRate: get('http_req_failed')?.rate ?? null, dropped: get('dropped_iterations')?.count ?? 0, classes: {} };
+    const stage = {
+      target: r,
+      requests: reqs?.count ?? 0,
+      achieved: reqs ? reqs.count / STEP : 0,
+      failedRate: get('http_req_failed')?.rate ?? null,
+      dropped: get('dropped_iterations')?.count ?? 0,
+      classes: {},
+    };
     for (const c of ['A', 'B', 'C']) {
       const t = data.metrics[`http_req_duration{stage:${r},class:${c}}`]?.values;
       if (t) stage.classes[c] = { count: t.count, p50: t.med, p95: t['p(95)'], p99: t['p(99)'] };

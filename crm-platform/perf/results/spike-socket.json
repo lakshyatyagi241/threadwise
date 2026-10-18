@@ -1,79 +1,79 @@
 {
- "generatedAt": "2026-10-18T18:09:14.659Z",
- "meta": {
-  "spike": "socket",
-  "normal": 20,
-  "peak": 60,
-  "ramp": 30,
-  "hold": 30,
-  "recovery": 30,
-  "baseline": 15
- },
- "phases": {
-  "normal": {
-   "seconds": 15,
-   "requests": 290,
-   "failedRate": 0,
-   "p95": 4.581235350000002,
-   "p99": 6.777449340000012,
-   "dropped": 0,
-   "canary": {
-    "failedRate": 0,
-    "p95": 16.869444799999997,
-    "max": 25.24783
-   }
+  "generatedAt": "2026-10-18T18:09:14.659Z",
+  "meta": {
+    "spike": "socket",
+    "normal": 20,
+    "peak": 60,
+    "ramp": 30,
+    "hold": 30,
+    "recovery": 30,
+    "baseline": 15
   },
-  "ramp": {
-   "seconds": 30,
-   "requests": 1115,
-   "failedRate": 0,
-   "p95": 2.9772714999999987,
-   "p99": 11.964149139999963,
-   "dropped": 0,
-   "canary": {
-    "failedRate": 0,
-    "p95": 14.875791800000004,
-    "max": 141.484238
-   }
-  },
-  "hold": {
-   "seconds": 30,
-   "requests": 1705,
-   "failedRate": 0,
-   "p95": 4.672820399999999,
-   "p99": 17.157554560000005,
-   "dropped": 0,
-   "canary": {
-    "failedRate": 0,
-    "p95": 18.976967400000007,
-    "max": 72.759559
-   }
-  },
-  "drop": {
-   "seconds": 30,
-   "requests": 589,
-   "failedRate": 0,
-   "p95": 4.713602800000001,
-   "p99": 6.51045552,
-   "dropped": 0,
-   "canary": {
-    "failedRate": 0,
-    "p95": 17.207281549999994,
-    "max": 37.455597
-   }
-  },
-  "recovery": {
-   "seconds": 30,
-   "requests": 589,
-   "failedRate": 0,
-   "p95": 4.511952600000002,
-   "p99": 8.21143996,
-   "dropped": 0,
-   "canary": {
-    "failedRate": 0,
-    "p95": 15.0369425,
-    "max": 41.53049
-   }
+  "phases": {
+    "normal": {
+      "seconds": 15,
+      "requests": 290,
+      "failedRate": 0,
+      "p95": 4.581235350000002,
+      "p99": 6.777449340000012,
+      "dropped": 0,
+      "canary": {
+        "failedRate": 0,
+        "p95": 16.869444799999997,
+        "max": 25.24783
+      }
+    },
+    "ramp": {
+      "seconds": 30,
+      "requests": 1115,
+      "failedRate": 0,
+      "p95": 2.9772714999999987,
+      "p99": 11.964149139999963,
+      "dropped": 0,
+      "canary": {
+        "failedRate": 0,
+        "p95": 14.875791800000004,
+        "max": 141.484238
+      }
+    },
+    "hold": {
+      "seconds": 30,
+      "requests": 1705,
+      "failedRate": 0,
+      "p95": 4.672820399999999,
+      "p99": 17.157554560000005,
+      "dropped": 0,
+      "canary": {
+        "failedRate": 0,
+        "p95": 18.976967400000007,
+        "max": 72.759559
+      }
+    },
+    "drop": {
+      "seconds": 30,
+      "requests": 589,
+      "failedRate": 0,
+      "p95": 4.713602800000001,
+      "p99": 6.51045552,
+      "dropped": 0,
+      "canary": {
+        "failedRate": 0,
+        "p95": 17.207281549999994,
+        "max": 37.455597
+      }
+    },
+    "recovery": {
+      "seconds": 30,
+      "requests": 589,
+      "failedRate": 0,
+      "p95": 4.511952600000002,
+      "p99": 8.21143996,
+      "dropped": 0,
+      "canary": {
+        "failedRate": 0,
+        "p95": 15.0369425,
+        "max": 41.53049
+      }
+    }
   }
- }
 }

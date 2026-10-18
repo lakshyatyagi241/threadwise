@@ -17,11 +17,17 @@ export const median = (xs) => {
 };
 
 const STATS = ['p50', 'p95', 'p99', 'avg', 'max', 'count'];
-const mergeTrend = (list) => Object.fromEntries(STATS.map((k) => [k, median(list.map((t) => t?.[k]))]));
+const mergeTrend = (list) =>
+  Object.fromEntries(STATS.map((k) => [k, median(list.map((t) => t?.[k]))]));
 
 /** Median of repeat runs, per class and per endpoint. */
 export function mergeRuns(runs) {
-  const out = { runs: runs.length, classes: {}, endpoints: {}, failedRate: median(runs.map((r) => r.http?.failedRate)) };
+  const out = {
+    runs: runs.length,
+    classes: {},
+    endpoints: {},
+    failedRate: median(runs.map((r) => r.http?.failedRate)),
+  };
   for (const c of ['A', 'B', 'C']) {
     const list = runs.map((r) => r.classes?.[c]).filter(Boolean);
     if (list.length) out.classes[c] = mergeTrend(list);
@@ -39,7 +45,16 @@ export function rank(merged, budgets) {
   return Object.entries(merged.endpoints)
     .map(([route, t]) => {
       const b = budgets.latency[t.class];
-      return { route, class: t.class, p50: t.p50, p95: t.p95, p99: t.p99, count: t.count, budget: b?.p95 ?? null, ratio: b && t.p95 != null ? t.p95 / b.p95 : null };
+      return {
+        route,
+        class: t.class,
+        p50: t.p50,
+        p95: t.p95,
+        p99: t.p99,
+        count: t.count,
+        budget: b?.p95 ?? null,
+        ratio: b && t.p95 != null ? t.p95 / b.p95 : null,
+      };
     })
     .filter((e) => e.ratio !== null)
     .sort((a, b) => b.ratio - a.ratio);
@@ -67,7 +82,8 @@ export function regressions(merged, baseline, budgets) {
     const b = baseline.endpoints?.[route];
     if (!b || b.p95 == null || t.p95 == null) continue;
     const diff = t.p95 - b.p95;
-    if (diff > minMs && t.p95 > b.p95 * (1 + share)) out.push({ route, class: t.class, baseline: b.p95, now: t.p95, diff, share: diff / b.p95 });
+    if (diff > minMs && t.p95 > b.p95 * (1 + share))
+      out.push({ route, class: t.class, baseline: b.p95, now: t.p95, diff, share: diff / b.p95 });
   }
   return out.sort((a, b) => b.diff - a.diff);
 }
@@ -75,16 +91,43 @@ export function regressions(merged, baseline, budgets) {
 const f1 = (x) => (x == null ? 'n/a' : x.toFixed(1));
 
 export function markdown({ merged, ranked, classes, regs, top }) {
-  const lines = [`# Latency ranking`, '', `Median of ${merged.runs} run(s). p95 in ms. Ratio is p95 over the class budget (above 1.00 is over budget).`, '', '## By class', '', '| Class | p50 | p95 | p99 | p95 budget | p95 | p99 vs budget |', '|---|---|---|---|---|---|---|'];
-  for (const c of classes) lines.push(`| ${c.class} | ${f1(c.p50)} | ${f1(c.p95)} | ${f1(c.p99)} | ${c.budgetP95} | ${c.p95Pass ? 'pass' : 'OVER'} | ${c.p99Over ? `over ${c.budgetP99}` : 'ok'} |`);
-  lines.push('', `## Top ${top} endpoints by distance over budget`, '', '| # | Route | Class | p50 | p95 | p99 | Budget | Ratio |', '|---|---|---|---|---|---|---|---|');
-  ranked.slice(0, top).forEach((e, i) => lines.push(`| ${i + 1} | \`${e.route}\` | ${e.class} | ${f1(e.p50)} | ${f1(e.p95)} | ${f1(e.p99)} | ${e.budget} | ${e.ratio.toFixed(2)} |`));
+  const lines = [
+    `# Latency ranking`,
+    '',
+    `Median of ${merged.runs} run(s). p95 in ms. Ratio is p95 over the class budget (above 1.00 is over budget).`,
+    '',
+    '## By class',
+    '',
+    '| Class | p50 | p95 | p99 | p95 budget | p95 | p99 vs budget |',
+    '|---|---|---|---|---|---|---|',
+  ];
+  for (const c of classes)
+    lines.push(
+      `| ${c.class} | ${f1(c.p50)} | ${f1(c.p95)} | ${f1(c.p99)} | ${c.budgetP95} | ${c.p95Pass ? 'pass' : 'OVER'} | ${c.p99Over ? `over ${c.budgetP99}` : 'ok'} |`,
+    );
+  lines.push(
+    '',
+    `## Top ${top} endpoints by distance over budget`,
+    '',
+    '| # | Route | Class | p50 | p95 | p99 | Budget | Ratio |',
+    '|---|---|---|---|---|---|---|---|',
+  );
+  ranked
+    .slice(0, top)
+    .forEach((e, i) =>
+      lines.push(
+        `| ${i + 1} | \`${e.route}\` | ${e.class} | ${f1(e.p50)} | ${f1(e.p95)} | ${f1(e.p99)} | ${e.budget} | ${e.ratio.toFixed(2)} |`,
+      ),
+    );
   if (regs) {
     lines.push('', '## Regressions against the baseline', '');
     if (!regs.length) lines.push('None.');
     else {
       lines.push('| Route | Class | Baseline p95 | Now p95 | Change |', '|---|---|---|---|---|');
-      for (const r of regs) lines.push(`| \`${r.route}\` | ${r.class} | ${f1(r.baseline)} | ${f1(r.now)} | +${f1(r.diff)} ms (+${(r.share * 100).toFixed(0)}%) |`);
+      for (const r of regs)
+        lines.push(
+          `| \`${r.route}\` | ${r.class} | ${f1(r.baseline)} | ${f1(r.now)} | +${f1(r.diff)} ms (+${(r.share * 100).toFixed(0)}%) |`,
+        );
     }
   }
   return lines.join('\n') + '\n';
@@ -103,23 +146,47 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     else if (!process.argv[i].startsWith('--')) files.push(process.argv[i]);
   }
   if (!files.length) {
-    console.error('usage: rank.mjs <latency.json> [...] [--top N] [--baseline file] [--out file] [--write-baseline file]');
+    console.error(
+      'usage: rank.mjs <latency.json> [...] [--top N] [--baseline file] [--out file] [--write-baseline file]',
+    );
     process.exit(2);
   }
-  const budgets = JSON.parse(readFileSync(arg('--budgets', join(ROOT, 'perf/budgets.json')), 'utf8'));
+  const budgets = JSON.parse(
+    readFileSync(arg('--budgets', join(ROOT, 'perf/budgets.json')), 'utf8'),
+  );
   const merged = mergeRuns(files.map((f) => JSON.parse(readFileSync(f, 'utf8'))));
   const top = Number(arg('--top', 20));
   const ranked = rank(merged, budgets);
   const classes = classVerdicts(merged, budgets);
   const baselinePath = arg('--baseline');
-  const regs = baselinePath ? regressions(merged, JSON.parse(readFileSync(baselinePath, 'utf8')), budgets) : null;
+  const regs = baselinePath
+    ? regressions(merged, JSON.parse(readFileSync(baselinePath, 'utf8')), budgets)
+    : null;
   const md = markdown({ merged, ranked, classes, regs, top });
   process.stdout.write(md);
   if (arg('--out')) writeFileSync(arg('--out'), md);
-  if (arg('--write-baseline')) writeFileSync(arg('--write-baseline'), JSON.stringify({ writtenAt: new Date().toISOString(), runs: merged.runs, classes: merged.classes, endpoints: merged.endpoints }, null, 1) + '\n');
+  if (arg('--write-baseline'))
+    writeFileSync(
+      arg('--write-baseline'),
+      JSON.stringify(
+        {
+          writtenAt: new Date().toISOString(),
+          runs: merged.runs,
+          classes: merged.classes,
+          endpoints: merged.endpoints,
+        },
+        null,
+        1,
+      ) + '\n',
+    );
   const failed = classes.some((c) => !c.p95Pass) || (regs && regs.length > 0);
   if (failed) {
-    console.error(`FAIL: ${classes.filter((c) => !c.p95Pass).map((c) => `class ${c.class} p95 ${f1(c.p95)} > ${c.budgetP95} ms`).join('; ')}${regs?.length ? ` ${regs.length} regression(s)` : ''}`);
+    console.error(
+      `FAIL: ${classes
+        .filter((c) => !c.p95Pass)
+        .map((c) => `class ${c.class} p95 ${f1(c.p95)} > ${c.budgetP95} ms`)
+        .join('; ')}${regs?.length ? ` ${regs.length} regression(s)` : ''}`,
+    );
     process.exit(1);
   }
 }

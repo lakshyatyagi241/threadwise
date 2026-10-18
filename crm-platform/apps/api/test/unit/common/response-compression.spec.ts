@@ -1,11 +1,18 @@
 import express from 'express';
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
-import { COMPRESSION_THRESHOLD_BYTES, responseCompression } from '../../../src/common/http/response-compression';
+import {
+  COMPRESSION_THRESHOLD_BYTES,
+  responseCompression,
+} from '../../../src/common/http/response-compression';
 
 /** QA 63: large JSON is compressed, small bodies and event streams are not, and a client can opt out. */
 
-const rows = Array.from({ length: 200 }, (_, i) => ({ id: i, name: `Contact number ${i}`, email: `person${i}@example.test` }));
+const rows = Array.from({ length: 200 }, (_, i) => ({
+  id: i,
+  name: `Contact number ${i}`,
+  email: `person${i}@example.test`,
+}));
 const app = express();
 app.use(responseCompression());
 app.get('/big', (_req, res) => res.json({ data: rows }));
@@ -39,8 +46,10 @@ describe('responseCompression', () => {
   });
 
   it('honours x-no-compression', async () => {
-    const res = await request(app).get('/big').set('accept-encoding', 'gzip').set('x-no-compression', '1');
+    const res = await request(app)
+      .get('/big')
+      .set('accept-encoding', 'gzip')
+      .set('x-no-compression', '1');
     expect(res.headers['content-encoding']).toBeUndefined();
   });
-
 });

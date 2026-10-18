@@ -12,10 +12,14 @@ let ip = 0;
 const nextIp = () => `10.77.${(ip >> 8) & 255}.${ip++ & 255}`;
 
 export function login() {
-  const res = http.post(`${BASE}/v2/auth/login`, JSON.stringify({ email: EMAIL, password: PASSWORD }), {
-    headers: { 'content-type': 'application/json', 'x-forwarded-for': nextIp() },
-    tags: { endpoint: 'POST /v2/auth/login', class: 'B', setup: 'true' },
-  });
+  const res = http.post(
+    `${BASE}/v2/auth/login`,
+    JSON.stringify({ email: EMAIL, password: PASSWORD }),
+    {
+      headers: { 'content-type': 'application/json', 'x-forwarded-for': nextIp() },
+      tags: { endpoint: 'POST /v2/auth/login', class: 'B', setup: 'true' },
+    },
+  );
   const token = res.status === 200 || res.status === 201 ? res.json('tokens.accessToken') : null;
   if (!token) fail(`login failed: ${res.status} ${res.body}`);
   return token;
@@ -55,24 +59,89 @@ export function probes(ids) {
     { route: 'GET /v2/companies', class: 'A', req: () => ['GET', '/v2/companies?limit=20'] },
     { route: 'GET /v2/tags', class: 'A', req: () => ['GET', '/v2/tags'] },
     { route: 'GET /v2/tasks', class: 'A', req: () => ['GET', '/v2/tasks?limit=20'] },
-    { route: 'GET /v2/inbox/conversations', class: 'A', req: () => ['GET', '/v2/inbox/conversations?limit=20'] },
+    {
+      route: 'GET /v2/inbox/conversations',
+      class: 'A',
+      req: () => ['GET', '/v2/inbox/conversations?limit=20'],
+    },
     { route: 'GET /v2/inbox/counts', class: 'A', req: () => ['GET', '/v2/inbox/counts'] },
   ];
-  if (ids.contact) list.push({ route: 'GET /v2/contacts/:id', class: 'A', req: () => ['GET', `/v2/contacts/${ids.contact}`] });
-  if (ids.company) list.push({ route: 'GET /v2/companies/:id', class: 'A', req: () => ['GET', `/v2/companies/${ids.company}`] });
-  if (ids.task) list.push({ route: 'GET /v2/tasks/:id', class: 'A', req: () => ['GET', `/v2/tasks/${ids.task}`] });
-  if (ids.conversation) list.push({ route: 'GET /v2/inbox/conversations/:id/messages', class: 'A', req: () => ['GET', `/v2/inbox/conversations/${ids.conversation}/messages?limit=50`] });
+  if (ids.contact)
+    list.push({
+      route: 'GET /v2/contacts/:id',
+      class: 'A',
+      req: () => ['GET', `/v2/contacts/${ids.contact}`],
+    });
+  if (ids.company)
+    list.push({
+      route: 'GET /v2/companies/:id',
+      class: 'A',
+      req: () => ['GET', `/v2/companies/${ids.company}`],
+    });
+  if (ids.task)
+    list.push({
+      route: 'GET /v2/tasks/:id',
+      class: 'A',
+      req: () => ['GET', `/v2/tasks/${ids.task}`],
+    });
+  if (ids.conversation)
+    list.push({
+      route: 'GET /v2/inbox/conversations/:id/messages',
+      class: 'A',
+      req: () => ['GET', `/v2/inbox/conversations/${ids.conversation}/messages?limit=50`],
+    });
   list.push(
-    { route: 'GET /v2/contacts?q', class: 'B', req: () => ['GET', `/v2/contacts?limit=20&q=${encodeURIComponent('Lastname' + (1 + Math.floor(Math.random() * 99000)))}`] },
-    { route: 'POST /v2/tags', class: 'B', req: () => ['POST', '/v2/tags', { name: `perf-${uniq()}`, color: '#3366ff' }] },
-    { route: 'POST /v2/contacts', class: 'B', req: () => ['POST', '/v2/contacts', { firstName: 'Perf', lastName: uniq(), email: `perf.${uniq()}@perf.example.test` }] },
-    { route: 'POST /v2/companies', class: 'B', req: () => ['POST', '/v2/companies', { name: `Perf Company ${uniq()}` }] },
-    { route: 'POST /v2/tasks', class: 'B', req: () => ['POST', '/v2/tasks', { title: `Perf task ${uniq()}` }] },
+    {
+      route: 'GET /v2/contacts?q',
+      class: 'B',
+      req: () => [
+        'GET',
+        `/v2/contacts?limit=20&q=${encodeURIComponent('Lastname' + (1 + Math.floor(Math.random() * 99000)))}`,
+      ],
+    },
+    {
+      route: 'POST /v2/tags',
+      class: 'B',
+      req: () => ['POST', '/v2/tags', { name: `perf-${uniq()}`, color: '#3366ff' }],
+    },
+    {
+      route: 'POST /v2/contacts',
+      class: 'B',
+      req: () => [
+        'POST',
+        '/v2/contacts',
+        { firstName: 'Perf', lastName: uniq(), email: `perf.${uniq()}@perf.example.test` },
+      ],
+    },
+    {
+      route: 'POST /v2/companies',
+      class: 'B',
+      req: () => ['POST', '/v2/companies', { name: `Perf Company ${uniq()}` }],
+    },
+    {
+      route: 'POST /v2/tasks',
+      class: 'B',
+      req: () => ['POST', '/v2/tasks', { title: `Perf task ${uniq()}` }],
+    },
   );
-  if (ids.contact) list.push({ route: 'PATCH /v2/contacts/:id', class: 'B', optimistic: true, req: (rowVersion) => ['PATCH', `/v2/contacts/${ids.contact}`, { lifecycleStage: 'qualified', rowVersion: rowVersion || 1 }] });
+  if (ids.contact)
+    list.push({
+      route: 'PATCH /v2/contacts/:id',
+      class: 'B',
+      optimistic: true,
+      req: (rowVersion) => [
+        'PATCH',
+        `/v2/contacts/${ids.contact}`,
+        { lifecycleStage: 'qualified', rowVersion: rowVersion || 1 },
+      ],
+    });
   list.push(
     { route: 'GET /v2/crm/dashboard', class: 'C', req: () => ['GET', '/v2/crm/dashboard'] },
-    { route: 'GET /v2/inbox/analytics/team', class: 'C', req: () => ['GET', '/v2/inbox/analytics/team'] },
+    {
+      route: 'GET /v2/inbox/analytics/team',
+      class: 'C',
+      req: () => ['GET', '/v2/inbox/analytics/team'],
+    },
   );
   return list;
 }
@@ -86,8 +155,13 @@ export function call(token, p, extraTags = {}) {
     version = r.status === 200 ? r.json('rowVersion') : undefined;
   }
   const [method, path, body] = p.req(version);
-  const params = { headers: auth(token), tags: { endpoint: p.route, class: p.class, ...extraTags } };
-  return method === 'GET' ? http.get(`${BASE}${path}`, params) : http.request(method, `${BASE}${path}`, body ? JSON.stringify(body) : null, params);
+  const params = {
+    headers: auth(token),
+    tags: { endpoint: p.route, class: p.class, ...extraTags },
+  };
+  return method === 'GET'
+    ? http.get(`${BASE}${path}`, params)
+    : http.request(method, `${BASE}${path}`, body ? JSON.stringify(body) : null, params);
 }
 
 // k6 only records a sub-metric for a tag combination that a threshold names, so every probed endpoint gets an always-true one.
@@ -99,7 +173,8 @@ export function endpointThresholds(routes, metric = 'http_req_duration') {
 
 export function classThresholds(extra = {}) {
   const t = { http_req_failed: [`rate<${BUDGETS.errorRate}`] };
-  for (const c of ['A', 'B', 'C']) t[`http_req_duration{class:${c}}`] = [`p(95)<${BUDGETS.latency[c].p95}`];
+  for (const c of ['A', 'B', 'C'])
+    t[`http_req_duration{class:${c}}`] = [`p(95)<${BUDGETS.latency[c].p95}`];
   return { ...t, ...extra };
 }
 
@@ -107,12 +182,32 @@ export function classThresholds(extra = {}) {
 export function summarise(data, meta, probeList = []) {
   const classOf = Object.fromEntries(probeList.map((p) => [p.route, p.class]));
   const out = { generatedAt: new Date().toISOString(), meta, classes: {}, endpoints: {}, http: {} };
-  const trend = (m) => m && { count: m.values.count, p50: m.values.med, p95: m.values['p(95)'], p99: m.values['p(99)'], max: m.values.max, avg: m.values.avg };
+  const trend = (m) =>
+    m && {
+      count: m.values.count,
+      p50: m.values.med,
+      p95: m.values['p(95)'],
+      p99: m.values['p(99)'],
+      max: m.values.max,
+      avg: m.values.avg,
+    };
   for (const [name, m] of Object.entries(data.metrics)) {
     let x;
-    if ((x = name.match(/^http_req_duration\{class:([ABC])(?:,phase:measure)?\}$/))) out.classes[x[1]] = trend(m);
-    else if ((x = name.match(/^http_req_duration\{endpoint:(.+?)(?:,phase:measure)?\}$/))) out.endpoints[x[1]] = { class: classOf[x[1]], ...trend(m), ...(out.endpoints[x[1]] || {}) , ...trend(m) };
-    else if ((x = name.match(/^http_req_failed\{endpoint:(.+?)(?:,phase:measure)?\}$/))) out.endpoints[x[1]] = { ...(out.endpoints[x[1]] || {}), class: classOf[x[1]], errorRate: m.values.rate };
+    if ((x = name.match(/^http_req_duration\{class:([ABC])(?:,phase:measure)?\}$/)))
+      out.classes[x[1]] = trend(m);
+    else if ((x = name.match(/^http_req_duration\{endpoint:(.+?)(?:,phase:measure)?\}$/)))
+      out.endpoints[x[1]] = {
+        class: classOf[x[1]],
+        ...trend(m),
+        ...(out.endpoints[x[1]] || {}),
+        ...trend(m),
+      };
+    else if ((x = name.match(/^http_req_failed\{endpoint:(.+?)(?:,phase:measure)?\}$/)))
+      out.endpoints[x[1]] = {
+        ...(out.endpoints[x[1]] || {}),
+        class: classOf[x[1]],
+        errorRate: m.values.rate,
+      };
   }
   const failed = data.metrics.http_req_failed;
   out.http = {
