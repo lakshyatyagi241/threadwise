@@ -15,6 +15,15 @@ const booleanish = z
   .union([z.boolean(), z.enum(['true', 'false', '1', '0'])])
   .transform((v) => v === true || v === 'true' || v === '1');
 
+/**
+ * An optional URL. A compose file hands an unset variable over as an empty string (`${X:-}`), and that is "not set", not a malformed
+ * URL: without this, an unset optional endpoint stopped the API at startup with "Invalid url".
+ */
+const optionalUrl = z.preprocess(
+  (v) => (typeof v === 'string' && v.trim() === '' ? undefined : v),
+  z.string().url().optional(),
+);
+
 export const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
@@ -100,9 +109,9 @@ export const envSchema = z.object({
   // --- object storage ------------------------------------------------------
   /** Where chat media lives when the platform storage settings name no bucket: `local` (this container's disk) or `s3` (the S3_* bucket). */
   MEDIA_STORAGE_DRIVER: z.enum(['local', 's3']).default('local'),
-  S3_ENDPOINT: z.string().url().optional(),
+  S3_ENDPOINT: optionalUrl,
   /** The address outsiders (a browser, a WhatsApp provider) use to reach the bucket when `S3_ENDPOINT` is a private address; links are signed against it. */
-  S3_PUBLIC_ENDPOINT: z.string().url().optional(),
+  S3_PUBLIC_ENDPOINT: optionalUrl,
   S3_REGION: z.string().default('us-east-1'),
   S3_BUCKET_MEDIA: z.string().default('crm-media'),
   S3_BUCKET_DOCUMENTS: z.string().default('crm-documents'),
@@ -195,14 +204,14 @@ export const envSchema = z.object({
   S3_BUCKET_ARCHIVE: z.string().default('crm-archive'),
   FAQ_AI_DRIVER: z.enum(['openrouter', 'fixture']).optional(),
   /** Overrides OpenRouter's base URL for the FAQ engine (a gateway, a local stub). */
-  FAQ_OPENROUTER_BASE_URL: z.string().url().optional(),
+  FAQ_OPENROUTER_BASE_URL: optionalUrl,
   /**
    * AI lead scoring's AI vendor: `openrouter` (the default, with a key from the AI keys screens) or `fixture`, an offline stand-in for
    * tests and demos that needs no key or network. A production process that sets `fixture` does not boot.
    */
   LEAD_SCORING_AI_DRIVER: z.enum(['openrouter', 'fixture']).optional(),
   /** Overrides OpenRouter's base URL for lead scoring (a gateway, a local stub). */
-  LEAD_SCORING_OPENROUTER_BASE_URL: z.string().url().optional(),
+  LEAD_SCORING_OPENROUTER_BASE_URL: optionalUrl,
   EASEBUZZ_ENV: z.enum(['test', 'prod']).default('test'),
   EASEBUZZ_KEY: z.string().optional(),
   EASEBUZZ_SALT: z.string().optional(),
