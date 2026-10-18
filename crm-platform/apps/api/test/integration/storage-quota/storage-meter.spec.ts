@@ -39,6 +39,8 @@ describe('storage meter (observe mode) against Postgres', () => {
   let orgA: number;
   let orgB: number;
   let seq = 0;
+  /** Marks the workspaces of this run, so a developer's long-lived scratch database can set earlier runs aside. */
+  let runTag = '';
 
   const mode = {
     current: async () => 'observe' as const,
@@ -93,7 +95,8 @@ describe('storage meter (observe mode) against Postgres', () => {
     db = new DatabaseService(clients);
     repo = new StorageQuotaRepository();
     meter = new StorageMeterService(db, repo, mode);
-    const tag = Date.now().toString(36);
+    runTag = Date.now().toString(36);
+    const tag = runTag;
     const mk = async (slug: string) =>
       Number(
         (
@@ -604,6 +607,11 @@ describe('storage meter (observe mode) against Postgres', () => {
 
   describe('operator fleet view (read only)', () => {
     it('totals, categories, the biggest workspaces first, levels and drift; and one workspace panel is audited', async () => {
+      // a scratch database keeps earlier runs' workspaces; the top-20 list must only compete with this run's, so earlier ones are set aside
+      await owner.query(
+        `UPDATE organizations SET status = 'deleted', deleted_at = now() WHERE slug LIKE 'sq-%' AND slug NOT LIKE $1`,
+        [`%-${runTag}`],
+      );
       const mkOrg = async (tag: string) => {
         const r = await owner.query(
           `INSERT INTO organizations (slug, name) VALUES ($1, $2) RETURNING id, uuid`,
