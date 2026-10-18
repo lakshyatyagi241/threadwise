@@ -81,7 +81,7 @@ export function load(d) {
     const body = webhookBody();
     const sig = 'sha256=' + crypto.hmac('sha256', WEBHOOK_SECRET, body, 'hex');
     const r = http.post(`${BASE}/v2/public/webhooks/whatsapp`, body, { headers: { 'content-type': 'application/json', 'x-hub-signature-256': sig }, tags });
-    check(r, { accepted: (x) => x.status === 200 });
+    check(r, { accepted: (x) => x.status === 200 }, { canary: 'no' });
   } else if (SPIKE === 'socket') {
     const url = `${BASE.replace(/^http/, 'ws')}/socket.io/?EIO=4&transport=websocket`;
     const res = ws.connect(url, { tags }, (socket) => {
@@ -89,13 +89,13 @@ export function load(d) {
       socket.on('message', (m) => { if (m.startsWith('40/realtime')) { socket.setTimeout(() => socket.close(), 2000); } });
       socket.setTimeout(() => socket.close(), 8000);
     });
-    check(res, { upgraded: (x) => x && x.status === 101 });
+    check(res, { upgraded: (x) => x && x.status === 101 }, { canary: 'no' });
   } else {
     const all = probes(d.ids);
     const x = Math.random();
     const cls = x < BUDGETS.mix.A ? 'A' : x < BUDGETS.mix.A + BUDGETS.mix.B ? 'B' : 'C';
     const r = call(d.token, pick(all.filter((p) => p.class === cls)), tags);
-    check(r, { ok: (y) => y.status >= 200 && y.status < 300 });
+    check(r, { ok: (y) => y.status >= 200 && y.status < 300 }, { canary: 'no' });
   }
 }
 
