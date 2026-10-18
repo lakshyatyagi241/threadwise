@@ -379,6 +379,16 @@
         "label": "Reglas de asignación de registros",
         "description": "Asigna automáticamente los nuevos contactos, empresas y negocios a tus responsables de ventas, mediante reglas por prioridad.",
         "keywords": "asignar, responsable, round robin, rotación, nuevo contacto, nuevo negocio, empresa, licencia, enrutamiento de leads, carga de trabajo, territorio"
+      },
+      "follow-ups": {
+        "label": "Seguimientos",
+        "description": "Fija automáticamente el próximo seguimiento de un contacto cuando tu equipo se pone en contacto con él, y elige la fecha y la hora de alerta.",
+        "keywords": "seguimiento, recordatorio, próxima acción, tarea, programar, posponer, algún día"
+      },
+      "duplicate-leads": {
+        "label": "Leads duplicados",
+        "description": "Elige si un lead nuevo que coincide con un contacto se fusiona con él o se convierte en un contacto nuevo.",
+        "keywords": "duplicado, fusionar, lead, mismo teléfono, mismo correo, contacto nuevo, fuente de leads"
       }
     },
     "backToMarketplace": "Volver al Marketplace"

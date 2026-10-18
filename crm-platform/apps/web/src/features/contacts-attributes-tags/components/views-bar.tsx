@@ -45,6 +45,7 @@ export function ViewsBar({
   count,
   can,
   hasUncontacted = false,
+  hasFollowUp = false,
 }: {
   /** The filters on screen now (what "Create view" and "Save current filters" keep). */
   filters: ContactFilters;
@@ -66,6 +67,8 @@ export function ViewsBar({
   can: { create: boolean; update: boolean; delete: boolean };
   /** Some contact is marked uncontacted: only then is the "Uncontacted" view offered (it stays while it is the open view). */
   hasUncontacted?: boolean;
+  /** Some contact has an open follow-up: only then are the follow-up views offered (the open one stays). */
+  hasFollowUp?: boolean;
 }) {
   const t = useTranslations(NS);
   const router = useRouter();
@@ -84,9 +87,10 @@ export function ViewsBar({
     [activeId, filters, meId],
   );
   const showUncontacted = hasUncontacted || preset === 'uncontacted';
+  const showFollowUps = hasFollowUp || (preset !== null && preset.startsWith('followUp'));
   const quick = useMemo(
-    () => availablePresets(QUICK_PRESETS, scoringOn, showUncontacted),
-    [scoringOn, showUncontacted],
+    () => availablePresets(QUICK_PRESETS, scoringOn, showUncontacted, showFollowUps),
+    [scoringOn, showUncontacted, showFollowUps],
   );
   const [favRaw, setFavRaw] = useStoredValue(PRESET_FAVORITES_KEY);
   const favPresets = useMemo(() => parsePresetFavorites(favRaw), [favRaw]);
@@ -130,6 +134,7 @@ export function ViewsBar({
             activeId={activeId}
             preset={preset}
             showUncontacted={showUncontacted}
+            showFollowUps={showFollowUps}
             favPresets={favPresets}
             onToggleFavPreset={(p) => setFavRaw(togglePresetFavorite(favRaw, p))}
             canCreate={can.create}
@@ -323,6 +328,7 @@ function Picker({
   activeId,
   preset,
   showUncontacted,
+  showFollowUps,
   favPresets,
   onToggleFavPreset,
   canCreate,
@@ -336,6 +342,7 @@ function Picker({
   activeId: string;
   preset: PresetView | null;
   showUncontacted: boolean;
+  showFollowUps: boolean;
   favPresets: readonly PresetView[];
   onToggleFavPreset: (p: PresetView) => void;
   canCreate: boolean;
@@ -350,7 +357,7 @@ function Picker({
   const shown = pickerViews(views, q, 'all');
   const favorites = shown.filter((v) => v.isFavorite);
   const scoringOn = useLeadScoringEnabled();
-  const presets = availablePresets(PRESET_VIEWS, scoringOn, showUncontacted).filter(
+  const presets = availablePresets(PRESET_VIEWS, scoringOn, showUncontacted, showFollowUps).filter(
     (p) => q.trim() === '' || t(`presets.${p}`).toLowerCase().includes(q.trim().toLowerCase()),
   );
   const favPresetsShown = presets.filter((p) => favPresets.includes(p));

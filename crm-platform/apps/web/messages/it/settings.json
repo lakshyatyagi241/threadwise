@@ -379,6 +379,16 @@
         "label": "Regole di assegnazione dei record",
         "description": "Assegna automaticamente i nuovi contatti, le aziende e le trattative ai tuoi responsabili vendite, tramite regole di priorità.",
         "keywords": "assegnare, responsabile, round robin, nuovo contatto, nuova trattativa, azienda, congedo, instradamento lead, carico di lavoro, territorio"
+      },
+      "follow-ups": {
+        "label": "Ricontatti",
+        "description": "Imposta automaticamente il prossimo ricontatto di un contatto quando il tuo team lo contatta, e scegli data e orario di avviso.",
+        "keywords": "ricontatto, ricontatti, promemoria, prossima azione, attività, pianificazione, posticipa, prima o poi"
+      },
+      "duplicate-leads": {
+        "label": "Lead duplicati",
+        "description": "Scegli se un nuovo lead che corrisponde a un contatto viene unito a esso o diventa un nuovo contatto.",
+        "keywords": "duplicato, unire, lead, stesso telefono, stessa e-mail, nuovo contatto, fonte di lead"
       }
     },
     "backToMarketplace": "Torna al Marketplace"

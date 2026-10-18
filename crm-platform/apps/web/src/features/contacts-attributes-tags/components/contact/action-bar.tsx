@@ -10,7 +10,7 @@ import { useCanPickCompany } from '@/features/companies';
 import { usePersonaVisibility } from '@/features/persona';
 import { useCanLogCall } from '../../api/call-log';
 import type { ContactTouchChannel } from '@crm/contracts';
-import { reportContactTouch, setUncontacted } from '../../api/lead-handling';
+import { clearFollowUp, reportContactTouch, setUncontacted } from '../../api/lead-handling';
 import { deleteContact, invalidateContacts } from '../../api/contacts';
 import { useChannels, openConversation } from '../../api/single-send';
 import type { ContactRow } from '../../api/schemas';
@@ -28,6 +28,7 @@ import {
   ChatIcon,
   CheckIcon,
   ChevronDownIcon,
+  ClockIcon,
   HistoryIcon,
   MailIcon,
   MoreIcon,
@@ -41,6 +42,7 @@ import { SingleSendDrawer, type SingleSendTarget } from '../single-send-drawer';
 import { notifyCallClick, rememberPhoneClick } from './call-nudge';
 import { FieldHistoryDrawer } from './field-history';
 import { ContactPrivacyMenuItems, useContactLegalHold } from '@/features/privacy-requests';
+import { FollowUpDialog } from '../lead-handling/next-follow-up';
 
 const button =
   'inline-flex h-9 items-center gap-1.5 whitespace-nowrap border border-border bg-background px-2.5 text-[13px] font-medium outline-none transition hover:bg-muted focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50';
@@ -115,6 +117,7 @@ export function ContactActionBar({
   const legalHold = useContactLegalHold(contact.id);
   const ts = useTranslations('contacts-attributes-tags.singleSend');
   const tu = useTranslations('contacts-attributes-tags.leadHandling.uncontacted');
+  const tfu = useTranslations('contacts-attributes-tags.leadHandling.followUp');
   const { toast } = useToast();
   const canUpdate = useCan('record.contacts.update');
   const canDelete = useCan('record.contacts.delete');
@@ -137,6 +140,7 @@ export function ContactActionBar({
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [history, setHistory] = useState(false);
+  const [followUpOpen, setFollowUpOpen] = useState(false);
   const [keepHistory, setKeepHistory] = useState(false);
   const [target, setTarget] = useState<SingleSendTarget | null>(null);
 
@@ -168,6 +172,15 @@ export function ContactActionBar({
       toast(r.uncontacted ? tu('markedUncontacted') : tu('markedContacted'), 'success');
     },
     onError: () => toast(tu('markFailed'), 'danger'),
+  });
+
+  const removeFollowUp = useMutation({
+    mutationFn: () => clearFollowUp(contact.id),
+    onSuccess: async () => {
+      await invalidateContacts(qc);
+      toast(tfu('clearedMessage'), 'success');
+    },
+    onError: () => toast(tfu('failed'), 'danger'),
   });
 
   const remove = useMutation({
@@ -291,6 +304,16 @@ export function ContactActionBar({
           <CheckIcon /> {contact.uncontactedSince ? tu('markContacted') : tu('markUncontacted')}
         </MenuItem>
       )}
+      {canUpdate && (
+        <MenuItem onSelect={() => setFollowUpOpen(true)}>
+          <ClockIcon /> {contact.nextFollowUp ? tfu('edit') : tfu('set')}
+        </MenuItem>
+      )}
+      {canUpdate && contact.nextFollowUp && (
+        <MenuItem onSelect={() => removeFollowUp.mutate()}>
+          <ClockIcon /> {tfu('remove')}
+        </MenuItem>
+      )}
       <MenuItem onSelect={() => setHistory(true)}>
         <HistoryIcon /> {tr('fieldHistory')}
       </MenuItem>
@@ -307,6 +330,14 @@ export function ContactActionBar({
   const overlays = (
     <>
       <ContactFormModal open={editing} contact={contact} onClose={() => setEditing(false)} />
+      {followUpOpen && (
+        <FollowUpDialog
+          contactId={contact.id}
+          current={contact.nextFollowUp}
+          open
+          onClose={() => setFollowUpOpen(false)}
+        />
+      )}
       <FieldHistoryDrawer open={history} onClose={() => setHistory(false)} contactId={contact.id} />
       <SingleSendDrawer target={target} onClose={() => setTarget(null)} />
       {legalHold.dialogs}

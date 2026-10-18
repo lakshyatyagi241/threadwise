@@ -1,4 +1,4 @@
-import { CONTACT_SORT_FIELDS } from '@crm/contracts';
+import { CONTACT_SORT_FIELDS, FOLLOW_UP_FILTERS, type FollowUpFilter } from '@crm/contracts';
 import {
   DEFAULT_FILTERS,
   ownerTokens,
@@ -42,6 +42,11 @@ function cleanKey(v: string | null): string {
 }
 
 /** A free-text filter value (a source): trimmed and cut to the API's 128 characters. */
+/** A follow-up state of the list filter, or empty for anything else a hand-edited link may carry. */
+function cleanFollowUp(v: string | null): '' | FollowUpFilter {
+  return (FOLLOW_UP_FILTERS as readonly string[]).includes(v ?? '') ? (v as FollowUpFilter) : '';
+}
+
 function cleanText(v: string | null): string {
   return (v ?? '').trim().slice(0, 128);
 }
@@ -82,6 +87,7 @@ export function parseFilters(
       params.get('minor') === 'yes' || params.get('minor') === 'no'
         ? (params.get('minor') as 'yes' | 'no')
         : '',
+    followUp: cleanFollowUp(params.get('followUp')),
     source: cleanText(params.get('source')),
     segment: cleanId(params.get('segment'), false),
     owner: ownerTokens(params.get('owner') ?? '').join(','),
@@ -107,6 +113,7 @@ export function filtersToSearch(
   if (f.imported) p.set('imported', '1');
   if (f.status) p.set('status', f.status);
   if (f.minor) p.set('minor', f.minor);
+  if (f.followUp) p.set('followUp', f.followUp);
   if (f.source.trim()) p.set('source', f.source.trim());
   if (f.segment) p.set('segment', f.segment);
   if (f.owner) p.set('owner', f.owner);
@@ -130,6 +137,7 @@ export function hasActiveFilter(f: ContactFilters): boolean {
     f.imported ||
     f.status ||
     f.minor ||
+    f.followUp ||
     f.source.trim() ||
     f.segment ||
     f.owner ||

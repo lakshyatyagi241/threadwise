@@ -2,7 +2,10 @@
   "contacts-attributes-tags": {
     "views": {
       "presets": {
-        "uncontacted": "Chưa liên hệ"
+        "uncontacted": "Chưa liên hệ",
+        "followUpToday": "Theo dõi hôm nay",
+        "followUpOverdue": "Theo dõi quá hạn",
+        "followUpSomeday": "Theo dõi để sau"
       }
     },
     "leadHandling": {
@@ -58,8 +61,94 @@
             "keep": "Không thay đổi dấu Chưa liên hệ",
             "mark": "Đánh dấu chưa liên hệ khi được giao lại"
           }
+        },
+        "followUps": {
+          "title": "Theo dõi",
+          "subtitle": "Giữ mọi khách hàng tiềm năng luôn tiến triển: khi thành viên trong nhóm liên hệ với một người, lần theo dõi tiếp theo của họ có thể được đặt hoặc dời tự động. Sẽ không có gì thay đổi cho đến khi bạn bật một tùy chọn.",
+          "when": {
+            "title": "Tự động đặt lịch theo dõi",
+            "intro": "Mỗi khi thành viên trong nhóm liên hệ với một người hoặc gửi nội dung cho họ, hãy cập nhật lịch theo dõi của người đó nếu:",
+            "none": "Liên hệ chưa có lịch theo dõi",
+            "overdue": "Lịch theo dõi đã quá hạn",
+            "today": "Lịch theo dõi đến hạn hôm nay",
+            "future": "Lịch theo dõi đến hạn sau hôm nay"
+          },
+          "date": {
+            "title": "Ngày theo dõi mặc định",
+            "intro": "Khi lịch theo dõi được cập nhật tự động, đặt thành:",
+            "day": "1 ngày sau",
+            "three_days": "3 ngày sau",
+            "week": "1 tuần sau",
+            "month": "1 tháng sau",
+            "custom": "Tùy chỉnh",
+            "someday": "Để sau",
+            "none": "Không theo dõi",
+            "somedayHint": "Lịch theo dõi không có ngày và nằm trong danh sách Để sau. Sẽ không bao giờ có nhắc nhở.",
+            "noneHint": "Lịch theo dõi đang mở được đánh dấu hoàn tất và không tạo lịch mới.",
+            "customDays": "Số ngày",
+            "daysLater": "ngày sau"
+          },
+          "time": {
+            "title": "Giờ theo dõi mặc định",
+            "intro": "Mỗi khi tạo lịch theo dõi mới, đặt giờ nhắc thành:",
+            "hint": "Tính theo múi giờ của không gian làm việc."
+          }
+        },
+        "duplicates": {
+          "title": "Khách hàng tiềm năng trùng lặp",
+          "subtitle": "Chọn điều xảy ra khi khách hàng tiềm năng mới từ một nguồn có cùng số điện thoại hoặc e-mail với một liên hệ bạn đã có.",
+          "mode": {
+            "title": "Khi khách hàng tiềm năng mới khớp với một liên hệ",
+            "intro": "Khách hàng tiềm năng khớp khi số điện thoại hoặc e-mail của họ đã thuộc về một liên hệ.",
+            "merge": "Gộp vào liên hệ hiện có",
+            "mergeHint": "Điền các trường còn trống của liên hệ và thêm khách hàng tiềm năng vào lịch sử. Không bao giờ ghi đè nội dung đã có.",
+            "createNew": "Tạo liên hệ mới",
+            "createNewHint": "Tạo một liên hệ riêng cho khách hàng tiềm năng. Liên hệ này được tính vào giới hạn liên hệ của gói và có thể gộp sau."
+          },
+          "note": {
+            "title": "Dòng thời gian",
+            "merge": "Thêm ghi chú vào dòng thời gian khi gộp khách hàng tiềm năng",
+            "hint": "Tắt theo mặc định, vì ghi chú cũng làm dịch chuyển hoạt động gần nhất của liên hệ."
+          }
+        }
+      },
+      "followUp": {
+        "title": "Theo dõi tiếp theo",
+        "somedayLabel": "Để sau",
+        "overdue": "Quá hạn",
+        "done": "Hoàn tất",
+        "snooze": "Báo lại sau",
+        "snoozeDay": "1 ngày",
+        "snoozeThreeDays": "3 ngày",
+        "snoozeWeek": "Tuần sau",
+        "change": "Đổi ngày",
+        "set": "Đặt lịch theo dõi",
+        "edit": "Sửa lịch theo dõi",
+        "remove": "Xóa lịch theo dõi",
+        "dialogTitle": "Theo dõi",
+        "someday": "Để sau (không có ngày)",
+        "dateTime": "Ngày và giờ",
+        "cancel": "Hủy",
+        "save": "Lưu",
+        "savedFor": "Đã lưu lịch theo dõi",
+        "savedSomeday": "Đã đặt lịch theo dõi ở chế độ để sau",
+        "snoozed": "Đã dời lịch theo dõi",
+        "doneMessage": "Đã đánh dấu lịch theo dõi là hoàn tất",
+        "clearedMessage": "Đã xóa lịch theo dõi",
+        "failed": "Không thể thay đổi lịch theo dõi. Vui lòng thử lại.",
+        "filterLabel": "Theo dõi",
+        "filter": {
+          "any": "Tất cả",
+          "overdue": "Quá hạn",
+          "today": "Đến hạn hôm nay",
+          "upcoming": "Sắp tới",
+          "someday": "Để sau",
+          "none": "Không theo dõi"
         }
       }
+    },
+    "list": {
+      "colNextFollowUp": "Theo dõi tiếp theo"
     }
   }
 }

@@ -379,6 +379,16 @@
         "label": "Règles d'attribution des enregistrements",
         "description": "Attribuez automatiquement les nouveaux contacts, entreprises et affaires à vos responsables commerciaux, selon des règles de priorité.",
         "keywords": "attribuer, responsable, tourniquet, round robin, nouveau contact, nouvelle affaire, entreprise, congé, routage des leads, charge de travail, territoire"
+      },
+      "follow-ups": {
+        "label": "Relances",
+        "description": "Définissez automatiquement la prochaine relance d'un contact quand votre équipe le contacte, puis choisissez la date et l'heure de l'alerte.",
+        "keywords": "relance, rappel, prochaine action, tâche, planification, reporter, un jour"
+      },
+      "duplicate-leads": {
+        "label": "Leads en double",
+        "description": "Choisissez si un nouveau lead qui correspond à un contact est fusionné avec lui ou devient un nouveau contact.",
+        "keywords": "doublon, fusionner, lead, même téléphone, même e-mail, nouveau contact, source de leads"
       }
     },
     "backToMarketplace": "Retour au Marketplace"

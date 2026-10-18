@@ -379,6 +379,16 @@
         "label": "Quy tắc phân công bản ghi",
         "description": "Tự động giao liên hệ, công ty và giao dịch mới cho người phụ trách bán hàng của bạn theo các quy tắc ưu tiên.",
         "keywords": "phân công, người phụ trách, xoay vòng, liên hệ mới, giao dịch mới, công ty, nghỉ phép, điều phối khách hàng tiềm năng, khối lượng công việc, khu vực"
+      },
+      "follow-ups": {
+        "label": "Theo dõi",
+        "description": "Tự động đặt lịch theo dõi tiếp theo của liên hệ khi nhóm bạn liên hệ với họ, đồng thời chọn ngày và giờ nhắc.",
+        "keywords": "theo dõi, nhắc nhở, hành động tiếp theo, công việc, lịch hẹn, báo lại sau, để sau"
+      },
+      "duplicate-leads": {
+        "label": "Khách hàng tiềm năng trùng lặp",
+        "description": "Chọn việc khách hàng tiềm năng mới khớp với một liên hệ sẽ được gộp vào đó hay trở thành liên hệ mới.",
+        "keywords": "trùng lặp, gộp, khách hàng tiềm năng, cùng số điện thoại, cùng e-mail, liên hệ mới, nguồn"
       }
     },
     "backToMarketplace": "Quay lại Marketplace"

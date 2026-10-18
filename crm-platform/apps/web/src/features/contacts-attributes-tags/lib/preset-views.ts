@@ -11,6 +11,9 @@ export const PRESET_VIEWS = [
   'myContacts',
   'unassigned',
   'uncontacted',
+  'followUpToday',
+  'followUpOverdue',
+  'followUpSomeday',
   'hotLeads',
   'newThisWeek',
   'newLastWeek',
@@ -39,18 +42,31 @@ export const QUICK_PRESETS = [
 /** The built-in views that filter by the lead score: they are offered only while lead scoring is on for the workspace. */
 const SCORE_PRESETS: readonly PresetView[] = ['hotLeads'];
 
+/** The built-in views of the contact's next follow-up (BL-291): offered once some contact has an open follow-up. */
+const FOLLOW_UP_PRESETS: readonly PresetView[] = [
+  'followUpToday',
+  'followUpOverdue',
+  'followUpSomeday',
+];
+
 /**
  * `presets` without the ones that do not apply: "Hot leads" needs lead scoring (off: it filters by a score nobody sees), and
  * "Uncontacted" is offered only once some contact carries the marker (BL-290), so a workspace that never uses the feature sees no new
- * chip. `uncontacted` defaults to true for callers that do not know.
+
+ * chip, and the follow-up views are offered only once a contact has a follow-up. `uncontacted` and `followUps` default to true for
+ * callers that do not know.
  */
 export function availablePresets<T extends PresetView>(
   presets: readonly T[],
   scoringOn: boolean,
   uncontacted = true,
+  followUps = true,
 ): T[] {
   return presets.filter(
-    (p) => (scoringOn || !SCORE_PRESETS.includes(p)) && (uncontacted || p !== 'uncontacted'),
+    (p) =>
+      (scoringOn || !SCORE_PRESETS.includes(p)) &&
+      (uncontacted || p !== 'uncontacted') &&
+      (followUps || !FOLLOW_UP_PRESETS.includes(p)),
   );
 }
 
@@ -94,6 +110,12 @@ export function presetFilters(preset: PresetView, meId: string): Partial<Contact
       return { owner: UNASSIGNED_OWNER };
     case 'uncontacted':
       return { rules: rulesOf({ field: 'uncontacted', operator: 'is_true' }) };
+    case 'followUpToday':
+      return { followUp: 'today' };
+    case 'followUpOverdue':
+      return { followUp: 'overdue' };
+    case 'followUpSomeday':
+      return { followUp: 'someday' };
     case 'hotLeads':
       // A lead score in the "hot" band of the score badge (67 and up).
       return { rules: rulesOf({ field: 'leadScore', operator: 'gte', value: HOT_FROM }) };

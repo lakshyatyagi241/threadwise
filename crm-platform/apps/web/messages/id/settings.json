@@ -379,6 +379,16 @@
         "label": "Aturan penugasan data",
         "description": "Berikan kontak, perusahaan, dan transaksi baru ke pemilik penjualan Anda secara otomatis, berdasarkan aturan prioritas.",
         "keywords": "tugaskan, pemilik, round robin, kontak baru, transaksi baru, perusahaan, cuti, perutean prospek, beban kerja, wilayah"
+      },
+      "follow-ups": {
+        "label": "Tindak lanjut",
+        "description": "Atur tindak lanjut berikutnya untuk kontak secara otomatis saat tim Anda menghubunginya, lalu pilih tanggal dan waktu pengingat.",
+        "keywords": "tindak lanjut, pengingat, tindakan berikutnya, tugas, jadwal, tunda, suatu saat nanti"
+      },
+      "duplicate-leads": {
+        "label": "Lead duplikat",
+        "description": "Pilih apakah lead baru yang cocok dengan kontak digabungkan ke kontak itu atau menjadi kontak baru.",
+        "keywords": "duplikat, gabung, lead, telepon sama, e-mail sama, kontak baru, sumber lead"
       }
     },
     "backToMarketplace": "Kembali ke Marketplace"

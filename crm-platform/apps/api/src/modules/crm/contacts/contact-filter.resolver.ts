@@ -2,6 +2,7 @@ import { and, eq, inArray, sql } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 import type { ContactFilter } from '@crm/contracts';
 import type { InvalidCondition } from '@crm/contracts';
+import { resolveTimezone } from '../../../common/workspace-calendar';
 import { compileAdHocRules, loadSegmentFilter } from '../segments/segment-filter';
 import type { ResolvedContactFilter } from './contact-conditions';
 
@@ -58,6 +59,16 @@ export async function resolveContactFilter(
     uuids: extra.uuids,
     excludeUuids: extra.excludeUuids,
   };
+
+  if (input.followUp) {
+    const org = await tx.execute(
+      sql`SELECT settings ->> 'timezone' AS tz FROM organizations WHERE id = ${orgId}`,
+    );
+    resolved.followUp = {
+      state: input.followUp,
+      timeZone: resolveTimezone((org.rows[0] as { tz: string | null } | undefined)?.tz),
+    };
+  }
 
   if (input.ownerId) {
     const rows = await tx
