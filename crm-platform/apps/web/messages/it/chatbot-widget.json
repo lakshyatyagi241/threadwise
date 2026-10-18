@@ -325,7 +325,8 @@
           "url": "Oppure usa l'indirizzo di una tua immagine",
           "urlHint": "Incolla l'indirizzo di un'immagine quadrata (https://...). Il caricamento di un file non è ancora disponibile.",
           "botName": "Nome del bot",
-          "botNameHint": "Compare nell'intestazione della finestra di chat. Lascia vuoto per usare il nome del tuo bot."
+          "botNameHint": "Compare nell'intestazione della finestra di chat. Lascia vuoto per usare il nome del tuo bot.",
+          "urlHintUpload": "Incolla l'indirizzo di un'immagine quadrata (https://...) oppure carica un file qui sotto."
         },
         "3": {
           "title": "Imposta il messaggio di benvenuto",
@@ -699,7 +700,9 @@
         "statusLive": "Attivo",
         "statusDraft": "Non pubblicato",
         "codeLabel": "HTML",
-        "localNote": "Questo codice punta a un indirizzo su questo computer (localhost), quindi funziona solo nelle pagine aperte qui. Su un sito reale usa il tuo indirizzo di produzione."
+        "localNote": "Questo codice punta a un indirizzo su questo computer (localhost), quindi funziona solo nelle pagine aperte qui. Su un sito reale usa il tuo indirizzo di produzione.",
+        "statusNoNumber": "Pubblicato, senza numero",
+        "noNumber": "Questo bot è pubblicato, ma non ha ancora un numero WhatsApp, quindi il pulsante, il codice QR e il link diretto restano nascosti. Scegli un numero nel Trigger, nella scheda Crea."
       },
       "whatsapp": {
         "loading": "Caricamento del pulsante…",
@@ -708,7 +711,8 @@
         "saved": "Pulsante WhatsApp salvato",
         "saveFailed": "Impossibile salvare il pulsante. Riprova.",
         "fromBot": "Il pulsante apre WhatsApp al numero {number}, quello su cui è attivo questo bot. Cambia il numero nel Trigger, nella scheda Crea.",
-        "noNumber": "Questo bot non ha ancora un numero WhatsApp. Sceglilo nel trigger, nella scheda Crea, poi torna a salvare il pulsante."
+        "noNumber": "Questo bot non ha ancora un numero WhatsApp. Sceglilo nel trigger, nella scheda Crea, poi torna a salvare il pulsante.",
+        "keywordMissing": "Il messaggio qui sopra non contiene la parola di avvio del tuo bot \"{keyword}\". Se il bot parte solo con quella parola, i visitatori che toccano il pulsante non lo raggiungeranno."
       }
     },
     "webBots": {

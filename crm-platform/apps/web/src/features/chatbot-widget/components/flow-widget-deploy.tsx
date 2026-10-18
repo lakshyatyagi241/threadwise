@@ -156,6 +156,8 @@ export function FlowWidgetDeploy({
     }
   };
   const snippet = snippetFor(widget.embedUrl);
+  // published says the bot is switched on; ready says a customer can actually reach it (a WhatsApp button needs a number to open)
+  const needsNumber = channel === 'chat' && link === null;
   return (
     <div className="w-full space-y-5 p-4 sm:p-6 lg:px-10 lg:py-8">
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -168,11 +170,11 @@ export function FlowWidgetDeploy({
         <span
           data-testid="deploy-status"
           className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12px] font-semibold ${
-            published ? 'bg-success/15 text-success' : 'bg-warning/15 text-warning'
+            published && !needsNumber ? 'bg-success/15 text-success' : 'bg-warning/15 text-warning'
           }`}
         >
           <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-current" />
-          {t(published ? 'statusLive' : 'statusDraft')}
+          {t(published ? (needsNumber ? 'statusNoNumber' : 'statusLive') : 'statusDraft')}
         </span>
       </div>
       {published ? null : (
@@ -183,6 +185,15 @@ export function FlowWidgetDeploy({
           {t(channel === 'chat' ? 'notPublishedWhatsapp' : 'notPublished')}
         </p>
       )}
+      {published && needsNumber ? (
+        <p
+          role="status"
+          data-testid="deploy-no-number"
+          className="rounded-xl border border-warning/40 bg-warning/10 p-3 text-[12.5px]"
+        >
+          {t('noNumber')}
+        </p>
+      ) : null}
       {isLocalAddress(widget.embedUrl) ? (
         <p
           role="note"

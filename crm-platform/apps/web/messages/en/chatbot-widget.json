@@ -384,7 +384,9 @@
         "statusLive": "Live",
         "statusDraft": "Not published",
         "codeLabel": "HTML",
-        "localNote": "This code points to an address on this computer (localhost), so it only works on pages opened here. On a live website, use your deployed address instead."
+        "localNote": "This code points to an address on this computer (localhost), so it only works on pages opened here. On a live website, use your deployed address instead.",
+        "statusNoNumber": "Published, no number",
+        "noNumber": "This bot is published, but it has no WhatsApp number yet, so the button, the QR code and the direct link stay hidden. Choose a number on the Trigger in the Build tab."
       },
       "whatsapp": {
         "loading": "Loading the button…",
@@ -393,7 +395,8 @@
         "saved": "WhatsApp button saved",
         "saveFailed": "Could not save the button. Try again.",
         "fromBot": "The button opens WhatsApp on {number}, the number this bot runs on. Change the number on the Trigger in the Build tab.",
-        "noNumber": "This bot has no WhatsApp number yet. Choose one on the Trigger in the Build tab, then come back to save the button."
+        "noNumber": "This bot has no WhatsApp number yet. Choose one on the Trigger in the Build tab, then come back to save the button.",
+        "keywordMissing": "The message above does not contain your bot's start word \"{keyword}\". If the bot only starts on that word, visitors who tap the button will not reach it."
       }
     },
     "builder": {
@@ -622,7 +625,8 @@
           "url": "Or use your own image address",
           "urlHint": "Paste the address of a square image (https://...). Uploading a file is not available yet.",
           "botName": "Bot name",
-          "botNameHint": "Shown in the header of the chat window. Leave it empty to use your bot's name."
+          "botNameHint": "Shown in the header of the chat window. Leave it empty to use your bot's name.",
+          "urlHintUpload": "Paste the address of a square image (https://...), or upload a file below."
         },
         "3": {
           "title": "Set your welcome message",
