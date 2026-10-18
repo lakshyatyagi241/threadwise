@@ -94,7 +94,13 @@
             "endInvalid": "올바른 종료 날짜와 시간을 입력하세요.",
             "endBeforeStart": "종료 시간은 시작 시간보다 빠를 수 없습니다."
           }
-        }
+        },
+        "bookedOnline": "온라인 예약",
+        "viewBooking": "예약 보기",
+        "manageBooking": "예약 관리",
+        "viewBookingAria": "{title} 예약 보기",
+        "manageBookingAria": "{title} 예약 관리",
+        "bookedReadOnly": "온라인으로 예약되었습니다. 예약에서만 변경할 수 있습니다."
       },
       "files": {
         "title": "파일",

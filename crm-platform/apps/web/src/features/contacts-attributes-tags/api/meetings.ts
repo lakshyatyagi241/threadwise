@@ -16,13 +16,18 @@ export const MEETING_KEYS = {
   activities: (contactId: string) => ['cat', 'activities', contactId] as const,
 };
 
-/** A contact's logged meetings, in the order the API returns them, fifty at a time. */
+/**
+ * A contact's meetings (typed in, and the mirror of each booking), latest start first, fifty at a time. `when: 'all'` asks the API to
+ * order by start, so a meeting still to come is on the first page however many past ones there are.
+ */
+export const MEETING_QUERY = { when: 'all' } as const;
+
 export function useContactMeetings(contactId: string, enabled = true) {
   return useCursorList(
     MEETING_KEYS.list(contactId),
     `/contacts/${contactId}/meetings`,
     contactMeetingResponseSchema,
-    {},
+    MEETING_QUERY,
     { enabled },
   );
 }
@@ -84,6 +89,11 @@ export function addPendingMeeting(
     rowVersion: 1,
     createdAt: now,
     updatedAt: now,
+    source: 'manual',
+    appointmentId: null,
+    status: null,
+    joinUrl: null,
+    canManageBooking: false,
   };
   const before = qc.getQueriesData<MeetingPages>({ queryKey: MEETING_KEYS.list(contactId) });
   for (const [key, data] of before) {

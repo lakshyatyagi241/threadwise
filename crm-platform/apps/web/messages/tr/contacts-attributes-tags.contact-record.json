@@ -196,7 +196,9 @@
           },
           "meeting": {
             "upcoming": "Toplantı: {title}",
-            "past": "Görüşüldü: {title}"
+            "past": "Görüşüldü: {title}",
+            "notHeld": "Yapılmadı: {title}",
+            "noShow": "Gelmedi: {title}"
           },
           "call": {
             "inbound": "Gelen arama",

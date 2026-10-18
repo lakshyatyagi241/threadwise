@@ -196,7 +196,9 @@
           },
           "meeting": {
             "upcoming": "ミーティング：{title}",
-            "past": "面談済み：{title}"
+            "past": "面談済み：{title}",
+            "notHeld": "実施されず：{title}",
+            "noShow": "無断欠席：{title}"
           },
           "call": {
             "inbound": "着信",

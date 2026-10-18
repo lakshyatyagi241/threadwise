@@ -196,7 +196,9 @@
           },
           "meeting": {
             "upcoming": "Cuộc họp: {title}",
-            "past": "Đã gặp: {title}"
+            "past": "Đã gặp: {title}",
+            "notHeld": "Không diễn ra: {title}",
+            "noShow": "Vắng mặt: {title}"
           },
           "call": {
             "inbound": "Cuộc gọi đến",

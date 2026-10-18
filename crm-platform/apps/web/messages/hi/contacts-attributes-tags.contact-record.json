@@ -196,7 +196,9 @@
           },
           "meeting": {
             "upcoming": "मीटिंग: {title}",
-            "past": "मुलाकात हुई: {title}"
+            "past": "मुलाकात हुई: {title}",
+            "notHeld": "नहीं हुई: {title}",
+            "noShow": "नहीं आए: {title}"
           },
           "call": {
             "inbound": "आने वाली कॉल",
