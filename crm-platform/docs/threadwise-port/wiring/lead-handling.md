@@ -63,3 +63,16 @@ conversation message sent by a bot that is not a flow, campaign or broadcast (fi
 | WIRE-LH-036 | Settings screen `/follow-ups` (tile `follow-ups`, section Automation, gate `admin.settings.manage`, shortcut from `/contacts`); help guide `follow-ups`                                                                     |
 
 Not wired (recorded): the follow-up filter is not a segment field, so "Save as segment" does not carry it (BL-294); a follow-up for a deal or a company; per-user defaults (BL-293); skipping closed days with the business hours.
+
+## Step 3: duplicate leads (BL-292)
+
+| Id          | What                                                                                                                                                                                                     |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WIRE-LH-040 | `lead_followup_settings` section `duplicates`: `mode` (`merge` default, `create_new`), `noteOnMerge`; reader `LeadHandlingSettingsService.duplicatesIn`, writer `PUT /lead-handling/settings/duplicates` |
+| WIRE-LH-041 | `LeadIngestService.resolveContact`: a match with `mode = create_new` (and not a test lead) goes to `createSeparate`, which calls `ContactsService.resolveOrCreateByIdentity({ duplicateOf })`            |
+| WIRE-LH-042 | `resolveOrCreateByIdentity` with `duplicateOf`: skips the identity and stored-number lookups, creates the contact, and adds the identity only when nobody holds it (the original does)                   |
+| WIRE-LH-043 | `LeadIngestService.leaveTimelineNote`: `lead_duplicate` on a separate contact, `lead_merged` on a merge when `noteOnMerge`; both `source = system`, written through `ContactActivitiesRepository`        |
+| WIRE-LH-044 | `fillContact(.., separate)`: a separate contact's phone or e-mail that another contact holds is not a conflict (no "needs review")                                                                       |
+| WIRE-LH-045 | Settings screen `/duplicate-leads` (tile `duplicate-leads`, section Automation, gate `admin.settings.manage`, shortcut from `/contacts`); help guide `duplicate-leads`                                   |
+
+Not wired (recorded): a per-lead-source rule; lead-form submissions and other creation paths that already match by identity (they merge as before); moving the identity to the newest contact.
