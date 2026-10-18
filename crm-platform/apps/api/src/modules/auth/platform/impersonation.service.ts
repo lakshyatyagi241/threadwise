@@ -209,10 +209,11 @@ export class ImpersonationService {
     settings: Record<string, unknown>,
   ): Promise<{ id: number; uuid: string; status: string }> {
     const named = typeof settings.ownerUserId === 'string' ? settings.ownerUserId : null;
+    // The named owner counts only while active: a migrated or since-disabled owner must not hide the admin-role holder below.
     let owner = named
       ? await this.one<{ id: number; uuid: string; status: string }>(
           tx,
-          sql`SELECT id, uuid, status FROM users WHERE org_id = ${orgId} AND uuid::text = ${named}`,
+          sql`SELECT id, uuid, status FROM users WHERE org_id = ${orgId} AND uuid::text = ${named} AND status = 'active'`,
         )
       : null;
     if (!owner) {
@@ -226,7 +227,7 @@ export class ImpersonationService {
           ORDER BY u.id LIMIT 1`,
       );
     }
-    if (!owner || owner.status !== 'active') {
+    if (!owner) {
       throw new AppError(
         ERROR_CODES.WSP_IMPERSONATION_NO_OWNER,
         'This workspace has no active owner to act as.',
