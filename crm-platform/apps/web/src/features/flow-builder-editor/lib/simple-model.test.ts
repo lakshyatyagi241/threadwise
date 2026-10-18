@@ -116,11 +116,11 @@ describe('graph to simple', () => {
     const noTrigger = toSimple(graph([node('a', 'message')], []));
     expect(noTrigger.ok).toBe(false);
     const canvasOnly = toSimple(
-      graph([node('t', 'trigger'), node('w', 'webhook')], [edge('t', 'out', 'w')]),
+      graph([node('t', 'trigger'), node('w', 'tag')], [edge('t', 'out', 'w')]),
     );
     expect(canvasOnly).toEqual({
       ok: false,
-      reasons: [msg('simpleModel.reasons.unsupportedStep', { node: nodeLabelMsg('webhook') })],
+      reasons: [msg('simpleModel.reasons.unsupportedStep', { node: nodeLabelMsg('tag') })],
     });
     const merge = toSimple(
       graph(
