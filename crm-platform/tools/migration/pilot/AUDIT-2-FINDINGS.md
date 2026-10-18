@@ -38,3 +38,6 @@ or the app answers 404 for the copied keys. Rows already copied to S3 under `cha
 `copy-files` now also finds Waboo-host links inside `flows.flow_data` (media steps), copies each file to `flow-media/<org id>/waboo/<hash>/<name>` in `S3_BUCKET_MEDIA` (R2) and rewrites the step to
 `<flowMediaPublicBase>/<object key>`. A flow sends its media by link, so the config needs `"flowMediaPublicBase": "https://<public origin of the R2 bucket>"` (custom domain or r2.dev); `copy --apply` refuses without it.
 `verify` lists flow links still on a Waboo host (so you can see when nothing points at S3) and HEADs the rewritten R2 objects. Not covered still: template header media, broadcast / FAQ / knowledge attachments.
+
+### Content-less customer turns
+A customer turn with a typed query object but no text, file or reply payload (the 2 EMPTY_MESSAGE rows of the demo workspace) is now imported as an inbound placeholder "(message content not available)" with `meta.legacy.contentUnavailable = true` and a CONTENT_UNAVAILABLE soft issue; the independent check in `reconcile/oracle-chat.ts` follows the same rule. Re-run the chat step (append) to pick up already-quarantined turns; find the placeholders with `meta->'legacy'->>'contentUnavailable' = 'true'`.

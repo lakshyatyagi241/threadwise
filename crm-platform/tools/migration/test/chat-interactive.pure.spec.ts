@@ -219,3 +219,15 @@ describe('a customer tapping a button or list row is not an empty message', () =
     expect(b.kind).toBe('interactive');
   });
 });
+
+describe('a customer turn with no content', () => {
+  it('is kept as a placeholder, flagged, with a soft issue; a bare empty user_query stays empty', () => {
+    const t = parseTurn({ user_query_object: { type: 'text', value: '' } });
+    expect(t.empty).toBe(false);
+    expect(t.direction).toBe('in');
+    expect(t.body).toBe('(message content not available)');
+    expect(t.legacy.contentUnavailable).toBe(true);
+    expect(t.soft.map((x) => x.code)).toContain('CONTENT_UNAVAILABLE');
+    expect(parseTurn({ user_query: '' }).empty).toBe(true);
+  });
+});

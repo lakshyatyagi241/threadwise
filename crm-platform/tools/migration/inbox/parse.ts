@@ -35,6 +35,9 @@ export interface ParsedTurn {
   empty: boolean;
 }
 
+/** Body of a customer turn whose content is missing in the Waboo dump. */
+export const CONTENT_UNAVAILABLE = '(message content not available)';
+
 export const obj = (v: unknown): Doc | null =>
   v !== null &&
   typeof v === 'object' &&
@@ -481,8 +484,20 @@ export function parseTurn(doc: Doc): ParsedTurn {
       if (kind === 'text') kind = kindOfUrl(mediaUrl);
     }
   }
-  const empty =
+  let empty =
     (body === null || body.trim() === '') && mediaUrl === null && senderKind !== 'system';
+  // A customer turn that Waboo recorded (typed query object, time, phone) but without any text, file or reply payload: the customer did
+  // write, only the content is gone. Kept as a placeholder so the thread and its inbound count match the old inbox; the flag lets a
+  // later repair find these rows.
+  if (empty && uqo && Object.keys(uqo).length > 0) {
+    body = CONTENT_UNAVAILABLE;
+    legacy.contentUnavailable = true;
+    soft.push({
+      code: 'CONTENT_UNAVAILABLE',
+      reason: 'the customer turn has no text, file or reply payload in the dump; imported as a placeholder message',
+    });
+    empty = false;
+  }
   return { direction: 'in', kind, senderKind, body, mediaUrl, legacy, soft, empty };
 }
 
