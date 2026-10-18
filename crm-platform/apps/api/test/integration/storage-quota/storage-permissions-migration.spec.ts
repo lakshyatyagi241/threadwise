@@ -49,6 +49,9 @@ describe('storage quota permissions migration on existing workspaces', () => {
       );
       orgs.push(Number(r.rows[0].id));
     }
+    // roles are provisioned by sign-up (not by the insert); the owner connection is bound by FORCE RLS, so it raises the flag first
+    await owner.query(`SELECT set_config('app.privileged', 'on', false)`);
+    for (const org of orgs) await owner.query(`SELECT provision_workspace_presets($1)`, [org]);
     versionsBefore = (
       await owner.query(`SELECT roles_version FROM organizations WHERE id = ANY($1) ORDER BY id`, [
         orgs,
@@ -94,6 +97,7 @@ describe('storage quota permissions migration on existing workspaces', () => {
       `INSERT INTO organizations (slug, name) VALUES ('post-c', 'post-c') RETURNING id`,
     );
     const org = Number(r.rows[0].id);
+    await owner.query(`SELECT provision_workspace_presets($1)`, [org]);
     const byRole = await owner.query(
       `SELECT r.system_key, count(*)::int AS n FROM role_grants g JOIN roles r ON r.org_id = g.org_id AND r.id = g.role_id
        WHERE g.org_id = $1 AND g.permission_key LIKE 'storage.%' GROUP BY 1`,
