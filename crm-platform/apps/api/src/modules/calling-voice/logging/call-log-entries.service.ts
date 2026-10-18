@@ -158,7 +158,8 @@ export class CallLogEntriesService {
       await this.contacts.bumpLastActivity(tx, orgId, d.contactId);
       await this.repo.link(tx, orgId, inserted.id, { activityId });
       // A call a person placed or answered reached the contact: lead handling (the uncontacted marker, BL-290). Never throws.
-      if (callReachedContact(d)) await this.leadHandling.touch(tx, orgId, d.contactId, 'contact_button');
+      if (callReachedContact(d))
+        await this.leadHandling.touch(tx, orgId, d.contactId, 'contact_button');
     }
 
     // The trail names the facts, never the words: the notes and the number stay out of the audit row and the event.

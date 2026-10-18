@@ -20,7 +20,11 @@ import { settingsDelta } from '../../../src/modules/crm/lead-handling/lead-handl
 
 describe('uncontacted settings: defaults change nothing', () => {
   it('never marks a contact on its own, and keeps the owner on a reassign', () => {
-    expect(UNCONTACTED_DEFAULTS.markNew).toEqual({ manual: false, import: false, leadSource: false });
+    expect(UNCONTACTED_DEFAULTS.markNew).toEqual({
+      manual: false,
+      import: false,
+      leadSource: false,
+    });
     expect(UNCONTACTED_DEFAULTS.onReassign).toBe('keep');
     for (const m of ['manual', 'import', 'lead_source'] as const) {
       expect(marksNew(UNCONTACTED_DEFAULTS, m)).toBe(false);
@@ -56,7 +60,13 @@ describe('uncontacted settings: defaults change nothing', () => {
 describe('which action clears the marker, which creation marks it', () => {
   const only = (key: 'contactButton' | 'message' | 'automation' | 'activity') => ({
     ...UNCONTACTED_DEFAULTS,
-    clearOn: { contactButton: false, message: false, automation: false, activity: false, [key]: true },
+    clearOn: {
+      contactButton: false,
+      message: false,
+      automation: false,
+      activity: false,
+      [key]: true,
+    },
   });
 
   it.each([
@@ -117,7 +127,8 @@ describe('contracts', () => {
     ).toBe(true);
     expect(updateUncontactedSettingsSchema.safeParse({ clearOn: {} }).success).toBe(false);
     expect(
-      updateUncontactedSettingsSchema.safeParse({ ...UNCONTACTED_DEFAULTS, onReassign: 'x' }).success,
+      updateUncontactedSettingsSchema.safeParse({ ...UNCONTACTED_DEFAULTS, onReassign: 'x' })
+        .success,
     ).toBe(false);
   });
 
@@ -132,7 +143,8 @@ describe('contracts', () => {
     const id = '00000000-0000-4000-8000-000000000001';
     expect(bulkSetUncontactedSchema.safeParse({ ids: [id], uncontacted: true }).success).toBe(true);
     expect(
-      bulkSetUncontactedSchema.safeParse({ filter: { uncontacted: true }, uncontacted: false }).success,
+      bulkSetUncontactedSchema.safeParse({ filter: { uncontacted: true }, uncontacted: false })
+        .success,
     ).toBe(true);
     expect(bulkSetUncontactedSchema.safeParse({ uncontacted: true }).success).toBe(false);
     expect(
@@ -144,7 +156,11 @@ describe('contracts', () => {
 describe('the uncontacted filter', () => {
   const dialect = new PgDialect();
   const sqlOf = (uncontacted: boolean) => {
-    const conditions = contactConditions(1, { includeArchived: false, tagMode: 'any', uncontacted }, undefined);
+    const conditions = contactConditions(
+      1,
+      { includeArchived: false, tagMode: 'any', uncontacted },
+      undefined,
+    );
     return conditions.map((c) => dialect.sqlToQuery(c).sql).join(' AND ');
   };
 
@@ -161,7 +177,9 @@ describe('the uncontacted filter', () => {
   });
 
   it('a saved filter becomes the same segment rule', () => {
-    const rules = JSON.stringify(contactFilterToRules({ uncontacted: true, includeArchived: false, tagMode: 'any' }));
+    const rules = JSON.stringify(
+      contactFilterToRules({ uncontacted: true, includeArchived: false, tagMode: 'any' }),
+    );
     expect(rules).toContain('"uncontacted"');
     expect(rules).toContain('is_true');
   });

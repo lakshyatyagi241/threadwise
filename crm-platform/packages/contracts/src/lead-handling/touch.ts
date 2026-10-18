@@ -1,5 +1,9 @@
 import { z } from 'zod';
-import { contactSelectionShape, hasExactlyOneSelector, SELECTION_REFINEMENT } from '../contacts-attributes-tags/contact-filter';
+import {
+  contactSelectionShape,
+  hasExactlyOneSelector,
+  SELECTION_REFINEMENT,
+} from '../contacts-attributes-tags/contact-filter';
 
 /** The contact buttons a person can press. The web reports the press; what it does is decided by the workspace's settings. */
 export const CONTACT_TOUCH_CHANNELS = ['call', 'sms', 'email', 'whatsapp'] as const;

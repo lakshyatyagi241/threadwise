@@ -37,7 +37,10 @@ export function flatten(value: unknown, prefix = ''): Record<string, unknown> {
 }
 
 /** The leaves that differ between two documents, as an audit delta. */
-export function settingsDelta(before: unknown, after: unknown): Record<string, { old: unknown; new: unknown }> {
+export function settingsDelta(
+  before: unknown,
+  after: unknown,
+): Record<string, { old: unknown; new: unknown }> {
   const a = flatten(before);
   const b = flatten(after);
   const delta: Record<string, { old: unknown; new: unknown }> = {};
@@ -104,7 +107,9 @@ export class LeadHandlingSettingsService {
 
   async updateUncontacted(input: UpdateUncontactedSettingsInput): Promise<UncontactedSettings> {
     const { rowVersion, ...values } = input;
-    const row = await this.save('uncontacted', values, rowVersion, (c) => mergeUncontactedSettings(c));
+    const row = await this.save('uncontacted', values, rowVersion, (c) =>
+      mergeUncontactedSettings(c),
+    );
     return this.uncontactedOf(row);
   }
 

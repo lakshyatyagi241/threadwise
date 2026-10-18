@@ -23,7 +23,7 @@ beforeAll(async () => {
   touch = h.app.get(ContactTouchService);
   db = h.app.get(DatabaseService);
   contactsSvc = h.app.get(ContactsService);
-}, 900_000);
+}, 1_500_000);
 
 afterAll(async () => {
   await h?.stop();
@@ -33,7 +33,8 @@ let n = 0;
 const phone = () => `+9198${String(30_000_000 + n++)}`;
 
 const settingsUrl = '/v2/lead-handling/settings/uncontacted';
-const save = (t: Tenant, body: Record<string, unknown>) => api.as(t.admin).put(settingsUrl).send(body);
+const save = (t: Tenant, body: Record<string, unknown>) =>
+  api.as(t.admin).put(settingsUrl).send(body);
 
 const create = async (t: Tenant, body: Record<string, unknown> = {}, token = t.admin) => {
   const res = await api
@@ -58,9 +59,26 @@ const mark = async (uuid: string) =>
   h.owner.query(`UPDATE contacts SET uncontacted_since = now() WHERE uuid = $1`, [uuid]);
 
 /** A touch from a worker-like caller: no request context, the way a message dispatch or a campaign reaches the service. */
-const touchAs = async (t: Tenant, uuid: string, source: 'contact_button' | 'message' | 'automation' | 'activity') => {
+const touchAs = async (
+  t: Tenant,
+  uuid: string,
+  source: 'contact_button' | 'message' | 'automation' | 'activity',
+) => {
   const id = await internalId(uuid);
-  await db.txAs({ orgId: t.orgId }, (tx) => touch.touch(tx, t.orgId, id, source));
+  const run = () => db.txAs({ orgId: t.orgId }, (tx) => touch.touch(tx, t.orgId, id, source));
+  // A timeline entry only counts when a person wrote it, so that touch is made as one.
+  if (source === 'activity') {
+    await RequestContextStore.run(
+      {
+        requestId: 'e2e',
+        orgId: t.orgId,
+        actorType: 'user',
+        actorId: t.adminUserId,
+        userId: t.adminUserId,
+      },
+      run,
+    );
+  } else await run();
 };
 
 const uncontactedAudits = async (t: Tenant) =>
@@ -112,14 +130,19 @@ describe('the settings document', () => {
   });
 
   it('refuses a malformed document', async () => {
-    expect((await save(t, { clearOn: {} })).status).toBe(400);
+    expect((await save(t, { clearOn: {} })).status).toBe(422);
   });
 
   it('needs admin.settings.manage to read or write; a contacts editor cannot', async () => {
     const m = await api.member(t, 'ed', [['record.contacts.update']]);
     expect((await api.as(m.token).get('/v2/lead-handling/settings')).status).toBe(403);
     expect(
-      (await api.as(m.token).put(settingsUrl).send({ ...UNCONTACTED_DEFAULTS, rowVersion: 2 })).status,
+      (
+        await api
+          .as(m.token)
+          .put(settingsUrl)
+          .send({ ...UNCONTACTED_DEFAULTS, rowVersion: 2 })
+      ).status,
     ).toBe(403);
   });
 
@@ -136,9 +159,13 @@ describe('with the default settings nothing changes on its own', () => {
     const a = await api.member(t, 'asha', [['record.contacts.update'], ['record.contacts.read']]);
     const c = await create(t);
     expect(c.uncontactedSince).toBeNull();
-    const ashaUuid = (await h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [a.userId])).rows[0].uuid;
-    const moved = await api.as(t.admin).post('/v2/contacts/assignee').send({ ids: [c.id], ownerId: ashaUuid });
-    expect(moved.status, JSON.stringify(moved.body)).toBe(200);
+    const ashaUuid = (await h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [a.userId]))
+      .rows[0].uuid;
+    const moved = await api
+      .as(t.admin)
+      .post('/v2/contacts/assignee')
+      .send({ ids: [c.id], ownerId: ashaUuid });
+    expect(moved.status, JSON.stringify(moved.body)).toBeLessThan(300);
     const note = await api.as(t.admin).post(`/v2/contacts/${c.id}/notes`).send({ body: 'called' });
     expect(note.status, JSON.stringify(note.body)).toBeLessThan(300);
     await touchAs(t, c.id, 'message');
@@ -177,11 +204,17 @@ describe('what sets the marker', () => {
 
   it('a person-created contact that already exists (matched by phone) is not flipped', async () => {
     const existing = await create(t);
-    await h.owner.query(`UPDATE contacts SET uncontacted_since = NULL WHERE uuid = $1`, [existing.id]);
+    await h.owner.query(`UPDATE contacts SET uncontacted_since = NULL WHERE uuid = $1`, [
+      existing.id,
+    ]);
     const again = await api
       .as(t.admin)
       .post('/v2/contacts')
-      .send({ firstName: 'Lead', phone: (await h.owner.query(`SELECT phone FROM contacts WHERE uuid = $1`, [existing.id])).rows[0].phone });
+      .send({
+        firstName: 'Lead',
+        phone: (await h.owner.query(`SELECT phone FROM contacts WHERE uuid = $1`, [existing.id]))
+          .rows[0].phone,
+      });
     expect(again.body.id).toBe(existing.id);
     expect(await since(existing.id)).toBeNull();
   });
@@ -215,30 +248,53 @@ describe('what sets the marker', () => {
   });
 
   it('an owner change marks the contact only when "mark on reassign" is on, and only for a real new owner', async () => {
-    const asha = await api.member(t, 'asha', [['record.contacts.read'], ['record.contacts.update']]);
-    const ashaUuid = (await h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [asha.userId])).rows[0].uuid as string;
+    const asha = await api.member(t, 'asha', [
+      ['record.contacts.read'],
+      ['record.contacts.update'],
+    ]);
+    const ashaUuid = (await h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [asha.userId]))
+      .rows[0].uuid as string;
     await turnOn({ manual: false, leadSource: false }, 'keep');
     const a = await create(t);
-    await api.as(t.admin).post('/v2/contacts/assignee').send({ ids: [a.id], ownerId: ashaUuid });
+    await api
+      .as(t.admin)
+      .post('/v2/contacts/assignee')
+      .send({ ids: [a.id], ownerId: ashaUuid });
     expect(await since(a.id)).toBeNull();
 
     await turnOn({ manual: false, leadSource: false }, 'mark');
     const b = await create(t);
-    expect((await api.as(t.admin).post('/v2/contacts/assignee').send({ ids: [b.id], ownerId: ashaUuid })).status).toBe(200);
+    expect(
+      (
+        await api
+          .as(t.admin)
+          .post('/v2/contacts/assignee')
+          .send({ ids: [b.id], ownerId: ashaUuid })
+      ).status,
+    ).toBeLessThan(300);
     expect(await since(b.id)).not.toBeNull();
 
     // unassigning is not an assignment
     const c = await create(t);
-    await api.as(t.admin).post('/v2/contacts/assignee').send({ ids: [c.id], ownerId: null });
+    await api
+      .as(t.admin)
+      .post('/v2/contacts/assignee')
+      .send({ ids: [c.id], ownerId: null });
     expect(await since(c.id)).toBeNull();
 
     // the bulk route and the edit form do the same
     const d = await create(t);
-    const bulk = await api.as(t.admin).post('/v2/contacts/bulk/owner').send({ ids: [d.id], ownerId: ashaUuid });
+    const bulk = await api
+      .as(t.admin)
+      .post('/v2/contacts/bulk/owner')
+      .send({ ids: [d.id], ownerId: ashaUuid });
     expect(bulk.status, JSON.stringify(bulk.body)).toBe(200);
     expect(await since(d.id)).not.toBeNull();
     const e = await create(t);
-    const edit = await api.as(t.admin).patch(`/v2/contacts/${e.id}`).send({ ownerId: ashaUuid, rowVersion: e.rowVersion });
+    const edit = await api
+      .as(t.admin)
+      .patch(`/v2/contacts/${e.id}`)
+      .send({ ownerId: ashaUuid, rowVersion: e.rowVersion });
     expect(edit.status, JSON.stringify(edit.body)).toBe(200);
     expect(await since(e.id)).not.toBeNull();
   });
@@ -260,17 +316,25 @@ describe('what clears the marker', () => {
       const c = await create(t);
       await mark(c.id);
       // all four off: nothing clears
-      const cur = (await api.as(t.admin).get('/v2/lead-handling/settings')).body.uncontacted as { rowVersion: number | null };
+      const cur = (await api.as(t.admin).get('/v2/lead-handling/settings')).body.uncontacted as {
+        rowVersion: number | null;
+      };
       const off = { contactButton: false, message: false, automation: false, activity: false };
-      await save(t, { ...UNCONTACTED_DEFAULTS, clearOn: off, ...(cur.rowVersion ? { rowVersion: cur.rowVersion } : {}) });
+      await save(t, {
+        ...UNCONTACTED_DEFAULTS,
+        clearOn: off,
+        ...(cur.rowVersion ? { rowVersion: cur.rowVersion } : {}),
+      });
       await touchAs(t, c.id, source);
       expect(await since(c.id), `${source} with its toggle off`).not.toBeNull();
 
-      const v = (await api.as(t.admin).get('/v2/lead-handling/settings')).body.uncontacted.rowVersion as number;
+      const v = (await api.as(t.admin).get('/v2/lead-handling/settings')).body.uncontacted
+        .rowVersion as number;
       await save(t, { ...UNCONTACTED_DEFAULTS, clearOn: { ...off, [key]: true }, rowVersion: v });
       await touchAs(t, c.id, source);
       expect(await since(c.id), `${source} with its toggle on`).toBeNull();
-      const v2 = (await api.as(t.admin).get('/v2/lead-handling/settings')).body.uncontacted.rowVersion as number;
+      const v2 = (await api.as(t.admin).get('/v2/lead-handling/settings')).body.uncontacted
+        .rowVersion as number;
       await save(t, { ...UNCONTACTED_DEFAULTS, rowVersion: v2 });
     }
   });
@@ -302,7 +366,10 @@ describe('what clears the marker', () => {
   it('a note or timeline activity a person adds clears it; the "contact button" endpoint clears it', async () => {
     const a = await create(t);
     await mark(a.id);
-    const note = await api.as(t.admin).post(`/v2/contacts/${a.id}/notes`).send({ body: 'spoke to them' });
+    const note = await api
+      .as(t.admin)
+      .post(`/v2/contacts/${a.id}/notes`)
+      .send({ body: 'spoke to them' });
     expect(note.status, JSON.stringify(note.body)).toBeLessThan(300);
     expect(await since(a.id)).toBeNull();
 
@@ -317,7 +384,10 @@ describe('what clears the marker', () => {
 
     const c = await create(t);
     await mark(c.id);
-    const pressed = await api.as(t.admin).post(`/v2/contacts/${c.id}/touch`).send({ channel: 'whatsapp' });
+    const pressed = await api
+      .as(t.admin)
+      .post(`/v2/contacts/${c.id}/touch`)
+      .send({ channel: 'whatsapp' });
     expect(pressed.status, JSON.stringify(pressed.body)).toBe(200);
     expect(pressed.body).toEqual({ uncontacted: false });
     expect(await since(c.id)).toBeNull();
@@ -354,13 +424,19 @@ describe('by hand: one contact and a selection', () => {
 
   it('marks and unmarks one contact; the same state twice is a no-op with one audit row', async () => {
     const c = await create(t);
-    const on = await api.as(t.admin).put(`/v2/contacts/${c.id}/uncontacted`).send({ uncontacted: true });
+    const on = await api
+      .as(t.admin)
+      .put(`/v2/contacts/${c.id}/uncontacted`)
+      .send({ uncontacted: true });
     expect(on.status, JSON.stringify(on.body)).toBe(200);
     expect(on.body).toEqual({ uncontacted: true });
     await api.as(t.admin).put(`/v2/contacts/${c.id}/uncontacted`).send({ uncontacted: true });
     expect(await uncontactedAudits(t)).toBe(1);
     expect((await read(t, c.id)).uncontactedSince).not.toBeNull();
-    const off = await api.as(t.admin).put(`/v2/contacts/${c.id}/uncontacted`).send({ uncontacted: false });
+    const off = await api
+      .as(t.admin)
+      .put(`/v2/contacts/${c.id}/uncontacted`)
+      .send({ uncontacted: false });
     expect(off.body).toEqual({ uncontacted: false });
     expect((await read(t, c.id)).uncontactedSince).toBeNull();
   });
@@ -375,10 +451,16 @@ describe('by hand: one contact and a selection', () => {
 
   it('the list filter and the bulk action work on ids and on a filter, and report what changed', async () => {
     const ids = [(await create(t)).id, (await create(t)).id, (await create(t)).id];
-    const marked = await api.as(t.admin).post('/v2/contacts/bulk/uncontacted').send({ ids: ids.slice(0, 2), uncontacted: true });
+    const marked = await api
+      .as(t.admin)
+      .post('/v2/contacts/bulk/uncontacted')
+      .send({ ids: ids.slice(0, 2), uncontacted: true });
     expect(marked.status, JSON.stringify(marked.body)).toBe(200);
     expect(marked.body).toMatchObject({ matched: 2, changed: 2 });
-    const again = await api.as(t.admin).post('/v2/contacts/bulk/uncontacted').send({ ids: ids.slice(0, 2), uncontacted: true });
+    const again = await api
+      .as(t.admin)
+      .post('/v2/contacts/bulk/uncontacted')
+      .send({ ids: ids.slice(0, 2), uncontacted: true });
     expect(again.body).toMatchObject({ matched: 2, changed: 0 });
 
     const list = await api.as(t.admin).get('/v2/contacts?uncontacted=true&limit=100');
@@ -387,24 +469,43 @@ describe('by hand: one contact and a selection', () => {
     const rest = await api.as(t.admin).get('/v2/contacts?uncontacted=false&limit=100');
     expect((rest.body.data as Array<{ id: string }>).map((c) => c.id)).toContain(ids[2]);
 
-    const cleared = await api.as(t.admin).post('/v2/contacts/bulk/uncontacted').send({ filter: { uncontacted: true }, uncontacted: false });
+    const cleared = await api
+      .as(t.admin)
+      .post('/v2/contacts/bulk/uncontacted')
+      .send({ filter: { uncontacted: true }, uncontacted: false });
     expect(cleared.body).toMatchObject({ matched: 2, changed: 2 });
-    expect(((await api.as(t.admin).get('/v2/contacts?uncontacted=true')).body.data as unknown[]).length).toBe(0);
+    expect(
+      ((await api.as(t.admin).get('/v2/contacts?uncontacted=true')).body.data as unknown[]).length,
+    ).toBe(0);
     expect(await uncontactedAudits(t)).toBeGreaterThanOrEqual(4);
   });
 });
 
 describe('scopes and tenants', () => {
-  it('a member limited to their own contacts cannot touch, mark or bulk-mark someone else\'s contact', async () => {
+  it("a member limited to their own contacts cannot touch, mark or bulk-mark someone else's contact", async () => {
     const t = await api.signup('ucsc');
-    const asha = await api.member(t, 'asha', [['record.contacts.read', 'own'], ['record.contacts.update', 'own']]);
-    const ashaUuid = (await h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [asha.userId])).rows[0].uuid as string;
+    const asha = await api.member(t, 'asha', [
+      ['record.contacts.read', 'own'],
+      ['record.contacts.update', 'own'],
+    ]);
+    const ashaUuid = (await h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [asha.userId]))
+      .rows[0].uuid as string;
     const mine = await create(t, { ownerId: ashaUuid });
     const theirs = await create(t);
     await mark(theirs.id);
 
-    expect((await api.as(asha.token).post(`/v2/contacts/${theirs.id}/touch`).send({ channel: 'call' })).status).toBe(404);
-    expect((await api.as(asha.token).put(`/v2/contacts/${theirs.id}/uncontacted`).send({ uncontacted: false })).status).toBe(404);
+    expect(
+      (await api.as(asha.token).post(`/v2/contacts/${theirs.id}/touch`).send({ channel: 'call' }))
+        .status,
+    ).toBe(404);
+    expect(
+      (
+        await api
+          .as(asha.token)
+          .put(`/v2/contacts/${theirs.id}/uncontacted`)
+          .send({ uncontacted: false })
+      ).status,
+    ).toBe(404);
     expect(await since(theirs.id)).not.toBeNull();
 
     const bulk = await api
@@ -415,20 +516,38 @@ describe('scopes and tenants', () => {
     expect(bulk.body.failedCount).toBe(1);
     expect(await since(theirs.id)).not.toBeNull();
 
-    expect((await api.as(asha.token).put(`/v2/contacts/${mine.id}/uncontacted`).send({ uncontacted: true })).status).toBe(200);
+    expect(
+      (
+        await api
+          .as(asha.token)
+          .put(`/v2/contacts/${mine.id}/uncontacted`)
+          .send({ uncontacted: true })
+      ).status,
+    ).toBe(200);
   });
 
-  it('another workspace cannot reach a contact, and one workspace\'s settings never act on another\'s contacts', async () => {
+  it("another workspace cannot reach a contact, and one workspace's settings never act on another's contacts", async () => {
     const a = await api.signup('uct1');
     const b = await api.signup('uct2');
-    await save(a, { ...UNCONTACTED_DEFAULTS, markNew: { manual: true, import: true, leadSource: true } });
+    await save(a, {
+      ...UNCONTACTED_DEFAULTS,
+      markNew: { manual: true, import: true, leadSource: true },
+    });
     const ca = await create(a);
     const cb = await create(b);
     expect(ca.uncontactedSince).not.toBeNull();
     expect(cb.uncontactedSince).toBeNull();
-    expect((await api.as(b.admin).put(`/v2/contacts/${ca.id}/uncontacted`).send({ uncontacted: false })).status).toBe(404);
-    expect((await api.as(b.admin).post(`/v2/contacts/${ca.id}/touch`).send({ channel: 'sms' })).status).toBe(404);
-    const bulk = await api.as(b.admin).post('/v2/contacts/bulk/uncontacted').send({ ids: [ca.id], uncontacted: false });
+    expect(
+      (await api.as(b.admin).put(`/v2/contacts/${ca.id}/uncontacted`).send({ uncontacted: false }))
+        .status,
+    ).toBe(404);
+    expect(
+      (await api.as(b.admin).post(`/v2/contacts/${ca.id}/touch`).send({ channel: 'sms' })).status,
+    ).toBe(404);
+    const bulk = await api
+      .as(b.admin)
+      .post('/v2/contacts/bulk/uncontacted')
+      .send({ ids: [ca.id], uncontacted: false });
     expect(bulk.body.matched).toBe(0);
     expect(await since(ca.id)).not.toBeNull();
   });

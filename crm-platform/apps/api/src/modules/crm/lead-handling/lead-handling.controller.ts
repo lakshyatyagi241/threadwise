@@ -34,7 +34,8 @@ export class LeadHandlingController {
   @Get('settings')
   @RequirePermission('admin.settings.manage')
   @ApiOperation({
-    summary: 'Every lead handling section with its own rowVersion (defaults for a section never saved)',
+    summary:
+      'Every lead handling section with its own rowVersion (defaults for a section never saved)',
   })
   get() {
     return this.settings.get();
