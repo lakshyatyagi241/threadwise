@@ -574,7 +574,7 @@ function Editor({
 
   return (
     <FlowEditorContext.Provider
-      value={{ flowId, web: channel === 'web', whatsapp: channel === 'chat' }}
+      value={{ flowId, web: channel === 'web', channel, whatsapp: channel === 'chat' }}
     >
       <div className="flb-root fixed inset-0 z-40 flex flex-col bg-muted text-foreground">
         <BuilderFonts />

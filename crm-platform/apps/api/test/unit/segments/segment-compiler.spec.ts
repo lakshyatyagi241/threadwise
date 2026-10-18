@@ -132,12 +132,12 @@ describe('the compiler binds every operand', () => {
     );
   });
 
-  it('the country code field is compared with the contact column, the dial code bound as a parameter', () => {
+  it('the country code field is compared with the contact column, the dial code bound as a parameter (as digits: "+91" is "91")', () => {
     const { invalid, sql, params } = compile(group('and', cond('countryCode', 'equals', '+91')));
     expect(invalid).toEqual([]);
     expect(sql).toContain('country_code');
     expect(sql).not.toContain('+91');
-    expect(params).toContain('+91');
+    expect(params).toContain('91');
   });
 
   it('AND / OR keep their grouping', () => {
@@ -400,5 +400,76 @@ describe('rules on the company of a contact (BL-196)', () => {
     ];
     expect(segmentsUsing(rows, 'field', 'company.tier').map((r) => r.name)).toEqual(['ByCompany']);
     expect(segmentsUsing(rows, 'field', 'tier').map((r) => r.name)).toEqual(['ByContact']);
+  });
+});
+
+describe('phone and country code are compared the way the screen shows them', () => {
+  const phone = (op: string, value: unknown) => compile(group('and', cond('phone', op, value)));
+
+  it('a typed number is reduced to its digits and compared with the digits of the stored phone', () => {
+    const { sql, params } = phone('equals', '+91 88751 37569');
+    expect(sql).toContain(
+      'regexp_replace(coalesce("contacts"."normalized_phone", "contacts"."phone", \'\'), \'\\D\', \'\', \'g\')',
+    );
+    expect(params).toContain('918875137569');
+    expect(params.some((p) => typeof p === 'string' && p.includes(' '))).toBe(false);
+  });
+
+  it.each([
+    ['contains', '%918875137569%'],
+    ['starts_with', '918875137569%'],
+    ['not_contains', '%918875137569%'],
+  ])('%s binds the digits as a pattern', (op, pattern) => {
+    expect(phone(op, '+91 88751 37569').params).toContain(pattern);
+  });
+
+  it('a list is reduced to digits one by one', () => {
+    const { params } = phone('in', ['+91 88751 37569', '+1 (415) 555-0100']);
+    expect(params).toEqual(expect.arrayContaining(['918875137569', '14155550100']));
+  });
+
+  it('"not" operators include contacts with no phone', () => {
+    expect(phone('not_equals', '+91 88751 37569').sql).toContain('NOT');
+    expect(phone('not_in', ['+91 88751 37569']).sql).toContain('NOT IN');
+  });
+
+  it('an operand with no digit is compared as written, and "is empty" reads the stored text', () => {
+    expect(phone('contains', 'abc').params).toContain('%abc%');
+    expect(phone('is_empty', undefined).sql).toContain('btrim(');
+  });
+
+  it.each(['+91', '91', '0091', ' +91 '])('country code %j is the code 91', (typed) => {
+    const { params } = compile(group('and', cond('countryCode', 'equals', typed)));
+    expect(params).toContain('91');
+  });
+
+  it('country codes are compared on their digits with leading zeros dropped', () => {
+    const { sql } = compile(group('and', cond('countryCode', 'in', ['+91', '+1'])));
+    expect(sql).toContain(
+      "ltrim(regexp_replace(coalesce((\"contacts\".\"country_code\")::text, ''), '\\D', '', 'g'), '0')",
+    );
+  });
+});
+
+describe('the search box', () => {
+  it('a phone typed as printed is also matched as a whole against the digits of the phone', () => {
+    const { sql, params } = compile(group('and', cond('search', 'matches', '+91 88751 37569')));
+    expect(params).toContain('%918875137569%');
+    expect(sql).toContain(' OR regexp_replace(');
+  });
+
+  it('a single word or a name search adds no whole-phrase branch', () => {
+    expect(compile(group('and', cond('search', 'matches', 'Aarav Sharma'))).sql).not.toContain(
+      'regexp_replace',
+    );
+    expect(compile(group('and', cond('search', 'matches', '918875137569'))).sql).not.toContain(
+      ' OR regexp_replace(',
+    );
+  });
+
+  it('"+91" is a country code: the digits of the phone start with it', () => {
+    const { sql, params } = compile(group('and', cond('search', 'matches', '+91')));
+    expect(sql).toContain('regexp_replace(');
+    expect(params).toContain('91%');
   });
 });

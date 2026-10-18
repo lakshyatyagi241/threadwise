@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { flbLinkableFlows } from '@crm/contracts';
 import { Field, SelectInput } from '../kit';
 import type { FormComponent } from '../types';
 import { agentOptionLabel, flowOptionLabel, withSavedOption } from './helpers';
@@ -20,10 +21,11 @@ export const SubflowForm: FormComponent = (p) => {
   const opts = withSavedOption(
     [
       { v: '', l: p.env.loading ? t('loadingFlows') : t('pickFlow') },
-      // A flow cannot call itself (the saved flow being edited is skipped).
-      ...flows
-        .filter((f) => f.id !== p.env.flowId)
-        .map((f) => ({ v: f.id, l: flowOptionLabel(f.name, f.isPublished, th) })),
+      // A flow cannot call itself, and only bots of this channel are offered (a conversation cannot move to another channel).
+      ...flbLinkableFlows(flows, p.env.mode, p.env.flowId).map((f) => ({
+        v: f.id,
+        l: flowOptionLabel(f.name, f.isPublished, th),
+      })),
     ],
     p.data.flow,
     (id) => t('savedFlow', { id: id.slice(0, 8) }),

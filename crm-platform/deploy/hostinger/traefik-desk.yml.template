@@ -1,0 +1,37 @@
+# Public routing for the desk host, written by ci-entry.sh on every release (route_to). The API paths go to the live API slot and
+# everything else to the live web slot. Traefik watches its dynamic directory, so rewriting this file moves traffic with no restart.
+# ci-entry.sh fills in __DOMAIN__ and __SLOT__ (blue or green).
+http:
+  routers:
+    desk-api:
+      rule: Host(`__DOMAIN__`) && (PathPrefix(`/v2`) || PathPrefix(`/socket.io`) || PathPrefix(`/health`) || PathPrefix(`/ready`) || PathPrefix(`/api/v1`) || PathPrefix(`/public/v1`) || Path(`/docs/api.json`))
+      entryPoints: [websecure]
+      service: desk-api
+      priority: 100
+      tls:
+        certResolver: letsencrypt
+    desk-web:
+      rule: Host(`__DOMAIN__`)
+      entryPoints: [websecure]
+      service: desk-web
+      priority: 10
+      tls:
+        certResolver: letsencrypt
+    desk-http:
+      rule: Host(`__DOMAIN__`)
+      entryPoints: [web]
+      service: desk-web
+      middlewares: [desk-https]
+  middlewares:
+    desk-https:
+      redirectScheme:
+        scheme: https
+  services:
+    desk-api:
+      loadBalancer:
+        servers:
+          - url: http://desk-api-__SLOT__:3000
+    desk-web:
+      loadBalancer:
+        servers:
+          - url: http://desk-web-__SLOT__:3001

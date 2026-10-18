@@ -9,6 +9,7 @@ const ctx = {
   flows: [
     { id: 'f-self', name: 'This flow', flowType: 'chat', isPublished: false },
     { id: 'f-live', name: 'Support menu', flowType: 'chat', isPublished: true },
+    { id: 'f-web', name: 'Website helper', flowType: 'web', isPublished: true },
   ],
   teams: [{ id: 't1', name: 'Sales', members: [{}, {}] }],
 } as unknown as FlbBuilderContext;
@@ -57,5 +58,25 @@ describe('ButtonActionPicker: what a button does when it is pressed', () => {
     expect(html).toContain('Live agent');
     expect(html).not.toContain('Opt in');
     expect(html).not.toContain('Opt out');
+  });
+
+  it('lists only bots of the same channel: a WhatsApp bot never sees a website chat bot, and the other way round', () => {
+    const asChannel = (channel: string) =>
+      renderIntl(
+        <FlowEditorContext.Provider value={{ flowId: 'f-self', web: channel === 'web', channel }}>
+          <ButtonActionPicker
+            value={{ kind: 'flow', flow: '' }}
+            onChange={() => undefined}
+            ctx={ctx}
+            flowId="f-self"
+          />
+        </FlowEditorContext.Provider>,
+      );
+    const whatsapp = asChannel('chat');
+    expect(whatsapp).toContain('Support menu');
+    expect(whatsapp).not.toContain('Website helper');
+    const web = asChannel('web');
+    expect(web).toContain('Website helper');
+    expect(web).not.toContain('Support menu');
   });
 });

@@ -2,6 +2,7 @@
 
 import { ButtonIcon } from '../button-icon';
 import { MessageField } from '../message-field';
+import { ctaLinkProblem } from '../../lib/cta-link';
 import { flowVariables } from '../../lib/flow-variables';
 import { ButtonActionPicker } from '../button-action-picker';
 import {
@@ -1392,12 +1393,17 @@ function CtaEditor({ step, set }: EditorProps) {
     );
   const holder = (kind: string) =>
     kind === 'phone' ? '+91 98765 43210' : kind === 'email' ? 'name@example.com' : 'https://';
-  // Switching what a button opens swaps its stock name too (an untouched "Visit website" becomes "Call us") and drops the old
-  // address, which is no phone number or email; a name the author wrote is kept.
+  // Switching what a button opens swaps its stock name too (an untouched "Visit website" becomes "Call us"). The old address is
+  // kept only when it is already valid for the new kind (or turns into it: "mailto:a@b.co" / "tel:+91..." lose the scheme);
+  // otherwise it is cleared, so no web address is left in a phone or email field. A name the author wrote is kept.
+  const carryValue = (value: string, to: string) => {
+    const v = value.trim().replace(/^(mailto|tel):/i, '');
+    return ctaLinkProblem(to, v) === null ? v : '';
+  };
   const switchKind = (i: number, from: string, to: string) =>
     patch(i, {
       type: to,
-      value: '',
+      value: carryValue(str(actions[i]?.value), to),
       ...(!str(actions[i]?.label).trim() || str(actions[i]?.label) === CTA_DEFAULT_LABEL[from]
         ? { label: CTA_DEFAULT_LABEL[to] }
         : {}),
@@ -1414,6 +1420,7 @@ function CtaEditor({ step, set }: EditorProps) {
       </Field>
       {actions.map((a, i) => {
         const kind = (CTA_KINDS as readonly string[]).includes(str(a.type)) ? str(a.type) : 'url';
+        const problem = ctaLinkProblem(kind, a.value);
         return (
           <Row key={i}>
             <div className="space-y-3">
@@ -1452,11 +1459,15 @@ function CtaEditor({ step, set }: EditorProps) {
                       ? 'cta.opensEmail'
                       : 'cta.opens',
                 )}
+                error={problem ? t(`cta.errors.${problem}`) : undefined}
               >
                 <Input
                   value={str(a.value)}
                   maxLength={whatsapp && kind === 'url' ? FLB_WA_LIMITS.ctaUrl : undefined}
                   placeholder={holder(kind)}
+                  type={kind === 'email' ? 'email' : kind === 'phone' ? 'tel' : 'url'}
+                  inputMode={kind === 'email' ? 'email' : kind === 'phone' ? 'tel' : 'url'}
+                  invalid={!!problem}
                   onChange={(e) => patch(i, { value: e.target.value })}
                 />
               </Field>

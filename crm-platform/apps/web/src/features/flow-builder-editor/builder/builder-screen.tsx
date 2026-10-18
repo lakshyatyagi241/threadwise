@@ -581,7 +581,9 @@ function BuilderInner({
   );
 
   return (
-    <FlowEditorContext.Provider value={{ flowId, web: mode === 'web', whatsapp: mode === 'chat' }}>
+    <FlowEditorContext.Provider
+      value={{ flowId, web: mode === 'web', channel: mode, whatsapp: mode === 'chat' }}
+    >
       <div
         className="flb-root fixed inset-0 z-40 flex flex-col bg-background text-foreground"
         data-testid="flow-builder"

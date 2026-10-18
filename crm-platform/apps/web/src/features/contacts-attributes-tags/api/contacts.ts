@@ -28,6 +28,7 @@ export const KEYS = {
   statusOptions: ['cat', 'status-options'] as const,
   groups: ['cat', 'groups'] as const,
   stats: ['cat', 'stats'] as const,
+  filterValues: ['cat', 'contact-filter-values'] as const,
   owners: ['cat', 'owners'] as const,
 };
 
@@ -294,6 +295,7 @@ export function invalidateContacts(qc: QueryClient) {
   return Promise.all([
     qc.invalidateQueries({ queryKey: KEYS.contacts }),
     qc.invalidateQueries({ queryKey: KEYS.stats }),
+    qc.invalidateQueries({ queryKey: KEYS.filterValues }),
   ]);
 }
 

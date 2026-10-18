@@ -8,7 +8,12 @@ export { SlashTextarea } from './components/slash-picker';
 export { NotesSection as ContactNotesSection } from './components/contact/notes-section';
 export { ContactsReadonlyTable } from './components/contacts-readonly-table';
 export { RowMenu, RowMenuItem, RowMenuSeparator } from './components/row-menu';
-export { createAttribute, usePickerFeed, useStatusOptions } from './api/attributes';
+export {
+  createAttribute,
+  useContactFilterValues,
+  usePickerFeed,
+  useStatusOptions,
+} from './api/attributes';
 export { suggestKey as suggestAttributeKey } from './lib/attribute-model';
 export { useGroups } from './api/groups';
 export { useTags } from './api/tags';

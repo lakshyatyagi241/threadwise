@@ -1274,7 +1274,12 @@
             "add": "Aggiungi un altro pulsante",
             "remove": "Rimuovi pulsante",
             "opensPhone": "Numero di telefono",
-            "opensEmail": "Indirizzo e-mail"
+            "opensEmail": "Indirizzo e-mail",
+            "errors": {
+              "url": "Inserisci un indirizzo web valido che inizi con https://",
+              "phone": "Inserisci un numero di telefono valido, ad esempio +91 98765 43210",
+              "email": "Inserisci un indirizzo e-mail valido, ad esempio name@example.com"
+            }
           },
           "carousel": {
             "intro": "Messaggio sopra le schede",
@@ -2471,6 +2476,7 @@
         "chooseTemplate": "Passo {stage}: scegli un Template.",
         "chooseTeam": "Passo {stage}: scegli il team a cui va la conversazione.",
         "ctaLabelLink": "Passo {stage}: dai un nome al pulsante e un link.",
+        "ctaLinkInvalid": "Passaggio {stage}: la destinazione del pulsante non è valida per il suo tipo.",
         "choosePickedProperty": "Passo {stage}: scegli la proprietà del contatto in cui viene copiata l’opzione scelta.",
         "buttonsPrompt": "Passo {stage}: scrivi il messaggio sopra i pulsanti.",
         "addButton": "Passo {stage}: aggiungi almeno un pulsante.",
