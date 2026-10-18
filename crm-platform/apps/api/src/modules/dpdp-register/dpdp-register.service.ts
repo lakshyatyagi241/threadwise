@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { sql } from 'drizzle-orm';
 import {
-  AI_PROVIDERS,
   DPDP_ATTESTABLE_CHECKS,
   DPDP_CATALOG,
   type DpdpAttestableCheck,
@@ -158,15 +157,7 @@ export class DpdpRegisterService {
         return value === undefined || value === null ? undefined : String(value);
       },
       platformKeyProviders: () =>
-        this.within('platform AI keys', async () => {
-          const llm = AI_PROVIDERS.filter((p) => p.group === 'llm');
-          const found = await Promise.all(
-            llm.map(async (p) =>
-              (await this.keys.resolve(null, p.slug)).key !== null ? p.slug : null,
-            ),
-          );
-          return found.filter((slug): slug is string => slug !== null);
-        }),
+        this.within('platform AI keys', () => this.keys.platformProviders()),
       consentAdoption: () =>
         this.within('consent adoption', async () => {
           const res = await this.store.tx((tx) =>

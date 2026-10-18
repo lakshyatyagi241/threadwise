@@ -431,7 +431,9 @@ describe('attesting', () => {
 describe('when a dependency fails', () => {
   it('a probe failure does not fail the page', async () => {
     const keys = h.app.get(AiKeyResolver);
-    const spy = vi.spyOn(keys, 'resolve').mockRejectedValue(new Error('key store unreachable'));
+    const spy = vi
+      .spyOn(keys, 'platformProviders')
+      .mockRejectedValue(new Error('key store unreachable'));
     try {
       const res = await reg(superToken, 'get');
       expect(res.status, JSON.stringify(res.body)).toBe(200);
@@ -458,7 +460,9 @@ describe('when a dependency fails', () => {
 
   it('a dependency that never answers is cut off after 5 seconds and the page still returns', async () => {
     const keys = h.app.get(AiKeyResolver);
-    const spy = vi.spyOn(keys, 'resolve').mockImplementation(() => new Promise(() => undefined));
+    const spy = vi
+      .spyOn(keys, 'platformProviders')
+      .mockImplementation(() => new Promise(() => undefined));
     try {
       const started = Date.now();
       const res = await reg(superToken, 'get');
@@ -477,4 +481,44 @@ describe('when a dependency fails', () => {
       spy.mockRestore();
     }
   }, 60_000);
+});
+
+describe('the platform AI key check', () => {
+  it('counts a key on a voice provider, not only on a language model', async () => {
+    const ops = (method: 'get' | 'patch', path: string) =>
+      http()[method](`/v2/platform${path}`).set(bearer(superToken));
+    const deepgram = async (): Promise<{ id: string; rowVersion: number }> => {
+      const res = await ops('get', '/ai-keys');
+      expect(res.status, JSON.stringify(res.body)).toBe(200);
+      return (res.body.data as Array<{ id: string; rowVersion: number; provider: string }>).find(
+        (k) => k.provider === 'deepgram',
+      )!;
+    };
+    const save = async (patch: Record<string, unknown>) => {
+      const row = await deepgram();
+      const res = await ops('patch', `/ai-keys/${row.id}`).send({
+        rowVersion: row.rowVersion,
+        ...patch,
+      });
+      expect(res.status, JSON.stringify(res.body)).toBe(200);
+    };
+
+    await save({ apiKey: 'sk-test-DPDP-REGISTER-0123456789' });
+    try {
+      const body = (await reg(superToken, 'get')).body as DpdpRegisterResponse;
+      expect(checkOf(body, 'ai.platform_key_off')).toMatchObject({
+        result: 'fail',
+        detail: 'platform_key_set',
+        params: { providers: 'deepgram' },
+      });
+    } finally {
+      await save({ removeKey: true });
+    }
+
+    const after = (await reg(superToken, 'get')).body as DpdpRegisterResponse;
+    expect(checkOf(after, 'ai.platform_key_off')).toMatchObject({
+      result: 'pass',
+      detail: 'no_platform_key',
+    });
+  });
 });
