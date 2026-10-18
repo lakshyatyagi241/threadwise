@@ -31,7 +31,9 @@ export class PlatformStorageController {
 
   @Get('workspaces/:id')
   @PlatformPermission('platform.workspace.view_all')
-  @ApiOperation({ summary: "One workspace's storage: used, cap, level and the breakdown (read only, audited)" })
+  @ApiOperation({
+    summary: "One workspace's storage: used, cap, level and the breakdown (read only, audited)",
+  })
   workspace(@Param('id', zodPipe(uuidSchema)) id: string) {
     return this.fleet.workspace(id);
   }

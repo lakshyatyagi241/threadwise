@@ -65,7 +65,9 @@ export class StorageFleetService {
           ORDER BY s.hot_bytes DESC, o.id LIMIT ${TOP}`),
       );
       const levels = rowsOf(
-        await tx.execute(sql`SELECT level, count(*)::bigint AS n FROM storage_org_state GROUP BY level`),
+        await tx.execute(
+          sql`SELECT level, count(*)::bigint AS n FROM storage_org_state GROUP BY level`,
+        ),
       );
       const drift = rowsOf(
         await tx.execute(sql`
@@ -81,7 +83,10 @@ export class StorageFleetService {
       return { totals, byCategory, top, levels, drift, lastRun };
     });
 
-    const levels = Object.fromEntries(STORAGE_LEVELS.map((l) => [l, 0])) as Record<StorageLevel, number>;
+    const levels = Object.fromEntries(STORAGE_LEVELS.map((l) => [l, 0])) as Record<
+      StorageLevel,
+      number
+    >;
     for (const r of data.levels) {
       const level = String(r.level) as StorageLevel;
       if (level in levels) levels[level] = num(r.n);
@@ -96,7 +101,9 @@ export class StorageFleetService {
         reservedBytes: num(data.totals.reserved),
         objects: num(data.totals.objects),
       },
-      byCategory: data.byCategory.filter((r) => isStorageCategory(String(r.category))).map(toCategoryUsage),
+      byCategory: data.byCategory
+        .filter((r) => isStorageCategory(String(r.category)))
+        .map(toCategoryUsage),
       top: data.top.map(toFleetWorkspace),
       levels,
       drift: {
@@ -107,11 +114,16 @@ export class StorageFleetService {
     };
   }
 
-  async workspace(workspaceUuid: string, now: Date = new Date()): Promise<StorageWorkspaceDetailResponse> {
+  async workspace(
+    workspaceUuid: string,
+    now: Date = new Date(),
+  ): Promise<StorageWorkspaceDetailResponse> {
     const configured = await this.mode.configured();
     const found = await this.store.tx(async (tx) => {
       const org = rowsOf(
-        await tx.execute(sql`SELECT id, uuid, name, plan FROM organizations WHERE uuid = ${workspaceUuid}::uuid`),
+        await tx.execute(
+          sql`SELECT id, uuid, name, plan FROM organizations WHERE uuid = ${workspaceUuid}::uuid`,
+        ),
       )[0];
       if (!org) return null;
       const orgId = num(org.id);
@@ -145,7 +157,9 @@ export class StorageFleetService {
     });
 
     const s = found.state;
-    const byCategory = found.usage.filter((r) => isStorageCategory(String(r.category))).map(toCategoryUsage);
+    const byCategory = found.usage
+      .filter((r) => isStorageCategory(String(r.category)))
+      .map(toCategoryUsage);
     const summary: StorageSummary = {
       mode: configured,
       hotBytes: num(s?.hot_bytes),

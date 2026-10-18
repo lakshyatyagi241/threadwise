@@ -22,7 +22,9 @@ export interface OwnerSource {
    */
   size: { column: string } | { probe: true };
   /** The category, or the SQL expression over the table's columns that picks it. */
-  category: StorageCategory | { sql: string; values: Record<string, StorageCategory>; fallback: StorageCategory };
+  category:
+    | StorageCategory
+    | { sql: string; values: Record<string, StorageCategory>; fallback: StorageCategory };
 }
 
 export const OWNER_SOURCES: readonly OwnerSource[] = [

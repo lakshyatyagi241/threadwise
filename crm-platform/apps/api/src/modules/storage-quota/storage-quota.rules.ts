@@ -37,11 +37,17 @@ export function levelFor(hotBytes: number, capBytes: number): StorageLevel {
  */
 export function effectiveMode(raw: unknown): 'off' | 'observe' {
   const value = typeof raw === 'string' ? raw.trim().toLowerCase() : '';
-  const known = (STORAGE_MODES as readonly string[]).includes(value) ? (value as StorageMode) : 'observe';
+  const known = (STORAGE_MODES as readonly string[]).includes(value)
+    ? (value as StorageMode)
+    : 'observe';
   return known === 'off' ? 'off' : 'observe';
 }
 
-export { TEAM_CHAT_BLOB_TABLE, pgBlobKey, teamChatBlobKey } from '../../common/storage-meter/storage-key-category';
+export {
+  TEAM_CHAT_BLOB_TABLE,
+  pgBlobKey,
+  teamChatBlobKey,
+} from '../../common/storage-meter/storage-key-category';
 
 export const isStorageCategory = (value: string): value is StorageCategory =>
   (STORAGE_CATEGORIES as readonly string[]).includes(value);

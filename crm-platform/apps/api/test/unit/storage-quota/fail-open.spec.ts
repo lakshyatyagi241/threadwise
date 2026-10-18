@@ -109,14 +109,17 @@ describe('the port helpers fail open', () => {
     };
     const write = vi.fn(async () => 1);
     await expect(
-      meteredWrite(meter, { orgId: 7, bytes: 10, category: 'inbox_media' }, write, () => ({ key: 'k' })),
+      meteredWrite(meter, { orgId: 7, bytes: 10, category: 'inbox_media' }, write, () => ({
+        key: 'k',
+      })),
     ).rejects.toBe(refusal);
     expect(write).not.toHaveBeenCalled();
   });
 });
 
 describe('StorageMeterService is inert when its database is not', () => {
-  const mode = (m: 'off' | 'observe') => ({ current: async () => m }) as unknown as StorageModeService;
+  const mode = (m: 'off' | 'observe') =>
+    ({ current: async () => m }) as unknown as StorageModeService;
   const repo = {
     reserve: vi.fn(async () => '00000000-0000-4000-8000-000000000000'),
     commit: vi.fn(async () => undefined),
@@ -151,12 +154,18 @@ describe('StorageMeterService is inert when its database is not', () => {
   it('mode off, a category that does not count, and an empty file touch no table at all', async () => {
     const db = dbThat(async () => 'x');
     const off = new StorageMeterService(db, repo, mode('off'));
-    expect(await off.reserve({ orgId: 7, bytes: 100, category: 'inbox_media' })).toBe(NO_RESERVATION);
+    expect(await off.reserve({ orgId: 7, bytes: 100, category: 'inbox_media' })).toBe(
+      NO_RESERVATION,
+    );
     await off.recordRemoved(7, 'chat/7/x.png');
     const on = new StorageMeterService(db, repo, mode('observe'));
-    expect(await on.reserve({ orgId: 7, bytes: 100, category: 'payment_proof' })).toBe(NO_RESERVATION);
+    expect(await on.reserve({ orgId: 7, bytes: 100, category: 'payment_proof' })).toBe(
+      NO_RESERVATION,
+    );
     expect(await on.reserve({ orgId: 7, bytes: 0, category: 'inbox_media' })).toBe(NO_RESERVATION);
-    expect(await on.reserve({ orgId: 7, bytes: Number.NaN, category: 'inbox_media' })).toBe(NO_RESERVATION);
+    expect(await on.reserve({ orgId: 7, bytes: Number.NaN, category: 'inbox_media' })).toBe(
+      NO_RESERVATION,
+    );
     expect(db.txAs).not.toHaveBeenCalled();
   });
 });
@@ -195,7 +204,13 @@ describe('the write doors store the file when metering throws', () => {
     ['reserve throws', () => brokenMeter().meter],
     ['commit and release throw', () => reservingMeter().meter],
   ])('ChatMediaStore.store: %s', async (_name, makeMeter) => {
-    const store = new ChatMediaStore(localGateway(), new UploadPolicyService(), local, tokens, makeMeter());
+    const store = new ChatMediaStore(
+      localGateway(),
+      new UploadPolicyService(),
+      local,
+      tokens,
+      makeMeter(),
+    );
     const stored = await store.store({ orgId: 7, filename: 'a.png', buffer: PNG });
     expect(stored.size).toBe(PNG.length);
     const opened = await store.open(7, stored.key);
@@ -204,7 +219,13 @@ describe('the write doors store the file when metering throws', () => {
 
   it('ChatMediaStore.remove deletes the file when the meter throws on remove', async () => {
     const meter = reservingMeter().meter;
-    const store = new ChatMediaStore(localGateway(), new UploadPolicyService(), local, tokens, meter);
+    const store = new ChatMediaStore(
+      localGateway(),
+      new UploadPolicyService(),
+      local,
+      tokens,
+      meter,
+    );
     const stored = await store.store({ orgId: 7, filename: 'a.png', buffer: PNG });
     await expect(store.remove(7, stored.key)).resolves.toBeUndefined();
     expect(await store.open(7, stored.key)).toBeNull();
@@ -213,7 +234,13 @@ describe('the write doors store the file when metering throws', () => {
 
   it('ChatMediaStore.storeInbound names the customer-media category and still stores when metering throws', async () => {
     const meter = reservingMeter().meter;
-    const store = new ChatMediaStore(localGateway(), new UploadPolicyService(), local, tokens, meter);
+    const store = new ChatMediaStore(
+      localGateway(),
+      new UploadPolicyService(),
+      local,
+      tokens,
+      meter,
+    );
     const stored = await store.storeInbound({ orgId: 7, buffer: PNG, declaredMime: 'image/png' });
     expect(stored.size).toBe(PNG.length);
     expect(meter.reserve).toHaveBeenCalledWith({
@@ -246,11 +273,18 @@ describe('the write doors store the file when metering throws', () => {
       visibility: 'private',
       cdnUrl: '',
     });
-    vi.stubGlobal('fetch', vi.fn(async () => new Response(null, { status: 200 })));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(null, { status: 200 })),
+    );
     try {
       const out = await svc.put('scheduled/7/abc.png', PNG, 'image/png');
       expect(out).toEqual({ key: 'scheduled/7/abc.png' });
-      expect(meter.reserve).toHaveBeenCalledWith({ orgId: 7, bytes: PNG.length, category: 'scheduled_media' });
+      expect(meter.reserve).toHaveBeenCalledWith({
+        orgId: 7,
+        bytes: PNG.length,
+        category: 'scheduled_media',
+      });
 
       // chat/ is metered by ChatMediaStore (which also covers local disk): counting it here too would double it
       (meter.reserve as ReturnType<typeof vi.fn>).mockClear();
@@ -266,7 +300,12 @@ describe('the write doors store the file when metering throws', () => {
   it('MediaStorageService.put does not commit when media is local (nothing was stored here)', async () => {
     const { meter, reservation } = reservingMeter();
     const svc = new MediaStorageService({} as never, undefined, meter);
-    vi.spyOn(svc, 'destination').mockResolvedValue({ disk: 'local', target: null, visibility: 'private', cdnUrl: '' });
+    vi.spyOn(svc, 'destination').mockResolvedValue({
+      disk: 'local',
+      target: null,
+      visibility: 'private',
+      cdnUrl: '',
+    });
     expect(await svc.put('telegram/7/abc.png', PNG, 'image/png')).toBeNull();
     expect(reservation.commit).not.toHaveBeenCalled();
     expect(reservation.release).toHaveBeenCalled();

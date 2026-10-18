@@ -74,7 +74,12 @@ describe('storage quota rules', () => {
 describe('storage quota contracts', () => {
   it('every category has a definition and the system kinds are never blocked or counted', () => {
     for (const c of STORAGE_CATEGORIES) expect(STORAGE_CATEGORY_DEFS[c], c).toBeDefined();
-    for (const c of ['temporary_export', 'privacy_export', 'system_asset', 'payment_proof'] as const) {
+    for (const c of [
+      'temporary_export',
+      'privacy_export',
+      'system_asset',
+      'payment_proof',
+    ] as const) {
       expect(STORAGE_CATEGORY_DEFS[c].counted).toBe(false);
       expect(STORAGE_CATEGORY_DEFS[c].policy).toBe('never');
     }

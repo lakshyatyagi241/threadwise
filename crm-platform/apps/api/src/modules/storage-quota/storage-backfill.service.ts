@@ -60,7 +60,9 @@ export class StorageBackfillService {
 
     // Counters, team chat blobs and links from the registry as it now stands; then the workspace is marked done.
     await this.reconcile.reconcileOrg(orgId);
-    await this.db.txAs({ orgId, userId: null }, (tx) => this.repo.markBackfilled(tx, orgId, new Date()));
+    await this.db.txAs({ orgId, userId: null }, (tx) =>
+      this.repo.markBackfilled(tx, orgId, new Date()),
+    );
     this.logger.log({ ...result }, '[STORAGE] backfill finished');
     return result;
   }
@@ -118,7 +120,8 @@ export class StorageBackfillService {
       if (!isCountedStorageCategory(category)) continue;
       // A key that is not this workspace's (an external URL stored in the same column, a foreign key) is not an object of ours.
       if (!storageKeyIsOwnedBy(orgId, row.key)) continue;
-      if (row.size !== null && row.size > 0) out.push({ id: row.id, key: row.key, bytes: row.size, category });
+      if (row.size !== null && row.size > 0)
+        out.push({ id: row.id, key: row.key, bytes: row.size, category });
       else toProbe.push(row);
     }
 
@@ -143,7 +146,10 @@ export class StorageBackfillService {
       return await this.media.sizeOf(orgId, key);
     } catch (err) {
       // A bucket that cannot answer is "unknown", not "missing": the object is left for the next run rather than registered at zero.
-      this.logger.warn({ orgId, err: String(err) }, '[STORAGE] a size check failed; left for the next run');
+      this.logger.warn(
+        { orgId, err: String(err) },
+        '[STORAGE] a size check failed; left for the next run',
+      );
       return null;
     }
   }

@@ -191,7 +191,9 @@ export class StorageQuotaRepository {
     now: Date,
   ): Promise<{ driftBytes: number; hotBytes: number; level: string }> {
     const before = rowsOf(
-      await tx.execute(sql`SELECT hot_bytes FROM storage_org_state WHERE org_id = ${orgId} FOR UPDATE`),
+      await tx.execute(
+        sql`SELECT hot_bytes FROM storage_org_state WHERE org_id = ${orgId} FOR UPDATE`,
+      ),
     )[0];
     const sums = rowsOf(
       await tx.execute(sql`
@@ -206,7 +208,9 @@ export class StorageQuotaRepository {
     const drift = Math.abs(storedHot - hotTotal);
     const level = levelOf(hotTotal);
 
-    await tx.execute(sql`UPDATE storage_usage SET hot_bytes = 0, cold_bytes = 0, objects = 0 WHERE org_id = ${orgId}`);
+    await tx.execute(
+      sql`UPDATE storage_usage SET hot_bytes = 0, cold_bytes = 0, objects = 0 WHERE org_id = ${orgId}`,
+    );
     for (const r of sums) {
       await tx.execute(sql`
         INSERT INTO storage_usage (org_id, category, hot_bytes, cold_bytes, objects)
@@ -335,7 +339,9 @@ export class StorageQuotaRepository {
   }
 
   async isRegistered(tx: Tx, orgId: number, key: string): Promise<boolean> {
-    const res = await tx.execute(sql`SELECT 1 FROM storage_objects WHERE org_id = ${orgId} AND key = ${key}`);
+    const res = await tx.execute(
+      sql`SELECT 1 FROM storage_objects WHERE org_id = ${orgId} AND key = ${key}`,
+    );
     return rowsOf(res).length > 0;
   }
 
@@ -353,7 +359,9 @@ export class StorageQuotaRepository {
 
   /** Every workspace that exists, for the nightly fan-out. */
   async allOrgIds(tx: Tx): Promise<number[]> {
-    const res = await tx.execute(sql`SELECT id FROM organizations WHERE status <> 'deleted' ORDER BY id`);
+    const res = await tx.execute(
+      sql`SELECT id FROM organizations WHERE status <> 'deleted' ORDER BY id`,
+    );
     return rowsOf(res).map((r) => num(r.id));
   }
 }

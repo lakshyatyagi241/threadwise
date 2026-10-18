@@ -188,7 +188,16 @@ export class MessagesService {
         })
       : NO_RESERVATION;
     try {
-      return await this.postInTx(orgId, userId, channelUuid, input, body, file, sniffed, reservation);
+      return await this.postInTx(
+        orgId,
+        userId,
+        channelUuid,
+        input,
+        body,
+        file,
+        sniffed,
+        reservation,
+      );
     } catch (err) {
       await reservation.release();
       throw err;

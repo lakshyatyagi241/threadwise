@@ -40,9 +40,21 @@ export class StorageMeterService implements StorageMeter {
       if ((await this.mode.current()) === 'off') return NO_RESERVATION;
       const expiresAt = new Date(Date.now() + RESERVATION_TTL_MS);
       const uuid = await this.db.txAs({ orgId: request.orgId, userId: null }, (tx) =>
-        this.repo.reserve(tx, request.orgId, Math.floor(request.bytes), request.category, expiresAt),
+        this.repo.reserve(
+          tx,
+          request.orgId,
+          Math.floor(request.bytes),
+          request.category,
+          expiresAt,
+        ),
       );
-      return new LiveReservation(this, request.orgId, uuid, Math.floor(request.bytes), request.category);
+      return new LiveReservation(
+        this,
+        request.orgId,
+        uuid,
+        Math.floor(request.bytes),
+        request.category,
+      );
     } catch (err) {
       meterFailedOpen('reserve', request.orgId, err);
       return NO_RESERVATION;
@@ -88,7 +100,9 @@ export class StorageMeterService implements StorageMeter {
   /** @internal */
   async giveBack(orgId: number, reservationUuid: string): Promise<void> {
     try {
-      await this.db.txAs({ orgId, userId: null }, (tx) => this.repo.release(tx, orgId, reservationUuid));
+      await this.db.txAs({ orgId, userId: null }, (tx) =>
+        this.repo.release(tx, orgId, reservationUuid),
+      );
     } catch (err) {
       meterFailedOpen('release', orgId, err);
     }

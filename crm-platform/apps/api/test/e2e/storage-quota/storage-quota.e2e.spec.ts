@@ -66,7 +66,9 @@ describe('a team chat attachment is measured, and metering can never fail the up
   beforeAll(async () => {
     t = await api.signup('stq');
     const list = await api.as(t.admin).get('/v2/team-chat/channels');
-    channel = (list.body.data as Array<{ slug: string; id: string }>).find((c) => c.slug === 'general')!.id;
+    channel = (list.body.data as Array<{ slug: string; id: string }>).find(
+      (c) => c.slug === 'general',
+    )!.id;
   });
 
   it('registers the blob under its pseudo key and counts its bytes, with nothing left reserved', async () => {
@@ -82,14 +84,22 @@ describe('a team chat attachment is measured, and metering can never fail the up
       [t.orgId, key],
     );
     expect(obj.rows).toEqual([
-      { category: 'team_chat_attachment', bytes: PNG.length, state: 'live', owner_table: 'team_chat_messages' },
+      {
+        category: 'team_chat_attachment',
+        bytes: PNG.length,
+        state: 'live',
+        owner_table: 'team_chat_messages',
+      },
     ]);
     expect(await state()).toEqual({ hot: PNG.length, reserved: 0 });
   });
 
   it('a post without a file touches no storage table', async () => {
     const before = await state();
-    const res = await api.as(t.admin).post(`/v2/team-chat/channels/${channel}/messages`).send({ body: 'hello' });
+    const res = await api
+      .as(t.admin)
+      .post(`/v2/team-chat/channels/${channel}/messages`)
+      .send({ body: 'hello' });
     expect(res.status).toBe(201);
     expect(await state()).toEqual(before);
   });
@@ -117,7 +127,9 @@ describe('the operator storage view', () => {
   it('needs an operator session', async () => {
     expect((await http().get('/v2/platform/storage/fleet')).status).toBe(401);
     const t = await api.signup('stqx');
-    expect((await api.as(t.admin).get('/v2/platform/storage/fleet')).status).toBeGreaterThanOrEqual(401);
+    expect((await api.as(t.admin).get('/v2/platform/storage/fleet')).status).toBeGreaterThanOrEqual(
+      401,
+    );
     expect((await api.as(t.admin).get('/v2/platform/storage/fleet')).status).toBeLessThan(500);
   });
 
@@ -127,7 +139,9 @@ describe('the operator storage view', () => {
     const fleet = storageFleetResponseSchema.parse(res.body);
     expect(fleet.mode).toBe('observe');
     expect(fleet.totals.hotBytes).toBeGreaterThanOrEqual(PNG.length);
-    expect(fleet.byCategory.find((c) => c.category === 'team_chat_attachment')!.hotBytes).toBeGreaterThanOrEqual(PNG.length);
+    expect(
+      fleet.byCategory.find((c) => c.category === 'team_chat_attachment')!.hotBytes,
+    ).toBeGreaterThanOrEqual(PNG.length);
   });
 
   it('serves one workspace and refuses an unknown one', async () => {
@@ -135,7 +149,9 @@ describe('the operator storage view', () => {
       `SELECT o.uuid FROM organizations o JOIN storage_org_state s ON s.org_id = o.id WHERE s.hot_bytes > 0 LIMIT 1`,
     );
     const uuid = org.rows[0].uuid as string;
-    const res = await http().get(`/v2/platform/storage/workspaces/${uuid}`).set(bearer(operatorToken));
+    const res = await http()
+      .get(`/v2/platform/storage/workspaces/${uuid}`)
+      .set(bearer(operatorToken));
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(storageWorkspaceDetailResponseSchema.parse(res.body).workspaceId).toBe(uuid);
     const audited = await h.owner.query(
@@ -147,6 +163,9 @@ describe('the operator storage view', () => {
       .get('/v2/platform/storage/workspaces/00000000-0000-4000-8000-000000000000')
       .set(bearer(operatorToken));
     expect(missing.status).toBe(404);
-    expect((await http().get('/v2/platform/storage/workspaces/not-a-uuid').set(bearer(operatorToken))).status).toBe(400);
+    expect(
+      (await http().get('/v2/platform/storage/workspaces/not-a-uuid').set(bearer(operatorToken)))
+        .status,
+    ).toBe(400);
   });
 });

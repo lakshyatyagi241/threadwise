@@ -46,11 +46,13 @@ const WRITERS: Record<string, Writer> = {
   // --- the doors -------------------------------------------------------------------------------------------------------------
   [CHAT_DOOR]: {
     role: 'door',
-    reason: 'ChatMediaStore: store, storeInbound, storeInboundStream (chat/<org>/...), local disk included',
+    reason:
+      'ChatMediaStore: store, storeInbound, storeInboundStream (chat/<org>/...), local disk included',
   },
   [MEDIA_DOOR]: {
     role: 'door',
-    reason: 'MediaStorageService.put: marketing/, scheduled/, telegram/, ai-training/ keys (chat/ is metered by ChatMediaStore)',
+    reason:
+      'MediaStorageService.put: marketing/, scheduled/, telegram/, ai-training/ keys (chat/ is metered by ChatMediaStore)',
   },
   [TRAINING_DOOR]: {
     role: 'door',
@@ -80,12 +82,14 @@ const WRITERS: Record<string, Writer> = {
   // --- primitives under a door ------------------------------------------------------------------------------------------------
   'infra/providers/chat-conversations/media/local-disk-media.store.ts': {
     role: 'exempt',
-    reason: 'the local-disk primitive; only ChatMediaStore and the training store call it, and both are doors',
+    reason:
+      'the local-disk primitive; only ChatMediaStore and the training store call it, and both are doors',
   },
   // --- not a workspace\'s counted storage (spec section 3) ---------------------------------------------------------------------
   'modules/marketing-site-cms/upload.service.ts': {
     role: 'exempt',
-    reason: 'the platform marketing site\'s images (site/ keys carry no workspace): platform data, not a workspace\'s files',
+    reason:
+      "the platform marketing site's images (site/ keys carry no workspace): platform data, not a workspace's files",
   },
   'modules/data-retention/partition-archiver.service.ts': {
     role: 'exempt',
@@ -109,23 +113,23 @@ const WRITERS: Record<string, Writer> = {
   },
   'modules/platform-infrastructure/offsite-backup/offsite-backup.cli.ts': {
     role: 'exempt',
-    reason: 'the platform\'s own off-host database backup tooling',
+    reason: "the platform's own off-host database backup tooling",
   },
   'modules/platform-infrastructure/offsite-backup/sync.ts': {
     role: 'exempt',
-    reason: 'the platform\'s own off-host database backup upload',
+    reason: "the platform's own off-host database backup upload",
   },
   'modules/platform-infrastructure/offsite-backup/s3-client.ts': {
     role: 'exempt',
-    reason: 'the platform\'s own off-host backup client',
+    reason: "the platform's own off-host backup client",
   },
   'modules/platform-infrastructure/offsite-backup/seal.ts': {
     role: 'exempt',
-    reason: 'the platform\'s own off-host backup encryption',
+    reason: "the platform's own off-host backup encryption",
   },
   'modules/addons-extension-registry/extension-installer.ts': {
     role: 'exempt',
-    reason: 'installs platform extension code on the server\'s disk; not workspace content',
+    reason: "installs platform extension code on the server's disk; not workspace content",
   },
   'modules/addons-extension-registry/module-loader.ts': {
     role: 'exempt',
@@ -138,15 +142,18 @@ const WRITERS: Record<string, Writer> = {
   // --- known gaps (counted below; the list only gets shorter) -----------------------------------------------------------------
   'modules/flow-builder-editor/flow-media.service.ts': {
     role: 'gap',
-    reason: 'flow builder media through FLOW_MEDIA_STORE (local-disk adapter, org uuid in the path): not metered in S1. Follow-up with the production adapter (phase S7)',
+    reason:
+      'flow builder media through FLOW_MEDIA_STORE (local-disk adapter, org uuid in the path): not metered in S1. Follow-up with the production adapter (phase S7)',
   },
   'infra/providers/flow-builder-editor/local-flow-media.adapter.ts': {
     role: 'gap',
-    reason: 'the local-disk adapter behind FLOW_MEDIA_STORE (development and single-node installs). Same follow-up as flow-media.service.ts',
+    reason:
+      'the local-disk adapter behind FLOW_MEDIA_STORE (development and single-node installs). Same follow-up as flow-media.service.ts',
   },
   'modules/calling-voice/cli/demo-calls.ts': {
     role: 'gap',
-    reason: 'a developer CLI that seeds demo recordings straight onto a store; the nightly reconcile and the backfill pick the files up. Never runs in production',
+    reason:
+      'a developer CLI that seeds demo recordings straight onto a store; the nightly reconcile and the backfill pick the files up. Never runs in production',
   },
 };
 
@@ -154,15 +161,18 @@ const WRITERS: Record<string, Writer> = {
 const KNOWN_GAPS = 3;
 
 /** The files that put an object on a store, write a file to disk or sign a write to a bucket (production code only). */
-const OBJECT_PUT = /\b(?:gateway|storage|mediaStorage|media|files|fileStore|disk|local|store|archive|client|o\.client)\.(?:put|adopt|putFile|putBytes)\(/;
-const FS_WRITE = /(?:^|[^.\w])(?:writeFile|writeFileSync|createWriteStream|appendFile|copyFile|copyFileSync)\(/;
+const OBJECT_PUT =
+  /\b(?:gateway|storage|mediaStorage|media|files|fileStore|disk|local|store|archive|client|o\.client)\.(?:put|adopt|putFile|putBytes)\(/;
+const FS_WRITE =
+  /(?:^|[^.\w])(?:writeFile|writeFileSync|createWriteStream|appendFile|copyFile|copyFileSync)\(/;
 const BUCKET_WRITE = /signS3Request\(/;
 
 function walk(dir: string, out: string[] = []): string[] {
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
     if (statSync(p).isDirectory()) walk(p, out);
-    else if (name.endsWith('.ts') && !name.endsWith('.spec.ts') && !name.endsWith('.test.ts')) out.push(p);
+    else if (name.endsWith('.ts') && !name.endsWith('.spec.ts') && !name.endsWith('.test.ts'))
+      out.push(p);
   }
   return out;
 }
@@ -177,7 +187,9 @@ describe('storage writes are guarded: object stores and disks', () => {
   const texts = new Map(files.map((f) => [rel(f), readFileSync(f, 'utf8')]));
 
   const writersFound = [...texts.entries()]
-    .filter(([, text]) => codeLines(text).some((l) => OBJECT_PUT.test(l) || FS_WRITE.test(l) || BUCKET_WRITE.test(l)))
+    .filter(([, text]) =>
+      codeLines(text).some((l) => OBJECT_PUT.test(l) || FS_WRITE.test(l) || BUCKET_WRITE.test(l)),
+    )
     .map(([file]) => file)
     .sort();
 
@@ -226,7 +238,9 @@ describe('storage writes are guarded: object stores and disks', () => {
   });
 
   it('a bucket write is signed only by the media door, the connection test, the archives and the backup tooling', () => {
-    const signers = writersFound.filter((f) => codeLines(texts.get(f)!).some((l) => BUCKET_WRITE.test(l)));
+    const signers = writersFound.filter((f) =>
+      codeLines(texts.get(f)!).some((l) => BUCKET_WRITE.test(l)),
+    );
     for (const f of signers) expect(WRITERS[f]?.role, f).toMatch(/^(door|exempt)$/);
   });
 });
@@ -236,12 +250,19 @@ describe('storage writes are guarded: Postgres blobs', () => {
   function byteaTables(): string[] {
     const found = new Set<string>();
     const dropped = new Set<string>();
-    for (const name of readdirSync(MIGRATIONS).filter((f) => f.endsWith('.sql')).sort()) {
+    for (const name of readdirSync(MIGRATIONS)
+      .filter((f) => f.endsWith('.sql'))
+      .sort()) {
       const text = readFileSync(join(MIGRATIONS, name), 'utf8').replace(/--[^\n]*/g, '');
-      for (const m of text.matchAll(/CREATE TABLE\s+(?:IF NOT EXISTS\s+)?(\w+)\s*\(([\s\S]*?)\n\);/g)) {
+      for (const m of text.matchAll(
+        /CREATE TABLE\s+(?:IF NOT EXISTS\s+)?(\w+)\s*\(([\s\S]*?)\n\);/g,
+      )) {
         if (/\bbytea\b/i.test(m[2]!)) found.add(m[1]!);
       }
-      for (const m of text.matchAll(/ALTER TABLE\s+(?:ONLY\s+)?(\w+)\s+ADD COLUMN\s+(?:IF NOT EXISTS\s+)?\w+\s+bytea/gi)) found.add(m[1]!);
+      for (const m of text.matchAll(
+        /ALTER TABLE\s+(?:ONLY\s+)?(\w+)\s+ADD COLUMN\s+(?:IF NOT EXISTS\s+)?\w+\s+bytea/gi,
+      ))
+        found.add(m[1]!);
       for (const m of text.matchAll(/DROP TABLE\s+(?:IF EXISTS\s+)?([\w,\s]+?)(?:CASCADE|;)/gi)) {
         for (const t of m[1]!.split(',')) dropped.add(t.trim());
       }
@@ -254,22 +275,79 @@ describe('storage writes are guarded: Postgres blobs', () => {
     team_chat_attachment_blobs: {
       how: 'metered',
       category: 'team_chat_attachment',
-      reason: 'MessagesService.post reserves and commits `pg:team_chat_attachment_blobs:<message id>` in the insert\'s transaction; the nightly check syncs the table',
+      reason:
+        "MessagesService.post reserves and commits `pg:team_chat_attachment_blobs:<message id>` in the insert's transaction; the nightly check syncs the table",
     },
-    order_proof_blobs: { how: 'exempt', category: 'payment_proof', reason: 'financial evidence tied to an order, 4 MB each' },
-    user_avatars: { how: 'exempt', category: 'system_asset', reason: 'one slot per user, replaced in place' },
-    workspace_brand_assets: { how: 'exempt', category: 'system_asset', reason: 'logo and favicon, one row per slot' },
-    flow_widget_assets: { how: 'exempt', category: 'system_asset', reason: 'flow widget pictures, one row per slot' },
-    revenue_report_exports: { how: 'exempt', category: 'temporary_export', reason: 'temporary (7 days), one at a time' },
-    message_log_exports: { how: 'exempt', category: 'temporary_export', reason: 'temporary (7 days), one at a time' },
-    contact_consent_exports: { how: 'exempt', category: 'temporary_export', reason: 'temporary, a compliance duty' },
-    audit_log_exports: { how: 'exempt', category: 'temporary_export', reason: 'temporary, a compliance duty' },
-    contact_exports: { how: 'exempt', category: 'temporary_export', reason: 'temporary saved contact exports' },
-    privacy_request_exports: { how: 'exempt', category: 'privacy_export', reason: 'a legal duty to deliver (GDPR Art. 15/20): must work at 100% full' },
-    message_event_archives: { how: 'exempt', category: 'system_asset', reason: 'platform data (the message log archive), not the workspace\'s files' },
-    webhook_forward_failures: { how: 'exempt', category: 'system_asset', reason: 'platform operating data (retried webhook bodies)' },
-    webauthn_credentials: { how: 'exempt', category: 'system_asset', reason: 'a public key, not a file' },
-    platform_webauthn_credentials: { how: 'exempt', category: 'system_asset', reason: 'a public key, not a file (platform operators)' },
+    order_proof_blobs: {
+      how: 'exempt',
+      category: 'payment_proof',
+      reason: 'financial evidence tied to an order, 4 MB each',
+    },
+    user_avatars: {
+      how: 'exempt',
+      category: 'system_asset',
+      reason: 'one slot per user, replaced in place',
+    },
+    workspace_brand_assets: {
+      how: 'exempt',
+      category: 'system_asset',
+      reason: 'logo and favicon, one row per slot',
+    },
+    flow_widget_assets: {
+      how: 'exempt',
+      category: 'system_asset',
+      reason: 'flow widget pictures, one row per slot',
+    },
+    revenue_report_exports: {
+      how: 'exempt',
+      category: 'temporary_export',
+      reason: 'temporary (7 days), one at a time',
+    },
+    message_log_exports: {
+      how: 'exempt',
+      category: 'temporary_export',
+      reason: 'temporary (7 days), one at a time',
+    },
+    contact_consent_exports: {
+      how: 'exempt',
+      category: 'temporary_export',
+      reason: 'temporary, a compliance duty',
+    },
+    audit_log_exports: {
+      how: 'exempt',
+      category: 'temporary_export',
+      reason: 'temporary, a compliance duty',
+    },
+    contact_exports: {
+      how: 'exempt',
+      category: 'temporary_export',
+      reason: 'temporary saved contact exports',
+    },
+    privacy_request_exports: {
+      how: 'exempt',
+      category: 'privacy_export',
+      reason: 'a legal duty to deliver (GDPR Art. 15/20): must work at 100% full',
+    },
+    message_event_archives: {
+      how: 'exempt',
+      category: 'system_asset',
+      reason: "platform data (the message log archive), not the workspace's files",
+    },
+    webhook_forward_failures: {
+      how: 'exempt',
+      category: 'system_asset',
+      reason: 'platform operating data (retried webhook bodies)',
+    },
+    webauthn_credentials: {
+      how: 'exempt',
+      category: 'system_asset',
+      reason: 'a public key, not a file',
+    },
+    platform_webauthn_credentials: {
+      how: 'exempt',
+      category: 'system_asset',
+      reason: 'a public key, not a file (platform operators)',
+    },
   };
 
   it('every table with a bytea column is classified: metered, or one of the kinds spec section 3 leaves out', () => {
@@ -290,7 +368,9 @@ describe('storage writes are guarded: Postgres blobs', () => {
     // the insert itself is in the repository, called only from the metered path
     const repo = readFileSync(join(SRC, 'modules/team-chat/team-chat.repository.ts'), 'utf8');
     expect(repo.match(/INSERT INTO team_chat_attachment_blobs/g)).toHaveLength(1);
-    const callers = [...walk(SRC)].filter((f) => readFileSync(f, 'utf8').includes('insertAttachmentBlob('));
+    const callers = [...walk(SRC)].filter((f) =>
+      readFileSync(f, 'utf8').includes('insertAttachmentBlob('),
+    );
     expect(callers.map(rel).sort()).toEqual([
       'modules/team-chat/messages.service.ts',
       'modules/team-chat/team-chat.repository.ts',
