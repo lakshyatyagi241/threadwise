@@ -249,11 +249,14 @@ describe('the worker side: a real file on disk, the real queue', () => {
     });
     expect(refound).toMatchObject({ category: 'contact_file', bytes: png.length, state: 'live' });
     await until(async () => ((await hot()) === png.length ? true : undefined));
-    const done = await h.owner.query(
-      `SELECT backfilled_at FROM storage_org_state WHERE org_id = $1`,
-      [t.orgId],
-    );
-    expect(done.rows[0].backfilled_at).not.toBeNull();
+    // the job marks the workspace done after its last step: wait for it instead of racing it
+    await until(async () => {
+      const done = await h.owner.query(
+        `SELECT backfilled_at FROM storage_org_state WHERE org_id = $1`,
+        [t.orgId],
+      );
+      return done.rows[0]?.backfilled_at ? true : undefined;
+    });
 
     // the delete path
     await media.remove(t.orgId, stored.key);

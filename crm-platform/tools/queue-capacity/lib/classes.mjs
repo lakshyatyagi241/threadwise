@@ -58,6 +58,7 @@ export const CLASSES = {
   AUDIT_LOG_EXPORT: MAINT('audit-export', 'db', 'postgres'),
   REVENUE_EXPORT: MAINT('revenue-export', 'db', 'postgres'),
   PRIVACY_EXPORT: MAINT('privacy-export', 'cpu', 'postgres,media-store'),
+  STORAGE_QUOTA: MAINT('storage-accounting', 'db', 'postgres,media-store'),
 };
 
 export function classify(constant) {
