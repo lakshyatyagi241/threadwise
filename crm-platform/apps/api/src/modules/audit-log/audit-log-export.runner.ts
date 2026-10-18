@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { gzipSync } from 'node:zlib';
+import { gzipAsync } from '../../common/async-zlib';
 import {
   AUDIT_LOG_EXPORT_MAX_ROWS,
   AUDIT_LOG_EXPORT_TTL_DAYS,
@@ -98,7 +98,7 @@ export class AuditLogExportRunner {
     filters: AuditLogFilters,
   ): Promise<{ file: Buffer; rows: number }> {
     const window = resolveWindow(filters);
-    const members: Buffer[] = [gzipSync(`${CSV_BOM}${csvLine([...CSV_HEADER])}\r\n`)];
+    const members: Buffer[] = [await gzipAsync(`${CSV_BOM}${csvLine([...CSV_HEADER])}\r\n`)];
     let rows = 0;
     let after: RowPosition | null = null;
 
@@ -143,7 +143,7 @@ export class AuditLogExportRunner {
           Object.keys(changes).length > 0 ? JSON.stringify(changes) : '',
         ]);
       });
-      members.push(gzipSync(`${lines.join('\r\n')}\r\n`));
+      members.push(await gzipAsync(`${lines.join('\r\n')}\r\n`));
       const last = page[page.length - 1]!;
       after = { atText: last.atText, id: last.id };
       if (page.length < BATCH) break;

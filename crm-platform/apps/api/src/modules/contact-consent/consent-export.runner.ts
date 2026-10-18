@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { gzipSync } from 'node:zlib';
+import { gzipAsync } from '../../common/async-zlib';
 import { CONSENT_EXPORT_MAX_ROWS, CONSENT_EXPORT_TTL_DAYS } from '@crm/contracts';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -85,7 +85,7 @@ export class ConsentExportRunner {
   }
 
   private async build(orgId: number): Promise<{ file: Buffer; rows: number }> {
-    const members: Buffer[] = [gzipSync(`${CONSENT_CSV_HEADER.join(',')}\r\n`)];
+    const members: Buffer[] = [await gzipAsync(`${CONSENT_CSV_HEADER.join(',')}\r\n`)];
     let rows = 0;
     let after: number | null = null;
     for (;;) {
@@ -96,7 +96,7 @@ export class ConsentExportRunner {
       if (page.length === 0) break;
       rows += page.length;
       if (rows > CONSENT_EXPORT_MAX_ROWS) throw new ExportTooLarge();
-      members.push(gzipSync(`${page.map(proofCsvLine).join('\r\n')}\r\n`));
+      members.push(await gzipAsync(`${page.map(proofCsvLine).join('\r\n')}\r\n`));
       after = page[page.length - 1]!.id;
       if (page.length < BATCH) break;
     }

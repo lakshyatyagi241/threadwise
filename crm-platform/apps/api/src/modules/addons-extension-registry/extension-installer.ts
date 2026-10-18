@@ -4,7 +4,7 @@ import { HttpStatus } from '@nestjs/common';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 import type { PackageInspection } from './package-inspector';
-import { readEntry } from './zip-reader';
+import { readEntryAsync } from './zip-reader';
 
 /**
  * Paths a package may never write or have removed, relative to the module folder (TW-ADD-005 rule 3). Everything
@@ -77,7 +77,7 @@ export async function installPackage(
         continue;
       }
       await mkdir(dirname(target), { recursive: true });
-      await writeFile(target, readEntry(buf, entry));
+      await writeFile(target, await readEntryAsync(buf, entry));
       files.push(`${manifest.slug}/${rel}`);
     }
   } catch (err) {

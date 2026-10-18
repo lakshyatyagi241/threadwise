@@ -1,0 +1,71 @@
+{
+ "generatedAt": "2026-10-18T05:47:39.863Z",
+ "node": "v22.17.0",
+ "cpu": "Intel(R) Core(TM) Ultra 7 155H",
+ "note": "The real compiled functions from apps/api/dist after EL-B08, synthetic payloads, this machine only. Hold = worst lateness of a 1 ms timer (about 15 ms is the Windows tick, i.e. nothing measurable).",
+ "rows": [
+  {
+   "site": "message-log.service archivedEventsOf()",
+   "case": "20,000 events (6 MB)",
+   "wallMs": 149.3,
+   "holdMs": 26.7,
+   "matched": 1
+  },
+  {
+   "site": "message-log.service archivedEventsOf()",
+   "case": "100,000 events (30 MB)",
+   "wallMs": 657.6,
+   "holdMs": 45.4,
+   "matched": 1
+  },
+  {
+   "site": "message-log.service archivedEventsOf()",
+   "case": "400,000 events (120 MB)",
+   "wallMs": 2553.3,
+   "holdMs": 173.7,
+   "matched": 1
+  },
+  {
+   "site": "privacy/engine/zip buildZip()",
+   "case": "1 MB entry",
+   "wallMs": 124,
+   "holdMs": 15,
+   "zipMb": 0.24
+  },
+  {
+   "site": "privacy/engine/zip buildZip()",
+   "case": "10 MB entry",
+   "wallMs": 1100.4,
+   "holdMs": 14.7,
+   "zipMb": 2.38
+  },
+  {
+   "site": "privacy/engine/zip buildZip()",
+   "case": "50 MB entry",
+   "wallMs": 5588.5,
+   "holdMs": 50.9,
+   "zipMb": 11.88
+  },
+  {
+   "site": "addons zip-reader readEntryAsync()",
+   "case": "20 MB entry",
+   "wallMs": 223.3,
+   "holdMs": 27.6,
+   "ok": true
+  },
+  {
+   "site": "ai-agents-training docxToText()",
+   "case": "2 MB document.xml",
+   "wallMs": 258.1,
+   "holdMs": 219,
+   "chars": 2097152
+  },
+  {
+   "site": "ai-agents-training docxToText()",
+   "case": "20 MB document.xml",
+   "wallMs": 4660.3,
+   "holdMs": 4289.8,
+   "chars": 20971520
+  }
+ ]
+}
