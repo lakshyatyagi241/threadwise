@@ -1,0 +1,157 @@
+{
+  "whatsapp-throughput": {
+    "nav": {
+      "group": "WhatsApp",
+      "item": "Limity wysyłania"
+    },
+    "eyebrow": "WhatsApp",
+    "title": "Limity wysyłania i wydajność na żywo",
+    "description": "Jak szybko może wysyłać każdy połączony numer WhatsApp, ile jego dziennego limitu wiadomości zostało wykorzystane i co dzieje się teraz. Zmiany obowiązują od następnej wiadomości wysłanej przez każdego workera.",
+    "updated": "Na żywo. Zaktualizowano {time}",
+    "stale": "Ostatnie odświeżenie nie powiodło się. Wyświetlane są poprzednie dane.",
+    "liveUnavailable": "Nie udało się odczytać liczników na żywo, więc kolumny na żywo pokazują zero. Limity, poziomy i ustawienia są nadal poprawne.",
+    "limiterOff": "Ogranicznik wysyłania jest wyłączony. Wiadomości nie są tu regulowane; działa tylko własne ograniczanie Meta.",
+    "footnote": "Szybkość numeru ustala Meta: domyślnie 80 wiadomości na sekundę, do 1000 po przyznaniu wyższego poziomu przez Meta oraz 20 dla numeru używanego także w aplikacji WhatsApp Business. Wiadomości przychodzące i wychodzące dzielą ten limit. Dzienny poziom wiadomości to osobny limit unikalnych osób, do których napisano w ciągu 24 godzin; liczba tutaj to szacunek na podstawie wiadomości szablonowych wysłanych przez tę platformę.",
+    "perSecond": "msg/s",
+    "peak": "Szczyt {n} w ostatniej minucie",
+    "sentCount": "Wysłano: {n}",
+    "deferredCount": "Wstrzymano: {n}",
+    "throttledCount": "Ograniczone przez Meta: {n}",
+    "tierUsed": "{used} z {cap} osób w ciągu 24 godzin",
+    "details": "Szczegóły",
+    "common": {
+      "loading": "Ładowanie...",
+      "retry": "Spróbuj ponownie"
+    },
+    "errors": {
+      "conflict": "Ktoś inny właśnie to zmienił. Wczytano najnowsze wartości; sprawdź je i zastosuj zmianę ponownie.",
+      "metaUnavailable": "Meta nie odpowiedziała. Spróbuj odświeżyć za chwilę.",
+      "notFound": "Ten numer już nie istnieje. Wróć do listy.",
+      "forbidden": "Tylko Super Admin może zmieniać limity wysyłania.",
+      "invalid": "Niektóre wartości nie zostały zaakceptowane. Sprawdź je i spróbuj ponownie.",
+      "unexpected": "Coś poszło nie tak po naszej stronie. Spróbuj ponownie za chwilę."
+    },
+    "kpi": {
+      "now": "Wysyłanie teraz",
+      "nowHint": "wiadomości na sekundę, wszystkie numery",
+      "sent": "Wysłano",
+      "last5": "ostatnie 5 minut",
+      "numbers": "Połączone numery",
+      "attention": "Wymagają uwagi",
+      "attentionHint": "Wstrzymane: {paused}, blisko dziennego limitu: {tier}",
+      "heldBack": "Wstrzymane",
+      "heldBackHint": "Ograniczone przez Meta: {meta}, ostatnie 5 minut"
+    },
+    "settings": {
+      "title": "Ustawienia platformy",
+      "description": "Dotyczą każdego numeru. Własne nadpisanie i wstrzymanie numeru ustawia się na jego stronie.",
+      "enabled": "Dostosuj wysyłanie do limitu każdego numeru",
+      "enabledHelp": "Po wyłączeniu wiadomości są wysyłane bez regulacji; własne ograniczanie Meta nadal działa.",
+      "defaultMps": "Domyślna szybkość (msg/s)",
+      "defaultMpsHelp": "Używana dla numeru, którego szybkości Meta jeszcze nie zgłosiła.",
+      "safetyMargin": "Margines bezpieczeństwa (%)",
+      "safetyMarginHelp": "Część limitu pozostawiona wolna na ruch przychodzący i rozbieżności czasowe.",
+      "maxWait": "Najdłuższe oczekiwanie (ms)",
+      "maxWaitHelp": "Wysyłka, która musiałaby czekać dłużej, wraca do kolejki i jest ponawiana.",
+      "syncInterval": "Ponowny odczyt z Meta (minuty)",
+      "syncIntervalHelp": "Jak często odświeżana jest szybkość i dzienny limit każdego numeru.",
+      "adaptive": "Zwolnij po ograniczeniu przez Meta",
+      "adaptiveHelp": "Zmniejsza szybkość o połowę, gdy Meta odrzuci wiadomość z powodu zbyt szybkiego wysyłania, a potem wraca do normy w ciągu minuty.",
+      "enforceTier": "Wstrzymaj wiadomości szablonowe po osiągnięciu dziennego limitu",
+      "enforceTierHelp": "Zatrzymuje nowe wiadomości szablonowe, gdy numer osiągnął dzienny poziom wiadomości. Po wyłączeniu tylko oznacza numer.",
+      "tierWarn": "Ostrzegaj przy (% dziennego limitu)",
+      "tierWarnHelp": "Numer jest oznaczany, gdy wykorzysta tę część swojego poziomu.",
+      "save": "Zapisz ustawienia",
+      "saving": "Zapisywanie...",
+      "saved": "Zapisano. Każdy numer stosuje teraz nowe ustawienia."
+    },
+    "numbers": {
+      "title": "Numery",
+      "search": "Szukaj według przestrzeni roboczej, numeru lub ID",
+      "emptyTitle": "Brak połączonych numerów",
+      "emptyBody": "Numery pojawią się tutaj, gdy przestrzeń robocza połączy WhatsApp."
+    },
+    "cols": {
+      "number": "Numer",
+      "rate": "Limit szybkości",
+      "live": "Teraz",
+      "last5": "Ostatnie 5 minut",
+      "tier": "Limit dzienny",
+      "state": "Stan",
+      "actions": "Akcje"
+    },
+    "source": {
+      "override": "Nadpisz",
+      "coexistence": "Aplikacja Business (stała)",
+      "meta": "Z Meta",
+      "default": "Domyślna"
+    },
+    "tier": {
+      "unlimited": "Bez limitu",
+      "unknown": "Jeszcze nie zgłoszono",
+      "unlimitedBody": "Ten numer ma nieograniczony dzienny limit wiadomości.",
+      "unknownBody": "Meta nie zgłosiła jeszcze dziennego limitu wiadomości dla tego numeru. Odśwież z Meta."
+    },
+    "state": {
+      "ok": "Sprawny",
+      "paused": "Wstrzymany",
+      "slowed": "Zwolniono do {pct}%",
+      "tierWarn": "Blisko limitu dziennego",
+      "tierFull": "Osiągnięto limit dzienny",
+      "syncFailed": "Odczyt z Meta nie powiódł się"
+    },
+    "events": {
+      "meta_throttled": "Meta ograniczyła wysyłanie",
+      "upgrade_in_progress": "Trwa podnoszenie przepustowości",
+      "throughput_upgraded": "Zmieniono poziom przepustowości",
+      "deferred": "Wysyłka wstrzymana, kolejka za długa",
+      "paused_block": "Wysyłka zablokowana, numer wstrzymany",
+      "tier_full": "Osiągnięto limit dzienny",
+      "paused": "Wstrzymane przez operatora",
+      "resumed": "Wznowione przez operatora",
+      "override_set": "Ustawiono nadpisanie szybkości",
+      "override_cleared": "Usunięto nadpisanie szybkości",
+      "synced": "Ponowny odczyt z Meta"
+    },
+    "detail": {
+      "title": "Limity numeru WhatsApp",
+      "back": "Wróć do limitów wysyłania",
+      "description": "ID numeru telefonu {id}. Odświeża się co kilka sekund.",
+      "refresh": "Odśwież z Meta",
+      "refreshing": "Odczytywanie z Meta...",
+      "syncError": "Ostatni odczyt z Meta nie powiódł się: {message}",
+      "coexistence": "Ten numer jest używany także w aplikacji WhatsApp Business, więc Meta ustala dla niego stałą szybkość 20 wiadomości na sekundę.",
+      "rate": "Dostosowano do (msg/s)",
+      "speed": "Szybkość",
+      "speedSlowed": "Zwolniono po ograniczeniu przez Meta, trwa powrót do normy",
+      "speedFull": "Pełna szybkość",
+      "wait": "Średnie oczekiwanie",
+      "waitHint": "Liczba wysyłek, które czekały: {n}, ostatnie 5 minut",
+      "meta": "Poziom przepustowości Meta",
+      "metaHint": "{n} msg/s",
+      "unknown": "Nie zgłoszono",
+      "chartSeconds": "Wysyłki na sekundę, ostatnia minuta",
+      "chartLegend": "Linia przerywana to dostosowana szybkość. Czerwone znaczniki to sekundy, w których Meta odrzuciła wysyłkę, bursztynowe to sekundy, w których wysyłki wstrzymano.",
+      "chartMinutes": "Wysyłki na minutę, ostatnia godzina",
+      "chartLegendMinutes": "Czerwone znaczniki to minuty, w których Meta odrzuciła wysyłkę, bursztynowe to minuty, w których wysyłki wstrzymano.",
+      "tierTitle": "Dzienny limit wiadomości",
+      "tierNote": "Meta ogranicza, z iloma różnymi osobami numer może rozpocząć rozmowy w ciągu 24 godzin. Ta liczba obejmuje wiadomości szablonowe wysłane przez tę platformę, więc może różnić się od danych Meta.",
+      "events": "Ostatnie zdarzenia",
+      "eventsEmpty": "Na razie nic",
+      "eventsEmptyBody": "Tutaj wyświetlane są ograniczenia, wstrzymania, pauzy i zmiany szybkości dla tego numeru."
+    },
+    "control": {
+      "title": "Sterowanie",
+      "description": "Nadpisz szybkość przyznaną numerowi przez Meta lub zatrzymaj jego wysyłkę. Oba działania obowiązują od następnej wiadomości, dla każdej przestrzeni roboczej używającej tego numeru.",
+      "override": "Nadpisanie szybkości (msg/s)",
+      "overrideHelp": "Liczba całkowita od 1 do {max}. Pozostaw puste, aby stosować wartość z Meta.",
+      "overrideInvalid": "Wpisz liczbę całkowitą od 1 do {max}.",
+      "overridePlaceholder": "Stosuj wartość z Meta",
+      "pause": "Wstrzymaj wysyłanie z tego numeru",
+      "pauseHelp": "Wysyłki masowe i kampanie zatrzymują się i wznawiają automatycznie; inne wiadomości kończą się błędem z opcją ponowienia.",
+      "reason": "Powód",
+      "reasonHelp": "Wyświetlany w dzienniku zdarzeń.",
+      "saved": "Zapisano. Numer stosuje nowe ustawienia od następnej wiadomości."
+    }
+  }
+}

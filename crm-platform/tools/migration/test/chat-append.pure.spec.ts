@@ -49,6 +49,7 @@ const doc = (t: T): Record<string, unknown> => ({
 
 const sourceOf = (docs: Array<Record<string, unknown>>): Source =>
   ({
+    collections: () => ['chathistory'],
     async *readIndexed() {
       let off = 0;
       for (const d of docs) yield { doc: d as never, offset: off++, length: 1 };
@@ -197,6 +198,7 @@ describe('oracle: the state after an append is what a fresh load makes', () => {
         hasUsers: false,
         contactsByDigits: new Map(),
         existingThreads: new Map(Object.entries(existing)),
+        sessionStatus: new Map(),
         loaded: (k) => keys.has(k),
       },
     );

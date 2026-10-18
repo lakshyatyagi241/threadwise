@@ -1,0 +1,117 @@
+{
+  "data-retention": {
+    "nav": {
+      "group": "Data",
+      "item": "Gegevensretentie"
+    },
+    "page": {
+      "title": "Gegevensretentie",
+      "eyebrow": "platform · gegevensretentie",
+      "description": "Kies per soort gegevens hoeveel dagen ze in de database blijven en hoeveel extra dagen het koude archief ze bewaart voordat ze definitief worden verwijderd. Er verandert niets voor een item totdat u er waarden voor opslaat.",
+      "superOnly": "Alleen een superbeheerder kan de retentie wijzigen. U kunt de opgeslagen waarden en het resultaat van de laatste run bekijken.",
+      "loading": "Retentiebeleid laden…",
+      "retry": "Opnieuw proberen"
+    },
+    "engine": {
+      "offTitle": "De archieftaak staat uit",
+      "offBody": "Waarden die voor de analysegebeurtenissen en het auditlogboek zijn opgeslagen, worden bewaard, maar er wordt niets gearchiveerd of verwijderd totdat de taak is ingeschakeld (RETENTION_ENABLED). Tot die tijd behouden beide hun huidige gedrag.",
+      "dryRunTitle": "De archieftaak legt alleen vast wat hij zou doen",
+      "dryRunBody": "De taak staat aan, maar in dry-run-modus (RETENTION_DRY_RUN). Opgeslagen waarden voor de analysegebeurtenissen en het auditlogboek worden nog niet uitgevoerd.",
+      "notDurableTitle": "Het archief is niet duurzaam",
+      "notDurableBody": "Het archief is een map op de eigen schijf van de server, die bij een nieuwe deployment wordt gewist. De taak weigert gegevens te verwijderen totdat hij naar S3 of R2 verwijst (ARCHIVE_DRIVER=s3).",
+      "liveTitle": "De archieftaak draait",
+      "liveBody": "Opgeslagen waarden worden uitgevoerd tijdens de nachtelijke run. Gearchiveerde gegevens worden bewaard in {driver}."
+    },
+    "items": {
+      "an_events": {
+        "title": "Analysegebeurtenissen",
+        "description": "De gebeurtenisstroom achter de rapporten. Hele maanden gaan naar het archief zodra ze ouder zijn dan de live dagen."
+      },
+      "audit_log": {
+        "title": "Auditlogboek",
+        "description": "Wie wat heeft gedaan in elke werkruimte, inclusief handelingen die zijn uitgevoerd terwijl iemand als gebruiker optrad. Totdat u waarden opslaat, wordt het verwijderd na het aantal dagen van het beveiligingsbeleid van het platform en nooit gearchiveerd. Opgeslagen waarden archiveren eerst en verwijderen later, en exports kunnen gearchiveerde maanden nog steeds lezen."
+      },
+      "security_events": {
+        "title": "Beveiligingslogboek",
+        "description": "Aanmeldingen, beveiligingswijzigingen en elke retentiewijziging die hier is gedaan. Het wordt verwijderd na de live dagen en heeft geen archief."
+      },
+      "audit_log_exports": {
+        "title": "Auditexportbestanden",
+        "description": "De CSV die een werkruimte aanvraagt uit het auditlogboek. De aanvrager krijgt een e-mail met een link om in te loggen en het bestand te downloaden; het bestand wordt verwijderd na de live dagen."
+      }
+    },
+    "fields": {
+      "liveDays": "Live dagen",
+      "liveDaysHint": "Dagen dat de gegevens in de database blijven. Toegestaan: {min} tot {max}.",
+      "keepForever": "Archief eeuwig bewaren",
+      "archiveDays": "Archiefdagen",
+      "archiveDaysHint": "Extra dagen dat het archief ze bewaart, daarna worden ze verwijderd. Toegestaan: {min} tot {max}."
+    },
+    "summary": {
+      "noArchive": "Definitief verwijderd {live, plural, one {# dag} other {# dagen}} nadat ze zijn vastgelegd.",
+      "archiveForever": "Live bewaard gedurende {live, plural, one {# dag} other {# dagen}}, daarna gearchiveerd en eeuwig bewaard.",
+      "archiveThenDelete": "Live bewaard gedurende {live, plural, one {# dag} other {# dagen}}, gearchiveerd gedurende {archive, plural, one {# dag} other {# dagen}}, daarna definitief verwijderd {total, plural, one {# dag} other {# dagen}} nadat ze zijn vastgelegd.",
+      "defaultForever": "Wordt momenteel eeuwig bewaard (het beveiligingsbeleid kent geen limiet).",
+      "defaultNote": "Huidig gedrag, niets opgeslagen."
+    },
+    "status": {
+      "default": "Huidig gedrag",
+      "custom": "Door u opgeslagen",
+      "notApplied": "Nog niet uitgevoerd",
+      "updated": "Opgeslagen {when}"
+    },
+    "stats": {
+      "live": "In de database",
+      "liveValue": "{size}, ongeveer {rows} rijen",
+      "liveValueNoRows": "{size}",
+      "months": "{count, plural, one {# maandpartitie} other {# maandpartities}}, oudste {oldest}",
+      "archive": "In het archief",
+      "archiveValue": "{size} in {count, plural, one {# object} other {# objecten}}",
+      "archiveNone": "Nog niets gemeten",
+      "archiveMeasured": "gemeten {when}",
+      "lastRun": "Laatste run",
+      "neverRun": "Nog niet uitgevoerd",
+      "runLive": "{when}: {months, plural, one {# maand} other {# maanden}} gearchiveerd ({rows} rijen, {size}), {expired} uit het archief verwijderd, {deleted} rijen of bestanden verwijderd",
+      "runDry": "{when}: dry-run, er is niets gewijzigd",
+      "runFailed": "De laatste run had een probleem: {error}"
+    },
+    "actions": {
+      "save": "Opslaan",
+      "checking": "Controleren…",
+      "saving": "Opslaan…",
+      "reset": "Terug naar huidig gedrag",
+      "resetting": "Terugzetten…",
+      "cancel": "Annuleren",
+      "confirmSave": "Opslaan en toepassen",
+      "resetTitle": "{item} terugzetten naar het huidige gedrag?",
+      "resetBody": "De opgeslagen waarden worden verwijderd. De nachtelijke taken gaan voor dit item terug naar de ingebouwde regels. Gegevens die al zijn gearchiveerd, blijven in het archief.",
+      "confirmReset": "Terugzetten naar huidig gedrag"
+    },
+    "preview": {
+      "title": "Retentie voor {item} opslaan?",
+      "intro": "Bij de volgende nachtelijke run:",
+      "toArchive": "{count, plural, one {# maand} other {# maanden}} ({rows} rijen, {size}) gaat naar het archief en verdwijnt uit de database.",
+      "toDeleteFromArchive": "{count, plural, one {# gearchiveerde maand} other {# gearchiveerde maanden}} wordt definitief uit het archief verwijderd.",
+      "rowsToDelete": "{count, plural, one {# rij of bestand} other {# rijen of bestanden}} wordt definitief verwijderd.",
+      "notApplied": "De archieftaak voert opgeslagen waarden nog niet uit, dus niets hiervan gebeurt totdat hij is ingeschakeld.",
+      "permanent": "Verwijderen is permanent en kan niet ongedaan worden gemaakt."
+    },
+    "saved": "Retentie opgeslagen.",
+    "resetDone": "Terug naar het huidige gedrag.",
+    "validation": {
+      "live_out_of_range": "Live dagen moeten een geheel getal zijn van {min} tot {max}.",
+      "archive_out_of_range": "Archiefdagen moeten een geheel getal zijn van {min} tot {max}.",
+      "archive_not_supported": "Dit item kan niet worden gearchiveerd.",
+      "delete_before_archive": "De gegevens kunnen niet worden verwijderd voordat ze zijn gearchiveerd.",
+      "not_a_number": "Voer een geheel aantal dagen in."
+    },
+    "errors": {
+      "forbidden": "U heeft hiervoor geen toestemming.",
+      "conflict": "Iemand anders heeft dit item gewijzigd. De nieuwste waarden zijn geladen; controleer ze en sla opnieuw op.",
+      "validation": "Deze waarden zijn niet toegestaan.",
+      "request": "Het verzoek is geweigerd.",
+      "unexpected": "Er is iets misgegaan op de server. Probeer het opnieuw.",
+      "network": "Kan de server niet bereiken. Controleer uw verbinding en probeer het opnieuw."
+    }
+  }
+}

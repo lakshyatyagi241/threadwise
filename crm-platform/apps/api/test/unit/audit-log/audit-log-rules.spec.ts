@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { AppError } from '../../../src/common/errors/app-error';
 import {
   actorKindOf,
+  archivedLineMatches,
   buildWhere,
   csvCell,
   csvLine,
@@ -211,5 +212,66 @@ describe('an act-as row is flagged', () => {
     );
     expect(JSON.stringify(e)).not.toContain('"old"');
     expect(e.changedFields).toEqual(['stage']);
+  });
+});
+
+describe('archivedLineMatches (the list filters, applied to a line read back from the archive)', () => {
+  const line = (over: Record<string, unknown> = {}) => ({
+    id: 5,
+    actor_id: 11,
+    actor_type: 'user',
+    module: 'contacts',
+    record_id: 77,
+    action: 'update',
+    request_id: 'req-1',
+    delta: { name: { old: 'a', new: 'b' } },
+    at: '2025-01-05T10:00:00.123456+00:00',
+    ...over,
+  });
+
+  it('matches everything when no filter is set', () => {
+    expect(archivedLineMatches({}, {}, line())).toBe(true);
+  });
+
+  it('filters by module, action, record and request exactly', () => {
+    expect(archivedLineMatches({ module: 'contacts' }, {}, line())).toBe(true);
+    expect(archivedLineMatches({ module: 'deals' }, {}, line())).toBe(false);
+    expect(archivedLineMatches({ action: 'insert' }, {}, line())).toBe(false);
+    expect(archivedLineMatches({ recordId: 77 }, {}, line({ record_id: '77' }))).toBe(true);
+    expect(archivedLineMatches({ recordId: 78 }, {}, line())).toBe(false);
+    expect(archivedLineMatches({ requestId: 'req-2' }, {}, line())).toBe(false);
+  });
+
+  it('searches the module and the action only, never the changed values', () => {
+    expect(archivedLineMatches({ q: 'CONTAC' }, {}, line())).toBe(true);
+    expect(archivedLineMatches({ q: 'date' }, {}, line())).toBe(true);
+    expect(archivedLineMatches({ q: 'b' }, {}, line({ module: 'x', action: 'y' }))).toBe(false);
+  });
+
+  it('filters by the actor kind, with "other" meaning any kind the screen does not name', () => {
+    expect(archivedLineMatches({ actorType: 'api_key' }, {}, line())).toBe(false);
+    expect(archivedLineMatches({ actorType: 'user' }, {}, line())).toBe(true);
+    expect(archivedLineMatches({ actorType: 'other' }, {}, line())).toBe(false);
+    expect(archivedLineMatches({ actorType: 'other' }, {}, line({ actor_type: 'webhook' }))).toBe(
+      true,
+    );
+  });
+
+  it('filters by one user, who must be a user and not an API key with the same id', () => {
+    expect(archivedLineMatches({}, { actorDbId: 11 }, line())).toBe(true);
+    expect(archivedLineMatches({}, { actorDbId: 12 }, line())).toBe(false);
+    expect(archivedLineMatches({}, { actorDbId: 11 }, line({ actor_type: 'api_key' }))).toBe(false);
+  });
+
+  it('keeps only the rows written while support was acting as a user', () => {
+    expect(archivedLineMatches({ actAs: true }, {}, line())).toBe(false);
+    expect(
+      archivedLineMatches(
+        { actAs: true },
+        {},
+        line({ delta: { _impersonatedBy: { old: null, new: {} } } }),
+      ),
+    ).toBe(true);
+    expect(archivedLineMatches({ actAs: true }, {}, line({ delta: null }))).toBe(false);
   });
 });

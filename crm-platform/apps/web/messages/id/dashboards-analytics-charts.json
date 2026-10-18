@@ -494,7 +494,8 @@
         "title": "Antrean",
         "name": "Antrean",
         "pending": "Tertunda",
-        "failed": "Gagal"
+        "failed": "Gagal",
+        "lastFailure": "Alasan kegagalan terakhir"
       },
       "clear": {
         "button": "Hapus job tertunda",

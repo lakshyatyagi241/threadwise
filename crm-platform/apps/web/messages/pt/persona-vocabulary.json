@@ -1,0 +1,85 @@
+{
+  "persona-vocabulary": {
+    "common": {
+      "loading": "Carregando suas palavras...",
+      "retry": "Tentar de novo",
+      "dismiss": "Dispensar"
+    },
+    "tile": {
+      "label": "Palavras que usamos",
+      "description": "Renomeie Contato, Agendamento, Negócio e Reunião para combinar com o seu negócio.",
+      "keywords": "renomear, paciente, cliente, lead, membro, visita, terminologia, vocabulário, rótulos"
+    },
+    "title": "Palavras que usamos",
+    "subtitle": "Chame as coisas como o seu negócio as chama: Paciente, Cliente, Membro, Visita. Mudam apenas os rótulos que as pessoas leem.",
+    "discard": "Descartar alterações",
+    "save": "Salvar",
+    "saved": "Salvo. Os menus e as telas agora usam as suas palavras.",
+    "resetDone": "De volta às palavras padrão.",
+    "reset": "Usar palavras padrão",
+    "conflict": "Outra pessoa alterou estas palavras enquanto você editava. A versão mais recente está sendo exibida; refaça a sua alteração.",
+    "conflictOk": "OK",
+    "language": "Você está editando as palavras que as pessoas veem quando o aplicativo está em {language}. Mude o idioma do aplicativo para editar outro.",
+    "labelsOnly": "Mudam apenas os rótulos. Seus dados, exportações, integrações, API e as mensagens enviadas a clientes mantêm os nomes de sempre.",
+    "applyAll": "Usar estas palavras em todos os idiomas",
+    "applyAllHint": "Salva as mesmas palavras para os 21 idiomas do aplicativo. Deixe desativado para alterar só o idioma indicado acima.",
+    "grammar": "As palavras entram no aplicativo exatamente como você as digita. O aplicativo não ajusta a gramática (gênero, casos, artigos) em outros idiomas, e algumas telas ainda mostram a palavra padrão.",
+    "sharedWord": "Neste idioma uma única palavra cobre agendamentos e reuniões, então um novo nome para este item não aparece aqui. Ele continua valendo em outros idiomas.",
+    "nouns": {
+      "contact": {
+        "hint": "As pessoas com quem você conversa. Aparece no menu, na lista, na página do registro e nos botões."
+      },
+      "appointment": {
+        "hint": "Um horário reservado com um cliente. Aparece na tela de Agendamentos e no registro do contato."
+      },
+      "deal": {
+        "hint": "Uma oportunidade de venda. Aparece no quadro de Negócios e no registro do contato."
+      },
+      "meeting": {
+        "hint": "Uma ligação ou reunião que você registra em um contato."
+      }
+    },
+    "fields": {
+      "name": "Nome",
+      "singular": "Singular",
+      "plural": "Plural",
+      "placeholderHint": "Palavra padrão: {word}"
+    },
+    "source": {
+      "workspace": "Suas palavras",
+      "operator": "Definido pela sua equipe de conta",
+      "persona": "Do seu tipo de negócio",
+      "default": "Palavras padrão"
+    },
+    "problems": {
+      "incomplete": "Preencha o singular e o plural, ou apague os dois.",
+      "invalid": "Use apenas letras, números, espaços e - . & / ( ), com até 40 caracteres."
+    },
+    "errors": {
+      "network": "Não foi possível conectar ao servidor. Verifique a conexão e tente novamente.",
+      "forbidden": "Você precisa de permissão para gerenciar as configurações do espaço de trabalho para alterar estas palavras.",
+      "conflict": "Estas palavras mudaram enquanto você editava. Recarregue e tente novamente.",
+      "validation": "Uma das palavras não é permitida. Verifique o campo destacado.",
+      "rateLimited": "Muitas alterações seguidas. Aguarde um instante e tente novamente.",
+      "unexpected": "Algo deu errado. Tente novamente."
+    },
+    "defaults": {
+      "contact": {
+        "one": "Contato",
+        "other": "Contatos"
+      },
+      "appointment": {
+        "one": "Agendamento",
+        "other": "Agendamentos"
+      },
+      "deal": {
+        "one": "Negócio",
+        "other": "Negócios"
+      },
+      "meeting": {
+        "one": "Reunião",
+        "other": "Reuniões"
+      }
+    }
+  }
+}

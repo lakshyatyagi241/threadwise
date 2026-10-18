@@ -94,6 +94,7 @@ export class RuntimeMonitor {
   private readonly jobRetries: Counter;
   private readonly dlqCaptured: Counter;
   private readonly dlqCaptureFailures: Counter;
+  private readonly storageMeterFailures: Counter;
   private readonly dlqOpen: Gauge;
   private readonly dlqOldest: Gauge;
   private readonly httpDuration: Histogram;
@@ -205,6 +206,10 @@ export class RuntimeMonitor {
       'crm_dead_letter_capture_failures_total',
       'Failed-operation records that could not be written. The job is still in the queue failed set and the reconcile sweep retries it; any non-zero value needs a person',
     );
+    this.storageMeterFailures = this.registry.counter(
+      'crm_storage_meter_failures_total',
+      'Storage quota metering steps that threw and were skipped (fail-open: the file write itself succeeded), by step. Observe mode: any non-zero value means the registry is drifting and the nightly counter check will correct it',
+    );
     this.dlqOpen = this.registry.gauge(
       'crm_dead_letter_open',
       'Failed operations not yet resolved or closed, by queue',
@@ -312,6 +317,11 @@ export class RuntimeMonitor {
 
   observeDeadLetterCaptureFailure(queue: string): void {
     this.dlqCaptureFailures.inc(1, { queue });
+  }
+
+  /** A storage metering step (reserve, commit, release, remove) failed and the file write went on without it. */
+  observeStorageMeterFailure(step: string): void {
+    this.storageMeterFailures.inc(1, { step });
   }
 
   /** The unresolved backlog of one queue, sampled by the reconcile sweep. */

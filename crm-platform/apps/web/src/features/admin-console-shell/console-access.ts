@@ -14,6 +14,8 @@ import type { OperatorRole } from '@crm/contracts';
 const ONLY_ROLES: Readonly<Record<string, readonly OperatorRole[]>> = {
   // The whole platform/waba API is class-level super_admin only.
   'settings-whatsapp': ['super_admin'],
+  // WabaThroughputController (platform/waba/throughput): class-level super_admin, reads included.
+  'wa-throughput': ['super_admin'],
   // PlatformPlanAnalyticsController: class-level @OperatorRoles('super_admin') covers plan-analytics, financial and premium.
   'plan-analytics': ['super_admin'],
   financial: ['super_admin'],

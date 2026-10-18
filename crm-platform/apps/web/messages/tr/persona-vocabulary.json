@@ -1,0 +1,85 @@
+{
+  "persona-vocabulary": {
+    "common": {
+      "loading": "Sözcükleriniz yükleniyor...",
+      "retry": "Yeniden dene",
+      "dismiss": "Kapat"
+    },
+    "tile": {
+      "label": "Kullandığımız sözcükler",
+      "description": "Kişi, Randevu, Fırsat ve Toplantı adlarını işletmenize uyacak şekilde değiştirin.",
+      "keywords": "yeniden adlandır, hasta, danışan, müşteri, aday, üye, ziyaret, terminoloji, sözlük, etiketler"
+    },
+    "title": "Kullandığımız sözcükler",
+    "subtitle": "Her şeye işletmenizin adlandırdığı gibi ad verin: Hasta, Danışan, Üye, Ziyaret. Yalnızca insanların okuduğu etiketler değişir.",
+    "discard": "Değişiklikleri at",
+    "save": "Kaydet",
+    "saved": "Kaydedildi. Menüler ve ekranlar artık sözcüklerinizi kullanıyor.",
+    "resetDone": "Standart sözcüklere dönüldü.",
+    "reset": "Standart sözcükleri kullan",
+    "conflict": "Siz düzenlerken başka biri bu sözcükleri değiştirdi. En son sürüm gösteriliyor; değişikliğinizi yeniden yapın.",
+    "conflictOk": "Tamam",
+    "language": "Uygulama {language} dilindeyken insanların gördüğü sözcükleri düzenliyorsunuz. Başka bir dili düzenlemek için uygulama dilini değiştirin.",
+    "labelsOnly": "Yalnızca etiketler değişir. Verileriniz, dışa aktarmalarınız, entegrasyonlarınız, API ve müşterilere gönderdiğiniz iletiler olağan adlarını korur.",
+    "applyAll": "Bu sözcükleri tüm dillerde kullan",
+    "applyAllHint": "Aynı sözcükleri uygulamanın 21 dilinin tümü için kaydeder. Yalnızca yukarıda gösterilen dili değiştirmek için kapalı bırakın.",
+    "grammar": "Sözcükler uygulamaya yazdığınız gibi yerleştirilir. Uygulama diğer dillerde dil bilgisini (cinsiyet, hâl ekleri, tanımlıklar) ayarlamaz ve bazı ekranlar hâlâ standart sözcüğü gösterir.",
+    "sharedWord": "Bu dilde tek bir sözcük hem randevuları hem toplantıları kapsar; bu nedenle bu öğe için yeni ad burada gösterilmez. Diğer dillerde geçerli kalır.",
+    "nouns": {
+      "contact": {
+        "hint": "Konuştuğunuz kişiler. Menüde, listede, kayıt sayfasında ve düğmelerinde gösterilir."
+      },
+      "appointment": {
+        "hint": "Bir müşteriyle ayrılmış zaman dilimi. Randevular ekranında ve kişi kaydında gösterilir."
+      },
+      "deal": {
+        "hint": "Bir satış fırsatı. Fırsatlar panosunda ve kişi kaydında gösterilir."
+      },
+      "meeting": {
+        "hint": "Bir kişiye kaydettiğiniz arama veya toplantı."
+      }
+    },
+    "fields": {
+      "name": "Ad",
+      "singular": "Tekil",
+      "plural": "Çoğul",
+      "placeholderHint": "Standart sözcük: {word}"
+    },
+    "source": {
+      "workspace": "Sözcükleriniz",
+      "operator": "Hesap ekibiniz tarafından ayarlandı",
+      "persona": "İşletme türünüzden",
+      "default": "Standart sözcükler"
+    },
+    "problems": {
+      "incomplete": "Tekil ve çoğul biçimlerin ikisini de doldurun ya da ikisini de temizleyin.",
+      "invalid": "Yalnızca harf, rakam, boşluk ve - . & / ( ) kullanın; en çok 40 karakter."
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip yeniden deneyin.",
+      "forbidden": "Bu sözcükleri değiştirmek için çalışma alanı ayarlarını yönetme iznine ihtiyacınız var.",
+      "conflict": "Siz düzenlerken bu sözcükler değişti. Sayfayı yenileyip yeniden deneyin.",
+      "validation": "Sözcüklerden birine izin verilmiyor. Vurgulanan alanı kontrol edin.",
+      "rateLimited": "Art arda çok fazla değişiklik. Biraz bekleyip yeniden deneyin.",
+      "unexpected": "Bir şeyler ters gitti. Yeniden deneyin."
+    },
+    "defaults": {
+      "contact": {
+        "one": "Kişi",
+        "other": "Kişiler"
+      },
+      "appointment": {
+        "one": "Randevu",
+        "other": "Randevular"
+      },
+      "deal": {
+        "one": "Fırsat",
+        "other": "Fırsatlar"
+      },
+      "meeting": {
+        "one": "Toplantı",
+        "other": "Toplantılar"
+      }
+    }
+  }
+}

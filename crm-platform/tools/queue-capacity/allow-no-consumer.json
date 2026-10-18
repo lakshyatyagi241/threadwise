@@ -1,0 +1,8 @@
+[
+  { "queue": "outbox", "reason": "Registered in QUEUES but no producer or @Processor exists in apps/api/src; the outbox drain is not BullMQ. Remediation QR-01: remove the registration or wire it." },
+  { "queue": "billing-posting", "reason": "Registered, never produced or consumed (QR-01)." },
+  { "queue": "sla-sweep", "reason": "Registered, never produced or consumed (QR-01)." },
+  { "queue": "counter-flush", "reason": "Registered, never produced or consumed (QR-01)." },
+  { "queue": "partition-maintenance", "reason": "Registered, never produced or consumed (QR-01)." },
+  { "queue": "bulk-jobs", "reason": "Registered, never produced or consumed (QR-01)." }
+]

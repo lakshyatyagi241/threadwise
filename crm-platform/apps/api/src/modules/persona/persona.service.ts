@@ -3,6 +3,7 @@ import {
   parseOperatorOverrides,
   parseWorkspaceOverrides,
   personaDefinitionSchema,
+  resolveAllNouns,
   resolvePersona,
   type PersonaDefinition,
   type PersonaView,
@@ -67,12 +68,16 @@ export class PersonaService {
     const definition = await this.definition(orgId, row.personaKey, version);
     if (!definition) return null;
 
-    const visibility = resolvePersona({
+    const input = {
       definition,
       operator: parseOperatorOverrides(row.operatorOverrides),
       workspace: parseWorkspaceOverrides(row.workspaceOverrides),
       showAll: row.showAllModules,
-    });
+    };
+    const visibility = resolvePersona(input);
+    // Dynamic object naming (BL-310): the words of every language that has any. Left out when none does, so a workspace with no
+    // vocabulary gets exactly the view it got before and the golden session comparisons keep holding.
+    const nouns = resolveAllNouns(input);
     const view: PersonaView = {
       key: row.personaKey,
       version,
@@ -82,6 +87,7 @@ export class PersonaService {
       showAll: row.showAllModules,
       defaultVisibility: visibility.defaultVisibility,
       modules: visibility.modules,
+      ...(nouns ? { nouns } : {}),
     };
     this.remember(this.views, viewKey, view, now + VIEW_TTL_MS, MAX_VIEWS);
     return view;

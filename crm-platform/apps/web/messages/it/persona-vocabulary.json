@@ -1,0 +1,85 @@
+{
+  "persona-vocabulary": {
+    "common": {
+      "loading": "Caricamento delle tue parole...",
+      "retry": "Riprova",
+      "dismiss": "Chiudi"
+    },
+    "tile": {
+      "label": "Le parole che usiamo",
+      "description": "Rinomina Contatto, Appuntamento, Trattativa e Riunione per adattarli alla tua attività.",
+      "keywords": "rinomina, paziente, cliente, lead, membro, visita, terminologia, vocabolario, etichette"
+    },
+    "title": "Le parole che usiamo",
+    "subtitle": "Chiama le cose come le chiama la tua attività: Paziente, Cliente, Membro, Visita. Cambiano solo le etichette che le persone leggono.",
+    "discard": "Annulla modifiche",
+    "save": "Salva",
+    "saved": "Salvato. Menu e schermate ora usano le tue parole.",
+    "resetDone": "Tornato alle parole standard.",
+    "reset": "Usa le parole standard",
+    "conflict": "Qualcun altro ha cambiato queste parole mentre modificavi. Viene mostrata l’ultima versione; ripeti la modifica.",
+    "conflictOk": "OK",
+    "language": "Stai modificando le parole che le persone vedono quando l’app è in {language}. Cambia la lingua dell’app per modificarne un’altra.",
+    "labelsOnly": "Cambiano solo le etichette. I tuoi dati, le esportazioni, le integrazioni, l’API e i messaggi inviati ai clienti mantengono i nomi abituali.",
+    "applyAll": "Usa queste parole in tutte le lingue",
+    "applyAllHint": "Salva le stesse parole per tutte le 21 lingue dell’app. Lascia disattivato per cambiare solo la lingua indicata sopra.",
+    "grammar": "Le parole vengono inserite nell’app esattamente come le scrivi. L’app non adatta la grammatica (genere, casi, articoli) nelle altre lingue e alcune schermate mostrano ancora la parola standard.",
+    "sharedWord": "In questa lingua una sola parola copre appuntamenti e riunioni, quindi qui non viene mostrato un nuovo nome per questa voce. Continua a valere nelle altre lingue.",
+    "nouns": {
+      "contact": {
+        "hint": "Le persone con cui parli. Mostrato nel menu, nell’elenco, nella pagina della scheda e nei suoi pulsanti."
+      },
+      "appointment": {
+        "hint": "Una fascia prenotata con un cliente. Mostrato nella schermata Appuntamenti e nella scheda del contatto."
+      },
+      "deal": {
+        "hint": "Un’opportunità di vendita. Mostrato nella bacheca Trattative e nella scheda del contatto."
+      },
+      "meeting": {
+        "hint": "Una chiamata o riunione che registri su un contatto."
+      }
+    },
+    "fields": {
+      "name": "Nome",
+      "singular": "Singolare",
+      "plural": "Plurale",
+      "placeholderHint": "Parola standard: {word}"
+    },
+    "source": {
+      "workspace": "Le tue parole",
+      "operator": "Impostato dal tuo team di account",
+      "persona": "Dal tuo tipo di attività",
+      "default": "Parole standard"
+    },
+    "problems": {
+      "incomplete": "Compila sia il singolare sia il plurale, oppure svuota entrambi.",
+      "invalid": "Usa solo lettere, numeri, spazi e - . & / ( ), fino a 40 caratteri."
+    },
+    "errors": {
+      "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+      "forbidden": "Per cambiare queste parole serve il permesso di gestire le impostazioni dello spazio di lavoro.",
+      "conflict": "Queste parole sono cambiate mentre modificavi. Ricarica e riprova.",
+      "validation": "Una delle parole non è consentita. Controlla il campo evidenziato.",
+      "rateLimited": "Troppe modifiche di seguito. Attendi un momento e riprova.",
+      "unexpected": "Qualcosa è andato storto. Riprova."
+    },
+    "defaults": {
+      "contact": {
+        "one": "Contatto",
+        "other": "Contatti"
+      },
+      "appointment": {
+        "one": "Appuntamento",
+        "other": "Appuntamenti"
+      },
+      "deal": {
+        "one": "Trattativa",
+        "other": "Trattative"
+      },
+      "meeting": {
+        "one": "Riunione",
+        "other": "Riunioni"
+      }
+    }
+  }
+}

@@ -494,7 +494,8 @@
         "title": "キュー",
         "name": "キュー",
         "pending": "保留中",
-        "failed": "失敗"
+        "failed": "失敗",
+        "lastFailure": "直近の失敗の原因"
       },
       "clear": {
         "button": "保留中のジョブをクリア",

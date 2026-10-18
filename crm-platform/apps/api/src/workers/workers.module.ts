@@ -67,6 +67,7 @@ import { FormsBuilderWorkerModule } from '../modules/forms-builder';
 import { ScheduledQueueWarmerWorkerModule } from '../modules/scheduled-queue-warmer';
 import { MarketplaceWorkerModule } from '../modules/marketplace';
 import { WorkspacesTeamsTenancyWorkerModule } from '../modules/workspaces-teams-tenancy';
+import { StorageMeterModule, StorageQuotaWorkerModule } from '../modules/storage-quota';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
 
@@ -148,6 +149,9 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     MarketplaceWorkerModule,
     PlatformSupportDeskWorkerModule,
     WorkspacesTeamsTenancyWorkerModule,
+    // The storage meter for every file the worker writes (inbound media, recordings), and its backfill, counter check and reaper.
+    StorageMeterModule,
+    StorageQuotaWorkerModule,
   ],
   providers: [
     OutboxDrainService,

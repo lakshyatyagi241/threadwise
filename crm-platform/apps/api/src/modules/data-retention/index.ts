@@ -9,4 +9,24 @@ export {
   type ArchiveManifest,
   type ArchiveResult,
 } from './partition-archiver.service';
-export { STREAM_POLICIES, type StreamPolicy } from './retention-policies';
+export {
+  STREAM_POLICIES,
+  isPastLiveWindow,
+  monthBounds,
+  type StreamPolicy,
+} from './retention-policies';
+export { engineState, type EngineState } from './retention-engine';
+export {
+  deletePolicy,
+  liveStats,
+  loadPolicies,
+  loadPolicy,
+  loadRuns,
+  partitionSizes,
+  countOlderThan,
+  recordRun,
+  savePolicy,
+  type RunRecord,
+  type StoredPolicy,
+  type StoredRun,
+} from './retention-store';

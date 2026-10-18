@@ -1,0 +1,117 @@
+{
+  "data-retention": {
+    "nav": {
+      "group": "Daten",
+      "item": "Datenaufbewahrung"
+    },
+    "page": {
+      "title": "Datenaufbewahrung",
+      "eyebrow": "Plattform · Datenaufbewahrung",
+      "description": "Legen Sie für jede Datenart fest, wie viele Tage sie in der Datenbank bleibt und wie viele weitere Tage das Kaltarchiv sie aufbewahrt, bevor sie endgültig gelöscht wird. Für einen Eintrag ändert sich nichts, bis Sie Werte dafür speichern.",
+      "superOnly": "Nur ein Super-Admin kann die Aufbewahrung ändern. Sie sehen die gespeicherten Werte und was der letzte Lauf getan hat.",
+      "loading": "Aufbewahrungsrichtlinien werden geladen…",
+      "retry": "Erneut versuchen"
+    },
+    "engine": {
+      "offTitle": "Der Archivierungsjob ist ausgeschaltet",
+      "offBody": "Gespeicherte Werte für die Analyseereignisse und das Audit-Protokoll werden abgelegt, aber es wird nichts archiviert oder entfernt, bis der Job aktiviert ist (RETENTION_ENABLED). Bis dahin behalten beide ihr aktuelles Verhalten.",
+      "dryRunTitle": "Der Archivierungsjob protokolliert nur, was er tun würde",
+      "dryRunBody": "Er ist eingeschaltet, läuft aber im Probelauf-Modus (RETENTION_DRY_RUN). Gespeicherte Werte für die Analyseereignisse und das Audit-Protokoll werden noch nicht umgesetzt.",
+      "notDurableTitle": "Das Archiv ist nicht dauerhaft",
+      "notDurableBody": "Das Archiv ist ein Ordner auf dem eigenen Datenträger des Servers, den ein erneutes Deployment löscht. Der Job entfernt keine Daten, solange er nicht auf S3 oder R2 zeigt (ARCHIVE_DRIVER=s3).",
+      "liveTitle": "Der Archivierungsjob läuft",
+      "liveBody": "Gespeicherte Werte werden vom nächtlichen Lauf umgesetzt. Archivierte Daten liegen in {driver}."
+    },
+    "items": {
+      "an_events": {
+        "title": "Analyseereignisse",
+        "description": "Der Ereignisstrom hinter den Berichten. Ganze Monate wandern ins Archiv, sobald sie älter als die Live-Tage sind."
+      },
+      "audit_log": {
+        "title": "Audit-Protokoll",
+        "description": "Wer in welchem Workspace was getan hat, einschließlich Aktionen in der Rolle eines Benutzers. Solange Sie keine Werte speichern, wird es nach den Tagen der Sicherheitsrichtlinie der Plattform gelöscht und nie archiviert. Gespeicherte Werte archivieren zuerst und löschen später; Exporte können archivierte Monate weiterhin lesen."
+      },
+      "security_events": {
+        "title": "Sicherheitsprotokoll",
+        "description": "Anmeldungen, Sicherheitsänderungen und jede hier vorgenommene Änderung der Aufbewahrung. Es wird nach den Live-Tagen gelöscht und hat kein Archiv."
+      },
+      "audit_log_exports": {
+        "title": "Audit-Exportdateien",
+        "description": "Die CSV-Datei, die ein Workspace aus seinem Audit-Protokoll anfordert. Der Anfragende erhält eine E-Mail mit einem Link zum Anmelden und Herunterladen; die Datei wird nach den Live-Tagen gelöscht."
+      }
+    },
+    "fields": {
+      "liveDays": "Live-Tage",
+      "liveDaysHint": "Tage, die die Daten in der Datenbank bleiben. Zulässig: {min} bis {max}.",
+      "keepForever": "Archiv unbegrenzt aufbewahren",
+      "archiveDays": "Archivtage",
+      "archiveDaysHint": "Weitere Tage, die das Archiv sie aufbewahrt, bevor sie gelöscht werden. Zulässig: {min} bis {max}."
+    },
+    "summary": {
+      "noArchive": "Endgültig gelöscht {live, plural, one {# Tag} other {# Tage}} nach dem Schreiben.",
+      "archiveForever": "Live gehalten für {live, plural, one {# Tag} other {# Tage}}, danach archiviert und unbegrenzt aufbewahrt.",
+      "archiveThenDelete": "Live gehalten für {live, plural, one {# Tag} other {# Tage}}, archiviert für {archive, plural, one {# Tag} other {# Tage}}, danach endgültig gelöscht {total, plural, one {# Tag} other {# Tage}} nach dem Schreiben.",
+      "defaultForever": "Derzeit unbegrenzt aufbewahrt (die Sicherheitsrichtlinie hat kein Limit).",
+      "defaultNote": "Aktuelles Verhalten, nichts gespeichert."
+    },
+    "status": {
+      "default": "Aktuelles Verhalten",
+      "custom": "Von Ihnen gespeichert",
+      "notApplied": "Noch nicht umgesetzt",
+      "updated": "Gespeichert {when}"
+    },
+    "stats": {
+      "live": "In der Datenbank",
+      "liveValue": "{size}, etwa {rows} Zeilen",
+      "liveValueNoRows": "{size}",
+      "months": "{count, plural, one {# Monatspartition} other {# Monatspartitionen}}, älteste {oldest}",
+      "archive": "Im Archiv",
+      "archiveValue": "{size} in {count, plural, one {# Objekt} other {# Objekten}}",
+      "archiveNone": "Noch nichts gemessen",
+      "archiveMeasured": "gemessen {when}",
+      "lastRun": "Letzter Lauf",
+      "neverRun": "Noch nicht gelaufen",
+      "runLive": "{when}: {months, plural, one {# Monat} other {# Monate}} archiviert ({rows} Zeilen, {size}), {expired} aus dem Archiv gelöscht, {deleted} Zeilen oder Dateien gelöscht",
+      "runDry": "{when}: Probelauf, nichts wurde geändert",
+      "runFailed": "Beim letzten Lauf ist ein Problem aufgetreten: {error}"
+    },
+    "actions": {
+      "save": "Speichern",
+      "checking": "Wird geprüft…",
+      "saving": "Wird gespeichert…",
+      "reset": "Zurück zum aktuellen Verhalten",
+      "resetting": "Wird zurückgesetzt…",
+      "cancel": "Abbrechen",
+      "confirmSave": "Speichern und anwenden",
+      "resetTitle": "{item} auf das aktuelle Verhalten zurücksetzen?",
+      "resetBody": "Die gespeicherten Werte werden entfernt. Die nächtlichen Jobs verwenden für diesen Eintrag wieder die integrierten Regeln. Bereits archivierte Daten bleiben im Archiv.",
+      "confirmReset": "Auf aktuelles Verhalten zurücksetzen"
+    },
+    "preview": {
+      "title": "Aufbewahrung für {item} speichern?",
+      "intro": "Beim nächsten nächtlichen Lauf:",
+      "toArchive": "{count, plural, one {# Monat} other {# Monate}} ({rows} Zeilen, {size}) werden ins Archiv verschoben und aus der Datenbank entfernt.",
+      "toDeleteFromArchive": "{count, plural, one {# archivierter Monat} other {# archivierte Monate}} werden endgültig aus dem Archiv gelöscht.",
+      "rowsToDelete": "{count, plural, one {# Zeile oder Datei} other {# Zeilen oder Dateien}} werden endgültig gelöscht.",
+      "notApplied": "Der Archivierungsjob setzt gespeicherte Werte noch nicht um, daher passiert nichts davon, bis er aktiviert ist.",
+      "permanent": "Das Löschen ist endgültig und kann nicht rückgängig gemacht werden."
+    },
+    "saved": "Aufbewahrung gespeichert.",
+    "resetDone": "Zurück zum aktuellen Verhalten.",
+    "validation": {
+      "live_out_of_range": "Live-Tage müssen eine ganze Zahl von {min} bis {max} sein.",
+      "archive_out_of_range": "Archivtage müssen eine ganze Zahl von {min} bis {max} sein.",
+      "archive_not_supported": "Dieser Eintrag kann nicht archiviert werden.",
+      "delete_before_archive": "Die Daten können nicht gelöscht werden, bevor sie archiviert sind.",
+      "not_a_number": "Geben Sie eine ganze Zahl von Tagen ein."
+    },
+    "errors": {
+      "forbidden": "Sie sind dazu nicht berechtigt.",
+      "conflict": "Jemand anderes hat diesen Eintrag geändert. Die neuesten Werte wurden geladen; prüfen Sie sie und speichern Sie erneut.",
+      "validation": "Diese Werte sind nicht zulässig.",
+      "request": "Die Anfrage wurde abgelehnt.",
+      "unexpected": "Auf dem Server ist ein Fehler aufgetreten. Versuchen Sie es erneut.",
+      "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut."
+    }
+  }
+}

@@ -1,13 +1,17 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
+import { sql } from 'drizzle-orm';
+import type { RetentionItemId } from '@crm/contracts';
 import type { Env } from '../../config/env.schema';
 import {
   ARCHIVE_STORAGE,
   type ArchiveStorage,
 } from '../../infra/providers/data-retention/archive-storage.port';
-import { prefixOf } from './archive-keys';
+import { DatabaseService } from '../../infra/db/database.service';
+import { parseObjectKey, prefixOf } from './archive-keys';
 import { PartitionArchiver, type ArchiveResult } from './partition-archiver.service';
+import { loadPolicies, recordRun } from './retention-store';
 import {
   RETENTION_POLICIES,
   STREAM_POLICIES,
@@ -55,7 +59,27 @@ export class RetentionWorker {
     @Optional()
     @Inject(RETENTION_POLICIES)
     private readonly policies: readonly StreamPolicy[] = STREAM_POLICIES,
+    @Optional() @Inject(DatabaseService) private readonly db?: Pick<DatabaseService, 'privileged'>,
   ) {}
+
+  /**
+   * The registered streams with the days a super admin saved for them (`data_retention_policies`) laid over the built-in ones.
+   * A stream marked `optIn` is left out until it has a saved policy. Without a database (a unit test) the registry is used as is.
+   */
+  async effectivePolicies(): Promise<StreamPolicy[]> {
+    if (!this.db) return [...this.policies];
+    const saved = await this.db.privileged((tx) => loadPolicies(tx));
+    const out: StreamPolicy[] = [];
+    for (const policy of this.policies) {
+      const mine = saved.get(policy.stream);
+      if (!mine) {
+        if (!policy.optIn) out.push(policy);
+        continue;
+      }
+      out.push({ ...policy, liveDays: mine.liveDays, archiveDays: mine.archiveDays });
+    }
+    return out;
+  }
 
   /** Returns the report, or null when the job is off or a run is already in progress. */
   @Cron('50 3 * * *')
@@ -91,7 +115,7 @@ export class RetentionWorker {
   async run(opts: { dryRun: boolean; now?: Date }): Promise<RetentionReport> {
     const now = opts.now ?? new Date();
     const streams: StreamReport[] = [];
-    for (const policy of this.policies) {
+    for (const policy of await this.effectivePolicies()) {
       const report: StreamReport = { stream: policy.stream };
       try {
         if (opts.dryRun) {
@@ -105,12 +129,50 @@ export class RetentionWorker {
         this.logger.error({ err, stream: policy.stream }, 'retention failed for stream');
       }
       streams.push(report);
+      await this.remember(policy, report, opts.dryRun, now);
       this.logger.log(
         { dryRun: opts.dryRun, ...summary(report) },
         opts.dryRun ? 'retention dry run' : 'retention run finished',
       );
     }
     return { dryRun: opts.dryRun, streams };
+  }
+
+  /** Leaves the dashboard's "last run" for the stream. Never fails the run: the numbers are for display. */
+  private async remember(
+    policy: StreamPolicy,
+    report: StreamReport,
+    dryRun: boolean,
+    now: Date,
+  ): Promise<void> {
+    if (!this.db) return;
+    try {
+      const dropped = (report.archived ?? []).filter((r) => r.status === 'dropped');
+      const failed = (report.archived ?? []).filter((r) => r.status === 'failed');
+      const objects = await this.storage.list(`archive/${policy.stream}/`);
+      await this.db.privileged((tx) =>
+        recordRun(
+          tx,
+          policy.stream as RetentionItemId,
+          {
+            mode: dryRun ? 'dry_run' : 'live',
+            outcome: report.error ? 'failed' : failed.length > 0 ? 'partial' : 'ok',
+            archivedMonths: dropped.length,
+            archivedRows: dropped.reduce((n, r) => n + (r.status === 'dropped' ? r.rows : 0), 0),
+            archivedBytes: dropped.reduce((n, r) => n + (r.status === 'dropped' ? r.bytes : 0), 0),
+            expiredItems: report.expired?.objects ?? 0,
+            error: report.error ?? (failed[0]?.status === 'failed' ? failed[0].reason : null),
+            archive: {
+              objects: objects.length,
+              bytes: objects.reduce((n, o) => n + o.bytes, 0),
+            },
+          },
+          now,
+        ),
+      );
+    } catch (err) {
+      this.logger.warn({ err, stream: policy.stream }, 'could not record the retention run');
+    }
   }
 
   private async plan(
@@ -140,13 +202,51 @@ export class RetentionWorker {
       if (month) byMonth.set(month, (byMonth.get(month) ?? 0) + 1);
     }
     const months = [...byMonth.keys()].filter((m) => isPastLiveWindow(m, now, keep)).sort();
+    // A workspace with a legal hold (BL-295) keeps its archive objects: they are per workspace, and the audit log in them is evidence.
+    const held = await this.orgsUnderLegalHold();
     let objects = 0;
     for (const month of months) {
-      objects += dryRun
-        ? (byMonth.get(month) ?? 0)
-        : await this.storage.deletePrefix(prefixOf(policy.stream, month));
+      if (held.size === 0) {
+        objects += dryRun
+          ? (byMonth.get(month) ?? 0)
+          : await this.storage.deletePrefix(prefixOf(policy.stream, month));
+        continue;
+      }
+      let kept = 0;
+      for (const object of await this.storage.list(prefixOf(policy.stream, month))) {
+        const parsed = parseObjectKey(object.key);
+        if (parsed && held.has(parsed.org)) {
+          kept += 1;
+          continue;
+        }
+        // The month's manifest and failure notes stay while any held object of the month does.
+        if (!parsed) continue;
+        if (!dryRun) await this.storage.delete(object.key);
+        objects += 1;
+      }
+      if (kept === 0) {
+        if (!dryRun) await this.storage.deletePrefix(prefixOf(policy.stream, month));
+      } else {
+        this.logger.log(
+          { stream: policy.stream, month, keptForLegalHold: kept },
+          '[RETENTION] archive objects kept under a legal hold',
+        );
+      }
     }
     return { months, objects };
+  }
+
+  /** The workspaces (as the text of their id, the name an archive object carries) that have any active legal hold, or the operator's. */
+  private async orgsUnderLegalHold(): Promise<Set<string>> {
+    if (!this.db) return new Set();
+    const res = await this.db.privileged((tx) =>
+      tx.execute(sql`
+        SELECT org_id::text AS org FROM legal_holds
+         WHERE status = 'active' AND (expires_at IS NULL OR expires_at > now())
+        UNION
+        SELECT id::text FROM organizations WHERE legal_hold`),
+    );
+    return new Set((res.rows as Array<{ org: string }>).map((r) => r.org));
   }
 }
 

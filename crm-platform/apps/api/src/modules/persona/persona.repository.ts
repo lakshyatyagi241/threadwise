@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
+import type { Tx } from '@crm/db';
 import { DatabaseService } from '../../infra/db/database.service';
 
 /** What the resolver needs from a workspace's `workspace_persona` row, plus the persona's latest published version. */
@@ -19,6 +20,22 @@ export interface WorkspacePersonaRecord {
   epoch: number;
   /** `personas.current_version`: null when the persona has no published version (or no longer exists). */
   currentVersion: number | null;
+}
+
+/** The columns a write needs from a locked workspace row. */
+export interface LockedWorkspacePersona {
+  rev: number;
+  personaKey: string;
+  workspaceOverrides: unknown;
+}
+
+export interface PersonaLogEntry {
+  orgId: number;
+  actorId: number | null;
+  action: string;
+  itemId: string;
+  before: unknown;
+  after: unknown;
 }
 
 interface RecordRow {
@@ -86,5 +103,42 @@ export class PersonaRepository {
       const row = res.rows[0] as unknown as { definition: unknown } | undefined;
       return row ? row.definition : null;
     });
+  }
+
+  /**
+   * The workspace's row, locked for the rest of the transaction (a write is coming). `null` = the workspace has no row. Runs inside the
+   * caller's tenant transaction, so row-level security applies as for any request.
+   */
+  async lockWorkspaceRow(tx: Tx, orgId: number): Promise<LockedWorkspacePersona | null> {
+    const res = await tx.execute(sql`
+      SELECT rev, persona_key, workspace_overrides
+        FROM workspace_persona
+       WHERE org_id = ${orgId}
+         FOR UPDATE
+    `);
+    const r = res.rows[0] as unknown as
+      { rev: number; persona_key: string; workspace_overrides: unknown } | undefined;
+    return r
+      ? { rev: Number(r.rev), personaKey: r.persona_key, workspaceOverrides: r.workspace_overrides }
+      : null;
+  }
+
+  /** Replaces the workspace's own override document. The row's trigger bumps `rev`; the operator columns are not touched. */
+  async saveWorkspaceOverrides(tx: Tx, orgId: number, document: unknown): Promise<void> {
+    await tx.execute(sql`
+      UPDATE workspace_persona
+         SET workspace_overrides = ${JSON.stringify(document)}::jsonb
+       WHERE org_id = ${orgId}
+    `);
+  }
+
+  /** One line of the append-only history, in the workspace layer. The policy binds `actor_id` to the acting user; the database stamps the time. */
+  async appendLog(tx: Tx, entry: PersonaLogEntry): Promise<void> {
+    await tx.execute(sql`
+      INSERT INTO workspace_persona_log (org_id, layer, actor_kind, actor_id, action, item_id, before, after)
+      VALUES (${entry.orgId}, 'workspace', 'user', ${entry.actorId}, ${entry.action}, ${entry.itemId},
+              ${entry.before === null ? null : JSON.stringify(entry.before)}::jsonb,
+              ${entry.after === null ? null : JSON.stringify(entry.after)}::jsonb)
+    `);
   }
 }

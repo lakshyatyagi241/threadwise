@@ -90,7 +90,7 @@ const encodeSegment = (s: string) =>
 /** Builds the URL and the signed headers for one request (exported for the unit test). */
 export function signS3Request(
   t: StorageTarget,
-  method: 'PUT' | 'DELETE',
+  method: 'PUT' | 'DELETE' | 'HEAD',
   key: string,
   body: Buffer,
   now: Date = new Date(),

@@ -1,0 +1,111 @@
+{
+  "verdict": "NOT_READY",
+  "commit": "b9dd0f8db302db03d79a2d9c0eb3a7334182f793",
+  "bullmq": "6.3.12",
+  "redis": "7.0.15",
+  "ioredis": "6.0.0",
+  "node": "v22.22.2",
+  "host": {
+    "platform": "linux",
+    "release": "7.0.0-38-generic",
+    "cpus": 22,
+    "cpuModel": "Intel(R) Core(TM) Ultra 7 155H",
+    "memGB": 30.8
+  },
+  "redisConfig": {
+    "appendonly": "no (main scenarios)",
+    "maxmemoryPolicy": "noeviction",
+    "singleInstance": true
+  },
+  "generatedAt": "2026-10-18T14:05:16.654Z",
+  "durationMultiplier": 1,
+  "caveat": "Synthetic handlers on one machine that also hosts producer, workers and Redis. Numbers are relative, queue-layer ceilings, not production capacity.",
+  "reproduce": "node tools/queue-capacity/bench.mjs --scenarios sweep,drain,profiles,isolation,fairness,provider,crash,redis,soak --duration 1 --soak-seconds 150",
+  "checksPassed": 33,
+  "checksTotal": 34,
+  "failedChecks": [
+    {
+      "id": "QCAP-026",
+      "name": "soak: heap/RSS flat (<5 MB/min growth in second half)",
+      "ok": false,
+      "detail": "rss 5.93 MB/min"
+    }
+  ],
+  "blockers": [
+    "QCAP-011..020 backlog measurement in harness; production exporter missing: jobTimings() exists (wait/duration) but no queue-depth / oldest-age / drain-time exporter or alert",
+    "QCAP-051..060 DB + provider ceilings: DB connections per worker and real provider ceilings not measured; mock provider only",
+    "QCAP-061..070 tenant isolation: fairness prototype measured; no per-tenant admission control in product; context leakage test needs real processors",
+    "QCAP-071..080 autoscaling + backpressure: policy function unit-tested; nothing wired to a deployment",
+    "QCAP-091..100 CI gates + certification: no CI workflow wired; no baselines committed for regression compare"
+  ],
+  "criticalLoss": "no job lost in any executed scenario",
+  "evidenceScope": "synthetic handlers + local Redis on one machine; not production capacity",
+  "controls": [
+    {
+      "id": "QCAP-001..010",
+      "what": "inventory + classification",
+      "evidenced": true,
+      "gap": "inventory.mjs --check"
+    },
+    {
+      "id": "QCAP-011..020",
+      "what": "backlog measurement in harness; production exporter missing",
+      "evidenced": false,
+      "gap": "jobTimings() exists (wait/duration) but no queue-depth / oldest-age / drain-time exporter or alert"
+    },
+    {
+      "id": "QCAP-021..030",
+      "what": "worker throughput + concurrency sweep on synthetic handlers",
+      "evidenced": true,
+      "gap": "real processors not benchmarked"
+    },
+    {
+      "id": "QCAP-031..039",
+      "what": "load profiles 15%..300% and short soak",
+      "evidenced": true,
+      "gap": "12 h and 24 h soak not run"
+    },
+    {
+      "id": "QCAP-040",
+      "what": "job accounting",
+      "evidenced": true,
+      "gap": ""
+    },
+    {
+      "id": "QCAP-041..050",
+      "what": "Redis memory/latency/persistence",
+      "evidenced": true,
+      "gap": "broker outage drain under load and cleanup policy at volume not tested"
+    },
+    {
+      "id": "QCAP-051..060",
+      "what": "DB + provider ceilings",
+      "evidenced": false,
+      "gap": "DB connections per worker and real provider ceilings not measured; mock provider only"
+    },
+    {
+      "id": "QCAP-061..070",
+      "what": "tenant isolation",
+      "evidenced": false,
+      "gap": "fairness prototype measured; no per-tenant admission control in product; context leakage test needs real processors"
+    },
+    {
+      "id": "QCAP-071..080",
+      "what": "autoscaling + backpressure",
+      "evidenced": false,
+      "gap": "policy function unit-tested; nothing wired to a deployment"
+    },
+    {
+      "id": "QCAP-081..090",
+      "what": "failure scenarios",
+      "evidenced": true,
+      "gap": "DB outage, provider outage, deploy under load, DLQ redrive not tested"
+    },
+    {
+      "id": "QCAP-091..100",
+      "what": "CI gates + certification",
+      "evidenced": false,
+      "gap": "no CI workflow wired; no baselines committed for regression compare"
+    }
+  ]
+}

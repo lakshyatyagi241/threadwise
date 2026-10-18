@@ -1585,7 +1585,8 @@
             "ai_form_generations_monthly": "Pembuatan oleh pembuat formulir AI per bulan",
             "sms_monthly": "SMS per bulan",
             "email_mailboxes": "Kotak surat email",
-            "email_monthly": "Email per bulan"
+            "email_monthly": "Email per bulan",
+            "storage_gb": "Penyimpanan (GB)"
           },
           "featureGroups": {
             "messaging": "Pesan",
@@ -1683,7 +1684,8 @@
             "ai_form_generations_monthly": "Pembuatan oleh pembuat formulir AI dalam bulan kalender, termasuk percobaan ulang perbaikan. 0 = tanpa batas.",
             "sms_monthly": "Pesan SMS keluar yang dikirim dalam bulan kalender. 0 = tanpa batas.",
             "email_mailboxes": "Kotak surat Gmail yang terhubung (yang diputus membebaskan tempatnya). 0 = tanpa batas.",
-            "email_monthly": "Email yang dikirim dalam bulan kalender, balasan dan email kampanye digabung. 0 = tanpa batas."
+            "email_monthly": "Email yang dikirim dalam bulan kalender, balasan dan email kampanye digabung. 0 = tanpa batas.",
+            "storage_gb": "Penyimpanan yang boleh dipakai ruang kerja, dalam GB (rekaman panggilan, media obrolan, lampiran email, dan file). 0 = tanpa batas. Saat ini hanya diukur: belum ada yang diblokir."
           }
         }
       },

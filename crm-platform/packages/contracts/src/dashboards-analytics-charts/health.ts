@@ -39,6 +39,8 @@ export const healthQueueRowSchema = z.object({
   name: z.string(),
   pending: z.number().int().nonnegative(),
   failed: z.number().int().nonnegative(),
+  /** Why the newest failed job failed: one line, cut short, with the job's parameters removed. Null when nothing failed. */
+  lastFailure: z.string().nullable(),
 });
 export type HealthQueueRow = z.infer<typeof healthQueueRowSchema>;
 

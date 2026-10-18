@@ -1,0 +1,117 @@
+{
+  "data-retention": {
+    "nav": {
+      "group": "Data",
+      "item": "Data retention"
+    },
+    "page": {
+      "title": "Data retention",
+      "eyebrow": "platform · data retention",
+      "description": "For each kind of data, choose how many days it stays in the database and how many more days the cold archive keeps it before it is deleted for good. Nothing changes for an item until you save values for it.",
+      "superOnly": "Only a super admin can change retention. You can see the saved values and what the last run did.",
+      "loading": "Loading retention policies…",
+      "retry": "Try again"
+    },
+    "engine": {
+      "offTitle": "The archive job is switched off",
+      "offBody": "Values saved for the analytics events and the audit log are stored, but nothing is archived or dropped until the job is enabled (RETENTION_ENABLED). Until then both keep their current behaviour.",
+      "dryRunTitle": "The archive job only logs what it would do",
+      "dryRunBody": "It is on but in dry-run mode (RETENTION_DRY_RUN). Saved values for the analytics events and the audit log are not carried out yet.",
+      "notDurableTitle": "The archive is not durable",
+      "notDurableBody": "The archive is a folder on the server's own disk, which a redeploy erases. The job refuses to drop any data until it points at S3 or R2 (ARCHIVE_DRIVER=s3).",
+      "liveTitle": "The archive job is running",
+      "liveBody": "Saved values are carried out by the nightly run. Archived data is kept in {driver}."
+    },
+    "items": {
+      "an_events": {
+        "title": "Analytics events",
+        "description": "The event stream behind the reports. Whole months move to the archive once they are older than the live days."
+      },
+      "audit_log": {
+        "title": "Audit log",
+        "description": "Who did what in each workspace, including actions taken while acting as a user. Until you save values it is deleted after the platform security policy's days and never archived. Saved values archive first and delete later, and exports can still read archived months."
+      },
+      "security_events": {
+        "title": "Security log",
+        "description": "Sign-ins, security changes and every retention change made here. It is deleted after the live days and has no archive."
+      },
+      "audit_log_exports": {
+        "title": "Audit export files",
+        "description": "The CSV a workspace requests from its audit log. The requester gets an email with a link to sign in and download it; the file is deleted after the live days."
+      }
+    },
+    "fields": {
+      "liveDays": "Live days",
+      "liveDaysHint": "Days the data stays in the database. Allowed: {min} to {max}.",
+      "keepForever": "Keep the archive for ever",
+      "archiveDays": "Archive days",
+      "archiveDaysHint": "Further days the archive keeps it, then it is deleted. Allowed: {min} to {max}."
+    },
+    "summary": {
+      "noArchive": "Deleted for good {live, plural, one {# day} other {# days}} after it is written.",
+      "archiveForever": "Kept live for {live, plural, one {# day} other {# days}}, then archived and kept for ever.",
+      "archiveThenDelete": "Kept live for {live, plural, one {# day} other {# days}}, archived for {archive, plural, one {# day} other {# days}}, then deleted for good {total, plural, one {# day} other {# days}} after it is written.",
+      "defaultForever": "Currently kept for ever (the security policy has no limit).",
+      "defaultNote": "Current behaviour, nothing saved."
+    },
+    "status": {
+      "default": "Current behaviour",
+      "custom": "Saved by you",
+      "notApplied": "Not carried out yet",
+      "updated": "Saved {when}"
+    },
+    "stats": {
+      "live": "In the database",
+      "liveValue": "{size}, about {rows} rows",
+      "liveValueNoRows": "{size}",
+      "months": "{count, plural, one {# monthly partition} other {# monthly partitions}}, oldest {oldest}",
+      "archive": "In the archive",
+      "archiveValue": "{size} in {count, plural, one {# object} other {# objects}}",
+      "archiveNone": "Nothing measured yet",
+      "archiveMeasured": "measured {when}",
+      "lastRun": "Last run",
+      "neverRun": "Has not run yet",
+      "runLive": "{when}: {months, plural, one {# month} other {# months}} archived ({rows} rows, {size}), {expired} deleted from the archive, {deleted} rows or files deleted",
+      "runDry": "{when}: dry run, nothing was changed",
+      "runFailed": "The last run had a problem: {error}"
+    },
+    "actions": {
+      "save": "Save",
+      "checking": "Checking…",
+      "saving": "Saving…",
+      "reset": "Back to current behaviour",
+      "resetting": "Resetting…",
+      "cancel": "Cancel",
+      "confirmSave": "Save and apply",
+      "resetTitle": "Return {item} to its current behaviour?",
+      "resetBody": "The saved values are removed. The nightly jobs go back to the built-in rules for this item. Data already archived stays in the archive.",
+      "confirmReset": "Return to current behaviour"
+    },
+    "preview": {
+      "title": "Save retention for {item}?",
+      "intro": "At the next nightly run:",
+      "toArchive": "{count, plural, one {# month} other {# months}} ({rows} rows, {size}) will move to the archive and leave the database.",
+      "toDeleteFromArchive": "{count, plural, one {# archived month} other {# archived months}} will be deleted from the archive for good.",
+      "rowsToDelete": "{count, plural, one {# row or file} other {# rows or files}} will be deleted for good.",
+      "notApplied": "The archive job is not carrying out saved values yet, so none of this happens until it is enabled.",
+      "permanent": "Deleting is permanent and cannot be undone."
+    },
+    "saved": "Retention saved.",
+    "resetDone": "Back to the current behaviour.",
+    "validation": {
+      "live_out_of_range": "Live days must be a whole number from {min} to {max}.",
+      "archive_out_of_range": "Archive days must be a whole number from {min} to {max}.",
+      "archive_not_supported": "This item cannot be archived.",
+      "delete_before_archive": "The data cannot be deleted before it is archived.",
+      "not_a_number": "Enter a whole number of days."
+    },
+    "errors": {
+      "forbidden": "You are not allowed to do that.",
+      "conflict": "Someone else changed this item. The latest values have been loaded; check them and save again.",
+      "validation": "Those values are not allowed.",
+      "request": "The request was refused.",
+      "unexpected": "Something went wrong on the server. Try again.",
+      "network": "Could not reach the server. Check your connection and try again."
+    }
+  }
+}

@@ -28,6 +28,10 @@ export class WabaIngestProcessor extends WorkerHost {
       // A rule the data broke will break again; anything else (database, redis) retries with backoff.
       if (err instanceof AppError) throw new UnrecoverableError(err.message);
       this.logger.error({ jobId: job.id, err }, '[WABA] ingest job failed');
+      // A database error arrives wrapped ("Failed query: ..."), so the failed job's reason hid the cause (permission denied, a lock).
+      const cause = (err as { cause?: unknown }).cause;
+      if (cause instanceof Error && !(err as Error).message.includes(cause.message))
+        throw new Error(`${(err as Error).message.split('\n')[0]} -- ${cause.message}`, { cause });
       throw err;
     }
   }

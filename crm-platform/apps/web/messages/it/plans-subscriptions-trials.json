@@ -46,7 +46,8 @@
       "ai_form_generations_monthly": "Generazioni del costruttore moduli AI al mese",
       "sms_monthly": "SMS al mese",
       "email_mailboxes": "Caselle e-mail",
-      "email_monthly": "E-mail al mese"
+      "email_monthly": "E-mail al mese",
+      "storage_gb": "Archiviazione (GB)"
     },
     "features": {
       "automation": "Automazione",
@@ -136,7 +137,8 @@
       "ai_form_generations_monthly": "Generazioni del costruttore moduli AI nel mese di calendario, compresi i tentativi di correzione. 0 = illimitato.",
       "sms_monthly": "Messaggi SMS in uscita inviati nel mese di calendario. 0 = illimitato.",
       "email_mailboxes": "Caselle Gmail collegate (una scollegata libera il suo posto). 0 = illimitato.",
-      "email_monthly": "E-mail inviate nel mese di calendario, risposte ed e-mail di campagna insieme. 0 = illimitato."
+      "email_monthly": "E-mail inviate nel mese di calendario, risposte ed e-mail di campagna insieme. 0 = illimitato.",
+      "storage_gb": "Spazio di archiviazione che l'area di lavoro può occupare, in GB (registrazioni delle chiamate, media della chat, allegati e-mail e file). 0 = illimitato. Per ora solo misurato: non viene ancora bloccato nulla."
     },
     "planAddons": {
       "title": "Add-on disponibili nel tuo piano",
