@@ -1,0 +1,117 @@
+{
+  "data-retention": {
+    "nav": {
+      "group": "Dati",
+      "item": "Conservazione dei dati"
+    },
+    "page": {
+      "title": "Conservazione dei dati",
+      "eyebrow": "piattaforma · conservazione dei dati",
+      "description": "Per ogni tipo di dato, scegli per quanti giorni resta nel database e per quanti giorni in più l'archivio a freddo lo conserva prima che venga eliminato definitivamente. Nulla cambia per un elemento finché non salvi dei valori per esso.",
+      "superOnly": "Solo un super admin può modificare la conservazione. Puoi vedere i valori salvati e cosa ha fatto l'ultima esecuzione.",
+      "loading": "Caricamento delle policy di conservazione…",
+      "retry": "Riprova"
+    },
+    "engine": {
+      "offTitle": "Il job di archiviazione è disattivato",
+      "offBody": "I valori salvati per gli eventi di analisi e il registro di audit sono memorizzati, ma nulla viene archiviato o eliminato finché il job non viene attivato (RETENTION_ENABLED). Fino ad allora entrambi mantengono il comportamento attuale.",
+      "dryRunTitle": "Il job di archiviazione registra solo ciò che farebbe",
+      "dryRunBody": "È attivo ma in modalità dry-run (RETENTION_DRY_RUN). I valori salvati per gli eventi di analisi e il registro di audit non vengono ancora applicati.",
+      "notDurableTitle": "L'archivio non è durevole",
+      "notDurableBody": "L'archivio è una cartella sul disco del server stesso, che viene cancellata a ogni nuovo deploy. Il job rifiuta di eliminare qualsiasi dato finché non punta a S3 o R2 (ARCHIVE_DRIVER=s3).",
+      "liveTitle": "Il job di archiviazione è in esecuzione",
+      "liveBody": "I valori salvati vengono applicati dall'esecuzione notturna. I dati archiviati sono conservati in {driver}."
+    },
+    "items": {
+      "an_events": {
+        "title": "Eventi di analisi",
+        "description": "Il flusso di eventi alla base dei report. Interi mesi passano all'archivio quando sono più vecchi dei giorni attivi."
+      },
+      "audit_log": {
+        "title": "Registro di audit",
+        "description": "Chi ha fatto cosa in ogni workspace, comprese le azioni eseguite agendo come un utente. Finché non salvi dei valori, viene eliminato dopo i giorni della policy di sicurezza della piattaforma e non viene mai archiviato. I valori salvati archiviano prima ed eliminano dopo, e le esportazioni possono ancora leggere i mesi archiviati."
+      },
+      "security_events": {
+        "title": "Registro di sicurezza",
+        "description": "Accessi, modifiche di sicurezza e ogni modifica della conservazione fatta qui. Viene eliminato dopo i giorni attivi e non ha archivio."
+      },
+      "audit_log_exports": {
+        "title": "File di esportazione dell'audit",
+        "description": "Il CSV che un workspace richiede dal proprio registro di audit. Chi lo richiede riceve un'email con un link per accedere e scaricarlo; il file viene eliminato dopo i giorni attivi."
+      }
+    },
+    "fields": {
+      "liveDays": "Giorni attivi",
+      "liveDaysHint": "Giorni in cui i dati restano nel database. Consentiti: da {min} a {max}.",
+      "keepForever": "Conserva l'archivio per sempre",
+      "archiveDays": "Giorni di archivio",
+      "archiveDaysHint": "Giorni aggiuntivi in cui l'archivio lo conserva, poi viene eliminato. Consentiti: da {min} a {max}."
+    },
+    "summary": {
+      "noArchive": "Eliminato definitivamente {live, plural, one {# giorno} other {# giorni}} dopo la scrittura.",
+      "archiveForever": "Conservato attivo per {live, plural, one {# giorno} other {# giorni}}, poi archiviato e conservato per sempre.",
+      "archiveThenDelete": "Conservato attivo per {live, plural, one {# giorno} other {# giorni}}, archiviato per {archive, plural, one {# giorno} other {# giorni}}, poi eliminato definitivamente {total, plural, one {# giorno} other {# giorni}} dopo la scrittura.",
+      "defaultForever": "Attualmente conservato per sempre (la policy di sicurezza non ha limiti).",
+      "defaultNote": "Comportamento attuale, nulla salvato."
+    },
+    "status": {
+      "default": "Comportamento attuale",
+      "custom": "Salvato da te",
+      "notApplied": "Non ancora applicato",
+      "updated": "Salvato {when}"
+    },
+    "stats": {
+      "live": "Nel database",
+      "liveValue": "{size}, circa {rows} righe",
+      "liveValueNoRows": "{size}",
+      "months": "{count, plural, one {# partizione mensile} other {# partizioni mensili}}, la più vecchia {oldest}",
+      "archive": "Nell'archivio",
+      "archiveValue": "{size} in {count, plural, one {# oggetto} other {# oggetti}}",
+      "archiveNone": "Ancora nessuna misurazione",
+      "archiveMeasured": "misurato {when}",
+      "lastRun": "Ultima esecuzione",
+      "neverRun": "Non ancora eseguito",
+      "runLive": "{when}: {months, plural, one {# mese archiviato} other {# mesi archiviati}} ({rows} righe, {size}), {expired} eliminati dall'archivio, {deleted} righe o file eliminati",
+      "runDry": "{when}: dry run, nulla è stato modificato",
+      "runFailed": "L'ultima esecuzione ha avuto un problema: {error}"
+    },
+    "actions": {
+      "save": "Salva",
+      "checking": "Verifica in corso…",
+      "saving": "Salvataggio…",
+      "reset": "Torna al comportamento attuale",
+      "resetting": "Ripristino…",
+      "cancel": "Annulla",
+      "confirmSave": "Salva e applica",
+      "resetTitle": "Riportare {item} al comportamento attuale?",
+      "resetBody": "I valori salvati vengono rimossi. I job notturni tornano alle regole integrate per questo elemento. I dati già archiviati restano nell'archivio.",
+      "confirmReset": "Torna al comportamento attuale"
+    },
+    "preview": {
+      "title": "Salvare la conservazione per {item}?",
+      "intro": "Alla prossima esecuzione notturna:",
+      "toArchive": "{count, plural, one {# mese} other {# mesi}} ({rows} righe, {size}) passeranno all'archivio e lasceranno il database.",
+      "toDeleteFromArchive": "{count, plural, one {# mese archiviato verrà eliminato} other {# mesi archiviati verranno eliminati}} definitivamente dall'archivio.",
+      "rowsToDelete": "{count, plural, one {# riga o file verrà eliminato} other {# righe o file verranno eliminati}} definitivamente.",
+      "notApplied": "Il job di archiviazione non sta ancora applicando i valori salvati, quindi nulla di tutto questo accade finché non viene attivato.",
+      "permanent": "L'eliminazione è permanente e non può essere annullata."
+    },
+    "saved": "Conservazione salvata.",
+    "resetDone": "Tornato al comportamento attuale.",
+    "validation": {
+      "live_out_of_range": "I giorni attivi devono essere un numero intero da {min} a {max}.",
+      "archive_out_of_range": "I giorni di archivio devono essere un numero intero da {min} a {max}.",
+      "archive_not_supported": "Questo elemento non può essere archiviato.",
+      "delete_before_archive": "I dati non possono essere eliminati prima di essere archiviati.",
+      "not_a_number": "Inserisci un numero intero di giorni."
+    },
+    "errors": {
+      "forbidden": "Non hai il permesso di farlo.",
+      "conflict": "Qualcun altro ha modificato questo elemento. Sono stati caricati i valori più recenti; controllali e salva di nuovo.",
+      "validation": "Questi valori non sono consentiti.",
+      "request": "La richiesta è stata rifiutata.",
+      "unexpected": "Si è verificato un errore sul server. Riprova.",
+      "network": "Impossibile raggiungere il server. Controlla la connessione e riprova."
+    }
+  }
+}

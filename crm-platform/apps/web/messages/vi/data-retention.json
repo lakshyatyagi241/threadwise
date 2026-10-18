@@ -1,0 +1,117 @@
+{
+  "data-retention": {
+    "nav": {
+      "group": "Dữ liệu",
+      "item": "Lưu giữ dữ liệu"
+    },
+    "page": {
+      "title": "Lưu giữ dữ liệu",
+      "eyebrow": "nền tảng · lưu giữ dữ liệu",
+      "description": "Với mỗi loại dữ liệu, hãy chọn số ngày dữ liệu nằm trong cơ sở dữ liệu và số ngày kho lưu trữ lạnh giữ thêm trước khi xóa vĩnh viễn. Sẽ không có gì thay đổi với một mục cho đến khi bạn lưu giá trị cho mục đó.",
+      "superOnly": "Chỉ quản trị viên cấp cao mới có thể thay đổi việc lưu giữ. Bạn có thể xem các giá trị đã lưu và kết quả của lần chạy gần nhất.",
+      "loading": "Đang tải chính sách lưu giữ…",
+      "retry": "Thử lại"
+    },
+    "engine": {
+      "offTitle": "Tác vụ lưu trữ đang tắt",
+      "offBody": "Các giá trị đã lưu cho sự kiện phân tích và nhật ký kiểm tra được lưu lại, nhưng sẽ không có gì được lưu trữ hoặc xóa cho đến khi bật tác vụ (RETENTION_ENABLED). Cho đến lúc đó, cả hai giữ nguyên hành vi hiện tại.",
+      "dryRunTitle": "Tác vụ lưu trữ chỉ ghi nhật ký những gì sẽ làm",
+      "dryRunBody": "Tác vụ đang bật nhưng ở chế độ chạy thử (RETENTION_DRY_RUN). Các giá trị đã lưu cho sự kiện phân tích và nhật ký kiểm tra chưa được thực hiện.",
+      "notDurableTitle": "Kho lưu trữ không bền vững",
+      "notDurableBody": "Kho lưu trữ là một thư mục trên ổ đĩa của chính máy chủ và sẽ bị xóa khi triển khai lại. Tác vụ từ chối xóa bất kỳ dữ liệu nào cho đến khi trỏ tới S3 hoặc R2 (ARCHIVE_DRIVER=s3).",
+      "liveTitle": "Tác vụ lưu trữ đang chạy",
+      "liveBody": "Các giá trị đã lưu được thực hiện trong lần chạy hằng đêm. Dữ liệu đã lưu trữ được giữ trong {driver}."
+    },
+    "items": {
+      "an_events": {
+        "title": "Sự kiện phân tích",
+        "description": "Luồng sự kiện đứng sau các báo cáo. Cả tháng được chuyển vào kho lưu trữ khi cũ hơn số ngày lưu hoạt động."
+      },
+      "audit_log": {
+        "title": "Nhật ký kiểm tra",
+        "description": "Ai đã làm gì trong từng không gian làm việc, kể cả các hành động thực hiện khi đang đóng vai người dùng. Cho đến khi bạn lưu giá trị, nhật ký bị xóa sau số ngày của chính sách bảo mật nền tảng và không bao giờ được lưu trữ. Giá trị đã lưu sẽ lưu trữ trước rồi xóa sau, và việc xuất vẫn đọc được các tháng đã lưu trữ."
+      },
+      "security_events": {
+        "title": "Nhật ký bảo mật",
+        "description": "Đăng nhập, thay đổi bảo mật và mọi thay đổi lưu giữ thực hiện tại đây. Nhật ký bị xóa sau số ngày lưu hoạt động và không có kho lưu trữ."
+      },
+      "audit_log_exports": {
+        "title": "Tệp xuất nhật ký kiểm tra",
+        "description": "Tệp CSV mà một không gian làm việc yêu cầu từ nhật ký kiểm tra của mình. Người yêu cầu nhận email có liên kết để đăng nhập và tải xuống; tệp bị xóa sau số ngày lưu hoạt động."
+      }
+    },
+    "fields": {
+      "liveDays": "Ngày lưu hoạt động",
+      "liveDaysHint": "Số ngày dữ liệu nằm trong cơ sở dữ liệu. Cho phép: từ {min} đến {max}.",
+      "keepForever": "Giữ kho lưu trữ vĩnh viễn",
+      "archiveDays": "Ngày lưu trữ",
+      "archiveDaysHint": "Số ngày kho lưu trữ giữ thêm, sau đó bị xóa. Cho phép: từ {min} đến {max}."
+    },
+    "summary": {
+      "noArchive": "Xóa vĩnh viễn sau {live, plural, other {# ngày}} kể từ khi được ghi.",
+      "archiveForever": "Giữ hoạt động trong {live, plural, other {# ngày}}, sau đó lưu trữ và giữ vĩnh viễn.",
+      "archiveThenDelete": "Giữ hoạt động trong {live, plural, other {# ngày}}, lưu trữ trong {archive, plural, other {# ngày}}, sau đó xóa vĩnh viễn sau {total, plural, other {# ngày}} kể từ khi được ghi.",
+      "defaultForever": "Hiện đang giữ vĩnh viễn (chính sách bảo mật không giới hạn).",
+      "defaultNote": "Hành vi hiện tại, chưa lưu gì."
+    },
+    "status": {
+      "default": "Hành vi hiện tại",
+      "custom": "Do bạn lưu",
+      "notApplied": "Chưa được thực hiện",
+      "updated": "Đã lưu {when}"
+    },
+    "stats": {
+      "live": "Trong cơ sở dữ liệu",
+      "liveValue": "{size}, khoảng {rows} hàng",
+      "liveValueNoRows": "{size}",
+      "months": "{count, plural, other {# phân vùng theo tháng}}, cũ nhất {oldest}",
+      "archive": "Trong kho lưu trữ",
+      "archiveValue": "{size} trong {count, plural, other {# đối tượng}}",
+      "archiveNone": "Chưa đo được gì",
+      "archiveMeasured": "đo {when}",
+      "lastRun": "Lần chạy gần nhất",
+      "neverRun": "Chưa chạy",
+      "runLive": "{when}: đã lưu trữ {months, plural, other {# tháng}} ({rows} hàng, {size}), đã xóa {expired} khỏi kho lưu trữ, đã xóa {deleted} hàng hoặc tệp",
+      "runDry": "{when}: chạy thử, không có gì thay đổi",
+      "runFailed": "Lần chạy gần nhất gặp sự cố: {error}"
+    },
+    "actions": {
+      "save": "Lưu",
+      "checking": "Đang kiểm tra…",
+      "saving": "Đang lưu…",
+      "reset": "Quay về hành vi hiện tại",
+      "resetting": "Đang đặt lại…",
+      "cancel": "Hủy",
+      "confirmSave": "Lưu và áp dụng",
+      "resetTitle": "Đưa {item} về hành vi hiện tại?",
+      "resetBody": "Các giá trị đã lưu sẽ bị xóa. Các tác vụ hằng đêm quay về quy tắc tích hợp sẵn cho mục này. Dữ liệu đã lưu trữ vẫn nằm trong kho lưu trữ.",
+      "confirmReset": "Quay về hành vi hiện tại"
+    },
+    "preview": {
+      "title": "Lưu chính sách lưu giữ cho {item}?",
+      "intro": "Ở lần chạy đêm tiếp theo:",
+      "toArchive": "{count, plural, other {# tháng}} ({rows} hàng, {size}) sẽ được chuyển vào kho lưu trữ và rời khỏi cơ sở dữ liệu.",
+      "toDeleteFromArchive": "{count, plural, other {# tháng đã lưu trữ}} sẽ bị xóa vĩnh viễn khỏi kho lưu trữ.",
+      "rowsToDelete": "{count, plural, other {# hàng hoặc tệp}} sẽ bị xóa vĩnh viễn.",
+      "notApplied": "Tác vụ lưu trữ chưa thực hiện các giá trị đã lưu, nên không điều nào ở trên xảy ra cho đến khi bật tác vụ.",
+      "permanent": "Việc xóa là vĩnh viễn và không thể hoàn tác."
+    },
+    "saved": "Đã lưu chính sách lưu giữ.",
+    "resetDone": "Đã quay về hành vi hiện tại.",
+    "validation": {
+      "live_out_of_range": "Ngày lưu hoạt động phải là số nguyên từ {min} đến {max}.",
+      "archive_out_of_range": "Ngày lưu trữ phải là số nguyên từ {min} đến {max}.",
+      "archive_not_supported": "Mục này không thể lưu trữ.",
+      "delete_before_archive": "Không thể xóa dữ liệu trước khi lưu trữ.",
+      "not_a_number": "Nhập số ngày là số nguyên."
+    },
+    "errors": {
+      "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+      "conflict": "Người khác đã thay đổi mục này. Các giá trị mới nhất đã được tải; hãy kiểm tra và lưu lại.",
+      "validation": "Các giá trị đó không được phép.",
+      "request": "Yêu cầu bị từ chối.",
+      "unexpected": "Đã xảy ra lỗi trên máy chủ. Hãy thử lại.",
+      "network": "Không thể kết nối tới máy chủ. Hãy kiểm tra kết nối và thử lại."
+    }
+  }
+}

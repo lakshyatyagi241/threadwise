@@ -1,0 +1,117 @@
+{
+  "data-retention": {
+    "nav": {
+      "group": "Datos",
+      "item": "Retención de datos"
+    },
+    "page": {
+      "title": "Retención de datos",
+      "eyebrow": "plataforma · retención de datos",
+      "description": "Para cada tipo de datos, elige cuántos días permanece en la base de datos y cuántos días más lo conserva el archivo en frío antes de eliminarlo definitivamente. No cambia nada para un elemento hasta que guardes valores para él.",
+      "superOnly": "Solo un superadministrador puede cambiar la retención. Puedes ver los valores guardados y lo que hizo la última ejecución.",
+      "loading": "Cargando políticas de retención…",
+      "retry": "Reintentar"
+    },
+    "engine": {
+      "offTitle": "El trabajo de archivado está desactivado",
+      "offBody": "Los valores guardados para los eventos de analítica y el registro de auditoría se almacenan, pero no se archiva ni se elimina nada hasta que se active el trabajo (RETENTION_ENABLED). Mientras tanto, ambos mantienen su comportamiento actual.",
+      "dryRunTitle": "El trabajo de archivado solo registra lo que haría",
+      "dryRunBody": "Está activado, pero en modo de simulación (RETENTION_DRY_RUN). Los valores guardados para los eventos de analítica y el registro de auditoría aún no se aplican.",
+      "notDurableTitle": "El archivo no es duradero",
+      "notDurableBody": "El archivo es una carpeta en el propio disco del servidor, que se borra con un nuevo despliegue. El trabajo se niega a eliminar datos hasta que apunte a S3 o R2 (ARCHIVE_DRIVER=s3).",
+      "liveTitle": "El trabajo de archivado está en marcha",
+      "liveBody": "Los valores guardados se aplican en la ejecución nocturna. Los datos archivados se conservan en {driver}."
+    },
+    "items": {
+      "an_events": {
+        "title": "Eventos de analítica",
+        "description": "El flujo de eventos que alimenta los informes. Los meses completos pasan al archivo cuando superan los días activos."
+      },
+      "audit_log": {
+        "title": "Registro de auditoría",
+        "description": "Quién hizo qué en cada espacio de trabajo, incluidas las acciones realizadas actuando como un usuario. Hasta que guardes valores, se elimina pasados los días de la política de seguridad de la plataforma y nunca se archiva. Los valores guardados archivan primero y eliminan después, y las exportaciones aún pueden leer los meses archivados."
+      },
+      "security_events": {
+        "title": "Registro de seguridad",
+        "description": "Inicios de sesión, cambios de seguridad y cada cambio de retención realizado aquí. Se elimina pasados los días activos y no tiene archivo."
+      },
+      "audit_log_exports": {
+        "title": "Archivos de exportación de auditoría",
+        "description": "El CSV que un espacio de trabajo solicita de su registro de auditoría. Quien lo solicita recibe un correo con un enlace para iniciar sesión y descargarlo; el archivo se elimina pasados los días activos."
+      }
+    },
+    "fields": {
+      "liveDays": "Días activos",
+      "liveDaysHint": "Días que los datos permanecen en la base de datos. Permitido: de {min} a {max}.",
+      "keepForever": "Conservar el archivo para siempre",
+      "archiveDays": "Días de archivo",
+      "archiveDaysHint": "Días adicionales que el archivo lo conserva antes de eliminarlo. Permitido: de {min} a {max}."
+    },
+    "summary": {
+      "noArchive": "Se elimina definitivamente {live, plural, one {# día} many {# de días} other {# días}} después de escribirse.",
+      "archiveForever": "Se mantiene activo durante {live, plural, one {# día} many {# de días} other {# días}} y después se archiva y se conserva para siempre.",
+      "archiveThenDelete": "Se mantiene activo durante {live, plural, one {# día} many {# de días} other {# días}}, se archiva durante {archive, plural, one {# día} many {# de días} other {# días}} y se elimina definitivamente {total, plural, one {# día} many {# de días} other {# días}} después de escribirse.",
+      "defaultForever": "Actualmente se conserva para siempre (la política de seguridad no tiene límite).",
+      "defaultNote": "Comportamiento actual, nada guardado."
+    },
+    "status": {
+      "default": "Comportamiento actual",
+      "custom": "Guardado por ti",
+      "notApplied": "Aún no se aplica",
+      "updated": "Guardado {when}"
+    },
+    "stats": {
+      "live": "En la base de datos",
+      "liveValue": "{size}, unas {rows} filas",
+      "liveValueNoRows": "{size}",
+      "months": "{count, plural, one {# partición mensual} many {# de particiones mensuales} other {# particiones mensuales}}, la más antigua {oldest}",
+      "archive": "En el archivo",
+      "archiveValue": "{size} en {count, plural, one {# objeto} many {# de objetos} other {# objetos}}",
+      "archiveNone": "Aún no se ha medido nada",
+      "archiveMeasured": "medido {when}",
+      "lastRun": "Última ejecución",
+      "neverRun": "Aún no se ha ejecutado",
+      "runLive": "{when}: {months, plural, one {# mes archivado} many {# de meses archivados} other {# meses archivados}} ({rows} filas, {size}), {expired} eliminados del archivo, {deleted} filas o archivos eliminados",
+      "runDry": "{when}: simulación, no se cambió nada",
+      "runFailed": "La última ejecución tuvo un problema: {error}"
+    },
+    "actions": {
+      "save": "Guardar",
+      "checking": "Comprobando…",
+      "saving": "Guardando…",
+      "reset": "Volver al comportamiento actual",
+      "resetting": "Restableciendo…",
+      "cancel": "Cancelar",
+      "confirmSave": "Guardar y aplicar",
+      "resetTitle": "¿Devolver {item} a su comportamiento actual?",
+      "resetBody": "Se eliminan los valores guardados. Los trabajos nocturnos vuelven a las reglas integradas para este elemento. Los datos ya archivados permanecen en el archivo.",
+      "confirmReset": "Volver al comportamiento actual"
+    },
+    "preview": {
+      "title": "¿Guardar la retención de {item}?",
+      "intro": "En la próxima ejecución nocturna:",
+      "toArchive": "{count, plural, one {# mes} many {# de meses} other {# meses}} ({rows} filas, {size}) pasarán al archivo y saldrán de la base de datos.",
+      "toDeleteFromArchive": "{count, plural, one {# mes archivado} many {# de meses archivados} other {# meses archivados}} se eliminarán definitivamente del archivo.",
+      "rowsToDelete": "{count, plural, one {# fila o archivo} many {# de filas o archivos} other {# filas o archivos}} se eliminarán definitivamente.",
+      "notApplied": "El trabajo de archivado aún no aplica los valores guardados, así que nada de esto ocurre hasta que se active.",
+      "permanent": "La eliminación es permanente y no se puede deshacer."
+    },
+    "saved": "Retención guardada.",
+    "resetDone": "Se ha vuelto al comportamiento actual.",
+    "validation": {
+      "live_out_of_range": "Los días activos deben ser un número entero de {min} a {max}.",
+      "archive_out_of_range": "Los días de archivo deben ser un número entero de {min} a {max}.",
+      "archive_not_supported": "Este elemento no se puede archivar.",
+      "delete_before_archive": "Los datos no se pueden eliminar antes de archivarse.",
+      "not_a_number": "Introduce un número entero de días."
+    },
+    "errors": {
+      "forbidden": "No tienes permiso para hacer eso.",
+      "conflict": "Otra persona cambió este elemento. Se han cargado los valores más recientes; revísalos y guarda de nuevo.",
+      "validation": "Esos valores no están permitidos.",
+      "request": "Se rechazó la solicitud.",
+      "unexpected": "Algo salió mal en el servidor. Inténtalo de nuevo.",
+      "network": "No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo."
+    }
+  }
+}

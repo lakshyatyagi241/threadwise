@@ -169,7 +169,14 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
   {
     id: 'system',
     icon: 'gear',
-    tabs: ['system', 'i18n-languages', 'currencies', 'i18n-providers', 'i18n-usage'],
+    tabs: [
+      'system',
+      'data-retention',
+      'i18n-languages',
+      'currencies',
+      'i18n-providers',
+      'i18n-usage',
+    ],
   },
 ];
 
