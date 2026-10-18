@@ -187,6 +187,7 @@
       "notFound": "Deze workspace bestaat niet meer.",
       "reasonRequired": "Een reden van minimaal 8 tekens is vereist.",
       "orgSuspended": "De workspace is geschorst, dus je kunt hem niet openen.",
+      "noOwner": "Deze werkruimte heeft geen actieve eigenaar om als in te loggen.",
       "validation": "Controleer de waarden en probeer het opnieuw."
     },
     "detail": {

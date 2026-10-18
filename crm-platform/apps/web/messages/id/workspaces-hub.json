@@ -187,6 +187,7 @@
       "notFound": "Workspace ini tidak lagi ada.",
       "reasonRequired": "Alasan minimal 8 karakter diperlukan.",
       "orgSuspended": "Workspace ditangguhkan, sehingga tidak dapat dimasuki.",
+      "noOwner": "Ruang kerja ini tidak memiliki pemilik aktif untuk masuk sebagai pemilik.",
       "validation": "Periksa nilainya dan coba lagi."
     },
     "detail": {

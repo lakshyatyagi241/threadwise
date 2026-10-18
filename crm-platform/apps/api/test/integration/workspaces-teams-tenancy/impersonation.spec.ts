@@ -248,6 +248,29 @@ describe('operator impersonation (act-as session)', () => {
     expect(Number(row.target_user_id)).toBe(ownerId);
   });
 
+  it('acts as the admin-role user when the named owner is disabled (a migrated workspace whose owner row is inactive)', async () => {
+    await q(`UPDATE users SET status = 'inactive' WHERE org_id = $1 AND id = $2`, [orgId, ownerId]);
+    await expect(start()).rejects.toMatchObject({ code: 'WSP_IMPERSONATION_NO_OWNER' });
+    const admin = await q(
+      `INSERT INTO users (org_id, email, full_name, status) VALUES ($1, $2, 'Admin', 'active') RETURNING id`,
+      [orgId, `admin-${Math.random().toString(36).slice(2, 6)}@x.test`],
+    );
+    const role = await q(
+      `INSERT INTO roles (org_id, name, system_key) VALUES ($1, 'Owner', 'admin') RETURNING id`,
+      [orgId],
+    );
+    await q(`INSERT INTO user_roles (org_id, user_id, role_id) VALUES ($1, $2, $3)`, [
+      orgId,
+      admin.rows[0].id,
+      role.rows[0].id,
+    ]);
+    const res = await start();
+    const row = (
+      await q(`SELECT target_user_id FROM impersonation_sessions WHERE uuid = $1`, [res.sessionId])
+    ).rows[0];
+    expect(Number(row.target_user_id)).toBe(Number(admin.rows[0].id));
+  });
+
   it('keeps at most one open session per operator: a new start ends the previous one', async () => {
     const first = await start();
     const second = await start();

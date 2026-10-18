@@ -187,6 +187,7 @@
       "notFound": "Không gian làm việc này không còn tồn tại.",
       "reasonRequired": "Cần lý do tối thiểu 8 ký tự.",
       "orgSuspended": "Không gian làm việc đã bị tạm khóa nên không thể truy cập.",
+      "noOwner": "Không gian làm việc này không có chủ sở hữu đang hoạt động để đăng nhập với tư cách đó.",
       "validation": "Kiểm tra các giá trị và thử lại."
     },
     "detail": {
