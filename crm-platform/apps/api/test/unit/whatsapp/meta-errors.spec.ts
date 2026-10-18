@@ -82,12 +82,37 @@ describe("metaFailure: Meta's code to a decision", () => {
     });
   });
 
-  it('a connection that failed before any answer is retryable and says so', () => {
-    const err = metaFailure(WabaApiError.network(new TypeError('fetch failed')));
+  const refused = () =>
+    Object.assign(new TypeError('fetch failed'), { cause: { code: 'ECONNREFUSED' } });
+
+  it('a connection that provably never left (refused, unresolved name) is retryable and says so', () => {
+    const err = metaFailure(WabaApiError.network(refused()));
     expect(err).toMatchObject({
       code: 'PROVIDER_UNREACHABLE',
       retryable: true,
       retryAfterMs: 10_000,
+      outcomeMayHaveCommitted: false,
+    });
+  });
+
+  it('a timeout, a reset or an unknown network error may have been accepted: not retried, outcome unknown (RF-01)', () => {
+    for (const cause of [
+      Object.assign(new Error('The operation timed out'), { name: 'TimeoutError' }),
+      Object.assign(new TypeError('fetch failed'), { cause: { code: 'ECONNRESET' } }),
+      new TypeError('fetch failed'),
+    ]) {
+      expect(metaFailure(WabaApiError.network(cause))).toMatchObject({
+        code: 'PROVIDER_OUTCOME_UNKNOWN',
+        retryable: false,
+        outcomeMayHaveCommitted: true,
+      });
+    }
+  });
+
+  it('a 200 whose body could not be read was accepted by Meta: outcome unknown, even when the cause looks like a refusal', () => {
+    expect(metaFailure(WabaApiError.network(refused(), { bodyUnreadable: true }))).toMatchObject({
+      code: 'PROVIDER_OUTCOME_UNKNOWN',
+      retryable: false,
     });
   });
 

@@ -31,6 +31,7 @@ import { BroadcastService } from './broadcast.service';
 import { CartRepository } from './cart.repository';
 import { CartService } from './cart.service';
 import { CodRepository } from './cod.repository';
+import { CommerceConsentService } from './commerce-consent.service';
 import { CodService } from './cod.service';
 import { CheckoutLinkService } from './checkout-link.service';
 import { EcomFlowShop } from './ecom-flow-shop';
@@ -117,6 +118,7 @@ import { WoocommerceService } from './woocommerce.service';
     StockRepository,
     StockService,
     MirrorRepository,
+    CommerceConsentService,
     EventMessageService,
     WebhookService,
     WebhookPipelineService,

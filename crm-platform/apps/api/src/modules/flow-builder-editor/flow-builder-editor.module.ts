@@ -23,6 +23,7 @@ import { GetaPublishSettingsService } from './geta-publish/geta-publish-settings
 import { GetaPublishSyncService } from './geta-publish/geta-publish-sync.service';
 import { PlatformFlowTemplatesController } from './platform-flow-templates.controller';
 import { TestWebhookService } from './test-webhook.service';
+import { MapsLinkService } from './maps-link.service';
 
 /**
  * Flow builder and editor (FLB): the flows list and its actions, the builder's save / publish / import / export, the
@@ -52,6 +53,7 @@ import { TestWebhookService } from './test-webhook.service';
     FlowMediaService,
     FlowTemplatesAdminService,
     TestWebhookService,
+    MapsLinkService,
     GetaPublishRepository,
     GetaPublishSettingsService,
     GetaPublishSyncService,

@@ -97,11 +97,11 @@ describe('Sub-flow form', () => {
   });
 });
 
-describe('Knowledge base picker: create one from the AI nodes', () => {
+describe('Knowledge base picker: create one from the Instagram and voice AI nodes', () => {
   const ai = { model: '', prompt: '', assistant: '', save: 'reply' };
 
-  it('every AI node offers "Create knowledge base" in a new tab and a Refresh list button', () => {
-    for (const type of ['ai', 'cf_ai', 'ig_ai']) {
+  it('offers "Create knowledge base" in a new tab and a Refresh list button', () => {
+    for (const type of ['cf_ai', 'ig_ai']) {
       const html = render(type, ai);
       expect(html, type).toMatch(
         /<a[^>]*href="\/ai-training\/create"[^>]*target="_blank"[^>]*rel="noopener noreferrer"[^>]*>\+ Create knowledge base<\/a>/,
@@ -109,22 +109,98 @@ describe('Knowledge base picker: create one from the AI nodes', () => {
       expect(html, type).toContain('Refresh list');
     }
   });
+});
 
-  it('with no knowledge base yet the hint says so and tells the person to refresh after creating one', () => {
-    const html = render('ai', ai);
-    expect(html).toContain('No knowledge bases yet.');
-    expect(html).toContain('then press Refresh list to pick it here');
-    expect(html).not.toContain('No trained assistants yet');
+describe('AI assistant step: pick an AI agent first', () => {
+  const agent = (n: number, name: string, sources: number, model = 'gpt-4o-mini') => ({
+    id: U(n),
+    name,
+    status: 'active',
+    model,
+    sources,
+  });
+  const fresh = {
+    agentMode: 'agent',
+    model: 'gpt-4o-mini',
+    prompt: 'You are a friendly support assistant. Reply briefly.',
+    assistant: '',
+    save: 'reply',
+  };
+
+  it('a new step asks for the agent and hides the model, the prompt and the knowledge picker', () => {
+    const html = render('ai', fresh, { assistants: [agent(8, 'Shivaa', 2)] });
+    expect(html).toContain('AI agent');
+    expect(html).toContain('Shivaa · 2 sources');
+    expect(html).toContain('Change them in');
+    expect(html).not.toContain('System prompt');
+    expect(html).not.toContain('Knowledge from an AI agent');
+    expect(html).not.toContain('Models the admin enabled');
+    // Nothing is called out before the person has touched the field.
+    expect(html).not.toContain('role="alert"');
   });
 
-  it('the AI Training links of the hint also open in a new tab, so the flow in progress is never replaced', () => {
+  it('offers a link to create an agent in a new tab and a Refresh list button', () => {
+    const html = render('ai', fresh);
+    expect(html).toMatch(
+      /<a[^>]*href="\/ai-training\/create"[^>]*target="_blank"[^>]*rel="noopener noreferrer"[^>]*>\+ Create AI agent<\/a>/,
+    );
+    expect(html).toContain('You have no AI agents yet.');
+    expect(html).toContain('then press Refresh list');
+    expect(html).toContain('Refresh list');
+  });
+
+  it('shows what the chosen agent brings: its model and its number of knowledge sources', () => {
     const html = render(
       'ai',
-      { ...ai, assistant: U(8) },
-      { assistants: [{ id: U(8), name: 'FAQ', status: 'active', sources: 3 }] },
+      { ...fresh, assistant: U(8) },
+      { assistants: [agent(8, 'Shivaa', 2, 'claude-sonnet-5-5')] },
     );
+    expect(html).toContain('Model claude-sonnet-5-5 · 2 knowledge sources');
     expect(html).toMatch(/<a[^>]*href="\/ai-training"[^>]*target="_blank"/);
-    expect(html).toContain('FAQ · 3 source');
+  });
+
+  it('warns that an agent with no sources answers from its instructions only', () => {
+    const html = render(
+      'ai',
+      { ...fresh, assistant: U(8) },
+      { assistants: [agent(8, 'Shivaa', 0)] },
+    );
+    expect(html).toContain('has no knowledge yet');
+  });
+
+  it('keeps an agent that left the workspace selectable, so the step does not silently change', () => {
+    expect(render('ai', { ...fresh, assistant: U(9) })).toContain('(assistant 00000000)');
+  });
+
+  it('the custom setup shows the model, the instructions and the agent as a knowledge source only', () => {
+    const html = render(
+      'ai',
+      { ...fresh, agentMode: 'custom', assistant: U(8) },
+      { assistants: [agent(8, 'Shivaa', 2)] },
+    );
+    expect(html).toContain('System prompt');
+    expect(html).toContain('Model');
+    expect(html).toContain('Knowledge from an AI agent (optional)');
+    expect(html).toContain('Shivaa · 2 sources');
+    expect(html).not.toContain('The agent brings its own');
+  });
+
+  it('a step saved before the choice existed reads as a custom setup and keeps its prompt and knowledge', () => {
+    const html = render(
+      'ai',
+      { model: 'gpt-4o-mini', prompt: 'Answer about farms', assistant: U(8), save: 'reply' },
+      { assistants: [agent(8, 'Shivaa', 2)] },
+    );
+    expect(html).toContain('Answer about farms');
+    expect(html).toContain('Knowledge from an AI agent (optional)');
+    expect(html).toMatch(/value="custom"[^>]*checked|checked=""[^>]*value="custom"/);
+  });
+
+  it('advanced options are collapsed, and open by themselves when the step already uses one', () => {
+    expect(render('ai', fresh)).not.toMatch(/<details[^>]*\sopen/);
+    const html = render('ai', { ...fresh, extract: true, fields: 'NAME, DATE' });
+    expect(html).toMatch(/<details[^>]*\sopen/);
+    expect(html).toContain('NAME, DATE');
   });
 });
 

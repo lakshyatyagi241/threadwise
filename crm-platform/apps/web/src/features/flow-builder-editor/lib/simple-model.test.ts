@@ -328,6 +328,42 @@ describe('checks', () => {
     ]);
   });
 
+  it('flags a Location step until it has real coordinates, and keeps a saved one valid', () => {
+    const run = (data: Record<string, unknown>) => {
+      let d = emptyDoc();
+      d = insertStep(d, 0, 0, { ...newStep('location', []), data });
+      d.trigger.data.keywords = 'hi';
+      return problems(d, { senderRequired: false }).map((p) => en(p.message));
+    };
+    const bad = ['Step 1.1: paste a Google Maps link or enter a valid latitude and longitude.'];
+    expect(run({})).toEqual(bad);
+    expect(run({ locMode: 'link', mapsUrl: '', lat: '', lng: '' })).toEqual(bad);
+    expect(run({ lat: '0', lng: '0' })).toEqual(bad);
+    expect(run({ lat: '91', lng: '10' })).toEqual(bad);
+    expect(run({ lat: 'abc', lng: '10' })).toEqual(bad);
+    // place name and address are optional; a step saved before the modes existed stays valid
+    expect(run({ lat: '18.5204', lng: '73.8567', title: '', address: '' })).toEqual([]);
+    expect(
+      run({
+        locMode: 'link',
+        mapsUrl: 'https://maps.google.com/?q=1.5,2.5',
+        lat: '1.5',
+        lng: '2.5',
+      }),
+    ).toEqual([]);
+  });
+
+  it('a new Location step starts empty in link mode, with no placeholder name or address', () => {
+    expect(newStep('location', []).data).toMatchObject({
+      locMode: 'link',
+      mapsUrl: '',
+      lat: '',
+      lng: '',
+      title: '',
+      address: '',
+    });
+  });
+
   it('flags long button labels and repeated variable names', () => {
     let d = emptyDoc();
     const b = newStep('buttons', []);
@@ -1132,5 +1168,69 @@ describe('a button, row or reply that leads nowhere is not published', () => {
     const wired = updateStep(d, b.id, { links: [LINK_NEXT, LINK_NEXT, LINK_NEXT, LINK_NEXT] });
     const next = insertStep(wired, 0, 1, { ...newStep('message', []), data: { text: 'x' } });
     expect(found(next)).toEqual(['Step 1.1: a set of buttons can have at most 3 buttons.']);
+  });
+});
+
+describe('the AI assistant step: an agent, or a custom setup with a prompt', () => {
+  const docWithAi = (data: Record<string, unknown>) => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const m = newStep('message', []);
+    const a = newStep('ai', [m]);
+    d = insertStep(d, 0, 0, m);
+    d = insertStep(d, 0, 1, a);
+    d = updateStep(d, a.id, { data });
+    return { d, a };
+  };
+  const ask = (d: SimpleDoc) =>
+    problems(d, { senderRequired: false })
+      .map((p) => en(p.message))
+      .filter((m) => m.includes('AI'));
+
+  it('a new step starts as an agent setup and cannot be published until an agent is chosen', () => {
+    const a = newStep('ai', []);
+    expect(a.data.agentMode).toBe('agent');
+    expect(a.data.assistant).toBe('');
+    const { d } = docWithAi({ ...a.data });
+    expect(ask(d)).toEqual([
+      'Step 1.2: choose the AI agent that answers, or switch the step to a custom setup.',
+    ]);
+  });
+
+  it('an agent setup passes once an agent is chosen, whatever the prompt field holds', () => {
+    expect(ask(docWithAi({ agentMode: 'agent', assistant: 'a-1', prompt: '' }).d)).toEqual([]);
+  });
+
+  it('a custom setup needs a prompt, unless an agent lends its knowledge (a step saved that way before)', () => {
+    expect(ask(docWithAi({ agentMode: 'custom', prompt: '  ', assistant: '' }).d)).toEqual([
+      'Step 1.2: write the instructions for the AI, or choose an AI agent.',
+    ]);
+    expect(ask(docWithAi({ agentMode: 'custom', prompt: 'Be brief', assistant: '' }).d)).toEqual(
+      [],
+    );
+    expect(ask(docWithAi({ agentMode: 'custom', prompt: '', assistant: 'a-1' }).d)).toEqual([]);
+  });
+
+  it('a step saved before the choice existed has no mode, keeps working and keeps its fields', () => {
+    const old = {
+      model: 'gpt-4o-mini',
+      prompt: 'Answer about farms',
+      assistant: 'a-1',
+      save: 'reply',
+    };
+    const g = graph(
+      [node('t', 'trigger', { kind: 'keyword', keywords: 'hi' }), node('ai1', 'ai', old, 80, 250)],
+      [edge('t', 'out', 'ai1')],
+    );
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (!back.ok) return;
+    expect(ask(back.doc)).toEqual([]);
+    const s = allSteps(back.doc).find((x) => x.id === 'ai1')!;
+    expect(s.data).toMatchObject(old);
+    expect(s.data.agentMode).toBeUndefined();
+    const saved = toGraph(back.doc).flowNodes.find((n) => n.id === 'ai1')!;
+    expect(saved.data).toMatchObject(old);
+    expect(saved.data.agentMode).toBeUndefined();
   });
 });

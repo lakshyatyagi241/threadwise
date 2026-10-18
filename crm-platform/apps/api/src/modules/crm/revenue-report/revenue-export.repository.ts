@@ -116,16 +116,21 @@ export class RevenueExportRepository {
     return rowsOf(res).length > 0;
   }
 
+  /**
+   * Stores the finished file. False when the row is gone or no longer running: an erasure removed it while it was being built
+   * (privacy registry, `revenue.exports`), and then no file is stored.
+   */
   async finish(
     tx: Tx,
     orgId: number,
     id: number,
     f: { fileName: string; file: Buffer; rowCount: number; expiresAt: Date },
-  ): Promise<void> {
-    await tx.execute(sql`
+  ): Promise<boolean> {
+    const res = await tx.execute(sql`
       UPDATE revenue_report_exports SET status = 'ready', file_name = ${f.fileName}, file_gz = ${f.file}, file_bytes = ${f.file.length},
         row_count = ${f.rowCount}, completed_at = now(), expires_at = ${f.expiresAt}, error = NULL
-      WHERE org_id = ${orgId} AND id = ${id} AND status = 'running'`);
+      WHERE org_id = ${orgId} AND id = ${id} AND status = 'running' RETURNING 1`);
+    return rowsOf(res).length > 0;
   }
 
   async fail(tx: Tx, orgId: number, id: number, error: string): Promise<void> {

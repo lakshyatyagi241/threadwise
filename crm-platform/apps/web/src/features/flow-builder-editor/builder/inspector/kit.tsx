@@ -378,10 +378,16 @@ export function TextArea({
   noAttr,
   compact,
   maxLength,
+  id,
+  onBlur,
 }: {
   value: unknown;
   onChange: (v: string) => void;
   placeholder?: string;
+  /** Lets a `<label htmlFor>` name the field. */
+  id?: string;
+  /** Fires when the field loses focus (a form shows a missing-value error only after that). */
+  onBlur?: () => void;
   rows?: number;
   /** A hard stop: typing and pasting both end here. */
   maxLength?: number;
@@ -397,6 +403,7 @@ export function TextArea({
   return (
     <>
       <textarea
+        id={id}
         rows={rows}
         value={text}
         placeholder={placeholder}
@@ -414,7 +421,10 @@ export function TextArea({
         onChange={handlers.onChange}
         onSelect={handlers.onSelect}
         onKeyDown={handlers.onKeyDown}
-        onBlur={handlers.onBlur}
+        onBlur={() => {
+          handlers.onBlur();
+          onBlur?.();
+        }}
         /* eslint-enable react-hooks/refs */
       />
       {picker.popover}
@@ -456,7 +466,14 @@ export function SelectInput({
  * brings it into the list. AI Training opens in a NEW tab so the flow being built (with its unsaved changes) stays open;
  * Refresh list re-reads the workspace's assistants, so the new one is there when the person comes back.
  */
-export function KnowledgeBaseActions({ refresh }: { refresh: () => void }) {
+export function KnowledgeBaseActions({
+  refresh,
+  createLabel,
+}: {
+  refresh: () => void;
+  /** The create link's text when the picker lists AI agents, not knowledge bases. */
+  createLabel?: string;
+}) {
   const t = useTranslations('flb.builder.shell.kit');
   return (
     <div className="mt-1.5 flex items-center justify-between text-[10.5px]">
@@ -466,7 +483,7 @@ export function KnowledgeBaseActions({ refresh }: { refresh: () => void }) {
         rel="noopener noreferrer"
         className="font-semibold text-brand underline"
       >
-        {t('createKnowledgeBase')}
+        {createLabel ?? t('createKnowledgeBase')}
       </a>
       <button type="button" onClick={refresh} className="text-brand underline">
         {t('refreshList')}

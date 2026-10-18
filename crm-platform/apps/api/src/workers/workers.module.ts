@@ -21,6 +21,8 @@ import { ShopifyWoocommerceWorkerModule } from '../modules/shopify-woocommerce';
 import { ChannelEmailWorkerModule } from '../modules/channel-email';
 import { ChannelSmsWorkerModule } from '../modules/channel-sms';
 import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
+import { WebhookRetryWorkerModule } from '../modules/webhook-retry';
+import { FailedOperationsWorkerModule } from '../modules/failed-operations';
 import { ChannelLineWorkerModule } from '../modules/channel-line';
 import { ChannelViberWorkerModule } from '../modules/channel-viber';
 import { ChannelWechatWorkerModule } from '../modules/channel-wechat';
@@ -123,6 +125,8 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     TeamInboxRoutingSlaWorkerModule,
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,
+    WebhookRetryWorkerModule,
+    FailedOperationsWorkerModule,
     ChannelLineWorkerModule,
     ChannelViberWorkerModule,
     ChannelWechatWorkerModule,

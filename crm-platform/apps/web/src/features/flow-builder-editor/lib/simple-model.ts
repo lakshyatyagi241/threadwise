@@ -8,7 +8,9 @@ import {
   type FlowVar,
   flbCarouselReplies,
   flbCleanCarouselCards,
+  flbAiNodeProblem,
   flbCondProblems,
+  flbReadLocation,
 } from '@crm/contracts';
 import { conditionTreeOf } from './condition-tree';
 import { ctaLinkProblem } from './cta-link';
@@ -632,7 +634,8 @@ export function newStep(
   if (type === 'code') data.save = fresh('result');
   if (type === 'ai') data.save = fresh('reply');
   // `faq` keeps the catalogue defaults: the customer's last message, every FAQ, the workspace's score, answer sent, saved as `faq`.
-  if (type === 'location') Object.assign(data, { lat: '', lng: '', title: '', address: '' });
+  if (type === 'location')
+    Object.assign(data, { locMode: 'link', mapsUrl: '', lat: '', lng: '', title: '', address: '' });
   if (type === 'cta') data.actions = [{ type: 'url', label: 'Visit website', value: '' }];
   if (type === 'condition')
     data.conditionGroup = { op: 'and', items: [{ variable: '', operator: 'equals', value: '' }] };
@@ -949,14 +952,7 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
         if (!str(d.var).trim()) bad('nameVariable');
         if (d.saveProperty === true && !str(d.propertyKey).trim()) bad('chooseAnswerProperty');
       }
-      if (
-        s.type === 'location' &&
-        (Number.isNaN(Number(d.lat)) ||
-          str(d.lat).trim() === '' ||
-          Number.isNaN(Number(d.lng)) ||
-          str(d.lng).trim() === '')
-      )
-        bad('setCoordinates');
+      if (s.type === 'location' && !flbReadLocation(d).ok) bad('setCoordinates');
       if (s.type === 'template' && !str(d.tpl).trim()) bad('chooseTemplate');
       if (s.type === 'assign' && !str(d.team).trim()) bad('chooseTeam');
       if (
@@ -998,6 +994,10 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
           bad('carouselButtons');
       }
       if (s.type === 'faq' && minScoreOutOfRange(d.minScore)) bad('faqMinScore');
+      if (s.type === 'ai') {
+        const why = flbAiNodeProblem(d);
+        if (why) bad(why === 'no_agent' ? 'chooseAiAgent' : 'writeAiPrompt');
+      }
       if (s.type === 'cta') {
         const list = arr(d.actions) as Array<Record<string, unknown>>;
         if (list.length === 0 || list.some((a) => !str(a.label).trim() || !str(a.value).trim()))
@@ -1113,7 +1113,7 @@ export function stepSummary(s: SimpleStep, t: Translate): string {
           : s.type === 'media'
             ? str(d.caption) || str(d.url)
             : s.type === 'location'
-              ? str(d.title) || str(d.address)
+              ? str(d.title) || str(d.address) || coordsSummary(d)
               : s.type === 'template'
                 ? str(d.tpl)
                 : s.type === 'condition'
@@ -1168,3 +1168,10 @@ export const TYPE_LABEL: Record<SimpleType, Msg> = {
   webhook: nodeLabelMsg('webhook'),
   code: msg('simpleModel.typeLabel.code'),
 };
+
+/** A Location step with no name or address is summarised by its coordinates. */
+function coordsSummary(d: Record<string, unknown>): string {
+  const lat = str(d.lat).trim();
+  const lng = str(d.lng).trim();
+  return lat && lng ? `${lat}, ${lng}` : '';
+}

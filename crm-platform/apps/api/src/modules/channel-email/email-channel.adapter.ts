@@ -312,6 +312,12 @@ Unsubscribe: ${link.pageUrl}`;
       );
     }
     if (err instanceof MailDriverError) {
+      if (err.outcomeMayHaveCommitted) {
+        return new ChannelError('MAIL_SEND_OUTCOME_UNKNOWN', err.message, false, {
+          providerCode: err.providerCode || null,
+          outcomeMayHaveCommitted: true,
+        });
+      }
       if (err.retryable) {
         return new ChannelError('MAIL_SEND_FAILED', err.message, true, {
           providerCode: err.providerCode || null,

@@ -5,6 +5,7 @@
 
 import type { PublicConsentNotice } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import type { CommerceClearance } from '../commerce-consent.rules';
 import type { EventContext } from '../event-rules';
 import type { MirrorCustomer, MirrorOrder, MirrorProduct, StoreKind } from '../mirror-rules';
 
@@ -69,6 +70,11 @@ export interface EcomTemplate {
   body: string;
   header: string | null;
   footer: string | null;
+  /**
+   * The template's category, lower case: Meta's own when it re-classified the template, else the workspace's (`marketing`, `utility`,
+   * `authentication`). It decides whether sending the template is a marketing message that the ConsentGate must clear.
+   */
+  category: string | null;
 }
 
 /** Reads the message templates an automation points at (message-templates domain). */
@@ -83,7 +89,9 @@ export const ECOM_TEMPLATES = Symbol('ECOM_TEMPLATES');
 /**
  * Sends one template to one customer through the number the workspace sends from (TW-ECOM-010): the chosen "send from" number, else
  * its default engine's. A Cloud API number gets the approved template with the numbered values; the unofficial engine and Twilio get the
- * template rendered as text (header, body, footer). Throws with a reason a person can act on.
+ * template rendered as text (header, body, footer). Throws with a reason a person can act on. Every template send carries the
+ * `consent` clearance its caller got from `CommerceConsentService`; a plain-text answer to a message the customer just sent is a reply
+ * inside their open session and needs none.
  */
 export interface CommerceSender {
   send(
@@ -96,6 +104,8 @@ export interface CommerceSender {
       reference: string;
       /** `engine:uuid` of the number to send from (TW-ECOM-033); absent means the workspace's default engine. */
       senderKey?: string | null;
+      /** The consent step for this message (BL-141): issued by `CommerceConsentService`, so no template goes out unchecked. */
+      consent: CommerceClearance;
     },
   ): Promise<{ providerMessageId: string | null }>;
   /** Whether a number is connected to send from now (nothing is scheduled for a workspace that has none). */

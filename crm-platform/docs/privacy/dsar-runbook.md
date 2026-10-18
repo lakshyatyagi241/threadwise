@@ -34,6 +34,9 @@ receipt date, verification date, due date. Escalate at 15 and 25 days.
    - Erasure: preview (counts per table), then type `ERASE <reference>`. Messages, files and recordings are deleted; leads, forms, appointments,
      calls keep the row without the person; invoices and payments are kept with the buyer replaced. The proof (counts, digest, hash) stays on the request.
      Deleting a contact in the CRM now also erases its conversation history (option to keep it anonymised).
+     Derived copies go with the person: a buyer's erasure deletes every unexpired revenue report export of the workspace (the file is
+     regenerable and is kept 7 days at most) and the AI briefs of the companies the contact belongs to; a staff member's account deletion
+     deletes the exports they asked for and the briefs they generated. Audit-log rows stay.
    - Rectification: edit the contact; the audit log records the change.
    - Withdrawal/objection: record a `withdrawn` event for every channel and purpose the person names.
 6. **Storage and caches:** done by the service (files go to the purge queue within a minute); confirm `storage_purge_queue` drained.

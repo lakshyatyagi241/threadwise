@@ -16,7 +16,11 @@ const ROUTES: Record<string, { org: number; cfg: number }> = {
 const OWN_SECRET: Record<number, string> = { 21: 'attacker-secret', 22: 'attacker-secret' };
 
 function build() {
-  const queue = { add: vi.fn(async () => undefined) };
+  const queue = {
+    add: vi.fn(async () => undefined),
+    getJobState: vi.fn(async () => 'unknown'),
+    getJob: vi.fn(async () => undefined),
+  };
   const db = {
     primary: {
       execute: vi.fn(async (q: { queryChunks: unknown[] }) => {
@@ -40,7 +44,10 @@ function build() {
     findById: async (_tx: unknown, _org: number, id: number) =>
       OWN_SECRET[id] ? { credentials_json: `enc:${OWN_SECRET[id]}` } : { credentials_json: null },
   };
-  const crypto = { decrypt: (v: string) => JSON.stringify({ app_secret: v.slice(4) }) };
+  const crypto = {
+    decrypt: (v: string) => JSON.stringify({ app_secret: v.slice(4) }),
+    encrypt: (v: string) => `sealed:${Buffer.from(v).toString('base64')}`,
+  };
   const config = {
     get: (k: string) => (k === 'CREDENTIALS_ENCRYPTION_KEY' ? 'k'.repeat(32) : undefined),
   };
@@ -105,6 +112,10 @@ describe('WhatsApp webhook: signature scope (AZ-015)', () => {
     const res = await send(svc, raw(change('wx', '221'), change('wx', '222')), 'attacker-secret');
     expect(res.queued).toBe(2);
     expect(queue.add).toHaveBeenCalledTimes(1);
+    // The job carries message text and phone numbers: it is queued sealed, never as plain JSON.
+    const data = (queue.add.mock.calls[0] as unknown as [string, Record<string, unknown>])[1];
+    expect(Object.keys(data)).toEqual(['sealed']);
+    expect(JSON.stringify(data)).not.toContain('"changes"');
   });
 
   it('accepts numbers of many workspaces signed with the platform secret', async () => {

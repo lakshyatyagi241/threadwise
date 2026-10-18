@@ -139,17 +139,30 @@ describe('default job options', () => {
   });
 
   it('drops a completed job at once on the queues that carry message text, phone numbers or raw webhook bodies', () => {
-    for (const queue of [QUEUES.WABA_INGEST, QUEUES.WEBHOOK_FORWARD]) {
+    for (const queue of [QUEUES.WABA_INGEST, QUEUES.WEBHOOK_RETRY, QUEUES.WEBHOOK_FORWARD]) {
       expect(jobOptionsFor(queue).removeOnComplete, queue).toBe(true);
       // Failures stay, bounded, so a dead job can still be debugged.
       expect(jobOptionsFor(queue).removeOnFail, queue).toEqual(DEFAULT_JOB_OPTIONS.removeOnFail);
-      expect(jobOptionsFor(queue).attempts, queue).toBe(DEFAULT_JOB_OPTIONS.attempts);
+      // The inbound WhatsApp queue deliberately retries longer than the default (a message exists only here once Meta has our 200);
+      // the forward queue keeps the default. See queues.spec.ts for the window.
+      if (queue === QUEUES.WABA_INGEST || queue === QUEUES.WEBHOOK_RETRY) {
+        expect(jobOptionsFor(queue).attempts, queue).toBeGreaterThan(DEFAULT_JOB_OPTIONS.attempts);
+      } else {
+        expect(jobOptionsFor(queue).attempts, queue).toBe(DEFAULT_JOB_OPTIONS.attempts);
+      }
     }
   });
 
   it('gives every other queue exactly the defaults', () => {
     for (const queue of Object.values(QUEUES)) {
-      if (queue === QUEUES.WABA_INGEST || queue === QUEUES.WEBHOOK_FORWARD) continue;
+      if (
+        queue === QUEUES.WABA_INGEST ||
+        queue === QUEUES.WEBHOOK_RETRY ||
+        queue === QUEUES.WEBHOOK_FORWARD ||
+        // The e-commerce webhook queue also retries longer than the default (same reason as the inbound WhatsApp queue).
+        queue === QUEUES.WEBHOOK_INGEST
+      )
+        continue;
       expect(jobOptionsFor(queue), queue).toEqual(DEFAULT_JOB_OPTIONS);
     }
   });
@@ -191,7 +204,7 @@ describe('outbox subscribers', () => {
           /idempoten|dedupe|redeliver|at[- ]least[- ]once|a repeat|twice|harmless|jobId/i.test(
             text,
           );
-        const base = rel.split('/').pop()!;
+        const base = rel.split(/[\\/]/).pop()!;
         expect(
           own || AUDIT.includes(base),
           `${rel} is neither explained in the file nor listed in the audit; see docs/adr/0029-idempotency.md`,

@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { EngineSenderRegistry } from '../../broadcasts';
 import { OutboundRegistry, SenderResolver, type SenderRef } from '../../node-bridge-runtime';
+import type { CommerceClearance } from '../commerce-consent.rules';
 import { bodyParams, renderBody, type EventContext } from '../event-rules';
 import type { CommerceSender, EcomTemplate } from './tokens';
 
@@ -21,6 +22,10 @@ export function templateText(template: EcomTemplate, ctx: EventContext): string 
  * The commerce send, engine-aware like Reference's notifier. The number is the chosen "send from" one (`engine:uuid`, which must be
  * connected) or the workspace's default engine's. Cloud API numbers send the approved template; the other engines send it as text
  * through the shared outbound layer.
+ *
+ * Consent (BL-141 follow-up): a template send takes the `consent` clearance its caller got from `CommerceConsentService`, which asked
+ * the ConsentGate for a marketing template and let a utility one through. The ConsentGate is not asked again per message here, so a
+ * broadcast of thousands costs one question per slice, not one per customer.
  */
 @Injectable()
 export class EngineCommerceSender implements CommerceSender {
@@ -85,8 +90,12 @@ export class EngineCommerceSender implements CommerceSender {
       ctx: EventContext;
       reference: string;
       senderKey?: string | null;
+      /** The consent step of this message, already settled by the caller (`CommerceConsentService`); the sender only carries it. */
+      consent: CommerceClearance;
     },
   ): Promise<{ providerMessageId: string | null }> {
+    // A caller that skipped the consent step (a plain JS call, a cast) is stopped here rather than sending unchecked.
+    if (!m.consent) throw new Error('A template send needs its consent clearance.');
     const sender = await this.need(orgId, m.senderKey);
     if (sender.engine === 'waba') {
       const adapter = this.engines.get('waba');

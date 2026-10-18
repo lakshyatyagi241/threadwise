@@ -90,6 +90,10 @@ export class RuntimeMonitor {
   private readonly throttledSeconds: Gauge;
   private readonly jobs: Counter;
   private readonly jobRetries: Counter;
+  private readonly dlqCaptured: Counter;
+  private readonly dlqCaptureFailures: Counter;
+  private readonly dlqOpen: Gauge;
+  private readonly dlqOldest: Gauge;
   private readonly httpDuration: Histogram;
   private readonly jobDuration: Histogram;
   private readonly jobWait: Histogram;
@@ -186,6 +190,22 @@ export class RuntimeMonitor {
       'crm_container_cpu_throttled_seconds_total',
       'cgroup throttled_usec in seconds',
     );
+    this.dlqCaptured = this.registry.counter(
+      'crm_dead_letter_captured_total',
+      'Background operations recorded as failed for good (retries exhausted or unrecoverable), by queue and failure category',
+    );
+    this.dlqCaptureFailures = this.registry.counter(
+      'crm_dead_letter_capture_failures_total',
+      'Failed-operation records that could not be written. The job is still in the queue failed set and the reconcile sweep retries it; any non-zero value needs a person',
+    );
+    this.dlqOpen = this.registry.gauge(
+      'crm_dead_letter_open',
+      'Failed operations not yet resolved or closed, by queue',
+    );
+    this.dlqOldest = this.registry.gauge(
+      'crm_dead_letter_oldest_open_seconds',
+      'Age of the oldest unresolved failed operation, by queue (0 when none)',
+    );
     this.jobs = this.registry.counter(
       'crm_queue_jobs_total',
       'Finished queue jobs by queue and outcome',
@@ -268,6 +288,21 @@ export class RuntimeMonitor {
     this.jobDuration.observe(durationMs / 1000, { queue });
     this.jobs.inc(1, { queue, outcome });
     if (retries > 0) this.jobRetries.inc(retries, { queue });
+  }
+
+  /** A failed operation was recorded. Labels are the fixed queue name and the failure category: never an id, tenant or error text. */
+  observeDeadLetter(queue: string, category: string): void {
+    this.dlqCaptured.inc(1, { queue, category });
+  }
+
+  observeDeadLetterCaptureFailure(queue: string): void {
+    this.dlqCaptureFailures.inc(1, { queue });
+  }
+
+  /** The unresolved backlog of one queue, sampled by the reconcile sweep. */
+  setDeadLetterBacklog(queue: string, open: number, oldestSeconds: number): void {
+    this.dlqOpen.set(open, { queue });
+    this.dlqOldest.set(oldestSeconds, { queue });
   }
 
   render(): string {

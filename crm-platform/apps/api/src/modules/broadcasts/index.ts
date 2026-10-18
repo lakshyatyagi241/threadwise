@@ -53,7 +53,14 @@ export {
 export { isKnownTimeZone, wallTimeToUtc } from './schedule';
 export { mediaUrlProblem, templateRefusals } from './template-guards';
 export { assemblePhone } from './recipient-phone';
-export { DEFAULT_RETRY_POLICY, resolvePolicy, retryDelaySeconds } from './retry-policy';
+export {
+  DEFAULT_RETRY_POLICY,
+  OUTCOME_UNKNOWN_PREFIX,
+  isOutcomeUnknown,
+  isPermanentFailure,
+  resolvePolicy,
+  retryDelaySeconds,
+} from './retry-policy';
 export {
   SENDER_DIRECTORY,
   TEMPLATE_DIRECTORY,

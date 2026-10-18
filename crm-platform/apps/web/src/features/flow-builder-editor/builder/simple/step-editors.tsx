@@ -54,6 +54,7 @@ import { ApiLibraryForm } from '../inspector/forms-channels/api-library';
 import { TemplatePreview } from '../inspector/forms-core/previews';
 import type { FormComponent, FormEnv } from '../inspector/types';
 import { MediaUpload } from './media-upload';
+import { LocationPicker } from '../location-picker';
 import { FlowEditorContext } from '../../lib/flow-editor-context';
 import {
   BRANCHING,
@@ -1293,26 +1294,7 @@ function DelayEditor({ step, set }: EditorProps) {
 }
 
 function LocationEditor({ step, set }: EditorProps) {
-  const t = useTranslations('flb.builder.simple.editors');
-  const f = (key: string, label: string, props: { placeholder?: string } = {}) => (
-    <Field label={label}>
-      <Input
-        value={str(step.data[key])}
-        placeholder={props.placeholder}
-        onChange={(e) => set({ [key]: e.target.value })}
-      />
-    </Field>
-  );
-  return (
-    <div className="space-y-3">
-      {f('title', t('location.placeName'), { placeholder: t('location.placePlaceholder') })}
-      {f('address', t('location.address'))}
-      <div className="grid grid-cols-2 gap-3">
-        {f('lat', t('location.latitude'), { placeholder: '18.5204' })}
-        {f('lng', t('location.longitude'), { placeholder: '73.8567' })}
-      </div>
-    </div>
-  );
+  return <LocationPicker data={step.data} patch={set} idPrefix={`loc-${step.id}`} />;
 }
 
 /** What a template button opens, for the list under the preview: the phone number, the link or the copied code. */

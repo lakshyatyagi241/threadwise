@@ -90,7 +90,7 @@ or WooCommerce store (that needs a Shopify partner app and a store, which this w
 
 - `StoreMirror` (`_shims/sql-store-mirror.ts`): writes `wa_products`, `wa_orders`, `contacts` and the customer group directly until the catalog, checkout and contacts domains export their writers (a contact is created without a quota check or a `contact_identities` row, as the Facebook and Telegram channels do).
 - `EcomTemplates` (`_shims/sql-ecom-templates.ts`): reads `wa_templates` (sendable: not submitted to Meta, or approved) until the templates domain exports its lookup.
-- `CommerceSender` (`_shims/engine-commerce-sender.ts`): sends through the chosen or default engine's number using the broadcasts engine adapter (Cloud API templates) and the shared outbound layer (text for the unofficial engine and Twilio).
+- `CommerceSender` (`_shims/engine-commerce-sender.ts`): sends through the chosen or default engine's number using the broadcasts engine adapter (Cloud API templates) and the shared outbound layer (text for the unofficial engine and Twilio). Intended difference (BL-278): a template send to a customer carries the consent clearance of `CommerceConsentService`; a MARKETING template is put through the ConsentGate first and an opted-out customer is skipped and recorded (Reference messaged them unless the contact flag was set).
 - `EcomPlanGate` (`_shims/open-gates.ts`): `integration_shopify` and `integration_woocommerce` are not in the plan catalogue; every check passes.
 
 ## Not verified

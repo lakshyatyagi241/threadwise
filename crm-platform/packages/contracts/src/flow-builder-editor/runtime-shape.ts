@@ -11,6 +11,7 @@ import {
   flbCleanMinAge,
 } from './ask-input';
 import { flbSanitizeConditionGroup } from './condition-group';
+import { flbParseCoordinate } from './location';
 import type { FlbNodeData } from './node-catalogue';
 
 /**
@@ -561,8 +562,11 @@ const SHAPERS: Record<string, Shaper> = {
   },
 
   location: (d) => ({
-    latitude: toFloat(coalesce(d.lat, d.latitude)),
-    longitude: toFloat(coalesce(d.lng, d.longitude)),
+    // Not PHP's (float) cast: that turns a blank or garbled coordinate into 0 and sends a pin at the equator. A coordinate that is not a
+    // plain number is `null` (JSON-safe, it is stored on a run), and the Location executor refuses to send it. (`18,5204` with a
+    // decimal comma reads as 18.5204.)
+    latitude: flbParseCoordinate(coalesce(d.lat, d.latitude)),
+    longitude: flbParseCoordinate(coalesce(d.lng, d.longitude)),
     address: s(d.address),
     title: s(d.title),
   }),

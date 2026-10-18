@@ -352,7 +352,8 @@ that runs every existing sweep as a "retention job" under one contract: plan wip
 (`apps/api/src/modules/notifications/notification-retention.service.ts`), push prune
 (`apps/api/src/modules/notifications/push-subscriptions-prune.service.ts`), webhook forward retention
 (`apps/api/src/modules/webhook-fanout/webhook-forward-retention.service.ts`), consent export sweep
-(`apps/api/src/modules/contact-consent/consent-export-sweep.service.ts`), and new ones (call recordings and transcripts, webhook delivery
+(`apps/api/src/modules/contact-consent/consent-export-sweep.service.ts`), revenue export sweep
+(`apps/api/src/modules/crm/revenue-report/revenue-export-sweep.service.ts`), and new ones (call recordings and transcripts, webhook delivery
 log, widget visitors, closed conversations if the tenant chooses, audit rows, sessions). Proposed platform defaults, all workspace
 overridable inside the bounds, all subject to decision D4:
 
@@ -367,6 +368,14 @@ overridable inside the bounds, all subject to decision D4:
 | Audit log                       | 13 months                            | 6 to 36 months                 |
 | Sessions / login IP             | 90 days                              | 30 to 365 days                 |
 | Inactive workspace              | per ADR-0028 (archive 90, erase 180) | operator override              |
+| Revenue report export files     | 7 days (daily sweep)                 | fixed; gone at erasure         |
+| Company briefs (AI summaries)   | cache: a day, then overwritten       | gone at erasure                |
+
+Derived copies (the last two rows) are not records of truth: they are built from invoices, payments, contacts, deals and tasks, which keep
+their own rules, so they do not outlive an erasure (GDPR Art. 17(1); Art. 17(3)(b) does not reach a copy) and a short fixed life keeps them
+inside the one-month "without undue delay" period. A buyer's erasure purges every unexpired export of the workspace because the row does not
+record whom a file lists. Both are registered holders (`revenue.exports`, `companies.briefs`), `audit_log` is untouched, and counsel should
+confirm the wording. See [api/privacy.md](../api/privacy.md) "Derived copies".
 
 Legal hold: a flag on a subject or a workspace that makes all retention jobs and erasures skip it and records why. It requires a
 distinct permission and is itself audited.
@@ -641,7 +650,7 @@ What is decided, and for whom:
 **The remaining senders (BL-191, built).** The broadcasts of LINE, Messenger, Telegram and Viber leave a held recipient `pending` with
 `held_until` and wake themselves with a delayed job at the first opening; a WeChat mass send is one call, so it waits as a whole on the
 workspace clock; the Instagram broadcasts page, the offer and win-back broadcasts of a Shopify or WooCommerce store, and the broadcast wizard's
-test send hold the same way (a delayed job at the opening). Every recipient of these broadcasts is also put through the ConsentGate before it is sent, first sends included (BL-141 follow-up; a WeChat all-followers or tag send is refused as a whole when it cannot be shown to be clean, BL-243). Only the marketing purpose is asked: a utility template is never held, and an
+test send hold the same way (a delayed job at the opening). Every recipient of these broadcasts is also put through the ConsentGate before it is sent, first sends included (BL-141 follow-up; a WeChat all-followers or tag send is refused as a whole when it cannot be shown to be clean, BL-243). The store senders do the same for every customer of a MARKETING template, before the hold (BL-278): the offer and win-back broadcasts, and the abandoned-cart, back-in-stock, COD and reward messages, which are cleared without being held; a utility template is a notice and is never asked. Only the marketing purpose is asked: a utility template is never held, and an
 Instagram reply typed in the inbox composer is a person answering a person.
 
 **Recurring campaigns and flows (BL-192, built).** A recurring campaign no longer carries its held recipients to the next occurrence: the

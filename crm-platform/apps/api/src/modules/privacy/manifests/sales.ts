@@ -9,7 +9,7 @@ import type { Link, LegalHold } from '../registry/types';
 const CONTACT: Link = { by: 'contact', column: 'contact_id' };
 
 /** How an invoice (and a quote) points at its buyer: the CRM contact, or the address / number printed on it. */
-const BUYER_LINKS: readonly Link[] = [
+export const BUYER_LINKS: readonly Link[] = [
   CONTACT,
   { by: 'email', column: 'buyer_email' },
   { by: 'phone', column: 'buyer_phone' },

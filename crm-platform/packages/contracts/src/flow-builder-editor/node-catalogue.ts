@@ -434,6 +434,7 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
       };
     case 'ai':
       return {
+        agentMode: 'agent',
         model: 'gpt-4o-mini',
         prompt: 'You are a friendly support assistant. Reply briefly.',
         save: 'reply',
@@ -578,7 +579,7 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
     case 'cta':
       return { actions: [{ type: 'url', label: 'Visit website', value: 'https://example.com' }] };
     case 'location':
-      return { lat: '', lng: '', address: 'Office address', title: 'Our office' };
+      return { locMode: 'link', mapsUrl: '', lat: '', lng: '', address: '', title: '' };
     case 'poll':
       return { question: 'Pick one', options: ['Option A', 'Option B'], multi: false };
     case 'chatbot':

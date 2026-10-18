@@ -68,6 +68,10 @@ If the law or a dispute means you must keep the data, place a **legal hold** wit
 
 Erasure needs the permission to execute erasures, a verified identity, and no legal hold.
 
+### Copies made from the person's records
+
+Temporary copies built from the person's records do not outlive the erasure. Revenue report files that are still available (they are kept 7 days at most) are deleted when a customer is erased, because a file does not record whom it lists, and so are the AI account briefs of the companies the person belongs to. Staff members who are deleted take with them the report files they prepared and the briefs they generated. Invoices and payments are kept for the statutory period with the buyer replaced, and the audit log is kept. Both kinds of copy can be created again from the records that remain.
+
 ### The proof
 
 After an erasure the request shows a **proof**: the totals, what was done per table, the registry digest, a SHA-256 and the limits of the erasure, such as backups. Select **Download proof** to save it as a JSON file. The proof contains no personal data.

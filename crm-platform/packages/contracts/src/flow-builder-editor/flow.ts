@@ -308,6 +308,8 @@ export const flbBuilderContextSchema = z.object({
       id: uuidSchema,
       name: z.string(),
       status: z.string().nullable(),
+      /** The agent's own model: an agent setup of the AI step answers with it. */
+      model: z.string().nullable().optional(),
       sources: z.number().int(),
     }),
   ),

@@ -8,7 +8,7 @@
  *   run       --client <c> [--org-name N] [--org-slug S] [--org-plan P] [--owner-email E] [--owner-name N]
  *             [--dry-run] [--batch N] [--force] [--skip-hash] [--default-cc 91]
  *             [--allow-target-host H[,H]] [--allow-docker-host N[,N]] [--confirm-db-name=<exact db name>]
- *             [--owner-verified] [--trial-days N] [--lock-wait-seconds N]
+ *             [--owner-verified] [--timezone Asia/Kolkata] [--trial-days N] [--lock-wait-seconds N]
  *             [--allow-no-owner]   (load users into an organization with no Owner; refused by default)
  *             [--channel-map FILE] [--keep-deleted-contact-chats] [--thread-status waboo|closed] [--no-assign-agents] [--window-hours 24]
  *                                  (chat history = inbox; the channel map is required when the dump has chathistory)
@@ -240,6 +240,7 @@ async function main(): Promise<number> {
           ownerEmail: flags.get('owner-email') ? String(flags.get('owner-email')) : null,
           ownerName: flags.get('owner-name') ? String(flags.get('owner-name')) : null,
           ownerVerified: flags.has('owner-verified'),
+          timezone: flags.get('timezone') ? String(flags.get('timezone')) : null,
           trialDays: flags.get('trial-days') ? Number(flags.get('trial-days')) : null,
         },
       });

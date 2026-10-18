@@ -57,7 +57,7 @@ export class WebhookDispatchConsumer implements OutboxSubscriber, OnModuleInit {
         {
           jobId: `${event.id}-${w.id}`,
           attempts: DELIVERY_ATTEMPTS,
-          backoff: { type: 'exponential', delay: DELIVERY_BACKOFF_MS },
+          backoff: { type: 'custom', delay: DELIVERY_BACKOFF_MS },
           removeOnComplete: 1000,
           removeOnFail: 5000,
         },

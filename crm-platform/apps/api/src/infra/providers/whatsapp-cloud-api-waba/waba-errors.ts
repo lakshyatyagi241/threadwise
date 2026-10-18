@@ -35,6 +35,11 @@ export class WabaApiError extends Error {
     readonly transient: boolean,
     /** The raw decoded body, kept for logs and audit; never shown to a user. */
     readonly body: unknown,
+    /**
+     * True when the request may have reached Meta and been acted on although no usable answer came back (a timeout, a reset, a 200
+     * whose body could not be read). Repeating a send after such an error can deliver it twice (RET-031, RET-032).
+     */
+    readonly outcomeMayHaveCommitted = false,
   ) {
     super(message);
   }
@@ -55,7 +60,7 @@ export class WabaApiError extends Error {
     );
   }
 
-  static network(cause: unknown): WabaApiError {
+  static network(cause: unknown, options: { bodyUnreadable?: boolean } = {}): WabaApiError {
     const reason = cause instanceof Error ? cause.message : String(cause);
     const timedOut =
       cause instanceof Error && (cause.name === 'TimeoutError' || cause.name === 'AbortError');
@@ -69,6 +74,7 @@ export class WabaApiError extends Error {
       null,
       true,
       null,
+      options.bodyUnreadable === true || !neverLeft(cause),
     );
   }
 
@@ -82,6 +88,29 @@ export class WabaApiError extends Error {
   get missingBusinessManagement(): boolean {
     return this.subcode === SUBCODE_MISSING_BUSINESS_MANAGEMENT;
   }
+}
+
+/** Connection errors that happen before a single byte of the request is sent: the call cannot have been acted on. */
+const NEVER_SENT = new Set([
+  'ECONNREFUSED',
+  'ENOTFOUND',
+  'EAI_AGAIN',
+  'ENETUNREACH',
+  'EHOSTUNREACH',
+  'CERT_HAS_EXPIRED',
+  'DEPTH_ZERO_SELF_SIGNED_CERT',
+  'UNABLE_TO_VERIFY_LEAF_SIGNATURE',
+  'ERR_TLS_CERT_ALTNAME_INVALID',
+]);
+
+/** True only when the error proves the request never left. Anything else (a timeout, a reset, an unknown error) is treated as possibly sent. */
+function neverLeft(cause: unknown): boolean {
+  for (let e: unknown = cause, depth = 0; e && depth < 4; depth++) {
+    const code = (e as { code?: unknown }).code;
+    if (typeof code === 'string' && NEVER_SENT.has(code)) return true;
+    e = (e as { cause?: unknown }).cause;
+  }
+  return false;
 }
 
 function extractError(body: unknown): MetaErrorBody | null {

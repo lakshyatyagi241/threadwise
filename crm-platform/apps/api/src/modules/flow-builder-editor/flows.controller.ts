@@ -27,6 +27,7 @@ import {
   renameFlowRequestSchema,
   saveFlowRequestSchema,
   setBuilderModeRequestSchema,
+  flbResolveMapsRequestSchema,
   flbTestWebhookRequestSchema,
   updateFlowRequestSchema,
   uuidSchema,
@@ -38,6 +39,7 @@ import {
   type RenameFlowRequest,
   type SaveFlowRequest,
   type SetBuilderModeRequest,
+  type FlbResolveMapsRequest,
   type FlbTestWebhookRequest,
   type UpdateFlowRequest,
 } from '@crm/contracts';
@@ -54,6 +56,7 @@ import { flowExportFileName } from './flow-rules';
 import { GOOGLE_FORM_ID_RE } from './google-apps-script';
 import { FlowsService } from './flows.service';
 import { TestWebhookService } from './test-webhook.service';
+import { MapsLinkService } from './maps-link.service';
 
 /**
  * The plan flag behind the soft paywall (TW-FLB-028; Reference `autoflow`, the registry's `automation`). The page and every read
@@ -84,6 +87,7 @@ export class FlowsController {
     private readonly context: BuilderContextService,
     private readonly ai: FlowAiService,
     private readonly webhook: TestWebhookService,
+    private readonly mapsLink: MapsLinkService,
     private readonly media: FlowMediaService,
     private readonly googleFiles: GoogleFilesService,
   ) {}
@@ -225,6 +229,20 @@ export class FlowsController {
   })
   async testWebhook(@Body(zodPipe(flbTestWebhookRequestSchema)) body: FlbTestWebhookRequest) {
     return this.webhook.run(body);
+  }
+
+  @Post('location/resolve')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('flb.flows.update')
+  @RequirePlanFeature(FLB_PLAN_FEATURE)
+  @ApiOperation({
+    summary:
+      'Read the coordinates out of a pasted Google Maps link (short links are followed, SSRF guarded)',
+    description:
+      'Only Google Maps hosts are requested, at most 5 redirects. Refusals are 200 `{ok:false,problem}` (not_url, not_maps, no_coords, lat_range, lng_range, zero, resolve_failed) so the form can show them inline.',
+  })
+  async resolveMapsLink(@Body(zodPipe(flbResolveMapsRequestSchema)) body: FlbResolveMapsRequest) {
+    return this.mapsLink.resolve(body.url);
   }
 
   @Post('ai-generate')
