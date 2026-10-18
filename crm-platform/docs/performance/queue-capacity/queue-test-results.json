@@ -1,0 +1,223 @@
+{
+  "commit": "b9dd0f8db302db03d79a2d9c0eb3a7334182f793",
+  "bullmq": "6.3.12",
+  "redis": "7.0.15",
+  "ioredis": "6.0.0",
+  "node": "v22.22.2",
+  "host": {
+    "platform": "linux",
+    "release": "7.0.0-38-generic",
+    "cpus": 22,
+    "cpuModel": "Intel(R) Core(TM) Ultra 7 155H",
+    "memGB": 30.8
+  },
+  "redisConfig": {
+    "appendonly": "no (main scenarios)",
+    "maxmemoryPolicy": "noeviction",
+    "singleInstance": true
+  },
+  "generatedAt": "2026-10-18T14:05:16.654Z",
+  "durationMultiplier": 1,
+  "caveat": "Synthetic handlers on one machine that also hosts producer, workers and Redis. Numbers are relative, queue-layer ceilings, not production capacity.",
+  "reproduce": "node tools/queue-capacity/bench.mjs --scenarios sweep,drain,profiles,isolation,fairness,provider,crash,redis,soak --duration 1 --soak-seconds 150",
+  "summary": {
+    "checks": 34,
+    "passed": 33,
+    "failed": 1
+  },
+  "checks": [
+    {
+      "id": "QCAP-024",
+      "name": "knee found for io-20ms (provider/HTTP wait)",
+      "ok": true,
+      "detail": "knee=100 (AT EDGE of swept range: true knee is higher or producer-bound) safeDefault=70 peak=4501/s"
+    },
+    {
+      "id": "QCAP-040",
+      "name": "no lost jobs in io-20ms (provider/HTTP wait) sweep",
+      "ok": true
+    },
+    {
+      "id": "QCAP-024",
+      "name": "knee found for db-5ms (pool of 10)",
+      "ok": true,
+      "detail": "knee=20 safeDefault=14 peak=1840/s"
+    },
+    {
+      "id": "QCAP-040",
+      "name": "no lost jobs in db-5ms (pool of 10) sweep",
+      "ok": true
+    },
+    {
+      "id": "QCAP-024",
+      "name": "knee found for cpu-3ms (sync work)",
+      "ok": true,
+      "detail": "knee=5 safeDefault=3 peak=320/s"
+    },
+    {
+      "id": "QCAP-040",
+      "name": "no lost jobs in cpu-3ms (sync work) sweep",
+      "ok": true
+    },
+    {
+      "id": "QCAP-018",
+      "name": "drain forecast within 30% of measured",
+      "ok": true,
+      "detail": "predicted 8s measured 7.8s"
+    },
+    {
+      "id": "QCAP-040",
+      "name": "every drain-scenario job accounted for",
+      "ok": true
+    },
+    {
+      "id": "QCAP-040",
+      "name": "baseline-15%: all accepted jobs reconciled",
+      "ok": true
+    },
+    {
+      "id": "QCAP-040",
+      "name": "moderate-50%: all accepted jobs reconciled",
+      "ok": true
+    },
+    {
+      "id": "QCAP-040",
+      "name": "expected-peak-100%: all accepted jobs reconciled",
+      "ok": true
+    },
+    {
+      "id": "QCAP-040",
+      "name": "headroom-130%: all accepted jobs reconciled",
+      "ok": true
+    },
+    {
+      "id": "QCAP-040",
+      "name": "stress-200%: all accepted jobs reconciled",
+      "ok": true
+    },
+    {
+      "id": "QCAP-040",
+      "name": "spike-300%: all accepted jobs reconciled",
+      "ok": true
+    },
+    {
+      "id": "QCAP-033",
+      "name": "expected peak: queue wait p95 < 250 ms",
+      "ok": true,
+      "detail": "27 ms"
+    },
+    {
+      "id": "QCAP-034",
+      "name": "130% headroom: queue wait p95 < 1000 ms",
+      "ok": true,
+      "detail": "38 ms"
+    },
+    {
+      "id": "QCAP-036",
+      "name": "300% spike: backlog bounded and drains",
+      "ok": true,
+      "detail": "drained in 3.32s vs forecast 3.3s"
+    },
+    {
+      "id": "QCAP-065",
+      "name": "shared FIFO queue starves critical work (documents why queues are split)",
+      "ok": true,
+      "detail": "p95 4981.8 ms"
+    },
+    {
+      "id": "QCAP-065",
+      "name": "separate queues keep critical wait p95 < 250 ms under a bulk flood",
+      "ok": true,
+      "detail": "p95 4 ms"
+    },
+    {
+      "id": "QCAP-065",
+      "name": "RISK DEMONSTRATED: CPU-heavy bulk in the same process delays critical work (queues alone do not isolate CPU)",
+      "ok": true,
+      "detail": "p95 2469 ms, loop lag p99 162.92 ms vs 4 ms with its own process"
+    },
+    {
+      "id": "QCAP-006",
+      "name": "own process for CPU-heavy bulk keeps critical wait p95 < 250 ms",
+      "ok": true,
+      "detail": "p95 4 ms"
+    },
+    {
+      "id": "QCAP-066",
+      "name": "FIFO: small tenant is delayed by the noisy tenant (baseline)",
+      "ok": true,
+      "detail": "p95 6412.5 ms"
+    },
+    {
+      "id": "QCAP-064",
+      "name": "admission cap keeps the small tenant wait p95 < 1000 ms",
+      "ok": true,
+      "detail": "p95 320 ms"
+    },
+    {
+      "id": "QCAP-068",
+      "name": "admission cap does not starve the noisy tenant (still completes)",
+      "ok": true
+    },
+    {
+      "id": "QCAP-058",
+      "name": "limiter below the ceiling removes the 429 storm",
+      "ok": true,
+      "detail": "8490 -> 0 rejected"
+    },
+    {
+      "id": "QCAP-056",
+      "name": "limited run completes every job",
+      "ok": true,
+      "detail": "completed 2000"
+    },
+    {
+      "id": "QCAP-057",
+      "name": "unlimited run loses no accepted job to 429 (accounted completed or failed)",
+      "ok": true,
+      "detail": "failed 1560"
+    },
+    {
+      "id": "QCAP-081",
+      "name": "1 worker kill(s): every accepted job reconciled (completed or failed, none missing)",
+      "ok": true,
+      "detail": "completed 200 failed 0"
+    },
+    {
+      "id": "QCAP-081",
+      "name": "2 worker kill(s): every accepted job reconciled (completed or failed, none missing)",
+      "ok": true,
+      "detail": "completed 200 failed 0"
+    },
+    {
+      "id": "QCAP-081",
+      "name": "repeated kills: no job silently fails on the stall limit",
+      "ok": true,
+      "detail": "0 jobs failed with \"stalled more than allowable limit\" (BullMQ maxStalledCount default 1)"
+    },
+    {
+      "id": "QCAP-044",
+      "name": "AOF everysec keeps the accepted backlog across kill -9 (after the fsync window)",
+      "ok": true,
+      "detail": "lost 0/5000"
+    },
+    {
+      "id": "QCAP-050",
+      "name": "no-persistence Redis loses the accepted backlog on restart (documents why prod needs AOF)",
+      "ok": true,
+      "detail": "lost 5000/5000"
+    },
+    {
+      "id": "QCAP-037",
+      "name": "soak: no failures, no growing backlog",
+      "ok": true,
+      "detail": "peak backlog 35"
+    },
+    {
+      "id": "QCAP-026",
+      "name": "soak: heap/RSS flat (<5 MB/min growth in second half)",
+      "ok": false,
+      "detail": "rss 5.93 MB/min"
+    }
+  ]
+}

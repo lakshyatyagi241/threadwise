@@ -64,6 +64,8 @@ export { LOG_REDACT_PATHS, SECRET_HEADERS, redactHeaders } from './observability
 export {
   EventLoopSampler,
   JobMetricsModule,
+  QueueDepthModule,
+  sampleQueueDepth,
   Prober,
   RuntimeMonitor,
   attachJobMetrics,
