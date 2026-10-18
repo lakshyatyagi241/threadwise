@@ -1,4 +1,5 @@
 import { OUTCOME_UNKNOWN_PREFIX, isOutcomeUnknown } from './retry-policy';
+import { WabaApiError } from '../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
 import { FailureRecorder } from '../failed-operations';
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { ERROR_CODES } from '@crm/contracts';
@@ -455,7 +456,11 @@ export class BroadcastDispatchService {
             await this.recordSent(orgId, broadcastId, contactId, sent.providerMessageId);
             if (sender.engine === 'baileys') await this.cap.bump(orgId, sender.engine, sender.id);
           } catch (err) {
-            if (err instanceof AppError && err.code === ERROR_CODES.AUTH_SEND_HALTED) {
+            // A send held back by the per-number limiter (queue too deep) is put back the same way, so it is sent later, never failed.
+            if (
+              (err instanceof AppError && err.code === ERROR_CODES.AUTH_SEND_HALTED) ||
+              (err instanceof WabaApiError && err.heldLocally)
+            ) {
               // The emergency halt is on: put this recipient back and stop. Nothing is lost; the run resumes when it is lifted.
               await this.db.tx(async (tx) => {
                 await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {

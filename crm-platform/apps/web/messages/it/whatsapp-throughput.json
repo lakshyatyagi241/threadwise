@@ -1,0 +1,157 @@
+{
+  "whatsapp-throughput": {
+    "nav": {
+      "group": "WhatsApp",
+      "item": "Limiti di invio"
+    },
+    "eyebrow": "WhatsApp",
+    "title": "Limiti di invio e prestazioni in tempo reale",
+    "description": "Quanto velocemente può inviare ogni numero WhatsApp collegato, quanto del suo limite giornaliero di messaggi ha usato e cosa sta succedendo in questo momento. Le modifiche si applicano al prossimo messaggio inviato da ogni worker.",
+    "updated": "In tempo reale. Aggiornato {time}",
+    "stale": "L'ultimo aggiornamento non è riuscito. Vengono mostrati i valori precedenti.",
+    "liveUnavailable": "Non è stato possibile leggere i contatori in tempo reale, quindi le colonne in tempo reale mostrano zero. Velocità, livelli e controlli sono comunque corretti.",
+    "limiterOff": "Il limitatore di invio è disattivato. I messaggi non vengono cadenzati qui; si applica solo la limitazione di Meta.",
+    "footnote": "La velocità di un numero è stabilita da Meta: 80 messaggi al secondo per impostazione predefinita, fino a 1.000 dopo l'upgrade da parte di Meta e 20 per un numero usato anche sull'app WhatsApp Business. I messaggi in entrata e in uscita la condividono. Il livello di messaggistica giornaliero è un limite separato sulle persone uniche contattate in 24 ore; il conteggio mostrato qui è una stima basata sui messaggi modello inviati tramite questa piattaforma.",
+    "perSecond": "msg/s",
+    "peak": "Picco di {n} nell'ultimo minuto",
+    "sentCount": "{n} inviati",
+    "deferredCount": "{n} trattenuti",
+    "throttledCount": "{n} limitati da Meta",
+    "tierUsed": "{used} di {cap} persone in 24 ore",
+    "details": "Dettagli",
+    "common": {
+      "loading": "Caricamento...",
+      "retry": "Riprova"
+    },
+    "errors": {
+      "conflict": "Qualcun altro ha appena modificato questi dati. Sono stati caricati i valori più recenti; controllali e applica di nuovo la modifica.",
+      "metaUnavailable": "Meta non ha risposto. Riprova ad aggiornare tra un momento.",
+      "notFound": "Questo numero non esiste più. Torna all'elenco.",
+      "forbidden": "Solo un Super Admin può modificare i limiti di invio.",
+      "invalid": "Alcuni valori non sono stati accettati. Controllali e riprova.",
+      "unexpected": "Si è verificato un problema da parte nostra. Riprova tra un momento."
+    },
+    "kpi": {
+      "now": "Invio in corso",
+      "nowHint": "messaggi al secondo, tutti i numeri",
+      "sent": "Inviati",
+      "last5": "ultimi 5 minuti",
+      "numbers": "Numeri collegati",
+      "attention": "Richiedono attenzione",
+      "attentionHint": "{paused} in pausa, {tier} vicini al limite giornaliero",
+      "heldBack": "Trattenuti",
+      "heldBackHint": "{meta} limitati da Meta, ultimi 5 minuti"
+    },
+    "settings": {
+      "title": "Impostazioni della piattaforma",
+      "description": "Si applicano a tutti i numeri. La sostituzione e la pausa di un singolo numero si impostano nella sua pagina.",
+      "enabled": "Cadenza gli invii in base al limite di ogni numero",
+      "enabledHelp": "Se disattivato, invia senza cadenza; la limitazione di Meta continua comunque ad applicarsi.",
+      "defaultMps": "Velocità predefinita (msg/s)",
+      "defaultMpsHelp": "Usata per un numero la cui velocità non è ancora stata comunicata da Meta.",
+      "safetyMargin": "Margine di sicurezza (%)",
+      "safetyMarginHelp": "Quota del limite lasciata libera per il traffico in entrata e la tempistica.",
+      "maxWait": "Attesa massima (ms)",
+      "maxWaitHelp": "Un invio che dovrebbe attendere più a lungo torna nella sua coda e viene ritentato.",
+      "syncInterval": "Rileggi da Meta (minuti)",
+      "syncIntervalHelp": "Ogni quanto vengono aggiornati la velocità e il limite giornaliero di ciascun numero.",
+      "adaptive": "Rallenta dopo una limitazione di Meta",
+      "adaptiveHelp": "Dimezza la velocità quando Meta rifiuta un messaggio perché inviato troppo in fretta, poi la ripristina nel giro di un minuto.",
+      "enforceTier": "Trattieni i messaggi modello al limite giornaliero",
+      "enforceTierHelp": "Blocca i nuovi messaggi modello quando il numero ha raggiunto il livello di messaggistica giornaliero. Se disattivato, viene solo segnalato.",
+      "tierWarn": "Avvisa al (% del limite giornaliero)",
+      "tierWarnHelp": "Un numero viene segnalato quando utilizza questa quota del suo livello.",
+      "save": "Salva impostazioni",
+      "saving": "Salvataggio...",
+      "saved": "Salvato. Ora tutti i numeri seguono le nuove impostazioni."
+    },
+    "numbers": {
+      "title": "Numeri",
+      "search": "Cerca per workspace, numero o ID",
+      "emptyTitle": "Nessun numero collegato",
+      "emptyBody": "I numeri compaiono qui non appena un workspace collega WhatsApp."
+    },
+    "cols": {
+      "number": "Numero",
+      "rate": "Limite di velocità",
+      "live": "Ora",
+      "last5": "Ultimi 5 minuti",
+      "tier": "Limite giornaliero",
+      "state": "Stato",
+      "actions": "Azioni"
+    },
+    "source": {
+      "override": "Sostituisci",
+      "coexistence": "App Business (fisso)",
+      "meta": "Da Meta",
+      "default": "Predefinito"
+    },
+    "tier": {
+      "unlimited": "Illimitato",
+      "unknown": "Non ancora comunicato",
+      "unlimitedBody": "Questo numero ha un limite giornaliero di messaggi illimitato.",
+      "unknownBody": "Meta non ha ancora comunicato il limite giornaliero di messaggi di questo numero. Aggiorna da Meta."
+    },
+    "state": {
+      "ok": "Integro",
+      "paused": "In pausa",
+      "slowed": "Rallentato al {pct}%",
+      "tierWarn": "Vicino al limite giornaliero",
+      "tierFull": "Limite giornaliero raggiunto",
+      "syncFailed": "Lettura da Meta non riuscita"
+    },
+    "events": {
+      "meta_throttled": "Meta ha limitato l'invio",
+      "upgrade_in_progress": "Upgrade della capacità in corso",
+      "throughput_upgraded": "Livello di capacità modificato",
+      "deferred": "Invii trattenuti, coda troppo lunga",
+      "paused_block": "Invio bloccato, numero in pausa",
+      "tier_full": "Limite giornaliero raggiunto",
+      "paused": "Messo in pausa da un operatore",
+      "resumed": "Ripreso da un operatore",
+      "override_set": "Sostituzione della velocità impostata",
+      "override_cleared": "Sostituzione della velocità rimossa",
+      "synced": "Riletto da Meta"
+    },
+    "detail": {
+      "title": "Limiti del numero WhatsApp",
+      "back": "Torna ai limiti di invio",
+      "description": "ID numero di telefono {id}. Si aggiorna ogni pochi secondi.",
+      "refresh": "Aggiorna da Meta",
+      "refreshing": "Lettura da Meta...",
+      "syncError": "L'ultima lettura da Meta non è riuscita: {message}",
+      "coexistence": "Questo numero è usato anche sull'app WhatsApp Business, quindi Meta lo fissa a 20 messaggi al secondo.",
+      "rate": "Cadenzato a (msg/s)",
+      "speed": "Velocità",
+      "speedSlowed": "Rallentato dopo una limitazione di Meta, in ripristino",
+      "speedFull": "Velocità massima",
+      "wait": "Attesa media",
+      "waitHint": "{n} invii in attesa, ultimi 5 minuti",
+      "meta": "Livello di capacità Meta",
+      "metaHint": "{n} msg/s",
+      "unknown": "Non comunicato",
+      "chartSeconds": "Invii al secondo, ultimo minuto",
+      "chartLegend": "La linea tratteggiata è la velocità cadenzata. I segni rossi indicano i secondi in cui Meta ha rifiutato un invio, quelli ambra i secondi in cui gli invii sono stati trattenuti.",
+      "chartMinutes": "Invii al minuto, ultima ora",
+      "chartLegendMinutes": "I segni rossi indicano i minuti in cui Meta ha rifiutato un invio, quelli ambra i minuti in cui gli invii sono stati trattenuti.",
+      "tierTitle": "Limite giornaliero di messaggi",
+      "tierNote": "Meta limita il numero di persone diverse con cui un numero può avviare conversazioni in 24 ore. Questo conteggio include i messaggi modello inviati tramite questa piattaforma, quindi può differire dal dato di Meta.",
+      "events": "Eventi recenti",
+      "eventsEmpty": "Ancora niente",
+      "eventsEmptyBody": "Qui sono elencate le limitazioni, i trattenimenti, le pause e le modifiche di velocità di questo numero."
+    },
+    "control": {
+      "title": "Controlli",
+      "description": "Sostituisci la velocità assegnata da Meta a questo numero oppure interrompi i suoi invii. Entrambe le azioni hanno effetto dal messaggio successivo, per ogni workspace che usa il numero.",
+      "override": "Sostituzione velocità (msg/s)",
+      "overrideHelp": "Numero intero da 1 a {max}. Lascia vuoto per seguire Meta.",
+      "overrideInvalid": "Inserisci un numero intero da 1 a {max}.",
+      "overridePlaceholder": "Segui Meta",
+      "pause": "Metti in pausa l'invio da questo numero",
+      "pauseHelp": "Le trasmissioni e le campagne si fermano e riprendono da sole; gli altri messaggi falliscono con l'opzione Riprova.",
+      "reason": "Motivo",
+      "reasonHelp": "Mostrato nel registro eventi.",
+      "saved": "Salvato. Il numero seguirà i nuovi controlli dal suo prossimo messaggio."
+    }
+  }
+}

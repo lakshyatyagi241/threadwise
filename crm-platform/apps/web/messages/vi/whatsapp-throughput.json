@@ -1,0 +1,157 @@
+{
+  "whatsapp-throughput": {
+    "nav": {
+      "group": "WhatsApp",
+      "item": "Giới hạn gửi"
+    },
+    "eyebrow": "WhatsApp",
+    "title": "Giới hạn gửi và hiệu suất trực tiếp",
+    "description": "Xem mỗi số WhatsApp đã kết nối được gửi nhanh đến mức nào, đã dùng bao nhiêu hạn mức nhắn tin hằng ngày và hiện đang diễn ra điều gì. Thay đổi áp dụng cho tin nhắn tiếp theo do mọi worker gửi.",
+    "updated": "Trực tiếp. Cập nhật lúc {time}",
+    "stale": "Lần làm mới gần nhất không thành công. Đang hiển thị số liệu trước đó.",
+    "liveUnavailable": "Không đọc được bộ đếm trực tiếp nên các cột trực tiếp hiển thị bằng không. Tốc độ, hạng mức và các điều khiển vẫn chính xác.",
+    "limiterOff": "Bộ giới hạn gửi đang tắt. Tin nhắn không được điều tiết tại đây; chỉ áp dụng cơ chế giới hạn của Meta.",
+    "footnote": "Tốc độ của một số do Meta quy định: mặc định 80 tin nhắn mỗi giây, lên đến 1.000 khi Meta nâng cấp, và 20 cho số cũng được dùng trên ứng dụng WhatsApp Business. Tin nhắn đến và đi dùng chung tốc độ này. Hạng mức nhắn tin hằng ngày là một giới hạn riêng về số người khác nhau được nhắn trong 24 giờ; số đếm ở đây là ước tính từ các tin nhắn mẫu gửi qua nền tảng này.",
+    "perSecond": "tin/giây",
+    "peak": "Đỉnh {n} trong phút qua",
+    "sentCount": "Đã gửi {n}",
+    "deferredCount": "Đang giữ {n}",
+    "throttledCount": "Bị Meta giới hạn {n}",
+    "tierUsed": "{used} trên {cap} người trong 24 giờ",
+    "details": "Chi tiết",
+    "common": {
+      "loading": "Đang tải...",
+      "retry": "Thử lại"
+    },
+    "errors": {
+      "conflict": "Vừa có người khác thay đổi mục này. Đã tải các giá trị mới nhất; hãy xem lại và áp dụng lại thay đổi của bạn.",
+      "metaUnavailable": "Meta không phản hồi. Hãy thử làm mới lại sau giây lát.",
+      "notFound": "Số này không còn tồn tại. Hãy quay lại danh sách.",
+      "forbidden": "Chỉ Super Admin mới có thể thay đổi giới hạn gửi.",
+      "invalid": "Một số giá trị không được chấp nhận. Hãy kiểm tra và thử lại.",
+      "unexpected": "Đã xảy ra lỗi từ phía chúng tôi. Hãy thử lại sau giây lát."
+    },
+    "kpi": {
+      "now": "Đang gửi",
+      "nowHint": "tin nhắn mỗi giây, tất cả số",
+      "sent": "Đã gửi",
+      "last5": "5 phút qua",
+      "numbers": "Số đã kết nối",
+      "attention": "Cần chú ý",
+      "attentionHint": "{paused} tạm dừng, {tier} gần chạm giới hạn ngày",
+      "heldBack": "Đang giữ",
+      "heldBackHint": "{meta} bị Meta giới hạn, 5 phút qua"
+    },
+    "settings": {
+      "title": "Cài đặt nền tảng",
+      "description": "Các cài đặt này áp dụng cho mọi số. Ghi đè và tạm dừng riêng của từng số được đặt trên trang của số đó.",
+      "enabled": "Điều tiết việc gửi theo giới hạn của từng số",
+      "enabledHelp": "Khi tắt, tin nhắn được gửi không điều tiết; cơ chế giới hạn của Meta vẫn áp dụng.",
+      "defaultMps": "Tốc độ mặc định (tin/giây)",
+      "defaultMpsHelp": "Dùng cho số mà Meta chưa báo cáo tốc độ.",
+      "safetyMargin": "Biên an toàn (%)",
+      "safetyMarginHelp": "Tỷ lệ giới hạn để trống cho lưu lượng đến và độ trễ thời gian.",
+      "maxWait": "Thời gian chờ tối đa (ms)",
+      "maxWaitHelp": "Lượt gửi phải chờ lâu hơn sẽ được đưa lại vào hàng đợi và thử lại.",
+      "syncInterval": "Đọc lại từ Meta (phút)",
+      "syncIntervalHelp": "Tần suất làm mới tốc độ và giới hạn ngày của từng số.",
+      "adaptive": "Giảm tốc sau khi bị Meta giới hạn",
+      "adaptiveHelp": "Giảm một nửa tốc độ khi Meta từ chối tin nhắn vì gửi quá nhanh, sau đó phục hồi trong vòng một phút.",
+      "enforceTier": "Giữ tin nhắn mẫu khi chạm giới hạn ngày",
+      "enforceTierHelp": "Dừng các tin nhắn mẫu mới khi số đã đạt hạng mức nhắn tin hằng ngày. Khi tắt chỉ gắn cờ cảnh báo.",
+      "tierWarn": "Cảnh báo ở mức (% giới hạn ngày)",
+      "tierWarnHelp": "Một số bị gắn cờ khi dùng đến tỷ lệ này của hạng mức.",
+      "save": "Lưu cài đặt",
+      "saving": "Đang lưu...",
+      "saved": "Đã lưu. Mọi số hiện áp dụng cài đặt mới."
+    },
+    "numbers": {
+      "title": "Số",
+      "search": "Tìm theo workspace, số hoặc ID",
+      "emptyTitle": "Chưa có số nào được kết nối",
+      "emptyBody": "Các số sẽ xuất hiện ở đây khi một workspace kết nối WhatsApp."
+    },
+    "cols": {
+      "number": "Số",
+      "rate": "Giới hạn tốc độ",
+      "live": "Hiện tại",
+      "last5": "5 phút qua",
+      "tier": "Giới hạn ngày",
+      "state": "Trạng thái",
+      "actions": "Thao tác"
+    },
+    "source": {
+      "override": "Ghi đè",
+      "coexistence": "WhatsApp Business (cố định)",
+      "meta": "Từ Meta",
+      "default": "Mặc định"
+    },
+    "tier": {
+      "unlimited": "Không giới hạn",
+      "unknown": "Chưa được báo cáo",
+      "unlimitedBody": "Số này có giới hạn nhắn tin hằng ngày không giới hạn.",
+      "unknownBody": "Meta chưa báo cáo giới hạn nhắn tin hằng ngày của số này. Hãy làm mới từ Meta."
+    },
+    "state": {
+      "ok": "Bình thường",
+      "paused": "Đã tạm dừng",
+      "slowed": "Đã giảm tốc còn {pct}%",
+      "tierWarn": "Gần chạm giới hạn ngày",
+      "tierFull": "Đã chạm giới hạn ngày",
+      "syncFailed": "Đọc từ Meta thất bại"
+    },
+    "events": {
+      "meta_throttled": "Meta đã giới hạn việc gửi",
+      "upgrade_in_progress": "Đang nâng cấp thông lượng",
+      "throughput_upgraded": "Mức thông lượng đã thay đổi",
+      "deferred": "Đang giữ lượt gửi, hàng đợi quá dài",
+      "paused_block": "Lượt gửi bị chặn, số đã tạm dừng",
+      "tier_full": "Đã chạm giới hạn ngày",
+      "paused": "Do vận hành viên tạm dừng",
+      "resumed": "Do vận hành viên tiếp tục",
+      "override_set": "Đã đặt ghi đè tốc độ",
+      "override_cleared": "Đã gỡ ghi đè tốc độ",
+      "synced": "Đã đọc lại từ Meta"
+    },
+    "detail": {
+      "title": "Giới hạn của số WhatsApp",
+      "back": "Quay lại giới hạn gửi",
+      "description": "ID số điện thoại {id}. Cập nhật sau vài giây.",
+      "refresh": "Làm mới từ Meta",
+      "refreshing": "Đang đọc từ Meta...",
+      "syncError": "Lần đọc gần nhất từ Meta thất bại: {message}",
+      "coexistence": "Số này cũng được dùng trên ứng dụng WhatsApp Business nên Meta cố định ở mức 20 tin nhắn mỗi giây.",
+      "rate": "Điều tiết ở mức (tin/giây)",
+      "speed": "Tốc độ",
+      "speedSlowed": "Đã giảm tốc sau khi bị Meta giới hạn, đang phục hồi",
+      "speedFull": "Tốc độ tối đa",
+      "wait": "Thời gian chờ trung bình",
+      "waitHint": "{n} lượt gửi phải chờ, 5 phút qua",
+      "meta": "Mức thông lượng của Meta",
+      "metaHint": "{n} tin/giây",
+      "unknown": "Chưa báo cáo",
+      "chartSeconds": "Lượt gửi mỗi giây, phút qua",
+      "chartLegend": "Đường đứt nét là tốc độ được điều tiết. Dấu đỏ là những giây Meta từ chối lượt gửi, dấu hổ phách là những giây lượt gửi bị giữ lại.",
+      "chartMinutes": "Lượt gửi mỗi phút, giờ qua",
+      "chartLegendMinutes": "Dấu đỏ là những phút Meta từ chối lượt gửi, dấu hổ phách là những phút lượt gửi bị giữ lại.",
+      "tierTitle": "Giới hạn nhắn tin hằng ngày",
+      "tierNote": "Meta giới hạn số người khác nhau mà một số được bắt đầu cuộc trò chuyện trong 24 giờ. Số đếm này tính các tin nhắn mẫu gửi qua nền tảng này nên có thể khác với con số của chính Meta.",
+      "events": "Sự kiện gần đây",
+      "eventsEmpty": "Chưa có gì",
+      "eventsEmptyBody": "Các lần giới hạn, giữ lại, tạm dừng và thay đổi tốc độ của số này được liệt kê tại đây."
+    },
+    "control": {
+      "title": "Điều khiển",
+      "description": "Ghi đè tốc độ Meta cấp cho số này hoặc dừng việc gửi của số. Cả hai có hiệu lực từ tin nhắn tiếp theo, với mọi workspace dùng số này.",
+      "override": "Ghi đè tốc độ (tin/giây)",
+      "overrideHelp": "Số nguyên từ 1 đến {max}. Để trống để theo Meta.",
+      "overrideInvalid": "Nhập một số nguyên từ 1 đến {max}.",
+      "overridePlaceholder": "Theo Meta",
+      "pause": "Tạm dừng gửi từ số này",
+      "pauseHelp": "Tin nhắn hàng loạt và chiến dịch tự dừng và tự tiếp tục; các tin nhắn khác sẽ thất bại kèm nút Thử lại.",
+      "reason": "Lý do",
+      "reasonHelp": "Hiển thị trong nhật ký sự kiện.",
+      "saved": "Đã lưu. Số này áp dụng các điều khiển mới từ tin nhắn tiếp theo."
+    }
+  }
+}

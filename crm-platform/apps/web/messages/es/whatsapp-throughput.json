@@ -1,0 +1,157 @@
+{
+  "whatsapp-throughput": {
+    "nav": {
+      "group": "WhatsApp",
+      "item": "Límites de envío"
+    },
+    "eyebrow": "WhatsApp",
+    "title": "Límites de envío y rendimiento en vivo",
+    "description": "Con qué rapidez puede enviar cada número de WhatsApp conectado, cuánto de su límite diario de mensajes ha usado y qué está ocurriendo ahora. Los cambios se aplican al siguiente mensaje enviado por cada worker.",
+    "updated": "En vivo. Actualizado {time}",
+    "stale": "La última actualización falló. Se muestran los datos anteriores.",
+    "liveUnavailable": "No se pudieron leer los contadores en vivo, por lo que las columnas en vivo muestran cero. Las tasas, los niveles y los controles siguen siendo correctos.",
+    "limiterOff": "El limitador de envíos está desactivado. Aquí no se regula el ritmo de los mensajes; solo se aplica la limitación propia de Meta.",
+    "footnote": "Meta define la tasa de cada número: 80 mensajes por segundo por defecto, hasta 1,000 cuando Meta lo mejora, y 20 si el número también se usa en la app WhatsApp Business. Los mensajes entrantes y salientes la comparten. El nivel de mensajería diario es un límite aparte sobre las personas únicas contactadas en 24 horas; el recuento aquí es una estimación basada en las plantillas enviadas a través de esta plataforma.",
+    "perSecond": "msg/s",
+    "peak": "Pico de {n} en el último minuto",
+    "sentCount": "{n} enviados",
+    "deferredCount": "{n} retenidos",
+    "throttledCount": "{n} limitados por Meta",
+    "tierUsed": "{used} de {cap} personas en 24 horas",
+    "details": "Detalles",
+    "common": {
+      "loading": "Cargando...",
+      "retry": "Reintentar"
+    },
+    "errors": {
+      "conflict": "Alguien más acaba de cambiar esto. Se cargaron los valores más recientes; revísalos y vuelve a aplicar tu cambio.",
+      "metaUnavailable": "Meta no respondió. Vuelve a actualizar en un momento.",
+      "notFound": "Este número ya no existe. Vuelve a la lista.",
+      "forbidden": "Solo un Super Admin puede cambiar los límites de envío.",
+      "invalid": "Algunos valores no fueron aceptados. Revísalos e inténtalo de nuevo.",
+      "unexpected": "Algo salió mal por nuestra parte. Inténtalo de nuevo en un momento."
+    },
+    "kpi": {
+      "now": "Enviando ahora",
+      "nowHint": "mensajes por segundo, todos los números",
+      "sent": "Enviados",
+      "last5": "últimos 5 minutos",
+      "numbers": "Números conectados",
+      "attention": "Requieren atención",
+      "attentionHint": "{paused} en pausa, {tier} cerca de su límite diario",
+      "heldBack": "Retenidos",
+      "heldBackHint": "{meta} limitados por Meta, últimos 5 minutos"
+    },
+    "settings": {
+      "title": "Ajustes de la plataforma",
+      "description": "Se aplican a todos los números. La anulación y la pausa de cada número se configuran en su página.",
+      "enabled": "Regular los envíos al límite de cada número",
+      "enabledHelp": "Desactivado envía sin regular el ritmo; la limitación propia de Meta sigue aplicándose.",
+      "defaultMps": "Tasa predeterminada (msg/s)",
+      "defaultMpsHelp": "Se usa para un número cuya tasa Meta aún no ha informado.",
+      "safetyMargin": "Margen de seguridad (%)",
+      "safetyMarginHelp": "Porcentaje del límite que se mantiene libre para el tráfico entrante y los desfases.",
+      "maxWait": "Espera máxima (ms)",
+      "maxWaitHelp": "Un envío que tendría que esperar más vuelve a su cola y se reintenta.",
+      "syncInterval": "Releer desde Meta (minutos)",
+      "syncIntervalHelp": "Con qué frecuencia se actualizan la tasa y el límite diario de cada número.",
+      "adaptive": "Reducir la velocidad tras una limitación de Meta",
+      "adaptiveHelp": "Reduce la velocidad a la mitad cuando Meta rechaza un mensaje por enviar demasiado rápido y la recupera en un minuto.",
+      "enforceTier": "Retener plantillas al llegar al límite diario",
+      "enforceTierHelp": "Detiene las nuevas plantillas cuando el número alcanza su nivel de mensajería diario. Desactivado solo lo marca.",
+      "tierWarn": "Avisar al llegar a (% del límite diario)",
+      "tierWarnHelp": "Se marca un número cuando usa este porcentaje de su nivel.",
+      "save": "Guardar ajustes",
+      "saving": "Guardando...",
+      "saved": "Guardado. Todos los números siguen ahora los nuevos ajustes."
+    },
+    "numbers": {
+      "title": "Números",
+      "search": "Buscar por espacio de trabajo, número o id",
+      "emptyTitle": "No hay números conectados",
+      "emptyBody": "Los números aparecerán aquí cuando un espacio de trabajo conecte WhatsApp."
+    },
+    "cols": {
+      "number": "Número",
+      "rate": "Límite de tasa",
+      "live": "Ahora",
+      "last5": "Últimos 5 minutos",
+      "tier": "Límite diario",
+      "state": "Estado",
+      "actions": "Acciones"
+    },
+    "source": {
+      "override": "Anulación",
+      "coexistence": "App Business (fijo)",
+      "meta": "De Meta",
+      "default": "Predeterminado"
+    },
+    "tier": {
+      "unlimited": "Ilimitado",
+      "unknown": "Aún sin informar",
+      "unlimitedBody": "Este número tiene un límite de mensajería diario ilimitado.",
+      "unknownBody": "Meta aún no ha informado el límite de mensajería diario de este número. Actualiza desde Meta."
+    },
+    "state": {
+      "ok": "Saludable",
+      "paused": "En pausa",
+      "slowed": "Reducido al {pct}%",
+      "tierWarn": "Cerca del límite diario",
+      "tierFull": "Límite diario alcanzado",
+      "syncFailed": "Falló la lectura de Meta"
+    },
+    "events": {
+      "meta_throttled": "Meta limitó el envío",
+      "upgrade_in_progress": "Mejora de rendimiento en curso",
+      "throughput_upgraded": "Cambió el nivel de rendimiento",
+      "deferred": "Envíos retenidos, cola demasiado larga",
+      "paused_block": "Envío bloqueado, número en pausa",
+      "tier_full": "Límite diario alcanzado",
+      "paused": "Pausado por un operador",
+      "resumed": "Reanudado por un operador",
+      "override_set": "Anulación de tasa establecida",
+      "override_cleared": "Anulación de tasa eliminada",
+      "synced": "Releído desde Meta"
+    },
+    "detail": {
+      "title": "Límites del número de WhatsApp",
+      "back": "Volver a los límites de envío",
+      "description": "Id del número de teléfono {id}. Se actualiza cada pocos segundos.",
+      "refresh": "Actualizar desde Meta",
+      "refreshing": "Leyendo desde Meta...",
+      "syncError": "Falló la última lectura desde Meta: {message}",
+      "coexistence": "Este número también se usa en la app WhatsApp Business, por lo que Meta lo fija en 20 mensajes por segundo.",
+      "rate": "Regulado a (msg/s)",
+      "speed": "Velocidad",
+      "speedSlowed": "Reducida tras una limitación de Meta, recuperándose",
+      "speedFull": "Velocidad máxima",
+      "wait": "Espera promedio",
+      "waitHint": "{n} envíos esperaron, últimos 5 minutos",
+      "meta": "Nivel de rendimiento de Meta",
+      "metaHint": "{n} msg/s",
+      "unknown": "Sin informar",
+      "chartSeconds": "Envíos por segundo, último minuto",
+      "chartLegend": "La línea discontinua es la tasa regulada. Las marcas rojas son segundos en que Meta rechazó un envío; las ámbar, segundos en que se retuvieron envíos.",
+      "chartMinutes": "Envíos por minuto, última hora",
+      "chartLegendMinutes": "Las marcas rojas son minutos en que Meta rechazó un envío; las ámbar, minutos en que se retuvieron envíos.",
+      "tierTitle": "Límite de mensajería diario",
+      "tierNote": "Meta limita con cuántas personas distintas puede iniciar conversaciones un número en 24 horas. Este recuento incluye las plantillas enviadas a través de esta plataforma, por lo que puede diferir de la cifra de Meta.",
+      "events": "Eventos recientes",
+      "eventsEmpty": "Nada todavía",
+      "eventsEmptyBody": "Aquí se listan las limitaciones, retenciones, pausas y cambios de tasa de este número."
+    },
+    "control": {
+      "title": "Controles",
+      "description": "Anula la tasa que Meta asigna a este número o detén sus envíos. Ambos surten efecto en el siguiente mensaje, para todos los espacios de trabajo que usen el número.",
+      "override": "Anulación de tasa (msg/s)",
+      "overrideHelp": "Número entero de 1 a {max}. Déjalo vacío para seguir a Meta.",
+      "overrideInvalid": "Introduce un número entero de 1 a {max}.",
+      "overridePlaceholder": "Seguir a Meta",
+      "pause": "Pausar el envío desde este número",
+      "pauseHelp": "Las difusiones y campañas se detienen y se reanudan solas; los demás mensajes fallan con la opción Reintentar.",
+      "reason": "Motivo",
+      "reasonHelp": "Se muestra en el registro de eventos.",
+      "saved": "Guardado. El número seguirá los nuevos controles desde su próximo mensaje."
+    }
+  }
+}

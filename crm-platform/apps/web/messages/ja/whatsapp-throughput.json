@@ -1,0 +1,157 @@
+{
+  "whatsapp-throughput": {
+    "nav": {
+      "group": "WhatsApp",
+      "item": "送信制限"
+    },
+    "eyebrow": "WhatsApp",
+    "title": "送信制限とリアルタイムのパフォーマンス",
+    "description": "接続されている各 WhatsApp 番号の送信速度、1 日のメッセージ上限の使用量、現在の状況を確認できます。変更は、すべてのワーカーが次に送信するメッセージから反映されます。",
+    "updated": "リアルタイム。{time} に更新",
+    "stale": "最新の更新に失敗しました。前回の数値を表示しています。",
+    "liveUnavailable": "リアルタイムのカウンターを読み取れなかったため、リアルタイムの列は 0 と表示されます。レート、ティア、各設定は正しい内容です。",
+    "limiterOff": "送信リミッターがオフです。ここではメッセージの送信ペースを調整せず、Meta 側のスロットリングのみが適用されます。",
+    "footnote": "番号のレートは Meta が設定します。デフォルトは 1 秒あたり 80 メッセージ、Meta がアップグレードすると最大 1,000 メッセージ、WhatsApp Business アプリでも使用している番号は 20 メッセージです。受信と送信でこのレートを共有します。1 日のメッセージティアは、24 時間以内にメッセージを送信した一意の相手数に対する別の上限です。ここに表示される件数は、このプラットフォームから送信したテンプレートメッセージに基づく推定値です。",
+    "perSecond": "msg/s",
+    "peak": "直近 1 分間のピーク: {n}",
+    "sentCount": "送信済み {n} 件",
+    "deferredCount": "保留 {n} 件",
+    "throttledCount": "Meta によるスロットリング {n} 件",
+    "tierUsed": "24 時間で {cap} 人中 {used} 人",
+    "details": "詳細",
+    "common": {
+      "loading": "読み込み中...",
+      "retry": "再試行"
+    },
+    "errors": {
+      "conflict": "たった今、他のユーザーがこの内容を変更しました。最新の値を読み込みました。内容を確認して、もう一度変更を適用してください。",
+      "metaUnavailable": "Meta から応答がありませんでした。しばらくしてからもう一度更新してください。",
+      "notFound": "この番号は存在しなくなりました。一覧に戻ってください。",
+      "forbidden": "送信制限を変更できるのはスーパー管理者のみです。",
+      "invalid": "受け付けられない値があります。内容を確認してもう一度お試しください。",
+      "unexpected": "サーバー側で問題が発生しました。しばらくしてからもう一度お試しください。"
+    },
+    "kpi": {
+      "now": "現在の送信",
+      "nowHint": "1 秒あたりのメッセージ数（全番号）",
+      "sent": "送信済み",
+      "last5": "直近 5 分間",
+      "numbers": "接続中の番号",
+      "attention": "要対応",
+      "attentionHint": "一時停止 {paused} 件、1 日の上限に近い番号 {tier} 件",
+      "heldBack": "保留中",
+      "heldBackHint": "Meta によるスロットリング {meta} 件（直近 5 分間）"
+    },
+    "settings": {
+      "title": "プラットフォーム設定",
+      "description": "すべての番号に適用されます。番号ごとの上書きと一時停止は、その番号のページで設定します。",
+      "enabled": "各番号の上限に合わせて送信ペースを調整",
+      "enabledHelp": "オフの場合はペース調整なしで送信します。Meta 側のスロットリングは引き続き適用されます。",
+      "defaultMps": "デフォルトのレート (msg/s)",
+      "defaultMpsHelp": "Meta からレートがまだ報告されていない番号に使用されます。",
+      "safetyMargin": "安全マージン (%)",
+      "safetyMarginHelp": "受信トラフィックとタイミングの余裕として確保しておく上限の割合です。",
+      "maxWait": "最長待機時間 (ms)",
+      "maxWaitHelp": "これより長く待つ送信は、キューに戻されて再試行されます。",
+      "syncInterval": "Meta から再取得する間隔（分）",
+      "syncIntervalHelp": "各番号のレートと 1 日の上限を更新する頻度です。",
+      "adaptive": "Meta のスロットリング後に速度を落とす",
+      "adaptiveHelp": "送信が速すぎて Meta にメッセージを拒否されると速度を半分にし、1 分かけて元に戻します。",
+      "enforceTier": "1 日の上限でテンプレートメッセージを保留",
+      "enforceTierHelp": "番号が 1 日のメッセージティアに達したら、新しいテンプレートメッセージの送信を停止します。オフの場合は警告表示のみです。",
+      "tierWarn": "警告するしきい値（1 日の上限に対する %）",
+      "tierWarnHelp": "番号がティアのこの割合に達すると警告が表示されます。",
+      "save": "設定を保存",
+      "saving": "保存中...",
+      "saved": "保存しました。すべての番号に新しい設定が適用されます。"
+    },
+    "numbers": {
+      "title": "番号",
+      "search": "ワークスペース、番号、ID で検索",
+      "emptyTitle": "接続中の番号はありません",
+      "emptyBody": "ワークスペースが WhatsApp に接続すると、番号がここに表示されます。"
+    },
+    "cols": {
+      "number": "番号",
+      "rate": "レート制限",
+      "live": "現在",
+      "last5": "直近 5 分間",
+      "tier": "1 日の上限",
+      "state": "状態",
+      "actions": "操作"
+    },
+    "source": {
+      "override": "上書き",
+      "coexistence": "WhatsApp Business アプリ（固定）",
+      "meta": "Meta から取得",
+      "default": "デフォルト"
+    },
+    "tier": {
+      "unlimited": "無制限",
+      "unknown": "未報告",
+      "unlimitedBody": "この番号の 1 日のメッセージ上限は無制限です。",
+      "unknownBody": "Meta からこの番号の 1 日のメッセージ上限がまだ報告されていません。Meta から更新してください。"
+    },
+    "state": {
+      "ok": "正常",
+      "paused": "一時停止中",
+      "slowed": "{pct}% に減速中",
+      "tierWarn": "1 日の上限に近い",
+      "tierFull": "1 日の上限に到達",
+      "syncFailed": "Meta からの取得に失敗"
+    },
+    "events": {
+      "meta_throttled": "Meta が送信を制限",
+      "upgrade_in_progress": "スループットのアップグレード中",
+      "throughput_upgraded": "スループットレベルが変更されました",
+      "deferred": "キューが多すぎるため送信を保留",
+      "paused_block": "番号が一時停止中のため送信をブロック",
+      "tier_full": "1 日の上限に到達",
+      "paused": "オペレーターが一時停止",
+      "resumed": "オペレーターが再開",
+      "override_set": "レートの上書きを設定",
+      "override_cleared": "レートの上書きを解除",
+      "synced": "Meta から再取得"
+    },
+    "detail": {
+      "title": "WhatsApp 番号の制限",
+      "back": "送信制限に戻る",
+      "description": "電話番号 ID {id}。数秒ごとに更新されます。",
+      "refresh": "Meta から更新",
+      "refreshing": "Meta から取得中...",
+      "syncError": "Meta からの前回の取得に失敗しました: {message}",
+      "coexistence": "この番号は WhatsApp Business アプリでも使用されているため、Meta により 1 秒あたり 20 メッセージに固定されています。",
+      "rate": "ペース調整後 (msg/s)",
+      "speed": "速度",
+      "speedSlowed": "Meta のスロットリングにより減速中、回復中",
+      "speedFull": "フルスピード",
+      "wait": "平均待機時間",
+      "waitHint": "待機した送信 {n} 件（直近 5 分間）",
+      "meta": "Meta のスループットレベル",
+      "metaHint": "{n} msg/s",
+      "unknown": "未報告",
+      "chartSeconds": "1 秒あたりの送信数（直近 1 分間）",
+      "chartLegend": "破線はペース調整後のレートです。赤い印は Meta に送信を拒否された秒、黄色の印は送信が保留された秒を示します。",
+      "chartMinutes": "1 分あたりの送信数（直近 1 時間）",
+      "chartLegendMinutes": "赤い印は Meta に送信を拒否された分、黄色の印は送信が保留された分を示します。",
+      "tierTitle": "1 日のメッセージ上限",
+      "tierNote": "Meta は、1 つの番号が 24 時間以内に会話を開始できる相手の人数を制限しています。この件数は、このプラットフォームから送信したテンプレートメッセージの集計のため、Meta 側の数値と異なる場合があります。",
+      "events": "最近のイベント",
+      "eventsEmpty": "まだありません",
+      "eventsEmptyBody": "この番号のスロットリング、保留、一時停止、レート変更がここに表示されます。"
+    },
+    "control": {
+      "title": "コントロール",
+      "description": "Meta がこの番号に付与したレートを上書きするか、送信を停止します。どちらも、この番号を使用しているすべてのワークスペースで、次のメッセージから有効になります。",
+      "override": "レートの上書き (msg/s)",
+      "overrideHelp": "1 から {max} までの整数。空欄にすると Meta の設定に従います。",
+      "overrideInvalid": "1 から {max} までの整数を入力してください。",
+      "overridePlaceholder": "Meta に従う",
+      "pause": "この番号からの送信を一時停止",
+      "pauseHelp": "一斉配信とキャンペーンは自動的に停止・再開されます。その他のメッセージは失敗し、再試行できます。",
+      "reason": "理由",
+      "reasonHelp": "イベントログに表示されます。",
+      "saved": "保存しました。この番号には次のメッセージから新しいコントロールが適用されます。"
+    }
+  }
+}
