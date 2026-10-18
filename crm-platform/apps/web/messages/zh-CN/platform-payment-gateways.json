@@ -107,6 +107,7 @@
       "noGateway": "{currency} 尚未配置支付网关。请联系管理员启用一个。",
       "noGatewayButton": "未配置支付网关",
       "sandbox": "沙盒",
+      "sandboxNote": "测试模式：不会产生真实扣款。请使用支付网关文档中的测试卡付款。一次性密码（OTP）页面由支付网关显示，而非本应用。",
       "pay": "支付 {amount}",
       "processing": "正在发起付款",
       "summary": "订单摘要",

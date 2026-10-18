@@ -107,6 +107,7 @@
       "noGateway": "No payment gateway is configured for {currency} yet. Ask your administrator to activate one.",
       "noGatewayButton": "No gateway configured",
       "sandbox": "sandbox",
+      "sandboxNote": "Test mode: no real money is charged. Pay with the test card from your gateway's documentation. The one-time password (OTP) page is shown by the gateway, not by this app.",
       "pay": "Pay {amount}",
       "processing": "Starting payment",
       "summary": "Order summary",

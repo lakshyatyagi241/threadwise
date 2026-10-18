@@ -107,6 +107,7 @@
       "noGateway": "{currency} için henüz ödeme geçidi yapılandırılmadı. Yöneticinizden bir tanesini etkinleştirmesini isteyin.",
       "noGatewayButton": "Geçit yapılandırılmadı",
       "sandbox": "sandbox",
+      "sandboxNote": "Test modu: gerçek para çekilmez. Ödeme geçidinizin belgelerindeki test kartıyla ödeme yapın. Tek kullanımlık şifre (OTP) sayfasını bu uygulama değil, ödeme geçidi gösterir.",
       "pay": "{amount} öde",
       "processing": "Ödeme başlatılıyor",
       "summary": "Sipariş özeti",

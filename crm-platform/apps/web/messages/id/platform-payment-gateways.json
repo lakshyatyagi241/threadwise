@@ -107,6 +107,7 @@
       "noGateway": "Belum ada gateway pembayaran yang dikonfigurasi untuk {currency}. Minta administrator Anda untuk mengaktifkan salah satu.",
       "noGatewayButton": "Belum ada gateway yang dikonfigurasi",
       "sandbox": "sandbox",
+      "sandboxNote": "Mode uji: tidak ada uang sungguhan yang ditagih. Bayar dengan kartu uji dari dokumentasi gateway Anda. Halaman kata sandi sekali pakai (OTP) ditampilkan oleh gateway, bukan oleh aplikasi ini.",
       "pay": "Bayar {amount}",
       "processing": "Memulai pembayaran",
       "summary": "Ringkasan pesanan",

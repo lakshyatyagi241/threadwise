@@ -47,7 +47,7 @@ If you open a screen of an app the workspace does not have, the page says it isn
 
 ## Available add-ons
 
-Your plan can list paid add-ons that you have not bought yet. They show an **Add-on** label with the monthly price and a **Subscribe** button. **Install** stays disabled with the note "Included in your plan's catalogue, buy it to use it" until you subscribe. Select **Available add-ons** above the grid to see only these. Apps your plan does not list do not appear at all. Add-ons you already bought, free apps and apps your plan includes install as usual.
+Your plan can list paid add-ons that you have not bought yet. They show an **Add-on** label with the monthly price and a **Subscribe** button. **Install** stays disabled with the note "Subscribe first. Install unlocks once your payment is complete." until you subscribe. Select **Available add-ons** above the grid to see only these. Apps your plan does not list do not appear at all. Add-ons you already bought, free apps and apps your plan includes install as usual.
 
 ## Plan and access
 

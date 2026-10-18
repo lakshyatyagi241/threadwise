@@ -803,7 +803,7 @@
         "minPlan": "Planınız veya daha üst bir plan bu uygulamayı içeriyor, bu yüzden ödeyecek bir şey yok.",
         "plan": "Planınız bu uygulamayı içeriyor, bu yüzden ödeyecek bir şey yok."
       },
-      "needsPurchase": "Planınızın kataloğunda yer alıyor; kullanmak için satın alın.",
+      "needsPurchase": "Önce abone olun. Ödeme tamamlanınca kurulum açılır.",
       "subscribedNote": "Çalışma alanınızın bu uygulama için bir aboneliği var.",
       "trialOffer": "{days} gün ücretsiz deneyin. Abone olmayı seçene kadar hiçbir ücret alınmaz.",
       "prepaidNote": "Çalışma alanınızın faturalandırmasıyla aylık faturalandırılır. Her ödeme bir ayı kapsar ve otomatik olarak çekilmez: uygulamanın çalışmaya devam etmesi için gösterilen tarihten önce tekrar ödeyin.",
