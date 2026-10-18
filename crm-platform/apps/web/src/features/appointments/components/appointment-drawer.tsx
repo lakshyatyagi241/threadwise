@@ -15,7 +15,8 @@ import {
 } from '../lib/format';
 import { formatMoney } from '../lib/money';
 import { deriveReminders } from '../lib/reminders';
-import { REMINDER_TONE, actionsFor } from '../lib/status';
+import { knownReason } from '../lib/reminder-rules';
+import { REMINDER_RUN_TONE, REMINDER_TONE, actionsFor } from '../lib/status';
 import { CalendarSyncPanel } from './calendar-sync-panel';
 import { Drawer } from './drawer';
 import {
@@ -79,6 +80,46 @@ export function AppointmentDrawer(p: AppointmentDrawerProps) {
   );
 }
 
+/** The reminders and follow-ups of this booking and what became of each (BL-283): a status, the channel it went on, or why it did not. */
+function RecordedReminders({
+  reminders,
+  zone,
+}: {
+  reminders: NonNullable<Appointment['reminders']>;
+  zone: string;
+}) {
+  const t = useTranslations('appointments.reminders');
+  const locale = useLocale();
+  if (reminders.length === 0) return <p className="text-sm text-muted-foreground">{t('noneOn')}</p>;
+  return (
+    <ul className="space-y-2 text-sm">
+      {reminders.map((r) => (
+        <li
+          key={`${r.kind}:${r.offsetMinutes}:${r.dueAt}`}
+          className="flex flex-wrap items-start justify-between gap-2"
+        >
+          <span className="min-w-0">
+            <span className="font-medium">
+              {r.label || t(`when.${r.kind}`, { count: r.offsetMinutes })}
+            </span>
+            <span className="ms-2 tabular-nums text-muted-foreground">
+              {formatDateTime(r.dueAt, locale, zone)}
+            </span>
+            <span className="block text-xs text-muted-foreground">
+              {r.status === 'sent' && r.channel
+                ? t('sentOn', { channel: t(`channels.${r.channel}`) })
+                : knownReason(r.reason)
+                  ? t(`reasons.${knownReason(r.reason)!}`)
+                  : null}
+            </span>
+          </span>
+          <ToneChip tone={REMINDER_RUN_TONE[r.status]} label={t(`status.${r.status}`)} />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function Section({
   icon,
   title,
@@ -116,7 +157,13 @@ function Body({
   const [confirmDecline, setConfirmDecline] = useState(false);
   const types = useBookingTypes();
   const typeRow = types.data?.find((x) => x.id === a.bookingType?.id);
-  const reminderRows = typeRow ? deriveReminders(a, typeRow.reminders, now) : [];
+  const reminderRows = typeRow
+    ? deriveReminders(
+        a,
+        typeRow.reminders.filter((r) => r.isActive && r.kind === 'before'),
+        now,
+      )
+    : [];
   const [busy, setBusy] = useState(false);
   const [notes, setNotes] = useState(a.notes ?? '');
   const [seenNotes, setSeenNotes] = useState(a.notes ?? '');
@@ -414,7 +461,9 @@ function Body({
       </Section>
 
       <Section icon={<BellIcon className="size-3.5" />} title={t('reminders')}>
-        {reminderRows.length === 0 ? (
+        {a.reminders ? (
+          <RecordedReminders reminders={a.reminders} zone={zone} />
+        ) : reminderRows.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t('noReminders')}</p>
         ) : (
           <ul className="space-y-2 text-sm">
@@ -434,7 +483,7 @@ function Body({
             ))}
           </ul>
         )}
-        {reminderRows.length > 0 && (
+        {!a.reminders && reminderRows.length > 0 && (
           <p className="text-xs text-muted-foreground">{t('remindersNote')}</p>
         )}
       </Section>

@@ -1,0 +1,301 @@
+{
+  "record-assignment": {
+    "back": "Automatización",
+    "title": "Reglas de asignación de registros",
+    "intro": "Asigna automáticamente los nuevos {contacts}, empresas y {deals} al responsable de ventas adecuado.",
+    "crossNote": "Esto asigna {contacts}, empresas y {deals}. Para asignar conversaciones a agentes, consulta <link>Asignación automática</link>.",
+    "master": {
+      "title": "Activar la asignación de registros",
+      "hint": "Desactivada hasta que la actives. Cuando está activa, las reglas de abajo asignan a alguien de tu equipo cada nuevo {contact}, empresa o {deal} que no tenga responsable.",
+      "on": "La asignación de registros está activada.",
+      "off": "La asignación de registros está desactivada."
+    },
+    "imports": {
+      "title": "Asignar también los registros importados",
+      "hint": "Desactivado por defecto para que una importación grande no cambie quién es responsable de qué."
+    },
+    "ownerRule": {
+      "title": "Solo se asignan los registros sin responsable",
+      "body": "Nunca se reemplaza un responsable establecido por una persona, ni uno que alguien quitó a propósito. El motor rellena un responsable vacío en un registro nuevo. Si activas Reasignar al actualizar en una regla, también puede mover un registro que el propio motor asignó antes, siempre que nadie haya cambiado el responsable desde entonces."
+    },
+    "tabs": {
+      "contact": "{Contacts}",
+      "company": "{Companies}",
+      "deal": "{Deals}",
+      "label": "Módulo"
+    },
+    "views": {
+      "rules": "Reglas",
+      "log": "Registro de ejecución"
+    },
+    "how": {
+      "title": "Cómo funciona la prioridad",
+      "p1": "Las reglas se prueban desde la prioridad 1 hacia abajo. La primera regla que coincide y encuentra a alguien disponible se queda con el registro.",
+      "p2": "Solo se priorizan las reglas activas. Una regla en pausa conserva su lugar en la lista pero nunca se ejecuta.",
+      "p3": "Una regla sin condiciones coincide con todos los registros y se ejecuta después de todas las demás, esté donde esté en la lista. Es la regla de respaldo.",
+      "p4": "Un registro que coincide con varias reglas va a la de mayor prioridad.",
+      "p5": "Arrastra una fila, o usa sus botones de flecha, para cambiar el orden. Las reglas de respaldo y las reglas en pausa permanecen en su propio grupo al final."
+    },
+    "list": {
+      "title": {
+        "contact": "Reglas para {contacts}",
+        "company": "Reglas para empresas",
+        "deal": "Reglas para {deals}"
+      },
+      "create": "Crear regla",
+      "loading": "Cargando las reglas…",
+      "loadFailed": "No se pudieron cargar las reglas.",
+      "retry": "Reintentar",
+      "readOnly": "Puedes ver estas reglas pero no modificarlas. Para modificarlas necesitas el permiso de gestionar la asignación de registros.",
+      "empty": {
+        "title": "Aún no hay reglas",
+        "contact": "Los nuevos {contacts} conservan el responsable con el que se crean.",
+        "company": "Las nuevas empresas conservan el responsable con el que se crean.",
+        "deal": "Los nuevos {deals} conservan el responsable con el que se crean.",
+        "create": "Crear la primera regla"
+      },
+      "col": {
+        "priority": "Prioridad",
+        "rule": "Regla",
+        "assignTo": "Asignar a",
+        "method": "Método",
+        "active": "Activa",
+        "used": "Usos",
+        "modified": "Última modificación"
+      },
+      "fallback": "Respaldo",
+      "fallbackHint": "Una regla sin condiciones coincide con todos los registros y se ejecuta después de todas las demás.",
+      "notPrioritised": "En pausa",
+      "noConditions": "Sin condiciones: coincide con todos los registros",
+      "brokenConditions": "{count, plural, one {# condición rota} other {# condiciones rotas}}",
+      "brokenHint": "Una condición apunta a algo que se eliminó. No coincidirá con nada hasta que la corrijas.",
+      "usedCount": "{count, plural, =0 {Nunca usada} one {Usada # vez} other {Usada # veces}}",
+      "lastUsed": "Último uso {when}",
+      "modifiedBy": "{name}, {when}",
+      "nobody": "Nadie",
+      "unknownPerson": "Antiguo miembro",
+      "unknownTeam": "Equipo eliminado",
+      "teamName": "Equipo: {name}",
+      "skipsOffline": "Omite a las personas sin conexión",
+      "reassigns": "Reasigna al actualizar",
+      "activeFor": "La regla {name} está activa",
+      "dragHandle": "Arrastra {name} para cambiar su prioridad",
+      "moveUp": "Subir {name}",
+      "moveDown": "Bajar {name}",
+      "moved": "{name} se movió a la posición {place}.",
+      "actions": "Acciones de {name}",
+      "edit": "Editar",
+      "clone": "Duplicar",
+      "delete": "Eliminar"
+    },
+    "strategy": {
+      "round_robin": "Round robin (rotación)",
+      "least_busy": "Menor carga de trabajo abierta",
+      "fixed": "Usuario específico",
+      "hint": {
+        "round_robin": "Reparte por turnos entre las personas, en un orden constante.",
+        "least_busy": {
+          "contact": "Lo asigna a la persona que tiene menos {contacts} en este momento.",
+          "company": "Lo asigna a la persona que tiene menos empresas en este momento.",
+          "deal": "Lo asigna a la persona que tiene menos {deals} abiertos en este momento."
+        },
+        "fixed": "Siempre la misma persona. Mientras esté de licencia, su suplente toma el relevo."
+      }
+    },
+    "editor": {
+      "titleNew": "Nueva regla",
+      "titleEdit": "Editar regla",
+      "name": "Nombre de la regla",
+      "description": "Descripción (opcional)",
+      "module": "Módulo",
+      "moduleLocked": "El módulo de una regla no se puede cambiar. Crea una regla nueva para otro módulo.",
+      "conditions": {
+        "title": "Condiciones",
+        "hint": "Un registro coincide cuando sus campos cumplen las condiciones. Elige un campo, luego cómo compararlo y después un valor.",
+        "emptyTitle": "Sin condiciones: coincide con todos los registros, se ejecuta al final (respaldo)",
+        "emptyBody": "Esta regla toma todos los registros que ninguna otra regla tomó. Añade una condición para acotarla.",
+        "add": "Añadir condición",
+        "counts": "{conditions} de {max} condiciones",
+        "loading": "Cargando los campos…",
+        "partial": "No se pudieron cargar algunos campos. Aún puedes crear reglas con los que sí se cargaron."
+      },
+      "group": {
+        "company": "Campos de la empresa",
+        "deal": "Campos de {Deal}"
+      },
+      "assign": {
+        "title": "Asignar a",
+        "method": "Método",
+        "people": "Personas",
+        "person": "Persona",
+        "peoplePlaceholder": "Elegir personas",
+        "personPlaceholder": "Elegir una persona",
+        "teams": "Equipos",
+        "teamsPlaceholder": "Elegir equipos",
+        "teamsNote": "Aquí un equipo es un grupo de personas entre las que elegir. Un registro no pertenece a un equipo: su responsable es uno de los miembros del equipo.",
+        "noPeople": "Ninguna persona coincide.",
+        "removePerson": "Quitar a {name}",
+        "onLeave": "de licencia",
+        "skipOffline": "Omitir a las personas sin conexión",
+        "skipOfflineHint": "Las personas de licencia siempre se omiten.",
+        "reassign": "Reasignar cuando una actualización haga que este registro empiece a coincidir con la regla",
+        "reassignHint": "Se aplica solo a los registros que este motor asignó por sí mismo, y solo mientras nadie haya cambiado el responsable desde entonces. Desactivado por defecto: un registro se asigna una sola vez."
+      },
+      "problems": {
+        "name": "Ponle un nombre a la regla.",
+        "people": "Elige al menos una persona o un equipo.",
+        "fixedOne": "Una regla de usuario específico necesita exactamente una persona y ningún equipo.",
+        "conditions": "Corrige las condiciones resaltadas antes de guardar.",
+        "server": "El servidor rechazó las reglas."
+      },
+      "saveActivate": "Guardar y activar",
+      "savePaused": "Guardar en pausa",
+      "save": "Guardar cambios",
+      "cancel": "Cancelar",
+      "unsavedTitle": "¿Salir sin guardar?",
+      "unsavedMessage": "Los cambios en esta regla no se han guardado.",
+      "stay": "Seguir editando",
+      "leave": "Salir"
+    },
+    "fields": {
+      "origin": "Llegó a través de",
+      "company": {
+        "name": "Nombre",
+        "email": "Correo electrónico",
+        "phone": "Teléfono",
+        "domain": "Dominio del sitio web",
+        "industry": "Sector",
+        "sizeRange": "Tamaño",
+        "address": "Dirección",
+        "status": "Estado",
+        "createdAt": "Creado",
+        "updatedAt": "Última actualización"
+      },
+      "deal": {
+        "title": "Título",
+        "value": "Valor",
+        "currency": "Moneda",
+        "pipeline": "Pipeline (embudo)",
+        "stage": "Etapa",
+        "status": "Estado",
+        "source": "Origen",
+        "expectedCloseDate": "Fecha de cierre prevista",
+        "createdAt": "Creado",
+        "hasContact": "Tiene un {contact}",
+        "hasCompany": "Tiene una empresa"
+      },
+      "dealStatus": {
+        "open": "Abierto",
+        "won": "Ganado",
+        "lost": "Perdido"
+      }
+    },
+    "origin": {
+      "manual": "Añadido por una persona",
+      "import": "Importación",
+      "inbound": "Primer mensaje",
+      "form": "Formulario",
+      "lead": "Origen del lead",
+      "api": "API"
+    },
+    "test": {
+      "title": "Probar con un registro",
+      "hint": "Elige un registro real y mira qué regla lo tomaría y quién lo recibiría. No se cambia nada, y funciona aunque el interruptor esté apagado.",
+      "search": {
+        "contact": "Buscar {contacts} por nombre, correo o teléfono",
+        "company": "Buscar empresas por nombre",
+        "deal": "Buscar {deals} por título"
+      },
+      "searchLabel": "Registro a probar",
+      "searching": "Buscando…",
+      "noMatches": "No se encontró ningún registro.",
+      "searchFailed": "La búsqueda no funcionó. Puede que no tengas permiso para ver estos registros.",
+      "clear": "Elegir otro registro",
+      "run": "Probar",
+      "running": "Probando…",
+      "failed": "La prueba no se ejecutó. Inténtalo de nuevo.",
+      "off": "La asignación de registros está desactivada, así que esto muestra lo que pasaría si estuviera activada.",
+      "outcome": {
+        "would_assign": "{record} iría a {owner} mediante la regla {rule}.",
+        "disabled": "La asignación de registros está desactivada en este espacio de trabajo, así que no pasaría nada.",
+        "has_owner": "{record} ya tiene un responsable, así que no se ejecutaría ninguna regla. Un responsable establecido por alguien nunca se reemplaza.",
+        "no_rule": "Ninguna regla activa coincide con {record}.",
+        "nobody_available": "Una regla coincide con {record}, pero todas las personas que nombra están de licencia, sin conexión o ya no están.",
+        "plan": "Tu plan no incluye reglas de asignación de registros.",
+        "not_found": "No se encontró ese registro. Puede que se haya eliminado o que esté fuera de lo que puedes ver."
+      },
+      "traceTitle": "Reglas probadas, en orden",
+      "traceEmpty": "No se probó ninguna regla activa.",
+      "trace": {
+        "winner": "Coincidió y toma el registro",
+        "matched": "Coincidió",
+        "not_matched": "No coincidió",
+        "nobody": "Coincidió, pero no había nadie disponible",
+        "broken": "Tiene una condición rota"
+      },
+      "skipped": "Omitida porque no había nadie disponible: {names}"
+    },
+    "log": {
+      "title": "Registro de ejecución",
+      "intro": "Lo que hizo el motor con cada registro, del más reciente al más antiguo. Las entradas se conservan {days} días y contienen solo identificadores, nunca el contenido de un registro.",
+      "filterOutcome": "Resultado",
+      "filterRule": "Regla",
+      "allOutcomes": "Todos los resultados",
+      "allRules": "Todas las reglas",
+      "loading": "Cargando el registro de ejecución…",
+      "loadFailed": "No se pudo cargar el registro de ejecución.",
+      "empty": "Aún no se ha asignado nada.",
+      "emptyFiltered": "Ninguna entrada coincide con estos filtros.",
+      "loadMore": "Cargar más",
+      "col": {
+        "when": "Cuándo",
+        "record": "Registro",
+        "outcome": "Resultado",
+        "reason": "Motivo",
+        "rule": "Regla",
+        "assignedTo": "Asignado a",
+        "method": "Método",
+        "arrived": "Llegó a través de"
+      },
+      "deletedRecord": "Eliminada",
+      "noRule": "Sin regla",
+      "outcome": {
+        "assigned": "Asignado",
+        "reassigned": "Reasignado",
+        "skipped": "Sin cambios"
+      },
+      "reason": {
+        "matched": "Una regla coincidió",
+        "has_owner": "Ya tenía un responsable",
+        "no_rule": "Ninguna regla coincidió",
+        "nobody_available": "No había nadie disponible",
+        "raced": "El responsable cambió mientras se asignaba",
+        "unchanged": "Ya está con la regla correcta"
+      },
+      "trigger": {
+        "created": "Registro nuevo",
+        "updated": "Registro actualizado"
+      },
+      "showTrace": "Mostrar cómo se decidió",
+      "hideTrace": "Ocultar cómo se decidió",
+      "traceFor": "Cómo se decidió para {record}"
+    },
+    "toast": {
+      "created": "Regla creada.",
+      "saved": "Regla guardada.",
+      "deleted": "Regla eliminada.",
+      "cloned": "Regla copiada. La copia está en pausa.",
+      "activated": "Regla activada.",
+      "paused": "Regla en pausa.",
+      "reordered": "Orden guardado.",
+      "conflict": "Otra persona cambió esta regla. Se cargó la versión más reciente. Revísala y vuelve a aplicar tu cambio.",
+      "failed": "Algo salió mal. Inténtalo de nuevo."
+    },
+    "delete": {
+      "title": "¿Eliminar esta regla?",
+      "message": "La regla {name} dejará de asignar. Los registros que ya asignó conservan su responsable.",
+      "confirm": "Eliminar",
+      "cancel": "Cancelar"
+    }
+  }
+}

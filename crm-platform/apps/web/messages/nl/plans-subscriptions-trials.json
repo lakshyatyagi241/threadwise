@@ -84,7 +84,8 @@
       "email_channel": "E-mailkanaal (Gmail)",
       "personal_history_full": "Volledige geschiedenis importeren (persoonlijke WhatsApp)",
       "ai_crm_copilot": "AI CRM Copilot",
-      "lead_scoring": "AI-leadscoring"
+      "lead_scoring": "AI-leadscoring",
+      "record_assignment": "Regels voor recordtoewijzing"
     },
     "limitGroups": {
       "messaging": "Berichten",

@@ -4,6 +4,8 @@ import { ownersAvailable } from '../../../src/common/leave-owner-pool';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { OutboxSubscriberRegistry } from '../../../src/kernel/outbox/outbox-subscribers';
 import { ContactAssignmentConsumer } from '../../../src/modules/crm/contact-assignment/contact-assignment.consumer';
+import { AssignmentRunSweepService } from '../../../src/modules/crm/contact-assignment/assignment-run-sweep.service';
+import { ContactAssignmentRepository } from '../../../src/modules/crm/contact-assignment/contact-assignment.repository';
 import { ContactAssignmentEngine } from '../../../src/modules/crm/contact-assignment/contact-assignment.engine';
 import { DealsApi, startHarness, type Harness } from '../deals-pipelines/support';
 import type { Tenant } from '../contacts-attributes-tags/support';
@@ -27,6 +29,26 @@ afterAll(async () => {
 const get = <T>(cls: new (...a: never[]) => T): T => h.app.get(cls as never, { strict: false });
 const engine = () => get(ContactAssignmentEngine);
 const consumer = () => new ContactAssignmentConsumer(get(OutboxSubscriberRegistry), engine());
+
+/** The plan feature the whole area needs (higher plans only): a test workspace gets it as a per-workspace override. */
+const grant = async (t: Tenant) => {
+  await h.owner.query(
+    `UPDATE org_plan_state SET overrides = jsonb_set(overrides, '{features}', '{"record_assignment": true}'::jsonb, true) WHERE org_id = $1`,
+    [t.orgId],
+  );
+  return t;
+};
+const tenant = async (name: string) => grant(await api.signup(name));
+
+/** A rule tree with the conditions all required, the way the screen's builder saves one. */
+const cond = (field: string, operator: string, value?: unknown) => ({
+  type: 'condition',
+  field,
+  operator,
+  ...(value === undefined ? {} : { value }),
+});
+const all = (...children: unknown[]) => ({ type: 'group', combinator: 'and', children });
+const any = (...children: unknown[]) => ({ type: 'group', combinator: 'or', children });
 
 const MANAGE: Array<[string, 'all']> = [
   ['crm.assignment.read', 'all'],
@@ -99,8 +121,8 @@ describe('the API', () => {
   let a: Person;
 
   beforeAll(async () => {
-    t = await api.signup('ca');
-    other = await api.signup('cao');
+    t = await tenant('ca');
+    other = await tenant('cao');
     mgr = await person(t, 'camgr', MANAGE);
     reader = await person(t, 'cardr', [['crm.assignment.read', 'all']]);
     agent = await person(t, 'caagent', [['record.contacts.read', 'all']]);
@@ -134,7 +156,7 @@ describe('the API', () => {
       subject: 'contact',
       strategy: 'fixed',
       userIds: [a.uuid],
-      conditions: { sources: ['Website'] },
+      rules: all(cond('source', 'equals', 'Website')),
     };
     expect((await rules(reader.token).create(body)).status).toBe(403);
     expect((await rules(agent.token).list()).status).toBe(403);
@@ -221,7 +243,7 @@ describe('the engine', () => {
   let c: Person;
 
   beforeAll(async () => {
-    t = await api.signup('ce');
+    t = await tenant('ce');
     mgr = await person(t, 'cemgr', MANAGE);
     a = await person(t, 'cea');
     b = await person(t, 'ceb');
@@ -259,7 +281,7 @@ describe('the engine', () => {
       name: 'Website to A',
       strategy: 'fixed',
       userIds: [a.uuid],
-      conditions: { sources: ['website'] },
+      rules: all(cond('source', 'equals', 'website')),
     });
     const id = await newContact(t, 'Website');
     const r = await assignTo(t, id);
@@ -293,7 +315,7 @@ describe('the engine', () => {
       name: 'India',
       strategy: 'fixed',
       userIds: [a.uuid],
-      conditions: { phonePrefixes: ['91'] },
+      rules: all(cond('phone', 'starts_with', '91')),
     });
     const r2 = await makeRule({ name: 'Everyone else', strategy: 'fixed', userIds: [b.uuid] });
     const india = await newContact(t, 'x', { phone: '+919812345678' });
@@ -327,7 +349,7 @@ describe('the engine', () => {
       name: 'Only ads',
       strategy: 'fixed',
       userIds: [a.uuid],
-      conditions: { sources: ['ads'] },
+      rules: all(cond('source', 'equals', 'ads')),
     });
     const id = await newContact(t, 'Website');
     expect((await assignTo(t, id)).outcome).toBe('no_rule');
@@ -472,10 +494,16 @@ describe('the engine', () => {
       payload: { uuid: flagged, autoAssigned: true },
     });
     expect(await ownerOf(flagged)).toBeNull();
-    // an updated event never starts an assignment (the consumer does not listen to it)
-    expect(
-      new ContactAssignmentConsumer(get(OutboxSubscriberRegistry), engine()).eventTypes,
-    ).not.toContain('contact.updated');
+    // the engine's own update event is flagged, so it never starts another assignment
+    await consumer().handle({
+      id: '3b',
+      orgId: t.orgId,
+      aggregateModule: 'contacts',
+      aggregateId: '1',
+      eventType: 'contact.updated',
+      payload: { uuid: flagged, autoAssigned: true },
+    });
+    expect(await ownerOf(flagged)).toBeNull();
 
     // a form that created a contact, and a lead source, name the contact in their own events
     const form = await newContact(t);
@@ -518,7 +546,7 @@ describe('the engine', () => {
       subject: 'deal',
       strategy: 'fixed',
       userIds: [c.uuid],
-      conditions: { pipelineIds: [pipeline.id], valueMin: 1000 },
+      rules: all(cond('pipeline', 'in', [pipeline.id]), cond('value', 'gte', 1000)),
     });
     const big = await api.deal(t.admin, { title: 'big', value: '5000', ownerId: null });
     const small = await api.deal(t.admin, { title: 'small', value: '10', ownerId: null });
@@ -550,7 +578,7 @@ describe('the engine', () => {
       name: 'Rot',
       strategy: 'round_robin',
       userIds: [a.uuid, b.uuid],
-      conditions: { sources: ['website'] },
+      rules: all(cond('source', 'equals', 'website')),
     });
     const id = await newContact(t, 'Website');
     const t1 = await rules(mgr.token).test({ subject: 'contact', recordId: id });
@@ -563,29 +591,40 @@ describe('the engine', () => {
     expect(t2.body.owner.id).toBe(t1.body.owner.id); // the rotation did not move
     expect(await ownerOf(id)).toBeNull();
     expect(await firedOf(rule.id)).toBe(0);
-    expect(
-      (await rules(mgr.token).test({ subject: 'contact', facts: { source: 'ads' } })).body.outcome,
-    ).toBe('no_rule');
-    expect(
-      (await rules(mgr.token).test({ subject: 'contact', facts: { source: 'WEBSITE' } })).body
-        .outcome,
-    ).toBe('would_assign');
+    const ads = await newContact(t, 'ads');
+    expect((await rules(mgr.token).test({ subject: 'contact', recordId: ads })).body).toMatchObject(
+      {
+        outcome: 'no_rule',
+        trace: [{ ruleId: rule.id, matched: false }],
+      },
+    );
+    const web = await newContact(t, 'WEBSITE');
+    expect((await rules(mgr.token).test({ subject: 'contact', recordId: web })).body.outcome).toBe(
+      'would_assign',
+    );
     await away(t, a.userId);
     await away(t, b.userId);
-    const none = await rules(mgr.token).test({ subject: 'contact', facts: { source: 'website' } });
-    expect(none.body).toMatchObject({ outcome: 'nobody_available', skipped: [{ id: rule.id }] });
+    const none = await rules(mgr.token).test({ subject: 'contact', recordId: web });
+    expect(none.body).toMatchObject({
+      outcome: 'nobody_available',
+      skipped: [{ id: rule.id }],
+      trace: [{ ruleId: rule.id, matched: true, nobody: true }],
+    });
     await back(t);
     const owned = await newContact(t, 'Website', { ownerId: c.userId });
     expect(
       (await rules(mgr.token).test({ subject: 'contact', recordId: owned })).body.outcome,
     ).toBe('has_owner');
     expect((await rules(mgr.token).test({ subject: 'contact' })).status).toBe(422);
+    expect(
+      (await rules(mgr.token).test({ subject: 'contact', recordId: randomUUID() })).body.outcome,
+    ).toBe('not_found');
     await clean();
   });
 
   it("another workspace's rules and switch never touch this workspace's records", async () => {
     await enable();
-    const other = await api.signup('ceo');
+    const other = await tenant('ceo');
     const op = await person(other, 'ceop');
     await rules(other.admin).setSettings({ enabled: true });
     expect(
@@ -613,7 +652,7 @@ describe('the engine', () => {
 
 describe('form and lead-source owner pools skip people on leave', () => {
   it('a rotation skips them; a fixed person is replaced by their delegate; nobody on leave is left untouched', async () => {
-    const t = await api.signup('cp');
+    const t = await tenant('cp');
     const a = await person(t, 'cpa');
     const b = await person(t, 'cpb');
     const c = await person(t, 'cpc');
@@ -640,5 +679,384 @@ describe('form and lead-source owner pools skip people on leave', () => {
       (await db.txAs({ orgId: t.orgId }, (tx) => ownersAvailable(tx, t.orgId, pool, 'unassigned')))
         .length,
     ).toBe(3);
+  });
+});
+
+describe('record assignment rules (BL-340..BL-345)', () => {
+  let t: Tenant;
+  let mgr: Person;
+  let a: Person;
+  let b: Person;
+  let c: Person;
+
+  beforeAll(async () => {
+    t = await tenant('cr');
+    mgr = await person(t, 'crmgr', MANAGE);
+    a = await person(t, 'cra');
+    b = await person(t, 'crb');
+    c = await person(t, 'crc');
+    expect((await rules(mgr.token).setSettings({ enabled: true })).status).toBe(200);
+  });
+  const clean = async () => {
+    await h.owner.query(`DELETE FROM assignment_rules WHERE org_id = $1`, [t.orgId]);
+    await h.owner.query(`DELETE FROM assignment_runs WHERE org_id = $1`, [t.orgId]);
+  };
+  afterEach(clean);
+  const make = async (body: Record<string, unknown>) => {
+    const r = await rules(mgr.token).create({ subject: 'contact', ...body });
+    expect(r.status, JSON.stringify(r.body)).toBe(201);
+    return r.body as { id: string; rowVersion: number };
+  };
+  const company = async (
+    name: string,
+    industry: string | null,
+    data: Record<string, unknown> = {},
+  ) =>
+    (
+      await h.owner.query(
+        `INSERT INTO companies (org_id, name, industry, data) VALUES ($1,$2,$3,$4::jsonb) RETURNING uuid`,
+        [t.orgId, name, industry, JSON.stringify(data)],
+      )
+    ).rows[0].uuid as string;
+  const runs = async (query = '') =>
+    (await api.as(mgr.token).get(`/v2/assignment/runs${query}`)).body;
+
+  it('the whole area is a plan feature: a workspace without record_assignment is refused and its engine does nothing', async () => {
+    const free = await api.signup('crfree');
+    // the test harness has no plan catalogue, so a workspace without the feature is a per-workspace override
+    await h.owner.query(
+      `UPDATE org_plan_state SET overrides = jsonb_set(overrides, '{features}', '{"record_assignment": false}'::jsonb, true) WHERE org_id = $1`,
+      [free.orgId],
+    );
+    const m = await person(free, 'crfreemgr', MANAGE);
+    for (const res of [
+      await rules(m.token).list(),
+      await rules(m.token).settings(),
+      await api.as(m.token).get('/v2/assignment/runs'),
+    ]) {
+      expect(res.status).toBe(422);
+      expect(res.body.code).toBe('PLAN_FEATURE_LOCKED');
+    }
+    await h.owner.query(`INSERT INTO assignment_settings (org_id, enabled) VALUES ($1, true)`, [
+      free.orgId,
+    ]);
+    const id = await newContact(free);
+    expect((await engine().assign(free.orgId, 'contact', id, 'manual')).outcome).toBe('plan');
+  });
+
+  it('the migration grants the feature to the plans that carry SLA policies and to no other', async () => {
+    const rows = (
+      await h.owner.query(
+        `SELECT features -> 'inbox_sla' AS sla, features -> 'record_assignment' AS ra FROM plans WHERE kind = 'plan'`,
+      )
+    ).rows;
+    for (const r of rows) expect(r.ra === true).toBe(r.sla === true);
+  });
+
+  it('companies: a rule on a built-in field and one on a custom property; the owner is set, audited and announced', async () => {
+    const sec = await api
+      .as(t.admin)
+      .post('/v2/field-sections')
+      .send({ moduleKey: 'companies', name: 'Billing' });
+    expect(sec.status, JSON.stringify(sec.body)).toBe(201);
+    const prop = await api
+      .as(t.admin)
+      .post('/v2/fields')
+      .send({
+        moduleKey: 'companies',
+        sectionId: sec.body.id,
+        label: 'Tier',
+        key: 'tier',
+        fieldType: 'text',
+      });
+    expect(prop.status, JSON.stringify(prop.body)).toBe(201);
+    const key = prop.body.key as string;
+
+    const byIndustry = await make({
+      name: 'Retail',
+      subject: 'company',
+      strategy: 'fixed',
+      userIds: [a.uuid],
+      rules: all(cond('industry', 'equals', 'Retail')),
+    });
+    const byTier = await make({
+      name: 'Gold',
+      subject: 'company',
+      strategy: 'fixed',
+      userIds: [b.uuid],
+      rules: all(cond(`custom.${key}`, 'equals', 'gold')),
+    });
+    const retail = await company('R', 'Retail');
+    const gold = await company('G', 'Banking', { [key]: 'gold' });
+    const none = await company('N', 'Banking');
+    expect(await engine().assign(t.orgId, 'company', retail, 'manual')).toMatchObject({
+      outcome: 'assigned',
+      ruleId: byIndustry.id,
+      ownerUuid: a.uuid,
+    });
+    expect(await engine().assign(t.orgId, 'company', gold, 'manual')).toMatchObject({
+      outcome: 'assigned',
+      ruleId: byTier.id,
+      ownerUuid: b.uuid,
+    });
+    expect((await engine().assign(t.orgId, 'company', none, 'manual')).outcome).toBe('no_rule');
+    expect(
+      Number(
+        (await h.owner.query(`SELECT owner_id FROM companies WHERE uuid = $1`, [retail])).rows[0]
+          .owner_id,
+      ),
+    ).toBe(a.userId);
+    expect(
+      (
+        await h.owner.query(
+          `SELECT 1 FROM audit_log WHERE org_id = $1 AND module = 'companies' AND action = 'company.auto_assigned'`,
+          [t.orgId],
+        )
+      ).rows.length,
+    ).toBe(2);
+    // a person's choice is final, even for a company left without an owner on purpose
+    await h.owner.query(`UPDATE companies SET owner_id = $2 WHERE uuid = $1`, [none, c.userId]);
+    await h.owner.query(`UPDATE companies SET owner_id = NULL WHERE uuid = $1`, [none]);
+    expect((await engine().assign(t.orgId, 'company', none, 'manual')).outcome).toBe('has_owner');
+    // the consumer routes company events
+    const viaEvent = await company('E', 'Retail');
+    await consumer().handle({
+      id: 'c1',
+      orgId: t.orgId,
+      aggregateModule: 'companies',
+      aggregateId: '1',
+      eventType: 'company.created',
+      payload: { uuid: viaEvent },
+    });
+    expect(
+      Number(
+        (await h.owner.query(`SELECT owner_id FROM companies WHERE uuid = $1`, [viaEvent])).rows[0]
+          .owner_id,
+      ),
+    ).toBe(a.userId);
+  });
+
+  it('conditions are a tree: AND / OR groups over the module fields, and a field of another module is refused', async () => {
+    const r = await make({
+      name: 'US with a phone, or Newsletter',
+      strategy: 'fixed',
+      userIds: [a.uuid],
+      rules: all(
+        cond('countryCode', 'equals', '+1'),
+        any(cond('phone', 'is_not_empty'), cond('source', 'equals', 'Newsletter')),
+      ),
+    });
+    const us = await newContact(t, 'x', { countryCode: '+1', phone: '+14155550123' });
+    const usNewsletter = await newContact(t, 'Newsletter', { countryCode: '+1' });
+    const usNothing = await newContact(t, 'other', { countryCode: '+1' });
+    const india = await newContact(t, 'Newsletter', { countryCode: '+91', phone: '+919812345678' });
+    expect((await assignTo(t, us)).outcome).toBe('assigned');
+    expect((await assignTo(t, usNewsletter)).outcome).toBe('assigned');
+    expect((await assignTo(t, usNothing)).outcome).toBe('no_rule');
+    expect((await assignTo(t, india)).outcome).toBe('no_rule');
+    const bad = await rules(mgr.token).create({
+      name: 'bad',
+      subject: 'contact',
+      strategy: 'fixed',
+      userIds: [a.uuid],
+      rules: all(cond('value', 'gte', 5)),
+    });
+    expect(bad.status).toBe(422);
+    const ghost = await rules(mgr.token).update(r.id, {
+      rowVersion: r.rowVersion,
+      rules: all(cond('custom.does_not_exist', 'equals', 'x')),
+    });
+    expect(ghost.status).toBe(422);
+  });
+
+  it('a rule without conditions is the fallback: it runs after every rule that has some, wherever it sits in the list', async () => {
+    const fallback = await make({ name: 'Everyone else', strategy: 'fixed', userIds: [c.uuid] });
+    const web = await make({
+      name: 'Website',
+      strategy: 'fixed',
+      userIds: [a.uuid],
+      rules: all(cond('source', 'equals', 'Website')),
+    });
+    const list = (await rules(mgr.token).list()).body.data as Array<{
+      id: string;
+      priority: number | null;
+      isFallback: boolean;
+    }>;
+    expect(list.find((r) => r.id === fallback.id)).toMatchObject({ isFallback: true, priority: 2 });
+    expect(list.find((r) => r.id === web.id)).toMatchObject({ isFallback: false, priority: 1 });
+    expect(await assignTo(t, await newContact(t, 'Website'))).toMatchObject({ ruleId: web.id });
+    expect(await assignTo(t, await newContact(t, 'elsewhere'))).toMatchObject({
+      ruleId: fallback.id,
+    });
+  });
+
+  it('pause, activate and clone: a paused rule is not prioritised and never runs; a clone is paused and last', async () => {
+    const r = await make({ name: 'W', strategy: 'fixed', userIds: [a.uuid] });
+    const paused = await api.as(mgr.token).post(`/v2/assignment/rules/${r.id}/pause`);
+    expect(paused.body).toMatchObject({ isActive: false, priority: null });
+    expect((await assignTo(t, await newContact(t))).outcome).toBe('no_rule');
+    const active = await api.as(mgr.token).post(`/v2/assignment/rules/${r.id}/activate`);
+    expect(active.body).toMatchObject({ isActive: true, priority: 1 });
+    expect(active.body.lastModifiedBy).toMatchObject({ id: mgr.uuid });
+    const copy = await api
+      .as(mgr.token)
+      .post(`/v2/assignment/rules/${r.id}/clone`)
+      .set('idempotency-key', randomUUID());
+    expect(copy.status, JSON.stringify(copy.body)).toBe(201);
+    expect(copy.body).toMatchObject({
+      name: 'W (copy)',
+      isActive: false,
+      position: 2,
+      priority: null,
+    });
+    expect(await assignTo(t, await newContact(t))).toMatchObject({ ruleId: r.id });
+  });
+
+  it('least busy counts the module: companies owned here', async () => {
+    const rule = await make({
+      name: 'LB',
+      subject: 'company',
+      strategy: 'least_busy',
+      userIds: [a.uuid, b.uuid],
+    });
+    // a already holds two companies, b none: the next company goes to b
+    for (const n of ['L1', 'L2']) {
+      const id = await company(n, null);
+      await h.owner.query(`UPDATE companies SET owner_id = $2 WHERE uuid = $1`, [id, a.userId]);
+    }
+    const next = await company('L3', null);
+    expect(await engine().assign(t.orgId, 'company', next, 'manual')).toMatchObject({
+      ruleId: rule.id,
+      ownerUuid: b.uuid,
+    });
+  });
+
+  it('the run log tells why: assigned with the trace, owner already set, nobody available, no rule; filters, paging, retention', async () => {
+    const miss = await make({
+      name: 'Ads',
+      strategy: 'fixed',
+      userIds: [a.uuid],
+      rules: all(cond('source', 'equals', 'ads')),
+    });
+    const web = await make({
+      name: 'Web',
+      strategy: 'fixed',
+      userIds: [b.uuid],
+      rules: all(cond('source', 'equals', 'web')),
+    });
+    const id = await newContact(t, 'web');
+    await assignTo(t, id);
+    const owned = await newContact(t, 'web', { ownerId: c.userId });
+    await assignTo(t, owned);
+    await assignTo(t, await newContact(t, 'zzz'));
+    await away(t, b.userId);
+    await assignTo(t, await newContact(t, 'web'));
+    await back(t);
+
+    const log = (await runs('?limit=10')).data as Array<Record<string, any>>;
+    expect(log.map((x) => x.reason)).toEqual([
+      'nobody_available',
+      'no_rule',
+      'has_owner',
+      'matched',
+    ]);
+    const matched = log[3]!;
+    expect(matched).toMatchObject({
+      outcome: 'assigned',
+      ruleId: web.id,
+      ruleName: 'Web',
+      method: 'fixed',
+      trigger: 'created',
+      owner: { id: b.uuid },
+    });
+    expect(matched.record).toMatchObject({ id });
+    expect(
+      matched.trace.map((x: { ruleId: string; matched: boolean }) => [x.ruleId, x.matched]),
+    ).toEqual([
+      [miss.id, false],
+      [web.id, true],
+    ]);
+    expect(log[0]!.trace.find((x: { ruleId: string }) => x.ruleId === web.id)).toMatchObject({
+      matched: true,
+      nobody: true,
+    });
+    expect((await runs('?outcome=assigned')).data).toHaveLength(1);
+    expect((await runs(`?subject=contact&recordId=${id}`)).data).toHaveLength(1);
+    const first = await runs('?limit=2');
+    expect(first.data).toHaveLength(2);
+    expect(first.nextCursor).not.toBeNull();
+    expect((await runs(`?limit=2&cursor=${first.nextCursor}`)).data).toHaveLength(2);
+    expect((await runs(`?ruleId=${web.id}`)).data.length).toBeGreaterThan(0);
+
+    // retention: older than 90 days goes, nothing else
+    await h.owner.query(
+      `UPDATE assignment_runs SET created_at = now() - interval '91 days'
+       WHERE org_id = $1 AND id = (SELECT min(id) FROM assignment_runs WHERE org_id = $1)`,
+      [t.orgId],
+    );
+    const count = async () =>
+      Number(
+        (
+          await h.owner.query(`SELECT count(*) AS n FROM assignment_runs WHERE org_id = $1`, [
+            t.orgId,
+          ])
+        ).rows[0].n,
+      );
+    const before = await count();
+    await new AssignmentRunSweepService(
+      get(DatabaseService),
+      new ContactAssignmentRepository(),
+    ).sweep();
+    expect(await count()).toBe(before - 1);
+  });
+
+  it('reassign on update (default off): a record the engine assigned moves when an edit makes a higher rule match, never one a person took over', async () => {
+    const low = await make({ name: 'Everyone', strategy: 'fixed', userIds: [a.uuid] });
+    const id = await newContact(t, 'plain');
+    expect(await assignTo(t, id)).toMatchObject({ ruleId: low.id });
+    const vip = await make({
+      name: 'VIP',
+      strategy: 'fixed',
+      userIds: [b.uuid],
+      rules: all(cond('source', 'equals', 'vip')),
+    });
+    await h.owner.query(`UPDATE contacts SET source = 'vip' WHERE uuid = $1`, [id]);
+    // off by default: the owner stays
+    expect((await engine().assign(t.orgId, 'contact', id, 'manual', 'updated')).outcome).toBe(
+      'has_owner',
+    );
+    const cur = (await rules(mgr.token).list()).body.data.find(
+      (r: { id: string }) => r.id === vip.id,
+    );
+    expect(
+      (
+        await rules(mgr.token).update(vip.id, {
+          rowVersion: cur.rowVersion,
+          reassignOnUpdate: true,
+        })
+      ).status,
+    ).toBe(200);
+    expect(await engine().assign(t.orgId, 'contact', id, 'manual', 'updated')).toMatchObject({
+      outcome: 'reassigned',
+      ruleId: vip.id,
+      ownerUuid: b.uuid,
+    });
+    expect(Number(await ownerOf(id))).toBe(b.userId);
+    // the same rule matching again changes nothing
+    expect((await engine().assign(t.orgId, 'contact', id, 'manual', 'updated')).outcome).toBe(
+      'unchanged',
+    );
+    // a person takes over: the engine never touches it again
+    await h.owner.query(`UPDATE contacts SET owner_id = $2 WHERE uuid = $1`, [id, c.userId]);
+    expect((await engine().assign(t.orgId, 'contact', id, 'manual', 'updated')).outcome).toBe(
+      'has_owner',
+    );
+    expect(Number(await ownerOf(id))).toBe(c.userId);
+    // an edit also assigns a record that never had an owner
+    const late = await newContact(t, 'vip');
+    expect(await engine().assign(t.orgId, 'contact', late, 'manual', 'updated')).toMatchObject({
+      outcome: 'assigned',
+    });
+    expect(((await runs('?outcome=reassigned')).data as unknown[]).length).toBe(1);
   });
 });

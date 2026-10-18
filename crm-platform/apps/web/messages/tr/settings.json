@@ -355,11 +355,6 @@
         "description": "Her temsilcinin bugün, bu hafta veya bu ay ne kadar hızlı yanıtlayıp çözdüğünü görün.",
         "keywords": "raporlar, analiz, temsilciler, yanıt süresi, ilk yanıt, çözüldü, iş yükü, performans"
       },
-      "contact-assignment": {
-        "label": "Kişi atama",
-        "description": "Yeni kişileri ve fırsatları izinli olanları atlayarak otomatik olarak doğru kişiye verin.",
-        "keywords": "atama, sahip, sıralı dağıtım, yeni kişi, yeni fırsat, izin, potansiyel müşteri yönlendirme"
-      },
       "privacy-requests": {
         "label": "Veri talepleri",
         "description": "Haklarında ne tuttuğunuzu soranlara yanıt verin: kimlik kontrolü, dışa aktarma, önizlemeli silme ve saklayabileceğiniz bir kanıt.",
@@ -379,6 +374,21 @@
         "label": "Ulaşılmamış potansiyel müşteriler",
         "description": "Hangi eylemlerin bir potansiyel müşteriye ulaşmak sayılacağını ve hangi yeni kişilerin ulaşılmadı olarak başlayacağını seçin.",
         "keywords": "ulaşılmadı, iletişime geçildi, potansiyel müşteri, yeni potansiyel müşteri, ilk temas, takip, yeniden atama, işaret"
+      },
+      "record-assignment": {
+        "label": "Kayıt atama kuralları",
+        "description": "Yeni kişileri, şirketleri ve fırsatları öncelik kurallarıyla satış sahiplerinize otomatik olarak atayın.",
+        "keywords": "atama, sahip, döngüsel dağıtım, yeni kişi, yeni fırsat, şirket, izin, potansiyel müşteri yönlendirme, iş yükü, bölge"
+      },
+      "follow-ups": {
+        "label": "Takipler",
+        "description": "Ekibiniz iletişime geçtiğinde bir kişinin sonraki takibini otomatik belirleyin; tarihi ve uyarı saatini seçin.",
+        "keywords": "takip, hatırlatıcı, sonraki adım, görev, zamanlama, ertele, bir gün"
+      },
+      "duplicate-leads": {
+        "label": "Yinelenen potansiyel müşteriler",
+        "description": "Bir kişiyle eşleşen yeni kaydın ona birleştirilmesini mi yoksa yeni kişi olmasını mı istediğinizi seçin.",
+        "keywords": "yinelenen, birleştir, potansiyel müşteri, aynı telefon, aynı e-posta, yeni kişi, kaynak"
       }
     },
     "backToMarketplace": "Marketplace'e dön"

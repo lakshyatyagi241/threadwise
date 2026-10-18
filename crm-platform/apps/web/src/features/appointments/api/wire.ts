@@ -88,6 +88,7 @@ export function toAppointment(r: AppointmentResponse): Appointment {
     cancelledBy: r.cancelledBy,
     cancelReason: r.cancelReason,
     cancelledAt: r.cancelledAt,
+    ...(r.reminders ? { reminders: r.reminders } : {}),
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,
   };
@@ -180,9 +181,18 @@ export function toBookingType(r: BookingTypeResponse): BookingType {
       waTemplateId: t.waTemplateId,
       plainBody: t.plainBody,
     })),
-    reminders: r.reminders
-      .filter((x) => x.isActive)
-      .map((x) => ({ offsetMinutes: x.offsetMinutes, label: x.label })),
+    // Every rule, switched on or off: the editor shows both.
+    reminders: r.reminders.map((x) => ({
+      id: x.id,
+      offsetMinutes: x.offsetMinutes,
+      label: x.label,
+      isActive: x.isActive,
+      kind: x.kind,
+      channels: x.channels,
+      subject: x.subject,
+      body: x.body,
+      waTemplateId: x.waTemplateId,
+    })),
     questions: r.questions.map((q) => ({
       id: q.id,
       label: q.label,
@@ -197,6 +207,21 @@ export function toBookingType(r: BookingTypeResponse): BookingType {
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,
   };
+}
+
+/** The API's rules from the editor's: a saved rule keeps its id, so the row (and what it has already sent) is kept. */
+export function toReminderBody(list: BookingTypeInput['reminders']) {
+  return list.map((r) => ({
+    ...(r.id ? { id: r.id } : {}),
+    offsetMinutes: r.offsetMinutes,
+    label: r.label,
+    isActive: r.isActive,
+    kind: r.kind,
+    channels: r.channels,
+    subject: r.subject,
+    body: r.body,
+    waTemplateId: r.waTemplateId,
+  }));
 }
 
 type CreateBody = z.input<typeof createBookingTypeSchema>;
@@ -245,11 +270,7 @@ export function toTypeBody(i: BookingTypeInput, rowVersion?: number): CreateBody
           ? 'phone'
           : ((q.mapToContactField as 'name' | 'email' | 'phone' | null) ?? null),
     })),
-    reminders: i.reminders.map((r) => ({
-      offsetMinutes: r.offsetMinutes,
-      label: r.label,
-      isActive: true,
-    })),
+    reminders: toReminderBody(i.reminders),
     templates: i.templates.map((t) => ({
       event: t.event,
       channel:
@@ -300,6 +321,8 @@ export function duplicateOf(t: BookingType): BookingTypeInput {
     isActive: false,
     // the copy's questions are new rows, not the original's
     questions: t.questions.map(({ id: _qid, ...q }) => q),
+    // ... and so are its reminder rules
+    reminders: t.reminders.map(({ id: _rid, ...r }) => r),
   };
 }
 

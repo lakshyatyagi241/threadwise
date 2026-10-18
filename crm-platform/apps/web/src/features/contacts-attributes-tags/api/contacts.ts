@@ -8,6 +8,7 @@ import {
   type QueryClient,
 } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import type { FollowUpFilter } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 import {
   contactPageSchema,
@@ -53,6 +54,8 @@ export interface ContactFilters {
   status: string;
   /** `yes`: flagged as a minor only; `no`: not flagged; empty for both (`minor` on the API, BL-190). */
   minor: MinorFilter;
+  /** Where the contact's next follow-up stands now (`followUp` on the API, BL-291), empty for any. */
+  followUp: '' | FollowUpFilter;
   /** Where the contact came from (`source` on the API: the import's source knob, a form, "api"), empty for any. */
   source: string;
   /** Members of one segment (a saved rule that fills itself), by id; empty for none. Combines with every other filter. */
@@ -81,6 +84,7 @@ export const DEFAULT_FILTERS: ContactFilters = {
   imported: false,
   status: '',
   minor: '',
+  followUp: '',
   source: '',
   segment: '',
   owner: '',
@@ -96,7 +100,14 @@ export function contactFilterBody(
   f: Pick<
     ContactFilters,
     'q' | 'lifecycleStage' | 'group' | 'tag' | 'consent' | 'imported' | 'segment'
-  > & { rules?: string; owner?: string; status?: string; source?: string; minor?: MinorFilter },
+  > & {
+    rules?: string;
+    owner?: string;
+    status?: string;
+    source?: string;
+    minor?: MinorFilter;
+    followUp?: '' | FollowUpFilter;
+  },
 ) {
   const owners = ownerTokens(f.owner ?? '');
   const ownerIds = owners.filter((o) => o !== UNASSIGNED_OWNER);
@@ -110,6 +121,7 @@ export function contactFilterBody(
     imported: f.imported ? true : undefined,
     status: f.status?.trim() || undefined,
     minor: f.minor ? f.minor === 'yes' : undefined,
+    followUp: f.followUp || undefined,
     source: f.source?.trim() || undefined,
     segmentId: f.segment || undefined,
     rules: f.rules || undefined,
@@ -146,6 +158,7 @@ export function listQuery(f: ContactFilters) {
     imported: b.imported,
     status: b.status,
     minor: b.minor,
+    followUp: b.followUp,
     source: b.source,
     segmentId: b.segmentId,
     rules: b.rules,

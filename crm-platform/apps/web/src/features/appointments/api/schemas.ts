@@ -44,6 +44,9 @@ export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
 export const BOOKING_SOURCES = ['chat', 'link', 'manual', 'api'] as const;
 export type BookingSource = (typeof BOOKING_SOURCES)[number];
 
+export const REMINDER_KINDS = ['before', 'after'] as const;
+export const REMINDER_CHANNELS = ['whatsapp', 'sms', 'email'] as const;
+
 const instant = z.string().refine((v) => !Number.isNaN(Date.parse(v)), 'not an ISO 8601 instant');
 const nullableText = z.string().nullable();
 
@@ -87,6 +90,31 @@ export const calendarDriftResultSchema = z.object({
 });
 export type CalendarDriftResult = z.infer<typeof calendarDriftResultSchema>;
 
+export const REMINDER_RUN_STATUSES = [
+  'scheduled',
+  'pending',
+  'sending',
+  'held',
+  'sent',
+  'skipped',
+  'failed',
+  'cancelled',
+] as const;
+export type ReminderRunStatus = (typeof REMINDER_RUN_STATUSES)[number];
+
+/** One reminder or follow-up of a booking and what became of it. `reason` is a stable code, never a message or an address. */
+export const appointmentReminderSchema = z.object({
+  kind: z.enum(REMINDER_KINDS),
+  offsetMinutes: z.number().int(),
+  label: nullableText,
+  dueAt: instant,
+  status: z.enum(REMINDER_RUN_STATUSES),
+  reason: nullableText,
+  channel: z.enum(REMINDER_CHANNELS).nullable(),
+  sentAt: instant.nullable(),
+});
+export type AppointmentReminder = z.infer<typeof appointmentReminderSchema>;
+
 export const appointmentSchema = z.object({
   id: z.string(),
   rowVersion: z.number().int().optional(),
@@ -129,6 +157,8 @@ export const appointmentSchema = z.object({
   cancelledBy: z.enum(['staff', 'invitee', 'system']).nullable().optional(),
   cancelReason: nullableText.optional(),
   cancelledAt: instant.nullable().optional(),
+  /** What each reminder and follow-up did. Only on a single booking read from a server that records it. */
+  reminders: z.array(appointmentReminderSchema).optional(),
   createdAt: instant,
   updatedAt: instant,
 });
@@ -185,9 +215,20 @@ export const bookingTemplateSchema = z.object({
   plainBody: nullableText,
 });
 
+/** A reminder (before the start) or an after-visit follow-up of a booking type, off until it is switched on (BL-283). */
 export const bookingReminderSchema = z.object({
+  /** The saved rule's id, sent back so the rule (and what it has already sent) is kept. */
+  id: z.string().optional(),
   offsetMinutes: z.number().int(),
   label: nullableText,
+  isActive: z.boolean(),
+  kind: z.enum(REMINDER_KINDS),
+  /** In the order they are tried. */
+  channels: z.array(z.enum(REMINDER_CHANNELS)),
+  subject: nullableText,
+  body: nullableText,
+  /** An approved WhatsApp template of the workspace. */
+  waTemplateId: nullableText,
 });
 
 export const bookingPriceSchema = z.object({
@@ -248,6 +289,13 @@ export const bookingTypeSchema = z.object({
   updatedAt: instant,
 });
 export type BookingType = z.infer<typeof bookingTypeSchema>;
+
+/** An approved WhatsApp template a reminder can use. */
+export interface WaTemplateOption {
+  id: string;
+  name: string;
+  language: string;
+}
 
 export const bookingTypeListSchema = z.object({ data: z.array(bookingTypeSchema) });
 

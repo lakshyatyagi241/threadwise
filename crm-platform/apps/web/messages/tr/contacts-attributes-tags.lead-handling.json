@@ -2,7 +2,10 @@
   "contacts-attributes-tags": {
     "views": {
       "presets": {
-        "uncontacted": "Ulaşılmadı"
+        "uncontacted": "Ulaşılmadı",
+        "followUpToday": "Bugünkü takipler",
+        "followUpOverdue": "Takibi gecikenler",
+        "followUpSomeday": "Tarihsiz takipler"
       }
     },
     "leadHandling": {
@@ -58,8 +61,94 @@
             "keep": "Ulaşılmadı işaretini değiştirme",
             "mark": "Yeniden atandığında ulaşılmadı olarak işaretle"
           }
+        },
+        "followUps": {
+          "title": "Takipler",
+          "subtitle": "Her potansiyel müşteri hareket halinde kalsın: bir ekip üyesi bir kişiyle iletişime geçtiğinde, sonraki takibi sizin yerinize belirlenebilir veya ileri alınabilir. Bir seçeneği açana kadar hiçbir şey değişmez.",
+          "when": {
+            "title": "Takipleri otomatik belirle",
+            "intro": "Bir ekip üyesi bir kişiyle iletişime geçtiğinde veya ona içerik gönderdiğinde, şu durumlarda takibi güncelle:",
+            "none": "Kişinin takibi yok",
+            "overdue": "Takibin zamanı geçmiş",
+            "today": "Takip bugün yapılacak",
+            "future": "Takip daha sonra yapılacak"
+          },
+          "date": {
+            "title": "Varsayılan takip tarihi",
+            "intro": "Bir takip otomatik güncellendiğinde şuna ayarla:",
+            "day": "1 gün sonra",
+            "three_days": "3 gün sonra",
+            "week": "1 hafta sonra",
+            "month": "1 ay sonra",
+            "custom": "Özel",
+            "someday": "Bir gün",
+            "none": "Takip yok",
+            "somedayHint": "Takibin tarihi yoktur ve «Bir gün» listesinde bekler. Hiçbir zaman hatırlatılmaz.",
+            "noneHint": "Açık takip tamamlandı olarak işaretlenir ve yenisi oluşturulmaz.",
+            "customDays": "Gün sayısı",
+            "daysLater": "gün sonra"
+          },
+          "time": {
+            "title": "Varsayılan takip saati",
+            "intro": "Yeni bir takip oluşturulduğunda uyarı saatini şuna ayarla:",
+            "hint": "Çalışma alanınızın saat dilimine göre okunur."
+          }
+        },
+        "duplicates": {
+          "title": "Yinelenen potansiyel müşteriler",
+          "subtitle": "Bir potansiyel müşteri kaynağından gelen yeni kaydın telefon numarası veya e-postası mevcut bir kişiyle aynıysa ne olacağını belirleyin.",
+          "mode": {
+            "title": "Yeni kayıt bir kişiyle eşleştiğinde",
+            "intro": "Telefon numarası veya e-postası zaten bir kişiye aitse kayıt eşleşir.",
+            "merge": "Mevcut kişiyle birleştir",
+            "mergeHint": "Kişinin boş alanlarını doldurur ve kaydı geçmişine ekler. Önceden doldurulmuş hiçbir şeyin üzerine yazılmaz.",
+            "createNew": "Yeni kişi oluştur",
+            "createNewHint": "Kayıt için ayrı bir kişi oluşturur. Planınızın kişi sınırına dahildir ve daha sonra birleştirilebilir."
+          },
+          "note": {
+            "title": "Zaman çizelgesi",
+            "merge": "Bir kayıt birleştirildiğinde zaman çizelgesine not ekle",
+            "hint": "Varsayılan olarak kapalı, çünkü not kişinin son etkinliğini de kaydırır."
+          }
+        }
+      },
+      "followUp": {
+        "title": "Sonraki takip",
+        "somedayLabel": "Bir gün",
+        "overdue": "Gecikmiş",
+        "done": "Tamam",
+        "snooze": "Ertele",
+        "snoozeDay": "1 gün",
+        "snoozeThreeDays": "3 gün",
+        "snoozeWeek": "Gelecek hafta",
+        "change": "Tarihi değiştir",
+        "set": "Takip belirle",
+        "edit": "Takibi değiştir",
+        "remove": "Takibi kaldır",
+        "dialogTitle": "Takip",
+        "someday": "Bir gün (tarihsiz)",
+        "dateTime": "Tarih ve saat",
+        "cancel": "İptal",
+        "save": "Kaydet",
+        "savedFor": "Takip kaydedildi",
+        "savedSomeday": "Takip «bir gün» olarak ayarlandı",
+        "snoozed": "Takip ertelendi",
+        "doneMessage": "Takip tamamlandı olarak işaretlendi",
+        "clearedMessage": "Takip kaldırıldı",
+        "failed": "Takip değiştirilemedi. Tekrar deneyin.",
+        "filterLabel": "Takip",
+        "filter": {
+          "any": "Tümü",
+          "overdue": "Gecikmiş",
+          "today": "Bugün yapılacak",
+          "upcoming": "Yaklaşan",
+          "someday": "Bir gün",
+          "none": "Takip yok"
         }
       }
+    },
+    "list": {
+      "colNextFollowUp": "Sonraki takip"
     }
   }
 }

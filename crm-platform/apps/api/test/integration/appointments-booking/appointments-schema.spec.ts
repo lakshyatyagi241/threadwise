@@ -552,7 +552,7 @@ describe('appointments: schema, constraints, isolation and the double-booking gu
       await rejects(rem(8, 60), /chk_booking_reminders_offset/);
       await rem(0, 1440);
       await rem(1, 180);
-      await rejects(rem(2, 180), /uq_booking_reminders_booking_type_id_offset_minutes/);
+      await rejects(rem(2, 180), /uq_booking_reminders_booking_type_id_kind_offset/);
       await owner.query('BEGIN');
       await owner.query(
         `UPDATE booking_reminders SET offset_index = 1 WHERE org_id = $1 AND booking_type_id = $2 AND offset_index = 0`,
@@ -612,35 +612,36 @@ describe('appointments: schema, constraints, isolation and the double-booking gu
     });
   });
 
-  describe('the reminder claims (TW-APPT-030, D-14)', () => {
-    it("one claim per appointment and offset: a second insert of the same pair is ignored, which is the sweep's idempotency", async () => {
+  describe('the reminder claims (TW-APPT-030, D-14, BL-283)', () => {
+    const insert = `INSERT INTO appointment_reminder_runs (org_id, appointment_id, kind, offset_minutes, due_at, armed_at)`;
+    const key = `ON CONFLICT (org_id, appointment_id, kind, offset_minutes, armed_at) DO NOTHING RETURNING id`;
+
+    it("one claim per appointment, rule and arming: a second insert of the same run is ignored, which is the sweep's idempotency", async () => {
       await owner.query(`DELETE FROM appointments WHERE org_id IN ($1, $2)`, [orgA, orgB]);
       const a = Number((await appt(orgA, typeA, 20, 21)).rows[0].id);
-      const claim = () =>
-        owner.query(
-          `INSERT INTO appointment_reminder_runs (org_id, appointment_id, offset_minutes, due_at) VALUES ($1,$2,60, now())
-           ON CONFLICT (org_id, appointment_id, offset_minutes) DO NOTHING RETURNING id`,
-          [orgA, a],
-        );
+      const armed = '2026-11-01T08:00:00Z';
+      const claim = (kind = 'before', offset = 60, at = armed) =>
+        owner.query(`${insert} VALUES ($1,$2,$3,$4, now(), $5) ${key}`, [
+          orgA,
+          a,
+          kind,
+          offset,
+          at,
+        ]);
       expect((await claim()).rows).toHaveLength(1);
       expect((await claim()).rows).toHaveLength(0);
-      await owner.query(
-        `INSERT INTO appointment_reminder_runs (org_id, appointment_id, offset_minutes, due_at) VALUES ($1,$2,1440, now())`,
-        [orgA, a],
-      );
+      // 60 minutes after the end is a different rule from 60 minutes before the start.
+      expect((await claim('after', 60)).rows).toHaveLength(1);
+      // A reschedule moves the booking's arming: the same rule is claimed again for the new time.
+      expect((await claim('before', 60, '2026-11-02T08:00:00Z')).rows).toHaveLength(1);
+      await owner.query(`${insert} VALUES ($1,$2,'before',1440, now(), $3)`, [orgA, a, armed]);
       await rejects(
-        owner.query(
-          `INSERT INTO appointment_reminder_runs (org_id, appointment_id, offset_minutes, due_at) VALUES ($1,$2,1440, now())`,
-          [orgA, a],
-        ),
+        owner.query(`${insert} VALUES ($1,$2,'before',1440, now(), $3)`, [orgA, a, armed]),
         /uq_appointment_reminder_runs/,
       );
       // A claim cannot name another workspace's appointment, and goes away with the appointment.
       await rejects(
-        owner.query(
-          `INSERT INTO appointment_reminder_runs (org_id, appointment_id, offset_minutes, due_at) VALUES ($1,$2,5, now())`,
-          [orgB, a],
-        ),
+        owner.query(`${insert} VALUES ($1,$2,'before',5, now(), $3)`, [orgB, a, armed]),
         /fk_appointment_reminder_runs_appointment/,
       );
       await owner.query(`DELETE FROM appointments WHERE id = $1`, [a]);
@@ -652,6 +653,88 @@ describe('appointments: schema, constraints, isolation and the double-booking gu
           )
         ).rows[0].n,
       ).toBe(0);
+    });
+
+    it('a run starts pending and only knows the outcomes the sweep writes; the kind is before or after', async () => {
+      const a = Number((await appt(orgA, typeA, 22, 23)).rows[0].id);
+      const run = await owner.query(
+        `${insert} VALUES ($1,$2,'before',30, now(), now()) RETURNING status, attempts, reason, channel`,
+        [orgA, a],
+      );
+      expect(run.rows[0]).toMatchObject({
+        status: 'pending',
+        attempts: 0,
+        reason: null,
+        channel: null,
+      });
+      await rejects(
+        owner.query(
+          `UPDATE appointment_reminder_runs SET status = 'delivered' WHERE appointment_id = $1`,
+          [a],
+        ),
+        /chk_appointment_reminder_runs_status/,
+      );
+      await rejects(
+        owner.query(
+          `UPDATE appointment_reminder_runs SET channel = 'fax' WHERE appointment_id = $1`,
+          [a],
+        ),
+        /chk_appointment_reminder_runs_channel/,
+      );
+      await rejects(
+        owner.query(`${insert} VALUES ($1,$2,'during',31, now(), now())`, [orgA, a]),
+        /chk_appointment_reminder_runs_kind/,
+      );
+    });
+  });
+
+  describe('the reminder rules (BL-283)', () => {
+    it('a rule is created OFF, before the start, over every channel, and may exist before and after with the same offset', async () => {
+      const t = await one(
+        `INSERT INTO booking_types (org_id, name, slug) VALUES ($1,'rules','rules-t') RETURNING id`,
+        [orgA],
+      );
+      const r = await owner.query(
+        `INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes) VALUES ($1,$2,0,60)
+         RETURNING is_active, kind, channels, body, wa_template_id`,
+        [orgA, t],
+      );
+      expect(r.rows[0]).toMatchObject({
+        is_active: false,
+        kind: 'before',
+        channels: ['whatsapp', 'sms', 'email'],
+        body: null,
+        wa_template_id: null,
+      });
+      await owner.query(
+        `INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes, kind) VALUES ($1,$2,1,60,'after')`,
+        [orgA, t],
+      );
+      await rejects(
+        owner.query(
+          `INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes, kind) VALUES ($1,$2,2,60,'after')`,
+          [orgA, t],
+        ),
+        /uq_booking_reminders_booking_type_id_kind_offset/,
+      );
+    });
+
+    it('refuses an unknown kind, an empty or unknown channel list, an over-long text, and a template of another workspace', async () => {
+      const t = await one(
+        `INSERT INTO booking_types (org_id, name, slug) VALUES ($1,'rules2','rules-t2') RETURNING id`,
+        [orgA],
+      );
+      const ins = (extra: string, vals: unknown[]) =>
+        owner.query(
+          `INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes, ${extra.split('=')[0]})
+           VALUES ($1,$2,5,5,${extra.split('=')[1]})`,
+          [orgA, t, ...vals],
+        );
+      await rejects(ins('kind=$3', ['during']), /chk_booking_reminders_kind/);
+      await rejects(ins("channels='{}'", []), /chk_booking_reminders_channels/);
+      await rejects(ins("channels='{whatsapp,fax}'", []), /chk_booking_reminders_channels/);
+      await rejects(ins('body=$3', ['x'.repeat(2001)]), /chk_booking_reminders_text/);
+      await rejects(ins('wa_template_id=$3', [999_999_999]), /fk_booking_reminders_wa_template_id/);
     });
   });
 

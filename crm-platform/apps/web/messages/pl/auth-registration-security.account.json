@@ -560,7 +560,8 @@
             "email_channel": "Kanał e-mail (Gmail)",
             "personal_history_full": "Import pełnej historii (osobisty WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
-            "lead_scoring": "Ocenianie leadów przez AI"
+            "lead_scoring": "Ocenianie leadów przez AI",
+            "record_assignment": "Reguły przypisywania rekordów"
           },
           "cta": {
             "continueFree": "Kontynuuj za darmo",

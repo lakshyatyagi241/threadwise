@@ -1441,7 +1441,8 @@
             "email_channel": "Koppel Gmail- en Google Workspace-postvakken aan de teaminbox. De betaalde E-mail-app beheert deze schakelaar.",
             "personal_history_full": "Laat een persoonlijk WhatsApp-nummer de volledige chatgeschiedenis importeren bij de eerste koppeling. Het importeren van recente chats is beschikbaar voor elk abonnement met persoonlijke nummers.",
             "ai_crm_copilot": "Vindt en scoort leads met AI uit je contacten.",
-            "lead_scoring": "Scoort contacten met AI en voedt de groeipilot. De app AI-leadscoring beheert deze schakelaar."
+            "lead_scoring": "Scoort contacten met AI en voedt de groeipilot. De app AI-leadscoring beheert deze schakelaar.",
+            "record_assignment": "Wijst nieuwe contacten, bedrijven en deals via prioriteitsregels toe aan de juiste verkoopeigenaar."
           },
           "units": {
             "days": "Dagen",
@@ -1629,7 +1630,8 @@
             "email_channel": "E-mailkanaal (Gmail)",
             "personal_history_full": "Volledige chatgeschiedenis importeren (persoonlijke WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
-            "lead_scoring": "AI-leadscoring"
+            "lead_scoring": "AI-leadscoring",
+            "record_assignment": "Regels voor recordtoewijzing (contacten, bedrijven en deals automatisch toewijzen)"
           },
           "problems": {
             "required": "Dit veld is verplicht.",

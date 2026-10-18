@@ -84,7 +84,8 @@
       "email_channel": "E-Mail-Kanal (Gmail)",
       "personal_history_full": "Vollständiger Verlaufsimport (privates WhatsApp)",
       "ai_crm_copilot": "AI CRM Copilot",
-      "lead_scoring": "KI-Lead-Scoring"
+      "lead_scoring": "KI-Lead-Scoring",
+      "record_assignment": "Regeln zur Datensatzzuweisung"
     },
     "limitGroups": {
       "messaging": "Nachrichten",

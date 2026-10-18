@@ -355,11 +355,6 @@
         "description": "Zobacz, jak szybko każdy agent odpowiadał i rozwiązywał rozmowy dziś, w tym tygodniu lub miesiącu.",
         "keywords": "raporty, analityka, agenci, czas odpowiedzi, pierwsza odpowiedź, rozwiązane, obciążenie, wydajność"
       },
-      "contact-assignment": {
-        "label": "Przypisywanie kontaktów",
-        "description": "Automatycznie przydzielaj nowe kontakty i transakcje właściwej osobie, pomijając osoby na urlopie.",
-        "keywords": "przypisanie, właściciel, round robin, nowy kontakt, nowa transakcja, urlop, routing leadów"
-      },
       "privacy-requests": {
         "label": "Wnioski o dane",
         "description": "Odpowiadaj osobom pytającym, co o nich przechowujesz: sprawdzenie tożsamości, eksport, usunięcie z podglądem i dowód, który możesz zachować.",
@@ -379,6 +374,21 @@
         "label": "Potencjalni klienci bez kontaktu",
         "description": "Wybierz, które działania uznawane są za kontakt z potencjalnym klientem oraz które nowe kontakty zaczynają jako nieskontaktowane.",
         "keywords": "bez kontaktu, skontaktowany, potencjalny klient, nowy potencjalny klient, pierwszy kontakt, kontakt zwrotny, przypisanie, oznaczenie"
+      },
+      "record-assignment": {
+        "label": "Reguły przypisywania rekordów",
+        "description": "Automatycznie przypisuj nowe kontakty, firmy i transakcje swoim opiekunom sprzedaży według reguł priorytetu.",
+        "keywords": "przypisanie, opiekun, round robin, nowy kontakt, nowa transakcja, firma, urlop, routing leadów, obciążenie, terytorium"
+      },
+      "follow-ups": {
+        "label": "Ponowne kontakty",
+        "description": "Automatycznie ustawiaj następny ponowny kontakt, gdy zespół odezwie się do kontaktu, i wybierz datę oraz godzinę przypomnienia.",
+        "keywords": "ponowny kontakt, przypomnienie, następne działanie, zadanie, harmonogram, odłożenie, kiedyś"
+      },
+      "duplicate-leads": {
+        "label": "Zduplikowane leady",
+        "description": "Wybierz, czy nowy lead pasujący do kontaktu ma zostać z nim scalony, czy stać się nowym kontaktem.",
+        "keywords": "duplikat, scalanie, lead, ten sam telefon, ten sam e-mail, nowy kontakt, źródło leadów"
       }
     },
     "backToMarketplace": "Wróć do Marketplace"

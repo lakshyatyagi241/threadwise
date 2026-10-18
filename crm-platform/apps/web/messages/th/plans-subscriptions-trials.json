@@ -84,7 +84,8 @@
       "email_channel": "ช่องทางอีเมล (Gmail)",
       "personal_history_full": "นำเข้าประวัติทั้งหมด (WhatsApp ส่วนตัว)",
       "ai_crm_copilot": "AI CRM Copilot",
-      "lead_scoring": "การให้คะแนนลีดด้วย AI"
+      "lead_scoring": "การให้คะแนนลีดด้วย AI",
+      "record_assignment": "กฎการมอบหมายระเบียน"
     },
     "limitGroups": {
       "messaging": "การส่งข้อความ",

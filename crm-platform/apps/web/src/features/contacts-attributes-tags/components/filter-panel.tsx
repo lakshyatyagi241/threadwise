@@ -19,10 +19,20 @@ import {
   type SegmentsState,
 } from './segment-picker';
 import { CheckIcon, ChevronDownIcon, FilterIcon, SparkIcon } from './icons';
+import { FOLLOW_UP_FILTERS } from '@crm/contracts';
 
 /** The parts of the panel that can be opened straight away (a column header's "Filter" does that). */
 export type FilterSection =
-  'segment' | 'tag' | 'owner' | 'stage' | 'status' | 'minor' | 'consent' | 'source' | 'ai';
+  | 'segment'
+  | 'tag'
+  | 'owner'
+  | 'stage'
+  | 'status'
+  | 'minor'
+  | 'followUp'
+  | 'consent'
+  | 'source'
+  | 'ai';
 
 type View = 'menu' | FilterSection;
 type Outcome = { kind: 'ignored'; parts: string[] } | { kind: 'empty' } | { kind: 'failed' };
@@ -37,6 +47,7 @@ type FilterValues = Pick<
   | 'lifecycleStage'
   | 'status'
   | 'minor'
+  | 'followUp'
   | 'consent'
   | 'source'
   | 'rules'
@@ -86,6 +97,7 @@ export function quickFilterCount(f: FilterValues): number {
     Number(f.lifecycleStage !== '') +
     Number(f.status !== '') +
     Number(f.minor !== '') +
+    Number(f.followUp !== '') +
     Number(f.consent !== '') +
     Number(f.source.trim() !== '')
   );
@@ -99,6 +111,7 @@ export function quickFilterCount(f: FilterValues): number {
  */
 export function FilterPanel(p: FilterPanelProps) {
   const t = useTranslations('contacts-attributes-tags.list');
+  const tf = useTranslations('contacts-attributes-tags.leadHandling.followUp');
   const [open, setOpen] = useState(false);
   const [view, setView] = useState<View>('menu');
   const [builder, setBuilder] = useState(false);
@@ -184,6 +197,7 @@ export function FilterPanel(p: FilterPanelProps) {
   const stageName = p.stages.find((s) => s.value === f.lifecycleStage)?.label;
   const statusName = p.statuses.find((s) => s.value === f.status)?.label;
   const minorName = f.minor === 'yes' ? t('minorYes') : f.minor === 'no' ? t('minorNo') : undefined;
+  const followUpName = f.followUp ? tf(`filter.${f.followUp}`) : undefined;
   const consentName =
     f.consent === 'subscribed'
       ? t('subscribedOnly')
@@ -302,6 +316,7 @@ export function FilterPanel(p: FilterPanelProps) {
             {entry('stage', t('stageLabel'), stageName)}
             {entry('status', t('statusLabel'), statusName)}
             {entry('minor', t('minorLabel'), minorName)}
+            {entry('followUp', tf('filterLabel'), followUpName)}
             {entry('consent', t('consentLabel'), consentName)}
             {entry('source', t('sourceLabel'), f.source.trim() || undefined)}
             <button
@@ -510,6 +525,16 @@ export function FilterPanel(p: FilterPanelProps) {
             {choice('all', t('allMinor'), f.minor === '', () => pick({ minor: '' }))}
             {choice('yes', t('minorYes'), f.minor === 'yes', () => pick({ minor: 'yes' }))}
             {choice('no', t('minorNo'), f.minor === 'no', () => pick({ minor: 'no' }))}
+          </div>
+        )}
+
+        {view === 'followUp' && (
+          <div role="radiogroup" aria-label={tf('filterLabel')} className="space-y-0.5 p-1">
+            {back}
+            {choice('all', tf('filter.any'), f.followUp === '', () => pick({ followUp: '' }))}
+            {FOLLOW_UP_FILTERS.map((s) =>
+              choice(s, tf(`filter.${s}`), f.followUp === s, () => pick({ followUp: s })),
+            )}
           </div>
         )}
 

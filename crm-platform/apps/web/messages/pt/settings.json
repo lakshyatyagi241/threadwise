@@ -355,11 +355,6 @@
         "description": "Veja a rapidez com que cada agente respondeu e resolveu hoje, nesta semana ou neste mês.",
         "keywords": "relatórios, análises, agentes, tempo de resposta, primeira resposta, resolvidas, carga, desempenho"
       },
-      "contact-assignment": {
-        "label": "Atribuição de contatos",
-        "description": "Atribui automaticamente novos contatos e negócios à pessoa certa, ignorando quem está de licença.",
-        "keywords": "atribuir, responsável, round robin, rodízio, novo contato, novo negócio, licença, férias, roteamento de leads"
-      },
       "privacy-requests": {
         "label": "Solicitações de dados",
         "description": "Responda a quem pergunta o que você mantém sobre elas: verificação de identidade, exportação, exclusão com prévia e um comprovante que você pode guardar.",
@@ -379,6 +374,21 @@
         "label": "Leads não contatados",
         "description": "Escolha quais ações contam como contato com um lead e quais novos contatos começam como não contatados.",
         "keywords": "não contatado, contatado, lead, novo lead, primeiro contato, acompanhamento, reatribuir, marcação"
+      },
+      "record-assignment": {
+        "label": "Regras de atribuição de registros",
+        "description": "Atribua automaticamente novos contatos, empresas e negócios aos seus responsáveis de vendas, por regras de prioridade.",
+        "keywords": "atribuir, responsável, rodízio, round robin, novo contato, novo negócio, empresa, licença, distribuição de leads, carga de trabalho, território"
+      },
+      "follow-ups": {
+        "label": "Acompanhamentos",
+        "description": "Defina automaticamente o próximo acompanhamento de um contato quando sua equipe entrar em contato com ele e escolha a data e o horário do alerta.",
+        "keywords": "acompanhamento, retorno, lembrete, próxima ação, tarefa, agendar, adiar, algum dia"
+      },
+      "duplicate-leads": {
+        "label": "Leads duplicados",
+        "description": "Escolha se um novo lead que coincide com um contato é mesclado a ele ou vira um novo contato.",
+        "keywords": "duplicado, mesclar, lead, mesmo telefone, mesmo e-mail, novo contato, fonte de leads"
       }
     },
     "backToMarketplace": "Voltar ao Marketplace"

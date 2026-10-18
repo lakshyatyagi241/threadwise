@@ -813,12 +813,61 @@ function realtimeDashboard() {
         desc: 'What one publish costs the caller: the Redis sequence pipeline and the emit. Not the time until a browser receives it.',
       },
     ),
+    timeseries(
+      'Rooms held',
+      [
+        [`sum(crm_realtime_rooms{${S}})`, 'all API instances'],
+        [`max by (instance) (crm_realtime_rooms{${S}})`, '{{instance}}'],
+      ],
+      { h: 8, w: 8, x: 0, y: 50 },
+      {
+        unit: 'none',
+        desc: 'Rooms in each API process (the adapter room map; every socket also holds its own id as a room). Rooms growing while sockets do not is a leak of room membership.',
+      },
+    ),
+    timeseries(
+      'Delivery lag reported by browsers',
+      [
+        [
+          'histogram_quantile(0.5, sum by (le) (rate(crm_realtime_delivery_lag_seconds_bucket[' +
+            RI +
+            '])))',
+          'p50',
+        ],
+        [
+          'histogram_quantile(0.95, sum by (le) (rate(crm_realtime_delivery_lag_seconds_bucket[' +
+            RI +
+            '])))',
+          'p95',
+        ],
+        [
+          'histogram_quantile(0.99, sum by (le) (rate(crm_realtime_delivery_lag_seconds_bucket[' +
+            RI +
+            '])))',
+          'p99',
+        ],
+      ],
+      { h: 8, w: 8, x: 8, y: 50 },
+      {
+        unit: 's',
+        desc: 'From the server stamping an event to a browser handling it, each open tab reporting its worst minute (corrected by the clock offset the handshake measured). A client estimate: tabs in the background throttle timers, so read the shape, not single points. Empty means no browser reported, not that delivery is fast.',
+      },
+    ),
+    timeseries(
+      'Browsers reporting, per second',
+      [['sum(rate(crm_realtime_delivery_lag_seconds_count[' + RI + ']))', 'reports']],
+      { h: 8, w: 8, x: 16, y: 50 },
+      {
+        unit: 'ops',
+        desc: 'How many delivery-lag reports arrive (one per tab per minute at most). Without this the lag panel cannot be trusted: a quantile of two samples is not a quantile.',
+      },
+    ),
   );
   return dashboard({
     uid: 'crm-realtime',
     title: 'Threadwise realtime: the loop behind the sockets',
     description:
-      'The API process read for the realtime question: loop delay and utilization, open handles, heap and GC. Socket-level counters do not exist yet (EL-B18).',
+      'The API process read for the realtime question: loop delay and utilization, open handles, heap and GC. Sockets, handshakes, rooms, publishes and the delivery lag browsers report.',
     tags: ['realtime'],
     panels,
     templating: [

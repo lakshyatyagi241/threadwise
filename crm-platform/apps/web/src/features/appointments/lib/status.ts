@@ -64,6 +64,18 @@ export const REMINDER_TONE = {
   skipped: 'neutral',
 } as const satisfies Record<string, Tone>;
 
+/** The tone of a recorded reminder or follow-up (BL-283): what became of it. */
+export const REMINDER_RUN_TONE = {
+  scheduled: 'info',
+  pending: 'info',
+  sending: 'info',
+  held: 'warning',
+  sent: 'success',
+  skipped: 'neutral',
+  failed: 'danger',
+  cancelled: 'neutral',
+} as const satisfies Record<string, Tone>;
+
 /** The CSS for a tone, as chips and dots (theme tokens only). */
 export const TONE_CHIP: Record<Tone, string> = {
   success: 'border-success/30 bg-success/10 text-success',

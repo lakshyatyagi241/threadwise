@@ -1,0 +1,46 @@
+{
+ "generatedAt": "2026-10-18T16:46:16.869Z",
+ "image": "prom/alertmanager:v0.27.0",
+ "results": [
+  {
+   "name": "slack: the firing message reaches the webhook URL from the secret file",
+   "ok": true,
+   "detail": "/slack"
+  },
+  {
+   "name": "slack: title names the alert and says firing",
+   "ok": true,
+   "detail": "EventLoopTestAlert (firing) test"
+  },
+  {
+   "name": "slack: text carries the summary",
+   "ok": true,
+   "detail": "Test alert from tools/event-loop-audit/send-test-alert.mjs. "
+  },
+  {
+   "name": "slack: the resolved message follows and says resolved",
+   "ok": true,
+   "detail": "EventLoopTestAlert (resolved) test"
+  },
+  {
+   "name": "pagerduty: the firing event is a trigger carrying the routing key from the file",
+   "ok": true,
+   "detail": "trigger"
+  },
+  {
+   "name": "pagerduty: a warning stays a warning (only critical pages as critical)",
+   "ok": true,
+   "detail": "warning"
+  },
+  {
+   "name": "pagerduty: the description names the alert and its summary",
+   "ok": true,
+   "detail": "EventLoopTestAlert: Test alert from tools/event-loop-audit/send-test-a"
+  },
+  {
+   "name": "pagerduty: the resolve event follows with the same dedup key",
+   "ok": true,
+   "detail": "resolve"
+  }
+ ]
+}

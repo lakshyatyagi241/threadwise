@@ -236,7 +236,7 @@
       "declineTitle": "Rifiutare questa richiesta?",
       "declineMessage": "Il cliente viene avvisato del rifiuto della richiesta e l'orario torna libero.",
       "declineConfirm": "Rifiuta richiesta",
-      "remindersNote": "I promemoria seguono il tipo di prenotazione. La consegna non è tracciata per singolo promemoria."
+      "remindersNote": "I promemoria seguono il tipo di prenotazione. Si impostano in Impostazioni appuntamenti o nel tipo di prenotazione."
     },
     "source": {
       "chat": "Un flow di chat",
@@ -407,9 +407,6 @@
         "depositTooHigh": "L'acconto non può superare il totale (tariffa più imposta).",
         "cancelFeeInvalid": "Inserisci un importo come 25.00.",
         "cancelWindowInvalid": "Inserisci un numero intero di minuti da 0 a {cancelWindowMax}.",
-        "reminderInvalid": "Inserisci minuti interi prima dell'inizio, da 1 a {reminderMax}.",
-        "remindersDuplicate": "Ogni promemoria richiede un orario diverso.",
-        "remindersTooMany": "Un tipo di prenotazione può avere al massimo {reminders} promemoria.",
         "questionLabelRequired": "Dai un'etichetta alla domanda (fino a {questionLabelMax} caratteri).",
         "questionsTooMany": "Un tipo di prenotazione può avere al massimo {questions} domande.",
         "questionOptionsRequired": "Aggiungi almeno una scelta, una per riga.",
@@ -417,7 +414,12 @@
         "overridesInvalid": "Correggi le date segnalate nell'elenco delle eccezioni di data.",
         "descriptionTooLong": "La descrizione può avere al massimo {descriptionMax} caratteri.",
         "locationTooLong": "Il luogo può avere al massimo {locationMax} caratteri.",
-        "server": "Il server non ha accettato questo valore. Controllalo e riprova."
+        "server": "Il server non ha accettato questo valore. Controllalo e riprova.",
+        "reminderInvalid": "Inserisci un numero intero per l'orario, fino a 30 giorni.",
+        "remindersDuplicate": "Ogni promemoria o follow-up richiede un orario diverso.",
+        "remindersTooMany": "Un tipo di prenotazione può avere al massimo {reminders} promemoria e follow-up.",
+        "reminderChannelsNone": "Scegli almeno un canale.",
+        "reminderBodyTooLong": "Il messaggio, l'oggetto o l'etichetta è troppo lungo."
       },
       "service": {
         "title": "Dettagli del servizio",
@@ -597,25 +599,6 @@
           "reschedule": "Ciao {name}, il tuo appuntamento {type} è stato spostato a {slot}. Dettagli: {manage_link}"
         },
         "templatesNote": "Non è ancora possibile scegliere i template WhatsApp approvati. I messaggi vengono inviati come testo semplice qui sopra."
-      },
-      "reminders": {
-        "title": "Promemoria",
-        "hint": "Gli orari devono essere distinti (1440 = 24 h prima, 180 = 3 h prima). Fino a {max}.",
-        "add": "Aggiungi promemoria",
-        "quickAdd": "Aggiunta rapida",
-        "quick": {
-          "h24": "24 h",
-          "h3": "3 h",
-          "h1": "1 h",
-          "m15": "15 min"
-        },
-        "empty": "Nessun promemoria. I clienti ricevono solo la conferma.",
-        "offsetOf": "Promemoria {n}, minuti prima dell'inizio",
-        "minBefore": "min prima",
-        "labelPlaceholder": "24h",
-        "labelOf": "Promemoria {n}, etichetta",
-        "remove": "Rimuovi promemoria {n}",
-        "count": "{count} di {max} promemoria"
       },
       "questions": {
         "title": "Questionario",
@@ -1294,6 +1277,151 @@
         "cancel": "Annulla prenotazione",
         "reschedule": "Sposta prenotazione",
         "acknowledge": "Accetta"
+      }
+    },
+    "reminders": {
+      "title": "Promemoria e follow-up",
+      "hint": "Scrivi al contatto prima che un appuntamento inizi o dopo che finisce. Ognuno resta disattivato finché non lo attivi. Fino a {max} per tipo di prenotazione.",
+      "quickAdd": "Aggiunta rapida",
+      "quick": {
+        "h24": "24 ore prima",
+        "h3": "3 ore prima",
+        "h1": "1 ora prima",
+        "m15": "15 minuti prima",
+        "after2h": "2 ore dopo",
+        "afterDay": "1 giorno dopo"
+      },
+      "add": "Aggiungi promemoria",
+      "empty": "Nessun promemoria o follow-up. Il contatto riceve solo la conferma.",
+      "enabledOf": "Invia promemoria {n}",
+      "on": "Attivo",
+      "off": "Disattivato",
+      "offsetOf": "Promemoria {n}, quantità di tempo",
+      "unitOf": "Promemoria {n}, unità di tempo",
+      "kindOf": "Promemoria {n}, prima o dopo",
+      "units": {
+        "minutes": "minuti",
+        "hours": "ore",
+        "days": "giorni"
+      },
+      "kind": {
+        "before": "prima dell'inizio dell'appuntamento",
+        "after": "dopo la fine dell'appuntamento"
+      },
+      "editMessage": "Messaggio e canali",
+      "hideMessage": "Nascondi",
+      "remove": "Rimuovi promemoria {n}",
+      "withTemplate": "Modello WhatsApp",
+      "channelsTitle": "Invia su",
+      "channelsHint": "Viene usato il primo canale in grado di consegnare, gli altri fanno da riserva. Nessuno riceve lo stesso promemoria due volte.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "Email"
+      },
+      "moveUp": "Prova {channel} prima",
+      "moveDown": "Prova {channel} dopo",
+      "removeChannel": "Non usare {channel}",
+      "messageTitle": "Messaggio",
+      "placeholderMeaning": {
+        "name": "Il nome del contatto",
+        "type": "Il nome del tipo di prenotazione",
+        "slot": "Data e ora insieme",
+        "date": "La data",
+        "time": "L'ora",
+        "location": "Il luogo, o il link per partecipare se è online",
+        "join_link": "Il link per partecipare se è online",
+        "manage_link": "Il link per spostare o annullare l'appuntamento"
+      },
+      "bodyHintBefore": "Lascia vuoto per usare il messaggio di promemoria del tipo di prenotazione, o il testo standard.",
+      "bodyHintAfter": "Lascia vuoto per usare il testo standard di follow-up.",
+      "subjectTitle": "Oggetto dell'email",
+      "subjectPlaceholder": "Lascia vuoto per un oggetto standard",
+      "templateTitle": "Modello WhatsApp",
+      "templateNone": "Nessuno: testo libero, solo entro la finestra di 24 ore",
+      "templateUnknown": "Un modello non più disponibile",
+      "templateHint": "Oltre 24 ore dall'ultimo messaggio del contatto, WhatsApp consegna solo un modello approvato. Le sue variabili vengono compilate in quest'ordine: 1 nome, 2 servizio, 3 data, 4 ora, 5 luogo, 6 link per partecipare, 7 link di gestione.",
+      "labelTitle": "Etichetta (facoltativa)",
+      "labelPlaceholder": "es. Il giorno prima",
+      "previewTitle": "Anteprima",
+      "previewNote": "Un esempio con valori di prova. Il messaggio reale usa i dettagli dell'appuntamento.",
+      "count": "{count} di {max} promemoria e follow-up",
+      "note": "Un promemoria non viene mai inviato dopo l'inizio dell'appuntamento. Se l'appuntamento viene annullato o spostato, ciò che era in attesa si ferma e viene pianificato di nuovo per il nuovo orario. Le ore di silenzio trattengono un messaggio fino alla loro fine, e un contatto che ha rifiutato i messaggi o è nell'elenco Non chiamare viene saltato.",
+      "sample": {
+        "name": "Alex",
+        "type": "Consulenza",
+        "location": "Via Roma 12"
+      },
+      "settingsTitle": "Promemoria e follow-up",
+      "settingsDescription": "Per ogni tipo di prenotazione, scrivi al contatto prima di un appuntamento e fai follow-up dopo. Tutto resta disattivato finché non lo attivi.",
+      "loading": "Caricamento dei tipi di prenotazione",
+      "noTypes": "Non ci sono ancora tipi di prenotazione. Creane uno per impostare i suoi promemoria.",
+      "paused": "In pausa",
+      "summaryNone": "Nessuno impostato",
+      "summary": "{on} di {total} attivi",
+      "unsaved": "Modifiche non salvate",
+      "conflict": "Questo tipo di prenotazione è stato modificato altrove. Ricarica per vedere l'ultima versione prima di salvare.",
+      "reload": "Ricarica",
+      "discard": "Annulla modifiche",
+      "saving": "Salvataggio in corso",
+      "save": "Salva promemoria",
+      "saved": "Promemoria salvati per {name}.",
+      "readOnly": "Puoi vedere questi promemoria ma non modificarli.",
+      "fixFirst": "Correggi prima i promemoria evidenziati.",
+      "problems": {
+        "offsetInvalid": "Inserisci un numero intero per l'orario, fino a 30 giorni.",
+        "duplicate": "Ogni promemoria o follow-up richiede un orario diverso.",
+        "channelsNone": "Scegli almeno un canale.",
+        "bodyTooLong": "Il messaggio è troppo lungo.",
+        "subjectTooLong": "L'oggetto è troppo lungo.",
+        "labelTooLong": "L'etichetta è troppo lunga.",
+        "tooMany": "Al massimo 8 promemoria e follow-up per tipo di prenotazione."
+      },
+      "noneOn": "Nessun promemoria o follow-up è attivo per questo tipo di prenotazione.",
+      "when": {
+        "before": "{count, plural, one {# minuto prima} other {# minuti prima}}",
+        "after": "{count, plural, one {# minuto dopo} other {# minuti dopo}}"
+      },
+      "sentOn": "Inviato su {channel}",
+      "status": {
+        "scheduled": "Pianificato",
+        "pending": "In scadenza",
+        "sending": "Invio in corso",
+        "held": "In attesa",
+        "sent": "Inviato",
+        "skipped": "Non inviato",
+        "failed": "Non riuscito",
+        "cancelled": "Annullato"
+      },
+      "reasons": {
+        "rule_removed": "Il promemoria è stato rimosso prima della scadenza.",
+        "rule_off": "Il promemoria è stato disattivato prima dell'invio.",
+        "rescheduled": "L'appuntamento è stato spostato, quindi questo è stato sostituito.",
+        "booking_cancelled": "L'appuntamento è stato annullato.",
+        "booking_declined": "La richiesta è stata rifiutata.",
+        "booking_no_show": "Segnato come assenza.",
+        "booking_not_confirmed": "L'appuntamento non è confermato.",
+        "started": "L'appuntamento era già iniziato.",
+        "expired": "Era troppo tardi per inviarlo.",
+        "no_contact_point": "Il contatto non ha un numero o un indirizzo per questo canale.",
+        "no_channel": "Nessun canale ha potuto consegnarlo.",
+        "no_sender": "Nessun mittente collegato per questo canale.",
+        "template_required": "WhatsApp richiede un modello approvato fuori dalla finestra di 24 ore.",
+        "template_unavailable": "Il modello WhatsApp scelto non può essere inviato.",
+        "quiet_hours_too_late": "Le ore di silenzio sono andate oltre l'inizio.",
+        "no_consent": "Nessun consenso registrato.",
+        "opted_out": "Il contatto ha rifiutato i messaggi.",
+        "do_not_call": "Il numero è nell'elenco Non chiamare.",
+        "minor": "Il contatto è segnalato come minorenne.",
+        "processing_restricted": "Scrivere a questo contatto è limitato.",
+        "plan_limit": "Il limite del piano è stato raggiunto.",
+        "quiet_hours": "In attesa della fine delle ore di silenzio.",
+        "channel_unavailable": "Il canale al momento non è collegato.",
+        "wallet_empty": "Il credito è esaurito.",
+        "send_halted": "L'invio è sospeso.",
+        "provider_error": "Il provider lo ha rifiutato.",
+        "interrupted": "È stato interrotto e non ritentato.",
+        "internal_error": "Qualcosa è andato storto."
       }
     }
   }

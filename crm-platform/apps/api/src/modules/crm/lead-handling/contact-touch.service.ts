@@ -1,11 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
-import type {
-  ContactTouchChannel,
-  RecordScope,
-  TouchContactResponse,
-  UncontactedCause,
+import {
+  mergeFollowUpSettings,
+  mergeUncontactedSettings,
+  type ContactTouchChannel,
+  type RecordScope,
+  type TouchContactResponse,
+  type UncontactedCause,
 } from '@crm/contracts';
 import { schema, type Tx } from '@crm/db';
 import { RequestContextStore } from '../../../common/context/request-context';
@@ -15,6 +17,7 @@ import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { assertContactScope } from '../contacts/contact-scope';
 import { ContactsRepository } from '../contacts/contacts.repository';
+import { FollowUpService } from './follow-up.service';
 import { LeadHandlingSettingsService } from './lead-handling-settings.service';
 import { clearsOn, marksNew, type CreateMethod, type TouchSource } from './lead-handling-rules';
 
@@ -42,17 +45,34 @@ export class ContactTouchService {
     private readonly contactsRepo: ContactsRepository,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly followUps: FollowUpService,
   ) {}
 
   // --- hooks (called by other modules; never throw) -----------------------------------------------------------------------------
 
   /** A person or an automation reached the contact: clear the uncontacted marker when the workspace says this kind of touch counts. */
-  async touch(tx: Tx, orgId: number, contactId: number, source: TouchSource): Promise<void> {
+  async touch(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+    source: TouchSource,
+    /** The person who reached out, when the caller knows (a worker has no request user): the follow-up's fallback assignee. */
+    actorUserId?: number | null,
+  ): Promise<void> {
     // The timeline is the team's own: a note or an activity written by a key or a system actor is not a person reaching out.
     if (source === 'activity' && RequestContextStore.peek()?.actorType !== 'user') return;
     await this.guarded(tx, orgId, 'touch', async (sp) => {
-      const s = await this.settings.uncontactedIn(sp, orgId);
+      const rows = await this.settings.readIn(sp, orgId, ['uncontacted', 'follow_ups']);
+      const s = mergeUncontactedSettings(rows.get('uncontacted')?.config);
       if (clearsOn(s, source)) await this.clearIn(sp, orgId, contactId, source);
+      // The same touch may move the contact's next follow-up (BL-291): a no-op unless the workspace switched a situation on.
+      await this.followUps.applyAfterTouch(
+        sp,
+        orgId,
+        contactId,
+        mergeFollowUpSettings(rows.get('follow_ups')?.config),
+        actorUserId ?? RequestContextStore.peek()?.userId ?? null,
+      );
     });
   }
 

@@ -127,7 +127,8 @@
       "open": "Open",
       "edit": "Edit",
       "delete": "Delete",
-      "unassigned": "Unassigned"
+      "unassigned": "Unassigned",
+      "followUpBadge": "Follow-up"
     },
     "bulk": {
       "label": "Actions for the selected tasks",

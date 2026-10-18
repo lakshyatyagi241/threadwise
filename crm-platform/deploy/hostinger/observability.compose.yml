@@ -1,14 +1,20 @@
 # Event-loop metrics, alerting and a caller-side probe, next to the app. Optional and additive: nothing here runs unless this file is
-# named, and docker-compose.yml alone is unchanged by it.
+# named, and the release flow (ci-entry.sh, which uses docker-compose.yml alone) never starts or stops it.
 #
-#   ./observability-up.sh        # first time: makes the token, asks where alerts go, starts everything
-#   docker compose -f docker-compose.yml -f observability.compose.yml --env-file .env up -d     # afterwards
+#   ./observability-up.sh        # first time: makes the token, asks where alerts go, starts prometheus, alertmanager and the probe
+#   docker compose -f docker-compose.yml -f observability.compose.yml --env-file .env up -d prometheus alertmanager probe   # afterwards
 #
 # What it adds
-#   api, worker, web   serve /metrics on 9464 inside the stack network (token required), published nowhere
-#   probe         a separate process that GETs the API from outside its event loop and reports the latency a caller sees
-#   prometheus    scrapes the four, evaluates ../observability/event-loop.rules.yml, keeps 15 days (or 2 GB)
-#   alertmanager  sends firing and resolved alerts to the URL in secrets/alert_webhook_url
+#   prometheus    scrapes api, worker, web and the probe, evaluates ../observability/event-loop.rules.yml, keeps 15 days (or 2 GB)
+#   alertmanager  sends firing and resolved alerts to the destination in secrets/alert_webhook_url (webhook, Slack/Discord or PagerDuty)
+#   probe         a separate process that GETs the API and the web server from outside their event loops and reports the latency a caller sees
+#
+# What it does NOT touch: the app containers. With blue-green releases the API, web and worker serve /metrics on 9464 (token required,
+# published nowhere) when OBS_METRICS_PORT and OBS_METRICS_TOKEN are in .env, which the base docker-compose.yml passes to every slot and
+# to the worker; observability-up.sh writes them. A running container only picks them up when it is created: the next release does that
+# for the slot it starts and for the worker, so metrics appear after one release (see observability-up.sh for the one-line alternative).
+# Prometheus finds the API and the web server by the network alias `api` / `web` that both slots carry, which resolves to running slots
+# only, so the idle slot is never a down target.
 #
 # Nothing is published and nothing is routed through Traefik: reach Prometheus and Alertmanager with
 #   docker compose -f docker-compose.yml -f observability.compose.yml exec prometheus wget -qO- http://localhost:9090/api/v1/targets
@@ -25,25 +31,6 @@ x-obs-logging: &obs-logging
     max-file: '5'
 
 services:
-  api:
-    environment:
-      OBS_RELEASE: ${IMAGE_TAG:-local}
-      OBS_METRICS_PORT: '9464'
-      OBS_METRICS_TOKEN: ${OBS_METRICS_TOKEN:?run ./observability-up.sh, it generates OBS_METRICS_TOKEN}
-
-  worker:
-    environment:
-      OBS_RELEASE: ${IMAGE_TAG:-local}
-      OBS_METRICS_PORT: '9464'
-      OBS_METRICS_TOKEN: ${OBS_METRICS_TOKEN:?run ./observability-up.sh, it generates OBS_METRICS_TOKEN}
-
-  web:
-    environment:
-      OBS_RELEASE: ${IMAGE_TAG:-local}
-      OBS_METRICS_PORT: '9464'
-      OBS_METRICS_HOST: 0.0.0.0
-      OBS_METRICS_TOKEN: ${OBS_METRICS_TOKEN:?run ./observability-up.sh, it generates OBS_METRICS_TOKEN}
-
   probe:
     image: desk-api:${IMAGE_TAG:-local}
     pull_policy: never
@@ -54,15 +41,17 @@ services:
     environment:
       NODE_ENV: production
       TZ: UTC
-      PROBE_TARGETS: health=http://api:3000/health,ready=http://api:3000/ready,web=http://web:3001/robots.txt
+      # `api` and `web` are the slots' shared network aliases (docker-compose.yml): whichever slot is running answers.
+      # PROBE_EXTRA_TARGETS (EL-B15) adds callers' own path: observability-up.sh sets it to the public domain's /health and /login, so the
+      # probe also times a request that goes out of the stack and back through Traefik. ApiCallerLatencyHigh covers every target. From the
+      # host itself this includes the ingress but not the internet; to see the internet, run this probe on a second host with only the
+      # public URLs in PROBE_TARGETS and scrape it from here.
+      PROBE_TARGETS: health=http://api:3000/health,ready=http://api:3000/ready,web=http://web:3001/robots.txt${PROBE_EXTRA_TARGETS:+,}${PROBE_EXTRA_TARGETS:-}
       PROBE_INTERVAL_SECONDS: '10'
       PROBE_TIMEOUT_SECONDS: '10'
       OBS_METRICS_PORT: '9464'
       OBS_METRICS_HOST: 0.0.0.0
       OBS_METRICS_TOKEN: ${OBS_METRICS_TOKEN:?run ./observability-up.sh, it generates OBS_METRICS_TOKEN}
-    depends_on:
-      - api
-      - web
 
   prometheus:
     image: prom/prometheus:v2.55.0
@@ -93,7 +82,9 @@ services:
       - --config.file=/etc/alertmanager/alertmanager.yml
       - --storage.path=/alertmanager
     volumes:
-      - ../observability/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      # alertmanager.yml (a webhook that takes Alertmanager's JSON), alertmanager.slack.yml (Slack, and Discord via /slack) or
+      # alertmanager.pagerduty.yml: observability-up.sh asks which and writes ALERTMANAGER_FILE to .env.
+      - ../observability/${ALERTMANAGER_FILE:-alertmanager.yml}:/etc/alertmanager/alertmanager.yml:ro
       - amdata:/alertmanager
     secrets: [alert_webhook_url]
 

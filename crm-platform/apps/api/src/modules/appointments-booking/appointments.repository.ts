@@ -511,13 +511,6 @@ export class AppointmentsRepository {
     await tx.execute(sql`DELETE FROM appointments WHERE org_id = ${orgId} AND id = ${id}`);
   }
 
-  /** Reminder claims of one booking are forgotten when it moves, so every offset is armed again. */
-  async clearReminderRuns(tx: Tx, orgId: number, appointmentId: number): Promise<void> {
-    await tx.execute(
-      sql`DELETE FROM appointment_reminder_runs WHERE org_id = ${orgId} AND appointment_id = ${appointmentId}`,
-    );
-  }
-
   // --- the facts the slot engine and the commit read ---------------------------------------------------------------------
 
   /** Active bookings of a type that can touch [fromMs, toMs] (padded by the caller), optionally leaving one out. */

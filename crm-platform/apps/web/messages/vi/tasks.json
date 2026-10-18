@@ -127,7 +127,8 @@
       "open": "Mở",
       "edit": "Sửa",
       "delete": "Xóa",
-      "unassigned": "Chưa giao"
+      "unassigned": "Chưa giao",
+      "followUpBadge": "Theo dõi"
     },
     "bulk": {
       "label": "Thao tác với các công việc đã chọn",

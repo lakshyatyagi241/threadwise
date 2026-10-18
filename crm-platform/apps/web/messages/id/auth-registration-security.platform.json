@@ -1441,7 +1441,8 @@
             "email_channel": "Hubungkan kotak surat Gmail dan Google Workspace ke kotak masuk tim. Aplikasi Email berbayar mengendalikan sakelar ini.",
             "personal_history_full": "Memungkinkan nomor WhatsApp pribadi mengimpor seluruh riwayat chat saat pertama kali ditautkan. Impor chat terbaru tersedia untuk semua paket yang memiliki nomor pribadi.",
             "ai_crm_copilot": "Mencari dan menilai prospek dengan AI dari kontak Anda.",
-            "lead_scoring": "Menilai kontak dengan AI dan menjalankan pilot pertumbuhan. Aplikasi Penilaian prospek dengan AI mengatur sakelar ini."
+            "lead_scoring": "Menilai kontak dengan AI dan menjalankan pilot pertumbuhan. Aplikasi Penilaian prospek dengan AI mengatur sakelar ini.",
+            "record_assignment": "Menugaskan kontak, perusahaan, dan transaksi baru ke pemilik penjualan yang tepat berdasarkan aturan prioritas."
           },
           "units": {
             "days": "Hari",
@@ -1629,7 +1630,8 @@
             "email_channel": "Kanal email (Gmail)",
             "personal_history_full": "Impor riwayat chat lengkap (WhatsApp pribadi)",
             "ai_crm_copilot": "AI CRM Copilot",
-            "lead_scoring": "Penilaian prospek dengan AI"
+            "lead_scoring": "Penilaian prospek dengan AI",
+            "record_assignment": "Aturan penugasan data (tugaskan otomatis kontak, perusahaan, dan transaksi)"
           },
           "problems": {
             "required": "Kolom ini wajib diisi.",

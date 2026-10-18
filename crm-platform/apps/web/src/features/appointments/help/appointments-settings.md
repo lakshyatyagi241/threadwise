@@ -39,8 +39,9 @@ Appointment settings holds what every booking in your workspace shares: the Goog
 4. To use Outlook or Microsoft 365 instead, or as well, select **Connect Outlook** on the **Outlook / Microsoft 365** card. Microsoft asks you to choose an account and allow calendar access. You come back here and a box asks you to confirm the connection: press **Connect** only if you started it yourself. Then choose the calendar the same way.
 5. Set the **Time zone** and the **Business hours** for each day. Switch a day off to close it, or add intervals for a break.
 6. Fill in **Booking rules**: slot length, bookings per day, buffers, how far ahead people can book and the default reminder.
-7. Edit the **Message templates** if you want your own wording. Use the placeholders such as the customer's name and the manage link. Select **Reset to default** to undo a change.
-8. Select **Save settings**. The bar at the top shows whether you have unsaved changes.
+7. Under **Reminders and follow-ups**, open a booking type to switch on reminders before its appointments and follow-ups after them, choose the channels and write the text. They are off until you switch them on, and are saved with their own **Save reminders** button. See [Reminders and follow-ups](help:appointments-reminders).
+8. Edit the **Message templates** if you want your own wording. Use the placeholders such as the customer's name and the manage link. Select **Reset to default** to undo a change.
+9. Select **Save settings**. The bar at the top shows whether you have unsaved changes.
 
 ## Options and settings
 

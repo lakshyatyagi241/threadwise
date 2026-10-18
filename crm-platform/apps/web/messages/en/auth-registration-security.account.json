@@ -599,7 +599,8 @@
             "email_channel": "Email (Gmail) channel",
             "personal_history_full": "Full history import (personal WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
-            "lead_scoring": "AI lead scoring"
+            "lead_scoring": "AI lead scoring",
+            "record_assignment": "Record assignment rules"
           },
           "cta": {
             "continueFree": "Continue free",

@@ -1,25 +1,26 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
-import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { APPOINTMENT_MODULE } from './appointment-rules';
+import { AppointmentReminderService } from './appointment-reminder.service';
+import { AppointmentRemindersRepository } from './appointment-reminders.repository';
 
 const BATCH = 200;
+const DELIVER_BATCH = 50;
 
 /**
- * The reminder sweep (TW-APPT-030, D-14): the hook point the message consumer subscribes to. Every minute it claims the
- * (appointment, reminder offset) pairs whose time has come and writes one `appointment.reminder_due` event per claim, in one
- * transaction.
+ * The reminder sweep (TW-APPT-030, BL-283): every minute it (1) claims the (booking, rule) runs whose time has come and (2) delivers the
+ * runs that are waiting. Both halves are rows in `appointment_reminder_runs`, so a restart loses nothing: a claimed run waits as
+ * `pending` or `held` with its `next_attempt_at` until a worker takes it.
  *
- * What Reference did (registered a one-off schedule on the Node bridge at booking time, with a synthetic id, and never checked it again)
- * is a worker job here, and it is idempotent by construction: the claim is an `INSERT ... ON CONFLICT DO NOTHING` on
- * (appointment, offset), so however many workers run, a retry or a restart cannot announce the same reminder twice. A reschedule
- * deletes the booking's claims, which arms every offset again.
+ * The claim is idempotent by construction: an `INSERT ... ON CONFLICT DO NOTHING` on (booking, kind, offset, arming), so however many
+ * workers run, a retry or a restart cannot claim the same reminder twice. A reschedule moves the booking's `armed_at`, which makes the
+ * rules claimable again for the new time, and the old runs stop (`cancelled / rescheduled`).
  *
- * A reminder fires only for a confirmed booking that has not started, when its time (start - offset) has come, and only if that time
- * is later than the moment the booking was made or last moved (`armed_at`): Reference's "skip when the booking was made inside the
- * reminder window". A reminder row that is switched off never fires.
+ * A before-rule fires only for a confirmed booking that has not started and whose moment is later than the booking was made or last
+ * moved; an after-rule (the follow-up) only for a booking that ended and was not cancelled, declined or marked no-show. A rule that is
+ * switched off never fires. Delivery re-checks all of this at send time (`AppointmentReminderService`).
  *
  * Runs privileged: it spans every workspace by definition (one of the sanctioned uses). Imported by WorkersModule only.
  */
@@ -31,6 +32,8 @@ export class AppointmentReminderSweepService {
   constructor(
     private readonly db: DatabaseService,
     private readonly outbox: OutboxService,
+    private readonly runs: AppointmentRemindersRepository,
+    private readonly reminders: AppointmentReminderService,
   ) {}
 
   @Interval(60_000)
@@ -38,8 +41,11 @@ export class AppointmentReminderSweepService {
     if (this.running) return;
     this.running = true;
     try {
-      const n = await this.sweep();
-      if (n > 0) this.logger.debug({ claimed: n }, 'appointment reminder sweep');
+      const claimed = await this.sweep();
+      const delivered = await this.deliver();
+      if (claimed + delivered > 0) {
+        this.logger.debug({ claimed, delivered }, 'appointment reminder sweep');
+      }
     } catch (err) {
       this.logger.error({ err }, 'appointment reminder sweep failed');
     } finally {
@@ -47,55 +53,34 @@ export class AppointmentReminderSweepService {
     }
   }
 
-  /** One pass. Returns how many reminders were claimed and announced. */
+  /** The claim half. Returns how many runs were claimed and announced. */
   async sweep(limit = BATCH): Promise<number> {
     return this.db.privileged(async (tx) => {
-      const res = await tx.execute(sql`
-        WITH due AS (
-          SELECT a.org_id, a.id AS appointment_id, r.id AS reminder_id, r.offset_minutes,
-                 a.starts_at - make_interval(mins => r.offset_minutes) AS due_at
-          FROM appointments a
-          JOIN booking_reminders r
-            ON r.org_id = a.org_id AND r.booking_type_id = a.booking_type_id AND r.is_active
-          WHERE a.status = 'confirmed'
-            AND a.starts_at > now()
-            AND a.starts_at - make_interval(mins => r.offset_minutes) <= now()
-            AND a.starts_at - make_interval(mins => r.offset_minutes) > a.armed_at
-            AND NOT EXISTS (
-              SELECT 1 FROM appointment_reminder_runs x
-              WHERE x.org_id = a.org_id AND x.appointment_id = a.id AND x.offset_minutes = r.offset_minutes)
-          ORDER BY due_at, a.id
-          LIMIT ${limit}
-        ), claimed AS (
-          INSERT INTO appointment_reminder_runs (org_id, appointment_id, reminder_id, offset_minutes, due_at)
-          SELECT org_id, appointment_id, reminder_id, offset_minutes, due_at FROM due
-          ON CONFLICT (org_id, appointment_id, offset_minutes) DO NOTHING
-          RETURNING org_id, appointment_id, reminder_id, offset_minutes, due_at
-        )
-        SELECT c.org_id, c.appointment_id, c.offset_minutes, c.due_at,
-               a.uuid, a.starts_at, a.ends_at, a.timezone, bt.uuid AS type_uuid
-        FROM claimed c
-        JOIN appointments a ON a.org_id = c.org_id AND a.id = c.appointment_id
-        LEFT JOIN booking_types bt ON bt.org_id = a.org_id AND bt.id = a.booking_type_id
-      `);
-      for (const r of res.rows as Array<Record<string, unknown>>) {
+      const claimed = await this.runs.claimDue(tx, limit);
+      for (const r of claimed) {
         await this.outbox.emit(tx, {
-          orgId: Number(r.org_id),
+          orgId: r.orgId,
           aggregateModule: APPOINTMENT_MODULE,
-          aggregateId: Number(r.appointment_id),
+          aggregateId: r.appointmentId,
           eventType: 'appointment.reminder_due',
           payload: {
-            uuid: r.uuid,
-            offsetMinutes: Number(r.offset_minutes),
-            dueAt: new Date(r.due_at as string).toISOString(),
-            startsAt: new Date(r.starts_at as string).toISOString(),
-            endsAt: new Date(r.ends_at as string).toISOString(),
+            uuid: r.appointmentUuid,
+            kind: r.kind,
+            offsetMinutes: r.offsetMinutes,
+            dueAt: r.dueAt.toISOString(),
+            startsAt: r.startsAt.toISOString(),
+            endsAt: r.endsAt.toISOString(),
             timezone: r.timezone,
-            bookingTypeId: r.type_uuid ?? null,
+            bookingTypeId: r.bookingTypeUuid,
           },
         });
       }
-      return res.rows.length;
+      return claimed.length;
     });
+  }
+
+  /** The delivery half. Returns how many runs were worked on. */
+  async deliver(limit = DELIVER_BATCH): Promise<number> {
+    return this.reminders.processDue(limit);
   }
 }

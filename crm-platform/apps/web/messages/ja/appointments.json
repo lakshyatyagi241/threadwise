@@ -236,7 +236,7 @@
       "declineTitle": "このリクエストを辞退しますか?",
       "declineMessage": "リクエストが辞退されたことがお客様に通知され、その時間は再び空きになります。",
       "declineConfirm": "リクエストを辞退",
-      "remindersNote": "リマインダーは予約タイプに従います。配信状況はリマインダーごとには追跡されません。"
+      "remindersNote": "リマインダーは予約タイプに従います。予約設定または予約タイプで設定します。"
     },
     "source": {
       "chat": "チャットフロー",
@@ -407,9 +407,6 @@
         "depositTooHigh": "手付金は合計(料金と税)を超えることはできません。",
         "cancelFeeInvalid": "25.00 のような金額を入力してください。",
         "cancelWindowInvalid": "0〜{cancelWindowMax}分の整数を入力してください。",
-        "reminderInvalid": "開始前の分数を1〜{reminderMax}の整数で入力してください。",
-        "remindersDuplicate": "各リマインダーには異なる時間が必要です。",
-        "remindersTooMany": "1つの予約タイプに設定できるリマインダーは最大{reminders}件です。",
         "questionLabelRequired": "質問にラベルを付けてください({questionLabelMax}文字以内)。",
         "questionsTooMany": "1つの予約タイプに設定できる質問は最大{questions}件です。",
         "questionOptionsRequired": "選択肢を1行に1つずつ、少なくとも1つ追加してください。",
@@ -417,7 +414,12 @@
         "overridesInvalid": "日付の例外リストでマークされている日付を修正してください。",
         "descriptionTooLong": "説明は{descriptionMax}文字以内にしてください。",
         "locationTooLong": "場所は{locationMax}文字以内にしてください。",
-        "server": "サーバーがこの値を受け付けませんでした。確認してもう一度お試しください。"
+        "server": "サーバーがこの値を受け付けませんでした。確認してもう一度お試しください。",
+        "reminderInvalid": "時間は30日以内の整数で入力してください。",
+        "remindersDuplicate": "リマインダーやフォローアップごとに異なる時間を設定してください。",
+        "remindersTooMany": "1つの予約タイプに設定できるリマインダーとフォローアップは最大{reminders}件です。",
+        "reminderChannelsNone": "チャネルを1つ以上選択してください。",
+        "reminderBodyTooLong": "メッセージ、件名、またはラベルが長すぎます。"
       },
       "service": {
         "title": "サービスの詳細",
@@ -597,25 +599,6 @@
           "reschedule": "{name}様、{type}が{slot}に変更されました。詳細: {manage_link}"
         },
         "templatesNote": "承認済みのWhatsAppテンプレートはまだ選択できません。メッセージは上のプレーンテキストとして送信されます。"
-      },
-      "reminders": {
-        "title": "リマインダー",
-        "hint": "時間は重複しないようにしてください(1440 = 24時間前、180 = 3時間前)。最大{max}件。",
-        "add": "リマインダーを追加",
-        "quickAdd": "クイック追加",
-        "quick": {
-          "h24": "24時間",
-          "h3": "3時間",
-          "h1": "1時間",
-          "m15": "15分"
-        },
-        "empty": "リマインダーなし。お客様には確定通知のみ届きます。",
-        "offsetOf": "リマインダー{n}、開始の何分前か",
-        "minBefore": "分前",
-        "labelPlaceholder": "24時間",
-        "labelOf": "リマインダー{n}、ラベル",
-        "remove": "リマインダー{n}を削除",
-        "count": "リマインダー {count} / {max} 件"
       },
       "questions": {
         "title": "アンケート",
@@ -1294,6 +1277,151 @@
         "cancel": "予約をキャンセル",
         "reschedule": "予約を変更",
         "acknowledge": "受け入れる"
+      }
+    },
+    "reminders": {
+      "title": "リマインダーとフォローアップ",
+      "hint": "予定の開始前または終了後に、連絡先へメッセージを送ります。オンにするまで、それぞれオフのままです。予約タイプごとに最大{max}件。",
+      "quickAdd": "クイック追加",
+      "quick": {
+        "h24": "24時間前",
+        "h3": "3時間前",
+        "h1": "1時間前",
+        "m15": "15分前",
+        "after2h": "2時間後",
+        "afterDay": "1日後"
+      },
+      "add": "リマインダーを追加",
+      "empty": "リマインダーやフォローアップはありません。連絡先には確認メッセージのみ届きます。",
+      "enabledOf": "リマインダー{n}を送信",
+      "on": "オン",
+      "off": "オフ",
+      "offsetOf": "リマインダー{n}、時間の長さ",
+      "unitOf": "リマインダー{n}、時間の単位",
+      "kindOf": "リマインダー{n}、前または後",
+      "units": {
+        "minutes": "分",
+        "hours": "時間",
+        "days": "日"
+      },
+      "kind": {
+        "before": "予定の開始前",
+        "after": "予定の終了後"
+      },
+      "editMessage": "メッセージとチャネル",
+      "hideMessage": "閉じる",
+      "remove": "リマインダー{n}を削除",
+      "withTemplate": "WhatsAppテンプレート",
+      "channelsTitle": "送信チャネル",
+      "channelsHint": "配信できる最初のチャネルが使われ、以降のチャネルは代替になります。同じリマインダーが2回届くことはありません。",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "メール"
+      },
+      "moveUp": "{channel}を先に試す",
+      "moveDown": "{channel}を後に試す",
+      "removeChannel": "{channel}を使用しない",
+      "messageTitle": "メッセージ",
+      "placeholderMeaning": {
+        "name": "連絡先の名前",
+        "type": "予約タイプの名前",
+        "slot": "日付と時刻",
+        "date": "日付",
+        "time": "時刻",
+        "location": "場所、またはオンラインの場合は参加リンク",
+        "join_link": "オンラインの場合の参加リンク",
+        "manage_link": "予定の変更またはキャンセル用リンク"
+      },
+      "bodyHintBefore": "空欄の場合は、予約タイプのリマインダーメッセージまたは標準の文面を使用します。",
+      "bodyHintAfter": "空欄の場合は、標準のフォローアップ文面を使用します。",
+      "subjectTitle": "メールの件名",
+      "subjectPlaceholder": "空欄の場合は標準の件名になります",
+      "templateTitle": "WhatsAppテンプレート",
+      "templateNone": "なし：自由入力（24時間以内のみ）",
+      "templateUnknown": "利用できなくなったテンプレート",
+      "templateHint": "連絡先が最後にメッセージを送ってから24時間を過ぎると、WhatsAppは承認済みテンプレートのみ配信します。変数は次の順に入力されます：1 名前、2 サービス、3 日付、4 時刻、5 場所、6 参加リンク、7 管理リンク。",
+      "labelTitle": "ラベル（任意）",
+      "labelPlaceholder": "例：前日",
+      "previewTitle": "プレビュー",
+      "previewNote": "サンプル値を使った例です。実際のメッセージには予定の詳細が使われます。",
+      "count": "リマインダーとフォローアップ {count}/{max}件",
+      "note": "リマインダーは予定の開始後には送信されません。予定がキャンセルまたは変更された場合、待機中のものは停止し、新しい時間で再設定されます。通知停止時間帯のメッセージは終了まで保留され、配信停止した連絡先や通話禁止リストの連絡先には送信されません。",
+      "sample": {
+        "name": "Alex",
+        "type": "相談",
+        "location": "本町1-2-3"
+      },
+      "settingsTitle": "リマインダーとフォローアップ",
+      "settingsDescription": "予約タイプごとに、予定の前に連絡先へメッセージを送り、後にフォローアップします。オンにするまですべてオフです。",
+      "loading": "予約タイプを読み込み中",
+      "noTypes": "予約タイプがまだありません。作成してリマインダーを設定しましょう。",
+      "paused": "一時停止中",
+      "summaryNone": "未設定",
+      "summary": "{total}件中{on}件がオン",
+      "unsaved": "未保存の変更",
+      "conflict": "この予約タイプは別の場所で変更されました。保存する前に再読み込みして最新の状態を確認してください。",
+      "reload": "再読み込み",
+      "discard": "変更を破棄",
+      "saving": "保存中",
+      "save": "リマインダーを保存",
+      "saved": "{name}のリマインダーを保存しました。",
+      "readOnly": "このリマインダーは表示のみで、変更はできません。",
+      "fixFirst": "強調表示されたリマインダーを先に修正してください。",
+      "problems": {
+        "offsetInvalid": "時間は30日以内の整数で入力してください。",
+        "duplicate": "リマインダーやフォローアップごとに異なる時間を設定してください。",
+        "channelsNone": "チャネルを1つ以上選択してください。",
+        "bodyTooLong": "メッセージが長すぎます。",
+        "subjectTooLong": "件名が長すぎます。",
+        "labelTooLong": "ラベルが長すぎます。",
+        "tooMany": "1つの予約タイプにつきリマインダーとフォローアップは最大8件です。"
+      },
+      "noneOn": "この予約タイプにはオンのリマインダーやフォローアップがありません。",
+      "when": {
+        "before": "{count, plural, other {#分前}}",
+        "after": "{count, plural, other {#分後}}"
+      },
+      "sentOn": "{channel}で送信済み",
+      "status": {
+        "scheduled": "予定済み",
+        "pending": "送信時刻",
+        "sending": "送信中",
+        "held": "待機中",
+        "sent": "送信済み",
+        "skipped": "未送信",
+        "failed": "失敗",
+        "cancelled": "キャンセル済み"
+      },
+      "reasons": {
+        "rule_removed": "送信時刻前にリマインダーが削除されました。",
+        "rule_off": "送信前にリマインダーがオフになりました。",
+        "rescheduled": "予定が変更されたため、これは置き換えられました。",
+        "booking_cancelled": "予定がキャンセルされました。",
+        "booking_declined": "リクエストが拒否されました。",
+        "booking_no_show": "無断欠席として記録されました。",
+        "booking_not_confirmed": "予定が確認されていません。",
+        "started": "予定はすでに開始していました。",
+        "expired": "送信するには遅すぎました。",
+        "no_contact_point": "連絡先にこのチャネルの番号またはアドレスがありません。",
+        "no_channel": "配信できるチャネルがありませんでした。",
+        "no_sender": "このチャネルに接続された送信元がありません。",
+        "template_required": "24時間を過ぎると、WhatsAppは承認済みテンプレートが必要です。",
+        "template_unavailable": "選択したWhatsAppテンプレートは送信できません。",
+        "quiet_hours_too_late": "通知停止時間帯が開始時刻を過ぎました。",
+        "no_consent": "同意の記録がありません。",
+        "opted_out": "連絡先が配信を停止しています。",
+        "do_not_call": "この番号は通話禁止リストに登録されています。",
+        "minor": "連絡先は未成年として登録されています。",
+        "processing_restricted": "この連絡先へのメッセージ送信は制限されています。",
+        "plan_limit": "プランの上限に達しました。",
+        "quiet_hours": "通知停止時間帯の終了を待っています。",
+        "channel_unavailable": "現在、このチャネルは接続されていません。",
+        "wallet_empty": "残高がありません。",
+        "send_halted": "送信が停止されています。",
+        "provider_error": "プロバイダーに拒否されました。",
+        "interrupted": "中断され、再試行されませんでした。",
+        "internal_error": "問題が発生しました。"
       }
     }
   }

@@ -43,6 +43,8 @@ Tables: 12 · Columns: 205. Generated from the live schema (all migrations appli
 
 **Facts:** RLS on+forced · plain · created in `20261012090000_appt_model_reshape.sql` · Drizzle `packages/db/src/schema/appointments-booking/tables.ts`
 
+**Update (BL-283, `20270110090000_appt_reminder_rules.sql`):** the table is no longer write-once: it is the delivery record of a reminder or follow-up. New columns: `kind` (`before` | `after`), `armed_at` (the booking's `armed_at` when claimed; a reschedule moves it, so the rule is claimed again for the new time and the old row stays as history), `status` (`pending`, `sending`, `held`, `sent`, `skipped`, `failed`, `cancelled`), `reason` (a stable code, never a message, a number or an address), `channel` (`whatsapp` | `sms` | `email`, the one that delivered), `attempts`, `next_attempt_at` (when a waiting or held run is looked at next), `locked_at` (a worker's claim; older than ten minutes it is closed `failed / interrupted`), `sent_at`, `updated_at`. The unique key is now (org_id, appointment_id, kind, offset_minutes, armed_at). Partial index `idx_appointment_reminder_runs_waiting` serves the delivery sweep. No contact id is stored here (the contact is read through the appointment), so the privacy registry needs no entry; the outcome on the contact's timeline is a `contact_activities` row without the message text.
+
 **Design notes:** Write-once rows, no row_version/updated_at by design. Unique key (org_id, appointment_id, offset_minutes) is the guard, so reminder_id is only informational (SET NULL). Grows with every appointment; cascade-deleted with the appointment, no retention job needed.
 
 | Column | Type · null · default | Purpose | Allowed values / format | Best practice | Linked features | Usage | Useful | Evidence |
@@ -252,6 +254,8 @@ Tables: 12 · Columns: 205. Generated from the live schema (all migrations appli
 **Linked to:** api modules/appointments-booking booking-types.repository.ts (syncReminders), appointment-reminder-sweep.service.ts (reads active rows); web editor reminders step.
 
 **Facts:** RLS on+forced · plain · created in `20261001104800_appt_threadwise_schema.sql` · Drizzle `packages/db/src/schema/appointments-booking/tables.ts`
+
+**Update (BL-283, `20270110090000_appt_reminder_rules.sql`):** a rule is a reminder (`kind = before`: `offset_minutes` before the start) or an after-visit follow-up (`kind = after`: `offset_minutes` after the END). New columns: `kind`, `channels` (text[], an ordered preference over `whatsapp`, `sms`, `email`; the first that can deliver wins), `subject` (email), `body` (the text with `{{placeholders}}`, up to 2000 characters; null = the type's `reminder` message or the built-in follow-up text), `wa_template_id` (an approved WhatsApp template, composite FK, SET NULL). `is_active` now defaults to false: a rule never sends until it is switched on. The unique key on minutes is now (org_id, booking_type_id, kind, offset_minutes), still DEFERRABLE INITIALLY DEFERRED. The body is the business's own text, not personal data of a contact.
 
 **Design notes:** Two unique keys per type (offset_index and offset_minutes) both DEFERRABLE INITIALLY DEFERRED so lists can be re-ordered in one transaction. offset_index is a pure position handle that duplicates list order.
 
