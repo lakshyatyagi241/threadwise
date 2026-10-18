@@ -23,4 +23,4 @@ export function forwardJobId(targetId: number, body: Buffer): string {
 }
 
 /** Backoff: 2s, 4s, 8s... capped by the queue default's exponential type. */
-export const FORWARD_BACKOFF = { type: 'exponential' as const, delay: 2_000 };
+export const FORWARD_BACKOFF = { type: 'exponential' as const, delay: 2_000, jitter: 0.5 };

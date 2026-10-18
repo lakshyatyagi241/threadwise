@@ -122,7 +122,8 @@ export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];
  */
 export const DEFAULT_JOB_OPTIONS = {
   attempts: 5,
-  backoff: { type: 'exponential' as const, delay: 2_000 },
+  // `jitter` spreads each retry over the upper half of its delay, so jobs that failed together do not retry together.
+  backoff: { type: 'exponential' as const, delay: 2_000, jitter: 0.5 },
   removeOnComplete: { count: 1_000, age: 3_600 },
   removeOnFail: { count: 2_000, age: 3 * 24 * 3600 },
 };
@@ -131,7 +132,8 @@ export const DEFAULT_JOB_OPTIONS = {
 const INBOUND_RETRY_OPTIONS: JobsOptions = {
   removeOnComplete: true,
   attempts: 10,
-  backoff: { type: 'exponential', delay: 5_000 },
+  // A quarter of jitter keeps the shortest possible window above 30 minutes (10 attempts from 5 s: 32 to 43 minutes).
+  backoff: { type: 'exponential', delay: 5_000, jitter: 0.25 },
 };
 
 /**

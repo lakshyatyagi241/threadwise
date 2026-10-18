@@ -27,7 +27,7 @@ export interface TelephonyJob {
 
 export const TELEPHONY_JOB_OPTIONS = {
   attempts: 5,
-  backoff: { type: 'exponential' as const, delay: 5_000 },
+  backoff: { type: 'exponential' as const, delay: 5_000, jitter: 0.5 },
   removeOnComplete: { age: 24 * 3600 },
   removeOnFail: { age: 7 * 24 * 3600 },
 };

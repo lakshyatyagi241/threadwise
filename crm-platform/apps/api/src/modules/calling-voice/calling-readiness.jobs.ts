@@ -31,7 +31,7 @@ const SCHEDULE_BATCH = 100;
 
 const JOB_OPTIONS = {
   attempts: 3,
-  backoff: { type: 'exponential' as const, delay: 30_000 },
+  backoff: { type: 'exponential' as const, delay: 30_000, jitter: 0.5 },
   removeOnComplete: { age: 24 * 3600 },
   removeOnFail: { age: 7 * 24 * 3600 },
 };

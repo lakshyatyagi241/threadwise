@@ -155,7 +155,7 @@ export class PinnacleOnboardingService {
         jobId: `pinnacle-credit-${job.rowId}`,
         delay: PINNACLE_CREDIT_LINE_DELAY_MS,
         attempts: 6,
-        backoff: { type: 'exponential', delay: 60_000 },
+        backoff: { type: 'exponential', delay: 60_000, jitter: 0.5 },
         removeOnComplete: { age: 24 * 3600 },
         removeOnFail: { age: 7 * 24 * 3600 },
       });

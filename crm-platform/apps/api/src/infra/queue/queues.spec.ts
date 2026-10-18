@@ -7,8 +7,19 @@ const retryWindowSeconds = (queue: (typeof QUEUES)[keyof typeof QUEUES]): number
   const attempts = o.attempts ?? 1;
   const b = o.backoff;
   const delay = typeof b === 'object' ? (b.delay ?? 0) : 0;
-  return (delay * (2 ** (attempts - 1) - 1)) / 1000;
+  // The shortest window: every retry draws the smallest delay jitter allows.
+  const jitter = typeof b === 'object' ? (b.jitter ?? 0) : 0;
+  return (delay * (1 - jitter) * (2 ** (attempts - 1) - 1)) / 1000;
 };
+
+describe('retry jitter (RF-06)', () => {
+  it('every queue spreads its retries; the default and the inbound queues are configured with jitter', () => {
+    for (const q of Object.values(QUEUES)) {
+      const b = jobOptionsFor(q).backoff;
+      expect(typeof b === 'object' && (b.jitter ?? 0) > 0, `${q} has jitter`).toBe(true);
+    }
+  });
+});
 
 describe('job options of the inbound webhook queue', () => {
   it('rides out an outage of at least 30 minutes before a WhatsApp payload is given up on (ASYNC-032/036)', () => {

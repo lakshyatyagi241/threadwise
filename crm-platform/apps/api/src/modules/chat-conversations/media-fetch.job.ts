@@ -22,7 +22,7 @@ export type MediaFetchJob = z.infer<typeof mediaFetchJobSchema>;
  */
 export const MEDIA_FETCH_JOB_OPTIONS = {
   attempts: 6,
-  backoff: { type: 'exponential' as const, delay: 15_000 },
+  backoff: { type: 'exponential' as const, delay: 15_000, jitter: 0.5 },
 };
 
 /** `:` is reserved by BullMQ. */
