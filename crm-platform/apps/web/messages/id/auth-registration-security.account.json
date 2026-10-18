@@ -560,7 +560,8 @@
             "email_channel": "Kanal email (Gmail)",
             "personal_history_full": "Impor riwayat lengkap (WhatsApp pribadi)",
             "ai_crm_copilot": "AI CRM Copilot",
-            "lead_scoring": "Penilaian prospek dengan AI"
+            "lead_scoring": "Penilaian prospek dengan AI",
+            "record_assignment": "Aturan penugasan data"
           },
           "cta": {
             "continueFree": "Lanjut gratis",

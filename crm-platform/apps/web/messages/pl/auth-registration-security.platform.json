@@ -1441,7 +1441,8 @@
             "email_channel": "Połącz skrzynki Gmail i Google Workspace ze skrzynką odbiorczą zespołu. Tym przełącznikiem steruje płatna aplikacja E-mail.",
             "personal_history_full": "Pozwala osobistemu numerowi WhatsApp zaimportować pełną historię czatów przy pierwszym połączeniu. Import ostatnich czatów jest dostępny w każdym planie z numerami osobistymi.",
             "ai_crm_copilot": "Znajduje i ocenia leady za pomocą AI z Twoich kontaktów.",
-            "lead_scoring": "Ocenia kontakty za pomocą AI i zasila pilotaż wzrostu. Tym przełącznikiem zarządza aplikacja Ocenianie leadów przez AI."
+            "lead_scoring": "Ocenia kontakty za pomocą AI i zasila pilotaż wzrostu. Tym przełącznikiem zarządza aplikacja Ocenianie leadów przez AI.",
+            "record_assignment": "Przypisuje nowe kontakty, firmy i transakcje właściwemu opiekunowi sprzedaży według reguł priorytetu."
           },
           "units": {
             "days": "Dni",
@@ -1629,7 +1630,8 @@
             "email_channel": "Kanał e-mail (Gmail)",
             "personal_history_full": "Import pełnej historii czatów (osobisty WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
-            "lead_scoring": "Ocenianie leadów przez AI"
+            "lead_scoring": "Ocenianie leadów przez AI",
+            "record_assignment": "Reguły przypisywania rekordów (automatyczne przypisywanie kontaktów, firm i transakcji)"
           },
           "problems": {
             "required": "To pole jest wymagane.",

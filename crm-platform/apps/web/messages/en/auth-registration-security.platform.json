@@ -1441,7 +1441,8 @@
             "email_channel": "Connect Gmail and Google Workspace mailboxes to the team inbox. The paid Email app owns this switch.",
             "personal_history_full": "Lets a personal WhatsApp number import its full chat history when it is first linked. The recent-chats import is open to every plan that has personal numbers.",
             "ai_crm_copilot": "Finds and scores leads with AI, from the contacts in your workspace.",
-            "lead_scoring": "Scores contacts with AI and powers the growth pilot. The Lead scoring app owns this switch."
+            "lead_scoring": "Scores contacts with AI and powers the growth pilot. The Lead scoring app owns this switch.",
+            "record_assignment": "Gives new contacts, companies and deals to the right sales owner by priority rules."
           },
           "units": {
             "days": "Days",
@@ -1629,7 +1630,8 @@
             "email_channel": "Email (Gmail) channel",
             "personal_history_full": "Full chat-history import (personal WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
-            "lead_scoring": "AI lead scoring"
+            "lead_scoring": "AI lead scoring",
+            "record_assignment": "Record assignment rules (auto-assign contacts, companies and deals)"
           },
           "problems": {
             "required": "This field is required.",

@@ -560,7 +560,8 @@
             "email_channel": "E-posta (Gmail) kanalı",
             "personal_history_full": "Tam geçmişi içe aktarma (kişisel WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
-            "lead_scoring": "Yapay zeka ile potansiyel müşteri puanlama"
+            "lead_scoring": "Yapay zeka ile potansiyel müşteri puanlama",
+            "record_assignment": "Kayıt atama kuralları"
           },
           "cta": {
             "continueFree": "Ücretsiz devam et",

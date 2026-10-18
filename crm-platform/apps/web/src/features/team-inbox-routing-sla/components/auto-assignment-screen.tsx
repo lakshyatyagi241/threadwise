@@ -19,6 +19,7 @@ import {
 } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useVocab } from '@/features/persona-vocabulary';
 import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/plan-paywall';
 import {
   refresh,
@@ -42,6 +43,8 @@ const reason = (e: unknown, fallback: string) =>
  */
 export function AutoAssignmentScreen() {
   const t = useTranslations('team-inbox-routing-sla.page');
+  const contactNoun = useVocab('contact');
+  const dealNoun = useVocab('deal');
   const canRead = useCan('inbox.settings.read');
   const canManage = useCan('inbox.routing.manage');
   const qc = useQueryClient();
@@ -141,6 +144,17 @@ export function AutoAssignmentScreen() {
           </Link>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">{t('title')}</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('subtitle')}</p>
+          <p className="mt-1 max-w-2xl text-sm text-muted-foreground" data-testid="record-note">
+            {t.rich('recordNote', {
+              contacts: contactNoun.pluralLower,
+              deals: dealNoun.pluralLower,
+              link: (chunks) => (
+                <Link href="/record-assignment" className="underline underline-offset-2">
+                  {chunks}
+                </Link>
+              ),
+            })}
+          </p>
         </div>
         <div className="flex flex-wrap items-start justify-end gap-2">
           {canRead && !locked && (
