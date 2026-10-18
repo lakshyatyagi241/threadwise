@@ -409,7 +409,14 @@
       "learned": "Đã thêm vào “{question}”. Từ giờ tin nhắn này sẽ được trả lời.",
       "pickTitle": "Thêm tin nhắn này vào FAQ nào?",
       "loadMore": "Tải thêm",
-      "loadingMore": "Đang tải"
+      "loadingMore": "Đang tải",
+      "fallback": {
+        "title": "Khi không có FAQ nào trả lời",
+        "hint": "Câu trả lời này được gửi tới khách có tin nhắn mà không FAQ nào trả lời. Tin nhắn vẫn hiện bên dưới để bạn bổ sung cho FAQ.",
+        "placeholder": "Xin lỗi, tôi chưa hiểu. Một thành viên trong nhóm sẽ liên hệ lại với bạn.",
+        "save": "Lưu câu trả lời dự phòng",
+        "saved": "Đã lưu câu trả lời dự phòng"
+      }
     },
     "picker": {
       "close": "Đóng",

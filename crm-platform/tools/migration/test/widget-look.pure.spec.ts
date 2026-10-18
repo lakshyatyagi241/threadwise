@@ -70,3 +70,55 @@ describe('FAQs made from Intent records are named', () => {
     expect(codes('Feedback')).not.toContain('INTENT_ONLY');
   });
 });
+
+describe('fallbackOf: the fallback message is carried exactly', () => {
+  it('keeps spelling, spacing and punctuation, from the usual places', async () => {
+    const { fallbackOf } = await import('../flows/widget');
+    const soft: Soft[] = [];
+    const msg = 'Sorry,  i didnt get that!! ';
+    expect(fallbackOf({ fallback_message: msg }, {}, soft)).toBe(msg);
+    expect(fallbackOf({ default_messages: { fallback: msg } }, {}, soft)).toBe(msg);
+    expect(fallbackOf({}, { fallback_message: msg }, soft)).toBe(msg);
+    expect(fallbackOf({ fallback_message: '  ' }, {}, soft)).toBeNull();
+    expect(soft).toEqual([]);
+  });
+
+  it('does not cut a text the application cannot hold; it says so', async () => {
+    const { fallbackOf } = await import('../flows/widget');
+    const soft: Soft[] = [];
+    expect(fallbackOf({ fallback_message: 'x'.repeat(1025) }, {}, soft)).toBeNull();
+    expect(soft[0]).toMatchObject({ code: 'FALLBACK_TOO_LONG', detail: 1025 });
+  });
+});
+
+describe('chatSettingsOf: feedback, languages and devices keep their flags and stored values', () => {
+  it('keeps a disabled feedback with its stored message, English primary and no extra languages', async () => {
+    const { chatSettingsOf } = await import('../flows/widget');
+    const soft: Soft[] = [];
+    const r = chatSettingsOf(
+      {
+        feedback: { enabled: false, message: 'How did we do?' },
+        devices: { desktop: true, tablet: true, mobile: true },
+      },
+      { primary_language: 'English' },
+      soft,
+    );
+    expect(r.feedback).toEqual({ enabled: false, message: 'How did we do?' });
+    expect(r.languages).toEqual({ primary: 'en' });
+    expect(r.devices).toEqual({ desktop: true, tablet: true, mobile: true });
+    expect(soft).toEqual([]);
+  });
+
+  it('states nothing it does not find, and reports a value it cannot carry', async () => {
+    const { chatSettingsOf } = await import('../flows/widget');
+    const soft: Soft[] = [];
+    expect(chatSettingsOf({}, {}, soft)).toEqual({});
+    const r = chatSettingsOf(
+      { feedback_message: 'x'.repeat(201) },
+      { primary_language: 'Klingon!' },
+      soft,
+    );
+    expect(r.feedback).toBeUndefined();
+    expect(soft[0]).toMatchObject({ code: 'CHAT_SETTING_UNRECOGNISED' });
+  });
+});

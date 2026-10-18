@@ -62,7 +62,8 @@
       "field_match": "Dopasowanie pola",
       "date_field_match": "Dopasowanie daty",
       "schedule": "Harmonogram",
-      "ecom_event": "Zdarzenie sklepu"
+      "ecom_event": "Zdarzenie sklepu",
+      "segment_leave": "Opuszczenie segmentu"
     },
     "endReason": {
       "end_node": "Osiągnięto koniec przepływu",

@@ -62,7 +62,8 @@
       "field_match": "फ़ील्ड मेल",
       "date_field_match": "तारीख मेल",
       "schedule": "शेड्यूल",
-      "ecom_event": "स्टोर इवेंट"
+      "ecom_event": "स्टोर इवेंट",
+      "segment_leave": "सेगमेंट छोड़ें"
     },
     "endReason": {
       "end_node": "फ़्लो के अंत तक पहुँच गए",

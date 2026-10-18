@@ -4,7 +4,7 @@ import type { Readable } from 'node:stream';
  * Where cold event archives live: one gzipped NDJSON object per workspace per month plus a manifest, written by the retention job when a
  * partition is closed and read back for drill-downs and exports (docs/superpowers/specs/2026-10-16-event-based-analytics-design.md,
  * section 6). The retention module is written against this port; `local` (a directory, for development and tests) and `s3` (the
- * MinIO / S3 / R2 bucket) are its adapters.
+ * S3 / R2 bucket) are its adapters.
  *
  * Objects can be larger than memory (one busy workspace for one month), so file and stream calls are the primary surface; `putBytes`
  * and `readBytes` exist for the small manifest.

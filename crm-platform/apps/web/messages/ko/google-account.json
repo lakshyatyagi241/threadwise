@@ -5,6 +5,21 @@
         "label": "Google 계정",
         "description": "플로우에서 Google 캘린더, Sheets, Docs, Forms, Meet를 쓰도록 Google 계정 하나를 연결하세요.",
         "keywords": "google, 구글, google 계정, 구글 계정, 캘린더, calendar, 스프레드시트, sheets, 문서, docs, 폼, forms, meet, 미트, drive, 드라이브, oauth, google 연결"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "플로우에서 행을 추가하고, 행을 조회하고, 시트의 연락처를 저장하세요. Google 계정 연결을 사용합니다.",
+        "keywords": "google sheets, 스프레드시트, 행, 셀, oauth, google 연결"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "템플릿 문서를 복사하고, 내용을 채우고, 플로우에서 공유하세요. Google 계정 연결을 사용합니다.",
+        "keywords": "google docs, 문서, 템플릿, 공유, oauth, google 연결"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "고객에게 양식을 보내고 고객이 작성하면 다음 단계를 이어가세요. Google 계정 연결을 사용합니다.",
+        "keywords": "google forms, 양식, 설문, 응답, oauth, google 연결"
       }
     }
   },

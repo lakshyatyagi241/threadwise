@@ -5,6 +5,21 @@
         "label": "حساب Google",
         "description": "اربط حساب Google واحدًا لـ Calendar وSheets وDocs وForms وMeet في تدفقاتك.",
         "keywords": "google, حساب google, تقويم, calendar, sheets, جداول البيانات, docs, مستندات, forms, نماذج, meet, drive, oauth, ربط google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "أضف صفوفًا وابحث عن صفوف واحفظ جهات الاتصال من جدول بيانات داخل تدفقاتك. يستخدم اتصال حساب Google الخاص بك.",
+        "keywords": "google sheets, جدول بيانات, صفوف, خلايا, oauth, ربط google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "انسخ مستندًا نموذجيًا واملأه وشاركه من تدفقاتك. يستخدم اتصال حساب Google الخاص بك.",
+        "keywords": "google docs, مستند, قالب, مشاركة, oauth, ربط google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "أرسل نموذجًا إلى عميل وتابع عندما يملؤه. يستخدم اتصال حساب Google الخاص بك.",
+        "keywords": "google forms, نموذج, استبيان, ردود, oauth, ربط google"
       }
     }
   },

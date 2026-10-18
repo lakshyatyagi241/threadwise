@@ -5,6 +5,21 @@
         "label": "Google hesabı",
         "description": "Akışlarınızda Takvim, Sheets, Docs, Forms ve Meet için tek bir Google hesabı bağlayın.",
         "keywords": "google, google hesabı, takvim, calendar, e-tablo, sheets, belge, docs, form, forms, meet, drive, oauth, google bağla"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Akışlarınızda satır ekleyin, satır arayın ve bir sayfadaki kişileri kaydedin. Google hesap bağlantınızı kullanır.",
+        "keywords": "google sheets, e-tablo, satırlar, hücreler, oauth, google bağla"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Akışlarınızda bir şablon belgeyi kopyalayın, doldurun ve paylaşın. Google hesap bağlantınızı kullanır.",
+        "keywords": "google docs, belge, şablon, paylaşım, oauth, google bağla"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Bir müşteriye form gönderin ve formu doldurduğunda devam edin. Google hesap bağlantınızı kullanır.",
+        "keywords": "google forms, form, anket, yanıtlar, oauth, google bağla"
       }
     }
   },

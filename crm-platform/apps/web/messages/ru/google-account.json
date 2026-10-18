@@ -5,6 +5,21 @@
         "label": "Аккаунт Google",
         "description": "Подключите один аккаунт Google для Calendar, Sheets, Docs, Forms и Meet в ваших сценариях.",
         "keywords": "google, аккаунт google, календарь, calendar, таблицы, sheets, документы, docs, формы, forms, meet, drive, oauth, подключить google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Добавляйте строки, ищите строки и сохраняйте контакты из таблицы в ваших сценариях. Используется подключение вашего аккаунта Google.",
+        "keywords": "google sheets, таблица, строки, ячейки, oauth, подключить google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Копируйте шаблон документа, заполняйте его и делитесь им в ваших сценариях. Используется подключение вашего аккаунта Google.",
+        "keywords": "google docs, документ, шаблон, доступ, oauth, подключить google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Отправьте форму клиенту и продолжите сценарий, когда он её заполнит. Используется подключение вашего аккаунта Google.",
+        "keywords": "google forms, форма, опрос, ответы, oauth, подключить google"
       }
     }
   },

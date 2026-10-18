@@ -78,6 +78,8 @@ describe('the launcher draft', () => {
         speak: false,
         pip: false,
         devices: { desktop: true, tablet: true, mobile: true },
+        feedback: { enabled: true, message: '' },
+        languages: { primary: '', additional: [] },
       },
       desktop: { side: 'right', sideSpacing: '10', bottomSpacing: '10' },
       mobile: { side: 'right', sideSpacing: '10', bottomSpacing: '60' },

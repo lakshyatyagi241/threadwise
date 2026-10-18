@@ -25,6 +25,7 @@ import { TagsService } from '../tags/tags.service';
 import { ContactImportRepository, type ImportJobRow } from './contact-import.repository';
 import { parseCsv, type Delimiter } from './csv-parser';
 import { extractRow, resolveMapping, type ParsedRow, type ResolvedMapping } from './import-rows';
+import { ContactTouchService } from '../lead-handling/contact-touch.service';
 
 const { contacts, contactGroupMembers, contactTags } = schema;
 
@@ -100,6 +101,7 @@ export class ContactImportEngine {
     private readonly consent: ContactConsentService,
     private readonly privacy: ContactPrivacyService,
     private readonly minors: MinorDetectionService,
+    private readonly touch: ContactTouchService,
   ) {}
 
   /** Runs (or resumes) an import job to the end. Needs a request context (the processor sets one). */
@@ -468,6 +470,13 @@ export class ContactImportEngine {
         ...(o.row.email ? [sql`(${orgId}, ${o.contactId}, 'email', ${o.row.email}, true)`] : []),
       ]);
       await this.addIdentities(tx, identityRows);
+      // Start uncontacted when the workspace says imported contacts do (BL-290). Off by default: no write.
+      await this.touch.markNewMany(
+        tx,
+        orgId,
+        inserted.map((r) => r.id),
+        'import',
+      );
 
       if (options.triggerAutomations) {
         for (const row of inserted) {

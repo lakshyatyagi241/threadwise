@@ -62,7 +62,8 @@
       "field_match": "התאמת שדה",
       "date_field_match": "התאמת תאריך",
       "schedule": "תזמון",
-      "ecom_event": "אירוע בחנות"
+      "ecom_event": "אירוע בחנות",
+      "segment_leave": "יציאה מסגמנט"
     },
     "endReason": {
       "end_node": "הגיע לסוף התהליך",

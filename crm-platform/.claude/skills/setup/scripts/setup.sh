@@ -92,16 +92,12 @@ if infra_up; then
 else
   PG_PORT="$(get_env POSTGRES_PORT)"; PG_PORT="${PG_PORT:-5432}"
   RD_PORT="$(get_env REDIS_PORT)";    RD_PORT="${RD_PORT:-6379}"
-  MN_PORT="$(get_env MINIO_PORT)";    MN_PORT="${MN_PORT:-9000}"
-  MC_PORT="$(get_env MINIO_CONSOLE_PORT)"; MC_PORT="${MC_PORT:-9001}"
   MS_PORT="$(get_env MAILPIT_SMTP_PORT)";  MS_PORT="${MS_PORT:-1025}"
   MU_PORT="$(get_env MAILPIT_UI_PORT)";    MU_PORT="${MU_PORT:-8025}"
   API_PORT_CUR="$(get_env PORT)";          API_PORT_CUR="${API_PORT_CUR:-3000}"
 
   NEW_PG="$(find_free_port "$PG_PORT")"
   NEW_RD="$(find_free_port "$RD_PORT")"
-  NEW_MN="$(find_free_port "$MN_PORT")"
-  NEW_MC="$(find_free_port "$MC_PORT")"
   NEW_MS="$(find_free_port "$MS_PORT")"
   NEW_MU="$(find_free_port "$MU_PORT")"
   NEW_API="$(find_free_port "$API_PORT_CUR")"
@@ -117,8 +113,6 @@ else
   }
   remap POSTGRES_PORT "$PG_PORT" "$NEW_PG"
   remap REDIS_PORT "$RD_PORT" "$NEW_RD"
-  remap MINIO_PORT "$MN_PORT" "$NEW_MN"
-  remap MINIO_CONSOLE_PORT "$MC_PORT" "$NEW_MC"
   remap MAILPIT_SMTP_PORT "$MS_PORT" "$NEW_MS"
   remap MAILPIT_UI_PORT "$MU_PORT" "$NEW_MU"
   remap PORT "$API_PORT_CUR" "$NEW_API"
@@ -128,7 +122,6 @@ else
     set_env MIGRATION_DATABASE_URL "postgres://crm:crm@localhost:$NEW_PG/crm"
     set_env DATABASE_REPLICA_URL "postgres://crm_app_user:crm_app_dev@localhost:$NEW_PG/crm"
     set_env REDIS_URL "redis://localhost:$NEW_RD"
-    set_env S3_ENDPOINT "http://localhost:$NEW_MN"
     set_env SMTP_PORT "$NEW_MS"
     set_env APP_URL "http://localhost:$NEW_API"
     ok "Remapped conflicting ports in .env"
@@ -136,7 +129,7 @@ else
     ok "Default ports are free"
   fi
 
-  step "Starting Docker infra (postgres, redis, minio, mailpit)"
+  step "Starting Docker infra (postgres, redis, mailpit)"
   pnpm infra:up
 
   step "Waiting for Postgres and Redis to be healthy"

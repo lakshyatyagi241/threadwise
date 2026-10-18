@@ -43,6 +43,7 @@ function row(over: Partial<ContactRow> = {}): ContactRow {
     leadScoreSource: null,
     leadScoreReasons: null,
     leadScoredAt: null,
+    uncontactedSince: null,
     leadScoreModel: null,
     source: null,
     isUnsubscribed: false,

@@ -42,6 +42,8 @@ export const contactFilterShape = {
   unsubscribed: queryBoolean().optional(),
   /** true: flagged as a minor. false: not flagged (BL-190). */
   minor: queryBoolean().optional(),
+  /** true: uncontacted (BL-290). false: contacted. */
+  uncontacted: queryBoolean().optional(),
   source: z.string().max(128).optional(),
   status: z.string().max(64).optional(),
   /** Contacts whose stored time zone is this one (BL-193), e.g. `Asia/Kolkata`. */

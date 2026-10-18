@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "Endpoint",
-            "hint": "Obrigatório para Spaces, R2 e MinIO. Um /bucket no final é removido.",
-            "placeholder": "https://… (obrigatório para Spaces / R2 / MinIO; automático para Wasabi e Bunny)"
+            "hint": "Obrigatório para Spaces e R2. Um /bucket no final é removido.",
+            "placeholder": "https://… (obrigatório para Spaces / R2; automático para Wasabi e Bunny)"
           },
           "cdnUrl": {
             "label": "URL pública / CDN (opcional)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "Usar endpoint em estilo de caminho (MinIO / alguns armazenamentos compatíveis com S3)"
+            "label": "Usar endpoint em estilo de caminho (alguns armazenamentos compatíveis com S3)"
           },
           "storageZone": {
             "label": "Zona de armazenamento",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / compatível com S3"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "Privado (URLs assinadas)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "Armazenamento em nuvem",
-        "description": "Envie a mídia dos clientes para o seu próprio bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 ou MinIO.",
+        "description": "Envie a mídia dos clientes para o seu próprio bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "Use os campos do Bunny: zona de armazenamento e senha. A região é a região da zona (de, ny, la...)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "Preencha os campos S3 e cole a URL do endpoint. Marque o estilo de caminho para MinIO."
+              "title": "Spaces / R2",
+              "body": "Preencha os campos S3 e cole a URL do endpoint."
             },
             "test": {
               "title": "Sempre teste primeiro",

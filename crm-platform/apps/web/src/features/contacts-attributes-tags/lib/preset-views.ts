@@ -10,6 +10,7 @@ import { sameFilters } from './views';
 export const PRESET_VIEWS = [
   'myContacts',
   'unassigned',
+  'uncontacted',
   'hotLeads',
   'newThisWeek',
   'newLastWeek',
@@ -29,6 +30,7 @@ export type PresetView = (typeof PRESET_VIEWS)[number];
 export const QUICK_PRESETS = [
   'myContacts',
   'unassigned',
+  'uncontacted',
   'newThisWeek',
   'needsFollowUp',
   'hotLeads',
@@ -37,12 +39,19 @@ export const QUICK_PRESETS = [
 /** The built-in views that filter by the lead score: they are offered only while lead scoring is on for the workspace. */
 const SCORE_PRESETS: readonly PresetView[] = ['hotLeads'];
 
-/** `presets` without the ones that need lead scoring while it is off (the "Hot leads" quick chip and its row in the view picker). */
+/**
+ * `presets` without the ones that do not apply: "Hot leads" needs lead scoring (off: it filters by a score nobody sees), and
+ * "Uncontacted" is offered only once some contact carries the marker (BL-290), so a workspace that never uses the feature sees no new
+ * chip. `uncontacted` defaults to true for callers that do not know.
+ */
 export function availablePresets<T extends PresetView>(
   presets: readonly T[],
   scoringOn: boolean,
+  uncontacted = true,
 ): T[] {
-  return presets.filter((p) => scoringOn || !SCORE_PRESETS.includes(p));
+  return presets.filter(
+    (p) => (scoringOn || !SCORE_PRESETS.includes(p)) && (uncontacted || p !== 'uncontacted'),
+  );
 }
 
 type Cond = { field: string; operator: string; value?: number | string };
@@ -83,6 +92,8 @@ export function presetFilters(preset: PresetView, meId: string): Partial<Contact
       return { owner: meId };
     case 'unassigned':
       return { owner: UNASSIGNED_OWNER };
+    case 'uncontacted':
+      return { rules: rulesOf({ field: 'uncontacted', operator: 'is_true' }) };
     case 'hotLeads':
       // A lead score in the "hot" band of the score badge (67 and up).
       return { rules: rulesOf({ field: 'leadScore', operator: 'gte', value: HOT_FROM }) };

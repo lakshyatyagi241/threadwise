@@ -201,6 +201,8 @@ export class OwnerReassignRepository {
     targets: readonly number[],
     cap: number,
     actor: Actor,
+    /** The workspace marks a reassigned contact uncontacted (BL-290). A restore after leave never does. */
+    markUncontacted = false,
   ): Promise<number> {
     const arr = sql`ARRAY[${sql.join(
       targets.map((t) => sql`${t}::bigint`),
@@ -211,7 +213,8 @@ export class OwnerReassignRepository {
         SELECT c.id, c.uuid, row_number() OVER (ORDER BY c.id) AS rn
         FROM contacts c WHERE c.org_id = ${orgId} AND c.owner_id = ${fromId} ORDER BY c.id LIMIT ${cap}
       ), upd AS (
-        UPDATE contacts SET owner_id = (${arr})[1 + ((picked.rn - 1) % ${targets.length})], updated_by = ${actor.actorId}::bigint
+        UPDATE contacts SET owner_id = (${arr})[1 + ((picked.rn - 1) % ${targets.length})], updated_by = ${actor.actorId}::bigint,
+          uncontacted_since = CASE WHEN ${markUncontacted}::boolean THEN coalesce(contacts.uncontacted_since, now()) ELSE contacts.uncontacted_since END
         FROM picked WHERE contacts.org_id = ${orgId} AND contacts.id = picked.id AND contacts.owner_id = ${fromId}
         RETURNING contacts.id, picked.uuid, contacts.owner_id AS new_owner
       ), au AS (

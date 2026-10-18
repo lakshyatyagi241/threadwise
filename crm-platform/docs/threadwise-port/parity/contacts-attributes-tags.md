@@ -603,3 +603,27 @@ The quick view header had empty space right of the name; the record page had a s
 - **Not changed:** the contact API still returns `leadScore*` (asking for less would need a field projection in `GET /contacts`; not cheap); the "AI lead scoring" admin screens, the Growth propensity figure (its own AI figure, not the contact's lead score) and the lead-scoring settings stay as they were; the import of a `lead_score` column and the API are unchanged.
 - **Tests:** `lead-score-chip.dom.test.tsx`, `score-card.test.tsx`, `record.render.test.tsx` (AssociationCards), `data-sections.test.tsx` (stats tile, field history), `views-bar.render.test.tsx` (quick chips), `columns.test.ts`, `preset-views.test.ts`, `segments/lib/fields.test.ts`.
 - Not verified in a browser against a workspace with the switch off and a typed score; see the PR.
+
+
+## Lead handling: uncontacted leads, automatic follow-ups, duplicate leads (BL-290 to BL-292, owner request 2026-10-18)
+
+**A product extension, not a Reference feature.** Spec: [specs/lead-followup-settings.md](../../specs/lead-followup-settings.md); wiring: [wiring/lead-handling.md](../wiring/lead-handling.md); API: [api/lead-handling.md](../../api/lead-handling.md). The owner's reference screenshots (a lead-management app's Settings pages) gave the idea only; the design is ours (contacts, tasks, lead sources, owners, record scopes, 21 locales, audit, RLS). **Nothing changes for a workspace until it switches a setting on**: every option that writes data is off by default, existing contacts are never touched, and no screen of Reference moves.
+
+### Step 1: uncontacted leads (BL-290)
+
+### Intended differences from the reference platform
+
+| #   | Where                | Reference platform                          | Ours, and why |
+| --- | -------------------- | ------------------------------------------- | ------------- |
+| L01 | Contacts             | No "uncontacted" concept                    | `contacts.uncontacted_since` marker (null for every existing contact), a quiet dot in the list, a chip in the record header and quick view, an "Uncontacted" view and quick chip (offered only while a contact carries the marker, so a workspace that never uses it sees no new chip), a More-menu action and a bulk action |
+| L02 | Settings             | Nothing                                      | Settings > Automation and AI > Uncontacted leads (`admin.settings.manage`, Owner and Admin): four "mark as contacted" options (on by default: they only act on contacts already marked), three "mark new leads" options and a reassign choice (off, keep) |
+| L03 | What counts as reaching out | n/a                                   | Our own actions: the contact buttons and logged calls, a person's inbox message (typed text, saved reply, template, file: the server cannot tell a saved reply from typing), a campaign, broadcast or flow send, a timeline note, meeting or activity. First-reply, FAQ and consent-keyword bots do not count |
+| L04 | Row version          | n/a                                          | The marker moves without bumping `row_version` (like `last_activity_at`), so a colleague's reply never 409s an open edit form |
+
+### Checks run
+
+See the pull request body (tsc, ESLint, unit, real-Postgres e2e, web tests, `db:verify-schema`, registry spec, 21 locales).
+
+### Not verified, and why
+
+A live WhatsApp or e-mail send through a real provider (the dispatch hook is covered by its transaction path and a service-level test, not a provider); campaign and broadcast sends end to end (the hooks sit on the per-recipient `sent` write); native review of the machine-drafted strings in 20 languages.

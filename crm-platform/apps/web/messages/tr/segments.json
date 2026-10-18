@@ -27,7 +27,8 @@
       "minor": "Reşit olmayan olarak işaretlendi",
       "dateOfBirth": "Doğum tarihi",
       "age": "Yaş (yıl)",
-      "timezone": "Saat dilimi"
+      "timezone": "Saat dilimi",
+      "uncontacted": "Ulaşılmadı"
     },
     "fieldGroups": {
       "journey": "Yolculuk",

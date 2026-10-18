@@ -72,7 +72,9 @@ export async function verifyFaq(a: Args): Promise<void> {
             x.embedding_model !== null ||
             Number(x.embed_attempts) !== 0)
         )
-          unsafe.push(`a variation of FAQ ${x.uuid.slice(0, 8)} is not pending, or holds a vector or an attempt`);
+          unsafe.push(
+            `a variation of FAQ ${x.uuid.slice(0, 8)} is not pending, or holds a vector or an attempt`,
+          );
         if (!a.allowExtraRows && x.status !== 'paused' && !(x.owner && armed.has(x.owner)))
           unsafe.push(`FAQ ${x.uuid.slice(0, 8)} is ${x.status}, not paused`);
       }
@@ -94,12 +96,21 @@ export async function verifyFaq(a: Args): Promise<void> {
         SELECT s.flow_id, s.enabled, fl.uuid::text AS owner FROM faq_settings s
         LEFT JOIN flows fl ON fl.org_id = s.org_id AND fl.id = s.flow_id
         WHERE s.org_id = ${orgId} AND s.flow_id IN (SELECT jsonb_array_elements_text(${JSON.stringify(owned)}::jsonb)::bigint)`);
-      const rows = s.rows as Array<{ flow_id: number | string; enabled: boolean; owner: string | null }>;
+      const rows = s.rows as Array<{
+        flow_id: number | string;
+        enabled: boolean;
+        owner: string | null;
+      }>;
       const have = new Set(rows.map((x) => Number(x.flow_id)));
       const missing = owned.filter((f) => !have.has(f)).length;
-      if (missing > 0) alarm(`FAQ_SETTINGS_MISSING: ${missing} flow(s) own a migrated FAQ and have no faq_settings row`);
+      if (missing > 0)
+        alarm(
+          `FAQ_SETTINGS_MISSING: ${missing} flow(s) own a migrated FAQ and have no faq_settings row`,
+        );
       if (!a.allowExtraRows && rows.some((x) => x.enabled && !(x.owner && armed.has(x.owner))))
-        alarm('FAQ_SAFETY: a faq_settings row of a migrated flow is enabled (the tool never switches FAQ answering on)');
+        alarm(
+          'FAQ_SAFETY: a faq_settings row of a migrated flow is enabled (the tool never switches FAQ answering on)',
+        );
     }
 
     if (!a.allowExtraRows) {
@@ -107,17 +118,31 @@ export async function verifyFaq(a: Args): Promise<void> {
         await tx.execute(sql`
           SELECT (SELECT count(*) FROM faq_variations WHERE org_id = ${orgId})::int AS variations,
                  (SELECT count(*) FROM faq_settings WHERE org_id = ${orgId})::int AS settings,
+                 (SELECT count(*) FROM faq_settings WHERE org_id = ${orgId} AND fallback_message IS NOT NULL AND flow_id NOT IN (SELECT jsonb_array_elements_text(${JSON.stringify([...owners])}::jsonb)::bigint))::int AS fallback_only,
                  (SELECT count(*) FROM faq_settings s LEFT JOIN flows fl ON fl.org_id = s.org_id AND fl.id = s.flow_id WHERE s.org_id = ${orgId} AND s.enabled AND NOT (fl.uuid::text IN (SELECT jsonb_array_elements_text(${JSON.stringify([...armed])}::jsonb))))::int AS enabled,
                  (SELECT count(*) FROM faqs f LEFT JOIN flows fl ON fl.org_id = f.org_id AND fl.id = f.owner_flow_id WHERE f.org_id = ${orgId} AND f.status <> 'paused' AND NOT (fl.uuid::text IN (SELECT jsonb_array_elements_text(${JSON.stringify([...armed])}::jsonb))))::int AS active,
                  (SELECT count(*) FROM faq_match_logs WHERE org_id = ${orgId})::int AS logs`)
-      ).rows[0] as { variations: number; settings: number; enabled: number; active: number; logs: number };
+      ).rows[0] as {
+        variations: number;
+        settings: number;
+        fallback_only: number;
+        enabled: number;
+        active: number;
+        logs: number;
+      };
       if (t.variations !== wantVariations)
-        alarm(`EXTRA_ROWS: faq_variations holds ${t.variations} row(s), the source accounts for ${wantVariations}`);
-      if (t.settings !== owners.size)
-        alarm(`EXTRA_ROWS: faq_settings holds ${t.settings} row(s), the source accounts for ${owners.size}`);
+        alarm(
+          `EXTRA_ROWS: faq_variations holds ${t.variations} row(s), the source accounts for ${wantVariations}`,
+        );
+      // a flow with a migrated fallback message but no FAQ has a settings row too (switch off): the widgets step wrote it
+      if (t.settings !== owners.size + t.fallback_only)
+        alarm(
+          `EXTRA_ROWS: faq_settings holds ${t.settings} row(s), the source accounts for ${owners.size + t.fallback_only}`,
+        );
       if (t.enabled > 0) alarm(`FAQ_SAFETY: ${t.enabled} faq_settings row(s) are enabled`);
       if (t.active > 0) alarm(`FAQ_SAFETY: ${t.active} FAQ(s) are not paused`);
-      if (t.logs > 0) alarm(`EXTRA_ROWS: faq_match_logs holds ${t.logs} row(s); the migration writes none`);
+      if (t.logs > 0)
+        alarm(`EXTRA_ROWS: faq_match_logs holds ${t.logs} row(s); the migration writes none`);
     }
   });
 }

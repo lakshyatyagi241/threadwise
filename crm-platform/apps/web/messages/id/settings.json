@@ -374,6 +374,11 @@
         "label": "Properti perusahaan",
         "description": "Tambahkan kolom yang ingin Anda simpan di setiap perusahaan.",
         "keywords": "kolom kustom, kolom, wajib, dropdown, organisasi, akun"
+      },
+      "uncontacted-leads": {
+        "label": "Prospek belum dihubungi",
+        "description": "Pilih tindakan yang dianggap sebagai menghubungi prospek, dan kontak baru mana yang dimulai sebagai belum dihubungi.",
+        "keywords": "belum dihubungi, sudah dihubungi, prospek, prospek baru, kontak pertama, tindak lanjut, alihkan, penanda"
       }
     },
     "backToMarketplace": "Kembali ke Marketplace"

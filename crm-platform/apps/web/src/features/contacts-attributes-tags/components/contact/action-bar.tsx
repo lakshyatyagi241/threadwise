@@ -9,6 +9,8 @@ import { useCan, useSession } from '@/features/auth-registration-security/shared
 import { useCanPickCompany } from '@/features/companies';
 import { usePersonaVisibility } from '@/features/persona';
 import { useCanLogCall } from '../../api/call-log';
+import type { ContactTouchChannel } from '@crm/contracts';
+import { reportContactTouch, setUncontacted } from '../../api/lead-handling';
 import { deleteContact, invalidateContacts } from '../../api/contacts';
 import { useChannels, openConversation } from '../../api/single-send';
 import type { ContactRow } from '../../api/schemas';
@@ -109,6 +111,7 @@ export function ContactActionBar({
   const tr = useTranslations('contacts-attributes-tags.contact.record.actions');
   const tl = useTranslations('contacts-attributes-tags.list');
   const ts = useTranslations('contacts-attributes-tags.singleSend');
+  const tu = useTranslations('contacts-attributes-tags.leadHandling.uncontacted');
   const { toast } = useToast();
   const canUpdate = useCan('record.contacts.update');
   const canDelete = useCan('record.contacts.delete');
@@ -155,6 +158,15 @@ export function ContactActionBar({
     onError: () => toast(ts('openFailed', { message: '' }), 'danger'),
   });
 
+  const mark = useMutation({
+    mutationFn: (uncontacted: boolean) => setUncontacted(contact.id, uncontacted),
+    onSuccess: async (r) => {
+      await invalidateContacts(qc);
+      toast(r.uncontacted ? tu('markedUncontacted') : tu('markedContacted'), 'success');
+    },
+    onError: () => toast(tu('markFailed'), 'danger'),
+  });
+
   const remove = useMutation({
     mutationFn: () => deleteContact(contact.id, { eraseHistory: !keepHistory }),
     onSuccess: async () => {
@@ -187,7 +199,17 @@ export function ContactActionBar({
     phone: tr('callPhone'),
     log: tr('logCall'),
   };
+  /** The person pressed a contact button: the workspace's lead handling settings decide whether that marks the contact as contacted. */
+  const pressed = (channel: ContactTouchChannel) => {
+    if (!canUpdate) return;
+    reportContactTouch(
+      contact.id,
+      channel,
+      contact.uncontactedSince ? () => void invalidateContacts(qc) : undefined,
+    );
+  };
   const runCall = (way: CallWay) => {
+    if (way !== 'log') pressed('call');
     if (way === 'whatsapp') send('call');
     else if (way === 'log') onAdd('call');
     else {
@@ -222,6 +244,7 @@ export function ContactActionBar({
     ...(links.email && route.kind !== 'email' ? (['email'] as const) : []),
   ];
   const runMessage = (way: MessageWay) => {
+    pressed(way === 'email' ? 'email' : 'whatsapp');
     if (way === 'chat') chat.mutate();
     else if (way === 'template') send('whatsapp');
     else send('email');
@@ -242,6 +265,7 @@ export function ContactActionBar({
     </MenuItem>
   ));
   const messageMain = () => {
+    if (route.kind !== 'blocked') pressed(route.kind === 'email' ? 'email' : 'whatsapp');
     if (route.kind === 'chat') chat.mutate();
     else if (route.kind === 'email') send('email');
   };
@@ -257,6 +281,11 @@ export function ContactActionBar({
       {canUpdate && canPickCompany && !isActionHidden('company') && (
         <MenuItem onSelect={() => onAdd('company')}>
           <BuildingIcon /> {contact.companyId ? t('changeCompany') : t('addCompany')}
+        </MenuItem>
+      )}
+      {canUpdate && (
+        <MenuItem onSelect={() => mark.mutate(!contact.uncontactedSince)}>
+          <CheckIcon /> {contact.uncontactedSince ? tu('markContacted') : tu('markUncontacted')}
         </MenuItem>
       )}
       <MenuItem onSelect={() => setHistory(true)}>

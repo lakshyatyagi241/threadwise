@@ -1,0 +1,65 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "Chưa liên hệ"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "Chưa liên hệ",
+        "chipTitle": "Chưa ai trong nhóm liên hệ",
+        "waitingSince": "Đang chờ từ {date}",
+        "markContacted": "Đánh dấu đã liên hệ",
+        "markUncontacted": "Đánh dấu chưa liên hệ",
+        "markedContacted": "Đã đánh dấu là đã liên hệ",
+        "markedUncontacted": "Đã đánh dấu là chưa liên hệ",
+        "markFailed": "Không thể thay đổi dấu đánh dấu. Vui lòng thử lại.",
+        "bulkMarkedContacted": "{count, plural, other {Đã đánh dấu # liên hệ là đã liên hệ}}",
+        "bulkMarkedUncontacted": "{count, plural, other {Đã đánh dấu # liên hệ là chưa liên hệ}}"
+      },
+      "settings": {
+        "save": "Lưu",
+        "discard": "Hủy thay đổi",
+        "saved": "Đã lưu cài đặt",
+        "retry": "Thử lại",
+        "loading": "Đang tải cài đặt",
+        "conflict": "Một người khác đã lưu các cài đặt này khi bạn đang chỉnh sửa. Cài đặt được hiển thị lại bên dưới; hãy thực hiện lại thay đổi của bạn.",
+        "conflictOk": "Đã hiểu",
+        "errors": {
+          "network": "Không thể kết nối đến máy chủ. Hãy kiểm tra kết nối và thử lại.",
+          "forbidden": "Chỉ những người quản lý cài đặt không gian làm việc mới có thể thay đổi trang này.",
+          "conflict": "Người khác đã thay đổi các cài đặt này trước. Hãy tải lại và thử lại.",
+          "validation": "Một số cài đặt không hợp lệ. Hãy kiểm tra và thử lại.",
+          "unexpected": "Đã xảy ra lỗi. Vui lòng thử lại."
+        },
+        "uncontacted": {
+          "title": "Khách hàng tiềm năng chưa liên hệ",
+          "subtitle": "Đánh dấu những khách hàng tiềm năng chưa ai liên hệ để họ nổi bật cho đến khi có người liên hệ. Sẽ không có gì thay đổi cho đến khi bạn bật một tùy chọn.",
+          "clear": {
+            "title": "Đánh dấu đã liên hệ",
+            "intro": "Tự động gỡ dấu Chưa liên hệ khi thành viên trong nhóm thực hiện bất kỳ thao tác nào sau đây:",
+            "contactButton": "Bấm nút liên hệ (gọi điện, SMS, email hoặc WhatsApp) hoặc thực hiện cuộc gọi",
+            "message": "Gửi tin nhắn, mẫu tin nhắn, câu trả lời đã lưu hoặc tệp từ inbox",
+            "automation": "Chiến dịch, tin nhắn hàng loạt hoặc luồng tự động gửi đến khách hàng tiềm năng",
+            "activity": "Thêm ghi chú, cuộc họp hoặc hoạt động khác vào dòng thời gian",
+            "manualHint": "Bạn cũng có thể đổi dấu đánh dấu thủ công: mở menu Thêm trên một liên hệ, hoặc chọn nhiều liên hệ rồi dùng Thêm trên thanh phía trên danh sách."
+          },
+          "new": {
+            "title": "Đánh dấu khách hàng tiềm năng mới là chưa liên hệ",
+            "intro": "Khi khách hàng tiềm năng được tạo theo một trong các cách sau, hãy đánh dấu là chưa liên hệ:",
+            "manual": "Tạo thủ công trong ứng dụng",
+            "import": "Nhập từ tệp hoặc Google Sheets",
+            "leadSource": "Nguồn khách hàng tiềm năng, biểu mẫu và tích hợp"
+          },
+          "reassign": {
+            "title": "Khách hàng tiềm năng được giao lại",
+            "intro": "Khi khách hàng tiềm năng được giao hoặc giao lại cho người phụ trách mới:",
+            "keep": "Không thay đổi dấu Chưa liên hệ",
+            "mark": "Đánh dấu chưa liên hệ khi được giao lại"
+          }
+        }
+      }
+    }
+  }
+}

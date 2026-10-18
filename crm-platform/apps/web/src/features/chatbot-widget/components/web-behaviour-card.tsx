@@ -1,10 +1,11 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { CHAT_AUTO_OPEN_MAX, WIDGET_LIMITS } from '@crm/contracts';
+import { CHAT_AUTO_OPEN_MAX, LAUNCHER_LIMITS, WIDGET_LIMITS } from '@crm/contracts';
 import { cn } from '@crm/ui';
 import { ConsentNoticeEditor } from '@/features/contact-consent';
 import type { BuilderState } from '../lib/builder-model';
+import { ChatLanguageFields } from './chat-language-fields';
 import { ToggleRow } from './toggle-row';
 import { WidgetAgeQuestion } from './widget-age-question';
 
@@ -154,6 +155,35 @@ export function WebBehaviourCard({
           onChange={(speak) => setChat({ speak })}
         />
       </div>
+
+      <div>
+        <ToggleRow
+          id="wgt-f-chat-feedback"
+          checked={chat.feedback.enabled}
+          label={t('feedback.label')}
+          hint={t('feedback.hint')}
+          onChange={(enabled) => setChat({ feedback: { ...chat.feedback, enabled } })}
+        />
+        <label
+          htmlFor="wgt-f-chat-feedback-message"
+          className="mt-2 block text-[11.5px] font-semibold"
+        >
+          {t('feedback.message')}
+        </label>
+        <input
+          id="wgt-f-chat-feedback-message"
+          type="text"
+          value={chat.feedback.message}
+          maxLength={LAUNCHER_LIMITS.feedbackMessage}
+          onChange={(e) => setChat({ feedback: { ...chat.feedback, message: e.target.value } })}
+          className={cn(INPUT, 'mt-1')}
+        />
+        {chat.feedback.enabled ? null : (
+          <p className="mt-1 text-[11.5px] text-muted-foreground">{t('feedback.keptWhenOff')}</p>
+        )}
+      </div>
+
+      <ChatLanguageFields value={chat.languages} onChange={(languages) => setChat({ languages })} />
 
       <div>
         <ToggleRow

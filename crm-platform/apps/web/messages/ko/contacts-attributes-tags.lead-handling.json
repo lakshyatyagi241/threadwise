@@ -1,0 +1,65 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "미연락"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "미연락",
+        "chipTitle": "아직 팀원 누구도 연락하지 않았습니다",
+        "waitingSince": "{date}부터 대기 중",
+        "markContacted": "연락함으로 표시",
+        "markUncontacted": "미연락으로 표시",
+        "markedContacted": "연락함으로 표시했습니다",
+        "markedUncontacted": "미연락으로 표시했습니다",
+        "markFailed": "표시를 변경하지 못했습니다. 다시 시도해 주세요.",
+        "bulkMarkedContacted": "{count, plural, other {연락처 #개를 연락함으로 표시했습니다}}",
+        "bulkMarkedUncontacted": "{count, plural, other {연락처 #개를 미연락으로 표시했습니다}}"
+      },
+      "settings": {
+        "save": "저장",
+        "discard": "변경 사항 취소",
+        "saved": "설정을 저장했습니다",
+        "retry": "다시 시도",
+        "loading": "설정을 불러오는 중",
+        "conflict": "편집하는 동안 다른 사용자가 이 설정을 저장했습니다. 아래에 다시 표시했으니 변경을 다시 해 주세요.",
+        "conflictOk": "확인",
+        "errors": {
+          "network": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도해 주세요.",
+          "forbidden": "워크스페이스 설정을 관리하는 사용자만 이 페이지를 변경할 수 있습니다.",
+          "conflict": "다른 사용자가 먼저 설정을 변경했습니다. 새로고침한 후 다시 시도해 주세요.",
+          "validation": "올바르지 않은 설정이 있습니다. 확인한 후 다시 시도해 주세요.",
+          "unexpected": "문제가 발생했습니다. 다시 시도해 주세요."
+        },
+        "uncontacted": {
+          "title": "미연락 잠재 고객",
+          "subtitle": "아직 아무도 연락하지 않은 잠재 고객을 표시해 두면 누군가 연락할 때까지 눈에 띕니다. 옵션을 켜기 전에는 아무것도 바뀌지 않습니다.",
+          "clear": {
+            "title": "연락함으로 표시",
+            "intro": "팀원이 다음 중 하나를 하면 미연락 표시를 자동으로 해제합니다.",
+            "contactButton": "연락 버튼(전화, SMS, 이메일, WhatsApp)을 누르거나 전화를 걸 때",
+            "message": "인박스에서 메시지, 템플릿, 저장된 답장 또는 파일을 보낼 때",
+            "automation": "캠페인, 브로드캐스트 또는 자동화 플로우가 잠재 고객에게 발송될 때",
+            "activity": "타임라인에 메모, 미팅 또는 기타 활동을 추가할 때",
+            "manualHint": "표시를 직접 변경할 수도 있습니다. 연락처의 더보기 메뉴를 열거나, 여러 연락처를 선택한 뒤 목록 위 막대의 더보기를 사용하세요."
+          },
+          "new": {
+            "title": "신규 잠재 고객을 미연락으로 표시",
+            "intro": "잠재 고객이 다음 방식으로 생성되면 미연락으로 표시합니다.",
+            "manual": "앱에서 직접 생성",
+            "import": "파일 또는 Google Sheets에서 가져옴",
+            "leadSource": "잠재 고객 유입 경로, 양식, 연동"
+          },
+          "reassign": {
+            "title": "재배정된 잠재 고객",
+            "intro": "잠재 고객이 새 담당자에게 배정 또는 재배정될 때:",
+            "keep": "미연락 표시를 변경하지 않음",
+            "mark": "재배정 시 미연락으로 표시"
+          }
+        }
+      }
+    }
+  }
+}

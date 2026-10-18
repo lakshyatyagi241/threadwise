@@ -374,6 +374,11 @@
         "label": "Propriétés des entreprises",
         "description": "Ajoutez les champs à conserver sur chaque entreprise.",
         "keywords": "champs personnalisés, champs, obligatoire, liste déroulante, organisation, compte"
+      },
+      "uncontacted-leads": {
+        "label": "Prospects non contactés",
+        "description": "Choisissez les actions qui comptent comme une prise de contact avec un prospect, et les nouveaux contacts qui démarrent comme non contactés.",
+        "keywords": "non contacté, contacté, prospect, nouveau prospect, premier contact, relance, réattribuer, marquage"
       }
     },
     "backToMarketplace": "Retour au Marketplace"

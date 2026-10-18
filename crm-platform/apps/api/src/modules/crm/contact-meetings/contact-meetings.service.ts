@@ -17,11 +17,16 @@ import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { assertContactScope, ContactsRepository } from '../contacts';
 import { toContactMeetingResponse } from './contact-meetings.mapper';
+<<<<<<< HEAD
+import { ContactMeetingsRepository } from './contact-meetings.repository';
+import { ContactTouchService } from '../lead-handling/contact-touch.service';
+=======
 import {
   ContactMeetingsRepository,
   type ContactMeetingListRow,
   type ContactMeetingRow,
 } from './contact-meetings.repository';
+>>>>>>> origin/main
 
 const MODULE_KEY = 'contact_meetings';
 
@@ -34,6 +39,7 @@ export class ContactMeetingsService {
     private readonly outbox: OutboxService,
     private readonly audit: AuditService,
     private readonly rbac: RbacService,
+    private readonly leadHandling: ContactTouchService,
   ) {}
 
   async list(
@@ -101,6 +107,8 @@ export class ContactMeetingsService {
         createdBy: ctx.userId,
       });
       await this.contactsRepo.bumpLastActivity(tx, ctx.orgId, contactId);
+      // A meeting a person added reached the contact: lead handling (the uncontacted marker, BL-290). Never throws.
+      await this.leadHandling.touch(tx, ctx.orgId, contactId, 'activity');
 
       await this.audit.record(tx, { module: MODULE_KEY, recordId: created.id, action: 'insert' });
       await this.outbox.emit(tx, {

@@ -125,6 +125,8 @@ export class ContactBulkRepository {
     where: SQL,
     owner: { id: number | null; uuid: string | null },
     meta: ActorMeta,
+    /** The workspace marks a reassigned contact uncontacted (BL-290): only a contact that is not marked yet is stamped. */
+    markUncontacted = false,
   ): Promise<number> {
     const res = await tx.execute(sql`
       WITH picked AS (
@@ -133,7 +135,9 @@ export class ContactBulkRepository {
         LEFT JOIN users prev ON prev.org_id = contacts.org_id AND prev.id = contacts.owner_id
         WHERE ${where} AND contacts.owner_id IS DISTINCT FROM ${owner.id}::bigint
       ), upd AS (
-        UPDATE contacts SET owner_id = ${owner.id}::bigint, updated_by = ${meta.actorId}::bigint
+        UPDATE contacts SET owner_id = ${owner.id}::bigint, updated_by = ${meta.actorId}::bigint,
+          uncontacted_since = CASE WHEN ${markUncontacted && owner.id !== null}::boolean
+                                   THEN coalesce(contacts.uncontacted_since, now()) ELSE contacts.uncontacted_since END
         FROM picked
         WHERE contacts.org_id = ${orgId}::bigint AND contacts.id = picked.id
         RETURNING contacts.id, picked.uuid, picked.prev_owner
@@ -148,6 +152,49 @@ export class ContactBulkRepository {
         SELECT ${orgId}::bigint, 'contacts', upd.id, 'contact.updated',
                jsonb_build_object('uuid', upd.uuid, 'ownerId', ${owner.uuid}::text,
                                   'previousOwnerId', upd.prev_owner, '_meta', ${metaJson(meta)}::jsonb)
+        FROM upd
+      )
+      SELECT count(*)::int AS n FROM upd
+    `);
+    return Number((res.rows[0] as { n: number }).n);
+  }
+
+  /**
+   * Marks every contact the filter matches as uncontacted (`true`, since now) or as contacted (`false`), skipping the ones already in
+   * that state. One audit row and one `contact.uncontacted_changed` event per contact changed, cause `manual`; `row_version` does not move
+   * (contacts_touch).
+   */
+  async setUncontacted(
+    tx: Tx,
+    orgId: number,
+    where: SQL,
+    uncontacted: boolean,
+    meta: ActorMeta,
+  ): Promise<number> {
+    const res = await tx.execute(sql`
+      WITH picked AS (
+        SELECT contacts.id, contacts.uuid, contacts.uncontacted_since AS was
+        FROM contacts
+        WHERE ${where} AND (contacts.uncontacted_since IS NULL) = ${uncontacted}::boolean
+      ), upd AS (
+        UPDATE contacts
+        SET uncontacted_since = CASE WHEN ${uncontacted}::boolean THEN now() ELSE NULL END
+        FROM picked
+        WHERE contacts.org_id = ${orgId}::bigint AND contacts.id = picked.id
+        RETURNING contacts.id, picked.uuid, picked.was, contacts.uncontacted_since AS now_since
+      ), au AS (
+        INSERT INTO audit_log (org_id, actor_id, actor_type, module, record_id, action, delta, request_id)
+        SELECT ${orgId}::bigint, ${meta.actorId}::bigint, ${meta.actorType}, 'contacts', upd.id, 'update',
+               jsonb_build_object(
+                 'uncontactedSince', jsonb_build_object('old', to_jsonb(upd.was), 'new', to_jsonb(upd.now_since)),
+                 'cause', jsonb_build_object('old', NULL, 'new', 'manual')),
+               ${meta.requestId}
+        FROM upd
+      ), ev AS (
+        INSERT INTO event_outbox (org_id, aggregate_module, aggregate_id, event_type, payload)
+        SELECT ${orgId}::bigint, 'contacts', upd.id, 'contact.uncontacted_changed',
+               jsonb_build_object('uuid', upd.uuid, 'uncontacted', ${uncontacted}::boolean, 'cause', 'manual',
+                                  '_meta', ${metaJson(meta)}::jsonb)
         FROM upd
       )
       SELECT count(*)::int AS n FROM upd

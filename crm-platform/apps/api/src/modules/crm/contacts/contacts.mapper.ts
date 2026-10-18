@@ -56,6 +56,7 @@ export function toContactResponse(
     dateOfBirth: row.dateOfBirth,
     isMinor: row.isMinor === true,
     lastActivityAt: row.lastActivityAt?.toISOString() ?? null,
+    uncontactedSince: row.uncontactedSince?.toISOString() ?? null,
     customFields: row.data ?? {},
     source: row.source,
     timezone: row.timezone,

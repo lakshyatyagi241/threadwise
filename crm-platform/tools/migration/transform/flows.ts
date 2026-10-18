@@ -569,6 +569,7 @@ export const widgets: HandlerSpec = {
         c('name', 'text'),
         c('slug', 'text'),
         c('embed_token', 'text'),
+        c('legacy_embed_id', 'text'),
         c('mode', 'text'),
         c('target_whatsapp_cc', 'text'),
         c('target_whatsapp_number', 'text'),
@@ -671,6 +672,8 @@ export const widgets: HandlerSpec = {
           // A bot with no flow (a website chat bot) keeps flow_id NULL: it is a stand-alone widget.
           row: {
             ...w.row,
+            // the old embed snippet carries the bot id: wgt_legacy_lookup resolves it to this widget
+            legacy_embed_id: /^[A-Za-z0-9_-]{1,64}$/.test(w.botId) ? w.botId : null,
             assistant_id: assistantId,
             flow_id: flow && flow.table === 'flows' ? flow.id : null,
             customized_at: flow && flow.table === 'flows' ? w.row.updated_at : null,

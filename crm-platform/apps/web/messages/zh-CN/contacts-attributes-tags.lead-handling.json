@@ -1,0 +1,65 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "未联系"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "未联系",
+        "chipTitle": "团队中还没有人联系过",
+        "waitingSince": "自 {date} 起等待",
+        "markContacted": "标记为已联系",
+        "markUncontacted": "标记为未联系",
+        "markedContacted": "已标记为已联系",
+        "markedUncontacted": "已标记为未联系",
+        "markFailed": "无法更改标记，请重试。",
+        "bulkMarkedContacted": "{count, plural, other {已将 # 位联系人标记为已联系}}",
+        "bulkMarkedUncontacted": "{count, plural, other {已将 # 位联系人标记为未联系}}"
+      },
+      "settings": {
+        "save": "保存",
+        "discard": "放弃更改",
+        "saved": "设置已保存",
+        "retry": "重试",
+        "loading": "正在加载设置",
+        "conflict": "你编辑期间，其他人保存了这些设置。设置已在下方重新显示，请再次修改。",
+        "conflictOk": "知道了",
+        "errors": {
+          "network": "无法连接到服务器。请检查网络后重试。",
+          "forbidden": "只有管理工作区设置的人员才能更改此页面。",
+          "conflict": "其他人已先更改了这些设置。请刷新后重试。",
+          "validation": "部分设置无效。请检查后重试。",
+          "unexpected": "出了点问题，请重试。"
+        },
+        "uncontacted": {
+          "title": "未联系的潜在客户",
+          "subtitle": "标记出还没有人联系过的潜在客户，让他们在有人跟进之前保持醒目。开启选项之前不会有任何变化。",
+          "clear": {
+            "title": "标记为已联系",
+            "intro": "当团队成员执行以下任一操作时，自动移除“未联系”标记：",
+            "contactButton": "点击联系按钮（电话、短信、邮件或 WhatsApp）或拨打电话",
+            "message": "从收件箱发送消息、模板、快捷回复或文件",
+            "automation": "营销活动、群发或自动化流程向该潜在客户发送内容",
+            "activity": "在时间线中添加备注、会议或其他活动",
+            "manualHint": "你也可以手动更改标记：在联系人上打开“更多”菜单，或选择多位联系人并使用列表上方栏中的“更多”。"
+          },
+          "new": {
+            "title": "将新潜在客户标记为未联系",
+            "intro": "通过以下方式创建潜在客户时，将其标记为未联系：",
+            "manual": "在应用中手动创建",
+            "import": "从文件或 Google Sheets 导入",
+            "leadSource": "潜在客户来源、表单和集成"
+          },
+          "reassign": {
+            "title": "重新分配的潜在客户",
+            "intro": "当潜在客户被分配或重新分配给新负责人时：",
+            "keep": "不更改“未联系”标记",
+            "mark": "重新分配时标记为未联系"
+          }
+        }
+      }
+    }
+  }
+}

@@ -5,6 +5,21 @@
         "label": "חשבון Google",
         "description": "חברו חשבון Google אחד ל-Calendar, Sheets, Docs, Forms ו-Meet בתהליכים שלכם.",
         "keywords": "google, חשבון google, לוח שנה, calendar, sheets, docs, forms, טפסים, meet, drive, oauth, חיבור google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "הוסיפו שורות, חפשו שורות ושמרו אנשי קשר מגיליון בתוך הזרימות שלכם. משתמש בחיבור לחשבון Google שלכם.",
+        "keywords": "google sheets, גיליון אלקטרוני, שורות, תאים, oauth, חיבור google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "העתיקו מסמך תבנית, מלאו אותו ושתפו אותו מהזרימות שלכם. משתמש בחיבור לחשבון Google שלכם.",
+        "keywords": "google docs, מסמך, תבנית, שיתוף, oauth, חיבור google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "שלחו טופס ללקוח והמשיכו כשהוא ימלא אותו. משתמש בחיבור לחשבון Google שלכם.",
+        "keywords": "google forms, טופס, סקר, תגובות, oauth, חיבור google"
       }
     }
   },

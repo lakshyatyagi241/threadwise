@@ -270,6 +270,19 @@
             "placeholder": "example.com",
             "add": "Add a website",
             "remove": "Remove website"
+          },
+          "feedback": {
+            "label": "Let visitors rate replies",
+            "hint": "Thumbs up and down under each bot reply.",
+            "message": "Message shown after a rating",
+            "keptWhenOff": "Feedback is off. This message is kept and shows again if you switch it back on."
+          },
+          "languages": {
+            "primary": "Primary language",
+            "follow": "Follow the visitor's browser",
+            "primaryHint": "The language of the chat window's own texts.",
+            "additional": "Other languages",
+            "additionalHint": "A visitor whose browser uses one of these sees the window in that language. Everyone else sees the primary language."
           }
         },
         "rail": {

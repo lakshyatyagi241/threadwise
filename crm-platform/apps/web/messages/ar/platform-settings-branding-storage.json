@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "نقطة النهاية",
-            "hint": "مطلوبة لـ Spaces وR2 وMinIO. تُزال /bucket اللاحقة.",
-            "placeholder": "https://… (مطلوب لـ Spaces / R2 / MinIO؛ تلقائي لـ Wasabi وBunny)"
+            "hint": "مطلوبة لـ Spaces وR2. تُزال /bucket اللاحقة.",
+            "placeholder": "https://… (مطلوب لـ Spaces / R2؛ تلقائي لـ Wasabi وBunny)"
           },
           "cdnUrl": {
             "label": "رابط عام / CDN (اختياري)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "استخدام نقطة نهاية بنمط المسار (MinIO / بعض مخازن S3 المتوافقة)"
+            "label": "استخدام نقطة نهاية بنمط المسار (بعض مخازن S3 المتوافقة)"
           },
           "storageZone": {
             "label": "منطقة التخزين",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / متوافق مع S3"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "خاص (روابط موقّعة)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "التخزين السحابي",
-        "description": "أرسل وسائط العملاء إلى حاويتك الخاصة: Amazon S3 أو Wasabi أو Bunny.net أو DigitalOcean Spaces أو Cloudflare R2 أو MinIO.",
+        "description": "أرسل وسائط العملاء إلى حاويتك الخاصة: Amazon S3 أو Wasabi أو Bunny.net أو DigitalOcean Spaces أو Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "استخدم حقول Bunny: منطقة التخزين وكلمة المرور. المنطقة هي منطقة التخزين (de وny وla...)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "املأ حقول S3 والصق رابط نقطة النهاية. حدد نمط المسار لـ MinIO."
+              "title": "Spaces / R2",
+              "body": "املأ حقول S3 والصق رابط نقطة النهاية."
             },
             "test": {
               "title": "اختبر دائمًا أولًا",

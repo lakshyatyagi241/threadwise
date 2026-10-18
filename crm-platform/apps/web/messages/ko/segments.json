@@ -27,7 +27,8 @@
       "minor": "미성년자로 표시됨",
       "dateOfBirth": "생년월일",
       "age": "나이(세)",
-      "timezone": "시간대"
+      "timezone": "시간대",
+      "uncontacted": "미연락"
     },
     "fieldGroups": {
       "journey": "여정",

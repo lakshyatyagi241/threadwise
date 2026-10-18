@@ -292,7 +292,7 @@ export const pwaSettingsSchema = z.object({
 });
 
 // --- TW-SET-039 -------------------------------------------------------------------------------
-export const STORAGE_PROVIDERS = ['s3', 'wasabi', 'bunny', 'spaces', 'r2', 'minio'] as const;
+export const STORAGE_PROVIDERS = ['s3', 'wasabi', 'bunny', 'spaces', 'r2'] as const;
 export const storageSettingsSchema = z.object({
   enabled: flag(false),
   provider: z.enum(STORAGE_PROVIDERS).default('s3'),

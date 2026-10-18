@@ -766,15 +766,15 @@
           },
           "endpoint": {
             "label": "Endpoint",
-            "hint": "Vereist voor Spaces, R2 en MinIO. Een afsluitende /bucket wordt verwijderd.",
-            "placeholder": "https://… (vereist voor Spaces / R2 / MinIO; automatisch voor Wasabi & Bunny)"
+            "hint": "Vereist voor Spaces en R2. Een afsluitende /bucket wordt verwijderd.",
+            "placeholder": "https://… (vereist voor Spaces / R2; automatisch voor Wasabi & Bunny)"
           },
           "cdnUrl": {
             "label": "Publieke / CDN-URL (optioneel)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "Gebruik path-style endpoint (MinIO / sommige S3-compatibele opslag)"
+            "label": "Gebruik path-style endpoint (sommige S3-compatibele opslag)"
           },
           "storageZone": {
             "label": "Opslagzone",
@@ -792,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3-compatibel"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "Privé (ondertekende URL's)",
@@ -1151,7 +1150,7 @@
       },
       "storage": {
         "title": "Cloudopslag",
-        "description": "Stuur clientmedia naar je eigen bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 of MinIO.",
+        "description": "Stuur clientmedia naar je eigen bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1650,8 +1649,8 @@
               "body": "Gebruik de Bunny-velden: opslagzone en wachtwoord. Regio is de regio van de zone (de, ny, la...)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "Vul de S3-velden in en plak de Endpoint-URL. Vink path-style aan voor MinIO."
+              "title": "Spaces / R2",
+              "body": "Vul de S3-velden in en plak de Endpoint-URL."
             },
             "test": {
               "title": "Altijd eerst testen",

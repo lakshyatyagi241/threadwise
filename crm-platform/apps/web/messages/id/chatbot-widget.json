@@ -586,6 +586,19 @@
             "placeholder": "example.com",
             "add": "Tambah situs web",
             "remove": "Hapus situs web"
+          },
+          "feedback": {
+            "label": "Biarkan pengunjung menilai balasan",
+            "hint": "Jempol naik dan turun di bawah setiap balasan bot.",
+            "message": "Pesan yang ditampilkan setelah penilaian",
+            "keptWhenOff": "Umpan balik nonaktif. Pesan ini disimpan dan tampil lagi jika Anda mengaktifkannya kembali."
+          },
+          "languages": {
+            "primary": "Bahasa utama",
+            "follow": "Ikuti browser pengunjung",
+            "primaryHint": "Bahasa teks bawaan jendela obrolan.",
+            "additional": "Bahasa lain",
+            "additionalHint": "Pengunjung yang browsernya memakai salah satunya melihat jendela dalam bahasa itu. Yang lain melihat bahasa utama."
           }
         },
         "rail": {

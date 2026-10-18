@@ -586,6 +586,19 @@
             "placeholder": "example.com",
             "add": "Thêm trang web",
             "remove": "Xóa trang web"
+          },
+          "feedback": {
+            "label": "Cho phép khách đánh giá câu trả lời",
+            "hint": "Nút thích và không thích dưới mỗi câu trả lời của bot.",
+            "message": "Tin nhắn hiển thị sau khi đánh giá",
+            "keptWhenOff": "Phản hồi đang tắt. Tin nhắn này được giữ lại và hiện lại nếu bạn bật lại."
+          },
+          "languages": {
+            "primary": "Ngôn ngữ chính",
+            "follow": "Theo trình duyệt của khách",
+            "primaryHint": "Ngôn ngữ của các văn bản riêng của cửa sổ chat.",
+            "additional": "Ngôn ngữ khác",
+            "additionalHint": "Khách có trình duyệt dùng một trong các ngôn ngữ này sẽ thấy cửa sổ bằng ngôn ngữ đó. Những người khác thấy ngôn ngữ chính."
           }
         },
         "rail": {

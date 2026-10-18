@@ -84,6 +84,7 @@ const row = (over: Partial<RowView> = {}): RowView => ({
   leadScore: null,
   leadScoreSource: null,
   leadScoredAt: null,
+  uncontactedSince: null,
   dateOfBirth: null,
   isMinor: false,
   ...over,
@@ -860,6 +861,7 @@ describe('applied filters and the selection bar', () => {
           onAssignOwner={noop}
           onChangeStage={noop}
           onUpdate={noop}
+          onMarkUncontacted={noop}
           picker={null}
           onPicker={noop}
           onGroup={async () => true}

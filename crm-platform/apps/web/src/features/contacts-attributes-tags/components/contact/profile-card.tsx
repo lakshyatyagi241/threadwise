@@ -15,6 +15,7 @@ import { KeyDetails } from './key-details';
 import { LeadScoreChip } from './lead-score-chip';
 import { JobTitle, SocialIcons } from './parts';
 import { StageControl } from './stage-control';
+import { UncontactedMarker } from '../lead-handling/uncontacted-marker';
 
 /**
  * The left column of the contact page (HubSpot's profile card): the way back, avatar and name with the lead score, the job title, the
@@ -57,6 +58,7 @@ export function ProfileColumn({
                 {name}
               </h1>
               {showScore && <LeadScoreChip contact={contact} onOpen={() => onAdd('score')} />}
+              <UncontactedMarker since={contact.uncontactedSince} />
             </div>
             <JobTitle contact={contact} />
             <div className="mt-1 flex flex-wrap items-center gap-1.5">

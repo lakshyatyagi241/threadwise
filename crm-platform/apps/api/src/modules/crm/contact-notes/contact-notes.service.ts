@@ -16,6 +16,7 @@ import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { assertContactScope, ContactsRepository } from '../contacts';
 import { toContactNoteResponse } from './contact-notes.mapper';
 import { ContactNotesRepository } from './contact-notes.repository';
+import { ContactTouchService } from '../lead-handling/contact-touch.service';
 
 const MODULE_KEY = 'contact_notes';
 
@@ -28,6 +29,7 @@ export class ContactNotesService {
     private readonly outbox: OutboxService,
     private readonly audit: AuditService,
     private readonly rbac: RbacService,
+    private readonly leadHandling: ContactTouchService,
   ) {}
 
   async list(
@@ -76,6 +78,8 @@ export class ContactNotesService {
         createdBy: ctx.userId,
       });
       await this.contactsRepo.bumpLastActivity(tx, ctx.orgId, contactId);
+      // A note a person added reached the contact: lead handling (the uncontacted marker, BL-290). Never throws.
+      await this.leadHandling.touch(tx, ctx.orgId, contactId, 'activity');
 
       await this.audit.record(tx, { module: MODULE_KEY, recordId: created.id, action: 'insert' });
       await this.outbox.emit(tx, {

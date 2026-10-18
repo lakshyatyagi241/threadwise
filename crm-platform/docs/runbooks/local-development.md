@@ -8,7 +8,7 @@ pnpm install
 
 cp .env.example .env          # adjust ports if others are taken — see below
 
-pnpm infra:up                 # postgres, redis, minio, mailpit
+pnpm infra:up                 # postgres, redis, mailpit
 pnpm --filter @crm/contracts build
 pnpm --filter @crm/db build
 pnpm --filter @crm/observability build
@@ -46,8 +46,6 @@ If another project already owns 5432/6379/9000/1025, change the host ports in
 ```bash
 POSTGRES_PORT=55432
 REDIS_PORT=56379
-MINIO_PORT=59000
-MINIO_CONSOLE_PORT=59001
 MAILPIT_SMTP_PORT=51025
 MAILPIT_UI_PORT=58025
 ```
@@ -95,7 +93,6 @@ pnpm infra:nuke          # also deletes volumes — all local data gone
 | API           | http://localhost:3000                              |
 | Swagger       | http://localhost:3000/docs                         |
 | Mailpit       | http://localhost:8025 (or your `MAILPIT_UI_PORT`)  |
-| MinIO console | http://localhost:9001 — `crmminio` / `crmminio123` |
 
 ## Try the API
 
