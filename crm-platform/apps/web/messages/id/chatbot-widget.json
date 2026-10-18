@@ -325,7 +325,8 @@
           "url": "Atau gunakan alamat gambar Anda sendiri",
           "urlHint": "Tempel alamat gambar persegi (https://...). Unggah file belum tersedia.",
           "botName": "Nama bot",
-          "botNameHint": "Ditampilkan di header jendela obrolan. Kosongkan untuk memakai nama bot Anda."
+          "botNameHint": "Ditampilkan di header jendela obrolan. Kosongkan untuk memakai nama bot Anda.",
+          "urlHintUpload": "Tempel alamat gambar persegi (https://...) atau unggah file di bawah."
         },
         "3": {
           "title": "Atur pesan sambutan Anda",
@@ -699,7 +700,9 @@
         "statusLive": "Aktif",
         "statusDraft": "Belum dipublikasikan",
         "codeLabel": "HTML",
-        "localNote": "Kode ini mengarah ke alamat di komputer ini (localhost), jadi hanya berfungsi di halaman yang dibuka di sini. Di situs web langsung, gunakan alamat yang sudah di-deploy."
+        "localNote": "Kode ini mengarah ke alamat di komputer ini (localhost), jadi hanya berfungsi di halaman yang dibuka di sini. Di situs web langsung, gunakan alamat yang sudah di-deploy.",
+        "statusNoNumber": "Dipublikasikan, tanpa nomor",
+        "noNumber": "Bot ini sudah dipublikasikan, tetapi belum memiliki nomor WhatsApp, sehingga tombol, kode QR, dan tautan langsung tetap tersembunyi. Pilih nomor di Pemicu pada tab Bangun."
       },
       "whatsapp": {
         "loading": "Memuat tombol…",
@@ -708,7 +711,8 @@
         "saved": "Tombol WhatsApp tersimpan",
         "saveFailed": "Tombol tidak dapat disimpan. Coba lagi.",
         "fromBot": "Tombol membuka WhatsApp di {number}, nomor tempat bot ini berjalan. Ubah nomor di Pemicu pada tab Buat.",
-        "noNumber": "Bot ini belum punya nomor WhatsApp. Pilih satu di pemicu pada tab Bangun, lalu kembali untuk menyimpan tombol."
+        "noNumber": "Bot ini belum punya nomor WhatsApp. Pilih satu di pemicu pada tab Bangun, lalu kembali untuk menyimpan tombol.",
+        "keywordMissing": "Pesan di atas tidak memuat kata awal bot Anda \"{keyword}\". Jika bot hanya mulai dengan kata itu, pengunjung yang mengetuk tombol tidak akan sampai ke bot."
       }
     },
     "webBots": {

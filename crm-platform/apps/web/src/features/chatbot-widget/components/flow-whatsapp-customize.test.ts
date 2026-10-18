@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { WIDGET_BUILDER_DEFAULTS } from '@crm/contracts';
-import { botTarget, splitNumber, whatsappStart } from './flow-whatsapp-customize';
+import {
+  botTarget,
+  messageMissesKeyword,
+  splitNumber,
+  whatsappStart,
+} from './flow-whatsapp-customize';
 
 const bot = (over: Partial<Parameters<typeof whatsappStart>[1]> = {}) => ({
   phone: '919876543210',
@@ -47,6 +52,30 @@ describe("a WhatsApp bot's button is made from the bot", () => {
       targetWhatsappNumber: '7911123456',
       prefilledMessage: 'join',
     });
+  });
+});
+
+describe('a button that already exists keeps its own message', () => {
+  const saved = {
+    ...whatsappStart('Bot', bot()),
+    prefilledMessage: 'Hi, I would like to know more about your products and services.',
+  };
+
+  it('does not replace a saved or migrated message with the keyword', () => {
+    expect(botTarget(saved, bot(), true).prefilledMessage).toBe(saved.prefilledMessage);
+  });
+
+  it('still fills an empty message from the keyword, and a new bot always starts from it', () => {
+    expect(botTarget({ ...saved, prefilledMessage: '  ' }, bot(), true).prefilledMessage).toBe(
+      'hello',
+    );
+    expect(botTarget(saved, bot()).prefilledMessage).toBe('hello');
+  });
+
+  it('warns when a tap would not send the start word', () => {
+    expect(messageMissesKeyword(saved.prefilledMessage, 'hello')).toBe(true);
+    expect(messageMissesKeyword('Hello there', 'hello')).toBe(false);
+    expect(messageMissesKeyword('anything', '')).toBe(false);
   });
 });
 
