@@ -47,3 +47,28 @@ What changes the marker, with the workspace's settings:
 The hooks run in the caller's transaction, in a savepoint, and never fail the action they belong to (a failure is logged). Audit (module `contacts`): `uncontactedSince` old and new plus
 `cause` for a single clear or a manual mark (not for a creation or reassign mark: the creation or the owner change is the record). Outbox: `contact.uncontacted_changed { uuid, uncontacted,
 cause }` (cause: `manual`, `contact_button`, `message`, `automation`, `activity`); it is NOT `contact.updated`, so no customer flow starts because a flag moved.
+
+## Automatic follow-ups (BL-291)
+
+A contact's **next follow-up** is its one open task of kind `follow_up` (`tasks.kind`, at most one open per contact: unique index `uq_tasks_open_follow_up`). A follow-up without a date is
+"someday": an open task with a null `due_at`, never reminded. The task list, due reminders (`task.due`), notifications, audit and scopes are the tasks module's own; the generic task
+API cannot create a follow-up (`kind` is always `task` there). Tasks the rules create have `source = auto`; the title is `Follow up`; `TaskResponse.kind` is `task` or `follow_up`.
+
+| Method and path                       | Key                      | What                                                                                                                              |
+| ------------------------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| `PUT /settings/follow-ups`            | `admin.settings.manage`  | the whole section + `rowVersion` (omit on the first save); 409 when stale; 422 for an invalid document                            |
+| `PUT /contacts/:id/follow-up`         | `record.contacts.update` | `{ dueAt: ISO datetime or null }` (null = someday) -> `{ nextFollowUp }`; a NEW follow-up also needs `record.tasks.create` (403)   |
+| `POST /contacts/:id/follow-up/snooze` | `record.contacts.update` | `{ preset: 'day', 'three_days' or 'week' }` -> that day at the workspace's default alert time; 404 without a follow-up            |
+| `POST /contacts/:id/follow-up/done`   | `record.contacts.update` | completes it -> `{ nextFollowUp: null }`                                                                                          |
+| `DELETE /contacts/:id/follow-up`      | `record.contacts.update` | removes it -> `{ nextFollowUp: null }`                                                                                            |
+| `GET /contacts`, `GET /contacts/:id`  | `record.contacts.read`   | `nextFollowUp: { id, dueAt or null, assigneeId }` or null; list filter `followUp=overdue,today,upcoming,someday or none`          |
+| `GET /contacts/stats`                 | `record.contacts.read`   | gains `withFollowUp` (the web offers the follow-up views only while it is above zero)                                             |
+
+`follow_ups` section: `updateWhen: { none, overdue, today, future }` (all default `false`), `defaultDate`: `{ kind: 'days', days: 1..365 }` (default 3), `{ kind: 'month' }`, `{ kind: 'someday' }` or
+`{ kind: 'none' }`, `defaultTime`: `HH:mm` (default `09:00`). The day and the time are read on the workspace's time zone (`organizations.settings.timezone`), the same zone as the task buckets.
+
+Rules. A contact action that counts as reaching out (the same touches as the uncontacted marker, whatever that section's toggles say) looks at the contact's follow-up: no follow-up or a someday one is
+`none`, a dated one is overdue (before now), today (the rest of the workspace's day) or upcoming. If the section's toggle for that state is on, the follow-up is set to the default date at the default time
+(created for the contact's owner, else for the person who got in touch; an existing one keeps its person and re-arms its reminder), made "someday" (`defaultDate: someday`), or completed
+(`defaultDate: none`). The computed instant is a calendar day plus a time, so a redelivered touch writes the same value and changes nothing. Audit and events are the tasks module's:
+`task.created`, `task.updated`, `task.completed`, `task.deleted`, `task.assigned`.

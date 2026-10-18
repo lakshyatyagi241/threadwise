@@ -49,3 +49,17 @@ platform; recorded in [parity/contacts-attributes-tags.md](../parity/contacts-at
 
 Contacts created by an inbound message, the WhatsApp Business address-book sync and telephony are not in the three creation methods, so they never start uncontacted. A
 conversation message sent by a bot that is not a flow, campaign or broadcast (first reply, FAQ, consent keyword) is not a person contacting the lead and never clears the marker.
+
+## Step 2: automatic follow-ups (BL-291)
+
+| Id          | What                                                                                                                                                                                          |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WIRE-LH-030 | `tasks.kind` (`task` or `follow_up`), `chk_tasks_source` gains `auto`, unique index `uq_tasks_open_follow_up (org_id, contact_id) WHERE kind = 'follow_up' AND status = 'open'`                |
+| WIRE-LH-031 | `lead_followup_settings` section `follow_ups`: `updateWhen.none/overdue/today/future`, `defaultDate`, `defaultTime`; reader `FollowUpService.applyAfterTouch` (called by `ContactTouchService.touch` in the same savepoint) |
+| WIRE-LH-032 | `TasksService.openFollowUp / setFollowUpIn / completeFollowUpIn / deleteFollowUpIn / workspaceZone`: the only writers of a follow-up task (audit, outbox, `task.assigned`, reminder re-arm)          |
+| WIRE-LH-033 | `FollowUpService.set / snooze / done / clear` behind `PUT, POST, DELETE /contacts/:id/follow-up...` (contact scope; creating needs `record.tasks.create`)                                       |
+| WIRE-LH-034 | `TaskDueSweepService` stamps and announces a dated follow-up like any task (`task.due`); a someday follow-up has no `due_at` and is never claimed                                              |
+| WIRE-LH-035 | `GET /contacts` (`nextFollowUp`, filter `followUp`, shared by bulk selections and export), `GET /contacts/stats` (`withFollowUp`); web: header row, list column, filter, views, More menu, task badge |
+| WIRE-LH-036 | Settings screen `/follow-ups` (tile `follow-ups`, section Automation, gate `admin.settings.manage`, shortcut from `/contacts`); help guide `follow-ups`                                        |
+
+Not wired (recorded): the follow-up filter is not a segment field, so "Save as segment" does not carry it (BL-294); a follow-up for a deal or a company; per-user defaults (BL-293); skipping closed days with the business hours.

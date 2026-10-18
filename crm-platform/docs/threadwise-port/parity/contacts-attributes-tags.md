@@ -627,3 +627,14 @@ See the pull request body (tsc, ESLint, unit, real-Postgres e2e, web tests, `db:
 ### Not verified, and why
 
 A live WhatsApp or e-mail send through a real provider (the dispatch hook is covered by its transaction path and a service-level test, not a provider); campaign and broadcast sends end to end (the hooks sit on the per-recipient `sent` write); native review of the machine-drafted strings in 20 languages.
+
+### Step 2: automatic follow-ups (BL-291)
+
+### Intended differences from the reference platform
+
+| #   | Where    | Reference platform   | Ours, and why |
+| --- | -------- | -------------------- | ------------- |
+| L05 | Contacts | No follow-up concept | A contact's next follow-up is an open task of kind `follow_up` (one per contact), so the task list, the due reminder sweep, notifications, scopes and audit already work. Shown as "Next follow-up" in the record header and quick view (only when one exists), as a list column, a filter and three views (offered once a contact has one) |
+| L06 | Settings | Nothing              | Settings > Automation and AI > Follow-ups: four situations (none, overdue, today, later; a someday follow-up counts as none), default date (1 day, 3 days, 1 week, 1 month, custom days, someday, none = complete the open one) and alert time, all read on the workspace's time zone. Everything off by default |
+| L07 | Who      | n/a                  | The contact's owner, else the person who got in touch; an existing follow-up keeps its person. A per-user default is not built (BL-293) |
+| L08 | By hand  | n/a                  | More menu: Set / Change / Remove follow-up; Done, Snooze (1 day, 3 days, next week at the default time) and Change date on the header row |
