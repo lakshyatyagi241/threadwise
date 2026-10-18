@@ -69,3 +69,9 @@ export function useVocabulary(): Vocabulary {
     };
   }, [messages, locale, raw]);
 }
+
+/** One noun's words: `useVocab('contact').plural` is "Patients" when the workspace says so, else "Contacts". */
+export function useVocab(key: WorkspaceVocabNoun): Noun {
+  const { noun } = useVocabulary();
+  return noun(key);
+}

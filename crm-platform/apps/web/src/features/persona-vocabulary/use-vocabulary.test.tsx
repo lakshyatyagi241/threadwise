@@ -4,7 +4,7 @@ import { act, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { loadSlice } from './testing';
-import { useVocabulary, type Vocabulary } from './use-vocabulary';
+import { useVocab, useVocabulary, type Noun, type Vocabulary } from './use-vocabulary';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -70,6 +70,26 @@ describe('useVocabulary', () => {
     expect(v.localize('Create an appointment for this contact')).toBe(
       'Create a visit for this patient',
     );
+  });
+
+  it('useVocab gives one noun', async () => {
+    state.nouns = { en: { deal: { one: 'Admission', other: 'Admissions' } } };
+    let got: Noun | null = null;
+    function Probe(): ReactNode {
+      got = useVocab('deal');
+      return null;
+    }
+    host = document.createElement('div');
+    document.body.append(host);
+    const root = createRoot(host);
+    await act(async () => {
+      root.render(
+        <NextIntlClientProvider locale="en" messages={loadSlice('en')} timeZone="UTC">
+          <Probe />
+        </NextIntlClientProvider>,
+      );
+    });
+    expect(got).toMatchObject({ singular: 'Admission', plural: 'Admissions', custom: true });
   });
 
   it('words named for another language do not apply to this one', async () => {

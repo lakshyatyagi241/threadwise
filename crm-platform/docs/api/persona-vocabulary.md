@@ -100,8 +100,8 @@ binds `actor_id` to the acting user.
    words, keeping the case of the original (`Contact`, `contact`, `CONTACTS`, a sentence start) and, in English, `a`/`an`. ICU arguments (`{count}`), plural
    branches and `<b>` tags are left alone; a rewrite that would change a message's arguments is dropped and the string keeps its wording.
 3. Only the bound branches of the message tree are copied; the rest is shared. In production one set of words is computed once and reused.
-4. `useVocabulary()` (client) gives `noun('contact').plural` / `.pluralLower` / `.singular` for text built in code, and `localize(text)` for a string that is
-   not on a bound surface. Ordinary strings need neither.
+4. `useVocab('contact')` and `useVocabulary()` (client) give `.singular`, `.plural` and their lower-case forms for text built in code, and
+   `localize(text)` rewrites a string that is not on a bound surface. Ordinary strings need neither.
 5. The screen is `/workspace-words` (Settings, Business, "Words we use"). After a save it refreshes the layout, so the new words show at once.
 
 ### Why a rewrite of the translated text, not `{contact}` in the messages
