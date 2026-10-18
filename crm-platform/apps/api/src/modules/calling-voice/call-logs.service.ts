@@ -34,6 +34,8 @@ const iso = (v: unknown): string | null => (v ? new Date(v as string).toISOStrin
 /** The key that lets a person play recordings (`call.logs.read` only lets them read the log). */
 export const PERM_RECORDINGS_PLAY = 'call.recordings.play';
 const MODULE = 'wa_calls';
+/** The plan feature of WhatsApp calling: it gates the WhatsApp-only parts of the call log, not the log. */
+export const WHATSAPP_CALLING = 'waba_calling' as const;
 
 /** The consent evidence, retention clock and hold of a call's recording (BL-144). */
 export function toLifecycle(r: Row): CallRecordingLifecycle {
@@ -91,9 +93,15 @@ export function toLogRow(r: Row): CallLogRow {
 
 /**
  * The call log and the call analytics (TW-CALL-022 onward). Reference mirrored every call into `ai_call_logs` and read that; here the
- * log reads `wa_calls` (the source of truth) and its ledger `wa_call_events` directly, so there is no mirror to fall behind. Same
- * plan gate as the dial routes (`waba_calling`); the record scope of `call.logs.read` decides whose calls a person sees; playing a
- * recording needs `call.recordings.play` and is written to the audit trail each time.
+ * log reads `wa_calls` (the source of truth) and its ledger `wa_call_events` directly, so there is no mirror to fall behind.
+ *
+ * Plan (BL-257): the list, its cards, the filters, the detail and the analytics are **not** plan-gated. They read every call the
+ * person may see, so a workspace that only logs calls (by hand, from the mobile app or from a telephony provider) has the screen
+ * without WhatsApp calling. What belongs to WhatsApp stays behind `waba_calling`: playing a recording (only WhatsApp calls have one
+ * a person can play), the filter by WhatsApp number (`numberId`), and the numbers the filter bar offers (empty without the feature).
+ * Calls a workspace made while it had WhatsApp calling stay readable if the feature is later switched off, like the contact's calls.
+ * The record scope of `call.logs.read` decides whose calls a person sees; playing a recording needs `call.recordings.play` and is
+ * written to the audit trail each time.
  */
 @Injectable()
 export class CallLogsService {
@@ -106,14 +114,20 @@ export class CallLogsService {
     private readonly media: ChatMediaStore,
   ) {}
 
-  private async viewer(scope: RecordScope): Promise<Viewer> {
+  /** Who is asking. No plan check: the log of every source is open to anyone with `call.logs.read` (BL-257). */
+  private viewer(scope: RecordScope): Viewer {
     const { orgId, userId } = caller();
-    await this.plans.assertFeature(orgId, 'waba_calling');
     return { orgId, userId, scope };
   }
 
+  /** A filter that only means something to WhatsApp calling (a WhatsApp number): refused with the plan-locked problem without it. */
+  private async assertWhatsappFilter(v: Viewer, numberId: string | undefined): Promise<void> {
+    if (numberId) await this.plans.assertFeature(v.orgId, WHATSAPP_CALLING);
+  }
+
   async list(q: CallLogListQuery, scope: RecordScope, now = new Date()): Promise<CallLogList> {
-    const v = await this.viewer(scope);
+    const v = this.viewer(scope);
+    await this.assertWhatsappFilter(v, q.numberId);
     const w = logWindow(q, now);
     const filters = {
       start: w.start,
@@ -145,15 +159,17 @@ export class CallLogsService {
   }
 
   async filters(scope: RecordScope): Promise<CallLogFilters> {
-    const v = await this.viewer(scope);
+    const v = this.viewer(scope);
+    // The WhatsApp numbers are offered only to a workspace that has WhatsApp calling; the teammates are those of every source.
+    const whatsapp = await this.plans.featureEnabled(v.orgId, WHATSAPP_CALLING);
     return this.db.tx(async (tx) => ({
-      numbers: await this.repo.numbers(tx, v.orgId),
+      numbers: whatsapp ? await this.repo.numbers(tx, v.orgId) : [],
       agents: await this.repo.agents(tx, v),
     }));
   }
 
   async detail(uuid: string, scope: RecordScope): Promise<CallLogDetail> {
-    const v = await this.viewer(scope);
+    const v = this.viewer(scope);
     const found = await this.db.tx(async (tx) => {
       const r = await this.repo.byUuid(tx, v, uuid);
       if (!r) return null;
@@ -239,7 +255,9 @@ export class CallLogsService {
    * customer's file; the media route also needs their session). Every request is audited: who listened to which call.
    */
   async playback(uuid: string, scope: RecordScope): Promise<CallPlayback> {
-    const v = await this.viewer(scope);
+    const v = this.viewer(scope);
+    // A recording a person can play belongs to a WhatsApp call: playing one stays a WhatsApp calling feature.
+    await this.plans.assertFeature(v.orgId, WHATSAPP_CALLING);
     if (RequestContextStore.require().grants?.get(PERM_RECORDINGS_PLAY)?.effect !== 'allow') {
       throw AppError.forbidden(PERM_RECORDINGS_PLAY);
     }
@@ -280,7 +298,8 @@ export class CallLogsService {
     scope: RecordScope,
     now = new Date(),
   ): Promise<CallAnalytics> {
-    const v = await this.viewer(scope);
+    const v = this.viewer(scope);
+    await this.assertWhatsappFilter(v, q.numberId);
     const w = dayWindow(q, now);
     const [totals, daily, byAgent, heat, bySource] = await this.db.tx(async (tx) =>
       Promise.all([

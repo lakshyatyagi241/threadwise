@@ -7,16 +7,19 @@ import type { CallAnalytics } from '@crm/contracts';
 import { Alert, Button, EmptyState, Select, Spinner, StatTile, cn } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { AGENT_IGNORE, AGENT_PII } from '@/lib/agent-marks';
+import { usePlanFeature } from '@/lib/plan-features';
 import { useCallAnalytics, useCallLogFilters, useCallLogsLive } from '../api/call-logs';
 import {
   barHeights,
   durationText,
+  forPlan,
   heatGrid,
   heatLevel,
   logSearch,
   parseLogParams,
   percentText,
   toAnalyticsQuery,
+  WHATSAPP_CALLING,
   type LogParams,
 } from '../lib/call-logs';
 import { CallLogsTabs, RangeCard } from './call-logs-screen';
@@ -34,11 +37,13 @@ export function CallAnalyticsScreen() {
   const router = useRouter();
   const pathname = usePathname();
   const sp = useSearchParams();
-  const params = useMemo(() => parseLogParams(sp), [sp]);
+  const whatsapp = usePlanFeature(WHATSAPP_CALLING);
+  const params = useMemo(() => forPlan(parseLogParams(sp), whatsapp), [sp, whatsapp]);
   const tz = useSession().effectiveTimezone || 'UTC';
   const q = useCallAnalytics(toAnalyticsQuery(params, tz));
   const filters = useCallLogFilters();
-  const numbers = filters.data?.numbers ?? [];
+  // The WhatsApp numbers are a WhatsApp calling filter: a workspace without it has none to choose from.
+  const numbers = whatsapp ? (filters.data?.numbers ?? []) : [];
 
   const go = (patch: Partial<LogParams>) =>
     router.replace(

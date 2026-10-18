@@ -64,6 +64,28 @@ export function parseLogParams(sp: Params): LogParams {
   };
 }
 
+/** The plan feature of WhatsApp calling. Without it the Call logs screen is the log of the calls written down or reported. */
+export const WHATSAPP_CALLING = 'waba_calling';
+
+/**
+ * What the screens may ask for in a workspace without WhatsApp calling (BL-257): no WhatsApp number (the server refuses that filter
+ * without the plan feature) and no "WhatsApp" source (there is none to find). A bookmarked address from before the plan changed is
+ * cleaned instead of showing an error. With WhatsApp calling nothing changes.
+ */
+export function forPlan(p: LogParams, whatsapp: boolean): LogParams {
+  if (whatsapp) return p;
+  return {
+    ...p,
+    numberId: undefined,
+    source: p.source === 'whatsapp' ? undefined : p.source,
+  };
+}
+
+/** The sources the Source filter offers: every one with WhatsApp calling, the ways a call is logged without it. */
+export function sourcesFor(whatsapp: boolean): readonly CallLogSource[] {
+  return whatsapp ? CALL_LOG_SOURCES : CALL_LOG_SOURCES.filter((s) => s !== 'whatsapp');
+}
+
 /** The query string for a set of filters: what is at its default is left out, so the plain page has a plain address. */
 export function logSearch(p: Partial<LogParams>): string {
   const sp = new URLSearchParams();

@@ -1,7 +1,7 @@
 ---
 id: call-logs-overview
 title: Call logs and call analytics
-summary: See every WhatsApp call, open one to read its timeline and play its recording, and check how many were answered.
+summary: See every call your team had, WhatsApp or not, open one to read its timeline and play its recording, and check how many were answered.
 area: inbox
 order: 25
 documents: [nav:call-logs]
@@ -21,7 +21,9 @@ keywords:
 
 ## What it is for
 
-Call logs lists every WhatsApp call to or from your numbers, with its length, who handled it and how it ended. It also lists the calls that were not on WhatsApp and were written down with [Log a call](help:log-a-call); pick a **Source** in the filter to see one kind only. Open a call to see what happened step by step and, if it was recorded, to play the recording. The Analytics tab turns the same calls into figures.
+Call logs lists every call your team had: WhatsApp calls to or from your numbers, and calls that were not on WhatsApp and were written down with [Log a call](help:log-a-call), sent by the mobile app or reported by a phone line. Each shows its length, who handled it and how it ended. Pick a **Source** in the filter to see one kind only. Open a call to see what happened step by step and, if it is a WhatsApp call that was recorded, to play the recording. The Analytics tab turns the same calls into figures.
+
+You do not need WhatsApp calling to use it. If your plan does not include WhatsApp calling, Call logs shows the calls that were written down or reported, with **Log a call** to add more. The number filter and the recording card only appear with WhatsApp calling.
 
 ## How to use it
 
@@ -48,7 +50,7 @@ Select **Analytics** to see the calls of the chosen range as: the share answered
 - You need the right to view the call log. Its record scope decides whose calls you see: all calls, your team's, or only the ones you handled. A call outside your scope is not shown, and its address answers as if it did not exist.
 - Recordings are deleted automatically when the keeping period you set in [Recording calls](help:call-recording) ends. An owner or admin can also delete one recording by hand, and the call stays in the log.
 - Playing a recording needs its own right. Every time someone presses **Play recording**, it is written to the audit trail with their name.
-- Call logs follows your plan: it needs the **WhatsApp calling** plan feature, like placing calls. On a plan without it the menu entry shows a lock.
+- Call logs does not need the **WhatsApp calling** plan feature: anyone with the right to view the call log opens it. Without that feature the screen leaves out what belongs to WhatsApp (the number filter and the recording card), and playing a recording is not available. Calls that were made while your plan had WhatsApp calling stay in the list.
 
 > A recording is a customer's voice. Check the rules for recording calls where you and your customers are before you keep or share one.
 
@@ -56,5 +58,6 @@ Select **Analytics** to see the calls of the chosen range as: the share answered
 
 - **A call is missing.** It may be older than the time range, outside your scope, or hidden by a filter. Select **Clear** and widen the range.
 - **A call still shows as Live now.** The list updates by itself when a call ends. If WhatsApp never reported the end, reload the page after a few minutes.
-- **No Play button.** The call has no recording, or you can see the log but not play recordings.
+- **No Play button.** The call has no recording, or you can see the log but not play recordings. A call that was written down or reported has no recording to play here, and a plan without WhatsApp calling cannot play any.
+- **There is no Number filter, or no WhatsApp source.** Your plan does not include WhatsApp calling, so there are no WhatsApp numbers to choose from.
 - **The recording does not start.** Press play again to get a new link. If it still fails, the file may have been removed.
