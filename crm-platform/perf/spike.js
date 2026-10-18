@@ -48,6 +48,11 @@ for (const [name, secs, kind, rate] of PHASES) {
   thresholds[`http_req_duration{phase:${name},canary:yes}`] = ['max>=0'];
   thresholds[`http_reqs{phase:${name},canary:no}`] = ['count>=0'];
   thresholds[`dropped_iterations{phase:${name}}`] = ['count>=0'];
+  if (SPIKE === 'socket') {
+    thresholds[`ws_sessions{phase:${name},canary:no}`] = ['count>=0'];
+    thresholds[`ws_connecting{phase:${name},canary:no}`] = ['max>=0'];
+    thresholds[`checks{phase:${name},canary:no}`] = ['rate>=0'];
+  }
   at += secs;
 }
 
@@ -105,12 +110,21 @@ export function handleSummary(data) {
   const out = { generatedAt: new Date().toISOString(), meta: { spike: SPIKE, normal: NORMAL, peak: PEAK, ramp: RAMP, hold: HOLD, recovery: RECOVERY, baseline: BASELINE }, phases: {} };
   for (const [name, secs] of PHASES) {
     const g = (m, c) => data.metrics[`${m}{phase:${name},canary:${c}}`]?.values;
-    const load = g('http_req_duration', 'no');
+    let load = g('http_req_duration', 'no');
     const can = g('http_req_duration', 'yes');
+    let requests = g('http_reqs', 'no')?.count ?? 0;
+    let failedRate = g('http_req_failed', 'no')?.rate ?? null;
+    if (SPIKE === 'socket') {
+      // A socket session is not an HTTP request: count sessions, time the connect, and read failures from the upgrade check.
+      load = data.metrics[`ws_connecting{phase:${name},canary:no}`]?.values;
+      requests = data.metrics[`ws_sessions{phase:${name},canary:no}`]?.values.count ?? 0;
+      const ok = data.metrics[`checks{phase:${name},canary:no}`]?.values.rate;
+      failedRate = ok == null ? null : 1 - ok;
+    }
     out.phases[name] = {
       seconds: secs,
-      requests: g('http_reqs', 'no')?.count ?? 0,
-      failedRate: g('http_req_failed', 'no')?.rate ?? null,
+      requests,
+      failedRate,
       p95: load?.['p(95)'] ?? null,
       p99: load?.['p(99)'] ?? null,
       dropped: data.metrics[`dropped_iterations{phase:${name}}`]?.values.count ?? 0,
