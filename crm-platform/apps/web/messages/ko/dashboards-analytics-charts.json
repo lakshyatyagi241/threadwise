@@ -494,7 +494,8 @@
         "title": "큐",
         "name": "큐",
         "pending": "대기 중",
-        "failed": "실패"
+        "failed": "실패",
+        "lastFailure": "마지막 실패 사유"
       },
       "clear": {
         "button": "대기 중인 작업 지우기",

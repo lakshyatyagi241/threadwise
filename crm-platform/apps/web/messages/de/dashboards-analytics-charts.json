@@ -494,7 +494,8 @@
         "title": "Warteschlangen",
         "name": "Warteschlange",
         "pending": "Ausstehend",
-        "failed": "Fehlgeschlagen"
+        "failed": "Fehlgeschlagen",
+        "lastFailure": "Grund des letzten Fehlers"
       },
       "clear": {
         "button": "Ausstehende Jobs löschen",
