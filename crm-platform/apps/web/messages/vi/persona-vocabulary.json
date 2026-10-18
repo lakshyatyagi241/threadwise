@@ -1,0 +1,85 @@
+{
+  "persona-vocabulary": {
+    "common": {
+      "loading": "Đang tải thuật ngữ của bạn...",
+      "retry": "Thử lại",
+      "dismiss": "Đóng"
+    },
+    "tile": {
+      "label": "Thuật ngữ chúng tôi dùng",
+      "description": "Đổi tên Liên hệ, Lịch hẹn, Giao dịch và Cuộc họp cho phù hợp với doanh nghiệp của bạn.",
+      "keywords": "đổi tên, bệnh nhân, khách hàng, lead, thành viên, lượt khám, thuật ngữ, từ vựng, nhãn"
+    },
+    "title": "Thuật ngữ chúng tôi dùng",
+    "subtitle": "Gọi mọi thứ theo cách doanh nghiệp của bạn gọi: Bệnh nhân, Khách hàng, Thành viên, Lượt khám. Chỉ các nhãn mà mọi người đọc thay đổi.",
+    "discard": "Hủy thay đổi",
+    "save": "Lưu",
+    "saved": "Đã lưu. Menu và các màn hình giờ dùng thuật ngữ của bạn.",
+    "resetDone": "Đã quay về thuật ngữ chuẩn.",
+    "reset": "Dùng thuật ngữ chuẩn",
+    "conflict": "Người khác đã đổi các thuật ngữ này khi bạn đang chỉnh sửa. Đang hiển thị phiên bản mới nhất; hãy thực hiện lại thay đổi của bạn.",
+    "conflictOk": "OK",
+    "language": "Bạn đang chỉnh sửa thuật ngữ mà mọi người thấy khi ứng dụng ở ngôn ngữ {language}. Đổi ngôn ngữ ứng dụng để chỉnh sửa ngôn ngữ khác.",
+    "labelsOnly": "Chỉ nhãn thay đổi. Dữ liệu, bản xuất, tích hợp, API và tin nhắn bạn gửi cho khách hàng vẫn giữ tên quen thuộc.",
+    "applyAll": "Dùng các thuật ngữ này cho mọi ngôn ngữ",
+    "applyAllHint": "Lưu cùng thuật ngữ cho cả 21 ngôn ngữ của ứng dụng. Để tắt nếu chỉ muốn đổi ngôn ngữ hiển thị ở trên.",
+    "grammar": "Thuật ngữ được đặt vào ứng dụng đúng như bạn nhập. Ứng dụng không điều chỉnh ngữ pháp (giống, cách, mạo từ) ở các ngôn ngữ khác, và một số màn hình vẫn hiện thuật ngữ chuẩn.",
+    "sharedWord": "Trong ngôn ngữ này một từ bao gồm cả lịch hẹn lẫn cuộc họp, nên tên mới cho mục này không hiển thị ở đây. Tên vẫn áp dụng ở các ngôn ngữ khác.",
+    "nouns": {
+      "contact": {
+        "hint": "Những người bạn trao đổi. Hiển thị trong menu, danh sách, trang hồ sơ và các nút của trang."
+      },
+      "appointment": {
+        "hint": "Một khung giờ đã đặt với khách hàng. Hiển thị ở màn hình Lịch hẹn và hồ sơ liên hệ."
+      },
+      "deal": {
+        "hint": "Một cơ hội bán hàng. Hiển thị ở bảng Giao dịch và hồ sơ liên hệ."
+      },
+      "meeting": {
+        "hint": "Một cuộc gọi hoặc cuộc họp bạn ghi lại trên liên hệ."
+      }
+    },
+    "fields": {
+      "name": "Tên",
+      "singular": "Số ít",
+      "plural": "Số nhiều",
+      "placeholderHint": "Thuật ngữ chuẩn: {word}"
+    },
+    "source": {
+      "workspace": "Thuật ngữ của bạn",
+      "operator": "Do nhóm tài khoản của bạn đặt",
+      "persona": "Từ loại hình doanh nghiệp của bạn",
+      "default": "Thuật ngữ chuẩn"
+    },
+    "problems": {
+      "incomplete": "Điền cả số ít và số nhiều, hoặc xóa cả hai.",
+      "invalid": "Chỉ dùng chữ cái, chữ số, dấu cách và - . & / ( ), tối đa 40 ký tự."
+    },
+    "errors": {
+      "network": "Không thể kết nối tới máy chủ. Kiểm tra kết nối và thử lại.",
+      "forbidden": "Bạn cần quyền quản lý cài đặt không gian làm việc để đổi các thuật ngữ này.",
+      "conflict": "Các thuật ngữ này đã thay đổi khi bạn đang chỉnh sửa. Hãy tải lại và thử lại.",
+      "validation": "Một trong các thuật ngữ không được phép. Kiểm tra trường được đánh dấu.",
+      "rateLimited": "Thay đổi quá nhiều lần liên tiếp. Hãy đợi một lát rồi thử lại.",
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại."
+    },
+    "defaults": {
+      "contact": {
+        "one": "Liên hệ",
+        "other": "Liên hệ"
+      },
+      "appointment": {
+        "one": "Lịch hẹn",
+        "other": "Lịch hẹn"
+      },
+      "deal": {
+        "one": "Giao dịch",
+        "other": "Giao dịch"
+      },
+      "meeting": {
+        "one": "Cuộc họp",
+        "other": "Cuộc họp"
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextIntlClientProvider } from 'next-intl';
-import { getLocale } from 'next-intl/server';
+import { getLocale, getMessages } from 'next-intl/server';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { AccountBanners } from '@/features/auth-registration-security/account/account-banners';
@@ -13,6 +13,7 @@ import { BackgroundErrorBanner } from '@/components/shell/background-error-banne
 import { fetchEnabledFeatures } from '@/features/plans-subscriptions-trials/server';
 import { fetchConnectedChannels } from '@/features/whatsapp-cloud-api-waba/server';
 import { HelpProvider } from '@/features/help-center';
+import { withVocabulary, type Tree } from '@/features/persona-vocabulary/lib/overlay';
 import { HelpAgentRoot } from '@/features/help-agent/components/assistant-root';
 import { helpFor } from '@/features/help-center/view';
 import { AppGate, type AppRouteGate } from '@/components/shell/app-gate';
@@ -54,7 +55,16 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     channels: await fetchConnectedChannels(permissions.has('waba.numbers.read')),
   };
   // The docs this person may see in Help (gated like the menu); the page-level tip and every HelpTip read this index.
-  const help = helpFor(capabilities, await getLocale());
+  const locale = await getLocale();
+  const help = helpFor(capabilities, locale);
+  // Dynamic object naming (BL-310): the words this workspace uses for a contact, an appointment, a deal and a meeting, laid over the
+  // messages of the bound surfaces. No words named (generic, no overrides, another language) returns the very same messages: no change.
+  const baseMessages = await getMessages();
+  const messages = withVocabulary(
+    baseMessages as Tree,
+    locale,
+    session.org.persona?.nouns?.[locale],
+  );
   const paywallGates = NAV.filter((n) => n.gates?.planFeature).map((n) => ({
     href: n.href,
     feature: n.gates!.planFeature!,
@@ -75,7 +85,10 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   return (
     <SessionProvider session={session}>
       {/* Every date and time below is shown in the person's zone: their own choice, else the workspace's, else UTC. */}
-      <NextIntlClientProvider timeZone={session.effectiveTimezone}>
+      <NextIntlClientProvider
+        timeZone={session.effectiveTimezone}
+        {...(messages !== baseMessages ? { messages } : {})}
+      >
         {/* What the workspace has (plan, overrides, installed apps), for screens that sit inside other screens (a score on a contact). */}
         <PlanFeaturesProvider features={enabledFeatures ? [...enabledFeatures] : null}>
           {/* One socket per signed-in session; the key starts a fresh one (and a fresh ticket) when the person or workspace changes.
