@@ -619,3 +619,11 @@ Not a reference feature: Reference shows every module to every workspace. Reques
 - **Intended difference:** none for any workspace today. Only the `generic` persona exists until phase 2 (platform console), so nothing is hidden for anyone yet.
 - **Hidden is not locked:** nothing is deleted, no route or API is closed, entitlement (role, channel, app, plan feature) is applied after and wins, and a hidden module that the plan would lock shows no lock and no upsell.
 - **Not verified / open:** the Business type tile with Show more modules and its endpoint; a browser pass with a non-generic persona (none can be set yet); the 21-locale vocabulary overlay (phase 5).
+
+## Dynamic object naming, "Words we use" (BL-310, persona P5-lite): not in Reference
+
+Owner request 2026-10-18. Reference calls everything Contact, Appointment, Deal and Meeting. A workspace can now name these four things its own way (a Patient, a Client, a Member, a Visit), per language, from Settings, Business, **Words we use**. The default is exactly Reference's wording: a workspace that names nothing sees today's strings (tested for all 21 languages), so nothing in Reference is lost or changed for anyone who does not opt in.
+
+- **Labels in the web UI only.** The API, the data model, webhooks, exports, CSV headers, enums and the messages sent to customers keep the canonical names; no concept is renamed globally. Surfaces covered so far: the Contacts menu entry, list (title, add button, search, empty state, bulk actions, views), quick view, record page, the Appointments screen and the Deals board; the rest is a documented TODO list in [../../api/persona-vocabulary.md](../../api/persona-vocabulary.md).
+- **No grammatical agreement in other languages.** The word is placed as typed; a language that inflects the noun keeps the product's word where the form differs, and a word shared by two nouns (Polish and Russian: appointment and meeting) is not renamed there. The 21-language slice for the screen is a machine draft pending native review.
+- Spec: [../../specs/persona-profiles.md](../../specs/persona-profiles.md) sections 7.4, 8.2 and 15. Persona visibility (hiding modules, P1) is a separate extension and gets its own entry when it ships.

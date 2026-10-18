@@ -1,0 +1,85 @@
+{
+  "persona-vocabulary": {
+    "common": {
+      "loading": "Memuat istilah Anda...",
+      "retry": "Coba lagi",
+      "dismiss": "Tutup"
+    },
+    "tile": {
+      "label": "Istilah yang kami gunakan",
+      "description": "Ganti nama Kontak, Janji Temu, Deal, dan Rapat agar sesuai dengan bisnis Anda.",
+      "keywords": "ubah nama, pasien, klien, pelanggan, lead, anggota, kunjungan, terminologi, kosakata, label"
+    },
+    "title": "Istilah yang kami gunakan",
+    "subtitle": "Sebut sesuatu seperti yang disebut bisnis Anda: Pasien, Klien, Anggota, Kunjungan. Hanya label yang dibaca orang yang berubah.",
+    "discard": "Buang perubahan",
+    "save": "Simpan",
+    "saved": "Tersimpan. Menu dan layar kini memakai istilah Anda.",
+    "resetDone": "Kembali ke istilah standar.",
+    "reset": "Gunakan istilah standar",
+    "conflict": "Orang lain mengubah istilah ini saat Anda mengedit. Versi terbaru ditampilkan; lakukan perubahan Anda lagi.",
+    "conflictOk": "OK",
+    "language": "Anda mengedit istilah yang dilihat orang saat aplikasi berbahasa {language}. Ganti bahasa aplikasi untuk mengedit bahasa lain.",
+    "labelsOnly": "Hanya label yang berubah. Data, ekspor, integrasi, API, dan pesan yang Anda kirim ke pelanggan tetap memakai nama biasanya.",
+    "applyAll": "Gunakan istilah ini di semua bahasa",
+    "applyAllHint": "Menyimpan istilah yang sama untuk seluruh 21 bahasa aplikasi. Biarkan nonaktif untuk mengubah hanya bahasa yang ditampilkan di atas.",
+    "grammar": "Istilah ditempatkan di aplikasi persis seperti yang Anda ketik. Aplikasi tidak menyesuaikan tata bahasa (gender, kasus, artikel) di bahasa lain, dan beberapa layar masih memakai istilah standar.",
+    "sharedWord": "Dalam bahasa ini satu kata mencakup janji temu dan rapat, sehingga nama baru untuk item ini tidak ditampilkan di sini. Tetap berlaku di bahasa lain.",
+    "nouns": {
+      "contact": {
+        "hint": "Orang yang Anda ajak bicara. Tampil di menu, daftar, halaman rekaman, dan tombolnya."
+      },
+      "appointment": {
+        "hint": "Slot yang dipesan bersama pelanggan. Tampil di layar Janji Temu dan rekaman kontak."
+      },
+      "deal": {
+        "hint": "Peluang penjualan. Tampil di papan Deal dan rekaman kontak."
+      },
+      "meeting": {
+        "hint": "Panggilan atau rapat yang Anda catat pada kontak."
+      }
+    },
+    "fields": {
+      "name": "Nama",
+      "singular": "Tunggal",
+      "plural": "Jamak",
+      "placeholderHint": "Istilah standar: {word}"
+    },
+    "source": {
+      "workspace": "Istilah Anda",
+      "operator": "Ditetapkan oleh tim akun Anda",
+      "persona": "Dari jenis bisnis Anda",
+      "default": "Istilah standar"
+    },
+    "problems": {
+      "incomplete": "Isi bentuk tunggal dan jamak, atau kosongkan keduanya.",
+      "invalid": "Gunakan hanya huruf, angka, spasi, dan - . & / ( ), maksimal 40 karakter."
+    },
+    "errors": {
+      "network": "Tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.",
+      "forbidden": "Anda memerlukan izin mengelola pengaturan ruang kerja untuk mengubah istilah ini.",
+      "conflict": "Istilah ini berubah saat Anda mengedit. Muat ulang lalu coba lagi.",
+      "validation": "Salah satu istilah tidak diizinkan. Periksa kolom yang disorot.",
+      "rateLimited": "Terlalu banyak perubahan berturut-turut. Tunggu sebentar lalu coba lagi.",
+      "unexpected": "Terjadi kesalahan. Coba lagi."
+    },
+    "defaults": {
+      "contact": {
+        "one": "Kontak",
+        "other": "Kontak"
+      },
+      "appointment": {
+        "one": "Janji Temu",
+        "other": "Janji Temu"
+      },
+      "deal": {
+        "one": "Deal",
+        "other": "Deal"
+      },
+      "meeting": {
+        "one": "Rapat",
+        "other": "Rapat"
+      }
+    }
+  }
+}

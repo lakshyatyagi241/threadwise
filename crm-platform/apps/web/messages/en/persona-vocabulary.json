@@ -1,0 +1,85 @@
+{
+  "persona-vocabulary": {
+    "common": {
+      "loading": "Loading your words...",
+      "retry": "Retry",
+      "dismiss": "Dismiss"
+    },
+    "tile": {
+      "label": "Words we use",
+      "description": "Rename Contact, Appointment, Deal and Meeting to match your business.",
+      "keywords": "rename, patient, client, customer, lead, member, visit, terminology, vocabulary, labels, naming"
+    },
+    "title": "Words we use",
+    "subtitle": "Call things what your business calls them: a Patient, a Client, a Member, a Visit. Only the labels people read change.",
+    "discard": "Discard changes",
+    "save": "Save",
+    "saved": "Saved. Menus and screens now use your words.",
+    "resetDone": "Back to the standard words.",
+    "reset": "Use standard words",
+    "conflict": "Someone else changed these words while you were editing. The latest version is shown; make your change again.",
+    "conflictOk": "OK",
+    "language": "You are editing the words people see when the app is in {language}. Switch the app language to edit another one.",
+    "labelsOnly": "Only labels change. Your data, exports, integrations, API and the messages you send to customers keep their usual names.",
+    "applyAll": "Use these words in every language",
+    "applyAllHint": "Saves the same words for all 21 app languages. Leave it off to change only the language shown above.",
+    "grammar": "Words are placed in the app exactly as you type them. The app does not adjust grammar (gender, cases, articles) in other languages, and a few screens still say the standard word.",
+    "sharedWord": "In this language one word covers both appointments and meetings, so a new name for this one is not shown here. It still applies in other languages.",
+    "nouns": {
+      "contact": {
+        "hint": "The people you talk to. Shown in the menu, the list, the record page and its buttons."
+      },
+      "appointment": {
+        "hint": "A booked slot with a customer. Shown on the Appointments screen and on the contact record."
+      },
+      "deal": {
+        "hint": "A sales opportunity. Shown on the Deals board and on the contact record."
+      },
+      "meeting": {
+        "hint": "A call or meeting you log on a contact."
+      }
+    },
+    "fields": {
+      "name": "Name",
+      "singular": "Singular",
+      "plural": "Plural",
+      "placeholderHint": "Standard word: {word}"
+    },
+    "source": {
+      "workspace": "Your words",
+      "operator": "Set by your account team",
+      "persona": "From your business type",
+      "default": "Standard words"
+    },
+    "problems": {
+      "incomplete": "Fill in both the singular and the plural, or clear both.",
+      "invalid": "Use letters, numbers, spaces and - . & / ( ) only, up to 40 characters."
+    },
+    "errors": {
+      "network": "Could not reach the server. Check your connection and try again.",
+      "forbidden": "You need permission to manage workspace settings to change these words.",
+      "conflict": "These words changed while you were editing. Reload and try again.",
+      "validation": "One of the words is not allowed. Check the highlighted field.",
+      "rateLimited": "Too many changes in a row. Wait a moment and try again.",
+      "unexpected": "Something went wrong. Try again."
+    },
+    "defaults": {
+      "contact": {
+        "one": "Contact",
+        "other": "Contacts"
+      },
+      "appointment": {
+        "one": "Appointment",
+        "other": "Appointments"
+      },
+      "deal": {
+        "one": "Deal",
+        "other": "Deals"
+      },
+      "meeting": {
+        "one": "Meeting",
+        "other": "Meetings"
+      }
+    }
+  }
+}
