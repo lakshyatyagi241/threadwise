@@ -1,0 +1,208 @@
+{
+  "waboo-migration": {
+    "nav": {
+      "group": "Di chuyển dữ liệu",
+      "panel": "Di chuyển Waboo"
+    },
+    "common": {
+      "loading": "Đang tải",
+      "retry": "Thử lại",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+        "request": "Không thể hoàn tất yêu cầu đó.",
+        "unexpected": "Đã xảy ra sự cố ở phía chúng tôi. Vui lòng thử lại sau giây lát.",
+        "network": "Không thể kết nối đến máy chủ. Hãy kiểm tra kết nối và thử lại.",
+        "validation": "Một số giá trị không hợp lệ. Hãy kiểm tra các trường được đánh dấu.",
+        "notFound": "Lượt chạy hoặc lô đó không còn tồn tại.",
+        "active": "Một lượt chạy cho một trong các tổ chức này đã được xếp hàng hoặc đang chạy. Hãy chờ lượt đó hoàn tất.",
+        "dryRequired": "Việc di chuyển cần một lượt chạy thử đạt trong 24 giờ qua cho mọi tổ chức. Hãy chạy thử trước.",
+        "confirm": "Nội dung bạn nhập không khớp.",
+        "notCancellable": "Chỉ có thể hủy lượt chạy đang xếp hàng hoặc đã lên lịch. Không thể dừng việc di chuyển đang chạy.",
+        "collision": "ID tổ chức đó tạo ra khóa khách hàng đã được tổ chức khác sử dụng, hoặc xuất hiện hai lần trong danh sách.",
+        "schedule": "Hãy chọn thời điểm trong tương lai, tối đa 90 ngày tới."
+      }
+    },
+    "page": {
+      "eyebrow": "Quản trị / Hệ thống / Di chuyển dữ liệu",
+      "title": "Di chuyển Waboo",
+      "description": "Chuyển các tổ chức Waboo sang WaDesk bằng quy trình di chuyển hiện có, ngay lập tức hoặc vào thời điểm đã chọn, và theo dõi từng tổ chức tại đây.",
+      "banner": "Bảng này không bao giờ kết nối WhatsApp và không bao giờ ghi vào Waboo. Mỗi lần di chuyển luôn bắt đầu bằng một lượt diễn tập đầy đủ không ghi gì, và dừng trước khi nạp bất kỳ dữ liệu nào nếu lượt diễn tập không sạch. Các tổ chức được chạy lần lượt từng cái một.",
+      "superOnly": "Chỉ siêu quản trị viên mới có thể chạy di chuyển.",
+      "tabSingle": "Một tổ chức",
+      "tabBulk": "Hàng loạt"
+    },
+    "form": {
+      "title": "Bắt đầu lượt chạy",
+      "org": "ID tổ chức",
+      "orgHint": "ID tổ chức (workspace) Waboo, cũng là tên cơ sở dữ liệu Waboo. Gồm chữ cái, chữ số, dấu gạch dưới và dấu cộng.",
+      "orgInvalid": "Dùng chữ cái, chữ số, dấu gạch dưới hoặc dấu cộng (tối đa 128).",
+      "derived": "Khóa khách hàng: {client} (suy ra từ ID).",
+      "dryRun": "Chạy thử",
+      "dryRunning": "Đang bắt đầu",
+      "scheduleDry": "Lên lịch chạy thử",
+      "migrate": "Di chuyển",
+      "scheduleMigrate": "Lên lịch di chuyển",
+      "catchUp": "Đồng bộ bổ sung",
+      "migrateHint": "Di chuyển bắt đầu bằng một lượt diễn tập đầy đủ và không nạp gì nếu lượt đó không sạch. Chạy thử riêng là tùy chọn.",
+      "queued": "Đã xếp hàng lượt chạy.",
+      "scheduled": "Đã lên lịch lượt chạy."
+    },
+    "confirm": {
+      "title": "Di chuyển {org}",
+      "body": "Thao tác này nạp tổ chức {org} vào WaDesk. Quá trình bắt đầu bằng một lượt diễn tập đầy đủ và không nạp gì nếu lượt đó không sạch; khi việc nạp đã bắt đầu thì không thể dừng. Nhập ID tổ chức để xác nhận.",
+      "label": "Nhập {org} để xác nhận",
+      "cancel": "Hủy",
+      "submit": "Di chuyển",
+      "catchupTitle": "Đồng bộ bổ sung {org}",
+      "catchupBody": "Thao tác này cập nhật tổ chức {org} đã được nạp: xuất lại từ Waboo, chỉ nạp các dòng mới, đồng bộ ví và xác minh kết quả. Quá trình dừng nếu lượt chạy thử của chính nó không sạch và không thể dừng khi đã bắt đầu. Nhập ID tổ chức để xác nhận.",
+      "catchupSubmit": "Đồng bộ bổ sung"
+    },
+    "bulk": {
+      "title": "Di chuyển hàng loạt",
+      "ids": "ID tổ chức",
+      "idsHint": "Mỗi dòng một ID tổ chức, tối đa {max}.",
+      "invalid": "ID không hợp lệ: {ids}.",
+      "duplicates": "Bị liệt kê hai lần: {ids}.",
+      "collisions": "Trùng khóa khách hàng với ID khác: {ids}.",
+      "tooMany": "Tối đa {max} tổ chức mỗi lần.",
+      "count": "{count} trên {max} tổ chức",
+      "stopOnFailure": "Dừng khi lỗi đầu tiên",
+      "stopHint": "Mặc định tắt: một tổ chức bị lỗi không làm dừng các tổ chức còn lại.",
+      "sequential": "Các tổ chức chạy lần lượt từng cái một, không bao giờ chạy hai cái cùng lúc, vì máy chủ staging không thể chạy hai lần di chuyển cùng nhau.",
+      "notReady": "{count, plural, other {# tổ chức}} chưa có lượt chạy thử đạt trong 24 giờ qua, nên nút Di chuyển tất cả đang tắt.",
+      "dryAll": "Chạy thử tất cả",
+      "dryRunning": "Đang bắt đầu",
+      "migrateAll": "Di chuyển tất cả",
+      "migrateHint": "Mỗi tổ chức bắt đầu bằng lượt diễn tập đầy đủ riêng và không nạp gì nếu lượt đó không sạch. Chạy thử riêng là tùy chọn.",
+      "queued": "Đã xếp hàng lô.",
+      "scheduled": "Đã lên lịch lô."
+    },
+    "bulkConfirm": {
+      "title": "Di chuyển {count} tổ chức",
+      "body": "Thao tác này nạp {count} tổ chức vào WaDesk, lần lượt từng cái một. Mỗi tổ chức bắt đầu bằng lượt diễn tập đầy đủ riêng và không nạp gì nếu lượt đó không sạch; khi việc nạp đã bắt đầu thì không thể dừng. Nhập số lượng tổ chức để xác nhận.",
+      "label": "Nhập {count} để xác nhận",
+      "cancel": "Hủy",
+      "submit": "Di chuyển tất cả"
+    },
+    "readiness": {
+      "ok": "Lượt chạy thử gần nhất đạt và còn mới. Bạn có thể di chuyển.",
+      "okReview": "Lượt chạy thử gần nhất đạt nhưng có cảnh báo cần xem lại. Bạn có thể di chuyển sau khi xem lại.",
+      "no_dry": "Chưa có lượt chạy thử. Hãy chạy thử trước.",
+      "not_green": "Lượt chạy thử gần nhất không đạt. Hãy khắc phục rồi chạy thử lại.",
+      "stale": "Lượt chạy thử đạt gần nhất đã quá 24 giờ. Hãy chạy thử mới."
+    },
+    "schedule": {
+      "label": "Chạy vào lúc (tùy chọn)",
+      "hint": "Múi giờ của bạn: {tz}. Để trống để bắt đầu ngay.",
+      "utc": "Múi giờ của bạn: {tz}. Tức là {utc} UTC.",
+      "error": {
+        "invalid": "Hãy nhập ngày và giờ hợp lệ.",
+        "past": "Hãy chọn thời điểm trong tương lai.",
+        "tooFar": "Tối đa 90 ngày tới."
+      }
+    },
+    "runs": {
+      "title": "Lượt chạy",
+      "empty": "Chưa có lượt chạy nào.",
+      "emptyHint": "Hãy bắt đầu một lượt chạy thử ở trên.",
+      "open": "Mở",
+      "client": "Khách hàng",
+      "database": "Cơ sở dữ liệu",
+      "mode": "Chế độ",
+      "status": "Trạng thái",
+      "created": "Đã tạo"
+    },
+    "batches": {
+      "title": "Lô hàng loạt",
+      "empty": "Chưa có lô nào.",
+      "emptyHint": "Hãy dùng tab Hàng loạt ở trên.",
+      "open": "Mở",
+      "orgs": "{count, plural, other {# tổ chức}}"
+    },
+    "batch": {
+      "title": "Lô gồm {count, plural, other {# tổ chức}}",
+      "back": "Đóng",
+      "cancel": "Hủy lô",
+      "cancelling": "Đang hủy",
+      "cancelled": "Đã hủy lô.",
+      "progress": "Đã hoàn tất",
+      "runAt": "Lên lịch lúc",
+      "started": "Bắt đầu",
+      "finished": "Kết thúc lúc",
+      "stopOn": "Dừng ở lần lỗi đầu tiên.",
+      "stopOff": "Một tổ chức bị lỗi không làm dừng các tổ chức còn lại.",
+      "polling": "Tự cập nhật khi lô đang hoạt động."
+    },
+    "batchStatus": {
+      "queued": "Đang xếp hàng",
+      "running": "Đang chạy",
+      "completed": "Hoàn tất",
+      "failed": "Kết thúc có vấn đề",
+      "cancelled": "Đã hủy"
+    },
+    "detail": {
+      "title": "Lượt chạy {org}",
+      "back": "Đóng",
+      "cancel": "Hủy lượt chạy",
+      "cancelling": "Đang hủy",
+      "cancelled": "Đã hủy lượt chạy.",
+      "clientKey": "Khóa khách hàng",
+      "runAt": "Lên lịch lúc",
+      "started": "Bắt đầu",
+      "finished": "Kết thúc",
+      "steps": "Các bước",
+      "noSteps": "Chưa có bước nào được báo cáo.",
+      "report": "Kết quả trình xác minh",
+      "error": "Lỗi",
+      "polling": "Tự cập nhật khi lượt chạy đang hoạt động.",
+      "counts": "Số lượng"
+    },
+    "verdict": {
+      "green": "Xanh: không có mục thất lạc, không có lỗi toàn vẹn",
+      "amber": "Xem lại cảnh báo: không thiếu dữ liệu, nhưng trình xác minh đưa ra cảnh báo cần xem",
+      "red": "Đỏ: cần xử lý. Đừng coi lượt chạy này là đã xong",
+      "unaccounted": "Thất lạc",
+      "integrityErrors": "Lỗi toàn vẹn",
+      "alarms": "Cảnh báo",
+      "short": {
+        "green": "Xanh",
+        "amber": "Xem lại cảnh báo",
+        "red": "Đỏ"
+      }
+    },
+    "mode": {
+      "dry": "Chạy thử",
+      "load": "Di chuyển",
+      "catchup": "Đồng bộ bổ sung"
+    },
+    "status": {
+      "queued": "Đang xếp hàng",
+      "scheduled": "Đã lên lịch",
+      "running": "Đang chạy",
+      "completed": "Hoàn tất",
+      "completedReview": "Hoàn tất, xem lại cảnh báo",
+      "completedRed": "Kết thúc có lỗi",
+      "failed": "Thất bại",
+      "cancelled": "Đã hủy",
+      "blocked": "Bị chặn, chưa nạp"
+    },
+    "step": {
+      "export": "Xuất",
+      "preflight": "Kiểm tra trước",
+      "backup": "Sao lưu",
+      "dry": "Nạp thử",
+      "load": "Nạp",
+      "core-load": "Nạp lõi",
+      "flow-state": "Trạng thái luồng",
+      "reconcile": "Đối soát",
+      "report": "Báo cáo"
+    },
+    "stepStatus": {
+      "running": "Đang chạy",
+      "done": "Xong",
+      "failed": "Thất bại",
+      "skipped": "Đã bỏ qua"
+    }
+  }
+}

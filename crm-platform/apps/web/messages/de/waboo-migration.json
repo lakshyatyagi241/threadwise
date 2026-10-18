@@ -1,0 +1,208 @@
+{
+  "waboo-migration": {
+    "nav": {
+      "group": "Migration",
+      "panel": "Waboo-Migration"
+    },
+    "common": {
+      "loading": "Wird geladen",
+      "retry": "Erneut versuchen",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Sie haben keine Berechtigung dafür.",
+        "request": "Die Anfrage konnte nicht abgeschlossen werden.",
+        "unexpected": "Auf unserer Seite ist ein Fehler aufgetreten. Versuchen Sie es gleich noch einmal.",
+        "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "validation": "Einige Werte sind ungültig. Prüfen Sie die markierten Felder.",
+        "notFound": "Dieser Lauf oder Batch existiert nicht mehr.",
+        "active": "Für eine dieser Organisationen ist bereits ein Lauf eingereiht oder aktiv. Warten Sie, bis er beendet ist.",
+        "dryRequired": "Eine Migration erfordert für jede Organisation einen erfolgreichen Testlauf der letzten 24 Stunden. Führen Sie zuerst einen Testlauf aus.",
+        "confirm": "Ihre Eingabe stimmt nicht überein.",
+        "notCancellable": "Nur eingereihte oder geplante Läufe können abgebrochen werden. Eine laufende Migration kann nicht gestoppt werden.",
+        "collision": "Diese Organisations-ID ergibt einen Client-Schlüssel, der bereits von einer anderen Organisation verwendet wird oder in der Liste doppelt vorkommt.",
+        "schedule": "Wählen Sie einen Zeitpunkt in der Zukunft, höchstens 90 Tage im Voraus."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin / System / Migration",
+      "title": "Waboo-Migration",
+      "description": "Überführen Sie Waboo-Organisationen mit der bestehenden Migrations-Pipeline in WaDesk, sofort oder zu einem gewählten Zeitpunkt, und verfolgen Sie jede von hier aus.",
+      "banner": "Dieses Panel verbindet nie WhatsApp und schreibt nie in Waboo. Eine Migration beginnt immer mit einer eigenen vollständigen Probe, die nichts schreibt, und bricht vor dem Laden ab, wenn die Probe nicht sauber ist. Organisationen werden nacheinander ausgeführt.",
+      "superOnly": "Nur ein Super-Admin kann Migrationen ausführen.",
+      "tabSingle": "Eine Organisation",
+      "tabBulk": "Mehrere"
+    },
+    "form": {
+      "title": "Lauf starten",
+      "org": "Organisations-ID",
+      "orgHint": "Die ID der Waboo-Organisation (Workspace), also der Name der Waboo-Datenbank. Buchstaben, Ziffern, Unterstrich und Pluszeichen.",
+      "orgInvalid": "Verwenden Sie Buchstaben, Ziffern, Unterstrich oder Pluszeichen (bis zu 128).",
+      "derived": "Client-Schlüssel: {client} (aus der ID abgeleitet).",
+      "dryRun": "Testlauf",
+      "dryRunning": "Wird gestartet",
+      "scheduleDry": "Testlauf planen",
+      "migrate": "Migrieren",
+      "scheduleMigrate": "Migration planen",
+      "catchUp": "Nachholen",
+      "migrateHint": "Die Migration beginnt mit einer vollständigen Probe und lädt nichts, wenn diese nicht sauber ist. Ein separater Testlauf ist optional.",
+      "queued": "Lauf eingereiht.",
+      "scheduled": "Lauf geplant."
+    },
+    "confirm": {
+      "title": "{org} migrieren",
+      "body": "Dadurch wird die Organisation {org} in WaDesk geladen. Zuerst läuft eine vollständige Probe, und es wird nichts geladen, wenn sie nicht sauber ist. Sobald das Laden selbst beginnt, kann es nicht mehr gestoppt werden. Geben Sie zur Bestätigung die Organisations-ID ein.",
+      "label": "Geben Sie {org} zur Bestätigung ein",
+      "cancel": "Abbrechen",
+      "submit": "Migrieren",
+      "catchupTitle": "{org} nachholen",
+      "catchupBody": "Dadurch wird die bereits geladene Organisation {org} auf den neuesten Stand gebracht: Sie wird erneut aus Waboo exportiert, nur neue Zeilen werden geladen, das Wallet wird synchronisiert und das Ergebnis geprüft. Der Vorgang bricht ab, wenn sein eigener Testlauf nicht sauber ist, und kann nach dem Start nicht mehr gestoppt werden. Geben Sie zur Bestätigung die Organisations-ID ein.",
+      "catchupSubmit": "Nachholen"
+    },
+    "bulk": {
+      "title": "Massenmigration",
+      "ids": "Organisations-IDs",
+      "idsHint": "Eine Organisations-ID pro Zeile, höchstens {max}.",
+      "invalid": "Keine gültige ID: {ids}.",
+      "duplicates": "Doppelt aufgeführt: {ids}.",
+      "collisions": "Gleicher Client-Schlüssel wie eine andere ID: {ids}.",
+      "tooMany": "Höchstens {max} Organisationen auf einmal.",
+      "count": "{count} von {max} Organisationen",
+      "stopOnFailure": "Beim ersten Fehler stoppen",
+      "stopHint": "Standardmäßig aus: Eine fehlgeschlagene Organisation stoppt die übrigen nicht.",
+      "sequential": "Organisationen laufen nacheinander und nie zwei gleichzeitig, weil der Staging-Server nicht zwei Migrationen parallel ausführen kann.",
+      "notReady": "{count, plural, one {# Organisation hat} other {# Organisationen haben}} keinen erfolgreichen Testlauf der letzten 24 Stunden, daher ist „Alle migrieren“ deaktiviert.",
+      "dryAll": "Alle testen",
+      "dryRunning": "Wird gestartet",
+      "migrateAll": "Alle migrieren",
+      "migrateHint": "Jede Organisation beginnt mit einer eigenen vollständigen Probe und lädt nichts, wenn diese nicht sauber ist. Ein separater Testlauf ist optional.",
+      "queued": "Batch eingereiht.",
+      "scheduled": "Batch geplant."
+    },
+    "bulkConfirm": {
+      "title": "{count} Organisationen migrieren",
+      "body": "Dadurch werden {count} Organisationen nacheinander in WaDesk geladen. Jede beginnt mit einer eigenen vollständigen Probe und lädt nichts, wenn diese nicht sauber ist. Sobald ein Ladevorgang beginnt, kann er nicht mehr gestoppt werden. Geben Sie zur Bestätigung die Anzahl der Organisationen ein.",
+      "label": "Geben Sie {count} zur Bestätigung ein",
+      "cancel": "Abbrechen",
+      "submit": "Alle migrieren"
+    },
+    "readiness": {
+      "ok": "Der letzte Testlauf war erfolgreich und ist aktuell. Sie können migrieren.",
+      "okReview": "Der letzte Testlauf war erfolgreich, hat aber Warnungen ausgelöst, die geprüft werden sollten. Sie können migrieren, sobald Sie diese geprüft haben.",
+      "no_dry": "Noch kein Testlauf. Führen Sie zuerst einen Testlauf aus.",
+      "not_green": "Der letzte Testlauf war nicht erfolgreich. Beheben Sie das Problem und führen Sie erneut einen Testlauf aus.",
+      "stale": "Der letzte erfolgreiche Testlauf ist älter als 24 Stunden. Führen Sie einen neuen Testlauf aus."
+    },
+    "schedule": {
+      "label": "Ausführen um (optional)",
+      "hint": "Ihre Zeitzone: {tz}. Leer lassen, um sofort zu starten.",
+      "utc": "Ihre Zeitzone: {tz}. Das entspricht {utc} UTC.",
+      "error": {
+        "invalid": "Geben Sie ein gültiges Datum und eine gültige Uhrzeit ein.",
+        "past": "Wählen Sie einen Zeitpunkt in der Zukunft.",
+        "tooFar": "Höchstens 90 Tage im Voraus."
+      }
+    },
+    "runs": {
+      "title": "Läufe",
+      "empty": "Noch keine Läufe.",
+      "emptyHint": "Starten Sie oben einen Testlauf.",
+      "open": "Öffnen",
+      "client": "Client",
+      "database": "Datenbank",
+      "mode": "Modus",
+      "status": "Status",
+      "created": "Erstellt"
+    },
+    "batches": {
+      "title": "Massen-Batches",
+      "empty": "Noch keine Batches.",
+      "emptyHint": "Nutzen Sie oben den Tab „Mehrere“.",
+      "open": "Öffnen",
+      "orgs": "{count, plural, one {# Organisation} other {# Organisationen}}"
+    },
+    "batch": {
+      "title": "Batch mit {count, plural, one {# Organisation} other {# Organisationen}}",
+      "back": "Schließen",
+      "cancel": "Batch abbrechen",
+      "cancelling": "Wird abgebrochen",
+      "cancelled": "Batch abgebrochen.",
+      "progress": "Abgeschlossen",
+      "runAt": "Geplant für",
+      "started": "Gestartet",
+      "finished": "Beendet um",
+      "stopOn": "Stoppt beim ersten Fehler.",
+      "stopOff": "Eine fehlgeschlagene Organisation stoppt die übrigen nicht.",
+      "polling": "Wird aktualisiert, solange der Batch aktiv ist."
+    },
+    "batchStatus": {
+      "queued": "Eingereiht",
+      "running": "Läuft",
+      "completed": "Abgeschlossen",
+      "failed": "Mit Problemen beendet",
+      "cancelled": "Abgebrochen"
+    },
+    "detail": {
+      "title": "Lauf {org}",
+      "back": "Schließen",
+      "cancel": "Lauf abbrechen",
+      "cancelling": "Wird abgebrochen",
+      "cancelled": "Lauf abgebrochen.",
+      "clientKey": "Client-Schlüssel",
+      "runAt": "Geplant für",
+      "started": "Gestartet",
+      "finished": "Beendet",
+      "steps": "Schritte",
+      "noSteps": "Noch keine Schritte gemeldet.",
+      "report": "Prüfergebnis",
+      "error": "Fehler",
+      "polling": "Wird aktualisiert, solange der Lauf aktiv ist.",
+      "counts": "Anzahlen"
+    },
+    "verdict": {
+      "green": "Grün: nichts offen, keine Integritätsfehler",
+      "amber": "Warnungen prüfen: es fehlen keine Daten, aber die Prüfung hat Warnungen ausgelöst",
+      "red": "Rot: erfordert Aufmerksamkeit. Betrachten Sie diesen Lauf nicht als abgeschlossen",
+      "unaccounted": "Nicht zugeordnet",
+      "integrityErrors": "Integritätsfehler",
+      "alarms": "Warnungen",
+      "short": {
+        "green": "Grün",
+        "amber": "Warnungen prüfen",
+        "red": "Rot"
+      }
+    },
+    "mode": {
+      "dry": "Testlauf",
+      "load": "Migration",
+      "catchup": "Nachholen"
+    },
+    "status": {
+      "queued": "Eingereiht",
+      "scheduled": "Geplant",
+      "running": "Läuft",
+      "completed": "Abgeschlossen",
+      "completedReview": "Abgeschlossen, Warnungen prüfen",
+      "completedRed": "Mit Fehlern beendet",
+      "failed": "Fehlgeschlagen",
+      "cancelled": "Abgebrochen",
+      "blocked": "Blockiert, nicht geladen"
+    },
+    "step": {
+      "export": "Export",
+      "preflight": "Vorabprüfungen",
+      "backup": "Sicherung",
+      "dry": "Probeladung",
+      "load": "Laden",
+      "core-load": "Kernladung",
+      "flow-state": "Flow-Status",
+      "reconcile": "Abgleich",
+      "report": "Bericht"
+    },
+    "stepStatus": {
+      "running": "Läuft",
+      "done": "Erledigt",
+      "failed": "Fehlgeschlagen",
+      "skipped": "Übersprungen"
+    }
+  }
+}
