@@ -357,7 +357,8 @@
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "Không được phép: liên hệ này được đánh dấu là chưa thành niên và không gian làm việc của bạn giữ lại hoạt động tiếp thị.",
         "sale_share_opted_out": "Không được phép: liên hệ đã từ chối việc bán hoặc chia sẻ dữ liệu của họ.",
-        "on_dnc_list": "Nằm trong danh sách Không gọi của bạn: không có cuộc gọi hay tin nhắn tiếp thị tới số này"
+        "on_dnc_list": "Nằm trong danh sách Không gọi của bạn: không có cuộc gọi hay tin nhắn tiếp thị tới số này",
+        "legal_hold": "Không được phép: việc xử lý liên hệ này đang bị hạn chế."
       }
     },
     "notice": {

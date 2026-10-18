@@ -15,6 +15,7 @@ import { deleteContact, invalidateContacts } from '../../api/contacts';
 import { useChannels, openConversation } from '../../api/single-send';
 import type { ContactRow } from '../../api/schemas';
 import { displayName } from '../../lib/contact-model';
+import { errorKind } from '../../lib/errors';
 import { messageRoute, quickActions } from '../../lib/row-actions';
 import { rowView } from '../../lib/row-view';
 import { emailChannels, whatsappChannels, type SendChannel } from '../../lib/single-send';
@@ -39,7 +40,7 @@ import {
 import { SingleSendDrawer, type SingleSendTarget } from '../single-send-drawer';
 import { notifyCallClick, rememberPhoneClick } from './call-nudge';
 import { FieldHistoryDrawer } from './field-history';
-import { ContactPrivacyMenuItems } from '@/features/privacy-requests';
+import { ContactPrivacyMenuItems, useContactLegalHold } from '@/features/privacy-requests';
 
 const button =
   'inline-flex h-9 items-center gap-1.5 whitespace-nowrap border border-border bg-background px-2.5 text-[13px] font-medium outline-none transition hover:bg-muted focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50';
@@ -110,6 +111,8 @@ export function ContactActionBar({
   const t = useTranslations('contacts-attributes-tags.contact.actions');
   const tr = useTranslations('contacts-attributes-tags.contact.record.actions');
   const tl = useTranslations('contacts-attributes-tags.list');
+  const te = useTranslations('contacts-attributes-tags.errors');
+  const legalHold = useContactLegalHold(contact.id);
   const ts = useTranslations('contacts-attributes-tags.singleSend');
   const tu = useTranslations('contacts-attributes-tags.leadHandling.uncontacted');
   const { toast } = useToast();
@@ -175,9 +178,9 @@ export function ContactActionBar({
       toast(tl('deleted'), 'success');
       onDeleted();
     },
-    onError: () => {
+    onError: (err) => {
       setDeleting(false);
-      toast(t('deleteFailed'), 'danger');
+      toast(errorKind(err) === 'legalHold' ? te('legalHold') : t('deleteFailed'), 'danger');
     },
   });
 
@@ -292,6 +295,7 @@ export function ContactActionBar({
         <HistoryIcon /> {tr('fieldHistory')}
       </MenuItem>
       <ContactPrivacyMenuItems contactId={contact.id} />
+      {legalHold.items}
       {canDelete && <MenuSeparator />}
       {canDelete && (
         <MenuItem danger onSelect={() => setDeleting(true)}>
@@ -305,6 +309,7 @@ export function ContactActionBar({
       <ContactFormModal open={editing} contact={contact} onClose={() => setEditing(false)} />
       <FieldHistoryDrawer open={history} onClose={() => setHistory(false)} contactId={contact.id} />
       <SingleSendDrawer target={target} onClose={() => setTarget(null)} />
+      {legalHold.dialogs}
       <ConfirmDialog
         open={deleting}
         tone="danger"

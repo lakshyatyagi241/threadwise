@@ -23,7 +23,11 @@
       "exportNotReady": "Ce fichier n'est pas prêt ou a expiré. Préparez un nouvel export.",
       "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
       "validation": "Certaines valeurs ne sont pas valides. Vérifiez le formulaire et réessayez.",
-      "unexpected": "Une erreur s'est produite. Réessayez."
+      "unexpected": "Une erreur s'est produite. Réessayez.",
+      "holdActive": "Cet enregistrement est protégé et ne peut pas être supprimé pour le moment.",
+      "holdExists": "Cette personne fait déjà l'objet d'un blocage légal actif. Prolongez-le pour ajouter un autre dossier.",
+      "holdNotFound": "Ce blocage légal n'existe plus.",
+      "holdNotActive": "Ce blocage légal est déjà terminé."
     },
     "type": {
       "access": "Accès",
@@ -182,7 +186,12 @@
           "erase_previewed": "Effacement prévisualisé",
           "erased": "Données effacées",
           "completed": "Demande terminée",
-          "other": "Mettre à jour"
+          "other": "Mettre à jour",
+          "restricted": "Limité : blocage légal",
+          "erasure_queued": "Effacement confirmé, en attente de la fin du blocage",
+          "restriction_lifted": "Limitation levée",
+          "resume_skipped": "Effacement automatique ignoré",
+          "resume_failed": "Échec de l'effacement automatique, lancez-le manuellement"
         }
       },
       "verify": {
@@ -284,6 +293,168 @@
       "erase": "Effacer cette personne",
       "created": "Demande {reference} créée.",
       "failed": "Impossible de créer la demande."
+    },
+    "legalHold": {
+      "close": "Fermer",
+      "tab": {
+        "label": "Confidentialité",
+        "requests": "Demandes relatives aux données",
+        "holds": "Blocages légaux"
+      },
+      "requesterResponse": "Nous avons bien reçu votre demande. Nous sommes tenus de conserver une partie de vos données pour respecter une obligation légale, et nous ne pouvons donc pas les effacer pour le moment. Nous avons limité leur utilisation et nous les effacerons à la fin de cette obligation. Vous pouvez introduire une réclamation auprès de votre autorité de protection des données.",
+      "contactBanner": "Blocage légal : effacement et suppression suspendus",
+      "workspaceBanner": "Blocage légal sur tout l'espace de travail : effacement et suppression suspendus",
+      "caseStatus": "Limité : blocage légal",
+      "blockedMessage": "Cet enregistrement est protégé et ne peut pas être supprimé pour le moment.",
+      "listFilter": "En attente d'un blocage légal",
+      "banner": {
+        "caseRef": "Dossier {caseRef}",
+        "reviewBy": "révision avant le {date}",
+        "reviewOverdue": "révision en retard depuis le {date}",
+        "effects": "Le marketing, le traitement par IA et les exports sont limités, et chaque accès est journalisé.",
+        "open": "Ouvrir le registre"
+      },
+      "category": {
+        "legal_obligation": "Obligation légale",
+        "legal_claim": "Action en justice ou litige",
+        "regulator_request": "Demande d'une autorité de contrôle ou des forces de l'ordre",
+        "internal_investigation": "Enquête interne"
+      },
+      "scope": {
+        "contact": "Contact",
+        "lead": "Prospect",
+        "workspace": "Tout l'espace de travail"
+      },
+      "status": {
+        "active": "Actif",
+        "released": "Levé",
+        "expired": "Expiré"
+      },
+      "menu": {
+        "place": "Poser un blocage légal...",
+        "release": "Lever le blocage légal..."
+      },
+      "place": {
+        "title": "Poser un blocage légal sur ce contact",
+        "workspaceTitle": "Poser un blocage légal sur tout l'espace de travail",
+        "intro": "Tant que le blocage dure, l'effacement, la suppression et la purge au terme de la durée de conservation de cette personne sont refusés, et le marketing, le traitement par IA et les exports de ses données sont limités. Le service client continue comme d'habitude.",
+        "workspaceIntro": "Toutes les personnes de l'espace de travail sont bloquées : l'effacement, la suppression, la purge au terme de la durée de conservation et la suppression d'un espace de travail expiré sont refusés, et le marketing, le traitement par IA et les exports sont limités. Utilisez-le pour une décision qui couvre tous les enregistrements.",
+        "category": "Pourquoi les données sont-elles conservées ?",
+        "categoryPick": "Choisir un motif",
+        "caseRef": "Référence du dossier",
+        "caseRefHint": "Votre propre référence : un dossier judiciaire, un ticket, le numéro figurant sur un courrier d'une autorité.",
+        "note": "Note (facultatif)",
+        "noteHint": "N'écrivez ici ni noms, ni numéros de téléphone, ni détails du dossier.",
+        "reviewAt": "Révision avant le (facultatif)",
+        "reviewHint": "Le registre signale le blocage lorsque cette date est dépassée.",
+        "expiresAt": "Se termine le (facultatif)",
+        "expiresHint": "Après cette date, le blocage prend fin automatiquement.",
+        "submit": "Poser le blocage",
+        "submitting": "Pose en cours...",
+        "done": "Blocage légal posé.",
+        "target": "S'applique à",
+        "targetPerson": "Une personne",
+        "targetWorkspace": "Tout l'espace de travail",
+        "change": "Modifier",
+        "search": "Trouver la personne",
+        "searchHint": "Saisissez un nom, un numéro de téléphone ou une adresse e-mail (au moins deux caractères).",
+        "noResults": "Personne trouvée."
+      },
+      "release": {
+        "title": "Lever ce blocage légal",
+        "message": "La suppression, la purge au terme de la durée de conservation et le marketing pourront alors reprendre pour cette personne. Les demandes d'effacement en attente de ce blocage sortent de l'état limité, et un effacement déjà confirmé s'exécute automatiquement en moins d'une minute.",
+        "cases": "{count, plural, one {# demande relative aux données attend ce blocage.} other {# demandes relatives aux données attendent ce blocage.}}",
+        "reason": "Pourquoi est-il levé ? (facultatif)",
+        "reasonHint": "N'écrivez ici ni noms, ni détails du dossier.",
+        "submit": "Lever le blocage",
+        "submitting": "Levée en cours...",
+        "done": "Blocage légal levé.",
+        "doneResuming": "{count, plural, one {Blocage légal levé. # effacement confirmé va s'exécuter maintenant.} other {Blocage légal levé. # effacements confirmés vont s'exécuter maintenant.}}"
+      },
+      "extend": {
+        "title": "Prolonger ce blocage légal",
+        "caseRefNow": "Référence actuelle du dossier : {caseRef}",
+        "addCaseRef": "Ajouter une autre référence de dossier",
+        "addCaseRefHint": "Un second dossier concernant la même personne est ajouté au même blocage.",
+        "clearHint": "Videz la date pour la supprimer.",
+        "submit": "Enregistrer les modifications",
+        "submitting": "Enregistrement...",
+        "done": "Blocage légal mis à jour."
+      },
+      "review": {
+        "title": "Consigner une révision",
+        "message": "Consigne que vous avez réexaminé ce blocage et qu'il s'applique toujours.",
+        "next": "Prochaine révision avant le (facultatif)",
+        "nextHint": "Laissez vide pour conserver la date de révision actuelle.",
+        "submit": "Consigner la révision",
+        "submitting": "Enregistrement...",
+        "done": "Révision consignée."
+      },
+      "actions": {
+        "review": "Réviser",
+        "extend": "Prolonger",
+        "release": "Lever"
+      },
+      "register": {
+        "title": "Blocages légaux",
+        "subtitle": "Personnes et enregistrements dont l'effacement et la suppression sont suspendus parce que les données doivent être conservées. Un blocage sur une seule personne se pose depuis la fiche de ce contact.",
+        "export": "Exporter en CSV",
+        "empty": "Aucun blocage légal.",
+        "emptyFiltered": "Aucun blocage légal ne correspond à ces filtres.",
+        "loadMore": "Charger plus",
+        "loadingMore": "Chargement...",
+        "none": "-",
+        "overdue": "Révision en retard",
+        "cases": "{count, plural, one {# demande en attente} other {# demandes en attente}}",
+        "open": "Ouvrir le blocage de référence de dossier {caseRef}",
+        "filters": {
+          "label": "Filtres",
+          "status": "Statut",
+          "category": "Motif",
+          "scope": "S'applique à",
+          "caseRef": "Référence du dossier",
+          "reviewDue": "Révision en retard",
+          "any": "Tous"
+        },
+        "columns": {
+          "subject": "Personne concernée",
+          "category": "Motif",
+          "caseRef": "Référence du dossier",
+          "placed": "Posé le",
+          "review": "Révision avant le",
+          "expires": "Fin",
+          "status": "Statut",
+          "actions": "Actions"
+        },
+        "place": "Placer un blocage juridique..."
+      },
+      "detail": {
+        "title": "Blocage légal",
+        "history": "Historique",
+        "releasedAt": "Terminé",
+        "by": "par {actor}",
+        "system": "le système",
+        "action": {
+          "insert": "Blocage posé",
+          "update": "Blocage modifié",
+          "delete": "Blocage terminé",
+          "other": "Mise à jour"
+        }
+      },
+      "case": {
+        "body": "Les données de cette personne sont conservées et verrouillées tant qu'un blocage légal s'applique. L'effacement n'est pas exécuté, le marketing, le traitement par IA et les exports sont limités, et le délai continue de courir.",
+        "requesterTitle": "Réponse à la personne",
+        "requesterHint": "Indique que les données sont conservées au titre d'une obligation légale, sans en donner la raison. Le conseil juridique peut remplacer ce texte dans les paramètres de confidentialité.",
+        "copy": "Copier le texte",
+        "copied": "Copié",
+        "queueHint": "Vous pouvez quand même confirmer l'effacement dès maintenant : il est consigné, rien n'est effacé, et il s'exécute automatiquement à la fin du blocage.",
+        "queue": "Confirmer l'effacement pour la fin du blocage",
+        "queued": "Consigné. Rien n'a été effacé ; l'effacement s'exécutera automatiquement à la fin du blocage."
+      },
+      "settings": {
+        "noticeLabel": "Réponse à une personne dont l'effacement est suspendu",
+        "noticeHint": "La formulation de votre conseil juridique. Laissez vide pour utiliser le texte par défaut. Ne mentionnez ni le dossier ni le motif."
+      }
     }
   }
 }

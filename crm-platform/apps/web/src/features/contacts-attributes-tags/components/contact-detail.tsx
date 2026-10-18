@@ -13,6 +13,7 @@ import { useContactDeals } from '../api/deals';
 import { useContactFiles } from '../api/files';
 import { useContactMeetings } from '../api/meetings';
 import { useContact } from '../api/contacts';
+import { useContactLegalHold } from '@/features/privacy-requests';
 import { displayName } from '../lib/contact-model';
 import { errorKind } from '../lib/errors';
 import { isClosedBooking } from '../lib/meeting-booking';
@@ -49,6 +50,8 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
   const tn = useTranslations('contacts-attributes-tags.contact.nav');
   const tr = useTranslations('contacts-attributes-tags.contact.record');
   const contact = useContact(id);
+  // The legal-hold banner (people who may read the register only; nothing is asked of the server for anyone else).
+  const legalHold = useContactLegalHold(id);
   const session = useSession();
   const router = useRouter();
   const pathname = usePathname();
@@ -166,6 +169,7 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
           data-testid="contact-center"
           className="thin-scrollbar flex min-w-0 flex-col md:col-start-2 md:row-start-1 xl:min-h-0 xl:overflow-y-auto"
         >
+          {legalHold.banner && <div className="pb-3">{legalHold.banner}</div>}
           <ContactTabs contactId={id} current={current} tabs={tabs} counts={counts} />
           <div className="flex min-h-0 flex-1 flex-col gap-3 pt-3">
             <CallNudge

@@ -36,7 +36,8 @@
       "stageFlag": "Ganho e perdido só podem ser definidos em um estágio de contato, e um estágio não pode ser ambos.",
       "statusStage": "Esse status pertence a outro estágio. Escolha um status que combine com o estágio do contato.",
       "stageScope": "Um status só pode ser limitado a um dos seus estágios do ciclo de vida.",
-      "planLimit": "Você atingiu o limite do seu plano de {limit, plural, one {# contato} other {# contatos}}. Faça upgrade do plano para adicionar mais ou exclua um existente para liberar espaço."
+      "planLimit": "Você atingiu o limite do seu plano de {limit, plural, one {# contato} other {# contatos}}. Faça upgrade do plano para adicionar mais ou exclua um existente para liberar espaço.",
+      "legalHold": "Este registo está protegido e não pode ser eliminado neste momento."
     },
     "list": {
       "title": "Hub de Contatos",
@@ -338,7 +339,8 @@
       "sendCampaign": "Enviar campanha",
       "assignOwner": "Atribuir responsável",
       "changeStage": "Alterar estágio",
-      "more": "Mais"
+      "more": "Mais",
+      "held": "Este registo está protegido e não pode ser eliminado neste momento."
     },
     "form": {
       "addEyebrow": "Novo contato",
@@ -609,7 +611,8 @@
         "tag_limit_reached": "limite de etiquetas do plano atingido",
         "invalid_date_of_birth": "a data de nascimento não é uma data com o ano primeiro que possa ser de nascimento",
         "duplicate_in_file": "número repetido, mesclado a uma linha anterior",
-        "invalid_timezone": "fuso horário inválido"
+        "invalid_timezone": "fuso horário inválido",
+        "legal_hold": "registo protegido, não alterado"
       },
       "statusHint": "Aplicado aos contatos que este arquivo cria.",
       "queued": "Aguardando para iniciar...",

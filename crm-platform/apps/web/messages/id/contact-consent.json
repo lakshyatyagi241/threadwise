@@ -357,7 +357,8 @@
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "Tidak diizinkan: kontak ini ditandai di bawah umur dan ruang kerja Anda menahan pemasaran.",
         "sale_share_opted_out": "Tidak diizinkan: kontak menolak penjualan atau pembagian datanya.",
-        "on_dnc_list": "Ada di daftar Jangan Hubungi Anda: tidak ada panggilan atau pesan teks pemasaran ke nomor ini"
+        "on_dnc_list": "Ada di daftar Jangan Hubungi Anda: tidak ada panggilan atau pesan teks pemasaran ke nomor ini",
+        "legal_hold": "Tidak diizinkan: pemrosesan kontak ini dibatasi."
       }
     },
     "notice": {

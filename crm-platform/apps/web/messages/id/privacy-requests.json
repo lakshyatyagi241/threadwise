@@ -23,7 +23,11 @@
       "exportNotReady": "File tersebut belum siap atau sudah kedaluwarsa. Siapkan ekspor baru.",
       "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
       "validation": "Beberapa nilai tidak valid. Periksa formulir lalu coba lagi.",
-      "unexpected": "Terjadi kesalahan. Coba lagi."
+      "unexpected": "Terjadi kesalahan. Coba lagi.",
+      "holdActive": "Catatan ini dilindungi dan saat ini tidak dapat dihapus.",
+      "holdExists": "Orang ini sudah memiliki penahanan hukum yang aktif. Perpanjang untuk menambahkan perkara lain.",
+      "holdNotFound": "Penahanan hukum ini sudah tidak ada.",
+      "holdNotActive": "Penahanan hukum ini sudah berakhir."
     },
     "type": {
       "access": "Akses",
@@ -182,7 +186,12 @@
           "erase_previewed": "Penghapusan dipratinjau",
           "erased": "Data dihapus",
           "completed": "Permintaan selesai",
-          "other": "Perbarui"
+          "other": "Perbarui",
+          "restricted": "Dibatasi: penahanan hukum",
+          "erasure_queued": "Penghapusan dikonfirmasi, menunggu penahanan berakhir",
+          "restriction_lifted": "Pembatasan dicabut",
+          "resume_skipped": "Penghapusan otomatis dilewati",
+          "resume_failed": "Penghapusan otomatis gagal, jalankan secara manual"
         }
       },
       "verify": {
@@ -284,6 +293,168 @@
       "erase": "Hapus orang ini",
       "created": "Permintaan {reference} dibuat.",
       "failed": "Tidak dapat membuat permintaan."
+    },
+    "legalHold": {
+      "close": "Tutup",
+      "tab": {
+        "label": "Privasi",
+        "requests": "Permintaan data",
+        "holds": "Penahanan hukum"
+      },
+      "requesterResponse": "Kami telah menerima permintaan Anda. Kami wajib menyimpan sebagian data Anda untuk memenuhi kewajiban hukum, sehingga belum dapat menghapusnya sekarang. Kami telah membatasi penggunaannya dan akan menghapusnya setelah kewajiban tersebut berakhir. Anda dapat mengajukan pengaduan kepada otoritas perlindungan data Anda.",
+      "contactBanner": "Penahanan hukum: penghapusan data dan catatan dijeda",
+      "workspaceBanner": "Penahanan hukum pada seluruh ruang kerja: penghapusan data dan catatan dijeda",
+      "caseStatus": "Dibatasi: penahanan hukum",
+      "blockedMessage": "Catatan ini dilindungi dan saat ini tidak dapat dihapus.",
+      "listFilter": "Menunggu penahanan hukum",
+      "banner": {
+        "caseRef": "Perkara {caseRef}",
+        "reviewBy": "tinjau paling lambat {date}",
+        "reviewOverdue": "tinjauan terlambat sejak {date}",
+        "effects": "Pemasaran, pemrosesan AI, dan ekspor dibatasi, dan setiap akses dicatat dalam log.",
+        "open": "Buka register"
+      },
+      "category": {
+        "legal_obligation": "Kewajiban hukum",
+        "legal_claim": "Gugatan atau sengketa hukum",
+        "regulator_request": "Permintaan regulator atau penegak hukum",
+        "internal_investigation": "Investigasi internal"
+      },
+      "scope": {
+        "contact": "Kontak",
+        "lead": "Lead",
+        "workspace": "Seluruh ruang kerja"
+      },
+      "status": {
+        "active": "Aktif",
+        "released": "Dilepas",
+        "expired": "Kedaluwarsa"
+      },
+      "menu": {
+        "place": "Terapkan penahanan hukum...",
+        "release": "Lepas penahanan hukum..."
+      },
+      "place": {
+        "title": "Terapkan penahanan hukum pada kontak ini",
+        "workspaceTitle": "Terapkan penahanan hukum pada seluruh ruang kerja",
+        "intro": "Selama penahanan berlaku, penghapusan data, penghapusan catatan, dan pembersihan retensi untuk orang ini ditolak, serta pemasaran, pemrosesan AI, dan ekspor datanya dibatasi. Layanan pelanggan berjalan seperti biasa.",
+        "workspaceIntro": "Setiap orang di ruang kerja ditahan: penghapusan data, penghapusan catatan, pembersihan retensi, dan penghapusan ruang kerja yang telah lewat masa aktifnya ditolak, serta pemasaran, pemrosesan AI, dan ekspor dibatasi. Gunakan untuk perintah yang mencakup semua catatan.",
+        "category": "Mengapa data disimpan?",
+        "categoryPick": "Pilih alasan",
+        "caseRef": "Referensi perkara",
+        "caseRefHint": "Referensi Anda sendiri: berkas pengadilan, tiket, atau nomor pada surat regulator.",
+        "note": "Keterangan (opsional)",
+        "noteHint": "Jangan menulis nama, nomor telepon, atau rincian perkara di sini.",
+        "reviewAt": "Tinjau paling lambat (opsional)",
+        "reviewHint": "Register akan menandai penahanan ini saat tanggal ini terlewati.",
+        "expiresAt": "Berakhir pada (opsional)",
+        "expiresHint": "Setelah tanggal ini, penahanan berakhir dengan sendirinya.",
+        "submit": "Terapkan penahanan",
+        "submitting": "Menerapkan...",
+        "done": "Penahanan hukum diterapkan.",
+        "target": "Berlaku untuk",
+        "targetPerson": "Satu orang",
+        "targetWorkspace": "Seluruh ruang kerja",
+        "change": "Ubah",
+        "search": "Cari orang",
+        "searchHint": "Ketik nama, nomor telepon, atau alamat email (minimal dua karakter).",
+        "noResults": "Tidak ada yang ditemukan."
+      },
+      "release": {
+        "title": "Lepas penahanan hukum ini",
+        "message": "Setelah itu, penghapusan catatan, pembersihan retensi, dan pemasaran untuk orang ini dapat dilanjutkan. Permintaan penghapusan yang menunggu penahanan ini keluar dari status dibatasi, dan penghapusan yang sudah dikonfirmasi akan berjalan sendiri dalam satu menit.",
+        "cases": "{count, plural, other {# permintaan data menunggu penahanan ini.}}",
+        "reason": "Mengapa dilepas? (opsional)",
+        "reasonHint": "Jangan menulis nama atau rincian perkara.",
+        "submit": "Lepas penahanan",
+        "submitting": "Melepas...",
+        "done": "Penahanan hukum dilepas.",
+        "doneResuming": "{count, plural, other {Penahanan hukum dilepas. # penghapusan yang sudah dikonfirmasi akan berjalan sekarang.}}"
+      },
+      "extend": {
+        "title": "Perpanjang penahanan hukum ini",
+        "caseRefNow": "Referensi perkara saat ini: {caseRef}",
+        "addCaseRef": "Tambahkan referensi perkara lain",
+        "addCaseRefHint": "Perkara kedua tentang orang yang sama ditambahkan ke penahanan yang sama.",
+        "clearHint": "Kosongkan tanggal untuk menghapusnya.",
+        "submit": "Simpan perubahan",
+        "submitting": "Menyimpan...",
+        "done": "Penahanan hukum diperbarui."
+      },
+      "review": {
+        "title": "Catat tinjauan",
+        "message": "Mencatat bahwa Anda telah meninjau kembali penahanan ini dan penahanan ini masih berlaku.",
+        "next": "Tinjauan berikutnya paling lambat (opsional)",
+        "nextHint": "Kosongkan untuk mempertahankan tanggal tinjauan saat ini.",
+        "submit": "Catat tinjauan",
+        "submitting": "Menyimpan...",
+        "done": "Tinjauan dicatat."
+      },
+      "actions": {
+        "review": "Tinjau",
+        "extend": "Perpanjang",
+        "release": "Lepas"
+      },
+      "register": {
+        "title": "Penahanan hukum",
+        "subtitle": "Orang dan catatan yang penghapusannya dijeda karena datanya harus disimpan. Penahanan pada satu orang diterapkan dari halaman kontak tersebut.",
+        "export": "Ekspor CSV",
+        "empty": "Tidak ada penahanan hukum.",
+        "emptyFiltered": "Tidak ada penahanan hukum yang cocok dengan filter ini.",
+        "loadMore": "Muat lebih banyak",
+        "loadingMore": "Memuat...",
+        "none": "-",
+        "overdue": "Tinjauan terlambat",
+        "cases": "{count, plural, other {# permintaan menunggu}}",
+        "open": "Buka penahanan dengan referensi perkara {caseRef}",
+        "filters": {
+          "label": "Filter",
+          "status": "Status",
+          "category": "Alasan",
+          "scope": "Berlaku untuk",
+          "caseRef": "Referensi perkara",
+          "reviewDue": "Tinjauan terlambat",
+          "any": "Semua"
+        },
+        "columns": {
+          "subject": "Subjek",
+          "category": "Alasan",
+          "caseRef": "Referensi perkara",
+          "placed": "Diterapkan",
+          "review": "Tinjau paling lambat",
+          "expires": "Berakhir",
+          "status": "Status",
+          "actions": "Tindakan"
+        },
+        "place": "Pasang penahanan hukum..."
+      },
+      "detail": {
+        "title": "Penahanan hukum",
+        "history": "Riwayat",
+        "releasedAt": "Telah berakhir",
+        "by": "oleh {actor}",
+        "system": "sistem",
+        "action": {
+          "insert": "Penahanan diterapkan",
+          "update": "Penahanan diubah",
+          "delete": "Penahanan berakhir",
+          "other": "Perbarui"
+        }
+      },
+      "case": {
+        "body": "Data orang ini disimpan dan dikunci selama penahanan hukum berlaku. Penghapusan tidak dijalankan, pemasaran, pemrosesan AI, dan ekspor dibatasi, dan tenggat waktu tetap berjalan.",
+        "requesterTitle": "Jawaban untuk yang bersangkutan",
+        "requesterHint": "Menyatakan bahwa data disimpan berdasarkan kewajiban hukum, tanpa menyebutkan alasannya. Penasihat hukum dapat mengganti kalimat ini di pengaturan privasi.",
+        "copy": "Salin teks",
+        "copied": "Tersalin",
+        "queueHint": "Anda masih dapat mengonfirmasi penghapusan sekarang: hal ini dicatat, tidak ada yang dihapus, dan penghapusan berjalan sendiri saat penahanan berakhir.",
+        "queue": "Konfirmasi penghapusan untuk saat penahanan berakhir",
+        "queued": "Tercatat. Belum ada yang dihapus; penghapusan akan berjalan sendiri saat penahanan berakhir."
+      },
+      "settings": {
+        "noticeLabel": "Jawaban untuk orang yang penghapusannya ditahan",
+        "noticeHint": "Kalimat dari penasihat hukum Anda. Kosongkan untuk memakai teks bawaan. Jangan menyebut perkara atau alasannya."
+      }
     }
   }
 }

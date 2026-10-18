@@ -8,6 +8,7 @@ import { Alert, Badge, Button, Field, Input, Spinner, useToast } from '@crm/ui';
 import { KEYS } from '../api/hooks';
 import { privacyApi } from '../api/service';
 import { errorKey } from '../lib/errors';
+import { isRestrictedRecorded } from '../lib/legal-hold-model';
 import { downloadText, erasePhrase, groupLines, phraseMatches, proofFile } from '../lib/model';
 
 /** What a dry run or an executed erasure does, module by module: the counts per table and the stored files. */
@@ -103,8 +104,15 @@ export function EraseSection({ request }: { request: PrivacyRequest }) {
       setTyped('');
       await refresh();
     },
+    // Under a legal hold the server keeps the confirmation and answers 409: that is the result, not a failure (nothing was erased).
+    onError: async (err) => {
+      if (!isRestrictedRecorded(err)) return;
+      toast(t('legalHold.case.queued'), 'success');
+      setTyped('');
+      await refresh();
+    },
   });
-  const error = run.error ?? dry.error;
+  const error = run.error && !isRestrictedRecorded(run.error) ? run.error : dry.error;
   const proof = request.proof;
   const matches = phraseMatches(typed, request.reference);
 
@@ -214,7 +222,11 @@ export function EraseSection({ request }: { request: PrivacyRequest }) {
                 onClick={() => run.mutate()}
               >
                 {run.isPending && <Spinner />}
-                {run.isPending ? t('detail.erase.executing') : t('detail.erase.execute')}
+                {run.isPending
+                  ? t('detail.erase.executing')
+                  : request.restricted
+                    ? t('legalHold.case.queue')
+                    : t('detail.erase.execute')}
               </Button>
             </div>
           )}

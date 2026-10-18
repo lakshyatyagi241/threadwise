@@ -16,6 +16,7 @@ import {
   VerifySection,
 } from './detail-sections';
 import { EraseSection } from './erase-section';
+import { RestrictedSection } from './restricted-section';
 import { SlaLabel } from './sla-label';
 
 /** `/privacy-requests/[id]`: one request with its clock, timeline and the steps that can be taken next. */
@@ -72,7 +73,11 @@ export function RequestDetailScreen({ id }: { id: string }) {
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="font-mono text-xl font-semibold">{request.reference}</h1>
           <Badge>{t(`type.${request.requestType}`)}</Badge>
-          <Badge tone={statusTone(request.status)}>{t(`status.${request.status}`)}</Badge>
+          {request.restricted ? (
+            <Badge tone="warning">{t('legalHold.caseStatus')}</Badge>
+          ) : (
+            <Badge tone={statusTone(request.status)}>{t(`status.${request.status}`)}</Badge>
+          )}
           {request.legalHold && <Badge tone="warning">{t('detail.legalHoldBadge')}</Badge>}
         </div>
         <p className="text-sm">{request.subjectLabel}</p>
@@ -107,6 +112,7 @@ export function RequestDetailScreen({ id }: { id: string }) {
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="min-w-0 space-y-4">
+          {request.restricted && <RestrictedSection request={request} />}
           {canManage && <VerifySection request={request} />}
           {canManage && open && <HoldSection request={request} />}
           {exportable && (

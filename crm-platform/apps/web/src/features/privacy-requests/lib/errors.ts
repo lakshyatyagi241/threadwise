@@ -10,6 +10,10 @@ export const ERROR_KEYS = [
   'stateInvalid',
   'notVerified',
   'legalHold',
+  'holdActive',
+  'holdExists',
+  'holdNotFound',
+  'holdNotActive',
   'confirmationRequired',
   'exportInProgress',
   'exportNotReady',
@@ -34,6 +38,14 @@ export function errorKey(error: unknown): ErrorKey {
       return 'notVerified';
     case ERROR_CODES.PRIVACY_LEGAL_HOLD:
       return 'legalHold';
+    case ERROR_CODES.LEGAL_HOLD_ACTIVE:
+      return 'holdActive';
+    case ERROR_CODES.LEGAL_HOLD_EXISTS:
+      return 'holdExists';
+    case ERROR_CODES.LEGAL_HOLD_NOT_FOUND:
+      return 'holdNotFound';
+    case ERROR_CODES.LEGAL_HOLD_NOT_ACTIVE:
+      return 'holdNotActive';
     case ERROR_CODES.PRIVACY_CONFIRMATION_REQUIRED:
       return 'confirmationRequired';
     case ERROR_CODES.PRIVACY_EXPORT_IN_PROGRESS:

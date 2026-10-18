@@ -36,7 +36,8 @@
       "stageFlag": "Thắng và thua chỉ có thể đặt cho giai đoạn liên hệ, và một giai đoạn không thể vừa thắng vừa thua.",
       "statusStage": "Trạng thái đó thuộc giai đoạn khác. Hãy chọn trạng thái phù hợp với giai đoạn của liên hệ.",
       "stageScope": "Một trạng thái chỉ có thể giới hạn cho một trong các giai đoạn vòng đời của bạn.",
-      "planLimit": "Bạn đã đạt giới hạn {limit, plural, other {# liên hệ}} của gói. Hãy nâng cấp gói để thêm nữa, hoặc xóa liên hệ hiện có để giải phóng chỗ."
+      "planLimit": "Bạn đã đạt giới hạn {limit, plural, other {# liên hệ}} của gói. Hãy nâng cấp gói để thêm nữa, hoặc xóa liên hệ hiện có để giải phóng chỗ.",
+      "legalHold": "Bản ghi này được bảo vệ và hiện không thể xóa."
     },
     "list": {
       "title": "Trung tâm liên hệ",
@@ -338,7 +339,8 @@
       "sendCampaign": "Gửi chiến dịch",
       "assignOwner": "Giao người phụ trách",
       "changeStage": "Đổi giai đoạn",
-      "more": "Thêm"
+      "more": "Thêm",
+      "held": "Bản ghi này được bảo vệ và hiện không thể xóa."
     },
     "form": {
       "addEyebrow": "Liên hệ mới",
@@ -609,7 +611,8 @@
         "tag_limit_reached": "đã đạt giới hạn thẻ của gói",
         "invalid_date_of_birth": "ngày sinh không phải là ngày viết theo thứ tự năm trước có thể là ngày sinh",
         "duplicate_in_file": "số trùng lặp, đã gộp vào dòng trước",
-        "invalid_timezone": "múi giờ không hợp lệ"
+        "invalid_timezone": "múi giờ không hợp lệ",
+        "legal_hold": "bản ghi được bảo vệ, không thay đổi"
       },
       "statusHint": "Áp dụng cho các liên hệ mà tệp này tạo ra.",
       "queued": "Đang chờ bắt đầu...",

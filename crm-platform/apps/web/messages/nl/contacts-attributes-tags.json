@@ -36,7 +36,8 @@
       "stageFlag": "Gewonnen en verloren kunnen alleen op een contactfase worden ingesteld, en een fase kan niet beide zijn.",
       "statusStage": "Die status hoort bij een andere fase. Kies een status die past bij de fase van het contact.",
       "stageScope": "Een status kan alleen aan één van je levenscyclusfases worden gekoppeld.",
-      "planLimit": "Je hebt de limiet van je abonnement bereikt van {limit, plural, one {# contact} other {# contacten}}. Upgrade je abonnement om er meer toe te voegen, of verwijder een bestaand contact om ruimte vrij te maken."
+      "planLimit": "Je hebt de limiet van je abonnement bereikt van {limit, plural, one {# contact} other {# contacten}}. Upgrade je abonnement om er meer toe te voegen, of verwijder een bestaand contact om ruimte vrij te maken.",
+      "legalHold": "Dit record is beschermd en kan momenteel niet worden verwijderd."
     },
     "list": {
       "title": "Contact Hub",
@@ -338,7 +339,8 @@
       "sendCampaign": "Campagne verzenden",
       "assignOwner": "Eigenaar toewijzen",
       "changeStage": "Fase wijzigen",
-      "more": "Meer"
+      "more": "Meer",
+      "held": "Dit record is beschermd en kan momenteel niet worden verwijderd."
     },
     "form": {
       "addEyebrow": "Nieuw contact",
@@ -609,7 +611,8 @@
         "tag_limit_reached": "taglimiet van abonnement bereikt",
         "invalid_date_of_birth": "geboortedatum is geen datum met het jaar eerst die een geboortedatum kan zijn",
         "duplicate_in_file": "herhaald nummer, samengevoegd met een eerdere rij",
-        "invalid_timezone": "ongeldige tijdzone"
+        "invalid_timezone": "ongeldige tijdzone",
+        "legal_hold": "beschermd record, niet gewijzigd"
       },
       "statusHint": "Wordt toegepast op contacten die dit bestand aanmaakt.",
       "queued": "Wachten op start...",

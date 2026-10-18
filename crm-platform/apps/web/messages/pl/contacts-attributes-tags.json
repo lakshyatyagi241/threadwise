@@ -36,7 +36,8 @@
       "stageFlag": "Wygrany i utracony można ustawić tylko dla etapu kontaktu, a etap nie może być jednocześnie jednym i drugim.",
       "statusStage": "Ten status należy do innego etapu. Wybierz status pasujący do etapu kontaktu.",
       "stageScope": "Status można ograniczyć tylko do jednego z Twoich etapów cyklu życia.",
-      "planLimit": "Osiągnięto limit planu: {limit, plural, one {# kontakt} few {# kontakty} many {# kontaktów} other {# kontaktu}}. Zmień plan na wyższy, aby dodać więcej, lub usuń istniejący kontakt, aby zwolnić miejsce."
+      "planLimit": "Osiągnięto limit planu: {limit, plural, one {# kontakt} few {# kontakty} many {# kontaktów} other {# kontaktu}}. Zmień plan na wyższy, aby dodać więcej, lub usuń istniejący kontakt, aby zwolnić miejsce.",
+      "legalHold": "Ten rekord jest chroniony i obecnie nie można go usunąć."
     },
     "list": {
       "title": "Centrum kontaktów",
@@ -338,7 +339,8 @@
       "sendCampaign": "Wyślij kampanię",
       "assignOwner": "Przypisz właściciela",
       "changeStage": "Zmień etap",
-      "more": "Więcej"
+      "more": "Więcej",
+      "held": "Ten rekord jest chroniony i obecnie nie można go usunąć."
     },
     "form": {
       "addEyebrow": "Nowy kontakt",
@@ -609,7 +611,8 @@
         "tag_limit_reached": "osiągnięto limit tagów w planie",
         "invalid_date_of_birth": "data urodzenia nie jest datą z rokiem na początku, która może być datą urodzenia",
         "duplicate_in_file": "powtórzony numer, scalony z wcześniejszym wierszem",
-        "invalid_timezone": "nieprawidłowa strefa czasowa"
+        "invalid_timezone": "nieprawidłowa strefa czasowa",
+        "legal_hold": "rekord chroniony, bez zmian"
       },
       "statusHint": "Stosowane do kontaktów tworzonych przez ten plik.",
       "queued": "Oczekiwanie na start...",

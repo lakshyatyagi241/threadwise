@@ -1,6 +1,9 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import {
+  LEGAL_HOLD_REASON_CATEGORIES,
+  LEGAL_HOLD_SCOPES,
+  LEGAL_HOLD_STATUSES,
   PRIVACY_DISPOSITIONS,
   PRIVACY_REQUEST_STATUSES,
   PRIVACY_REQUEST_TYPES,
@@ -99,8 +102,18 @@ describe('privacy-requests messages', () => {
         'erase_previewed',
         'erased',
         'completed',
+        'restricted',
+        'erasure_queued',
+        'restriction_lifted',
+        'resume_skipped',
+        'resume_failed',
         'other',
       ].map((k) => `${ROOT}.detail.timeline.event.${k}`),
+      ...LEGAL_HOLD_REASON_CATEGORIES.map((k) => `${ROOT}.legalHold.category.${k}`),
+      ...LEGAL_HOLD_SCOPES.map((k) => `${ROOT}.legalHold.scope.${k}`),
+      ...LEGAL_HOLD_STATUSES.map((k) => `${ROOT}.legalHold.status.${k}`),
+      ...['insert', 'update', 'delete', 'other'].map((k) => `${ROOT}.legalHold.detail.action.${k}`),
+      ...['reviewBy', 'reviewOverdue'].map((k) => `${ROOT}.legalHold.banner.${k}`),
     ];
     expect(need.filter((k) => !(k in en))).toEqual([]);
   });
