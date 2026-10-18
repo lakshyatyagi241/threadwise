@@ -94,6 +94,7 @@ import { LeadScoringModule } from './modules/lead-scoring';
 import { ContactConsentModule } from './modules/contact-consent';
 import { PrivacyModule } from './modules/privacy';
 import { ComplianceCenterModule } from './modules/compliance-center';
+import { DpdpRegisterModule } from './modules/dpdp-register';
 import { AuditLogModule } from './modules/audit-log';
 import { ContactsPqlModule } from './modules/contacts-pql';
 import { MessageTemplatesModule } from './modules/message-templates';
@@ -269,6 +270,7 @@ import { HealthModule } from './health/health.module';
     ContactConsentModule,
     PrivacyModule,
     ComplianceCenterModule,
+    DpdpRegisterModule,
     AuditLogModule,
     ContactsPqlModule,
     WabaModule,

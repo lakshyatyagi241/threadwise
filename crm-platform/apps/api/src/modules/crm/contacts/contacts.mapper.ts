@@ -57,6 +57,13 @@ export function toContactResponse(
     isMinor: row.isMinor === true,
     lastActivityAt: row.lastActivityAt?.toISOString() ?? null,
     uncontactedSince: row.uncontactedSince?.toISOString() ?? null,
+    nextFollowUp: row.nextFollowUp
+      ? {
+          id: row.nextFollowUp.id,
+          dueAt: row.nextFollowUp.dueAt ? new Date(row.nextFollowUp.dueAt).toISOString() : null,
+          assigneeId: row.nextFollowUp.assigneeId,
+        }
+      : null,
     customFields: row.data ?? {},
     source: row.source,
     timezone: row.timezone,

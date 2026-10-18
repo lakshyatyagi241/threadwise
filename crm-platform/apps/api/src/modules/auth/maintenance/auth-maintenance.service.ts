@@ -20,6 +20,11 @@ import { engineState, loadPolicies, recordRun } from '../../data-retention';
  * Reference never pruned its security log and left expired reset tokens and the
  * audit log to an unscheduled command (TW-AUTH-013/037/046); this closes all three.
  */
+/**
+ * How long an ended session (revoked or expired) is kept before the daily purge deletes it, in `auth_sessions` and
+ * `platform_sessions`. Exported so the DPDP register can show it (`logs.session_retention`).
+ */
+export const ENDED_SESSION_RETENTION_DAYS = 90;
 const AUDIT_BATCH = 10_000;
 /** Bound one run so a first sweep over years of history cannot hold the worker for long. */
 const AUDIT_MAX_BATCHES = 100;
@@ -61,12 +66,12 @@ export class AuthMaintenanceService {
       `);
       const sessions = await tx.execute(sql`
         DELETE FROM auth_sessions
-        WHERE COALESCE(revoked_at, expires_at) < now() - interval '90 days'
+        WHERE COALESCE(revoked_at, expires_at) < now() - make_interval(days => ${ENDED_SESSION_RETENTION_DAYS})
         RETURNING 1
       `);
       const operatorSessions = await tx.execute(sql`
         DELETE FROM platform_sessions
-        WHERE COALESCE(revoked_at, expires_at) < now() - interval '90 days'
+        WHERE COALESCE(revoked_at, expires_at) < now() - make_interval(days => ${ENDED_SESSION_RETENTION_DAYS})
         RETURNING 1
       `);
 

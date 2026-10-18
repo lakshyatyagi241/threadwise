@@ -127,7 +127,8 @@
       "open": "Openen",
       "edit": "Bewerken",
       "delete": "Verwijderen",
-      "unassigned": "Niet toegewezen"
+      "unassigned": "Niet toegewezen",
+      "followUpBadge": "Opvolging"
     },
     "bulk": {
       "label": "Acties voor de geselecteerde taken",

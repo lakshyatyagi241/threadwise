@@ -379,6 +379,16 @@
         "label": "Nicht kontaktierte Leads",
         "description": "Legen Sie fest, welche Aktionen als Kontaktaufnahme mit einem Lead gelten und welche neuen Kontakte als nicht kontaktiert starten.",
         "keywords": "nicht kontaktiert, kontaktiert, Lead, neuer Lead, Erstkontakt, Nachfassen, neu zuweisen, Markierung"
+      },
+      "follow-ups": {
+        "label": "Wiedervorlagen",
+        "description": "Setzen Sie die nächste Wiedervorlage eines Kontakts automatisch, sobald Ihr Team ihn kontaktiert, und legen Sie Datum und Erinnerungszeit fest.",
+        "keywords": "Wiedervorlage, Follow-up, Erinnerung, nächste Aktion, Aufgabe, Termin, zurückstellen, irgendwann"
+      },
+      "duplicate-leads": {
+        "label": "Doppelte Leads",
+        "description": "Wählen Sie, ob ein neuer Lead, der zu einem Kontakt passt, dort zusammengeführt oder als neuer Kontakt angelegt wird.",
+        "keywords": "Duplikat, zusammenführen, Lead, gleiche Telefonnummer, gleiche E-Mail, neuer Kontakt, Lead-Quelle"
       }
     },
     "backToMarketplace": "Zurück zum Marketplace"

@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
+  sessionResponseSchema,
   impersonationStatusSchema,
   startImpersonationResponseSchema,
   type StartImpersonationResponse,
@@ -120,8 +121,13 @@ describe('the act-as session', () => {
 
     const session = await api().get('/v2/auth/session').set(bearer(token));
     expect(session.status, JSON.stringify(session.body)).toBe(200);
+    // The web shell only accepts a body its own schema parses: a masked permission map (`all` -> `******`) made it treat the act-as
+    // session as signed out and bounce the operator to the console.
+    const parsedSession = sessionResponseSchema.safeParse(session.body);
+    expect(parsedSession.success, JSON.stringify(parsedSession.success ? '' : parsedSession.error.issues)).toBe(true);
     expect(session.body.org.id).toBe(orgUuid);
-    expect(session.body.user.fullName).toBe('Owner Person');
+    // act-as responses mask personal data: the owner's name arrives masked
+    expect(session.body.user.fullName).toBe('O*** P***');
 
     const status = impersonationStatusSchema.parse(
       (await api().get('/v2/auth/impersonation').set(bearer(token))).body,

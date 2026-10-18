@@ -1,0 +1,348 @@
+{
+  "dpdp-register-admin": {
+    "nav": {
+      "group": "Privacy",
+      "register": "DPDP register"
+    },
+    "page": {
+      "eyebrow": "Admin · Team · DPDP register",
+      "title": "DPDP register",
+      "disclaimer": "Tracks what the platform does today against the DPDP Act and Rules. It is not a compliance certificate.",
+      "checkedAt": "Checked {time}",
+      "refresh": "Refresh"
+    },
+    "summary": {
+      "label": "Register summary",
+      "counts": {
+        "title": "Obligations by status",
+        "counted": "{total, plural, one {# obligation counted} other {# obligations counted}}",
+        "notCounted": "Not applicable rows are listed but not counted."
+      },
+      "milestones": {
+        "title": "Dates ahead",
+        "names": {
+          "consent_managers": "Consent Manager registration (rule 4)",
+          "main_duties": "Main duties of the Rules"
+        },
+        "left": "About {days, plural, =0 {0 days} one {# day} other {# days}} to go",
+        "passed": "This date has passed"
+      },
+      "tiers": {
+        "title": "Penalty tiers",
+        "tier": "Penalty tier",
+        "hint": "Obligations that are not followed, partly followed or unverified, by the penalty cap that applies to them."
+      }
+    },
+    "status": {
+      "following": "Following",
+      "partial": "Partial",
+      "not_following": "Not following",
+      "unverified": "Unverified",
+      "not_applicable": "Not applicable"
+    },
+    "result": {
+      "pass": "Pass",
+      "fail": "Fail",
+      "unknown": "Unknown"
+    },
+    "source": {
+      "live": "Read live",
+      "attested": "Attested",
+      "code": "Declared by the code"
+    },
+    "filters": {
+      "label": "Filter by status",
+      "all": "All",
+      "shown": "{count, plural, one {# obligation shown} other {# obligations shown}}",
+      "empty": {
+        "title": "No obligations match this filter",
+        "message": "No obligation has this status right now.",
+        "reset": "Show all"
+      }
+    },
+    "groups": {
+      "A": "Grounds, notice, consent (ss4 to 7, rule 3)",
+      "B": "Rights and grievance (ss11 to 15, rule 14)",
+      "C": "Retention and erasure (s8(7), (8), rule 8)",
+      "D": "Security (s8(4), (5), rule 6)",
+      "E": "Breach (s8(6), rule 7)",
+      "F": "Children (s9, rules 10 to 12, Fourth Schedule)",
+      "G": "Transfers and processors (ss8(1), 8(2), 16, rules 13(4), 15)",
+      "H": "Significant Data Fiduciary (s10, rule 13)",
+      "I": "Governance and enforcement (ss27 to 33, rule 19)"
+    },
+    "owners": {
+      "tenant": "Workspace",
+      "platform": "Platform",
+      "both": "Workspace and platform"
+    },
+    "tiers": {
+      "250": "Rs 250 crore",
+      "200": "Rs 200 crore",
+      "150": "Rs 150 crore",
+      "50": "Rs 50 crore",
+      "none": "No penalty tier"
+    },
+    "item": {
+      "citation": "Citation",
+      "owner": "Owner",
+      "penalty": "Penalty tier",
+      "plan": "Plan items",
+      "conditional": "Only if notified",
+      "checks": "Checks",
+      "noChecks": "Declared status. No check reads this yet."
+    },
+    "check": {
+      "lapsed": "Lapsed",
+      "note": "Note:",
+      "evidence": "Evidence link"
+    },
+    "items": {
+      "r01": { "title": "Process personal data only on consent or a permitted use" },
+      "r02": { "title": "Give a standalone, itemised notice before asking for consent" },
+      "r03": { "title": "Notify people who consented before the Act took effect" },
+      "r04": { "title": "Offer notice and consent in English or a scheduled language" },
+      "r05": { "title": "Make consent free, specific, informed and unambiguous" },
+      "r06": { "title": "Show a contact person in every consent request" },
+      "r07": { "title": "Let people withdraw consent as easily as they gave it" },
+      "r08": { "title": "On withdrawal, stop processing and make processors stop" },
+      "r09": { "title": "Be able to prove notice and consent" },
+      "r10": { "title": "Use voluntarily provided data only for the stated purpose" },
+      "r11": { "title": "Accept consent given or withdrawn through a Consent Manager" },
+      "r12": { "title": "Gate every outbound send on consent at send time" },
+      "r13": { "title": "Summarise data held, processing and who received it" },
+      "r14": { "title": "Correct, complete and update personal data on request" },
+      "r15": { "title": "Erase on request unless needed for the purpose or by law" },
+      "r16": { "title": "Run a published grievance mechanism, answering within 90 days" },
+      "r17": { "title": "Let people nominate someone to act on death or incapacity" },
+      "r18": { "title": "Publish how to make a request and which identifier is needed" },
+      "r19": { "title": "Publish a contact and include it in every response" },
+      "r20": { "title": "Verify identity, rate limit and audit rights requests" },
+      "r21": { "title": "Keep data accurate and complete where it drives decisions" },
+      "r22": {
+        "title": "Honour rights of the platform's own staff, billing contacts and visitors"
+      },
+      "r23": { "title": "Erase data when consent is withdrawn or the purpose ends" },
+      "r24": { "title": "Erase inactive data after three years, with 48 hours' notice" },
+      "r25": { "title": "Keep personal data and logs for at least one year" },
+      "r26": { "title": "Run the workspace inactivity lifecycle" },
+      "r27": { "title": "Protect data with encryption, masking or tokens" },
+      "r28": { "title": "Control access to computer resources" },
+      "r29": { "title": "Log and monitor access to personal data" },
+      "r30": { "title": "Back up data so processing can continue after a loss" },
+      "r31": { "title": "Keep logs for one year to detect and investigate incidents" },
+      "r32": { "title": "Have a security clause in every processor contract" },
+      "r33": { "title": "Be able to show the security measures in place" },
+      "r34": { "title": "Keep reasonable security safeguards in general" },
+      "r35": { "title": "Control AI paths that send contact text to third parties" },
+      "r36": { "title": "Tell each affected person about a breach without delay" },
+      "r37": { "title": "Tell the Board of a breach, then report within 72 hours" },
+      "r38": { "title": "As processor, tell the tenant of a breach fast enough" },
+      "r39": { "title": "Get verifiable parental consent before processing a child's data" },
+      "r40": { "title": "No tracking, behavioural monitoring or targeted ads for children" },
+      "r41": { "title": "Apply the Fourth Schedule exemptions for child-data duties" },
+      "r42": { "title": "Respect Government limits on transfers of data abroad" },
+      "r43": { "title": "Stay responsible for what processors do" },
+      "r44": { "title": "Meet Significant Data Fiduciary duties, only if notified" },
+      "r45": { "title": "Produce evidence for a Board inquiry within six months" },
+      "r46": { "title": "Keep the platform's own notices, terms acceptance and cookie choice" },
+      "r47": { "title": "Name a platform contact and grievance route" }
+    },
+    "details": {
+      "probe_error": "This could not be read right now, so the result is unknown.",
+      "probe_missing": "No reading came back for this check.",
+      "env_missing": "{key} is not set, so this could not be read.",
+      "attestation_missing": "No one has recorded this yet.",
+      "attestation_expired": "The statement recorded by {name} on {date} lapsed on {expires}. It no longer counts.",
+      "attested_pass": "Recorded as in place by {name} on {date}. Counts until {expires}.",
+      "attested_fail": "Recorded as not in place by {name} on {date}. Counts until {expires}.",
+      "code_declared": "Declared in the code, not measured at run time. The change that closes the gap updates it.",
+      "unrecognised": "This console has no description for this result yet ({detail})."
+    },
+    "checks": {
+      "mfa_operators": {
+        "title": "Super admins must sign in with two-factor authentication",
+        "details": {
+          "mfa_on": "Two-factor sign-in is required for super admins.",
+          "mfa_off": "Not required: super admins can sign in without a second factor."
+        }
+      },
+      "mfa_workspace_admins": {
+        "title": "Workspace admins must sign in with two-factor authentication",
+        "details": {
+          "mfa_on": "Two-factor sign-in is required for workspace admins.",
+          "mfa_off": "Not required: workspace admins can sign in without a second factor."
+        }
+      },
+      "logs_audit_retention": {
+        "title": "The audit log is kept for at least one year",
+        "details": {
+          "retention_ok": "Kept for {days, plural, one {# day} other {# days}}.",
+          "retention_unlimited": "Never pruned (0 days), so it is kept at least a year.",
+          "retention_below_floor": "Kept for only {days, plural, one {# day} other {# days}}; the Rules ask for at least 365."
+        }
+      },
+      "logs_session_retention": {
+        "title": "Ended sessions are kept for at least one year",
+        "details": {
+          "retention_ok": "Ended sessions are purged after {days, plural, one {# day} other {# days}}.",
+          "retention_below_floor": "Ended sessions are purged after {days, plural, one {# day} other {# days}}, below the 365 the Rules ask for."
+        }
+      },
+      "redis_auth": {
+        "title": "Redis needs a password or uses TLS",
+        "details": {
+          "redis_auth_on": "The configured Redis address carries a password or uses TLS.",
+          "redis_auth_off": "The configured Redis address has no password and does not use TLS."
+        }
+      },
+      "crypto_rotation_complete": {
+        "title": "No previous encryption keys are left in the key ring",
+        "details": {
+          "rotation_complete": "No previous keys are configured.",
+          "previous_keys_present": "Previous keys are still configured, so a key rotation is not finished."
+        }
+      },
+      "lifecycle_enabled": {
+        "title": "The workspace inactivity lifecycle is live",
+        "details": {
+          "lifecycle_on": "Enabled, not a dry run, and deletion is on.",
+          "lifecycle_off": "{enabled, select, true {Enabled} other {Disabled}}, {dryRun, select, true {dry run on} other {dry run off}}, {deleteEnabled, select, true {deletion on} other {deletion off}}."
+        }
+      },
+      "errors_vendor_region": {
+        "title": "Error reports stay in India or are switched off",
+        "details": {
+          "sentry_off": "Error reporting is off in the API server.",
+          "region_india": "Error reports go to an India region of the vendor.",
+          "region_outside_india": "Error reports go to the {region} region of the vendor, outside India.",
+          "region_unrecognised": "The error-reporting address is not a known regional address, so its country cannot be told.",
+          "region_unrecognised_host": "Error reports go to {host}, which is not a known regional address, so its country cannot be told."
+        }
+      },
+      "ai_platform_key_off": {
+        "title": "No platform AI key is configured",
+        "details": {
+          "no_platform_key": "No platform key is configured for any AI provider.",
+          "platform_key_set": "A platform key is configured for: {providers}."
+        }
+      },
+      "consent_default_opt_in": {
+        "title": "New workspaces start with marketing consent required",
+        "details": {
+          "default_opt_in": "New workspaces start with recorded consent required for marketing.",
+          "default_opt_out": "New workspaces start without requiring recorded consent for marketing.",
+          "default_opt_in_counts": "New workspaces start with recorded consent required for marketing. {on, number} of {total, number} workspaces require it now.",
+          "default_opt_out_counts": "New workspaces start without requiring recorded consent for marketing. {on, number} of {total, number} workspaces require it now."
+        }
+      },
+      "hosting_region_documented": {
+        "title": "Hosting provider, region and data locations are written down"
+      },
+      "storage_encrypted_at_rest": {
+        "title": "Volume and object storage encryption evidence is on file"
+      },
+      "backup_offsite_configured": {
+        "title": "A sealed off-site backup runs and covers object storage"
+      },
+      "backup_restore_drill": {
+        "title": "A restore drill ran in the last six months"
+      },
+      "security_pentest_report": {
+        "title": "An external penetration test report is on file with no open critical finding"
+      },
+      "legal_counsel_engaged": {
+        "title": "Indian data-protection counsel is engaged"
+      },
+      "legal_vendor_dpas": {
+        "title": "Executed DPAs are on file with the sub-processors that hold personal data"
+      },
+      "governance_contacts_named": {
+        "title": "Privacy contact, incident commander and grievance owner are named and published"
+      },
+      "pii_column_encryption": {
+        "title": "Contact phone, email and message body are encrypted per column"
+      },
+      "rls_privileged_guc_fixed": {
+        "title": "The privileged database setting cannot be set from a session"
+      },
+      "logs_erasure_keeps_year": {
+        "title": "Erasure keeps history and logs for a year before deleting them"
+      },
+      "ci_security_jobs_scheduled": {
+        "title": "Security checks run on a schedule in CI"
+      },
+      "ai_workspace_switch": {
+        "title": "Workspaces can switch off the AI paths that send contact text to a vendor"
+      },
+      "transfer_country_killswitch": {
+        "title": "Each vendor has a country tag, and a country can be cut off"
+      },
+      "dpa_acceptance_persisted": {
+        "title": "A workspace's acceptance of the DPA is recorded with version and time"
+      },
+      "consent_lawful_basis_dpdp": {
+        "title": "The purpose registry uses the Act's consent and section 7 uses"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "Workspace exit export and file clean-up are built"
+      },
+      "evidence_board_pack": {
+        "title": "Board-ready evidence pack is built"
+      },
+      "grievance_intake_built": {
+        "title": "Grievance intake is built"
+      }
+    },
+    "attest": {
+      "action": "Attest",
+      "actionFor": "Attest: {check}",
+      "title": "Record a statement",
+      "intro": "Record whether this is true today. It counts until it expires, then the check goes back to unknown. Every statement stays in the history.",
+      "result": {
+        "label": "Result",
+        "pass": "In place (pass)",
+        "fail": "Not in place (fail)"
+      },
+      "note": {
+        "label": "Note",
+        "hint": "What you checked and where the proof is. At least {min} characters."
+      },
+      "evidence": {
+        "label": "Evidence link (optional)",
+        "hint": "An https link to the document or ticket.",
+        "placeholder": "https://"
+      },
+      "expiry": {
+        "label": "Counts for (days)",
+        "hint": "{min} to {max} days. After that the check goes back to unknown."
+      },
+      "problems": {
+        "noteShort": "Write at least {min} characters.",
+        "noteLong": "Keep the note under {max, number} characters.",
+        "link": "Use a full https link, or leave this empty.",
+        "range": "Enter a whole number of days from {min} to {max}."
+      },
+      "submit": "Record statement",
+      "saving": "Saving",
+      "cancel": "Cancel",
+      "saved": "Statement recorded."
+    },
+    "history": {
+      "action": "History",
+      "actionFor": "History: {check}",
+      "title": "History",
+      "empty": "Nothing has been recorded for this check yet.",
+      "validUntil": "Valid until {date}",
+      "close": "Close"
+    },
+    "errors": {
+      "forbidden": "You do not have permission to do this.",
+      "request": "That request could not be completed.",
+      "unexpected": "Something went wrong on our side. Try again in a moment.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "validation": "Some values are not valid. Check the highlighted fields.",
+      "notFound": "That item no longer exists."
+    }
+  }
+}

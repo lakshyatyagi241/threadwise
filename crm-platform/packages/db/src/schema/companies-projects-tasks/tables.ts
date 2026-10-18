@@ -101,6 +101,8 @@ export const tasks = pgTable(
     dealId: idColumn('deal_id'),
     companyId: idColumn('company_id'),
     source: text('source').notNull().default('manual'),
+    /** BL-291: `follow_up` is a contact's next follow-up (at most one open per contact); every other task is `task`. */
+    kind: text('kind').notNull().default('task'),
     dueAt: timestamp('due_at', { withTimezone: true }),
     remindedAt: timestamp('reminded_at', { withTimezone: true }),
     doneAt: timestamp('done_at', { withTimezone: true }),

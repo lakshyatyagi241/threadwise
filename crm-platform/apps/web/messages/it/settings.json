@@ -379,6 +379,16 @@
         "label": "Lead non contattati",
         "description": "Scegli quali azioni contano come contatto con un lead e quali nuovi contatti partono come non contattati.",
         "keywords": "non contattato, contattato, lead, nuovo lead, primo contatto, follow-up, riassegnazione, contrassegno"
+      },
+      "follow-ups": {
+        "label": "Ricontatti",
+        "description": "Imposta automaticamente il prossimo ricontatto di un contatto quando il tuo team lo contatta, e scegli data e orario di avviso.",
+        "keywords": "ricontatto, ricontatti, promemoria, prossima azione, attività, pianificazione, posticipa, prima o poi"
+      },
+      "duplicate-leads": {
+        "label": "Lead duplicati",
+        "description": "Scegli se un nuovo lead che corrisponde a un contatto viene unito a esso o diventa un nuovo contatto.",
+        "keywords": "duplicato, unire, lead, stesso telefono, stessa e-mail, nuovo contatto, fonte di lead"
       }
     },
     "backToMarketplace": "Torna al Marketplace"

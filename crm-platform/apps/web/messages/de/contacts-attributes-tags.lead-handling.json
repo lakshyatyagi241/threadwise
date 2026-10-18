@@ -2,7 +2,10 @@
   "contacts-attributes-tags": {
     "views": {
       "presets": {
-        "uncontacted": "Nicht kontaktiert"
+        "uncontacted": "Nicht kontaktiert",
+        "followUpToday": "Wiedervorlage heute",
+        "followUpOverdue": "Wiedervorlage überfällig",
+        "followUpSomeday": "Wiedervorlagen „Irgendwann“"
       }
     },
     "leadHandling": {
@@ -58,8 +61,94 @@
             "keep": "Markierung „Nicht kontaktiert“ nicht ändern",
             "mark": "Bei Neuzuweisung als nicht kontaktiert markieren"
           }
+        },
+        "followUps": {
+          "title": "Wiedervorlagen",
+          "subtitle": "Behalten Sie jeden Lead im Fluss: Wenn ein Teammitglied eine Person kontaktiert, kann deren nächste Wiedervorlage automatisch gesetzt oder verschoben werden. Es ändert sich nichts, bis Sie eine Option aktivieren.",
+          "when": {
+            "title": "Wiedervorlagen automatisch setzen",
+            "intro": "Wenn ein Teammitglied eine Person kontaktiert oder ihr Inhalte sendet, die Wiedervorlage aktualisieren, falls:",
+            "none": "Der Kontakt keine Wiedervorlage hat",
+            "overdue": "Die Wiedervorlage überfällig ist",
+            "today": "Die Wiedervorlage heute fällig ist",
+            "future": "Die Wiedervorlage später fällig ist"
+          },
+          "date": {
+            "title": "Standarddatum der Wiedervorlage",
+            "intro": "Wenn eine Wiedervorlage automatisch aktualisiert wird, setzen auf:",
+            "day": "In 1 Tag",
+            "three_days": "In 3 Tagen",
+            "week": "In 1 Woche",
+            "month": "In 1 Monat",
+            "custom": "Benutzerdefiniert",
+            "someday": "Irgendwann",
+            "none": "Keine Wiedervorlage",
+            "somedayHint": "Die Wiedervorlage hat kein Datum und wartet in der Liste „Irgendwann“. Es gibt keine Erinnerung.",
+            "noneHint": "Die offene Wiedervorlage wird als erledigt markiert, eine neue wird nicht angelegt.",
+            "customDays": "Anzahl der Tage",
+            "daysLater": "Tage später"
+          },
+          "time": {
+            "title": "Standardzeit der Wiedervorlage",
+            "intro": "Wenn eine neue Wiedervorlage angelegt wird, die Erinnerungszeit setzen auf:",
+            "hint": "Bezieht sich auf die Zeitzone Ihres Workspace."
+          }
+        },
+        "duplicates": {
+          "title": "Doppelte Leads",
+          "subtitle": "Legen Sie fest, was passiert, wenn ein neuer Lead aus einer Lead-Quelle dieselbe Telefonnummer oder E-Mail-Adresse hat wie ein vorhandener Kontakt.",
+          "mode": {
+            "title": "Wenn ein neuer Lead zu einem Kontakt passt",
+            "intro": "Ein Lead passt, wenn seine Telefonnummer oder E-Mail-Adresse bereits zu einem Kontakt gehört.",
+            "merge": "In den vorhandenen Kontakt zusammenführen",
+            "mergeHint": "Füllt die leeren Felder des Kontakts und fügt den Lead seinem Verlauf hinzu. Bereits ausgefüllte Angaben werden nie überschrieben.",
+            "createNew": "Neuen Kontakt anlegen",
+            "createNewHint": "Legt für den Lead einen eigenen Kontakt an. Er zählt zum Kontaktlimit Ihres Tarifs und kann später zusammengeführt werden."
+          },
+          "note": {
+            "title": "Zeitachse",
+            "merge": "Notiz in der Zeitachse hinzufügen, wenn ein Lead zusammengeführt wird",
+            "hint": "Standardmäßig aus, da eine Notiz auch die letzte Aktivität des Kontakts verschiebt."
+          }
+        }
+      },
+      "followUp": {
+        "title": "Nächste Wiedervorlage",
+        "somedayLabel": "Irgendwann",
+        "overdue": "Überfällig",
+        "done": "Erledigt",
+        "snooze": "Zurückstellen",
+        "snoozeDay": "1 Tag",
+        "snoozeThreeDays": "3 Tage",
+        "snoozeWeek": "Nächste Woche",
+        "change": "Datum ändern",
+        "set": "Wiedervorlage setzen",
+        "edit": "Wiedervorlage ändern",
+        "remove": "Wiedervorlage entfernen",
+        "dialogTitle": "Wiedervorlage",
+        "someday": "Irgendwann (kein Datum)",
+        "dateTime": "Datum und Uhrzeit",
+        "cancel": "Abbrechen",
+        "save": "Speichern",
+        "savedFor": "Wiedervorlage gespeichert",
+        "savedSomeday": "Wiedervorlage auf „Irgendwann“ gesetzt",
+        "snoozed": "Wiedervorlage verschoben",
+        "doneMessage": "Wiedervorlage als erledigt markiert",
+        "clearedMessage": "Wiedervorlage entfernt",
+        "failed": "Die Wiedervorlage konnte nicht geändert werden. Bitte versuchen Sie es erneut.",
+        "filterLabel": "Wiedervorlage",
+        "filter": {
+          "any": "Alle",
+          "overdue": "Überfällig",
+          "today": "Heute fällig",
+          "upcoming": "Anstehend",
+          "someday": "Irgendwann",
+          "none": "Keine Wiedervorlage"
         }
       }
+    },
+    "list": {
+      "colNextFollowUp": "Nächste Wiedervorlage"
     }
   }
 }

@@ -456,6 +456,20 @@ describe('the key-choice chain (TW-AIADM-010)', () => {
     expect(await resolver().keyFor(null, 'openai')).toBe(`${SECRET}-openai`);
   });
 
+  it('lists, sorted, every vendor with a readable active platform key, voice vendors included', async () => {
+    expect(await resolver().platformProviders()).toEqual([]);
+    await enable('openai', 'gpt-5.4-mini');
+    await enable('deepgram', 'nova-2');
+    const off = await enable('gemini', 'gemini-3.5-flash');
+    await ops('patch', `/ai-keys/${off.id}/active`).send({ isActive: false });
+    await enable('mistral', 'mistral-large-latest');
+    await h.owner.query(
+      `UPDATE admin_ai_keys SET api_key = 'v1:AAAA:BBBB:CCCC' WHERE provider = 'mistral'`,
+    );
+    // a switched-off vendor and one whose stored key no longer decrypts do not count
+    expect(await resolver().platformProviders()).toEqual(['deepgram', 'openai']);
+  });
+
   it('does not let one workspace read another workspace key', async () => {
     const a = await byokTenant('chain-a');
     const b = await byokTenant('chain-b');

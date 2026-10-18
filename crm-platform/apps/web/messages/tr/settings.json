@@ -379,6 +379,16 @@
         "label": "Ulaşılmamış potansiyel müşteriler",
         "description": "Hangi eylemlerin bir potansiyel müşteriye ulaşmak sayılacağını ve hangi yeni kişilerin ulaşılmadı olarak başlayacağını seçin.",
         "keywords": "ulaşılmadı, iletişime geçildi, potansiyel müşteri, yeni potansiyel müşteri, ilk temas, takip, yeniden atama, işaret"
+      },
+      "follow-ups": {
+        "label": "Takipler",
+        "description": "Ekibiniz iletişime geçtiğinde bir kişinin sonraki takibini otomatik belirleyin; tarihi ve uyarı saatini seçin.",
+        "keywords": "takip, hatırlatıcı, sonraki adım, görev, zamanlama, ertele, bir gün"
+      },
+      "duplicate-leads": {
+        "label": "Yinelenen potansiyel müşteriler",
+        "description": "Bir kişiyle eşleşen yeni kaydın ona birleştirilmesini mi yoksa yeni kişi olmasını mı istediğinizi seçin.",
+        "keywords": "yinelenen, birleştir, potansiyel müşteri, aynı telefon, aynı e-posta, yeni kişi, kaynak"
       }
     },
     "backToMarketplace": "Marketplace'e dön"

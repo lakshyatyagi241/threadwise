@@ -77,6 +77,8 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'staff-roles': 'staff roles operators assign support auditor super admin',
   security: 'security center mfa two factor 2fa ip allowlist sessions password policy',
   'security-events': 'security events audit log activity logins failed login suspicious',
+  'dpdp-register':
+    'dpdp data protection act privacy compliance india rules consent breach grievance checklist register',
   registration: 'registration signup sign up policy invite approval email verification trial',
   'social-login': 'social login google facebook captcha recaptcha turnstile oauth sso',
   'auth-pages': 'auth pages login page signup page branding forgot password',

@@ -25,6 +25,8 @@ export const FIXED_COLUMN_IDS = [
   'company',
   'lastActivity',
   'source',
+  // BL-291: the contact's open follow-up. Offered, hidden until chosen; not sortable.
+  'nextFollowUp',
 ] as const;
 export type FixedColumnId = (typeof FIXED_COLUMN_IDS)[number];
 export type ColumnId = FixedColumnId | `attr:${string}`;
@@ -93,6 +95,7 @@ const FIXED_LABEL: Record<FixedColumnId, string> = {
   company: 'colCompany',
   lastActivity: 'colLastActivity',
   source: 'colSource',
+  nextFollowUp: 'colNextFollowUp',
 };
 
 /** The columns whose heading is shortened in the table header; the full label stays in the picker and as the tooltip. */
@@ -143,6 +146,7 @@ export function allColumns(
       fixed('dateOfBirth'),
       fixed('minor'),
       fixed('lastActivity'),
+      fixed('nextFollowUp'),
       fixed('createdOn'),
     ] as ColumnDef[]
   ).filter((c) => !omit.has(c.id));
@@ -271,6 +275,7 @@ export function sortKeyOf(id: ColumnId): string | null {
     case 'source':
     case 'dateOfBirth':
     case 'minor':
+    case 'nextFollowUp':
       return null;
     case 'createdOn':
       return 'createdAt';
@@ -324,6 +329,7 @@ export function columnGroup(id: ColumnId): ColumnGroup {
     case 'minor':
       return 'consent';
     case 'lastActivity':
+    case 'nextFollowUp':
     case 'createdOn':
       return 'activity';
   }
