@@ -1766,10 +1766,11 @@ async function checkOrg(
           );
       }
     }
-    const { ownerUserId, ...rest } = o.settings as Record<string, unknown>;
+    // timezone is set at provisioning from --timezone (like signup) and is the owner's to change afterwards
+    const { ownerUserId, timezone: _tz, ...rest } = o.settings as Record<string, unknown>;
     if (stable(rest) !== stable({ legacy: { waboo: { client } } }))
       alarm(
-        'ORG_STATE: organizations.settings was changed after the migration (it holds only the legacy marker and ownerUserId)',
+        'ORG_STATE: organizations.settings was changed after the migration (it holds only the legacy marker, ownerUserId and timezone)',
       );
     const plan = (
       await tx.execute(
