@@ -129,6 +129,58 @@
     {
       "key": "apps/api/src/modules/catalog-products/catalog-sync.service.ts await this.repo.findByRetailerIds(",
       "reason": "the only per-item lookup left in the import: it runs only when the same retailer id appears twice in one Meta listing and the first copy was created in this run (a few rows at most), so the second can update it; every other product is read once for the whole listing (findByRetailerIds + one variants read); proven by test/unit/catalog-products/catalog-import-lookup.spec.ts; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/appointments-booking/calendar-reconcile.service.ts await this.calendar.readEvent(",
+      "reason": "one Google Calendar API call per appointment checked, an external call with no batch form here, bounded by RECONCILE_BATCH = 100 per run; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/wizard/wizard-audience.service.ts await this.segmentsRepo.findByUuid(",
+      "reason": "one read per segment the user picked in the broadcast wizard, capped at WIZARD_SOURCES_MAX = 100 by the contract; a one-off step, not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/wizard/wizard-audience.service.ts await this.resolver.findOrCreateByPhone(",
+      "reason": "csv.newNumbers returns only numbers that are NOT contacts yet, so every row is a create (plan cap, audit, outbox); there is nothing already known to prefetch; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/company-briefs/company-briefs.service.ts await this.keys.resolve(",
+      "reason": "at most one read per AI vendor (6), memoised so the second priority pass reuses the first; proven by test/unit/ai-copilot-lead-finder/provider-resolution.spec.ts; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contact-import/contact-import.engine.ts await this.tags.findOrCreateByName(",
+      "reason": "only tags that do not exist yet reach this call: existing ones are prefetched once (findManyByNames); a create carries the plan tag cap, audit and outbox per tag; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/pipelines/pipelines.service.ts await this.dealsRepo.findById(",
+      "reason": "sequential by design: each deal moves to the top of the target stage, so the next iteration reads minOrder that the previous one changed; a batch read would be stale; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/resources/crm/companies/companies.service.ts await this.companies.get(",
+      "reason": "optimistic-lock retry loop: one read per attempt, not per item; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/forms-builder/form-submit.service.ts await this.tags.countAll(",
+      "reason": "counted at most once per submission and only when a tag has to be made (total is kept locally after that); proven by test/unit/forms-builder/form-submit-tags.spec.ts; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/leads/lead-sync.service.ts await this.registry.resolve(",
+      "reason": "one small read per lead source of the workspace (a handful), only in the provider whose source kind matches (meta-lead-pull.provider, marketplace lead-pull.provider); the Sources settings page, not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/device-group-notification.consumer.ts await this.publisher.read(",
+      "reason": "one unread count and one realtime emit per user whose notification rows were cleared; the count is personal to each user; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/device-notification.consumer.ts await this.publisher.read(",
+      "reason": "one unread count and one realtime emit per user whose notification rows were cleared; the count is personal to each user; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/waba-group-notification.consumer.ts await this.publisher.read(",
+      "reason": "one unread count and one realtime emit per user whose notification rows were cleared; the count is personal to each user; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/team-inbox-routing-sla/routing-engine.service.ts await this.repo.findOrCreateTag(",
+      "reason": "one per tag in a single routing rule action (a few), each with its own attach and conversation event; reviewed 2026-10-18"
     }
   ],
   "36": [
