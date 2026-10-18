@@ -93,6 +93,23 @@
             "intro": "Quand une nouvelle relance est créée, définir l'heure de l'alerte à :",
             "hint": "Basée sur le fuseau horaire de votre espace de travail."
           }
+        },
+        "duplicates": {
+          "title": "Leads en double",
+          "subtitle": "Choisissez ce qui se passe lorsqu'un nouveau lead issu d'une source de leads a le même numéro de téléphone ou la même adresse e-mail qu'un contact existant.",
+          "mode": {
+            "title": "Quand un nouveau lead correspond à un contact",
+            "intro": "Un lead correspond lorsque son numéro de téléphone ou son adresse e-mail appartient déjà à un contact.",
+            "merge": "Fusionner avec le contact existant",
+            "mergeHint": "Complète les champs vides du contact et ajoute le lead à son historique. Rien de ce qui est déjà renseigné n'est écrasé.",
+            "createNew": "Créer un nouveau contact",
+            "createNewHint": "Crée un contact distinct pour le lead. Il compte dans la limite de contacts de votre offre et pourra être fusionné plus tard."
+          },
+          "note": {
+            "title": "Chronologie",
+            "merge": "Ajouter une note à la chronologie lorsqu'un lead est fusionné",
+            "hint": "Désactivé par défaut, car une note déplace aussi la dernière activité du contact."
+          }
         }
       },
       "followUp": {

@@ -93,6 +93,23 @@
             "intro": "Whenever a new follow-up is created, set the alert time to:",
             "hint": "Read on your workspace's time zone."
           }
+        },
+        "duplicates": {
+          "title": "Duplicate leads",
+          "subtitle": "Decide what happens when a new lead from a lead source has the same phone number or e-mail as a contact you already have.",
+          "mode": {
+            "title": "When a new lead matches a contact",
+            "intro": "A lead matches when its phone number or e-mail already belongs to a contact.",
+            "merge": "Merge into the existing contact",
+            "mergeHint": "Fills the contact's empty fields and adds the lead to its history. Nothing already filled in is overwritten.",
+            "createNew": "Create a new contact",
+            "createNewHint": "Makes a separate contact for the lead. It counts against your plan's contact limit and can be merged later."
+          },
+          "note": {
+            "title": "Timeline",
+            "merge": "Add a note to the timeline when a lead is merged",
+            "hint": "Off by default, because a note also moves the contact's last activity."
+          }
         }
       },
       "followUp": {

@@ -93,6 +93,23 @@
             "intro": "Stel bij elke nieuwe opvolging de meldingstijd in op:",
             "hint": "Gebaseerd op de tijdzone van je werkruimte."
           }
+        },
+        "duplicates": {
+          "title": "Dubbele leads",
+          "subtitle": "Bepaal wat er gebeurt wanneer een nieuwe lead uit een leadbron hetzelfde telefoonnummer of e-mailadres heeft als een bestaand contact.",
+          "mode": {
+            "title": "Wanneer een nieuwe lead bij een contact past",
+            "intro": "Een lead past wanneer het telefoonnummer of e-mailadres al bij een contact hoort.",
+            "merge": "Samenvoegen met het bestaande contact",
+            "mergeHint": "Vult de lege velden van het contact in en voegt de lead toe aan de geschiedenis. Wat al is ingevuld wordt nooit overschreven.",
+            "createNew": "Nieuw contact maken",
+            "createNewHint": "Maakt een apart contact voor de lead. Het telt mee voor de contactlimiet van je abonnement en kan later worden samengevoegd."
+          },
+          "note": {
+            "title": "Tijdlijn",
+            "merge": "Een notitie aan de tijdlijn toevoegen wanneer een lead wordt samengevoegd",
+            "hint": "Standaard uit, omdat een notitie ook de laatste activiteit van het contact verschuift."
+          }
         }
       },
       "followUp": {

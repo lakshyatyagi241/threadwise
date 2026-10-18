@@ -93,6 +93,23 @@
             "intro": "Mỗi khi tạo lịch theo dõi mới, đặt giờ nhắc thành:",
             "hint": "Tính theo múi giờ của không gian làm việc."
           }
+        },
+        "duplicates": {
+          "title": "Khách hàng tiềm năng trùng lặp",
+          "subtitle": "Chọn điều xảy ra khi khách hàng tiềm năng mới từ một nguồn có cùng số điện thoại hoặc e-mail với một liên hệ bạn đã có.",
+          "mode": {
+            "title": "Khi khách hàng tiềm năng mới khớp với một liên hệ",
+            "intro": "Khách hàng tiềm năng khớp khi số điện thoại hoặc e-mail của họ đã thuộc về một liên hệ.",
+            "merge": "Gộp vào liên hệ hiện có",
+            "mergeHint": "Điền các trường còn trống của liên hệ và thêm khách hàng tiềm năng vào lịch sử. Không bao giờ ghi đè nội dung đã có.",
+            "createNew": "Tạo liên hệ mới",
+            "createNewHint": "Tạo một liên hệ riêng cho khách hàng tiềm năng. Liên hệ này được tính vào giới hạn liên hệ của gói và có thể gộp sau."
+          },
+          "note": {
+            "title": "Dòng thời gian",
+            "merge": "Thêm ghi chú vào dòng thời gian khi gộp khách hàng tiềm năng",
+            "hint": "Tắt theo mặc định, vì ghi chú cũng làm dịch chuyển hoạt động gần nhất của liên hệ."
+          }
         }
       },
       "followUp": {

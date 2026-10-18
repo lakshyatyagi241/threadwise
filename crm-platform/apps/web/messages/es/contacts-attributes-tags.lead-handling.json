@@ -93,6 +93,23 @@
             "intro": "Cada vez que se crea un seguimiento nuevo, fijar la hora de alerta a las:",
             "hint": "Se interpreta según la zona horaria de tu espacio de trabajo."
           }
+        },
+        "duplicates": {
+          "title": "Leads duplicados",
+          "subtitle": "Decide qué ocurre cuando un lead nuevo de una fuente de leads tiene el mismo teléfono o correo que un contacto que ya tienes.",
+          "mode": {
+            "title": "Cuando un lead nuevo coincide con un contacto",
+            "intro": "Un lead coincide cuando su teléfono o correo ya pertenece a un contacto.",
+            "merge": "Fusionar con el contacto existente",
+            "mergeHint": "Rellena los campos vacíos del contacto y añade el lead a su historial. Nunca se sobrescribe lo que ya está escrito.",
+            "createNew": "Crear un contacto nuevo",
+            "createNewHint": "Crea un contacto aparte para el lead. Cuenta para el límite de contactos de tu plan y se puede fusionar más tarde."
+          },
+          "note": {
+            "title": "Cronología",
+            "merge": "Añadir una nota a la cronología cuando se fusiona un lead",
+            "hint": "Desactivado por defecto, porque una nota también mueve la última actividad del contacto."
+          }
         }
       },
       "followUp": {

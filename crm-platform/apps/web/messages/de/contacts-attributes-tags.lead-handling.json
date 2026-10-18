@@ -93,6 +93,23 @@
             "intro": "Wenn eine neue Wiedervorlage angelegt wird, die Erinnerungszeit setzen auf:",
             "hint": "Bezieht sich auf die Zeitzone Ihres Workspace."
           }
+        },
+        "duplicates": {
+          "title": "Doppelte Leads",
+          "subtitle": "Legen Sie fest, was passiert, wenn ein neuer Lead aus einer Lead-Quelle dieselbe Telefonnummer oder E-Mail-Adresse hat wie ein vorhandener Kontakt.",
+          "mode": {
+            "title": "Wenn ein neuer Lead zu einem Kontakt passt",
+            "intro": "Ein Lead passt, wenn seine Telefonnummer oder E-Mail-Adresse bereits zu einem Kontakt gehört.",
+            "merge": "In den vorhandenen Kontakt zusammenführen",
+            "mergeHint": "Füllt die leeren Felder des Kontakts und fügt den Lead seinem Verlauf hinzu. Bereits ausgefüllte Angaben werden nie überschrieben.",
+            "createNew": "Neuen Kontakt anlegen",
+            "createNewHint": "Legt für den Lead einen eigenen Kontakt an. Er zählt zum Kontaktlimit Ihres Tarifs und kann später zusammengeführt werden."
+          },
+          "note": {
+            "title": "Zeitachse",
+            "merge": "Notiz in der Zeitachse hinzufügen, wenn ein Lead zusammengeführt wird",
+            "hint": "Standardmäßig aus, da eine Notiz auch die letzte Aktivität des Kontakts verschiebt."
+          }
         }
       },
       "followUp": {

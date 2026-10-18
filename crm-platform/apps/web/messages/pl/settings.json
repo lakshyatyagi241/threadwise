@@ -384,6 +384,11 @@
         "label": "Ponowne kontakty",
         "description": "Automatycznie ustawiaj następny ponowny kontakt, gdy zespół odezwie się do kontaktu, i wybierz datę oraz godzinę przypomnienia.",
         "keywords": "ponowny kontakt, przypomnienie, następne działanie, zadanie, harmonogram, odłożenie, kiedyś"
+      },
+      "duplicate-leads": {
+        "label": "Zduplikowane leady",
+        "description": "Wybierz, czy nowy lead pasujący do kontaktu ma zostać z nim scalony, czy stać się nowym kontaktem.",
+        "keywords": "duplikat, scalanie, lead, ten sam telefon, ten sam e-mail, nowy kontakt, źródło leadów"
       }
     },
     "backToMarketplace": "Wróć do Marketplace"
