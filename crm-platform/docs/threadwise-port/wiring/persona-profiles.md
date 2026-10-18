@@ -3,15 +3,17 @@
 A product extension, not a Reference feature (spec [persona-profiles.md](../../specs/persona-profiles.md), backlog BL-280; the
 `product-extensions.md` row is added when phase 1 ships). API: [persona-profiles.md](../../api/persona-profiles.md). Update this file in the same
 change as any new route, table, permission, mark or consumer. **Status: phases 0 and 1 (data, resolver, session field, and the web visibility runtime). The web hides modules for a persona other than
-`generic`; no such persona exists until phase 2.**
+`generic`; no such persona exists until phase 2.** Plus the early, label-only slice of phase 5, "dynamic object naming" (BL-310): the workspace's own words for contact, appointment, deal and meeting (see the vocabulary rows below).
 
 ## API routes
 
-| Method | Path               | Permission | Notes                                                                                                             |
-| ------ | ------------------ | ---------- | ----------------------------------------------------------------------------------------------------------------- |
-| GET    | `/v2/auth/session` | signed in  | gains the optional `org.persona` (`personaViewSchema`); absent = nothing hidden. No other route changes (phase 0) |
+| Method | Path                             | Permission              | Notes                                                                                                                                                                                                             |
+| ------ | -------------------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/v2/auth/session`               | signed in               | gains the optional `org.persona` (`personaViewSchema`); absent = nothing hidden. BL-310 adds the optional `org.persona.nouns` (language -> noun -> forms, omitted when none). No other route changes              |
+| GET    | `/v2/persona/vocabulary?locale=` | `admin.settings.manage` | BL-310: for each of contact, appointment, deal, meeting, what is shown in that language, which layer says so, the workspace's own words, and `rev` ([api/persona-vocabulary.md](../../api/persona-vocabulary.md)) |
+| PUT    | `/v2/persona/vocabulary?locale=` | `admin.settings.manage` | BL-310: saves the workspace's own words per noun and language (409 on a stale `rev`); logs in `workspace_persona_log` (layer `workspace`) and audits; labels only                                                 |
 
-Planned routes (not built): `GET /v2/persona/view`, `PATCH /v2/persona/settings` (`admin.settings.manage`), `POST /v2/persona/starter-pack/apply`,
+Planned routes (not built): `GET /v2/persona/view`, `PATCH /v2/persona/settings` (`admin.settings.manage`; the vocabulary part of it is the two routes above), `POST /v2/persona/starter-pack/apply`,
 `/v2/platform/personas/*`, `/v2/platform/workspaces/:id/persona/*` (spec 5.4, 7.1).
 
 ## Tables
@@ -19,7 +21,7 @@ Planned routes (not built): `GET /v2/persona/view`, `PATCH /v2/persona/settings`
 `personas`, `persona_versions` (platform, no `org_id`), `workspace_persona`, `workspace_persona_applied`, `workspace_persona_log` (tenant, RLS
 forced). Read: `PersonaRepository` (the workspace's own row joined to its persona's `current_version`, and one published definition). Written
 by: the migration seed and backfill, `provisionWorkspacePersona` (organization provisioning), the dev seed (`packages/db/src/cli/seed.ts`).
-Nothing else writes them yet.
+BL-310 adds one writer: `PersonaVocabularyService.save` updates `workspace_persona.workspace_overrides.vocab` (and nothing else of that row), appends to `workspace_persona_log` and writes the audit trail, all in one transaction under the workspace's own RLS context (no migration).
 
 ## Producers (who creates a `workspace_persona` row)
 
@@ -44,7 +46,9 @@ Nothing else writes them yet.
 | Business type tile in Settings, Show more modules                                             | **open** (needs `PATCH /v2/persona/settings`; the resolver already honours `showAll`)                                                         |
 | Platform console: personas, workspace Persona tab                                             | **phases 2 and 3**                                                                                                                            |
 | Onboarding, solo mode, starter pack, Home checklist                                           | **phase 4**                                                                                                                                   |
-| Vocabulary overlay (`i18n/request.ts`)                                                        | **phase 5**                                                                                                                                   |
+| Vocabulary overlay (message rewrite of the bound surfaces)                                                                      | **built, BL-310**: `(app)/layout.tsx` -> `withVocabulary` (`features/persona-vocabulary/lib/`), not `i18n/request.ts`; surfaces in `lib/bindings.ts`; `useVocabulary()` for text built in code |
+| Words we use (Settings, Business, `/workspace-words`)                                                                           | **built, BL-310**: tile `workspace-words`, gate `admin.settings.manage`                                                                                                                        |
+| Operator Words grid, compile at publish, completeness meters, persona packs in 21 languages, bindings beyond the first surfaces | **phase 5** (what BL-310 does not do)                                                                                                                                                          |
 
 ## Module-id catalog
 

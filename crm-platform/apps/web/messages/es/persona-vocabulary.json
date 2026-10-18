@@ -1,0 +1,85 @@
+{
+  "persona-vocabulary": {
+    "common": {
+      "loading": "Cargando tus palabras...",
+      "retry": "Reintentar",
+      "dismiss": "Descartar"
+    },
+    "tile": {
+      "label": "Palabras que usamos",
+      "description": "Cambia el nombre de Contacto, Cita, Negocio y Reunión para que encaje con tu negocio.",
+      "keywords": "renombrar, paciente, cliente, lead, socio, miembro, visita, terminología, vocabulario, etiquetas"
+    },
+    "title": "Palabras que usamos",
+    "subtitle": "Llama a las cosas como las llama tu negocio: Paciente, Cliente, Socio, Visita. Solo cambian las etiquetas que lee la gente.",
+    "discard": "Descartar cambios",
+    "save": "Guardar",
+    "saved": "Guardado. Los menús y las pantallas ya usan tus palabras.",
+    "resetDone": "Se restauraron las palabras estándar.",
+    "reset": "Usar palabras estándar",
+    "conflict": "Alguien más cambió estas palabras mientras editabas. Se muestra la última versión; vuelve a hacer tu cambio.",
+    "conflictOk": "Aceptar",
+    "language": "Estás editando las palabras que ve la gente cuando la aplicación está en {language}. Cambia el idioma de la aplicación para editar otro.",
+    "labelsOnly": "Solo cambian las etiquetas. Tus datos, exportaciones, integraciones, API y los mensajes que envías a clientes conservan sus nombres habituales.",
+    "applyAll": "Usar estas palabras en todos los idiomas",
+    "applyAllHint": "Guarda las mismas palabras para los 21 idiomas de la aplicación. Déjalo desactivado para cambiar solo el idioma indicado arriba.",
+    "grammar": "Las palabras se colocan en la aplicación tal como las escribes. La aplicación no ajusta la gramática (género, casos, artículos) en otros idiomas, y algunas pantallas aún dicen la palabra estándar.",
+    "sharedWord": "En este idioma una sola palabra cubre citas y reuniones, así que aquí no se muestra un nombre nuevo para esta. Sigue aplicándose en otros idiomas.",
+    "nouns": {
+      "contact": {
+        "hint": "Las personas con las que hablas. Se muestra en el menú, la lista, la ficha y sus botones."
+      },
+      "appointment": {
+        "hint": "Un hueco reservado con un cliente. Se muestra en la pantalla de Citas y en la ficha del contacto."
+      },
+      "deal": {
+        "hint": "Una oportunidad de venta. Se muestra en el tablero de Negocios y en la ficha del contacto."
+      },
+      "meeting": {
+        "hint": "Una llamada o reunión que registras en un contacto."
+      }
+    },
+    "fields": {
+      "name": "Nombre",
+      "singular": "Singular",
+      "plural": "Plural",
+      "placeholderHint": "Palabra estándar: {word}"
+    },
+    "source": {
+      "workspace": "Tus palabras",
+      "operator": "Definido por tu equipo de cuenta",
+      "persona": "De tu tipo de negocio",
+      "default": "Palabras estándar"
+    },
+    "problems": {
+      "incomplete": "Rellena el singular y el plural, o borra ambos.",
+      "invalid": "Usa solo letras, números, espacios y - . & / ( ), hasta 40 caracteres."
+    },
+    "errors": {
+      "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+      "forbidden": "Necesitas permiso para gestionar los ajustes del espacio de trabajo para cambiar estas palabras.",
+      "conflict": "Estas palabras cambiaron mientras editabas. Recarga e inténtalo de nuevo.",
+      "validation": "Una de las palabras no está permitida. Revisa el campo resaltado.",
+      "rateLimited": "Demasiados cambios seguidos. Espera un momento e inténtalo de nuevo.",
+      "unexpected": "Algo salió mal. Inténtalo de nuevo."
+    },
+    "defaults": {
+      "contact": {
+        "one": "Contacto",
+        "other": "Contactos"
+      },
+      "appointment": {
+        "one": "Cita",
+        "other": "Citas"
+      },
+      "deal": {
+        "one": "Negocio",
+        "other": "Negocios"
+      },
+      "meeting": {
+        "one": "Reunión",
+        "other": "Reuniones"
+      }
+    }
+  }
+}

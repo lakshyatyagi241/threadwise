@@ -69,6 +69,47 @@ describe('PersonaService.resolve', () => {
     });
   });
 
+  it('carries the words (BL-310) for every language that has any, workspace over operator over persona, and omits the field otherwise', async () => {
+    const clinic: PersonaDefinition = {
+      ...GENERIC_PERSONA_DEFINITION,
+      vocabulary: {
+        nouns: { contact: { en: { one: 'Patient', other: 'Patients' } } },
+        phrases: {},
+      },
+    };
+    const { repo } = fakeRepo({
+      row: record({
+        personaKey: 'clinic',
+        currentVersion: 1,
+        operatorOverrides: {
+          v: 1,
+          vocab: { meeting: { en: { one: 'Consult', other: 'Consults' } } },
+        },
+        workspaceOverrides: {
+          v: 1,
+          vocab: {
+            contact: { en: { one: 'Client', other: 'Clients' } },
+            deal: { hi: { one: 'केस', other: 'केस' } },
+          },
+        },
+      }),
+      definitions: { 'clinic@1': clinic },
+    });
+    const view = await new PersonaService(repo).resolve(1);
+    expect(view?.nouns).toEqual({
+      en: {
+        contact: { one: 'Client', other: 'Clients' },
+        meeting: { one: 'Consult', other: 'Consults' },
+      },
+      hi: { deal: { one: 'केस', other: 'केस' } },
+    });
+    // the generic golden view has no `nouns` key at all
+    const generic = await new PersonaService(
+      fakeRepo({ row: record(), definitions: { 'generic@1': GENERIC_PERSONA_DEFINITION } }).repo,
+    ).resolve(1);
+    expect(generic).not.toHaveProperty('nouns');
+  });
+
   it('a workspace with no row, or with an unknown persona or version, hides nothing (null)', async () => {
     const service = (r: ReturnType<typeof fakeRepo>) => new PersonaService(r.repo);
     expect(await service(fakeRepo({ row: null })).resolve(1)).toBeNull();
