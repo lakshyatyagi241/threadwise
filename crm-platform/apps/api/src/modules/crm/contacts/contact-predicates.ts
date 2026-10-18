@@ -70,6 +70,72 @@ export function textPredicate(
   }
 }
 
+// --- phone numbers and country codes --------------------------------------------------------------
+
+/**
+ * A condition on a field that is shown formatted but stored in its own way: a phone is displayed "+91 88751 37569" and stored
+ * "+918875137569", a country code is typed "+91", "91" or "0091". Typing what is on screen must find the contact, so both sides are
+ * reduced to the same key (`keyOf` for the typed operand, `keySql` for the stored value) and compared as text.
+ *
+ * `raw` is the stored column, used for "is empty" and as the fallback when the operand holds nothing to normalise (a letter-only
+ * word: it is then compared as written, as for any text field).
+ */
+function normalizedPredicate(
+  keySql: SQL,
+  raw: SQL,
+  keyOf: (v: unknown) => string,
+  op: TextOperator,
+  value: unknown,
+): SQL {
+  if (op === 'is_empty' || op === 'is_not_empty') return textPredicate(raw, op, value);
+  const operands = Array.isArray(value) ? (value as unknown[]) : [value];
+  const keys = operands.map(keyOf).filter((k) => k !== '');
+  if (keys.length === 0) return textPredicate(raw, op, value);
+  const key = keys[0]!;
+  const has = sql`${keySql} <> ''`;
+  switch (op) {
+    case 'equals':
+      return sql`${keySql} = ${key}`;
+    case 'not_equals':
+      return sql`(NOT ${has} OR ${keySql} <> ${key})`;
+    case 'contains':
+      return sql`${keySql} LIKE ${`%${key}%`}`;
+    case 'not_contains':
+      return sql`(NOT ${has} OR ${keySql} NOT LIKE ${`%${key}%`})`;
+    case 'starts_with':
+      return sql`${keySql} LIKE ${`${key}%`}`;
+    case 'in':
+      return sql`${keySql} IN (${list(keys.map((k) => sql`${k}::text`))})`;
+    case 'not_in':
+      return sql`(NOT ${has} OR ${keySql} NOT IN (${list(keys.map((k) => sql`${k}::text`))}))`;
+  }
+}
+
+/** The regex literal `'\D'`, inlined (not bound) so an expression index written with it can serve the query. */
+export const NON_DIGIT = sql.raw(`'\\D'`);
+
+/** The digits of a typed phone number: "+91 88751-37569" and "(+91) 88751 37569" are both "918875137569". */
+export const phoneDigits = (v: unknown): string => String(v ?? '').replace(/\D/g, '');
+
+/**
+ * `digitsSql` must be the digits of the stored number, written as the contact index writes it
+ * (`regexp_replace(coalesce(normalized_phone, phone, ''), '\D', '', 'g')`, idx_contacts_phone_digits).
+ */
+export function phonePredicate(digitsSql: SQL, raw: SQL, op: TextOperator, value: unknown): SQL {
+  return normalizedPredicate(digitsSql, raw, phoneDigits, op, value);
+}
+
+/** A country code is its digits without the "+" and the "00" some files carry. Same rule as `countryCodeDigits` in @crm/contracts. */
+export const countryCodeKey = (v: unknown): string =>
+  String(v ?? '')
+    .replace(/\D/g, '')
+    .replace(/^0+/, '');
+
+export function countryCodePredicate(raw: SQL, op: TextOperator, value: unknown): SQL {
+  const keySql = sql`ltrim(regexp_replace(coalesce((${raw})::text, ''), ${NON_DIGIT}, '', 'g'), '0')`;
+  return normalizedPredicate(keySql, raw, countryCodeKey, op, value);
+}
+
 // --- numbers ------------------------------------------------------------------------------------
 
 export type NumberOperator =

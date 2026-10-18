@@ -33,28 +33,33 @@ function fromGroup(
 /**
  * Lifecycle stages: the workspace's configured `lifecycle_stage` options when there are any, otherwise the platform
  * defaults. A stage the contact already has but the list lacks (an option was removed) is kept so the select can show it.
+ * `inUse` (filters only): the stages contacts hold right now; one the list lacks (the default `new` in a workspace that set up
+ * its own stages) is added at the end, so a filter can pick it.
  */
 export function stageChoices(
   options: readonly StatusOptionResponse[] | undefined,
   current?: string,
+  inUse?: readonly string[],
 ): Choice[] {
   const configured = fromGroup(options, ['lifecycle_stage']);
   const base = configured.length
     ? configured
     : lifecycleStageSchema.options.map((v) => ({ value: v, label: titleCaseKey(v) }));
-  return withCurrent(base, current);
+  return withInUse(withCurrent(base, current), inUse, titleCaseKey);
 }
 
 /**
  * Contact status: configured `status` / `contact_status` options, otherwise Reference's four. With `stage` only the statuses
  * valid for that stage are offered (the unscoped ones and those scoped to it); without it, every status (filters, import).
- * An empty `stage` means "the workspace default stage", as on the contact form.
+ * An empty `stage` means "the workspace default stage", as on the contact form. `inUse` (filters only): the statuses contacts hold
+ * right now; one the configured list lacks is added at the end, so a filter can pick it.
  */
 export function statusChoices(
   options: readonly StatusOptionResponse[] | undefined,
   fallbackLabel: (value: string) => string,
   current?: string,
   stage?: string,
+  inUse?: readonly string[],
 ): Choice[] {
   const inStage = stage === undefined ? undefined : effectiveStage(options, stage);
   const configured = fromGroup(options, ['status', 'contact_status']);
@@ -64,7 +69,19 @@ export function statusChoices(
         (c) => inStage === undefined || isStatusAllowedInStage(options, c.value, inStage),
       )
     : FALLBACK_STATUSES.map((v) => ({ value: v, label: fallbackLabel(v) }));
-  return withCurrent(base, current);
+  // The platform's four have translated names; any other value a contact holds is shown as its key in words.
+  const labelOf = (v: string) =>
+    (FALLBACK_STATUSES as readonly string[]).includes(v) ? fallbackLabel(v) : titleCaseKey(v);
+  return withInUse(withCurrent(base, current), inUse, labelOf);
+}
+
+function withInUse(
+  base: Choice[],
+  inUse: readonly string[] | undefined,
+  label: (value: string) => string,
+): Choice[] {
+  const missing = (inUse ?? []).filter((v) => v.trim() !== '' && !base.some((c) => c.value === v));
+  return missing.length ? [...base, ...missing.map((v) => ({ value: v, label: label(v) }))] : base;
 }
 
 function withCurrent(base: Choice[], current?: string): Choice[] {

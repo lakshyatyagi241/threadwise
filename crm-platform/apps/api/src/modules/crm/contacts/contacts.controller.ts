@@ -84,6 +84,13 @@ export class ContactsController {
     return this.contacts.selectData(query, scope);
   }
 
+  @Get('filter-values')
+  @RequirePermission('record.contacts.read')
+  @ApiOperation({ summary: 'Stages and statuses contacts hold, for the filter dropdowns' })
+  async filterValues(@GrantedScope('record.contacts.read') scope: RecordScope) {
+    return this.contacts.filterValues(scope);
+  }
+
   @Get('assignees')
   @RequirePermission('record.contacts.read')
   @ApiOperation({ summary: 'Active staff users a contact can be assigned to' })
