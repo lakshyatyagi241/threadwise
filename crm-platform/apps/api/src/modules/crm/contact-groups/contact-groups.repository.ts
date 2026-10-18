@@ -106,6 +106,30 @@ export class ContactGroupsRepository {
     return row ? toRow(row) : undefined;
   }
 
+  /** The groups with these names in one query per 5000, keyed by the lower-cased trimmed name (the comparison `findByName` makes). */
+  async findByNames(
+    tx: Tx,
+    orgId: number,
+    names: readonly string[],
+  ): Promise<Map<string, ContactGroupRow>> {
+    const out = new Map<string, ContactGroupRow>();
+    const wanted = [...new Set(names.map((n) => n.trim().toLowerCase()).filter((n) => n !== ''))];
+    for (let i = 0; i < wanted.length; i += 5000) {
+      const chunk = wanted.slice(i, i + 5000);
+      const res = await tx.execute(
+        sql`${this.selectSql} WHERE g.org_id = ${orgId} AND lower(g.name) = ANY(ARRAY[${sql.join(
+          chunk.map((n) => sql`${n}`),
+          sql`, `,
+        )}]::text[])`,
+      );
+      for (const raw of res.rows as unknown as RawGroupRow[]) {
+        const row = toRow(raw);
+        out.set(row.name.trim().toLowerCase(), row);
+      }
+    }
+    return out;
+  }
+
   /**
    * Insert, or nothing when a group with that name (any case) already exists. The unique index
    * decides, so two simultaneous creates cannot both succeed.
