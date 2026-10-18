@@ -39,6 +39,190 @@
     {
       "key": "apps/api/src/modules/storefront-builder/cli/demo-seeder.ts .query( `SELECT ${col} AS k, count(*)::int AS n FROM wa_orders WHERE org_id = $1 AND meta_",
       "reason": "col is only ever the literals 'status' and 'source' passed by countDemo in the same dev-only demo seeder CLI; org id and marker are bound; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/common/sql/identifier.ts sql.raw(identifier(name))",
+      "reason": "the name is validated by identifier() (only [A-Za-z_][A-Za-z0-9_]{0,62} passes); pinned by test/unit/common/sql-identifier.spec.ts; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/common/workspace-calendar.ts sql.raw(`${identifier(alias)}.org_id`)",
+      "reason": "the alias is validated by identifier(); pinned by test/unit/common/sql-identifier.spec.ts; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/common/workspace-calendar.ts sql.raw(`${identifier(alias)}.id`)",
+      "reason": "the alias is validated by identifier(); pinned by test/unit/common/sql-identifier.spec.ts; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/addons-extension-registry/addon-entitlement.service.ts sql.raw(addonLiveSql(await this.plans.graceDays()))",
+      "reason": "built by addonLiveSql(graceDays) from a constant template; graceDays is clamped to an integer from 0 to 30; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/addons-extension-registry/workspace-addons.service.ts sql.raw(addonLiveSql(await this.plans.graceDays()))",
+      "reason": "built by addonLiveSql(graceDays) from a constant template; graceDays is clamped to an integer from 0 to 30; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/ai-keys-usage-admin/platform-keys.service.ts sql.raw('id, uuid, provider, name, api_key, key_last4, default_model, extra_co)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: no ${} in the argument); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/ai-keys-usage-admin/workspace-keys.service.ts sql.raw('id, uuid, provider, api_key, key_last4, is_active, row_version, updat)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: no ${} in the argument); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/analytics/query/analytics-query.service.ts sql.raw(q.grain === 'hour' ? 'an_rollup_hour' : 'an_rollup_day')",
+      "reason": "chooses between two table-name literals by the grain, a typed union; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/analytics/query/analytics-query.service.ts sql.raw(groupBy.map((_, i) => String(i + 1)).join(', '))",
+      "reason": "joins the integers 1..n (GROUP BY ordinals) built from the length of an array, no text from a caller; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/analytics/rollup/rollup-sql.ts sql.raw(String(n))",
+      "reason": "int() throws unless the value is an integer, so only digits reach the SQL; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/analytics/rollup/rollup-sql.ts sql.raw(grain === 'hour' ? 'an_rollup_hour' : 'an_rollup_day')",
+      "reason": "chooses between two table-name literals by the grain, a typed union; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/summary/campaign-summary.repository.ts sql.raw(`nullif(regexp_replace(coalesce(${source === 'campaign' ? 'r.phone_num)",
+      "reason": "a template whose one choice is a literal r.phone_number prefix by a typed source; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/summary/campaign-summary.repository.ts sql.raw(`(extract(epoch FROM date_trunc('second', ${col}))::bigint * 1000000 +)",
+      "reason": "col is r.updated_at or x.at: every caller passes a literal expression (cursorAfter has one caller, with literals); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/wizard/wizard-csv-sql.ts sql.raw(`regexp_replace(coalesce(${a}.normalized_phone, ${a}.phone, ''), '\\\\D')",
+      "reason": "the alias is validated by identifier() in digitsOf; pinned by test/unit/common/sql-identifier.spec.ts; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/chat-conversations/message-history.query.ts sql.raw(`'${unit}'`)",
+      "reason": "unit is the typed union hour | day | week; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/companies/companies.repository.ts sql.raw(dir === 'asc' ? '>' : '<')",
+      "reason": "chooses a literal operator or direction by the typed union asc | desc; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/companies/companies.repository.ts sql.raw(dir === 'asc' ? 'ASC' : 'DESC')",
+      "reason": "chooses a literal operator or direction by the typed union asc | desc; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contacts/contact-predicates.ts sql.raw(table)",
+      "reason": "table and key are typed unions (contact_tags | contact_group_members, tag_id | group_id) set by the two callers in this file; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contacts/contact-predicates.ts sql.raw(key)",
+      "reason": "table and key are typed unions (contact_tags | contact_group_members, tag_id | group_id) set by the two callers in this file; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/invoicing/invoice-settings.repository.ts sql.raw(ECOM_COLUMNS[source].auto)",
+      "reason": "looked up in a fixed map by the typed union source; every column it holds is a plain identifier (checked); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/invoicing/invoice-settings.repository.ts sql.raw(ECOM_COLUMNS[source].trigger)",
+      "reason": "looked up in a fixed map by the typed union source; every column it holds is a plain identifier (checked); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/flow-builder-editor/flows.repository.ts sql.raw(`(${p})`)",
+      "reason": "p is statusPredicate(status), a switch that returns one of three literal predicates or null; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/marketing-site-cms/legal.service.ts sql.raw('uuid, slug, title, subtitle, updated_label, effective_label, sections)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: no ${} in the argument); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/browse.repository.ts sql.raw(x.expr)",
+      "reason": "from the fixed SORTS map keyed by the sort enum, which the API validates with z.enum(MARKET_APP_SORTS) (catalogue.ts); closes the earlier note to confirm it; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/browse.repository.ts sql.raw(def.keys.map((x, n) => `(${x.expr})::text AS k${n}`).join(', '))",
+      "reason": "from the fixed SORTS map keyed by the sort enum, which the API validates with z.enum(MARKET_APP_SORTS) (catalogue.ts); closes the earlier note to confirm it; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/platform-payment-gateways/gateway.service.ts sql.raw('id, uuid, slug, name, description, is_active, credentials, mode, supp)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: no ${} in the argument); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/roles-permissions/pg-array.ts sql.raw(`ARRAY[]::${type}[]`)",
+      "reason": "type is the typed union bigint | text | uuid; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/scheduled-queue-warmer/schedule-engagement.service.ts sql.raw(`'${bucket}'`)",
+      "reason": "bucket is computed here as the literal hour or day; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/_shims/sql-store-mirror.ts sql.raw(PRODUCT_ID[kind])",
+      "reason": "looked up in a const map of two literals by the typed union shopify | woocommerce; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/_shims/sql-store-mirror.ts sql.raw(ORDER_ID[kind])",
+      "reason": "looked up in a const map of two literals by the typed union shopify | woocommerce; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/cart.repository.ts sql.raw(kind === 'shopify' ? 'shopify_cart_recoveries' : 'woocommerce_cart_rec)",
+      "reason": "chooses between two table-name literals by the typed union shopify | woocommerce; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/mirror.repository.ts sql.raw(PRODUCT_ID[kind])",
+      "reason": "looked up in a const map of two literals by the typed union shopify | woocommerce; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/shop-products.repository.ts sql.raw(kind === 'shopify' ? 'shopify_product_id' : 'woo_product_id')",
+      "reason": "chooses between two column-name literals by the typed union shopify | woocommerce; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/team-inbox-conversations/conversations.repository.ts sql.raw(` c.id, c.uuid, c.channel_id, ch.uuid AS channel_uuid, ch.kind AS chan)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: the one US() call wraps a literal column); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/team-inbox-conversations/notes.repository.ts sql.raw(` n.id, n.uuid, n.body, n.mentions, n.is_pinned, n.edited_at, ${US('n.)",
+      "reason": "a column list whose only interpolation is US(), applied to the literal column n.created_at; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/wallet-message-billing/pg-array.ts sql.raw(`ARRAY[]::${type}[]`)",
+      "reason": "type is the typed union bigint | text | uuid; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/webhook-fanout/webhook-targets.repository.ts sql.raw('id, uuid, name, url, auth_header_name, auth_header_value, auth_header)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: no ${} in the argument); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/webhook-fanout/webhook-targets.service.ts sql.raw('t.id, t.uuid, t.name, t.url, t.auth_header_name, t.auth_header_value,)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: no ${} in the argument); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-connections.repository.ts sql.raw('id, uuid, status, is_primary, phone_number, display_label, credential)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: no ${} in the argument); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-template-events.service.ts sql.raw('id, template_name, language, status, meta_status, quality_score, cate)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: no ${} in the argument); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/whatsapp-provider-registry/provider-store.ts sql.raw(COLUMN_LIST.map((c) => `p.${c}`).join(', '))",
+      "reason": "built from the module constant COLUMN_LIST, an array of column-name literals; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/whatsapp-provider-registry/provider-store.ts sql.raw(COLUMN_LIST.join(', '))",
+      "reason": "built from the module constant COLUMN_LIST, an array of column-name literals; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/analytics/rollup/rollup-sql.ts sql.raw(`(CASE WHEN e.${col} IS NULL THEN 0 ${whens} ELSE ${LATENCY_EDGES_MS.l)",
+      "reason": "histCase: col is the typed literal duration_ms and the edges are the constant LATENCY_EDGES_MS numbers; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/browse.repository.ts sql.raw(` a.id, a.uuid, a.slug, a.kind, a.name, a.tagline, a.first_party, a.fe)",
+      "reason": "a column list that interpolates only the module constants APP_PRICING_COLUMNS_TEXT / SUBSCRIPTION_COLUMNS_TEXT, exported fixed text with no interpolation (marketplace/pricing-model.ts); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/installations.repository.ts sql.raw(` i.id, i.uuid, i.org_id, i.app_id, i.installed_version_id, i.pending_)",
+      "reason": "a column list that interpolates only the module constants APP_PRICING_COLUMNS_TEXT / SUBSCRIPTION_COLUMNS_TEXT, exported fixed text with no interpolation (marketplace/pricing-model.ts); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/operator-catalogue.store.ts sql.raw(` a.id, a.uuid, a.slug, a.kind, a.category_id, c.slug AS category_slug)",
+      "reason": "a column list that interpolates only the module constants APP_PRICING_COLUMNS_TEXT / SUBSCRIPTION_COLUMNS_TEXT, exported fixed text with no interpolation (marketplace/pricing-model.ts); reviewed 2026-10-18"
     }
   ],
   "43": [
