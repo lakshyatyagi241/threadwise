@@ -48,7 +48,7 @@ new_dir() {
   cp "$TEMPLATE" "$WORK/traefik-desk.yml.template"
   if [ -n "${1:-}" ]; then echo "$1" > "$WORK/.slot"; fi
   mkdir -p "$WORK/dyn"
-  export DESK_DIR="$WORK" TRAEFIK_DYN="$WORK/dyn/desk.yml" STUB_LOG="$WORK/calls.log" BLUE_GREEN_MIN_MEM_MB=0
+  export DESK_DIR="$WORK" TRAEFIK_DYN="$WORK/dyn/desk.yml" STUB_LOG="$WORK/calls.log" BLUE_GREEN_MIN_MEM_MB=0 DESK_LOCK_FILE="$WORK/release.lock" DESK_DOCKER_ROOT="$WORK" DESK_MIN_DISK_MB=0
   : > "$STUB_LOG"
   if [ -n "${1:-}" ]; then sed -e "s/__DOMAIN__/desk.example.test/g" -e "s/__SLOT__/$1/g" "$TEMPLATE" > "$TRAEFIK_DYN"; fi
 }
@@ -147,6 +147,56 @@ echo "release: a bad tag is refused"
 unset_stubs; new_dir blue bbbbbbb; release "not a tag"
 check "exits 2" test "$(code)" = 2
 check "nothing is run" test ! -s "$STUB_LOG"
+
+echo "release: .slot is lost but the routing file points at green (a release died between the two writes)"
+unset_stubs; new_dir green ccccccc; rm -f "$WORK/.slot"; release ddddddd
+check "exits 0" test "$(code)" = 0
+check "blue is the idle slot and is now live" test "$(slot)" = blue
+check "traffic is routed to the blue API" grep -q "desk-api-blue:3000" "$TRAEFIK_DYN"
+check "the old green slot is stopped" has "stop -t 30 api-green web-green"
+
+echo "release: .slot disagrees with the routing file"
+unset_stubs; new_dir blue bbbbbbb; echo green > "$WORK/.slot"; release ccccccc
+check "exits 0" test "$(code)" = 0
+check "the routing file wins: green was idle, so green is live" test "$(slot)" = green
+
+echo "release: .slot holds garbage and there is no routing file"
+unset_stubs; new_dir "" aaaaaaa; echo "../etc" > "$WORK/.slot"; release bbbbbbb
+check "exits 0 and treats it as the first release" test "$(code)" = 0
+check "the blue slot becomes live" test "$(slot)" = blue
+
+echo "release: another release holds the lock"
+unset_stubs; new_dir blue bbbbbbb
+( exec 8>"$DESK_LOCK_FILE"; flock -n 8; sleep 3 ) & holder=$!; sleep 0.5
+release ccccccc
+kill "$holder" 2>/dev/null; wait "$holder" 2>/dev/null
+check "exits 1" test "$(code)" = 1
+check "the message says nothing was changed" grep -q "nothing was changed" "$WORK/out.txt"
+check "nothing is run" test -z "$(grep -E 'migrate|up -d' "$STUB_LOG")"
+
+echo "release: Traefik's dynamic directory is missing"
+unset_stubs; new_dir blue bbbbbbb; rm -rf "$WORK/dyn"; release ccccccc
+check "exits 1" test "$(code)" = 1
+check "nothing is dumped, migrated or started" test -z "$(grep -E 'desk-backup once|migrate|up -d --no-deps' "$STUB_LOG")"
+
+echo "release: not enough disk"
+unset_stubs; new_dir blue bbbbbbb; DESK_MIN_DISK_MB=999999999 release ccccccc
+check "exits 1" test "$(code)" = 1
+check "nothing is dumped, migrated or started" test -z "$(grep -E 'desk-backup once|migrate|up -d --no-deps' "$STUB_LOG")"
+
+echo "release: DOMAIN missing from .env"
+unset_stubs; new_dir blue bbbbbbb; sed -i '/^DOMAIN=/d' "$WORK/.env"; release ccccccc
+check "exits 1 before anything changes" test "$(code)" = 1
+check "traffic is unchanged" grep -q "desk-api-blue:3000" "$TRAEFIK_DYN"
+
+echo "sync: ci-entry.sh is never replaced through the CI key"
+unset_stubs; new_dir blue bbbbbbb
+printf 'original\n' > "$WORK/ci-entry.sh"
+S=$(mktemp -d); printf 'evil\n' > "$S/ci-entry.sh"; printf 'services: {}\n' > "$S/docker-compose.yml"
+tar -C "$S" -c ci-entry.sh docker-compose.yml | SSH_ORIGINAL_COMMAND="sync" PATH="$BIN:$PATH" bash "$ENTRY" > "$WORK/out.txt" 2>&1
+check "ci-entry.sh is untouched" grep -q '^original$' "$WORK/ci-entry.sh"
+check "allow-listed files are still installed" grep -q 'services' "$WORK/docker-compose.yml"
+rm -rf "$S"
 
 echo
 echo "$pass passed, $fail failed"

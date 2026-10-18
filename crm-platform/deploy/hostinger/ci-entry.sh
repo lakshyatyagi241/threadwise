@@ -9,7 +9,9 @@
 set -euo pipefail
 DESK_DIR=${DESK_DIR:-/opt/desk}   # overridable only so tests/ci-entry.test.sh can run against a scratch directory
 TRAEFIK_DYN=${TRAEFIK_DYN:-/etc/dokploy/traefik/dynamic/desk.yml}   # Traefik watches this directory: rewriting the file moves traffic
-BG_MIN_MEM_MB=${BLUE_GREEN_MIN_MEM_MB:-1200}   # room for one extra api and one extra web while both slots run
+BG_MIN_MEM_MB=${BLUE_GREEN_MIN_MEM_MB:-1000}   # room for one extra api (~350 MB used, 1 GB cap) and one extra web (~400 MB used, 768 MB cap)
+MIN_DISK_MB=${DESK_MIN_DISK_MB:-3000}           # room to load two new images and keep the previous release
+LOCK_FILE=${DESK_LOCK_FILE:-/var/lock/desk-release.lock}
 cd "$DESK_DIR"
 read -r action arg _ <<<"${SSH_ORIGINAL_COMMAND:-}"
 
@@ -69,6 +71,17 @@ public_ok() {
   return 0
 }
 
+# Which slot serves traffic. .slot is the record, the routing file is the truth Traefik acts on: if they disagree (a release died
+# between the two writes, or .slot was lost), believe the routing file. No routing file and no record means the old labelled containers.
+live_slot() {
+  local rec routed
+  rec=$(cat .slot 2>/dev/null || true)
+  routed=$(grep -o 'desk-api-[a-z]*:3000' "$TRAEFIK_DYN" 2>/dev/null | head -1 | sed -e 's/^desk-api-//' -e 's/:3000$//' || true)
+  case "$routed" in blue | green) echo "$routed"; return ;; esac
+  case "$rec" in blue | green) [ -f "$TRAEFIK_DYN" ] && { echo "$rec"; return; } ;; esac
+  echo legacy
+}
+
 stop_slot() { # stop_slot <slot>: stop the api and web containers of one slot, keeping their images for a rollback
   compose stop -t 30 "api-$1" "web-$1" >/dev/null 2>&1 || true
 }
@@ -80,19 +93,35 @@ case "$action" in
   sync)
     tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
     tar -x -C "$tmp"
-    for f in docker-compose.yml init-roles.sh seed.js set-secrets.sh ci-entry.sh .env.example traefik-desk.yml.template; do
+    # ci-entry.sh is deliberately NOT in this list: it is the forced command of this very key, so letting the key rewrite it would hand
+    # root to whoever holds the key. It is installed by an administrator (ship.sh does it with their own login).
+    for f in docker-compose.yml init-roles.sh seed.js set-secrets.sh .env.example traefik-desk.yml.template; do
       [ -f "$tmp/$f" ] && install -m "$([ "${f##*.}" = sh ] && echo 755 || echo 644)" "$tmp/$f" "$DESK_DIR/$f"
     done
     echo "synced"
     ;;
   release)
     [[ "$arg" =~ ^[a-f0-9]{7,40}$ ]] || { echo "bad tag" >&2; exit 2; }
+    # One release at a time on this host, whoever started it (CI webhook, ship.sh, a person).
+    mkdir -p "$(dirname "$LOCK_FILE")"
+    exec 9>"$LOCK_FILE"
+    flock -n 9 || { echo "another release is running on this host; nothing was changed" >&2; exit 1; }
     docker image inspect "desk-api:$arg" "desk-web:$arg" >/dev/null
     DOMAIN=$(envget DOMAIN)
+    [ -n "$DOMAIN" ] || { echo "DOMAIN is not set in .env; nothing was changed" >&2; exit 1; }
     prev=$(envget IMAGE_TAG)
-    active=$(cat .slot 2>/dev/null || echo legacy)
+    active=$(live_slot)
     case "$active" in blue) idle=green ;; *) idle=blue ;; esac
     idle_upper=$(echo "$idle" | tr '[:lower:]' '[:upper:]')
+
+    # Traefik must be watching the directory the routing file goes in, or the switch would be written and never read.
+    if [ ! -d "$(dirname "$TRAEFIK_DYN")" ]; then
+      echo "Traefik's dynamic directory $(dirname "$TRAEFIK_DYN") does not exist; nothing was changed" >&2; exit 1
+    fi
+    avail_disk_mb=$(df -Pm "${DESK_DOCKER_ROOT:-/var/lib/docker}" 2>/dev/null | awk 'NR==2{print $4}')
+    if [ "${avail_disk_mb:-0}" -lt "$MIN_DISK_MB" ]; then
+      echo "not enough free disk (${avail_disk_mb:-0} MB free, ${MIN_DISK_MB} MB needed); nothing was changed" >&2; exit 1
+    fi
 
     # Both slots run during the switch, so there must be memory for one more api and one more web. Refuse before anything changes.
     avail_mb=$(awk '/^MemAvailable:/{print int($2/1024)}' /proc/meminfo 2>/dev/null || echo 0)

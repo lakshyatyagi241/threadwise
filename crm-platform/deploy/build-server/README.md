@@ -45,8 +45,9 @@ migration that must do one of these things can carry a `-- bluegreen-ok: <reason
 Dropping and re-adding a constraint or trigger under the same name (a widened check) is allowed.
 
 **Memory.** While both slots run, the host needs room for one more API (about 1 GB at most) and one more web (about 768 MB at most). A
-release refuses to start when less than `BLUE_GREEN_MIN_MEM_MB` (default 1200 MB) is available, before anything changes. The production host
-currently has about 1.5 GB available, which is below the comfortable margin: see the known limits below.
+release refuses to start when less than `BLUE_GREEN_MIN_MEM_MB` (default 1000 MB; measured use is about 350 MB for the API and 400 MB for web) is
+available, or less than `DESK_MIN_DISK_MB` (3000 MB) of disk, or when another release holds `/var/lock/desk-release.lock`, or when Traefik's
+dynamic directory is missing, all before anything changes.
 
 ## What runs where
 
@@ -101,7 +102,9 @@ Roll back by hand to the previous release (kept on the production host):
 
 ```bash
 ssh root@187.127.155.227 'cd /opt/desk && grep ^IMAGE_TAG .env && docker image ls --format "{{.Repository}}:{{.Tag}}" | grep ^desk-'
-ssh root@187.127.155.227 'cd /opt/desk && sed -i "/^IMAGE_TAG=/d" .env && echo IMAGE_TAG=<previous tag> >> .env && docker compose --env-file .env up -d api worker web'
+# blue-green: start the other slot's old release (the stopped slot keeps its image), move traffic back, restart the worker on it
+ssh root@187.127.155.227 'cd /opt/desk && cat .slot && grep -E "^(IMAGE_TAG|SLOT_(BLUE|GREEN)_TAG)=" .env'
+ssh root@187.127.155.227 'SSH_ORIGINAL_COMMAND="release <previous tag>" bash /opt/desk/ci-entry.sh'   # the simplest rollback: release the previous tag again
 ```
 
 Rolling back the code does not undo migrations; restore a dump (`docs/runbooks/backup-restore.md`) only if a migration itself was the problem.
@@ -138,9 +141,11 @@ Checks that need no server: `deploy/build-server/tests/checks.test.sh` (webhook 
   `workflow_dispatch` only) when billing is restored.
 - **MinIO image:** the stack needs `minio/minio:latest` preloaded on each host (`pull_policy: never`), and that repository is no longer on Docker Hub.
   A new host cannot pull it; copy it from a host that has it (`docker save minio/minio:latest | ssh <host> docker load`) or move to a maintained fork.
-- **Blue-green needs memory on the production host.** Two slots of API and web run during each switch. The host has about 1.5 GB
-  available against the roughly 0.8 GB the extra slot needs. Add RAM to the production host, or move other apps off it, before relying on
-  the switch in production. Until then a release refuses with a clear message and changes nothing.
+- **Blue-green needs memory on the production host.** Two slots of API and web run during each switch (about 0.75 GB extra). The host's
+  available memory moves between roughly 1.5 GB and 9 GB with the other apps on it. When it is below the gate a release refuses with a clear
+  message and changes nothing; re-run it later, or free memory first.
+- **`ci-entry.sh` is not synced by the CI key.** It is the forced command of that key, so the key cannot rewrite it. After changing it, install it
+  yourself: `deploy/hostinger/ship.sh` copies it with your own login, or `scp deploy/hostinger/ci-entry.sh root@<prod>:/opt/desk/ci-entry.sh`.
 - **Dokploy** is installed on the build server (panel on port 3000, reachable through an SSH tunnel) but has **no admin account and manages
   nothing**: this pipeline does not use it, except that its Traefik terminates TLS for the webhook. Moving the deploy into Dokploy itself (Applications
   with a build server and a registry, the database services as a compose on the production host) is possible but is a restructure of production and

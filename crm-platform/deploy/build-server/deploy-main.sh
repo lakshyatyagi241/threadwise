@@ -75,7 +75,7 @@ run_once() {
     --build-arg "NEXT_PUBLIC_SENTRY_DSN=$SENTRY_DSN" --build-arg "NEXT_PUBLIC_GIT_SHA=$TAG" crm-platform || return 1
   status shipping
   echo "== syncing deploy files"
-  tar -C crm-platform/deploy/hostinger -c docker-compose.yml init-roles.sh seed.js set-secrets.sh ci-entry.sh .env.example traefik-desk.yml.template | ssh_prod sync || return 1
+  tar -C crm-platform/deploy/hostinger -c docker-compose.yml init-roles.sh seed.js set-secrets.sh .env.example traefik-desk.yml.template | ssh_prod sync || return 1
   echo "== shipping images"
   docker save "desk-api:$TAG" "desk-web:$TAG" | gzip -1 | ssh_prod load || return 1
   status releasing
