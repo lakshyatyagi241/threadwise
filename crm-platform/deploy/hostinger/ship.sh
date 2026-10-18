@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Build the images HERE and ship them to the server; the server never builds (it is a shared host with little spare RAM).
 #   SERVER=root@187.127.155.227 SSH_KEY=~/.ssh/desk_deploy ./ship.sh
-# First run: also creates /opt/desk/.env with generated secrets. Re-runs keep .env and all data.
+# First run: also creates /opt/desk/.env with generated secrets. Re-runs keep .env and all data. Releases are blue-green (see ci-entry.sh).
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 SERVER=${SERVER:?set SERVER=user@host}
@@ -14,7 +14,7 @@ docker build -f apps/api/Dockerfile -t "desk-api:$TAG" .
 docker build -f apps/web/Dockerfile -t "desk-web:$TAG" .
 run "mkdir -p $DIR"
 docker save "desk-api:$TAG" "desk-web:$TAG" | gzip -1 | run "nice -n 10 sh -c 'gunzip | docker load'"
-scp "${SSH_OPTS[@]}" -q deploy/hostinger/{docker-compose.yml,init-roles.sh,seed.js,.env.example} "$SERVER:$DIR/"
+scp "${SSH_OPTS[@]}" -q deploy/hostinger/{docker-compose.yml,init-roles.sh,seed.js,ci-entry.sh,traefik-desk.yml.template,.env.example} "$SERVER:$DIR/"
 
 run "cd $DIR && set -e
 if [ ! -f .env ]; then
@@ -25,9 +25,7 @@ if [ ! -f .env ]; then
   sed -i \"s|^CREDENTIALS_ENCRYPTION_KEY=CHANGE_ME|CREDENTIALS_ENCRYPTION_KEY=\$(openssl rand -base64 32)|\" .env
   chmod 600 .env
 fi
-sed -i '/^IMAGE_TAG=/d' .env && echo IMAGE_TAG=$TAG >> .env
-docker compose --env-file .env up -d postgres redis minio
-docker compose --env-file .env run --rm migrate
-docker compose --env-file .env up -d api worker web
+# The same blue-green release the pipeline runs (ci-entry.sh): backup, migrate, idle slot healthy, traffic moved, worker restarted.
+SSH_ORIGINAL_COMMAND='release $TAG' bash $DIR/ci-entry.sh
 docker compose --env-file .env ps"
 echo "Shipped $TAG. Seed accounts once with seed.js / the operator CLI (see README)."

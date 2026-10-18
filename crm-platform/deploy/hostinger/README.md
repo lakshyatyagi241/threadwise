@@ -9,11 +9,13 @@ Memory is capped per container (about 4 GB in total) because the host runs many 
 
 ## Ship / update
 
-**Normally nothing to do:** merging to `main` triggers the build server, which builds the images and runs `release` here (database dump, migrate,
-restart, health check, automatic rollback). Progress, logs, manual runs, rollback and key rotation:
+**Normally nothing to do:** merging to `main` triggers the build server, which builds the images and runs `release` here. The release is
+blue-green: it migrates (expand-only), starts the idle slot (`api-blue`/`api-green` and `web-blue`/`web-green`), moves the public routes to it
+through `traefik-desk.yml.template` (written to Dokploy's Traefik dynamic directory) and restarts the worker. The old slot stops after a
+minute. Shared services (Postgres, Redis, MinIO) are started only if missing, never recreated by a release. Progress, logs, manual runs, rollback and key rotation:
 [../build-server/README.md](../build-server/README.md). Do not run `ship.sh` while a pipeline run is in progress.
 
-By hand from a workstation (needs Docker and the `desk_deploy` key; builds on your machine, so it needs about 8 GB of free memory):
+By hand from a workstation (needs Docker and the `desk_deploy` key; it builds here and then runs the same `release` as the pipeline):
 
 ```bash
 SERVER=root@<host> SSH_KEY=~/.ssh/<deploy key> deploy/hostinger/ship.sh
