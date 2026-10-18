@@ -1,6 +1,6 @@
 # Storage quota, storage packs and archival (design only)
 
-Status: **proposal, nothing built** (backlog BL-300). Written 2026-10-18 from a read-only investigation of `origin/main` (commit `d2e34babe`). Docs only: no code, no
+Status: **approved with the recommended defaults for O1 to O13 (owner, 2026-10-18); nothing built** (backlog BL-300). Written 2026-10-18 from a read-only investigation of `origin/main` (commit `d2e34babe`). Docs only: no code, no
 migration, no behaviour change comes with this note. Every "today" statement below names the file it was read in.
 
 Owner direction: charge for storage fairly while respecting privacy law. Three decisions are already made and are treated as fixed here:
