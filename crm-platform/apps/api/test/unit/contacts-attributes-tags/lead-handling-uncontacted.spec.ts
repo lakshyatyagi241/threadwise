@@ -178,7 +178,7 @@ describe('the uncontacted filter', () => {
 
   it('a saved filter becomes the same segment rule', () => {
     const rules = JSON.stringify(
-      contactFilterToRules({ uncontacted: true, includeArchived: false, tagMode: 'any' }),
+      contactFilterToRules({ uncontacted: true, tagMode: 'any' }),
     );
     expect(rules).toContain('"uncontacted"');
     expect(rules).toContain('is_true');
