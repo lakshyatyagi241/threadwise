@@ -476,6 +476,47 @@ describe('CTA and Location', () => {
   });
 });
 
+describe('Location: coordinates and optional name / address', () => {
+  const sendOf = async (data: Record<string, unknown>) => {
+    const run = newRun({ nodes: [n('l', 'location', data)], edges: [] });
+    const sent: OutboundMessage[] = [];
+    const deps: StepDeps = {
+      send: async (_r, m) => {
+        sent.push(m);
+        return { ok: true };
+      },
+      paceMs: () => 0,
+      now: () => new Date(0),
+    };
+    const out = await executeCurrent(run, deps);
+    return { sent, out };
+  };
+
+  it('sends the pin with no name or address when both are left out', async () => {
+    const { sent } = await sendOf({ lat: '18.5204', lng: '73.8567', title: '', address: '' });
+    expect(sent).toEqual([{ kind: 'location', latitude: 18.5204, longitude: 73.8567 }]);
+  });
+
+  it('reads a decimal comma the way the builder does', async () => {
+    const { sent } = await sendOf({ lat: '18,5204', lng: '73,8567' });
+    expect(sent[0]).toMatchObject({ kind: 'location', latitude: 18.5204, longitude: 73.8567 });
+  });
+
+  it('sends nothing for a step with no real coordinates (saved before the builder checked them)', async () => {
+    for (const data of [
+      {},
+      { lat: '', lng: '' },
+      { lat: '0', lng: '0', title: 'Our office' },
+      { lat: '95', lng: '10' },
+      { lat: '10', lng: '-200' },
+      { lat: 'abc', lng: '10' },
+    ]) {
+      const { sent } = await sendOf(data);
+      expect(sent, JSON.stringify(data)).toEqual([]);
+    }
+  });
+});
+
 describe('what the run log gets from a step', () => {
   it('lists what a node sent, as rendered for this customer', async () => {
     const run = newRun({

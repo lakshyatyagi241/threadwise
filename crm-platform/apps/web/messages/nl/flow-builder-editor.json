@@ -1248,13 +1248,6 @@
             "hour": "uren",
             "day": "dagen"
           },
-          "location": {
-            "placeName": "Plaatsnaam",
-            "placePlaceholder": "Ons kantoor",
-            "address": "Adres",
-            "latitude": "Breedtegraad",
-            "longitude": "Lengtegraad"
-          },
           "template": {
             "label": "Goedgekeurd sjabloon",
             "hint": "Alleen sjablonen die je WhatsApp-nummer heeft goedgekeurd, worden getoond.",
@@ -1463,13 +1456,7 @@
           "info": "Voeg maximaal {max} CTA-knoppen toe aan één bericht — combineer Website bezoeken, Bellen en Code kopiëren in elke volgorde. Dezelfde limiet als WhatsApp-sjabloonknoppen.",
           "buttonLabel": "Knoptekst",
           "addButton": "Knop toevoegen",
-          "maxReached": "Maximaal {max} knoppen bereikt.",
-          "locationTitle": "Titel",
-          "locationTitlePlaceholder": "Ons kantoor",
-          "locationAddress": "Adres",
-          "locationAddressPlaceholder": "Straat, plaats, land",
-          "locationLatitude": "Breedtegraad",
-          "locationLongitude": "Lengtegraad"
+          "maxReached": "Maximaal {max} knoppen bereikt."
         },
         "logic": {
           "operator": {
@@ -1900,6 +1887,41 @@
         "endTextHint": "Verzonden voordat de flow eindigt. Noem de leeftijd niet. Leeg gebruikt “We kunnen niet verder.”",
         "continueNote": "De volgende stappen kunnen de variabele van het antwoord gevolgd door _age_gate lezen (bijvoorbeeld answer_age_gate), die under of adult is. Voeg een Voorwaarde toe om te vertakken, bijvoorbeeld om een ouder of voogd te vragen.",
         "note": "Vraag alleen naar de leeftijd waar je die nodig hebt. Het antwoord wordt naar het contact geschreven: een geboortedatum als geboortedatum, en een antwoord onder de leeftijd markeert het contact als minderjarig."
+      },
+      "location": {
+        "modeLabel": "Hoe stel je de locatie in",
+        "modeLink": "Google Maps-link",
+        "modeCoords": "Breedte- en lengtegraad",
+        "linkLabel": "Google Maps-link",
+        "linkPlaceholder": "Plak een link, bijv. https://maps.app.goo.gl/…",
+        "linkHint": "Open de plek in Google Maps, tik op Delen en daarna op Link kopiëren. Korte en lange links werken allebei.",
+        "finding": "Link opzoeken…",
+        "retry": "Opnieuw proberen",
+        "latitude": "Breedtegraad",
+        "longitude": "Lengtegraad",
+        "coordsHint": "De breedtegraad loopt van -90 tot 90 en de lengtegraad van -180 tot 180. Je kunt „breedte, lengte” in een van beide velden plakken.",
+        "found": "Locatie gevonden",
+        "openInMaps": "Openen in Google Maps",
+        "optionalHint": "Optioneel: wordt getoond op de kaartkaart die de klant ontvangt. Je kunt beide leeg laten.",
+        "optional": "(optioneel)",
+        "placeName": "Naam van de plek",
+        "placePlaceholder": "Ons kantoor",
+        "address": "Adres",
+        "problem": {
+          "empty": "Voer een Google Maps-link of coördinaten in.",
+          "lat_missing": "Voer een breedtegraad in.",
+          "lng_missing": "Voer een lengtegraad in.",
+          "lat_nan": "De breedtegraad moet een getal zijn, bijvoorbeeld 18.5204.",
+          "lng_nan": "De lengtegraad moet een getal zijn, bijvoorbeeld 73.8567.",
+          "lat_range": "De breedtegraad moet tussen -90 en 90 liggen.",
+          "lng_range": "De lengtegraad moet tussen -180 en 180 liggen.",
+          "zero": "0, 0 is geen echte plek. Voer de werkelijke coördinaten in.",
+          "not_url": "Dit lijkt geen link. Plak de volledige Google Maps-link.",
+          "not_maps": "Dit is geen Google Maps-link.",
+          "no_coords": "Deze link wijst niet naar een exacte plek. Open de plek in Google Maps, tik op Delen en kopieer die link, of voer de coördinaten in.",
+          "unresolved": "Deze korte link is nog niet opgezocht. Verlaat het veld of probeer opnieuw.",
+          "resolve_failed": "Deze link kon niet worden gelezen. Controleer of hij opent in Google Maps, of voer de coördinaten in."
+        }
       }
     },
     "contracts": {
@@ -2332,7 +2354,8 @@
         "noSenderInstagram": "De Trigger-node heeft geen Instagram-account geselecteerd — kies er een in de triggerstap.",
         "noSenderFacebook": "De Trigger-node heeft geen Facebook-pagina geselecteerd — kies er een in de triggerstap.",
         "noSenderNumber": "De Trigger-node heeft geen nummer geselecteerd — kies er een in de triggerstap.",
-        "faqMinScore": "\"{node}\" heeft een minimumscore buiten 0.05 tot 0.99 — corrigeer dit of laat het leeg om de instelling van de flow te gebruiken."
+        "faqMinScore": "\"{node}\" heeft een minimumscore buiten 0.05 tot 0.99 — corrigeer dit of laat het leeg om de instelling van de flow te gebruiken.",
+        "locationInvalid": "„{node}” heeft geen geldige locatie: plak een Google Maps-link of voer een breedtegraad (-90 tot 90) en lengtegraad (-180 tot 180) in."
       }
     },
     "simpleModel": {
@@ -2473,7 +2496,7 @@
         "writeQuestion": "Stap {stage}: schrijf de vraag.",
         "nameVariable": "Stap {stage}: geef de variabele een naam waarin het antwoord wordt opgeslagen.",
         "chooseAnswerProperty": "Stap {stage}: kies de contacteigenschap waarnaar het antwoord wordt gekopieerd.",
-        "setCoordinates": "Stap {stage}: stel de breedte- en lengtegraad in.",
+        "setCoordinates": "Stap {stage}: plak een Google Maps-link of voer een geldige breedte- en lengtegraad in.",
         "chooseTemplate": "Stap {stage}: kies een sjabloon.",
         "chooseTeam": "Stap {stage}: kies het team waar het gesprek naartoe gaat.",
         "ctaLabelLink": "Stap {stage}: geef de knop een naam en een link.",
@@ -2755,7 +2778,8 @@
       "simPurchase": "Gesimuleerde aankoop: {name} → uitgang “gekocht”",
       "simAbandon": "Gesimuleerd verlaten → uitgang “verlaten”",
       "faqAnswered": "(gesimuleerd) Antwoord uit FAQ voor \"{query}\": de testchat zoekt je FAQ's niet op, dus er wordt niets verzonden en {ref} blijft leeg. Uitgang \"beantwoord\" wordt genomen.",
-      "faqNoMatch": "(gesimuleerd) Antwoord uit FAQ voor \"{query}\": de testchat zoekt je FAQ's niet op en de uitgang \"beantwoord\" is niet verbonden, dus \"geen match\" wordt genomen. {ref} blijft leeg."
+      "faqNoMatch": "(gesimuleerd) Antwoord uit FAQ voor \"{query}\": de testchat zoekt je FAQ's niet op en de uitgang \"beantwoord\" is niet verbonden, dus \"geen match\" wordt genomen. {ref} blijft leeg.",
+      "locationSkipped": "(locatie) overgeslagen: geen geldige coördinaten"
     }
   }
 }

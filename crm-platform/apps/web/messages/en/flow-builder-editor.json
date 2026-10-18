@@ -866,13 +866,6 @@
             "hour": "hours",
             "day": "days"
           },
-          "location": {
-            "placeName": "Place name",
-            "placePlaceholder": "Our office",
-            "address": "Address",
-            "latitude": "Latitude",
-            "longitude": "Longitude"
-          },
           "template": {
             "label": "Approved template",
             "hint": "Only templates your WhatsApp number has approved are listed.",
@@ -1093,13 +1086,7 @@
           "info": "Add up to {max} CTA buttons in one message — mix Visit website, Call, and Copy code in any combination. Same cap WhatsApp template buttons have.",
           "buttonLabel": "Button label",
           "addButton": "Add button",
-          "maxReached": "Max {max} buttons reached.",
-          "locationTitle": "Title",
-          "locationTitlePlaceholder": "Our office",
-          "locationAddress": "Address",
-          "locationAddressPlaceholder": "Street, city, country",
-          "locationLatitude": "Latitude",
-          "locationLongitude": "Longitude"
+          "maxReached": "Max {max} buttons reached."
         },
         "logic": {
           "operator": {
@@ -2041,6 +2028,41 @@
         "groupContact": "Contact properties",
         "groupFlow": "Saved in this flow",
         "variableNone": "No variables found"
+      },
+      "location": {
+        "modeLabel": "How to set the location",
+        "modeLink": "Google Maps link",
+        "modeCoords": "Latitude & longitude",
+        "linkLabel": "Google Maps link",
+        "linkPlaceholder": "Paste a link, e.g. https://maps.app.goo.gl/…",
+        "linkHint": "In Google Maps, open the place, tap Share, then Copy link. Short and long links both work.",
+        "finding": "Looking up the link…",
+        "retry": "Try again",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "coordsHint": "Latitude is -90 to 90 and longitude is -180 to 180. You can paste “lat, lng” into either box.",
+        "found": "Location found",
+        "openInMaps": "Open in Google Maps",
+        "optionalHint": "Optional: shown on the map card the customer receives. You can leave both empty.",
+        "optional": "(optional)",
+        "placeName": "Place name",
+        "placePlaceholder": "Our office",
+        "address": "Address",
+        "problem": {
+          "empty": "Enter a Google Maps link or coordinates.",
+          "lat_missing": "Enter a latitude.",
+          "lng_missing": "Enter a longitude.",
+          "lat_nan": "Latitude must be a number, for example 18.5204.",
+          "lng_nan": "Longitude must be a number, for example 73.8567.",
+          "lat_range": "Latitude must be between -90 and 90.",
+          "lng_range": "Longitude must be between -180 and 180.",
+          "zero": "0, 0 is not a real place. Enter the actual coordinates.",
+          "not_url": "This doesn’t look like a link. Paste the full Google Maps link.",
+          "not_maps": "This is not a Google Maps link.",
+          "no_coords": "This link doesn’t point to an exact spot. Open the place in Google Maps, tap Share and copy that link, or enter the coordinates instead.",
+          "unresolved": "This short link hasn’t been looked up yet. Click out of the field or try again.",
+          "resolve_failed": "Couldn’t read this link. Check that it opens in Google Maps, or enter the coordinates instead."
+        }
       }
     },
     "contracts": {
@@ -2473,7 +2495,8 @@
         "noSenderInstagram": "The Trigger node has no Instagram account selected — pick one on the Trigger step.",
         "noSenderFacebook": "The Trigger node has no Facebook Page selected — pick one on the Trigger step.",
         "noSenderNumber": "The Trigger node has no number selected — pick one on the Trigger step.",
-        "faqMinScore": "\"{node}\" has a minimum score outside 0.05 to 0.99 — fix it or leave it blank to use the flow's setting."
+        "faqMinScore": "\"{node}\" has a minimum score outside 0.05 to 0.99 — fix it or leave it blank to use the flow's setting.",
+        "locationInvalid": "\"{node}\" has no valid location — paste a Google Maps link or enter a latitude (-90 to 90) and longitude (-180 to 180)."
       }
     },
     "simpleModel": {
@@ -2614,7 +2637,7 @@
         "writeQuestion": "Step {stage}: write the question.",
         "nameVariable": "Step {stage}: name the variable the answer is saved in.",
         "chooseAnswerProperty": "Step {stage}: choose the contact property the answer is copied to.",
-        "setCoordinates": "Step {stage}: set the latitude and longitude.",
+        "setCoordinates": "Step {stage}: paste a Google Maps link or enter a valid latitude and longitude.",
         "chooseTemplate": "Step {stage}: choose a template.",
         "chooseTeam": "Step {stage}: choose the team the conversation goes to.",
         "ctaLabelLink": "Step {stage}: give the button a name and a link.",
@@ -2754,7 +2777,8 @@
       "simPurchase": "Simulated purchase: {name} → port \"purchased\"",
       "simAbandon": "Simulated abandon → port \"abandoned\"",
       "faqAnswered": "(simulated) Answer from FAQ for \"{query}\": the test chat does not look up your FAQs, so nothing is sent and {ref} stays empty. Taking the \"answered\" exit.",
-      "faqNoMatch": "(simulated) Answer from FAQ for \"{query}\": the test chat does not look up your FAQs, and the \"answered\" exit is not connected, so taking \"no match\". {ref} stays empty."
+      "faqNoMatch": "(simulated) Answer from FAQ for \"{query}\": the test chat does not look up your FAQs, and the \"answered\" exit is not connected, so taking \"no match\". {ref} stays empty.",
+      "locationSkipped": "(location) skipped: no valid coordinates"
     }
   }
 }

@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { FLB_WA_LIMITS } from '@crm/contracts';
 import { FlowEditorContext } from '../../../lib/flow-editor-context';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
-import { Field, RowCard, TextArea, TextInput } from '../kit';
+import { RowCard, TextInput } from '../kit';
 import type { FormProps } from '../types';
 import {
   changeCtaType,
@@ -20,6 +20,7 @@ import {
 } from './helpers';
 import { AddLink, CardHeader, InfoBox } from './parts';
 import { CtaPreview, LocationPreview } from './previews';
+import { LocationPicker } from '../../location-picker';
 
 const CTA_TYPES = ['url', 'phone', 'call_now', 'copy'] as const;
 
@@ -109,34 +110,11 @@ export function CtaForm({ data: d, set, env }: FormProps) {
   );
 }
 
-export function LocationForm({ data: d, set }: FormProps) {
-  const t = useTranslations('flb.builder.formsCore.engage');
+export function LocationForm({ node, data: d, setMany }: FormProps) {
   return (
     <>
       <LocationPreview d={d} />
-      <Field label={t('locationTitle')}>
-        <TextInput
-          value={d.title}
-          placeholder={t('locationTitlePlaceholder')}
-          onChange={(v) => set('title', v)}
-        />
-      </Field>
-      <Field label={t('locationAddress')}>
-        <TextArea
-          value={d.address}
-          placeholder={t('locationAddressPlaceholder')}
-          rows={2}
-          onChange={(v) => set('address', v)}
-        />
-      </Field>
-      <div className="mb-1 grid grid-cols-2 gap-2">
-        <Field label={t('locationLatitude')}>
-          <TextInput value={d.lat} placeholder="12.9716" onChange={(v) => set('lat', v)} />
-        </Field>
-        <Field label={t('locationLongitude')}>
-          <TextInput value={d.lng} placeholder="77.5946" onChange={(v) => set('lng', v)} />
-        </Field>
-      </div>
+      <LocationPicker data={d} patch={setMany} idPrefix={`loc-${node.id}`} />
     </>
   );
 }

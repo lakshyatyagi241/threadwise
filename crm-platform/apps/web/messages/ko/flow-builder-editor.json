@@ -855,13 +855,6 @@
             "hour": "시간",
             "day": "일"
           },
-          "location": {
-            "placeName": "장소 이름",
-            "placePlaceholder": "우리 사무실",
-            "address": "주소",
-            "latitude": "위도",
-            "longitude": "경도"
-          },
           "template": {
             "label": "승인된 템플릿",
             "hint": "WhatsApp 번호에서 승인된 템플릿만 표시됩니다.",
@@ -1070,13 +1063,7 @@
           "info": "한 메시지에 CTA 버튼을 최대 {max}개까지 추가할 수 있으며, 웹사이트 방문, 통화, 코드 복사를 자유롭게 조합할 수 있습니다. WhatsApp 템플릿 버튼과 같은 제한입니다.",
           "buttonLabel": "버튼 라벨",
           "addButton": "버튼 추가",
-          "maxReached": "최대 {max}개의 버튼에 도달했습니다.",
-          "locationTitle": "제목",
-          "locationTitlePlaceholder": "우리 사무실",
-          "locationAddress": "주소",
-          "locationAddressPlaceholder": "도로명, 도시, 국가",
-          "locationLatitude": "위도",
-          "locationLongitude": "경도"
+          "maxReached": "최대 {max}개의 버튼에 도달했습니다."
         },
         "logic": {
           "operator": {
@@ -2042,6 +2029,41 @@
         "endTextHint": "플로가 끝나기 전에 전송됩니다. 나이를 언급하지 마세요. 비워 두면 \"계속 진행할 수 없습니다.\"가 사용됩니다.",
         "continueNote": "다음 단계에서는 답변의 변수 뒤에 _age_gate를 붙인 변수(예: answer_age_gate)를 읽을 수 있으며, 값은 under 또는 adult입니다. 조건을 추가하여 분기할 수 있습니다(예: 부모 또는 보호자 요청).",
         "note": "나이는 필요한 곳에서만 물으세요. 답변은 연락처에 기록됩니다. 생년월일은 생년월일로 기록되고, 연령 미만의 답변은 연락처를 미성년자로 표시합니다."
+      },
+      "location": {
+        "modeLabel": "위치를 설정하는 방법",
+        "modeLink": "Google 지도 링크",
+        "modeCoords": "위도 및 경도",
+        "linkLabel": "Google 지도 링크",
+        "linkPlaceholder": "링크를 붙여넣으세요(예: https://maps.app.goo.gl/…)",
+        "linkHint": "Google 지도에서 장소를 열고 공유를 누른 다음 링크 복사를 누르세요. 짧은 링크와 긴 링크 모두 사용할 수 있습니다.",
+        "finding": "링크 확인 중…",
+        "retry": "다시 시도",
+        "latitude": "위도",
+        "longitude": "경도",
+        "coordsHint": "위도는 -90~90, 경도는 -180~180입니다. 두 칸 중 어디에든 “위도, 경도”를 붙여넣을 수 있습니다.",
+        "found": "위치를 찾았습니다",
+        "openInMaps": "Google 지도에서 열기",
+        "optionalHint": "선택 사항: 고객이 받는 지도 카드에 표시됩니다. 둘 다 비워 두어도 됩니다.",
+        "optional": "(선택 사항)",
+        "placeName": "장소 이름",
+        "placePlaceholder": "저희 사무실",
+        "address": "주소",
+        "problem": {
+          "empty": "Google 지도 링크 또는 좌표를 입력하세요.",
+          "lat_missing": "위도를 입력하세요.",
+          "lng_missing": "경도를 입력하세요.",
+          "lat_nan": "위도는 숫자여야 합니다(예: 18.5204).",
+          "lng_nan": "경도는 숫자여야 합니다(예: 73.8567).",
+          "lat_range": "위도는 -90에서 90 사이여야 합니다.",
+          "lng_range": "경도는 -180에서 180 사이여야 합니다.",
+          "zero": "0, 0은 실제 장소가 아닙니다. 실제 좌표를 입력하세요.",
+          "not_url": "링크가 아닌 것 같습니다. Google 지도 링크 전체를 붙여넣으세요.",
+          "not_maps": "Google 지도 링크가 아닙니다.",
+          "no_coords": "이 링크는 정확한 지점을 가리키지 않습니다. Google 지도에서 장소를 열고 공유로 링크를 복사하거나 좌표를 입력하세요.",
+          "unresolved": "이 단축 링크는 아직 확인되지 않았습니다. 입력란 밖을 누르거나 다시 시도하세요.",
+          "resolve_failed": "이 링크를 읽을 수 없습니다. Google 지도에서 열리는지 확인하거나 좌표를 입력하세요."
+        }
       }
     },
     "contracts": {
@@ -2474,7 +2496,8 @@
         "noSenderInstagram": "트리거 노드에 Instagram 계정이 선택되어 있지 않습니다 — 트리거 단계에서 계정을 선택하세요.",
         "noSenderFacebook": "트리거 노드에 Facebook 페이지가 선택되어 있지 않습니다 — 트리거 단계에서 페이지를 선택하세요.",
         "noSenderNumber": "트리거 노드에 번호가 선택되어 있지 않습니다 — 트리거 단계에서 번호를 선택하세요.",
-        "faqMinScore": "\"{node}\"의 최소 점수가 0.05~0.99 범위를 벗어났습니다. 수정하거나 비워 두어 플로우 설정을 사용하세요."
+        "faqMinScore": "\"{node}\"의 최소 점수가 0.05~0.99 범위를 벗어났습니다. 수정하거나 비워 두어 플로우 설정을 사용하세요.",
+        "locationInvalid": "“{node}”에 유효한 위치가 없습니다. Google 지도 링크를 붙여넣거나 위도(-90~90)와 경도(-180~180)를 입력하세요."
       }
     },
     "simpleModel": {
@@ -2615,7 +2638,7 @@
         "writeQuestion": "{stage} 단계: 질문을 입력하세요.",
         "nameVariable": "{stage} 단계: 답변을 저장할 변수 이름을 지정하세요.",
         "chooseAnswerProperty": "{stage} 단계: 답변을 복사할 연락처 속성을 선택하세요.",
-        "setCoordinates": "{stage} 단계: 위도와 경도를 설정하세요.",
+        "setCoordinates": "{stage}단계: Google 지도 링크를 붙여넣거나 올바른 위도와 경도를 입력하세요.",
         "chooseTemplate": "{stage} 단계: 템플릿을 선택하세요.",
         "chooseTeam": "{stage} 단계: 대화를 보낼 팀을 선택하세요.",
         "ctaLabelLink": "{stage} 단계: 버튼에 이름과 링크를 지정하세요.",
@@ -2755,7 +2778,8 @@
       "simPurchase": "시뮬레이션 구매: {name} → “구매 완료” 포트",
       "simAbandon": "시뮬레이션 이탈 → “이탈” 포트",
       "faqAnswered": "(시뮬레이션) \"{query}\"에 대한 FAQ로 답변: 테스트 채팅은 FAQ를 조회하지 않으므로 아무것도 전송되지 않고 {ref}은(는) 비어 있습니다. \"답변함\" 출구로 이동합니다.",
-      "faqNoMatch": "(시뮬레이션) \"{query}\"에 대한 FAQ로 답변: 테스트 채팅은 FAQ를 조회하지 않고 \"답변함\" 출구도 연결되어 있지 않으므로 \"일치 없음\"으로 이동합니다. {ref}은(는) 비어 있습니다."
+      "faqNoMatch": "(시뮬레이션) \"{query}\"에 대한 FAQ로 답변: 테스트 채팅은 FAQ를 조회하지 않고 \"답변함\" 출구도 연결되어 있지 않으므로 \"일치 없음\"으로 이동합니다. {ref}은(는) 비어 있습니다.",
+      "locationSkipped": "(위치) 건너뜀: 유효한 좌표 없음"
     }
   }
 }
