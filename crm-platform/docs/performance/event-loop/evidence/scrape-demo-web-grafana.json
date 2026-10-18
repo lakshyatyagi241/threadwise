@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-18T07:24:40.117Z",
+ "generatedAt": "2026-10-18T08:48:21.973Z",
  "node": "v22.17.0",
  "prometheus": "prom/prometheus:v2.55.0",
  "alertmanager": "prom/alertmanager:v0.27.0",
@@ -9,7 +9,7 @@
   {
    "name": "RuntimeMetricsTargetDown",
    "status": "firing",
-   "at": 1792308278485,
+   "at": 1792313299383,
    "labels": {
     "alertname": "RuntimeMetricsTargetDown",
     "instance": "host.docker.internal:9465",
@@ -72,7 +72,7 @@
    "ok": true,
    "detail": {
     "__name__": "crm_event_loop_delay_p99_seconds",
-    "exported_instance": "Lakshya:46748",
+    "exported_instance": "Lakshya:47560",
     "instance": "host.docker.internal:9465",
     "job": "crm-worker",
     "release": "demo-1",
@@ -82,12 +82,12 @@
   {
    "name": "a healthy idle loop reads in a sane range (under 0.5 s)",
    "ok": true,
-   "detail": "worker=0.023085055 api=0.049676287"
+   "detail": "worker=0.026198015 api=0.038469631"
   },
   {
    "name": "the heartbeat timestamp is fresh (under 30 s old)",
    "ok": true,
-   "detail": "worker=5.2s api=2.2s"
+   "detail": "worker=7.3s api=6.3s"
   },
   {
    "name": "the probe reports both targets up",
@@ -97,12 +97,12 @@
   {
    "name": "a healthy /health reads fast from the probe (p95 under 0.25 s)",
    "ok": true,
-   "detail": "0.024 s"
+   "detail": "0.010 s"
   },
   {
    "name": "Prometheus has the web server request counts by route template",
    "ok": true,
-   "detail": "44"
+   "detail": "45"
   },
   {
    "name": "a 404 is counted as \"unmatched\", never under its URL",
@@ -111,7 +111,7 @@
   {
    "name": "the web loop is scraped and reads sane (under 0.5 s)",
    "ok": true,
-   "detail": "0.246939647"
+   "detail": "0.06602751899999999"
   },
   {
    "name": "api, worker and web all carry the release label",
@@ -250,32 +250,32 @@
   {
    "name": "crm-web / Event loop delay has data",
    "ok": true,
-   "detail": "32 points"
+   "detail": "36 points"
   },
   {
    "name": "crm-web / Event loop utilization has data",
    "ok": true,
-   "detail": "16 points"
+   "detail": "18 points"
   },
   {
    "name": "crm-web / Heap used against its limit has data",
    "ok": true,
-   "detail": "8 points"
+   "detail": "9 points"
   },
   {
    "name": "crm-web / Memory has data",
    "ok": true,
-   "detail": "24 points"
+   "detail": "27 points"
   },
   {
    "name": "crm-web / GC pause has data",
    "ok": true,
-   "detail": "32 points"
+   "detail": "33 points"
   },
   {
    "name": "crm-web / CPU and throttling has data",
    "ok": true,
-   "detail": "8 points"
+   "detail": "9 points"
   },
   {
    "name": "crm-workers / Metrics target has data",
@@ -295,32 +295,32 @@
   {
    "name": "crm-workers / Event loop delay has data",
    "ok": true,
-   "detail": "32 points"
+   "detail": "36 points"
   },
   {
    "name": "crm-workers / Event loop utilization has data",
    "ok": true,
-   "detail": "16 points"
+   "detail": "18 points"
   },
   {
    "name": "crm-workers / Heap used against its limit has data",
    "ok": true,
-   "detail": "8 points"
+   "detail": "9 points"
   },
   {
    "name": "crm-workers / Memory has data",
    "ok": true,
-   "detail": "24 points"
+   "detail": "27 points"
   },
   {
    "name": "crm-workers / GC pause has data",
    "ok": true,
-   "detail": "32 points"
+   "detail": "33 points"
   },
   {
    "name": "crm-workers / CPU and throttling has data",
    "ok": true,
-   "detail": "8 points"
+   "detail": "9 points"
   },
   {
    "name": "every panel query runs without an error (105 run)",

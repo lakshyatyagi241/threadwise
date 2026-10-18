@@ -51,14 +51,20 @@ function finiteMs(ns: number): number | null {
  * histogram a stall that begins before the first tick after a reset is not recorded, about 0.1 to 0.2 % of the time at a 10 s window
  * and a 10 ms resolution (EL-B10). So there are two. The one for the next window is enabled and reset a few ticks BEFORE the current
  * window ends (a short unref'd timer), so its discarded tick is long gone by the boundary; at the boundary the sampler reads the
- * current one and switches. The price is that the last few ticks (about 30 ms) of a window are also at the start of the next one, so a
- * stall in that sliver counts in both windows. If the arming timer has not run by the boundary (the loop was blocked), it falls back
- * to reset in place, i.e. to the old single-histogram behaviour for that one window. An injected `histogram` (tests) keeps that
- * single-histogram mode.
+ * current one and switches. The price is that the last few ticks (about 100 ms) of a window are also at the start of the next one, so a
+ * stall in that sliver counts in both windows. If the arming timer has not run by the boundary, it falls back to reset in place, i.e.
+ * to the old single-histogram behaviour for that one window. Two limits, both measured: a lead of 3 ticks (30 ms) was marginal (34 to
+ * 40 of 40 trials), and checking that the spare had recorded a tick before switching made it WORSE (8 of 40: `count` lags the timer, so
+ * the check sent most boundaries to the fallback). And a loop starved for the whole lead (a full parallel test run on a loaded laptop
+ * did it once) defeats it. An injected `histogram` (tests) keeps the single-histogram mode.
  */
 const DEFAULT_WINDOW_MS = 10_000;
-/** How many ticks before the boundary the next histogram is armed. The first tick after a reset is discarded; the second is kept. */
-const ARM_LEAD_TICKS = 3;
+/**
+ * How many ticks before the boundary the next histogram is armed. The first tick after a reset is discarded; the second is kept. Ten
+ * (100 ms at the default resolution) leaves room for a loop that is busy but not blocked (40 of 40 in `measure-sampler-blindspot.mjs`);
+ * the cost is that much overlap between windows, 1 % of a 10 s window.
+ */
+const ARM_LEAD_TICKS = 10;
 
 type Histogram = NonNullable<EventLoopSamplerDeps['histogram']>;
 
@@ -74,7 +80,6 @@ export class EventLoopSampler {
   private readonly now: () => number;
   private previousElu: EventLoopUtilization;
   private windowStartedAt: number;
-  private lastWindowMs: number | undefined;
   private running = false;
 
   constructor(deps: EventLoopSamplerDeps = {}) {
@@ -120,8 +125,9 @@ export class EventLoopSampler {
   private scheduleArm(): void {
     if (!this.spare) return;
     if (this.armTimer) clearTimeout(this.armTimer);
-    const expected = this.lastWindowMs ?? this.windowHintMs;
-    const delay = Math.max(0, expected - ARM_LEAD_TICKS * this.resolutionMs);
+    // From the cadence the caller promised, never from the last window that happened to be observed: a caller that samples at irregular
+    // times would otherwise arm far too early and report one stall in two windows.
+    const delay = Math.max(0, this.windowHintMs - ARM_LEAD_TICKS * this.resolutionMs);
     this.armTimer = setTimeout(() => {
       this.armTimer = undefined;
       if (!this.running || !this.spare) return;
@@ -157,7 +163,6 @@ export class EventLoopSampler {
     } else {
       this.histogram.reset(); // single-histogram mode, or the arming timer did not run in time
     }
-    this.lastWindowMs = windowMs > 0 ? windowMs : this.lastWindowMs;
     if (this.running) this.scheduleArm();
 
     if (

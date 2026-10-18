@@ -15,7 +15,10 @@ const block = (ms: number) => {
 const WINDOW = 150;
 const STALL = 100;
 
-describe('EventLoopSampler window boundary', () => {
+// Real timers and a real busy loop make these depend on the machine's scheduling: a full parallel test run on a loaded laptop can starve the
+// event loop for longer than the sampler's 100 ms lead, which is the documented limit of the design. A retry separates that from a real regression
+// (the measurement tool runs 40 trials without retries).
+describe('EventLoopSampler window boundary', { retry: 3 }, () => {
   it('records a stall that begins right after the boundary (five times out of five)', async () => {
     for (let i = 0; i < 5; i++) {
       const sampler = new EventLoopSampler({ windowHintMs: WINDOW });
@@ -41,6 +44,24 @@ describe('EventLoopSampler window boundary', () => {
     sampler.stop();
     expect(quiet).not.toBeNull();
     expect(quiet!.delayMaxMs).toBeLessThan(STALL);
+  });
+
+  it('does not report one stall in two windows when the caller samples at irregular times', async () => {
+    // The arming time comes from the promised cadence (10 s here), not from the length of the last window: with short, uneven windows the
+    // spare must not already be recording when a stall happens in the middle of the next one.
+    const sampler = new EventLoopSampler({ windowHintMs: 10_000 });
+    sampler.start();
+    await sleep(60);
+    sampler.sample();
+    await sleep(40);
+    block(STALL);
+    await sleep(40);
+    const withStall = sampler.sample();
+    await sleep(120);
+    const after = sampler.sample();
+    sampler.stop();
+    expect(withStall!.delayMaxMs).toBeGreaterThanOrEqual(STALL * 0.8);
+    expect(after!.delayMaxMs).toBeLessThan(STALL * 0.6);
   });
 
   it('keeps working when the arming timer did not get to run (a sample right after start)', async () => {

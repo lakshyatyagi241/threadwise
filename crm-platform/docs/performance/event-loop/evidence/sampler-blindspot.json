@@ -1,25 +1,25 @@
 {
- "generatedAt": "2026-10-18T06:08:48.845Z",
+ "generatedAt": "2026-10-18T08:38:56.428Z",
  "node": "v22.17.0",
  "windowMs": 250,
  "stallMs": 120,
  "results": {
   "single": {
-   "trials": 40,
+   "trials": 60,
    "stallsSeen": 0,
    "nextWindowMaxMs": {
-    "min": 17,
-    "median": 20,
-    "max": 22
+    "min": 16,
+    "median": 24,
+    "max": 85
    }
   },
   "two-histograms": {
-   "trials": 40,
-   "stallsSeen": 40,
+   "trials": 60,
+   "stallsSeen": 60,
    "nextWindowMaxMs": {
     "min": 120,
     "median": 136,
-    "max": 141
+    "max": 153
    }
   }
  }
