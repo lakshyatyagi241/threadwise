@@ -7,7 +7,7 @@ OUT=${1:-perf/results}
 RUNS=${RUNS:-3}
 DURATION=${DURATION:-30}
 mkdir -p "$OUT"
-for mode in 1 20; do
+for mode in ${MODES:-1 20}; do
   for i in $(seq 1 "$RUNS"); do
     echo "== ${mode} user(s), run $i of $RUNS"
     k6 run perf/latency.js -e VUS="$mode" -e DURATION="$DURATION" -e OUT="$OUT/latency-vus${mode}-run${i}.json" --quiet 2>&1 | grep -v "^$" | grep -E "error|crossed" || true

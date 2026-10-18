@@ -23,6 +23,7 @@ import {
   startRuntimeMonitor,
 } from './modules/platform-infrastructure';
 import { buildOpenApiDocument } from './common/openapi';
+import { responseCompression } from './common/http/response-compression';
 import type { Env } from './config/env.schema';
 
 async function bootstrap(): Promise<void> {
@@ -56,6 +57,9 @@ async function bootstrap(): Promise<void> {
 
   // Times every response by route template, so a loop stall can be matched to the requests that were running.
   if (runtimeMonitor) app.use(httpMetricsMiddleware(runtimeMonitor));
+
+  // Smaller responses on the wire (QA 63): before the routes, after the metrics middleware so the timing still covers the handler.
+  if (config.get('RESPONSE_COMPRESSION', { infer: true })) app.use(responseCompression());
 
   // Body-size limits per route class (TW-INFRA-020): before anything reads a body.
   installBodyLimits(app);

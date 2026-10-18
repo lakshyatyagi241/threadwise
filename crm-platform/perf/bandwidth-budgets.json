@@ -1,0 +1,20 @@
+{
+  "_": "QA #63. api: bytes per response for the endpoints a screen loads first (uncompressed body), and whether a large response is compressed. web: gzip bytes of the JavaScript a route loads, from the next build manifest. Raise a budget only with a reason in the pull request.",
+  "api": {
+    "requireCompression": true,
+    "compressAboveBytes": 1024,
+    "default": { "maxBytes": 60000 },
+    "endpoints": {},
+    "measure": [
+      "GET /v2/auth/session",
+      "GET /v2/contacts?limit=20",
+      "GET /v2/contacts?limit=50",
+      "GET /v2/companies?limit=20",
+      "GET /v2/tags",
+      "GET /v2/tasks?limit=20",
+      "GET /v2/inbox/conversations?limit=20",
+      "GET /v2/crm/dashboard"
+    ]
+  },
+  "web": { "defaultRouteGzipBytes": 400000, "routes": {} }
+}
