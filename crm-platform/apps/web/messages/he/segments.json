@@ -27,7 +27,8 @@
       "minor": "מסומן כקטין",
       "dateOfBirth": "תאריך לידה",
       "age": "גיל (שנים)",
-      "timezone": "אזור זמן"
+      "timezone": "אזור זמן",
+      "uncontacted": "לא נוצר קשר"
     },
     "fieldGroups": {
       "journey": "מסלול",

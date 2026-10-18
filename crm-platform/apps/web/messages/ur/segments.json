@@ -27,7 +27,8 @@
       "minor": "نابالغ کے طور پر نشان زد",
       "dateOfBirth": "تاریخِ پیدائش",
       "age": "عمر (سال)",
-      "timezone": "ٹائم زون"
+      "timezone": "ٹائم زون",
+      "uncontacted": "رابطہ نہیں کیا گیا"
     },
     "fieldGroups": {
       "journey": "سفر",

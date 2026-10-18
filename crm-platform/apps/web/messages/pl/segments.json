@@ -27,7 +27,8 @@
       "minor": "Oznaczony jako niepełnoletni",
       "dateOfBirth": "Data urodzenia",
       "age": "Wiek (lata)",
-      "timezone": "Strefa czasowa"
+      "timezone": "Strefa czasowa",
+      "uncontacted": "Bez kontaktu"
     },
     "fieldGroups": {
       "journey": "Ścieżka",

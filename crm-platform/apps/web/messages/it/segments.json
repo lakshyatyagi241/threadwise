@@ -27,7 +27,8 @@
       "minor": "Contrassegnato come minorenne",
       "dateOfBirth": "Data di nascita",
       "age": "Età (anni)",
-      "timezone": "Fuso orario"
+      "timezone": "Fuso orario",
+      "uncontacted": "Non contattato"
     },
     "fieldGroups": {
       "journey": "Percorso",

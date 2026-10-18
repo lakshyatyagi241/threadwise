@@ -1,0 +1,65 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "Nicht kontaktiert"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "Nicht kontaktiert",
+        "chipTitle": "Noch niemand im Team hat Kontakt aufgenommen",
+        "waitingSince": "Wartet seit {date}",
+        "markContacted": "Als kontaktiert markieren",
+        "markUncontacted": "Als nicht kontaktiert markieren",
+        "markedContacted": "Als kontaktiert markiert",
+        "markedUncontacted": "Als nicht kontaktiert markiert",
+        "markFailed": "Die Markierung konnte nicht geändert werden. Versuchen Sie es erneut.",
+        "bulkMarkedContacted": "{count, plural, one {# Kontakt als kontaktiert markiert} other {# Kontakte als kontaktiert markiert}}",
+        "bulkMarkedUncontacted": "{count, plural, one {# Kontakt als nicht kontaktiert markiert} other {# Kontakte als nicht kontaktiert markiert}}"
+      },
+      "settings": {
+        "save": "Speichern",
+        "discard": "Änderungen verwerfen",
+        "saved": "Einstellungen gespeichert",
+        "retry": "Erneut versuchen",
+        "loading": "Einstellungen werden geladen",
+        "conflict": "Jemand anderes hat diese Einstellungen gespeichert, während Sie sie bearbeitet haben. Sie werden unten erneut angezeigt; nehmen Sie Ihre Änderung noch einmal vor.",
+        "conflictOk": "Verstanden",
+        "errors": {
+          "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+          "forbidden": "Nur Personen, die die Workspace-Einstellungen verwalten, können diese Seite ändern.",
+          "conflict": "Jemand anderes hat diese Einstellungen zuerst geändert. Laden Sie die Seite neu und versuchen Sie es erneut.",
+          "validation": "Einige dieser Einstellungen sind ungültig. Prüfen Sie sie und versuchen Sie es erneut.",
+          "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+        },
+        "uncontacted": {
+          "title": "Nicht kontaktierte Leads",
+          "subtitle": "Markieren Sie Leads, die noch niemand erreicht hat, damit sie auffallen, bis sich jemand meldet. Es ändert sich nichts, solange Sie keine Option aktivieren.",
+          "clear": {
+            "title": "Als kontaktiert markieren",
+            "intro": "Die Markierung „Nicht kontaktiert“ automatisch entfernen, wenn ein Teammitglied eines der Folgenden tut:",
+            "contactButton": "Drückt eine Kontakt-Schaltfläche (Anruf, SMS, E-Mail oder WhatsApp) oder startet einen Anruf",
+            "message": "Sendet eine Nachricht, Vorlage, gespeicherte Antwort oder Datei aus dem gemeinsamen Posteingang",
+            "automation": "Eine Kampagne, ein Broadcast oder ein automatisierter Ablauf sendet an den Lead",
+            "activity": "Fügt der Zeitleiste eine Notiz, einen Termin oder eine andere Aktivität hinzu",
+            "manualHint": "Sie können die Markierung auch manuell ändern: Öffnen Sie bei einem Kontakt das Menü „Mehr“ oder wählen Sie mehrere Kontakte aus und nutzen Sie „Mehr“ in der Leiste über der Liste."
+          },
+          "new": {
+            "title": "Neue Leads als nicht kontaktiert markieren",
+            "intro": "Wenn ein Lead auf eine dieser Arten erstellt wird, als nicht kontaktiert markieren:",
+            "manual": "Manuell in der App erstellt",
+            "import": "Aus einer Datei oder Google Sheets importiert",
+            "leadSource": "Lead-Quellen, Formulare und Integrationen"
+          },
+          "reassign": {
+            "title": "Neu zugewiesene Leads",
+            "intro": "Wenn ein Lead einem neuen Besitzer zugewiesen oder neu zugewiesen wird:",
+            "keep": "Markierung „Nicht kontaktiert“ nicht ändern",
+            "mark": "Bei Neuzuweisung als nicht kontaktiert markieren"
+          }
+        }
+      }
+    }
+  }
+}

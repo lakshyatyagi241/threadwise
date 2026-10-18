@@ -27,7 +27,8 @@
       "minor": "已标记为未成年人",
       "dateOfBirth": "出生日期",
       "age": "年龄(岁)",
-      "timezone": "时区"
+      "timezone": "时区",
+      "uncontacted": "未联系"
     },
     "fieldGroups": {
       "journey": "旅程",

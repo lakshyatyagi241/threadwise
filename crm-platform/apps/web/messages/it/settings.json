@@ -374,6 +374,11 @@
         "label": "Proprietà delle aziende",
         "description": "Aggiungi i campi che vuoi mantenere su ogni azienda.",
         "keywords": "campi personalizzati, campi, obbligatorio, menu a discesa, organizzazione, account"
+      },
+      "uncontacted-leads": {
+        "label": "Lead non contattati",
+        "description": "Scegli quali azioni contano come contatto con un lead e quali nuovi contatti partono come non contattati.",
+        "keywords": "non contattato, contattato, lead, nuovo lead, primo contatto, follow-up, riassegnazione, contrassegno"
       }
     },
     "backToMarketplace": "Torna al Marketplace"
