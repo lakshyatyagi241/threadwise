@@ -46,7 +46,8 @@
       "ai_form_generations_monthly": "Gerações do criador de formulários com IA por mês",
       "sms_monthly": "SMS por mês",
       "email_mailboxes": "Caixas de e-mail",
-      "email_monthly": "E-mails por mês"
+      "email_monthly": "E-mails por mês",
+      "storage_gb": "Armazenamento (GB)"
     },
     "features": {
       "automation": "Automação",
@@ -136,7 +137,8 @@
       "ai_form_generations_monthly": "Gerações do criador de formulários com IA no mês do calendário, incluindo novas tentativas de correção. 0 = ilimitado.",
       "sms_monthly": "Mensagens SMS enviadas no mês civil. 0 = ilimitado.",
       "email_mailboxes": "Caixas do Gmail conectadas (uma desconectada libera o lugar). 0 = ilimitado.",
-      "email_monthly": "E-mails enviados no mês civil, respostas e e-mails de campanhas juntos. 0 = ilimitado."
+      "email_monthly": "E-mails enviados no mês civil, respostas e e-mails de campanhas juntos. 0 = ilimitado.",
+      "storage_gb": "Armazenamento que o espaço de trabalho pode manter, em GB (gravações de chamadas, mídia do chat, anexos de e-mail e arquivos). 0 = ilimitado. Por enquanto apenas medido: nada é bloqueado ainda."
     },
     "planAddons": {
       "title": "Complementos disponíveis no seu plano",

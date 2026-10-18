@@ -357,7 +357,8 @@
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "No permitido: este contacto está marcado como menor y tu espacio de trabajo frena el marketing.",
         "sale_share_opted_out": "No permitido: el contacto se excluyó de la venta o el uso compartido de sus datos.",
-        "on_dnc_list": "En tu lista No llamar: sin llamadas ni mensajes de marketing a este número"
+        "on_dnc_list": "En tu lista No llamar: sin llamadas ni mensajes de marketing a este número",
+        "legal_hold": "No permitido: el tratamiento de este contacto está limitado."
       }
     },
     "notice": {

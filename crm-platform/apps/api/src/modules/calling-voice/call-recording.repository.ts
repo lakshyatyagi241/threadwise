@@ -226,6 +226,7 @@ export class CallRecordingRepository {
       FROM wa_calls w
       LEFT JOIN call_recording_settings s ON s.org_id = w.org_id
       WHERE w.recording_path IS NOT NULL AND NOT w.recording_legal_hold
+        AND NOT is_subject_held(w.org_id, 'contact', w.contact_id)
         AND w.recording_stored_at < ${now.toISOString()}::timestamptz - make_interval(days => coalesce(s.retention_days, ${defaultDays}))
       ORDER BY w.recording_stored_at, w.id
       LIMIT ${limit}`);
@@ -254,6 +255,7 @@ export class CallRecordingRepository {
       FROM wa_calls w
       LEFT JOIN call_recording_settings s ON s.org_id = w.org_id
       WHERE w.org_id = ${orgId} AND w.id = ${callId} AND w.recording_path = ${key} AND NOT w.recording_legal_hold
+        AND NOT is_subject_held(w.org_id, 'contact', w.contact_id)
         AND w.recording_stored_at < ${now.toISOString()}::timestamptz - make_interval(days => coalesce(s.retention_days, ${defaultDays}))
       FOR UPDATE OF w SKIP LOCKED`);
     return rowsOf(res).length > 0;

@@ -13,6 +13,10 @@ import { SubjectResolver } from '../../../src/modules/privacy/engine/subject-res
 import { companyBriefs, revenueExports } from '../../../src/modules/privacy/manifests/derived';
 import type { PrivacyCtx } from '../../../src/modules/privacy/registry/types';
 import { RevenueExportRepository } from '../../../src/modules/crm/revenue-report/revenue-export.repository';
+import { LegalHoldGuard } from '../../../src/modules/privacy/legal-holds/legal-hold.guard';
+
+/** These tests hold nobody: the guard only reads through the transaction it is given, so it needs no database service of its own. */
+const noHold = new LegalHoldGuard(null as never);
 
 /**
  * Derived convenience copies leave with the person they were derived from (owner decision, legal reasoning in
@@ -505,7 +509,7 @@ describe('privacy: erasing a person removes their derived copies', () => {
   // --- helpers -----------------------------------------------------------------------------------------------------------------
 
   function eraser(): PersonalDataErasureService {
-    return new PersonalDataErasureService(new SubjectResolver());
+    return new PersonalDataErasureService(new SubjectResolver(), noHold);
   }
 
   async function inTx<T>(fn: (tx: Tx) => Promise<T>): Promise<T> {

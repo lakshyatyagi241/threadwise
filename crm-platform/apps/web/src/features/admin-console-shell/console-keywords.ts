@@ -54,6 +54,10 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
 
   'wap-providers': 'whatsapp providers bsp meta cloud interakt gupshup registry credentials',
   'wap-switch': 'switch provider number migrate whatsapp number change',
+  'data-retention':
+    'retention archive archival delete deletion storage logs audit log events cold glacier r2 s3 days keep purge ttl expire',
+  'wa-throughput':
+    'whatsapp throughput limits rate mps tps messages per second messaging tier quota pause throttle performance live 130429',
   'node-bridge': 'node bridge baileys qr unofficial whatsapp server token address sender pacing',
   'sms-channel': 'sms text message twilio msg91 channel switch enable disable platform',
   'webhook-forwarding':
@@ -73,6 +77,8 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'staff-roles': 'staff roles operators assign support auditor super admin',
   security: 'security center mfa two factor 2fa ip allowlist sessions password policy',
   'security-events': 'security events audit log activity logins failed login suspicious',
+  'dpdp-register':
+    'dpdp data protection act privacy compliance india rules consent breach grievance checklist register',
   registration: 'registration signup sign up policy invite approval email verification trial',
   'social-login': 'social login google facebook captcha recaptcha turnstile oauth sso',
   'auth-pages': 'auth pages login page signup page branding forgot password',

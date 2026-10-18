@@ -18,4 +18,15 @@ export const PRIVACY_ERROR_CODES = {
   PRIVACY_EXPORT_NOT_FOUND: 'PRIVACY_EXPORT_NOT_FOUND',
   /** The export is not ready (still building, failed) or its file has expired. 409. */
   PRIVACY_EXPORT_NOT_READY: 'PRIVACY_EXPORT_NOT_READY',
+  /**
+   * The record is under a legal hold: it cannot be erased or deleted now (BL-295). The message is deliberately neutral (it never says why or
+   * for what matter). On a rights erasure the case has been recorded as restricted (`restricted` in the problem details). 409.
+   */
+  LEGAL_HOLD_ACTIVE: 'LEGAL_HOLD_ACTIVE',
+  /** The subject already has an active legal hold: extend it instead of placing a second one. 409. */
+  LEGAL_HOLD_EXISTS: 'LEGAL_HOLD_EXISTS',
+  /** No such legal hold in this workspace. 404. */
+  LEGAL_HOLD_NOT_FOUND: 'LEGAL_HOLD_NOT_FOUND',
+  /** The hold is already released or expired. 409. */
+  LEGAL_HOLD_NOT_ACTIVE: 'LEGAL_HOLD_NOT_ACTIVE',
 } as const;

@@ -22,6 +22,8 @@ export interface LifecycleRow {
   retention_exempt_until: Date | null;
   retention_exempt_by: string | null;
   legal_hold: boolean;
+  /** A hold placed by the workspace itself on a person or on all its records (BL-295): the hold wins, like the operator's. */
+  tenant_hold: boolean;
   exempt_by_plan: boolean;
   reminders_archive: number;
   reminders_delete: number;
@@ -54,6 +56,7 @@ export class LifecycleRepository {
     SELECT o.id, o.uuid, o.name, o.slug, o.status, o.plan, o.last_activity_at, o.archived_at, o.deleted_at,
            o.archive_after_days, o.delete_after_days, o.retention_exempt,
            o.retention_exempt_reason, o.retention_exempt_until, o.retention_exempt_by, o.legal_hold,
+           org_has_active_legal_hold(o.id) AS tenant_hold,
            EXISTS (
              SELECT 1 FROM org_plan_state ps
                LEFT JOIN plans pl ON pl.slug = o.plan AND pl.kind = 'plan'
@@ -105,6 +108,7 @@ export class LifecycleRepository {
       SELECT id FROM organizations
        WHERE id > ${afterId}
          AND legal_hold = false
+         AND NOT org_has_active_legal_hold(id)
          AND (
            -- idle workspaces: the cheap pre-filter, the policy decides
            (status IN ('active', 'archived')

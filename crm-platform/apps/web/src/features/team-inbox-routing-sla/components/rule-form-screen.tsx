@@ -372,7 +372,7 @@ export function RuleFormBody({ rule }: { rule?: RoutingRule }) {
             onChange={() => set('escalates', !form.escalates)}
           />
           {form.escalates && (
-            <div className="space-y-2 pl-6">
+            <div className="space-y-2 ps-6">
               <Field
                 label={t('escalateMinutes')}
                 htmlFor={`${uid}-minutes`}
@@ -431,7 +431,7 @@ export function RuleFormBody({ rule }: { rule?: RoutingRule }) {
             onChange={() => set('autoReplies', !form.autoReplies)}
           />
           {form.autoReplies && (
-            <div className="space-y-2 pl-6">
+            <div className="space-y-2 ps-6">
               <Field
                 label={t('autoReplyBody')}
                 htmlFor={`${uid}-autoreply-body`}

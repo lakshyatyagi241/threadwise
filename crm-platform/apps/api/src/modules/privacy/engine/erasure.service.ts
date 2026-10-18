@@ -7,6 +7,7 @@ import { registeredSpecs } from '../registry';
 import { linkKinds } from '../registry/sql';
 import type { PrivacyCtx, ResolvedSubject, TableSpec, Tier } from '../registry/types';
 import { RequestContextStore } from '../../../common/context/request-context';
+import { LegalHoldGuard } from '../legal-holds/legal-hold.guard';
 import { SubjectResolver } from './subject-resolver';
 
 /** A rights erasure covers every tier. */
@@ -36,7 +37,10 @@ export interface ErasureRun {
  */
 @Injectable()
 export class PersonalDataErasureService {
-  constructor(private readonly resolver: SubjectResolver) {}
+  constructor(
+    private readonly resolver: SubjectResolver,
+    private readonly guard: LegalHoldGuard,
+  ) {}
 
   async run(
     tx: Tx,
@@ -160,6 +164,13 @@ export class PersonalDataErasureService {
     contactIds: readonly number[],
     mode: PrivacyHistoryMode,
   ): Promise<ErasureRun> {
+    // A contact under a legal hold cannot be deleted (BL-295): refused before anything is touched, for a single delete and for a bulk one.
+    await this.guard.assertContactsNotHeld(
+      tx,
+      orgId,
+      contactIds,
+      contactIds.length > 1 ? 'contact_bulk_delete' : 'contact_delete',
+    );
     const subject = await this.resolver.fromContacts(tx, orgId, contactIds);
     const run = await this.run(tx, {
       orgId,

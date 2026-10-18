@@ -36,7 +36,8 @@
       "stageFlag": "Ganado y perdido solo se pueden definir en una etapa del contacto, y una etapa no puede ser ambos.",
       "statusStage": "Ese estado pertenece a otra etapa. Elige un estado que corresponda a la etapa del contacto.",
       "stageScope": "Un estado solo se puede limitar a una de tus etapas del ciclo de vida.",
-      "planLimit": "Has alcanzado el límite de tu plan de {limit, plural, one {# contacto} other {# contactos}}. Mejora tu plan para añadir más, o elimina uno existente para liberar espacio."
+      "planLimit": "Has alcanzado el límite de tu plan de {limit, plural, one {# contacto} other {# contactos}}. Mejora tu plan para añadir más, o elimina uno existente para liberar espacio.",
+      "legalHold": "Este registro está protegido y no se puede borrar por ahora."
     },
     "list": {
       "title": "Centro de contactos",
@@ -338,7 +339,8 @@
       "sendCampaign": "Enviar campaña",
       "assignOwner": "Asignar responsable",
       "changeStage": "Cambiar etapa",
-      "more": "Más"
+      "more": "Más",
+      "held": "Este registro está protegido y no se puede borrar por ahora."
     },
     "form": {
       "addEyebrow": "Contacto nuevo",
@@ -609,7 +611,8 @@
         "tag_limit_reached": "se alcanzó el límite de etiquetas del plan",
         "invalid_date_of_birth": "la fecha de nacimiento no es una fecha con el año primero que pueda ser de nacimiento",
         "duplicate_in_file": "número repetido, combinado con una fila anterior",
-        "invalid_timezone": "zona horaria no válida"
+        "invalid_timezone": "zona horaria no válida",
+        "legal_hold": "registro protegido, sin cambios"
       },
       "statusHint": "Se aplica a los contactos que crea este archivo.",
       "queued": "Esperando para empezar...",

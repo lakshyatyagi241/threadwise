@@ -63,6 +63,7 @@ import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
 import { LocalizationTranslationModule } from './modules/localization-translation';
 import { PlatformAsyncOpsModule } from './modules/platform-async-ops';
+import { PlatformDataRetentionModule } from './modules/platform-data-retention';
 import { FailedOperationsModule } from './modules/failed-operations';
 import { WebhookRetryModule } from './modules/webhook-retry';
 import { PlatformSupportDeskModule } from './modules/platform-support-desk';
@@ -93,6 +94,7 @@ import { LeadScoringModule } from './modules/lead-scoring';
 import { ContactConsentModule } from './modules/contact-consent';
 import { PrivacyModule } from './modules/privacy';
 import { ComplianceCenterModule } from './modules/compliance-center';
+import { DpdpRegisterModule } from './modules/dpdp-register';
 import { AuditLogModule } from './modules/audit-log';
 import { ContactsPqlModule } from './modules/contacts-pql';
 import { MessageTemplatesModule } from './modules/message-templates';
@@ -115,6 +117,7 @@ import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { DeveloperRestApiV1Module } from './modules/developer-rest-api-v1';
 import { ChatMediaModule } from './infra/providers/chat-conversations/media';
+import { StorageMeterModule, StorageQuotaModule } from './modules/storage-quota';
 import { RealtimeModule } from './realtime/realtime.module';
 import { HealthModule } from './health/health.module';
 
@@ -217,6 +220,9 @@ import { HealthModule } from './health/health.module';
       // A link stops working when the person may no longer see the conversation the file belongs to.
       accessPolicy: { useClass: MessageMediaAccessPolicy },
     }),
+    // The storage meter (observe mode: measures every counted file, refuses nothing) and the operator's read-only storage view.
+    StorageMeterModule,
+    StorageQuotaModule,
     HealthModule,
 
     // Apps
@@ -250,6 +256,7 @@ import { HealthModule } from './health/health.module';
     DeveloperRestApiV1Module,
     PlatformSupportDeskModule,
     PlatformAsyncOpsModule,
+    PlatformDataRetentionModule,
     FailedOperationsModule,
     WebhookRetryModule,
     TeamChatModule,
@@ -263,6 +270,7 @@ import { HealthModule } from './health/health.module';
     ContactConsentModule,
     PrivacyModule,
     ComplianceCenterModule,
+    DpdpRegisterModule,
     AuditLogModule,
     ContactsPqlModule,
     WabaModule,

@@ -7,11 +7,13 @@ import { useNow, useTranslations } from 'next-intl';
 import { EmptyState, Menu, MenuItem, Spinner, cn } from '@crm/ui';
 import { CallingProvider, OnCallPanel } from '@/features/calling-voice';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
+import { usePersonaVisibility } from '@/features/persona';
 import { useTasksList } from '@/features/tasks';
 import { useContactDeals } from '../api/deals';
 import { useContactFiles } from '../api/files';
 import { useContactMeetings } from '../api/meetings';
 import { useContact } from '../api/contacts';
+import { useContactLegalHold } from '@/features/privacy-requests';
 import { displayName } from '../lib/contact-model';
 import { errorKind } from '../lib/errors';
 import { isClosedBooking } from '../lib/meeting-booking';
@@ -48,11 +50,15 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
   const tn = useTranslations('contacts-attributes-tags.contact.nav');
   const tr = useTranslations('contacts-attributes-tags.contact.record');
   const contact = useContact(id);
+  // The legal-hold banner (people who may read the register only; nothing is asked of the server for anyone else).
+  const legalHold = useContactLegalHold(id);
   const session = useSession();
   const router = useRouter();
   const pathname = usePathname();
   const search = useSearchParams();
-  const tabs = useMemo(
+  const persona = usePersonaVisibility();
+  // What the person's permissions allow: it decides which section opens, so a link to a section the persona hides still works.
+  const permitted = useMemo(
     () => pageTabs((permission) => permission in session.permissions),
     [session.permissions],
   );
@@ -113,8 +119,13 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
 
   const c = contact.data;
   // A section this person cannot open (no permission) falls back to the overview.
-  const allowed = [...tabs.primary, ...tabs.more];
+  const allowed = [...permitted.primary, ...permitted.more];
   const current: SectionId = allowed.includes(section) ? section : 'overview';
+  // The strip leaves out what the workspace's persona hides (spared while it is the section on screen); nothing is closed.
+  const tabs = pageTabs(
+    (permission) => permission in session.permissions,
+    (s) => s !== current && persona.isSectionHidden(s),
+  );
   const open = (s: SectionId) => router.push(sectionHref(id, s));
   // Note, Task, Call and Meeting open the compose box where it is (Overview, Activity), else on the Activity tab; the company opens its card.
   const onAdd = (target: AddTarget, opts?: { clickedAt?: number }) => {
@@ -158,6 +169,7 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
           data-testid="contact-center"
           className="thin-scrollbar flex min-w-0 flex-col md:col-start-2 md:row-start-1 xl:min-h-0 xl:overflow-y-auto"
         >
+          {legalHold.banner && <div className="pb-3">{legalHold.banner}</div>}
           <ContactTabs contactId={id} current={current} tabs={tabs} counts={counts} />
           <div className="flex min-h-0 flex-1 flex-col gap-3 pt-3">
             <CallNudge

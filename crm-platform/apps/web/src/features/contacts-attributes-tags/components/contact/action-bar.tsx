@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { ConfirmDialog, Menu, MenuItem, MenuSeparator, useToast, cn } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useCanPickCompany } from '@/features/companies';
+import { usePersonaVisibility } from '@/features/persona';
 import { useCanLogCall } from '../../api/call-log';
 import type { ContactTouchChannel } from '@crm/contracts';
 import { clearFollowUp, reportContactTouch, setUncontacted } from '../../api/lead-handling';
@@ -14,6 +15,7 @@ import { deleteContact, invalidateContacts } from '../../api/contacts';
 import { useChannels, openConversation } from '../../api/single-send';
 import type { ContactRow } from '../../api/schemas';
 import { displayName } from '../../lib/contact-model';
+import { errorKind } from '../../lib/errors';
 import { messageRoute, quickActions } from '../../lib/row-actions';
 import { rowView } from '../../lib/row-view';
 import { emailChannels, whatsappChannels, type SendChannel } from '../../lib/single-send';
@@ -39,7 +41,7 @@ import {
 import { SingleSendDrawer, type SingleSendTarget } from '../single-send-drawer';
 import { notifyCallClick, rememberPhoneClick } from './call-nudge';
 import { FieldHistoryDrawer } from './field-history';
-import { ContactPrivacyMenuItems } from '@/features/privacy-requests';
+import { ContactPrivacyMenuItems, useContactLegalHold } from '@/features/privacy-requests';
 import { FollowUpDialog } from '../lead-handling/next-follow-up';
 
 const button =
@@ -111,6 +113,8 @@ export function ContactActionBar({
   const t = useTranslations('contacts-attributes-tags.contact.actions');
   const tr = useTranslations('contacts-attributes-tags.contact.record.actions');
   const tl = useTranslations('contacts-attributes-tags.list');
+  const te = useTranslations('contacts-attributes-tags.errors');
+  const legalHold = useContactLegalHold(contact.id);
   const ts = useTranslations('contacts-attributes-tags.singleSend');
   const tu = useTranslations('contacts-attributes-tags.leadHandling.uncontacted');
   const tfu = useTranslations('contacts-attributes-tags.leadHandling.followUp');
@@ -124,6 +128,11 @@ export function ContactActionBar({
   const canPickCompany = useCanPickCompany();
   const { permissions } = useSession();
   const tasksOpen = sectionAllowed(SECTION_OF_TARGET.task, (p) => p in permissions);
+  // Buttons the workspace's persona hides (`action:contact.<id>`). Only what is drawn changes; the endpoints behind them stay open.
+  const { isActionHidden } = usePersonaVisibility();
+  const showNote = canUpdate && !isActionHidden('note');
+  const showTask = canTask && tasksOpen && !isActionHidden('task');
+  const showMeeting = canUpdate && !isActionHidden('meeting');
   const qc = useQueryClient();
   const router = useRouter();
   const channels = useChannels(canSend);
@@ -182,9 +191,9 @@ export function ContactActionBar({
       toast(tl('deleted'), 'success');
       onDeleted();
     },
-    onError: () => {
+    onError: (err) => {
       setDeleting(false);
-      toast(t('deleteFailed'), 'danger');
+      toast(errorKind(err) === 'legalHold' ? te('legalHold') : t('deleteFailed'), 'danger');
     },
   });
 
@@ -234,7 +243,7 @@ export function ContactActionBar({
       {callIcon[way]} {callText[way]}
     </MenuItem>
   ));
-  const showCall = canCall || canLogCall;
+  const showCall = (canCall || canLogCall) && !isActionHidden('call');
   const callLabel = callMain === 'log' ? tr('logCall') : tr('call');
 
   // --- Message: the chat (else the mailbox) is the button, the template message and e-mail are in the menu ----------------
@@ -285,7 +294,7 @@ export function ContactActionBar({
           <PencilIcon /> {t('edit')}
         </MenuItem>
       )}
-      {canUpdate && canPickCompany && (
+      {canUpdate && canPickCompany && !isActionHidden('company') && (
         <MenuItem onSelect={() => onAdd('company')}>
           <BuildingIcon /> {contact.companyId ? t('changeCompany') : t('addCompany')}
         </MenuItem>
@@ -309,6 +318,7 @@ export function ContactActionBar({
         <HistoryIcon /> {tr('fieldHistory')}
       </MenuItem>
       <ContactPrivacyMenuItems contactId={contact.id} />
+      {legalHold.items}
       {canDelete && <MenuSeparator />}
       {canDelete && (
         <MenuItem danger onSelect={() => setDeleting(true)}>
@@ -330,6 +340,7 @@ export function ContactActionBar({
       )}
       <FieldHistoryDrawer open={history} onClose={() => setHistory(false)} contactId={contact.id} />
       <SingleSendDrawer target={target} onClose={() => setTarget(null)} />
+      {legalHold.dialogs}
       <ConfirmDialog
         open={deleting}
         tone="danger"
@@ -377,7 +388,7 @@ export function ContactActionBar({
         aria-label={tr('label')}
         className={cn('flex flex-wrap items-start justify-between gap-y-2', className)}
       >
-        {canUpdate && (
+        {showNote && (
           <RoundAction label={t('note')}>
             <button
               type="button"
@@ -442,7 +453,7 @@ export function ContactActionBar({
             )}
           </RoundAction>
         )}
-        {canTask && tasksOpen && (
+        {showTask && (
           <RoundAction label={t('task')}>
             <button
               type="button"
@@ -455,7 +466,7 @@ export function ContactActionBar({
             </button>
           </RoundAction>
         )}
-        {canUpdate && (
+        {showMeeting && (
           <RoundAction label={t('meeting')}>
             <button
               type="button"
@@ -491,7 +502,7 @@ export function ContactActionBar({
         aria-label={tr('label')}
         className="thin-scrollbar flex min-w-0 flex-1 items-center gap-1.5 max-sm:overflow-x-auto"
       >
-        {canUpdate && (
+        {showNote && (
           <button
             type="button"
             className={cn(button, 'rounded-md')}
@@ -502,7 +513,7 @@ export function ContactActionBar({
             <Label>{t('note')}</Label>
           </button>
         )}
-        {canTask && tasksOpen && (
+        {showTask && (
           <button
             type="button"
             className={cn(button, 'rounded-md')}
@@ -535,7 +546,7 @@ export function ContactActionBar({
             }
           />
         )}
-        {canUpdate && (
+        {showMeeting && (
           <button
             type="button"
             className={cn(button, 'rounded-md')}

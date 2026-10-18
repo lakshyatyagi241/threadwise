@@ -23,7 +23,11 @@
       "exportNotReady": "Dat bestand is niet gereed of verlopen. Bereid een nieuwe export voor.",
       "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
       "validation": "Sommige waarden zijn ongeldig. Controleer het formulier en probeer het opnieuw.",
-      "unexpected": "Er ging iets mis. Probeer het opnieuw."
+      "unexpected": "Er ging iets mis. Probeer het opnieuw.",
+      "holdActive": "Dit record is beschermd en kan momenteel niet worden verwijderd.",
+      "holdExists": "Deze persoon heeft al een actieve juridische bewaring. Verleng die om nog een zaak toe te voegen.",
+      "holdNotFound": "Deze juridische bewaring bestaat niet meer.",
+      "holdNotActive": "Deze juridische bewaring is al beëindigd."
     },
     "type": {
       "access": "Inzage",
@@ -182,7 +186,12 @@
           "erase_previewed": "Wissen bekeken in voorvertoning",
           "erased": "Gegevens gewist",
           "completed": "Verzoek afgerond",
-          "other": "Bijwerken"
+          "other": "Bijwerken",
+          "restricted": "Beperkt: juridische bewaring",
+          "erasure_queued": "Wissing bevestigd, wacht op het einde van de bewaring",
+          "restriction_lifted": "Beperking opgeheven",
+          "resume_skipped": "Automatische wissing overgeslagen",
+          "resume_failed": "Automatische wissing mislukt, voer die handmatig uit"
         }
       },
       "verify": {
@@ -284,6 +293,168 @@
       "erase": "Deze persoon wissen",
       "created": "Verzoek {reference} aangemaakt.",
       "failed": "Het verzoek kon niet worden aangemaakt."
+    },
+    "legalHold": {
+      "close": "Sluiten",
+      "tab": {
+        "label": "Privacy",
+        "requests": "Gegevensverzoeken",
+        "holds": "Juridische bewaringen"
+      },
+      "requesterResponse": "We hebben uw verzoek ontvangen. We zijn verplicht een deel van uw gegevens te bewaren om aan een wettelijke verplichting te voldoen, dus we kunnen ze nu niet wissen. We hebben het gebruik ervan beperkt en wissen ze zodra de verplichting eindigt. U kunt een klacht indienen bij uw gegevensbeschermingsautoriteit.",
+      "contactBanner": "Juridische bewaring: wissen en verwijderen gepauzeerd",
+      "workspaceBanner": "Juridische bewaring op de hele werkruimte: wissen en verwijderen gepauzeerd",
+      "caseStatus": "Beperkt: juridische bewaring",
+      "blockedMessage": "Dit record is beschermd en kan momenteel niet worden verwijderd.",
+      "listFilter": "Wacht op een juridische bewaring",
+      "banner": {
+        "caseRef": "Zaak {caseRef}",
+        "reviewBy": "beoordelen vóór {date}",
+        "reviewOverdue": "beoordeling achterstallig sinds {date}",
+        "effects": "Marketing, AI-verwerking en exports zijn beperkt, en elke toegang wordt vastgelegd.",
+        "open": "Register openen"
+      },
+      "category": {
+        "legal_obligation": "Wettelijke verplichting",
+        "legal_claim": "Rechtsvordering of geschil",
+        "regulator_request": "Verzoek van toezichthouder of opsporingsinstantie",
+        "internal_investigation": "Intern onderzoek"
+      },
+      "scope": {
+        "contact": "Contact",
+        "lead": "Lead",
+        "workspace": "Hele werkruimte"
+      },
+      "status": {
+        "active": "Actief",
+        "released": "Opgeheven",
+        "expired": "Verlopen"
+      },
+      "menu": {
+        "place": "Juridische bewaring instellen...",
+        "release": "Juridische bewaring opheffen..."
+      },
+      "place": {
+        "title": "Een juridische bewaring instellen voor dit contact",
+        "workspaceTitle": "Een juridische bewaring instellen voor de hele werkruimte",
+        "intro": "Zolang de bewaring duurt, worden wissing, verwijdering en opschoning van bewaartermijnen voor deze persoon geweigerd, en zijn marketing, AI-verwerking en exports van zijn of haar gegevens beperkt. De klantenservice gaat gewoon door.",
+        "workspaceIntro": "Alle personen in de werkruimte vallen onder de bewaring: wissing, verwijdering, opschoning van bewaartermijnen en het verwijderen van een verlopen werkruimte worden geweigerd, en marketing, AI-verwerking en exports zijn beperkt. Gebruik dit voor een bevel dat alle records omvat.",
+        "category": "Waarom worden de gegevens bewaard?",
+        "categoryPick": "Kies een reden",
+        "caseRef": "Zaakreferentie",
+        "caseRefHint": "Uw eigen referentie: een dossier bij de rechtbank, een ticket, het nummer op een brief van een toezichthouder.",
+        "note": "Notitie (optioneel)",
+        "noteHint": "Schrijf hier geen namen, telefoonnummers of details van de zaak.",
+        "reviewAt": "Beoordelen vóór (optioneel)",
+        "reviewHint": "Het register markeert de bewaring wanneer deze datum verstrijkt.",
+        "expiresAt": "Eindigt op (optioneel)",
+        "expiresHint": "Na deze datum eindigt de bewaring vanzelf.",
+        "submit": "Bewaring instellen",
+        "submitting": "Bezig met instellen...",
+        "done": "Juridische bewaring ingesteld.",
+        "target": "Geldt voor",
+        "targetPerson": "Eén persoon",
+        "targetWorkspace": "De hele werkruimte",
+        "change": "Wijzigen",
+        "search": "De persoon zoeken",
+        "searchHint": "Typ een naam, telefoonnummer of e-mailadres (minstens twee tekens).",
+        "noResults": "Niemand gevonden."
+      },
+      "release": {
+        "title": "Deze juridische bewaring opheffen",
+        "message": "Verwijdering, opschoning van bewaartermijnen en marketing kunnen dan weer worden hervat voor deze betrokkene. Wissingsverzoeken die op deze bewaring wachten, verlaten de beperkte status, en een wissing die al door iemand is bevestigd, wordt binnen een minuut automatisch uitgevoerd.",
+        "cases": "{count, plural, one {# gegevensverzoek wacht op deze bewaring.} other {# gegevensverzoeken wachten op deze bewaring.}}",
+        "reason": "Waarom wordt deze opgeheven? (optioneel)",
+        "reasonHint": "Schrijf geen namen of details van de zaak.",
+        "submit": "Bewaring opheffen",
+        "submitting": "Bezig met opheffen...",
+        "done": "Juridische bewaring opgeheven.",
+        "doneResuming": "{count, plural, one {Juridische bewaring opgeheven. # bevestigde wissing wordt nu uitgevoerd.} other {Juridische bewaring opgeheven. # bevestigde wissingen worden nu uitgevoerd.}}"
+      },
+      "extend": {
+        "title": "Deze juridische bewaring verlengen",
+        "caseRefNow": "Huidige zaakreferentie: {caseRef}",
+        "addCaseRef": "Nog een zaakreferentie toevoegen",
+        "addCaseRefHint": "Een tweede zaak over dezelfde persoon wordt aan dezelfde bewaring toegevoegd.",
+        "clearHint": "Maak de datum leeg om hem te verwijderen.",
+        "submit": "Wijzigingen opslaan",
+        "submitting": "Bezig met opslaan...",
+        "done": "Juridische bewaring bijgewerkt."
+      },
+      "review": {
+        "title": "Een beoordeling vastleggen",
+        "message": "Legt vast dat u deze bewaring opnieuw hebt bekeken en dat die nog steeds van toepassing is.",
+        "next": "Volgende beoordeling vóór (optioneel)",
+        "nextHint": "Laat leeg om de huidige beoordelingsdatum te behouden.",
+        "submit": "Beoordeling vastleggen",
+        "submitting": "Bezig met opslaan...",
+        "done": "Beoordeling vastgelegd."
+      },
+      "actions": {
+        "review": "Beoordelen",
+        "extend": "Verlengen",
+        "release": "Opheffen"
+      },
+      "register": {
+        "title": "Juridische bewaringen",
+        "subtitle": "Personen en records waarvan de wissing en verwijdering zijn gepauzeerd omdat de gegevens bewaard moeten blijven. Een bewaring voor één persoon wordt ingesteld vanaf de pagina van dat contact.",
+        "export": "CSV exporteren",
+        "empty": "Geen juridische bewaringen.",
+        "emptyFiltered": "Geen juridische bewaringen komen overeen met deze filters.",
+        "loadMore": "Meer laden",
+        "loadingMore": "Bezig met laden...",
+        "none": "-",
+        "overdue": "Beoordeling achterstallig",
+        "cases": "{count, plural, one {# verzoek wacht} other {# verzoeken wachten}}",
+        "open": "De bewaring met zaakreferentie {caseRef} openen",
+        "filters": {
+          "label": "Filters",
+          "status": "Status",
+          "category": "Reden",
+          "scope": "Geldt voor",
+          "caseRef": "Zaakreferentie",
+          "reviewDue": "Beoordeling achterstallig",
+          "any": "Alle"
+        },
+        "columns": {
+          "subject": "Betrokkene",
+          "category": "Reden",
+          "caseRef": "Zaakreferentie",
+          "placed": "Ingesteld",
+          "review": "Beoordelen vóór",
+          "expires": "Eindigt",
+          "status": "Status",
+          "actions": "Acties"
+        },
+        "place": "Juridische bewaarplicht instellen..."
+      },
+      "detail": {
+        "title": "Juridische bewaring",
+        "history": "Geschiedenis",
+        "releasedAt": "Beëindigd",
+        "by": "door {actor}",
+        "system": "het systeem",
+        "action": {
+          "insert": "Bewaring ingesteld",
+          "update": "Bewaring gewijzigd",
+          "delete": "Bewaring beëindigd",
+          "other": "Bijwerking"
+        }
+      },
+      "case": {
+        "body": "De gegevens van deze persoon worden bewaard en vergrendeld zolang een juridische bewaring geldt. De wissing wordt niet uitgevoerd, marketing, AI-verwerking en exports zijn beperkt, en de termijn blijft doorlopen.",
+        "requesterTitle": "Antwoord aan de persoon",
+        "requesterHint": "Vermeldt dat de gegevens op grond van een wettelijke verplichting worden bewaard, zonder de reden te noemen. Een jurist kan deze tekst in de privacyinstellingen vervangen.",
+        "copy": "Tekst kopiëren",
+        "copied": "Gekopieerd",
+        "queueHint": "U kunt de wissing nu nog bevestigen: die wordt vastgelegd, er wordt niets gewist, en de wissing wordt vanzelf uitgevoerd wanneer de bewaring eindigt.",
+        "queue": "Wissing bevestigen voor het einde van de bewaring",
+        "queued": "Vastgelegd. Er is niets gewist; de wissing wordt vanzelf uitgevoerd wanneer de bewaring eindigt."
+      },
+      "settings": {
+        "noticeLabel": "Antwoord aan een persoon van wie de wissing is uitgesteld",
+        "noticeHint": "De tekst van uw jurist. Laat leeg om de standaardtekst te gebruiken. Noem de zaak of de reden niet."
+      }
     }
   }
 }

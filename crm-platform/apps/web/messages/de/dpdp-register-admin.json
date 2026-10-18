@@ -1,0 +1,440 @@
+{
+  "dpdp-register-admin": {
+    "nav": {
+      "group": "Datenschutz",
+      "register": "DPDP-Register"
+    },
+    "page": {
+      "eyebrow": "Admin · Team · DPDP-Register",
+      "title": "DPDP-Register",
+      "disclaimer": "Erfasst, was die Plattform heute im Verhältnis zur DPDP Act und zu den DPDP Rules tut. Es ist kein Konformitätszertifikat.",
+      "checkedAt": "Geprüft: {time}",
+      "refresh": "Aktualisieren"
+    },
+    "summary": {
+      "label": "Zusammenfassung des Registers",
+      "counts": {
+        "title": "Pflichten nach Status",
+        "counted": "{total, plural, one {# Pflicht gezählt} other {# Pflichten gezählt}}",
+        "notCounted": "Zeilen mit „Nicht anwendbar“ werden aufgelistet, aber nicht gezählt."
+      },
+      "milestones": {
+        "title": "Anstehende Termine",
+        "names": {
+          "consent_managers": "Registrierung von Einwilligungsmanagern (rule 4)",
+          "main_duties": "Hauptpflichten der DPDP Rules"
+        },
+        "left": "Noch etwa {days, plural, =0 {0 Tage} one {# Tag} other {# Tage}}",
+        "passed": "Dieses Datum ist verstrichen"
+      },
+      "tiers": {
+        "title": "Sanktionsstufen",
+        "tier": "Sanktionsstufe",
+        "hint": "Pflichten, die nicht, nur teilweise oder ungeprüft befolgt werden, nach der jeweils geltenden Sanktionsobergrenze."
+      }
+    },
+    "status": {
+      "following": "Befolgt",
+      "partial": "Teilweise",
+      "not_following": "Nicht befolgt",
+      "unverified": "Ungeprüft",
+      "not_applicable": "Nicht anwendbar"
+    },
+    "result": {
+      "pass": "Bestanden",
+      "fail": "Fehlgeschlagen",
+      "unknown": "Unbekannt"
+    },
+    "source": {
+      "live": "Live gelesen",
+      "attested": "Bestätigt",
+      "code": "Vom Code deklariert"
+    },
+    "filters": {
+      "label": "Nach Status filtern",
+      "all": "Alle",
+      "shown": "{count, plural, one {# Pflicht angezeigt} other {# Pflichten angezeigt}}",
+      "empty": {
+        "title": "Keine Pflicht passt zu diesem Filter",
+        "message": "Derzeit hat keine Pflicht diesen Status.",
+        "reset": "Alle anzeigen"
+      }
+    },
+    "groups": {
+      "A": "Rechtsgrundlagen, Hinweis, Einwilligung (ss4 to 7, rule 3)",
+      "B": "Rechte und Beschwerden (ss11 to 15, rule 14)",
+      "C": "Aufbewahrung und Löschung (s8(7), (8), rule 8)",
+      "D": "Sicherheit (s8(4), (5), rule 6)",
+      "E": "Datenschutzverletzung (s8(6), rule 7)",
+      "F": "Kinder (s9, rules 10 to 12, Vierter Anhang)",
+      "G": "Übermittlungen und Auftragsverarbeiter (ss8(1), 8(2), 16, rules 13(4), 15)",
+      "H": "Bedeutender Datentreuhänder (s10, rule 13)",
+      "I": "Governance und Durchsetzung (ss27 to 33, rule 19)"
+    },
+    "owners": {
+      "tenant": "Arbeitsbereich",
+      "platform": "Plattform",
+      "both": "Arbeitsbereich und Plattform"
+    },
+    "tiers": {
+      "50": "Rs 50 crore",
+      "150": "Rs 150 crore",
+      "200": "Rs 200 crore",
+      "250": "Rs 250 crore",
+      "none": "Keine Sanktionsstufe"
+    },
+    "item": {
+      "citation": "Fundstelle",
+      "owner": "Verantwortlich",
+      "penalty": "Sanktionsstufe",
+      "plan": "Planpunkte",
+      "conditional": "Nur wenn bekanntgegeben",
+      "checks": "Prüfungen",
+      "noChecks": "Deklarierter Status. Noch keine Prüfung liest ihn."
+    },
+    "check": {
+      "lapsed": "Abgelaufen",
+      "note": "Notiz:",
+      "evidence": "Link zum Nachweis"
+    },
+    "items": {
+      "r01": {
+        "title": "Personenbezogene Daten nur mit Einwilligung oder für eine zulässige Verwendung verarbeiten"
+      },
+      "r02": {
+        "title": "Vor der Bitte um Einwilligung einen eigenständigen, detaillierten Hinweis geben"
+      },
+      "r03": {
+        "title": "Personen informieren, die vor Inkrafttreten des Gesetzes eingewilligt haben"
+      },
+      "r04": {
+        "title": "Hinweis und Einwilligung auf Englisch oder in einer gelisteten Sprache anbieten"
+      },
+      "r05": {
+        "title": "Eine freiwillige, bestimmte, informierte und eindeutige Einwilligung einholen"
+      },
+      "r06": {
+        "title": "In jeder Einwilligungsanfrage eine Kontaktperson angeben"
+      },
+      "r07": {
+        "title": "Den Widerruf der Einwilligung so einfach machen wie ihre Erteilung"
+      },
+      "r08": {
+        "title": "Bei Widerruf die Verarbeitung stoppen und Auftragsverarbeiter stoppen lassen"
+      },
+      "r09": {
+        "title": "Hinweis und Einwilligung nachweisen können"
+      },
+      "r10": {
+        "title": "Freiwillig bereitgestellte Daten nur für den genannten Zweck verwenden"
+      },
+      "r11": {
+        "title": "Einwilligungen annehmen, die über einen Einwilligungsmanager erteilt oder widerrufen wurden"
+      },
+      "r12": {
+        "title": "Jeden ausgehenden Versand zum Versandzeitpunkt von der Einwilligung abhängig machen"
+      },
+      "r13": {
+        "title": "Gespeicherte Daten, Verarbeitung und Empfänger zusammenfassen"
+      },
+      "r14": {
+        "title": "Personenbezogene Daten auf Anfrage berichtigen, vervollständigen und aktualisieren"
+      },
+      "r15": {
+        "title": "Auf Anfrage löschen, sofern nicht für den Zweck oder per Gesetz nötig"
+      },
+      "r16": {
+        "title": "Ein veröffentlichtes Beschwerdeverfahren betreiben und binnen 90 Tagen antworten"
+      },
+      "r17": {
+        "title": "Personen ermöglichen, jemanden für den Todes- oder Unfähigkeitsfall zu benennen"
+      },
+      "r18": {
+        "title": "Veröffentlichen, wie man eine Anfrage stellt und welche Kennung nötig ist"
+      },
+      "r19": {
+        "title": "Eine Kontaktstelle veröffentlichen und in jede Antwort aufnehmen"
+      },
+      "r20": {
+        "title": "Identität prüfen, Anfragen drosseln und Rechteanfragen auditieren"
+      },
+      "r21": {
+        "title": "Daten richtig und vollständig halten, wenn sie Entscheidungen steuern"
+      },
+      "r22": {
+        "title": "Rechte der eigenen Mitarbeitenden der Plattform, von Rechnungskontakten und Besuchern wahren"
+      },
+      "r23": {
+        "title": "Daten löschen, wenn die Einwilligung widerrufen wird oder der Zweck endet"
+      },
+      "r24": {
+        "title": "Inaktive Daten nach drei Jahren löschen, mit 48 Stunden Vorankündigung"
+      },
+      "r25": {
+        "title": "Personenbezogene Daten und Protokolle mindestens ein Jahr aufbewahren"
+      },
+      "r26": {
+        "title": "Den Inaktivitäts-Lebenszyklus der Arbeitsbereiche ausführen"
+      },
+      "r27": {
+        "title": "Daten durch Verschlüsselung, Maskierung oder Tokens schützen"
+      },
+      "r28": {
+        "title": "Den Zugriff auf Computerressourcen kontrollieren"
+      },
+      "r29": {
+        "title": "Den Zugriff auf personenbezogene Daten protokollieren und überwachen"
+      },
+      "r30": {
+        "title": "Daten sichern, damit die Verarbeitung nach einem Verlust weiterlaufen kann"
+      },
+      "r31": {
+        "title": "Protokolle ein Jahr aufbewahren, um Vorfälle zu erkennen und zu untersuchen"
+      },
+      "r32": {
+        "title": "In jedem Auftragsverarbeitervertrag eine Sicherheitsklausel haben"
+      },
+      "r33": {
+        "title": "Die geltenden Sicherheitsmaßnahmen nachweisen können"
+      },
+      "r34": {
+        "title": "Allgemein angemessene Sicherheitsvorkehrungen aufrechterhalten"
+      },
+      "r35": {
+        "title": "KI-Pfade kontrollieren, die Kontakttexte an Dritte senden"
+      },
+      "r36": {
+        "title": "Jede betroffene Person unverzüglich über eine Datenschutzverletzung informieren"
+      },
+      "r37": {
+        "title": "Den Datenschutzausschuss über eine Verletzung informieren, dann binnen 72 Stunden berichten"
+      },
+      "r38": {
+        "title": "Als Auftragsverarbeiter den Arbeitsbereich schnell genug über eine Verletzung informieren"
+      },
+      "r39": {
+        "title": "Vor der Verarbeitung von Kinderdaten eine überprüfbare Einwilligung der Eltern einholen"
+      },
+      "r40": {
+        "title": "Kein Tracking, keine Verhaltensüberwachung und keine gezielte Werbung für Kinder"
+      },
+      "r41": {
+        "title": "Die Ausnahmen des Vierten Anhangs für Pflichten bei Kinderdaten anwenden"
+      },
+      "r42": {
+        "title": "Grenzen der Regierung für Datenübermittlungen ins Ausland beachten"
+      },
+      "r43": {
+        "title": "Verantwortlich bleiben für das, was Auftragsverarbeiter tun"
+      },
+      "r44": {
+        "title": "Pflichten des Bedeutenden Datentreuhänders erfüllen, nur wenn bekanntgegeben"
+      },
+      "r45": {
+        "title": "Binnen sechs Monaten Nachweise für eine Untersuchung des Datenschutzausschusses liefern"
+      },
+      "r46": {
+        "title": "Die eigenen Hinweise der Plattform, die Zustimmung zu den Bedingungen und die Cookie-Auswahl pflegen"
+      },
+      "r47": {
+        "title": "Eine Kontaktstelle der Plattform und einen Beschwerdeweg benennen"
+      }
+    },
+    "details": {
+      "probe_error": "Das konnte gerade nicht gelesen werden, daher ist das Ergebnis unbekannt.",
+      "probe_missing": "Für diese Prüfung kam keine Messung zurück.",
+      "env_missing": "{key} ist nicht gesetzt, daher konnte dies nicht gelesen werden.",
+      "attestation_missing": "Das hat noch niemand erfasst.",
+      "attestation_expired": "Die von {name} am {date} erfasste Erklärung ist am {expires} abgelaufen. Sie zählt nicht mehr.",
+      "attested_pass": "Von {name} am {date} als vorhanden erfasst. Zählt bis {expires}.",
+      "attested_fail": "Von {name} am {date} als nicht vorhanden erfasst. Zählt bis {expires}.",
+      "code_declared": "Im Code deklariert, nicht zur Laufzeit gemessen. Die Änderung, die die Lücke schließt, aktualisiert es.",
+      "unrecognised": "Diese Konsole hat noch keine Beschreibung für dieses Ergebnis ({detail})."
+    },
+    "checks": {
+      "mfa_operators": {
+        "title": "Super-Admins müssen sich mit Zwei-Faktor-Authentifizierung anmelden",
+        "details": {
+          "mfa_on": "Die Zwei-Faktor-Anmeldung ist für Super-Admins vorgeschrieben.",
+          "mfa_off": "Nicht vorgeschrieben: Super-Admins können sich ohne zweiten Faktor anmelden."
+        }
+      },
+      "mfa_workspace_admins": {
+        "title": "Administratoren von Arbeitsbereichen müssen sich mit Zwei-Faktor-Authentifizierung anmelden",
+        "details": {
+          "mfa_on": "Die Zwei-Faktor-Anmeldung ist für Administratoren von Arbeitsbereichen vorgeschrieben.",
+          "mfa_off": "Nicht vorgeschrieben: Administratoren von Arbeitsbereichen können sich ohne zweiten Faktor anmelden."
+        }
+      },
+      "logs_audit_retention": {
+        "title": "Das Audit-Protokoll wird mindestens ein Jahr aufbewahrt",
+        "details": {
+          "retention_ok": "Aufbewahrt für {days, plural, one {# Tag} other {# Tage}}.",
+          "retention_unlimited": "Wird nie bereinigt (0 Tage), also mindestens ein Jahr aufbewahrt.",
+          "retention_below_floor": "Nur für {days, plural, one {# Tag} other {# Tage}} aufbewahrt; die DPDP Rules verlangen mindestens 365."
+        }
+      },
+      "logs_session_retention": {
+        "title": "Beendete Sitzungen werden mindestens ein Jahr aufbewahrt",
+        "details": {
+          "retention_ok": "Beendete Sitzungen werden nach {days, plural, one {# Tag} other {# Tagen}} bereinigt.",
+          "retention_below_floor": "Beendete Sitzungen werden nach {days, plural, one {# Tag} other {# Tagen}} bereinigt, unter den 365, die die DPDP Rules verlangen."
+        }
+      },
+      "redis_auth": {
+        "title": "Redis braucht ein Passwort oder nutzt TLS",
+        "details": {
+          "redis_auth_on": "Die konfigurierte Redis-Adresse enthält ein Passwort oder nutzt TLS.",
+          "redis_auth_off": "Die konfigurierte Redis-Adresse hat kein Passwort und nutzt kein TLS."
+        }
+      },
+      "crypto_rotation_complete": {
+        "title": "Im Schlüsselbund bleiben keine früheren Verschlüsselungsschlüssel",
+        "details": {
+          "rotation_complete": "Es sind keine früheren Schlüssel konfiguriert.",
+          "previous_keys_present": "Frühere Schlüssel sind noch konfiguriert, die Schlüsselrotation ist also nicht abgeschlossen."
+        }
+      },
+      "lifecycle_enabled": {
+        "title": "Der Inaktivitäts-Lebenszyklus der Arbeitsbereiche ist aktiv",
+        "details": {
+          "lifecycle_on": "Aktiviert, kein Probelauf, und das Löschen ist eingeschaltet.",
+          "lifecycle_off": "{enabled, select, true {Aktiviert} other {Deaktiviert}}, {dryRun, select, true {Probelauf an} other {Probelauf aus}}, {deleteEnabled, select, true {Löschen an} other {Löschen aus}}."
+        }
+      },
+      "errors_vendor_region": {
+        "title": "Fehlerberichte bleiben in Indien oder sind ausgeschaltet",
+        "details": {
+          "sentry_off": "Die Fehlerberichte sind im API-Server ausgeschaltet.",
+          "region_india": "Fehlerberichte gehen an eine indische Region des Anbieters.",
+          "region_outside_india": "Fehlerberichte gehen an die Region {region} des Anbieters, außerhalb Indiens.",
+          "region_unrecognised": "Die Adresse für Fehlerberichte ist keine bekannte regionale Adresse, daher lässt sich ihr Land nicht bestimmen.",
+          "region_unrecognised_host": "Fehlerberichte gehen an {host}, das keine bekannte regionale Adresse ist, daher lässt sich das Land nicht bestimmen."
+        }
+      },
+      "ai_platform_key_off": {
+        "title": "Es ist kein KI-Schlüssel der Plattform konfiguriert",
+        "details": {
+          "no_platform_key": "Für keinen KI-Anbieter ist ein Plattformschlüssel konfiguriert.",
+          "platform_key_set": "Für diese ist ein Plattformschlüssel konfiguriert: {providers}."
+        }
+      },
+      "consent_default_opt_in": {
+        "title": "Neue Arbeitsbereiche starten mit Pflicht zur Marketing-Einwilligung",
+        "details": {
+          "default_opt_in": "Neue Arbeitsbereiche starten mit der Pflicht zu einer erfassten Einwilligung für Marketing.",
+          "default_opt_out": "Neue Arbeitsbereiche starten ohne Pflicht zu einer erfassten Einwilligung für Marketing.",
+          "default_opt_in_counts": "Neue Arbeitsbereiche starten mit der Pflicht zu einer erfassten Einwilligung für Marketing. {on, number} von {total, number} Arbeitsbereichen verlangen sie jetzt.",
+          "default_opt_out_counts": "Neue Arbeitsbereiche starten ohne Pflicht zu einer erfassten Einwilligung für Marketing. {on, number} von {total, number} Arbeitsbereichen verlangen sie jetzt."
+        }
+      },
+      "hosting_region_documented": {
+        "title": "Hosting-Anbieter, Region und Datenstandorte sind dokumentiert"
+      },
+      "storage_encrypted_at_rest": {
+        "title": "Ein Nachweis zur Verschlüsselung von Volumes und Objektspeicher liegt vor"
+      },
+      "backup_offsite_configured": {
+        "title": "Ein versiegeltes externes Backup läuft und deckt den Objektspeicher ab"
+      },
+      "backup_restore_drill": {
+        "title": "Eine Wiederherstellungsübung fand in den letzten sechs Monaten statt"
+      },
+      "security_pentest_report": {
+        "title": "Ein externer Penetrationstest-Bericht liegt vor, ohne offene kritische Befunde"
+      },
+      "legal_counsel_engaged": {
+        "title": "Indische Rechtsberatung für Datenschutz ist beauftragt"
+      },
+      "legal_vendor_dpas": {
+        "title": "Abgeschlossene DPAs liegen für die Unterauftragsverarbeiter vor, die personenbezogene Daten halten"
+      },
+      "governance_contacts_named": {
+        "title": "Datenschutzkontakt, Incident Commander und Beschwerdeverantwortlicher sind benannt und veröffentlicht"
+      },
+      "pii_column_encryption": {
+        "title": "Telefon, E-Mail und Nachrichtentext des Kontakts sind spaltenweise verschlüsselt"
+      },
+      "rls_privileged_guc_fixed": {
+        "title": "Die privilegierte Datenbankeinstellung lässt sich nicht aus einer Sitzung setzen"
+      },
+      "logs_erasure_keeps_year": {
+        "title": "Die Löschung behält Verlauf und Protokolle ein Jahr, bevor sie gelöscht werden"
+      },
+      "ci_security_jobs_scheduled": {
+        "title": "Sicherheitsprüfungen laufen planmäßig in der CI"
+      },
+      "ai_workspace_switch": {
+        "title": "Arbeitsbereiche können die KI-Pfade abschalten, die Kontakttexte an einen Anbieter senden"
+      },
+      "transfer_country_killswitch": {
+        "title": "Jeder Anbieter hat ein Länderkennzeichen, und ein Land kann gesperrt werden"
+      },
+      "dpa_acceptance_persisted": {
+        "title": "Die Annahme des DPA durch einen Arbeitsbereich wird mit Version und Zeit gespeichert"
+      },
+      "consent_lawful_basis_dpdp": {
+        "title": "Das Zweckregister nutzt die Verwendungen der Act für Einwilligung und nach section 7"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "Der Export beim Verlassen eines Arbeitsbereichs und die Dateibereinigung sind umgesetzt"
+      },
+      "evidence_board_pack": {
+        "title": "Das Nachweispaket für eine Untersuchung des Datenschutzausschusses ist umgesetzt"
+      },
+      "grievance_intake_built": {
+        "title": "Die Annahme von Beschwerden ist umgesetzt"
+      }
+    },
+    "attest": {
+      "action": "Bestätigen",
+      "actionFor": "Bestätigen: {check}",
+      "title": "Erklärung erfassen",
+      "intro": "Halten Sie fest, ob dies heute zutrifft. Sie zählt bis zum Ablauf, danach springt die Prüfung auf unbekannt zurück. Jede Erklärung bleibt im Verlauf.",
+      "result": {
+        "label": "Ergebnis",
+        "pass": "Vorhanden (bestanden)",
+        "fail": "Nicht vorhanden (fehlgeschlagen)"
+      },
+      "note": {
+        "label": "Notiz",
+        "hint": "Was Sie geprüft haben und wo der Beleg liegt. Mindestens {min} Zeichen."
+      },
+      "evidence": {
+        "label": "Link zum Nachweis (optional)",
+        "hint": "Ein https-Link zum Dokument oder Ticket.",
+        "placeholder": "https://"
+      },
+      "expiry": {
+        "label": "Gilt für (Tage)",
+        "hint": "{min} bis {max} Tage. Danach springt die Prüfung auf unbekannt zurück."
+      },
+      "problems": {
+        "noteShort": "Schreiben Sie mindestens {min} Zeichen.",
+        "noteLong": "Halten Sie die Notiz unter {max, number} Zeichen.",
+        "link": "Verwenden Sie einen vollständigen https-Link oder lassen Sie das Feld leer.",
+        "range": "Geben Sie eine ganze Zahl von Tagen von {min} bis {max} ein."
+      },
+      "submit": "Erklärung speichern",
+      "saving": "Wird gespeichert",
+      "cancel": "Abbrechen",
+      "saved": "Erklärung erfasst."
+    },
+    "history": {
+      "action": "Verlauf",
+      "actionFor": "Verlauf: {check}",
+      "title": "Verlauf",
+      "empty": "Zu dieser Prüfung wurde noch nichts erfasst.",
+      "validUntil": "Gültig bis {date}",
+      "close": "Schließen"
+    },
+    "errors": {
+      "forbidden": "Sie haben dafür keine Berechtigung.",
+      "request": "Diese Anfrage konnte nicht abgeschlossen werden.",
+      "unexpected": "Auf unserer Seite ist etwas schiefgelaufen. Versuchen Sie es gleich noch einmal.",
+      "network": "Der Server war nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "validation": "Einige Werte sind ungültig. Prüfen Sie die markierten Felder.",
+      "notFound": "Dieses Element gibt es nicht mehr."
+    }
+  }
+}

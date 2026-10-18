@@ -98,6 +98,28 @@ jobs:
           name: event-loop-hotspots
           path: crm-platform/reports/event-loop/blocking-hotspots.json
 
+  resource-limits:
+    name: Resource limits (budget check against the deploy files, cgroup alert rules)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      # Pure Node, no install. Fails on a limit that regresses or a listed gap that no longer exists (docs/performance/resource-limits).
+      - name: Budget check and its rules
+        run: node tools/resource-limits/check.mjs --check && node --test tools/resource-limits/lib.test.mjs
+      - name: Redis at maxmemory with noeviction (real redis-server)
+        run: sudo apt-get install -y --no-install-recommends redis-server >/dev/null && bash tools/resource-limits/redis-pressure.sh
+      - name: Alert rules, syntax (promtool check rules)
+        run: docker run --rm -v "$PWD/deploy/observability:/rules" --entrypoint promtool prom/prometheus:v2.55.0 check rules /rules/resource-limits.rules.yml
+      - name: Alert rules, behaviour (promtool test rules)
+        run: docker run --rm -v "$PWD/deploy/observability:/rules" --entrypoint promtool prom/prometheus:v2.55.0 test rules /rules/resource-limits.rules.test.yml
+
   # A real load run of the built API against a baseline recorded on this kind of runner (EL-B06). Not part of the default run: it takes
   # a quarter of an hour, and its answer is only as good as the baseline, which has to be recorded on the runner first (see below).
   event-loop-regression:

@@ -12,6 +12,7 @@ import { AppError } from '../errors/app-error';
 import { RequestContextStore } from '../context/request-context';
 import { maskSecretUrl } from '../logging/mask-secret-url';
 import { reportServerError } from '../../modules/platform-infrastructure';
+import { LEGAL_HOLD_BLOCKED_MESSAGE, isLegalHoldDbError } from '../errors/legal-hold.error';
 
 /**
  * A surface whose clients expect their own error body (Reference's `/api/v1` answers `{ error: { code, message } }`) registers a renderer for
@@ -103,6 +104,20 @@ export class ProblemExceptionFilter implements ExceptionFilter {
         detail: Array.isArray(detail) ? detail.join('; ') : detail,
         instance: path,
         code: this.codeForStatus(status),
+        requestId,
+      };
+    }
+
+    // The delete trigger of a held contact or lead (BL-295, migration 20261231090200) is the net under the application guard: code that
+    // reached the database anyway is answered like the guard answers, 409 with the same neutral text, never as a 500.
+    if (isLegalHoldDbError(exception)) {
+      return {
+        type: `https://errors.crm.platform/${ERROR_CODES.LEGAL_HOLD_ACTIVE.toLowerCase()}`,
+        title: this.titleFor(HttpStatus.CONFLICT),
+        status: HttpStatus.CONFLICT,
+        detail: LEGAL_HOLD_BLOCKED_MESSAGE,
+        instance: path,
+        code: ERROR_CODES.LEGAL_HOLD_ACTIVE,
         requestId,
       };
     }

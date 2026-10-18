@@ -1,0 +1,117 @@
+{
+  "data-retention": {
+    "nav": {
+      "group": "Dados",
+      "item": "Retenção de dados"
+    },
+    "page": {
+      "title": "Retenção de dados",
+      "eyebrow": "plataforma · retenção de dados",
+      "description": "Para cada tipo de dado, escolha por quantos dias ele fica no banco de dados e por quantos dias a mais o arquivo frio o mantém antes de ser excluído definitivamente. Nada muda para um item até você salvar valores para ele.",
+      "superOnly": "Somente um superadministrador pode alterar a retenção. Você pode ver os valores salvos e o que a última execução fez.",
+      "loading": "Carregando políticas de retenção…",
+      "retry": "Tentar novamente"
+    },
+    "engine": {
+      "offTitle": "A tarefa de arquivamento está desativada",
+      "offBody": "Os valores salvos para os eventos de análise e o log de auditoria ficam armazenados, mas nada é arquivado ou removido até que a tarefa seja ativada (RETENTION_ENABLED). Até lá, ambos mantêm o comportamento atual.",
+      "dryRunTitle": "A tarefa de arquivamento apenas registra o que faria",
+      "dryRunBody": "Ela está ativa, mas em modo dry-run (RETENTION_DRY_RUN). Os valores salvos para os eventos de análise e o log de auditoria ainda não são executados.",
+      "notDurableTitle": "O arquivo não é durável",
+      "notDurableBody": "O arquivo é uma pasta no disco do próprio servidor, que é apagada em uma nova implantação. A tarefa se recusa a remover dados até apontar para S3 ou R2 (ARCHIVE_DRIVER=s3).",
+      "liveTitle": "A tarefa de arquivamento está em execução",
+      "liveBody": "Os valores salvos são aplicados pela execução noturna. Os dados arquivados são mantidos em {driver}."
+    },
+    "items": {
+      "an_events": {
+        "title": "Eventos de análise",
+        "description": "O fluxo de eventos por trás dos relatórios. Meses inteiros vão para o arquivo quando ficam mais antigos que os dias ativos."
+      },
+      "audit_log": {
+        "title": "Log de auditoria",
+        "description": "Quem fez o quê em cada espaço de trabalho, incluindo ações realizadas ao atuar como um usuário. Até você salvar valores, ele é excluído após os dias da política de segurança da plataforma e nunca é arquivado. Os valores salvos arquivam primeiro e excluem depois, e as exportações ainda podem ler os meses arquivados."
+      },
+      "security_events": {
+        "title": "Log de segurança",
+        "description": "Logins, alterações de segurança e toda alteração de retenção feita aqui. Ele é excluído após os dias ativos e não tem arquivo."
+      },
+      "audit_log_exports": {
+        "title": "Arquivos de exportação de auditoria",
+        "description": "O CSV que um espaço de trabalho solicita do seu log de auditoria. Quem solicitou recebe um e-mail com um link para entrar e baixá-lo; o arquivo é excluído após os dias ativos."
+      }
+    },
+    "fields": {
+      "liveDays": "Dias ativos",
+      "liveDaysHint": "Dias em que os dados ficam no banco de dados. Permitido: de {min} a {max}.",
+      "keepForever": "Manter o arquivo para sempre",
+      "archiveDays": "Dias de arquivo",
+      "archiveDaysHint": "Dias adicionais em que o arquivo os mantém, antes de serem excluídos. Permitido: de {min} a {max}."
+    },
+    "summary": {
+      "noArchive": "Excluído definitivamente {live, plural, one {# dia} many {# dias} other {# dias}} após ser gravado.",
+      "archiveForever": "Mantido ativo por {live, plural, one {# dia} many {# dias} other {# dias}}, depois arquivado e mantido para sempre.",
+      "archiveThenDelete": "Mantido ativo por {live, plural, one {# dia} many {# dias} other {# dias}}, arquivado por {archive, plural, one {# dia} many {# dias} other {# dias}}, depois excluído definitivamente {total, plural, one {# dia} many {# dias} other {# dias}} após ser gravado.",
+      "defaultForever": "Atualmente mantido para sempre (a política de segurança não tem limite).",
+      "defaultNote": "Comportamento atual, nada salvo."
+    },
+    "status": {
+      "default": "Comportamento atual",
+      "custom": "Salvo por você",
+      "notApplied": "Ainda não aplicado",
+      "updated": "Salvo {when}"
+    },
+    "stats": {
+      "live": "No banco de dados",
+      "liveValue": "{size}, cerca de {rows} linhas",
+      "liveValueNoRows": "{size}",
+      "months": "{count, plural, one {# partição mensal} many {# partições mensais} other {# partições mensais}}, a mais antiga {oldest}",
+      "archive": "No arquivo",
+      "archiveValue": "{size} em {count, plural, one {# objeto} many {# objetos} other {# objetos}}",
+      "archiveNone": "Nada medido ainda",
+      "archiveMeasured": "medido {when}",
+      "lastRun": "Última execução",
+      "neverRun": "Ainda não foi executada",
+      "runLive": "{when}: {months, plural, one {# mês arquivado} many {# meses arquivados} other {# meses arquivados}} ({rows} linhas, {size}), {expired} excluídos do arquivo, {deleted} linhas ou arquivos excluídos",
+      "runDry": "{when}: execução de teste (dry-run), nada foi alterado",
+      "runFailed": "A última execução teve um problema: {error}"
+    },
+    "actions": {
+      "save": "Salvar",
+      "checking": "Verificando…",
+      "saving": "Salvando…",
+      "reset": "Voltar ao comportamento atual",
+      "resetting": "Redefinindo…",
+      "cancel": "Cancelar",
+      "confirmSave": "Salvar e aplicar",
+      "resetTitle": "Voltar {item} ao comportamento atual?",
+      "resetBody": "Os valores salvos serão removidos. As tarefas noturnas voltam às regras internas para este item. Os dados já arquivados permanecem no arquivo.",
+      "confirmReset": "Voltar ao comportamento atual"
+    },
+    "preview": {
+      "title": "Salvar a retenção de {item}?",
+      "intro": "Na próxima execução noturna:",
+      "toArchive": "{count, plural, one {# mês ({rows} linhas, {size}) será movido para o arquivo e removido do banco de dados.} many {# meses ({rows} linhas, {size}) serão movidos para o arquivo e removidos do banco de dados.} other {# meses ({rows} linhas, {size}) serão movidos para o arquivo e removidos do banco de dados.}}",
+      "toDeleteFromArchive": "{count, plural, one {# mês arquivado será excluído definitivamente do arquivo.} many {# meses arquivados serão excluídos definitivamente do arquivo.} other {# meses arquivados serão excluídos definitivamente do arquivo.}}",
+      "rowsToDelete": "{count, plural, one {# linha ou arquivo será excluído definitivamente.} many {# linhas ou arquivos serão excluídos definitivamente.} other {# linhas ou arquivos serão excluídos definitivamente.}}",
+      "notApplied": "A tarefa de arquivamento ainda não aplica os valores salvos, portanto nada disso acontece até que ela seja ativada.",
+      "permanent": "A exclusão é permanente e não pode ser desfeita."
+    },
+    "saved": "Retenção salva.",
+    "resetDone": "Voltou ao comportamento atual.",
+    "validation": {
+      "live_out_of_range": "Os dias ativos devem ser um número inteiro de {min} a {max}.",
+      "archive_out_of_range": "Os dias de arquivo devem ser um número inteiro de {min} a {max}.",
+      "archive_not_supported": "Este item não pode ser arquivado.",
+      "delete_before_archive": "Os dados não podem ser excluídos antes de serem arquivados.",
+      "not_a_number": "Informe um número inteiro de dias."
+    },
+    "errors": {
+      "forbidden": "Você não tem permissão para fazer isso.",
+      "conflict": "Outra pessoa alterou este item. Os valores mais recentes foram carregados; confira-os e salve novamente.",
+      "validation": "Esses valores não são permitidos.",
+      "request": "A solicitação foi recusada.",
+      "unexpected": "Algo deu errado no servidor. Tente novamente.",
+      "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente."
+    }
+  }
+}

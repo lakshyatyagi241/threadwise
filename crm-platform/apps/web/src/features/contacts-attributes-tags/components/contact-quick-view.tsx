@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 import { Menu, MenuItem, Spinner, cn } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
+import { usePersonaVisibility } from '@/features/persona';
 import { fetchContact, KEYS, useContact } from '../api/contacts';
 import type { ContactRow } from '../api/schemas';
 import { displayName } from '../lib/contact-model';
@@ -200,12 +201,19 @@ function QuickViewBody({
   const stage = useStageChange(contact);
   const body = useRef<HTMLDivElement>(null);
 
-  const tabs = useMemo(
+  const persona = usePersonaVisibility();
+  // What the person's permissions allow decides which panel opens, so a link to a panel the persona hides still works.
+  const permitted = useMemo(
     () => quickTabs((permission) => permission in session.permissions),
     [session.permissions],
   );
-  const shown: QuickSection[] = [...tabs.primary, ...tabs.more];
+  const shown: QuickSection[] = [...permitted.primary, ...permitted.more];
   const current: SectionId = (shown as SectionId[]).includes(panel) ? panel : 'overview';
+  // The strip leaves out what the workspace's persona hides (spared while it is the panel on screen); nothing is closed.
+  const tabs = quickTabs(
+    (permission) => permission in session.permissions,
+    (s) => s !== current && persona.isSectionHidden(s),
+  );
   const name = displayName(contact) || tl('unnamed');
 
   // A new section starts at the top of the scrolling body.

@@ -290,6 +290,36 @@ describe('RuntimeMonitor', () => {
     }
   });
 
+  it('reads cgroup v2 memory, OOM kills and PIDs; a limit of "max" leaves the limit series absent', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'cgroup-'));
+    writeFileSync(join(dir, 'cpu.stat'), 'nr_throttled 0\nthrottled_usec 0\n');
+    writeFileSync(join(dir, 'memory.current'), '734003200\n');
+    writeFileSync(join(dir, 'memory.max'), '1073741824\n');
+    writeFileSync(join(dir, 'memory.events'), 'low 0\nhigh 0\nmax 3\noom 2\noom_kill 2\n');
+    writeFileSync(join(dir, 'pids.current'), '41\n');
+    writeFileSync(join(dir, 'pids.max'), 'max\n');
+    try {
+      monitor = new RuntimeMonitor({
+        service: 'api',
+        intervalMs: 60_000,
+        cgroupCpuStatPath: join(dir, 'cpu.stat'),
+      });
+      monitor.tick();
+      const deadline = Date.now() + 5000;
+      while (Date.now() < deadline && !monitor.render().includes('crm_container_pids{')) {
+        await new Promise((r) => setTimeout(r, 20));
+      }
+      const out = monitor.render();
+      expect(out).toMatch(/crm_container_memory_bytes\{[^}]*\} 734003200/);
+      expect(out).toMatch(/crm_container_memory_limit_bytes\{[^}]*\} 1073741824/);
+      expect(out).toMatch(/crm_container_oom_kills_total\{[^}]*\} 2/);
+      expect(out).toMatch(/crm_container_pids\{[^}]*\} 41/);
+      expect(out).not.toMatch(/crm_container_pids_limit\{/); // "max": no limit, so no series (a ratio alert must not divide by it)
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
   it('records garbage collections by kind and the longest pause of the window', async () => {
     // A GC is forced with a throwaway context's gc(): V8 only exposes it after --expose-gc.
     v8.setFlagsFromString('--expose-gc');

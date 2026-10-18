@@ -23,7 +23,11 @@
       "exportNotReady": "파일이 준비되지 않았거나 만료되었습니다. 새 내보내기를 준비하세요.",
       "rateLimited": "요청이 너무 많습니다. 잠시 후 다시 시도하세요.",
       "validation": "일부 값이 올바르지 않습니다. 양식을 확인하고 다시 시도하세요.",
-      "unexpected": "문제가 발생했습니다. 다시 시도하세요."
+      "unexpected": "문제가 발생했습니다. 다시 시도하세요.",
+      "holdActive": "이 레코드는 보호되어 있어 현재 제거할 수 없습니다.",
+      "holdExists": "이 사람에게는 이미 활성 법적 보존이 있습니다. 다른 사안을 추가하려면 연장하세요.",
+      "holdNotFound": "이 법적 보존은 더 이상 존재하지 않습니다.",
+      "holdNotActive": "이 법적 보존은 이미 종료되었습니다."
     },
     "type": {
       "access": "열람",
@@ -182,7 +186,12 @@
           "erase_previewed": "삭제 미리보기 실행됨",
           "erased": "데이터 삭제됨",
           "completed": "요청 완료됨",
-          "other": "업데이트"
+          "other": "업데이트",
+          "restricted": "처리 제한: 법적 보존",
+          "erasure_queued": "삭제 확인됨, 보존 종료 대기 중",
+          "restriction_lifted": "처리 제한 해제됨",
+          "resume_skipped": "자동 삭제 건너뜀",
+          "resume_failed": "자동 삭제 실패, 직접 실행하세요"
         }
       },
       "verify": {
@@ -284,6 +293,168 @@
       "erase": "이 사람 삭제",
       "created": "요청 {reference}이(가) 생성되었습니다.",
       "failed": "요청을 만들 수 없습니다."
+    },
+    "legalHold": {
+      "close": "닫기",
+      "tab": {
+        "label": "개인정보",
+        "requests": "데이터 요청",
+        "holds": "법적 보존"
+      },
+      "requesterResponse": "요청을 접수했습니다. 법적 의무를 이행하기 위해 귀하의 데이터 일부를 보관해야 하므로 지금은 삭제할 수 없습니다. 해당 데이터의 이용은 제한해 두었으며, 의무가 종료되면 삭제하겠습니다. 귀하는 개인정보 감독기관에 불만을 제기할 수 있습니다.",
+      "contactBanner": "법적 보존: 삭제 및 제거 일시 중지",
+      "workspaceBanner": "워크스페이스 전체 법적 보존: 삭제 및 제거 일시 중지",
+      "caseStatus": "처리 제한: 법적 보존",
+      "blockedMessage": "이 레코드는 보호되어 있어 현재 제거할 수 없습니다.",
+      "listFilter": "법적 보존 대기 중",
+      "banner": {
+        "caseRef": "사건 {caseRef}",
+        "reviewBy": "{date}까지 검토",
+        "reviewOverdue": "검토 기한 초과({date}부터)",
+        "effects": "마케팅, AI 처리, 내보내기가 제한되며 모든 접근이 기록됩니다.",
+        "open": "대장 열기"
+      },
+      "category": {
+        "legal_obligation": "법적 의무",
+        "legal_claim": "법적 청구 또는 분쟁",
+        "regulator_request": "규제 기관 또는 수사 기관의 요청",
+        "internal_investigation": "내부 조사"
+      },
+      "scope": {
+        "contact": "연락처",
+        "lead": "리드",
+        "workspace": "워크스페이스 전체"
+      },
+      "status": {
+        "active": "활성",
+        "released": "해제됨",
+        "expired": "만료됨"
+      },
+      "menu": {
+        "place": "법적 보존 설정...",
+        "release": "법적 보존 해제..."
+      },
+      "place": {
+        "title": "이 연락처에 법적 보존 설정",
+        "workspaceTitle": "워크스페이스 전체에 법적 보존 설정",
+        "intro": "보존이 유지되는 동안 이 사람의 데이터 삭제, 제거, 보관 기간 정리는 거부되며, 데이터의 마케팅, AI 처리, 내보내기는 제한됩니다. 고객 응대는 평소대로 진행됩니다.",
+        "workspaceIntro": "워크스페이스의 모든 사람이 보존 대상이 됩니다. 삭제, 제거, 보관 기간 정리, 기간이 만료된 워크스페이스의 제거는 거부되며, 마케팅, AI 처리, 내보내기는 제한됩니다. 모든 레코드를 대상으로 하는 명령이 있을 때 사용하세요.",
+        "category": "데이터를 보관하는 이유",
+        "categoryPick": "사유 선택",
+        "caseRef": "사건 참조 번호",
+        "caseRefHint": "자사 고유의 참조 번호: 법원 사건 번호, 티켓, 규제 기관 서한의 번호 등.",
+        "note": "메모(선택)",
+        "noteHint": "이름, 전화번호, 사안의 세부 내용은 여기에 적지 마세요.",
+        "reviewAt": "검토 기한(선택)",
+        "reviewHint": "이 날짜가 지나면 대장에 이 보존이 표시됩니다.",
+        "expiresAt": "종료일(선택)",
+        "expiresHint": "이 날짜 이후에는 보존이 자동으로 종료됩니다.",
+        "submit": "보존 설정",
+        "submitting": "설정 중...",
+        "done": "법적 보존을 설정했습니다.",
+        "target": "적용 대상",
+        "targetPerson": "한 사람",
+        "targetWorkspace": "전체 워크스페이스",
+        "change": "변경",
+        "search": "사람 찾기",
+        "searchHint": "이름, 전화번호 또는 이메일 주소를 입력하세요(2자 이상).",
+        "noResults": "찾은 사람이 없습니다."
+      },
+      "release": {
+        "title": "이 법적 보존 해제",
+        "message": "해제하면 이 대상자에 대한 제거, 보관 기간 정리, 마케팅을 다시 진행할 수 있습니다. 이 보존을 기다리던 삭제 요청은 제한 상태에서 벗어나며, 이미 확인된 삭제는 1분 이내에 자동으로 실행됩니다.",
+        "cases": "{count, plural, other {데이터 요청 #건이 이 보존을 기다리고 있습니다.}}",
+        "reason": "해제 사유(선택)",
+        "reasonHint": "이름이나 사안의 세부 내용은 적지 마세요.",
+        "submit": "보존 해제",
+        "submitting": "해제 중...",
+        "done": "법적 보존을 해제했습니다.",
+        "doneResuming": "{count, plural, other {법적 보존을 해제했습니다. 확인된 삭제 #건이 지금 실행됩니다.}}"
+      },
+      "extend": {
+        "title": "이 법적 보존 연장",
+        "caseRefNow": "현재 사건 참조 번호: {caseRef}",
+        "addCaseRef": "사건 참조 번호 추가",
+        "addCaseRefHint": "같은 사람에 관한 두 번째 사안이 동일한 보존에 추가됩니다.",
+        "clearHint": "날짜를 지우려면 비워 두세요.",
+        "submit": "변경 사항 저장",
+        "submitting": "저장 중...",
+        "done": "법적 보존을 업데이트했습니다."
+      },
+      "review": {
+        "title": "검토 기록",
+        "message": "이 보존을 다시 확인했으며 여전히 적용된다는 사실을 기록합니다.",
+        "next": "다음 검토 기한(선택)",
+        "nextHint": "현재 검토 기한을 유지하려면 비워 두세요.",
+        "submit": "검토 기록",
+        "submitting": "저장 중...",
+        "done": "검토를 기록했습니다."
+      },
+      "actions": {
+        "review": "검토",
+        "extend": "연장",
+        "release": "해제"
+      },
+      "register": {
+        "title": "법적 보존",
+        "subtitle": "데이터를 보관해야 하므로 삭제와 제거가 일시 중지된 사람과 레코드입니다. 한 사람에 대한 보존은 해당 연락처 페이지에서 설정합니다.",
+        "export": "CSV 내보내기",
+        "empty": "법적 보존이 없습니다.",
+        "emptyFiltered": "이 필터와 일치하는 법적 보존이 없습니다.",
+        "loadMore": "더 보기",
+        "loadingMore": "불러오는 중...",
+        "none": "-",
+        "overdue": "검토 기한 초과",
+        "cases": "{count, plural, other {#건 대기 중}}",
+        "open": "사건 참조 번호 {caseRef}의 보존 열기",
+        "filters": {
+          "label": "필터",
+          "status": "상태",
+          "category": "사유",
+          "scope": "적용 대상",
+          "caseRef": "사건 참조 번호",
+          "reviewDue": "검토 기한 초과",
+          "any": "전체"
+        },
+        "columns": {
+          "subject": "대상자",
+          "category": "사유",
+          "caseRef": "사건 참조 번호",
+          "placed": "설정일",
+          "review": "검토 기한",
+          "expires": "종료일",
+          "status": "상태",
+          "actions": "작업"
+        },
+        "place": "법적 보존 설정..."
+      },
+      "detail": {
+        "title": "법적 보존",
+        "history": "이력",
+        "releasedAt": "종료됨",
+        "by": "{actor} 처리",
+        "system": "시스템",
+        "action": {
+          "insert": "보존 설정됨",
+          "update": "보존 변경됨",
+          "delete": "보존 종료됨",
+          "other": "업데이트"
+        }
+      },
+      "case": {
+        "body": "법적 보존이 적용되는 동안 이 사람의 데이터는 보관되고 잠깁니다. 삭제는 실행되지 않고, 마케팅, AI 처리, 내보내기는 제한되며, 처리 기한은 계속 진행됩니다.",
+        "requesterTitle": "요청자에게 보낼 답변",
+        "requesterHint": "법적 의무에 따라 데이터를 보관한다는 사실만 알립니다. 이유는 밝히지 않습니다. 법률 자문은 개인정보 설정에서 이 문구를 바꿀 수 있습니다.",
+        "copy": "텍스트 복사",
+        "copied": "복사됨",
+        "queueHint": "지금도 삭제를 확인할 수 있습니다. 기록만 남고 아무것도 삭제되지 않으며, 보존이 종료되면 자동으로 실행됩니다.",
+        "queue": "보존 종료 시 실행할 삭제 확인",
+        "queued": "기록했습니다. 아무것도 삭제되지 않았으며, 보존이 종료되면 삭제가 자동으로 실행됩니다."
+      },
+      "settings": {
+        "noticeLabel": "삭제가 보류된 요청자에게 보낼 답변",
+        "noticeHint": "법률 자문이 정한 문구입니다. 기본 문구를 쓰려면 비워 두세요. 사안이나 사유는 적지 마세요."
+      }
     }
   }
 }

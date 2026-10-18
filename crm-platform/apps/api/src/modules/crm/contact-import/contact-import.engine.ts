@@ -304,6 +304,21 @@ export class ContactImportEngine {
   }
 
   /** Existing contacts by canonical phone: through the identity table, else the stored number. Oldest wins. */
+  /** Of these contact ids, the ones under a legal hold (one statement per chunk; nothing is read when the workspace has no hold at all). */
+  async heldAmong(tx: Tx, orgId: number, ids: number[]): Promise<Set<number>> {
+    const out = new Set<number>();
+    if (ids.length === 0) return out;
+    const any = await tx.execute(sql`SELECT org_has_active_legal_hold(${orgId}::bigint) AS held`);
+    if ((any.rows[0] as { held: boolean }).held !== true) return out;
+    for (let i = 0; i < ids.length; i += 5000) {
+      const res = await tx.execute(sql`
+        SELECT c AS id FROM unnest(${`{${ids.slice(i, i + 5000).join(',')}}`}::bigint[]) AS c
+         WHERE is_subject_held(${orgId}::bigint, 'contact', c)`);
+      for (const r of res.rows as Array<{ id: number | string }>) out.add(Number(r.id));
+    }
+    return out;
+  }
+
   async findExisting(tx: Tx, orgId: number, keys: string[]): Promise<Map<string, number>> {
     const found = new Map<string, number>();
     for (let i = 0; i < keys.length; i += 2000) {
@@ -359,6 +374,8 @@ export class ContactImportEngine {
     // 2. who already exists
     const keys = [...new Set(valid.map((r) => r.phone))].filter((k) => !state.fileMap.has(k));
     const existing = await this.findExisting(tx, orgId, keys);
+    // An import that would overwrite a person under a legal hold (BL-295) skips that row: evidence is not rewritten by a spreadsheet.
+    const held = await this.heldAmong(tx, orgId, [...new Set(existing.values())]);
 
     // A repeated number is merged, not lost, but it is listed in the report so the person sees what was folded in.
     const cellsByLine = new Map(slice.map((rec) => [rec.line, rec.cells]));
@@ -395,6 +412,10 @@ export class ContactImportEngine {
         continue;
       }
       const knownId = state.fileMap.get(row.phone) ?? existing.get(row.phone);
+      if (knownId !== undefined && held.has(knownId)) {
+        reject(row.line, 'legal_hold');
+        continue;
+      }
       if (knownId !== undefined) {
         if (state.fileMap.has(row.phone)) {
           state.counters.duplicatesInFile += 1;

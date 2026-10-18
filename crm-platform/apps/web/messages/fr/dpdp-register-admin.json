@@ -1,0 +1,440 @@
+{
+  "dpdp-register-admin": {
+    "nav": {
+      "group": "Confidentialité",
+      "register": "Registre DPDP"
+    },
+    "page": {
+      "eyebrow": "Admin · Équipe · Registre DPDP",
+      "title": "Registre DPDP",
+      "disclaimer": "Suit ce que la plateforme fait aujourd’hui au regard de la DPDP Act et des DPDP Rules. Ce n’est pas un certificat de conformité.",
+      "checkedAt": "Vérifié : {time}",
+      "refresh": "Actualiser"
+    },
+    "summary": {
+      "label": "Résumé du registre",
+      "counts": {
+        "title": "Obligations par statut",
+        "counted": "{total, plural, one {# obligation comptée} other {# obligations comptées}}",
+        "notCounted": "Les lignes « Sans objet » sont listées mais non comptées."
+      },
+      "milestones": {
+        "title": "Échéances à venir",
+        "names": {
+          "consent_managers": "Enregistrement des Gestionnaires de consentement (rule 4)",
+          "main_duties": "Principaux devoirs des DPDP Rules"
+        },
+        "left": "Environ {days, plural, =0 {0 jour} one {# jour} other {# jours}} restants",
+        "passed": "Cette date est passée"
+      },
+      "tiers": {
+        "title": "Niveaux de sanction",
+        "tier": "Niveau de sanction",
+        "hint": "Obligations non respectées, partiellement respectées ou non vérifiées, classées par plafond de sanction applicable."
+      }
+    },
+    "status": {
+      "following": "Respectée",
+      "partial": "Partielle",
+      "not_following": "Non respectée",
+      "unverified": "Non vérifiée",
+      "not_applicable": "Sans objet"
+    },
+    "result": {
+      "pass": "Réussi",
+      "fail": "Échec",
+      "unknown": "Inconnu"
+    },
+    "source": {
+      "live": "Lu en direct",
+      "attested": "Attesté",
+      "code": "Déclaré par le code"
+    },
+    "filters": {
+      "label": "Filtrer par statut",
+      "all": "Toutes",
+      "shown": "{count, plural, one {# obligation affichée} other {# obligations affichées}}",
+      "empty": {
+        "title": "Aucune obligation ne correspond à ce filtre",
+        "message": "Aucune obligation n’a ce statut pour le moment.",
+        "reset": "Tout afficher"
+      }
+    },
+    "groups": {
+      "A": "Fondements, notice et consentement (ss4 to 7, rule 3)",
+      "B": "Droits et réclamations (ss11 to 15, rule 14)",
+      "C": "Conservation et effacement (s8(7), (8), rule 8)",
+      "D": "Sécurité (s8(4), (5), rule 6)",
+      "E": "Violation de données (s8(6), rule 7)",
+      "F": "Enfants (s9, rules 10 to 12, Quatrième annexe)",
+      "G": "Transferts et sous-traitants (ss8(1), 8(2), 16, rules 13(4), 15)",
+      "H": "Fiduciaire de données significatif (s10, rule 13)",
+      "I": "Gouvernance et application de la loi (ss27 to 33, rule 19)"
+    },
+    "owners": {
+      "tenant": "Espace de travail",
+      "platform": "Plateforme",
+      "both": "Espace de travail et plateforme"
+    },
+    "tiers": {
+      "50": "Rs 50 crore",
+      "150": "Rs 150 crore",
+      "200": "Rs 200 crore",
+      "250": "Rs 250 crore",
+      "none": "Aucun niveau de sanction"
+    },
+    "item": {
+      "citation": "Référence légale",
+      "owner": "Responsable",
+      "penalty": "Niveau de sanction",
+      "plan": "Éléments du plan",
+      "conditional": "Seulement si notifié",
+      "checks": "Vérifications",
+      "noChecks": "Statut déclaré. Aucune vérification ne le lit pour l’instant."
+    },
+    "check": {
+      "lapsed": "Expirée",
+      "note": "Remarque :",
+      "evidence": "Lien vers la preuve"
+    },
+    "items": {
+      "r01": {
+        "title": "Traiter des données personnelles uniquement avec consentement ou pour un usage autorisé"
+      },
+      "r02": {
+        "title": "Fournir une notice autonome et détaillée avant de demander le consentement"
+      },
+      "r03": {
+        "title": "Informer les personnes qui ont consenti avant l’entrée en vigueur de la loi"
+      },
+      "r04": {
+        "title": "Proposer la notice et le consentement en anglais ou dans une langue de la liste officielle"
+      },
+      "r05": {
+        "title": "Obtenir un consentement libre, spécifique, éclairé et univoque"
+      },
+      "r06": {
+        "title": "Indiquer une personne à contacter dans chaque demande de consentement"
+      },
+      "r07": {
+        "title": "Permettre de retirer son consentement aussi facilement qu’on l’a donné"
+      },
+      "r08": {
+        "title": "En cas de retrait, cesser le traitement et faire cesser les sous-traitants"
+      },
+      "r09": {
+        "title": "Pouvoir prouver la notice et le consentement"
+      },
+      "r10": {
+        "title": "Utiliser les données fournies volontairement uniquement pour la finalité indiquée"
+      },
+      "r11": {
+        "title": "Accepter le consentement donné ou retiré via un Gestionnaire de consentement"
+      },
+      "r12": {
+        "title": "Subordonner chaque envoi sortant au consentement au moment de l’envoi"
+      },
+      "r13": {
+        "title": "Résumer les données détenues, leur traitement et leurs destinataires"
+      },
+      "r14": {
+        "title": "Corriger, compléter et mettre à jour les données personnelles sur demande"
+      },
+      "r15": {
+        "title": "Effacer sur demande, sauf si elles sont nécessaires à la finalité ou imposées par la loi"
+      },
+      "r16": {
+        "title": "Tenir un mécanisme de réclamation publié, avec réponse sous 90 jours"
+      },
+      "r17": {
+        "title": "Permettre de désigner une personne qui agira en cas de décès ou d’incapacité"
+      },
+      "r18": {
+        "title": "Publier comment faire une demande et quel identifiant est requis"
+      },
+      "r19": {
+        "title": "Publier un contact et l’inclure dans chaque réponse"
+      },
+      "r20": {
+        "title": "Vérifier l’identité, limiter le débit et auditer les demandes d’exercice de droits"
+      },
+      "r21": {
+        "title": "Garder des données exactes et complètes quand elles servent à décider"
+      },
+      "r22": {
+        "title": "Respecter les droits du personnel de la plateforme, des contacts de facturation et des visiteurs"
+      },
+      "r23": {
+        "title": "Effacer les données quand le consentement est retiré ou que la finalité prend fin"
+      },
+      "r24": {
+        "title": "Effacer les données inactives après trois ans, avec un préavis de 48 heures"
+      },
+      "r25": {
+        "title": "Conserver les données personnelles et les journaux au moins un an"
+      },
+      "r26": {
+        "title": "Exécuter le cycle de vie d’inactivité des espaces de travail"
+      },
+      "r27": {
+        "title": "Protéger les données par chiffrement, masquage ou jetons"
+      },
+      "r28": {
+        "title": "Contrôler l’accès aux ressources informatiques"
+      },
+      "r29": {
+        "title": "Journaliser et surveiller l’accès aux données personnelles"
+      },
+      "r30": {
+        "title": "Sauvegarder les données pour pouvoir poursuivre le traitement après une perte"
+      },
+      "r31": {
+        "title": "Conserver les journaux un an pour détecter et analyser les incidents"
+      },
+      "r32": {
+        "title": "Prévoir une clause de sécurité dans chaque contrat de sous-traitance"
+      },
+      "r33": {
+        "title": "Pouvoir démontrer les mesures de sécurité en place"
+      },
+      "r34": {
+        "title": "Maintenir de manière générale des garanties de sécurité raisonnables"
+      },
+      "r35": {
+        "title": "Maîtriser les circuits d’IA qui envoient du texte de contacts à des tiers"
+      },
+      "r36": {
+        "title": "Informer sans délai chaque personne concernée par une violation"
+      },
+      "r37": {
+        "title": "Informer le Conseil de protection des données d’une violation, puis faire un rapport sous 72 heures"
+      },
+      "r38": {
+        "title": "En tant que sous-traitant, prévenir l’espace de travail d’une violation assez vite"
+      },
+      "r39": {
+        "title": "Obtenir le consentement parental vérifiable avant de traiter les données d’un enfant"
+      },
+      "r40": {
+        "title": "Aucun suivi, surveillance comportementale ni publicité ciblée pour les enfants"
+      },
+      "r41": {
+        "title": "Appliquer les exemptions de la Quatrième annexe aux obligations sur les données d’enfants"
+      },
+      "r42": {
+        "title": "Respecter les limites fixées par le Gouvernement aux transferts de données à l’étranger"
+      },
+      "r43": {
+        "title": "Rester responsable de ce que font les sous-traitants"
+      },
+      "r44": {
+        "title": "Assumer les devoirs du fiduciaire de données significatif, seulement s’il est notifié"
+      },
+      "r45": {
+        "title": "Produire des preuves pour une enquête du Conseil de protection des données sous six mois"
+      },
+      "r46": {
+        "title": "Tenir les notices propres à la plateforme, l’acceptation des conditions et le choix des cookies"
+      },
+      "r47": {
+        "title": "Désigner un contact de la plateforme et une voie de réclamation"
+      }
+    },
+    "details": {
+      "probe_error": "Impossible de lire cela pour le moment, le résultat est donc inconnu.",
+      "probe_missing": "Aucune lecture n’est revenue pour cette vérification.",
+      "env_missing": "{key} n’est pas défini, donc la lecture a été impossible.",
+      "attestation_missing": "Personne ne l’a encore enregistré.",
+      "attestation_expired": "La déclaration enregistrée par {name} le {date} a expiré le {expires}. Elle ne compte plus.",
+      "attested_pass": "Enregistré comme en place par {name} le {date}. Compte jusqu’au {expires}.",
+      "attested_fail": "Enregistré comme non en place par {name} le {date}. Compte jusqu’au {expires}.",
+      "code_declared": "Déclaré dans le code, non mesuré à l’exécution. Le changement qui comble l’écart le met à jour.",
+      "unrecognised": "Cette console n’a pas encore de description pour ce résultat ({detail})."
+    },
+    "checks": {
+      "mfa_operators": {
+        "title": "Les super administrateurs doivent se connecter avec une authentification à deux facteurs",
+        "details": {
+          "mfa_on": "La connexion à deux facteurs est exigée des super administrateurs.",
+          "mfa_off": "Non exigée : les super administrateurs peuvent se connecter sans second facteur."
+        }
+      },
+      "mfa_workspace_admins": {
+        "title": "Les administrateurs d’espace de travail doivent se connecter avec une authentification à deux facteurs",
+        "details": {
+          "mfa_on": "La connexion à deux facteurs est exigée des administrateurs d’espace de travail.",
+          "mfa_off": "Non exigée : les administrateurs d’espace de travail peuvent se connecter sans second facteur."
+        }
+      },
+      "logs_audit_retention": {
+        "title": "Le journal d’audit est conservé au moins un an",
+        "details": {
+          "retention_ok": "Conservé {days, plural, one {# jour} other {# jours}}.",
+          "retention_unlimited": "Jamais purgé (0 jour), donc conservé au moins un an.",
+          "retention_below_floor": "Conservé seulement {days, plural, one {# jour} other {# jours}} ; les DPDP Rules demandent au moins 365."
+        }
+      },
+      "logs_session_retention": {
+        "title": "Les sessions terminées sont conservées au moins un an",
+        "details": {
+          "retention_ok": "Les sessions terminées sont purgées après {days, plural, one {# jour} other {# jours}}.",
+          "retention_below_floor": "Les sessions terminées sont purgées après {days, plural, one {# jour} other {# jours}}, en dessous des 365 que demandent les DPDP Rules."
+        }
+      },
+      "redis_auth": {
+        "title": "Redis exige un mot de passe ou utilise TLS",
+        "details": {
+          "redis_auth_on": "L’adresse Redis configurée comporte un mot de passe ou utilise TLS.",
+          "redis_auth_off": "L’adresse Redis configurée n’a pas de mot de passe et n’utilise pas TLS."
+        }
+      },
+      "crypto_rotation_complete": {
+        "title": "Aucune ancienne clé de chiffrement ne reste dans le trousseau de clés",
+        "details": {
+          "rotation_complete": "Aucune ancienne clé n’est configurée.",
+          "previous_keys_present": "Des anciennes clés sont encore configurées, donc la rotation des clés n’est pas terminée."
+        }
+      },
+      "lifecycle_enabled": {
+        "title": "Le cycle de vie d’inactivité des espaces de travail est actif",
+        "details": {
+          "lifecycle_on": "Activé, hors simulation, et la suppression est activée.",
+          "lifecycle_off": "{enabled, select, true {Activé} other {Désactivé}}, {dryRun, select, true {simulation activée} other {simulation désactivée}}, {deleteEnabled, select, true {suppression activée} other {suppression désactivée}}."
+        }
+      },
+      "errors_vendor_region": {
+        "title": "Les rapports d’erreurs restent en Inde ou sont désactivés",
+        "details": {
+          "sentry_off": "Les rapports d’erreurs sont désactivés dans le serveur de l’API.",
+          "region_india": "Les rapports d’erreurs vont vers une région indienne du fournisseur.",
+          "region_outside_india": "Les rapports d’erreurs vont vers la région {region} du fournisseur, hors d’Inde.",
+          "region_unrecognised": "L’adresse des rapports d’erreurs n’est pas une adresse régionale connue, son pays ne peut donc pas être déterminé.",
+          "region_unrecognised_host": "Les rapports d’erreurs vont vers {host}, qui n’est pas une adresse régionale connue, son pays ne peut donc pas être déterminé."
+        }
+      },
+      "ai_platform_key_off": {
+        "title": "Aucune clé d’IA de la plateforme n’est configurée",
+        "details": {
+          "no_platform_key": "Aucune clé de la plateforme n’est configurée pour un fournisseur d’IA.",
+          "platform_key_set": "Une clé de la plateforme est configurée pour : {providers}."
+        }
+      },
+      "consent_default_opt_in": {
+        "title": "Les nouveaux espaces de travail démarrent avec le consentement marketing exigé",
+        "details": {
+          "default_opt_in": "Les nouveaux espaces de travail démarrent avec un consentement enregistré exigé pour le marketing.",
+          "default_opt_out": "Les nouveaux espaces de travail démarrent sans exiger de consentement enregistré pour le marketing.",
+          "default_opt_in_counts": "Les nouveaux espaces de travail démarrent avec un consentement enregistré exigé pour le marketing. {on, number} espaces de travail sur {total, number} l’exigent actuellement.",
+          "default_opt_out_counts": "Les nouveaux espaces de travail démarrent sans exiger de consentement enregistré pour le marketing. {on, number} espaces de travail sur {total, number} l’exigent actuellement."
+        }
+      },
+      "hosting_region_documented": {
+        "title": "L’hébergeur, la région et les lieux des données sont documentés"
+      },
+      "storage_encrypted_at_rest": {
+        "title": "Une preuve du chiffrement des volumes et du stockage d’objets est disponible"
+      },
+      "backup_offsite_configured": {
+        "title": "Une sauvegarde externe scellée s’exécute et couvre le stockage d’objets"
+      },
+      "backup_restore_drill": {
+        "title": "Un exercice de restauration a eu lieu au cours des six derniers mois"
+      },
+      "security_pentest_report": {
+        "title": "Un rapport de test d’intrusion externe est disponible, sans constat critique ouvert"
+      },
+      "legal_counsel_engaged": {
+        "title": "Un conseil juridique indien en protection des données est engagé"
+      },
+      "legal_vendor_dpas": {
+        "title": "Des DPA signés sont disponibles avec les sous-traitants ultérieurs qui détiennent des données personnelles"
+      },
+      "governance_contacts_named": {
+        "title": "Le contact vie privée, le responsable d’incident et le responsable des réclamations sont nommés et publiés"
+      },
+      "pii_column_encryption": {
+        "title": "Le téléphone, l’e-mail et le corps du message du contact sont chiffrés par colonne"
+      },
+      "rls_privileged_guc_fixed": {
+        "title": "Le paramètre privilégié de la base de données ne peut pas être modifié depuis une session"
+      },
+      "logs_erasure_keeps_year": {
+        "title": "L’effacement conserve l’historique et les journaux un an avant de les supprimer"
+      },
+      "ci_security_jobs_scheduled": {
+        "title": "Les contrôles de sécurité s’exécutent de façon planifiée dans la CI"
+      },
+      "ai_workspace_switch": {
+        "title": "Les espaces de travail peuvent désactiver les circuits d’IA qui envoient du texte de contacts à un fournisseur"
+      },
+      "transfer_country_killswitch": {
+        "title": "Chaque fournisseur porte une étiquette de pays, et un pays peut être coupé"
+      },
+      "dpa_acceptance_persisted": {
+        "title": "L’acceptation du DPA par un espace de travail est enregistrée avec la version et l’heure"
+      },
+      "consent_lawful_basis_dpdp": {
+        "title": "Le registre des finalités utilise les usages de consentement et de section 7 de l’Act"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "L’export à la sortie d’un espace de travail et le nettoyage des fichiers sont en place"
+      },
+      "evidence_board_pack": {
+        "title": "Le dossier de preuves prêt pour le Conseil de protection des données est en place"
+      },
+      "grievance_intake_built": {
+        "title": "La réception des réclamations est en place"
+      }
+    },
+    "attest": {
+      "action": "Attester",
+      "actionFor": "Attester : {check}",
+      "title": "Enregistrer une déclaration",
+      "intro": "Indiquez si c’est vrai aujourd’hui. Elle compte jusqu’à son expiration, puis la vérification repasse à inconnu. Chaque déclaration reste dans l’historique.",
+      "result": {
+        "label": "Résultat",
+        "pass": "En place (réussi)",
+        "fail": "Pas en place (échec)"
+      },
+      "note": {
+        "label": "Remarque",
+        "hint": "Ce que vous avez vérifié et où se trouve la preuve. Au moins {min} caractères."
+      },
+      "evidence": {
+        "label": "Lien vers la preuve (facultatif)",
+        "hint": "Un lien https vers le document ou le ticket.",
+        "placeholder": "https://"
+      },
+      "expiry": {
+        "label": "Valable pendant (jours)",
+        "hint": "De {min} à {max} jours. Ensuite, la vérification repasse à inconnu."
+      },
+      "problems": {
+        "noteShort": "Écrivez au moins {min} caractères.",
+        "noteLong": "Gardez la remarque sous {max, number} caractères.",
+        "link": "Utilisez un lien https complet, ou laissez ce champ vide.",
+        "range": "Saisissez un nombre entier de jours de {min} à {max}."
+      },
+      "submit": "Enregistrer la déclaration",
+      "saving": "Enregistrement",
+      "cancel": "Annuler",
+      "saved": "Déclaration enregistrée."
+    },
+    "history": {
+      "action": "Historique",
+      "actionFor": "Historique : {check}",
+      "title": "Historique",
+      "empty": "Rien n’a encore été enregistré pour cette vérification.",
+      "validUntil": "Valable jusqu’au {date}",
+      "close": "Fermer"
+    },
+    "errors": {
+      "forbidden": "Vous n’avez pas l’autorisation de faire cela.",
+      "request": "Cette demande n’a pas pu aboutir.",
+      "unexpected": "Un problème est survenu de notre côté. Réessayez dans un instant.",
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "validation": "Certaines valeurs ne sont pas valides. Vérifiez les champs en surbrillance.",
+      "notFound": "Cet élément n’existe plus."
+    }
+  }
+}

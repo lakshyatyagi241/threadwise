@@ -10,6 +10,7 @@
  */
 export * from './analytics';
 export * from './platform-async-ops';
+export * from './data-retention';
 export * from './platform-failed-operations';
 export * from './common/ids';
 export * from './common/pagination';
@@ -109,7 +110,9 @@ export * from './growth';
 export * from './contact-consent';
 export * from './privacy';
 export * from './compliance';
+export * from './dpdp-register';
 export * from './waboo-migration';
 export * from './lead-handling';
 export * from './channel-wechat';
 export * from './persona';
+export * from './storage-quota';

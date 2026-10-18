@@ -357,7 +357,8 @@
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "Niet toegestaan: dit contact is als minderjarig gemarkeerd en je werkruimte houdt marketing tegen.",
         "sale_share_opted_out": "Niet toegestaan: het contact heeft zich afgemeld voor verkoop of delen van zijn gegevens.",
-        "on_dnc_list": "Op je Niet-bellen-lijst: geen marketingoproepen of SMS-berichten naar dit nummer"
+        "on_dnc_list": "Op je Niet-bellen-lijst: geen marketingoproepen of SMS-berichten naar dit nummer",
+        "legal_hold": "Niet toegestaan: de verwerking van dit contact is beperkt."
       }
     },
     "notice": {

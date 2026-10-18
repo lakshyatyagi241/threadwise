@@ -38,6 +38,7 @@ const byDigits = new Map([
   ['919800000004', { n: 1, id: 14 }],
 ]);
 const source = {
+  collections: () => ['chathistory'],
   async *readIndexed() {
     let o = 0;
     for (const d of docs) yield { doc: d as never, offset: o++, length: 1 };
@@ -75,6 +76,7 @@ describe('chat-relink: the contact the planner resolves now', () => {
       hasUsers: false,
       contactsByDigits: byDigits,
       existingThreads: new Map(),
+      sessionStatus: new Map(),
     });
     for (const t of plan.threads.values()) expect(o.threads.get(t.key)!.contactId).toBe(t.contactId);
 

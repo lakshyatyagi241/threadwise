@@ -357,7 +357,8 @@
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "Niedozwolone: ten kontakt jest oznaczony jako małoletni, a Twoja przestrzeń robocza wstrzymuje marketing.",
         "sale_share_opted_out": "Niedozwolone: kontakt sprzeciwił się sprzedaży lub udostępnianiu swoich danych.",
-        "on_dnc_list": "Na Twojej liście Nie dzwonić: bez marketingowych połączeń i SMS-ów na ten numer"
+        "on_dnc_list": "Na Twojej liście Nie dzwonić: bez marketingowych połączeń i SMS-ów na ten numer",
+        "legal_hold": "Niedozwolone: przetwarzanie tego kontaktu jest ograniczone."
       }
     },
     "notice": {

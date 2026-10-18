@@ -1,0 +1,157 @@
+{
+  "whatsapp-throughput": {
+    "nav": {
+      "group": "WhatsApp",
+      "item": "Gönderim limitleri"
+    },
+    "eyebrow": "WhatsApp",
+    "title": "Gönderim limitleri ve canlı performans",
+    "description": "Bağlı her WhatsApp numarasının ne kadar hızlı gönderim yapabileceğini, günlük mesaj limitinin ne kadarını kullandığını ve şu anda neler olduğunu görün. Değişiklikler, tüm çalışanların göndereceği bir sonraki mesajdan itibaren geçerli olur.",
+    "updated": "Canlı. Güncelleme: {time}",
+    "stale": "Son yenileme başarısız oldu. Önceki değerler gösteriliyor.",
+    "liveUnavailable": "Canlı sayaçlar okunamadı, bu yüzden canlı sütunlar sıfır gösteriyor. Hızlar, kademeler ve kontroller hâlâ doğru.",
+    "limiterOff": "Gönderim sınırlayıcı kapalı. Mesajlar burada hızlandırılmaz veya yavaşlatılmaz; yalnızca Meta'nın kendi kısıtlaması geçerlidir.",
+    "footnote": "Bir numaranın hızı Meta tarafından belirlenir: varsayılan olarak saniyede 80 mesaj, Meta yükselttiğinde 1.000'e kadar, WhatsApp Business uygulamasında da kullanılan numaralar için ise 20. Gelen ve giden mesajlar bu hızı paylaşır. Günlük mesajlaşma kademesi, 24 saatte mesaj gönderilen benzersiz kişi sayısına ilişkin ayrı bir limittir; buradaki sayı, bu platform üzerinden gönderilen şablon mesajlardan yapılan bir tahmindir.",
+    "perSecond": "msg/s",
+    "peak": "Son dakikada en yüksek {n}",
+    "sentCount": "{n} gönderildi",
+    "deferredCount": "{n} bekletildi",
+    "throttledCount": "{n} Meta tarafından kısıtlandı",
+    "tierUsed": "24 saatte {cap} kişiden {used}",
+    "details": "Ayrıntılar",
+    "common": {
+      "loading": "Yükleniyor...",
+      "retry": "Tekrar dene"
+    },
+    "errors": {
+      "conflict": "Başka biri bunu az önce değiştirdi. En son değerler yüklendi; inceleyin ve değişikliğinizi yeniden uygulayın.",
+      "metaUnavailable": "Meta yanıt vermedi. Biraz sonra tekrar yenilemeyi deneyin.",
+      "notFound": "Bu numara artık yok. Listeye geri dönün.",
+      "forbidden": "Gönderim limitlerini yalnızca Süper Yönetici değiştirebilir.",
+      "invalid": "Bazı değerler kabul edilmedi. Kontrol edip tekrar deneyin.",
+      "unexpected": "Bizim tarafımızda bir sorun oluştu. Biraz sonra tekrar deneyin."
+    },
+    "kpi": {
+      "now": "Şu an gönderilen",
+      "nowHint": "saniyedeki mesaj, tüm numaralar",
+      "sent": "Gönderilen",
+      "last5": "son 5 dakika",
+      "numbers": "Bağlı numaralar",
+      "attention": "Dikkat gerekenler",
+      "attentionHint": "{paused} duraklatıldı, {tier} günlük limitine yakın",
+      "heldBack": "Bekletilen",
+      "heldBackHint": "{meta} Meta tarafından kısıtlandı, son 5 dakika"
+    },
+    "settings": {
+      "title": "Platform ayarları",
+      "description": "Bunlar tüm numaralar için geçerlidir. Bir numaranın kendi geçersiz kılma ve duraklatma ayarları kendi sayfasında yapılır.",
+      "enabled": "Gönderimleri her numaranın limitine göre ayarla",
+      "enabledHelp": "Kapalıyken gönderimler hız ayarlanmadan yapılır; Meta'nın kendi kısıtlaması yine geçerlidir.",
+      "defaultMps": "Varsayılan hız (msg/s)",
+      "defaultMpsHelp": "Meta'nın henüz hızını bildirmediği numara için kullanılır.",
+      "safetyMargin": "Güvenlik payı (%)",
+      "safetyMarginHelp": "Gelen trafik ve zamanlama için boş bırakılan limit oranı.",
+      "maxWait": "En uzun bekleme (ms)",
+      "maxWaitHelp": "Bundan uzun bekleyecek bir gönderim kuyruğuna geri döner ve yeniden denenir.",
+      "syncInterval": "Meta'dan yeniden oku (dakika)",
+      "syncIntervalHelp": "Her numaranın hızı ve günlük limiti ne sıklıkla yenilenir.",
+      "adaptive": "Meta kısıtlamasından sonra yavaşla",
+      "adaptiveHelp": "Meta çok hızlı gönderim nedeniyle bir mesajı reddettiğinde hızı yarıya indirir, ardından bir dakika içinde eski haline getirir.",
+      "enforceTier": "Günlük limite ulaşınca şablon mesajları beklet",
+      "enforceTierHelp": "Numara günlük mesajlaşma kademesine ulaştığında yeni şablon mesajları durdurur. Kapalıyken yalnızca işaretler.",
+      "tierWarn": "Uyarı eşiği (günlük limitin %)",
+      "tierWarnHelp": "Bir numara kademesinin bu oranını kullandığında işaretlenir.",
+      "save": "Ayarları kaydet",
+      "saving": "Kaydediliyor...",
+      "saved": "Kaydedildi. Tüm numaralar artık yeni ayarları kullanıyor."
+    },
+    "numbers": {
+      "title": "Numaralar",
+      "search": "Çalışma alanı, numara veya kimliğe göre ara",
+      "emptyTitle": "Bağlı numara yok",
+      "emptyBody": "Bir çalışma alanı WhatsApp'a bağlandığında numaralar burada görünür."
+    },
+    "cols": {
+      "number": "Numara",
+      "rate": "Hız limiti",
+      "live": "Şimdi",
+      "last5": "Son 5 dakika",
+      "tier": "Günlük limit",
+      "state": "Durum",
+      "actions": "İşlemler"
+    },
+    "source": {
+      "override": "Geçersiz kıl",
+      "coexistence": "WhatsApp Business (sabit)",
+      "meta": "Meta'dan",
+      "default": "Varsayılan"
+    },
+    "tier": {
+      "unlimited": "Sınırsız",
+      "unknown": "Henüz bildirilmedi",
+      "unlimitedBody": "Bu numaranın günlük mesajlaşma limiti sınırsızdır.",
+      "unknownBody": "Meta bu numaranın günlük mesajlaşma limitini henüz bildirmedi. Meta'dan yenileyin."
+    },
+    "state": {
+      "ok": "Sağlıklı",
+      "paused": "Duraklatıldı",
+      "slowed": "%{pct} hıza düşürüldü",
+      "tierWarn": "Günlük limite yakın",
+      "tierFull": "Günlük limite ulaşıldı",
+      "syncFailed": "Meta'dan okuma başarısız"
+    },
+    "events": {
+      "meta_throttled": "Meta gönderimi kısıtladı",
+      "upgrade_in_progress": "Verim yükseltmesi sürüyor",
+      "throughput_upgraded": "Verim seviyesi değişti",
+      "deferred": "Gönderimler bekletildi, kuyruk çok dolu",
+      "paused_block": "Gönderim engellendi, numara duraklatıldı",
+      "tier_full": "Günlük limite ulaşıldı",
+      "paused": "Operatör tarafından duraklatıldı",
+      "resumed": "Operatör tarafından sürdürüldü",
+      "override_set": "Hız geçersiz kılma ayarlandı",
+      "override_cleared": "Hız geçersiz kılma kaldırıldı",
+      "synced": "Meta'dan yeniden okundu"
+    },
+    "detail": {
+      "title": "WhatsApp numara limitleri",
+      "back": "Gönderim limitlerine dön",
+      "description": "Telefon numarası kimliği {id}. Birkaç saniyede bir güncellenir.",
+      "refresh": "Meta'dan yenile",
+      "refreshing": "Meta'dan okunuyor...",
+      "syncError": "Meta'dan son okuma başarısız oldu: {message}",
+      "coexistence": "Bu numara WhatsApp Business uygulamasında da kullanıldığından Meta onu saniyede 20 mesajda sabitler.",
+      "rate": "Ayarlanan hız (msg/s)",
+      "speed": "Hız",
+      "speedSlowed": "Meta kısıtlamasından sonra yavaşlatıldı, toparlanıyor",
+      "speedFull": "Tam hız",
+      "wait": "Ortalama bekleme",
+      "waitHint": "{n} gönderim bekledi, son 5 dakika",
+      "meta": "Meta verim seviyesi",
+      "metaHint": "{n} msg/s",
+      "unknown": "Bildirilmedi",
+      "chartSeconds": "Saniyedeki gönderim, son dakika",
+      "chartLegend": "Kesikli çizgi ayarlanan hızdır. Kırmızı işaretler Meta'nın gönderimi reddettiği saniyeleri, kehribar işaretler gönderimlerin bekletildiği saniyeleri gösterir.",
+      "chartMinutes": "Dakikadaki gönderim, son saat",
+      "chartLegendMinutes": "Kırmızı işaretler Meta'nın gönderimi reddettiği dakikaları, kehribar işaretler gönderimlerin bekletildiği dakikaları gösterir.",
+      "tierTitle": "Günlük mesajlaşma limiti",
+      "tierNote": "Meta, bir numaranın 24 saatte kaç farklı kişiyle sohbet başlatabileceğini sınırlar. Bu sayı, bu platform üzerinden gönderilen şablon mesajları kapsar; bu nedenle Meta'nın kendi rakamından farklı olabilir.",
+      "events": "Son olaylar",
+      "eventsEmpty": "Henüz yok",
+      "eventsEmptyBody": "Bu numara için kısıtlamalar, beklemeler, duraklatmalar ve hız değişiklikleri burada listelenir."
+    },
+    "control": {
+      "title": "Kontroller",
+      "description": "Meta'nın bu numara için verdiği hızı geçersiz kılın veya gönderimlerini durdurun. İkisi de numarayı kullanan tüm çalışma alanları için bir sonraki mesajdan itibaren geçerli olur.",
+      "override": "Hız geçersiz kılma (msg/s)",
+      "overrideHelp": "1 ile {max} arasında tam sayı. Meta'yı izlemek için boş bırakın.",
+      "overrideInvalid": "1 ile {max} arasında bir tam sayı girin.",
+      "overridePlaceholder": "Meta'yı izle",
+      "pause": "Bu numaradan göndermeyi duraklat",
+      "pauseHelp": "Toplu gönderimler ve kampanyalar kendiliğinden durur ve devam eder; diğer mesajlar Yeniden dene seçeneğiyle başarısız olur.",
+      "reason": "Neden",
+      "reasonHelp": "Olay günlüğünde gösterilir.",
+      "saved": "Kaydedildi. Numara, bir sonraki mesajından itibaren yeni kontrolleri kullanır."
+    }
+  }
+}

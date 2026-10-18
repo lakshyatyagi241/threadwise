@@ -357,7 +357,8 @@
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "Nicht erlaubt: Dieser Kontakt ist als minderjährig markiert und Ihr Arbeitsbereich hält Marketing zurück.",
         "sale_share_opted_out": "Nicht erlaubt: Der Kontakt hat dem Verkauf oder der Weitergabe seiner Daten widersprochen.",
-        "on_dnc_list": "Auf Ihrer „Nicht anrufen“-Liste: keine Marketinganrufe oder -SMS an diese Nummer"
+        "on_dnc_list": "Auf Ihrer „Nicht anrufen“-Liste: keine Marketinganrufe oder -SMS an diese Nummer",
+        "legal_hold": "Nicht erlaubt: Die Verarbeitung dieses Kontakts ist eingeschränkt."
       }
     },
     "notice": {

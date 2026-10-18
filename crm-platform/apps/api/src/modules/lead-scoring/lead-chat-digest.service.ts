@@ -12,6 +12,7 @@ import {
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
+import { legalHoldRestricted } from '../../common/errors/legal-hold.error';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   LEAD_SCORING_AI_PORT,
@@ -189,6 +190,15 @@ export class LeadChatDigestService {
       };
     });
     if (!loaded?.scoring) return { status: 'skipped', reason: 'contact_gone' };
+    // A person under a legal hold (BL-295) is restricted from AI processing: their conversation is not read by a model.
+    if (
+      await this.db.txAs({ orgId, userId: null }, (tx) =>
+        this.repo.isRestricted(tx, orgId, contactId),
+      )
+    ) {
+      if (manual) throw legalHoldRestricted();
+      return { status: 'skipped', reason: 'restricted' };
+    }
     const { brief, stages, scoring } = loaded;
 
     // The workspace's own words to mask and its own button taps (the growth pilot's settings; empty elsewhere).

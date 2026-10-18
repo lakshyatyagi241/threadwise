@@ -103,6 +103,8 @@ export class PlanRetentionService {
         JOIN plans p ON p.slug = o.plan AND p.kind = 'plan'
         WHERE s.data_wiped_at IS NULL AND s.plan_ends_at IS NOT NULL AND coalesce((s.overrides->>'dataRetentionDays')::int, p.data_retention_days) > 0
           AND NOT s.platform_owned
+          -- A workspace with a legal hold (BL-295) is never wiped: the wipe would delete the held records too.
+          AND NOT org_has_active_legal_hold(o.id)
           AND s.plan_ends_at < ${now.toISOString()}::timestamptz - (coalesce((s.overrides->>'dataRetentionDays')::int, p.data_retention_days) * interval '1 day')
         ORDER BY s.plan_ends_at, o.id LIMIT ${limit}`);
       return (
@@ -162,6 +164,17 @@ export class PlanRetentionService {
           new Date(cur.plan_ends_at).getTime() <
             now.getTime() - Number(cur.data_retention_days) * 86_400_000;
         if (!due) return { orgId: c.orgId, slug: c.slug, wiped: false, rows: {} };
+        // A hold placed after the candidate list was read wins too (the hold takes this lock exclusively while it is placed).
+        const held = await tx.execute(
+          sql`SELECT pg_advisory_xact_lock_shared(7301995, ${Math.abs(c.orgId % 2147483647)}), org_has_active_legal_hold(${c.orgId}::bigint) AS held`,
+        );
+        if ((held.rows[0] as { held: boolean }).held) {
+          this.logger.warn(
+            { orgId: c.orgId, slug: c.slug },
+            '[WIPE-EXPIRED] skipped: the workspace has a legal hold',
+          );
+          return { orgId: c.orgId, slug: c.slug, wiped: false, rows: {} };
+        }
 
         const rows = await this.deleteAll(tx, c.orgId);
         if (dryRun) {

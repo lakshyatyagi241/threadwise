@@ -53,6 +53,7 @@ export {
 } from './observability/worker-status.service';
 export {
   initSentry,
+  sentryEnabled,
   NO_EXTRA_DATA,
   reportServerError,
   flushSentry,
@@ -64,6 +65,8 @@ export { LOG_REDACT_PATHS, SECRET_HEADERS, redactHeaders } from './observability
 export {
   EventLoopSampler,
   JobMetricsModule,
+  QueueDepthModule,
+  sampleQueueDepth,
   Prober,
   RuntimeMonitor,
   attachJobMetrics,

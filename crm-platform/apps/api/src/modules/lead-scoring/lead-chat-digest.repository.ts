@@ -467,13 +467,15 @@ export class LeadChatDigestRepository {
     ttlDays: number,
   ): Promise<{ digests: number; suggestions: number; expired: number }> {
     const digests = await tx.execute(sql`
-      DELETE FROM lead_chat_digests WHERE created_at < now() - make_interval(days => ${retentionDays}) RETURNING 1`);
+      DELETE FROM lead_chat_digests WHERE created_at < now() - make_interval(days => ${retentionDays})
+        AND NOT is_subject_held(org_id, 'contact', contact_id) RETURNING 1`);
     const expired = await tx.execute(sql`
       UPDATE lifecycle_stage_suggestions SET status = 'expired', decided_at = now()
        WHERE status = 'pending' AND created_at < now() - make_interval(days => ${ttlDays}) RETURNING 1`);
     const suggestions = await tx.execute(sql`
       DELETE FROM lifecycle_stage_suggestions
-       WHERE status <> 'pending' AND created_at < now() - make_interval(days => ${retentionDays}) RETURNING 1`);
+       WHERE status <> 'pending' AND created_at < now() - make_interval(days => ${retentionDays})
+         AND NOT is_subject_held(org_id, 'contact', contact_id) RETURNING 1`);
     return {
       digests: digests.rows.length,
       suggestions: suggestions.rows.length,

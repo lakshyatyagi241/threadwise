@@ -36,7 +36,8 @@
       "stageFlag": "Vinto e perso possono essere impostati solo su una fase del contatto, e una fase non può essere entrambi.",
       "statusStage": "Quello stato appartiene a un'altra fase. Scegli uno stato adatto alla fase del contatto.",
       "stageScope": "Uno stato può essere limitato solo a una delle tue fasi del ciclo di vita.",
-      "planLimit": "Hai raggiunto il limite del tuo piano di {limit, plural, one {# contatto} other {# contatti}}. Passa a un piano superiore per aggiungerne altri, oppure elimina un contatto esistente per liberare spazio."
+      "planLimit": "Hai raggiunto il limite del tuo piano di {limit, plural, one {# contatto} other {# contatti}}. Passa a un piano superiore per aggiungerne altri, oppure elimina un contatto esistente per liberare spazio.",
+      "legalHold": "Questo record è protetto e al momento non può essere eliminato."
     },
     "list": {
       "title": "Contact Hub",
@@ -338,7 +339,8 @@
       "sendCampaign": "Invia campagna",
       "assignOwner": "Assegna responsabile",
       "changeStage": "Cambia fase",
-      "more": "Altro"
+      "more": "Altro",
+      "held": "Questo record è protetto e al momento non può essere eliminato."
     },
     "form": {
       "addEyebrow": "Nuovo contatto",
@@ -609,7 +611,8 @@
         "tag_limit_reached": "limite di tag del piano raggiunto",
         "invalid_date_of_birth": "la data di nascita non è una data con l'anno per primo che possa essere una data di nascita",
         "duplicate_in_file": "numero ripetuto, unito a una riga precedente",
-        "invalid_timezone": "fuso orario non valido"
+        "invalid_timezone": "fuso orario non valido",
+        "legal_hold": "record protetto, non modificato"
       },
       "statusHint": "Applicato ai contatti creati da questo file.",
       "queued": "In attesa di avvio...",

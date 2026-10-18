@@ -30,7 +30,23 @@ export interface ConsentFacts {
   saleShareOptOut?: boolean;
   /** The contact's number is on the workspace's Do-Not-Call list (BL-181). Read only for voice and SMS marketing. Absent = false. */
   onDncList?: boolean;
+  /** The contact's data is under a legal hold (BL-295): kept and locked, so marketing, AI processing, profiling and sharing are refused. Absent = false. */
+  restricted?: boolean;
 }
+
+/**
+ * The purposes a legal hold refuses (docs/specs/legal-hold.md section 3.2): every use of a held person's data that is not the service the
+ * workspace owes them. Service messaging, call recording notices and push are not in the list: a hold freezes destruction and new kinds of
+ * use, not the relationship.
+ */
+export const RESTRICTED_PURPOSES: ReadonlySet<string> = new Set([
+  'marketing_messaging',
+  'third_party_sharing',
+  'analytics_profiling',
+  'ai_content_processing',
+  'staff_ai_assist',
+  'voice_ai_conversation',
+]);
 
 export const NO_FACTS: ConsentFacts = { unsubscribedFlag: false, ledgerState: 'unknown' };
 
@@ -59,6 +75,7 @@ const deny = (reason: ConsentGateReason): ConsentGateResult => ({ decision: 'den
  * The ConsentGate's rule. In order:
  *
  *  1. The purpose must apply to the channel and modality, and the workspace must not have switched it off (`purpose_not_enabled`).
+ *     Then a contact under a legal hold is refused every purpose in RESTRICTED_PURPOSES (`legal_hold`), whatever consent says.
  *  2. A purpose with a notice to deliver first (a recording announcement, an AI disclosure) answers `needs_notice` until the caller
  *     presents the evidence that the versioned notice was delivered; a consent-based one (a call recording) then needs the person's
  *     answer too: `granted` allows, `declined` denies, no answer is still `needs_notice`. No evidence is the old behaviour, unchanged.
@@ -81,6 +98,8 @@ export function decideConsent(input: DecideInput): ConsentGateResult {
 
   if (channel && !purposeAppliesTo(def, channel, modality)) return deny('purpose_not_applicable');
   if (input.purposeEnabled === false) return deny('purpose_not_enabled');
+  // A held person's data is restricted (BL-295). The text shown for this reason is neutral: it never says that a hold or a matter exists.
+  if (input.facts.restricted && RESTRICTED_PURPOSES.has(def.id)) return deny('legal_hold');
   if (def.noticeRequired && def.noticeKey) {
     const ev = input.noticeEvidence;
     const pending: ConsentGateResult = {

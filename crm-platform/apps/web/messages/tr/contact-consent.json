@@ -357,7 +357,8 @@
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "İzin verilmez: bu kişi reşit olmayan olarak işaretli ve çalışma alanınız pazarlamayı engelliyor.",
         "sale_share_opted_out": "İzin verilmez: kişi verilerinin satılmasından veya paylaşılmasından vazgeçti.",
-        "on_dnc_list": "Aranmayacaklar listenizde: bu numaraya pazarlama araması veya mesajı yapılmaz"
+        "on_dnc_list": "Aranmayacaklar listenizde: bu numaraya pazarlama araması veya mesajı yapılmaz",
+        "legal_hold": "İzin verilmiyor: bu kişinin verilerinin işlenmesi kısıtlanmıştır."
       }
     },
     "notice": {

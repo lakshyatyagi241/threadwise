@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Optional } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import {
   ERROR_CODES,
@@ -15,6 +15,14 @@ import {
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
+import { teamChatBlobKey } from '../../common/storage-meter/storage-key-category';
+import {
+  NO_RESERVATION,
+  STORAGE_METER,
+  reserveOn,
+  type StorageMeter,
+  type StorageReservation,
+} from '../../common/storage-meter/storage-meter.port';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
@@ -57,6 +65,8 @@ export class MessagesService {
     private readonly access: TeamChatAccess,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    /** The storage quota guard (observe mode: measures the attachment, never refuses). Optional: without it a message posts exactly as before. */
+    @Optional() @Inject(STORAGE_METER) private readonly meter?: StorageMeter,
   ) {}
 
   // --- reads -----------------------------------------------------------------------------------------------------------
@@ -168,6 +178,42 @@ export class MessagesService {
     // Checked before anything is written, so a refused file leaves no row and no orphan (Reference stored it first).
     const sniffed = file ? this.checkAttachment(file) : null;
 
+    // The attachment is a Postgres blob that counts toward the workspace's storage (spec docs/specs/storage-quota-and-archival.md 3 and 6.4).
+    // Reserved before the transaction, committed inside it (so the blob and its registry row land together), released if it fails.
+    const reservation = file
+      ? await reserveOn(this.meter, {
+          orgId,
+          bytes: file.buffer.length,
+          category: 'team_chat_attachment',
+        })
+      : NO_RESERVATION;
+    try {
+      return await this.postInTx(
+        orgId,
+        userId,
+        channelUuid,
+        input,
+        body,
+        file,
+        sniffed,
+        reservation,
+      );
+    } catch (err) {
+      await reservation.release();
+      throw err;
+    }
+  }
+
+  private postInTx(
+    orgId: number,
+    userId: number,
+    channelUuid: string,
+    input: PostTchatMessageInput,
+    body: string | null,
+    file: UploadedAttachment | undefined,
+    sniffed: { mime: string } | null,
+    reservation: StorageReservation,
+  ): Promise<TchatMessageResponse> {
     return this.db.tx(async (tx) => {
       const { channel } = await this.access.openChannel(tx, this.repo, channelUuid);
 
@@ -195,7 +241,17 @@ export class MessagesService {
         attachmentMime: sniffed?.mime ?? null,
         attachmentName: file ? safeFileName(file.originalname) : null,
       });
-      if (file) await this.repo.insertAttachmentBlob(tx, orgId, created.id, file.buffer);
+      if (file) {
+        await this.repo.insertAttachmentBlob(tx, orgId, created.id, file.buffer);
+        await reservation.commit(
+          {
+            key: teamChatBlobKey(created.id),
+            ownerTable: 'team_chat_messages',
+            ownerId: created.id,
+          },
+          tx,
+        );
+      }
       await this.repo.touchChannel(tx, orgId, channel.id);
       await this.repo.advanceRead(tx, orgId, channel.id, userId, created.id);
 

@@ -52,7 +52,8 @@ const toState = (r: LifecycleRow): LifecycleOrgState => ({
   deleteAfterDays: r.delete_after_days,
   retentionExempt: r.retention_exempt,
   retentionExemptUntil: r.retention_exempt_until ? new Date(r.retention_exempt_until) : null,
-  legalHold: r.legal_hold,
+  // The operator's hold or any hold the workspace placed (BL-295): either one stops archive and erase.
+  legalHold: r.legal_hold || r.tenant_hold === true,
   exemptByPlan: r.exempt_by_plan,
   remindersSent: { archive: r.reminders_archive, delete: r.reminders_delete },
   lastReminderAt: r.last_reminder_at ? new Date(r.last_reminder_at) : null,

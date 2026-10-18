@@ -357,7 +357,8 @@
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "不允许：该联系人已标记为未成年人，且你的工作区拦截营销。",
         "sale_share_opted_out": "不允许：该联系人已选择退出其数据的出售或共享。",
-        "on_dnc_list": "在您的“禁止来电”名单中:不向此号码拨打营销电话或发送营销短信"
+        "on_dnc_list": "在您的“禁止来电”名单中:不向此号码拨打营销电话或发送营销短信",
+        "legal_hold": "不允许：此联系人的数据处理已受限。"
       }
     },
     "notice": {
