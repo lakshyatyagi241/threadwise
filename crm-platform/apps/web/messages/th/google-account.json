@@ -5,6 +5,21 @@
         "label": "บัญชี Google",
         "description": "เชื่อมต่อบัญชี Google หนึ่งบัญชีสำหรับ Calendar, Sheets, Docs, Forms และ Meet ในโฟลว์ของคุณ",
         "keywords": "google, บัญชี google, ปฏิทิน, sheets, docs, forms, meet, drive, oauth, เชื่อมต่อ google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "เพิ่มแถว ค้นหาแถว และบันทึกรายชื่อติดต่อจากชีตในโฟลว์ของคุณ ใช้การเชื่อมต่อบัญชี Google ของคุณ",
+        "keywords": "google sheets, สเปรดชีต, แถว, เซลล์, oauth, เชื่อมต่อ google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "คัดลอกเอกสารเทมเพลต กรอกข้อมูล และแชร์จากโฟลว์ของคุณ ใช้การเชื่อมต่อบัญชี Google ของคุณ",
+        "keywords": "google docs, เอกสาร, เทมเพลต, แชร์, oauth, เชื่อมต่อ google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "ส่งแบบฟอร์มให้ลูกค้าและดำเนินการต่อเมื่อลูกค้ากรอกเสร็จ ใช้การเชื่อมต่อบัญชี Google ของคุณ",
+        "keywords": "google forms, แบบฟอร์ม, แบบสำรวจ, คำตอบ, oauth, เชื่อมต่อ google"
       }
     }
   },

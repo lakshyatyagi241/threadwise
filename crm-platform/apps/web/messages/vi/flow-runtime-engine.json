@@ -62,7 +62,8 @@
       "field_match": "Khớp trường",
       "date_field_match": "Khớp ngày",
       "schedule": "Lịch gửi",
-      "ecom_event": "Sự kiện cửa hàng"
+      "ecom_event": "Sự kiện cửa hàng",
+      "segment_leave": "Rời khỏi phân khúc"
     },
     "endReason": {
       "end_node": "Đã đến cuối luồng",

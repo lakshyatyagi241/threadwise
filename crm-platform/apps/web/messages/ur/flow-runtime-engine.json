@@ -349,7 +349,8 @@
       "field_match": "فیلڈ مماثلت",
       "date_field_match": "تاریخ مماثلت",
       "schedule": "شیڈول",
-      "ecom_event": "اسٹور کا واقعہ"
+      "ecom_event": "اسٹور کا واقعہ",
+      "segment_leave": "سیگمنٹ چھوڑنا"
     },
     "endReason": {
       "end_node": "فلو کے آخر تک پہنچ گیا",

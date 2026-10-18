@@ -62,7 +62,8 @@
       "field_match": "字段匹配",
       "date_field_match": "日期匹配",
       "schedule": "定时",
-      "ecom_event": "店铺事件"
+      "ecom_event": "店铺事件",
+      "segment_leave": "离开细分"
     },
     "endReason": {
       "end_node": "已到达流程末尾",

@@ -62,7 +62,8 @@
       "field_match": "필드 일치",
       "date_field_match": "날짜 일치",
       "schedule": "예약",
-      "ecom_event": "스토어 이벤트"
+      "ecom_event": "스토어 이벤트",
+      "segment_leave": "세그먼트 나가기"
     },
     "endReason": {
       "end_node": "플로우 끝에 도달",

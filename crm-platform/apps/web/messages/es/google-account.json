@@ -5,6 +5,21 @@
         "label": "Cuenta de Google",
         "description": "Conecta una cuenta de Google para Calendar, Sheets, Docs, Forms y Meet en tus flujos.",
         "keywords": "google, cuenta de google, calendar, calendario, sheets, hojas de cálculo, docs, documentos, forms, formularios, meet, drive, oauth, conectar google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Añade filas, busca filas y guarda contactos desde una hoja en tus flujos. Usa la conexión de tu cuenta de Google.",
+        "keywords": "google sheets, hoja de cálculo, filas, celdas, oauth, conectar google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Copia un documento de plantilla, rellénalo y compártelo desde tus flujos. Usa la conexión de tu cuenta de Google.",
+        "keywords": "google docs, documento, plantilla, compartir, oauth, conectar google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Envía un formulario a un cliente y continúa cuando lo rellene. Usa la conexión de tu cuenta de Google.",
+        "keywords": "google forms, formulario, encuesta, respuestas, oauth, conectar google"
       }
     }
   },

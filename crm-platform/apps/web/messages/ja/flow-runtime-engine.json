@@ -62,7 +62,8 @@
       "field_match": "項目の一致",
       "date_field_match": "日付の一致",
       "schedule": "スケジュール",
-      "ecom_event": "ストアのイベント"
+      "ecom_event": "ストアのイベント",
+      "segment_leave": "セグメントから退出"
     },
     "endReason": {
       "end_node": "フローの最後に到達",

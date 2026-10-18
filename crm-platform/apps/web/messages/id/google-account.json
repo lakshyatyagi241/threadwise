@@ -5,6 +5,21 @@
         "label": "Akun Google",
         "description": "Hubungkan satu akun Google untuk Calendar, Sheets, Docs, Forms, dan Meet di alur Anda.",
         "keywords": "google, akun google, kalender, sheets, docs, forms, meet, drive, oauth, hubungkan google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Tambahkan baris, cari baris, dan simpan kontak dari sheet di alur Anda. Menggunakan koneksi akun Google Anda.",
+        "keywords": "google sheets, spreadsheet, baris, sel, oauth, hubungkan google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Salin dokumen templat, isi, dan bagikan dari alur Anda. Menggunakan koneksi akun Google Anda.",
+        "keywords": "google docs, dokumen, templat, bagikan, oauth, hubungkan google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Kirim formulir ke pelanggan dan lanjutkan setelah mereka mengisinya. Menggunakan koneksi akun Google Anda.",
+        "keywords": "google forms, formulir, survei, tanggapan, oauth, hubungkan google"
       }
     }
   },

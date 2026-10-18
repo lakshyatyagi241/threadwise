@@ -4,7 +4,7 @@ title: Google account
 summary: Connect one Google account with Google's own sign-in for bookings and the Calendar, Sheets, Docs, Forms and Meet steps, and choose what it may be used for.
 area: settings
 order: 120
-documents: [tile:google-account]
+documents: [tile:google-account, tile:google-sheets, tile:google-docs, tile:google-forms]
 keywords:
   [
     google,
@@ -32,7 +32,7 @@ Your workspace has one Google account connection. The booking calendar and the G
 
 ## How to use it
 
-1. Open **Settings**, then **Integrations**, then **Google account**. You can also open it from the **More** page.
+1. Open **Settings**, then **Integrations**, then **Google account**. You can also open it from the **Google Sheets**, **Google Docs**, **Google Forms** or **Google Calendar** card on the Marketplace **Integrations** tab, or from the **More** page. The cards look and work like the Shopify and WooCommerce ones, but they share this one connection.
 2. Tick what Google may be used for. **Calendar**, **Sheets**, **Forms** and **Drive file list** are ticked for you. **Docs and Drive** starts unticked on purpose: Google treats it as restricted, so tick it only when you use the Docs step. Until Google has verified the platform's app, only people listed as test users by your platform administrator can connect.
 3. Select **Connect Google account**. Google asks you to choose an account and shows exactly the permissions you ticked. Keep every box ticked.
 4. You land on a confirmation page that reads "Connect (the Google account) to (your workspace) for (the permissions)?". Select **Confirm** to connect it, or **Cancel** to connect nothing. Nothing is stored until you confirm, and only you, the person who pressed Connect, can confirm it.
