@@ -116,3 +116,29 @@ describe('attribution evidence', () => {
     });
   });
 });
+
+describe('contact-level web-analytics values', () => {
+  it('keeps module, module_type, module_name, platform, channel, bot_name and every source exactly, empty strings included', () => {
+    const a = out({
+      source: 'Social Media',
+      channel: 'WhatsApp',
+      bot_name: 'Test bot',
+      module: 'chatbot',
+      module_type: 'Whatsapp Chatbot',
+      module_name: 'Test bot',
+      platform: 'WhatsApp',
+    });
+    expect(a.rows[0].row.source).toBe('Social Media');
+    expect(a.rows[0].row.data).toMatchObject({
+      channel: 'WhatsApp',
+      bot_name: 'Test bot',
+      module: 'chatbot',
+      module_type: 'Whatsapp Chatbot',
+      module_name: 'Test bot',
+      platform: 'WhatsApp',
+    });
+    const b = out({ source: 'WhatsApp Direct', channel: '', bot_name: '' });
+    expect(b.rows[0].row.source).toBe('WhatsApp Direct');
+    expect(b.rows[0].row.data).toMatchObject({ channel: '', bot_name: '' });
+  });
+});
