@@ -44,6 +44,7 @@ export function ViewsBar({
   meId,
   count,
   can,
+  hasUncontacted = false,
 }: {
   /** The filters on screen now (what "Create view" and "Save current filters" keep). */
   filters: ContactFilters;
@@ -63,6 +64,8 @@ export function ViewsBar({
   /** How many contacts the open view holds, shown in a pill beside its name; absent while that is not known. */
   count?: number;
   can: { create: boolean; update: boolean; delete: boolean };
+  /** Some contact is marked uncontacted: only then is the "Uncontacted" view offered (it stays while it is the open view). */
+  hasUncontacted?: boolean;
 }) {
   const t = useTranslations(NS);
   const router = useRouter();
@@ -74,12 +77,16 @@ export function ViewsBar({
   const [deleting, setDeleting] = useState<ContactViewResponse | null>(null);
   // Without lead scoring there is no "Hot leads" to choose: it filters by the score.
   const scoringOn = useLeadScoringEnabled();
-  const quick = useMemo(() => availablePresets(QUICK_PRESETS, scoringOn), [scoringOn]);
 
   const all = useMemo(() => views.data ?? [], [views.data]);
   const preset = useMemo(
     () => (activeId === '' ? activePreset(filters, meId) : null),
     [activeId, filters, meId],
+  );
+  const showUncontacted = hasUncontacted || preset === 'uncontacted';
+  const quick = useMemo(
+    () => availablePresets(QUICK_PRESETS, scoringOn, showUncontacted),
+    [scoringOn, showUncontacted],
   );
   const [favRaw, setFavRaw] = useStoredValue(PRESET_FAVORITES_KEY);
   const favPresets = useMemo(() => parsePresetFavorites(favRaw), [favRaw]);
@@ -122,6 +129,7 @@ export function ViewsBar({
             views={all}
             activeId={activeId}
             preset={preset}
+            showUncontacted={showUncontacted}
             favPresets={favPresets}
             onToggleFavPreset={(p) => setFavRaw(togglePresetFavorite(favRaw, p))}
             canCreate={can.create}
@@ -314,6 +322,7 @@ function Picker({
   views,
   activeId,
   preset,
+  showUncontacted,
   favPresets,
   onToggleFavPreset,
   canCreate,
@@ -326,6 +335,7 @@ function Picker({
   views: readonly ContactViewResponse[];
   activeId: string;
   preset: PresetView | null;
+  showUncontacted: boolean;
   favPresets: readonly PresetView[];
   onToggleFavPreset: (p: PresetView) => void;
   canCreate: boolean;
@@ -340,7 +350,7 @@ function Picker({
   const shown = pickerViews(views, q, 'all');
   const favorites = shown.filter((v) => v.isFavorite);
   const scoringOn = useLeadScoringEnabled();
-  const presets = availablePresets(PRESET_VIEWS, scoringOn).filter(
+  const presets = availablePresets(PRESET_VIEWS, scoringOn, showUncontacted).filter(
     (p) => q.trim() === '' || t(`presets.${p}`).toLowerCase().includes(q.trim().toLowerCase()),
   );
   const favPresetsShown = presets.filter((p) => favPresets.includes(p));

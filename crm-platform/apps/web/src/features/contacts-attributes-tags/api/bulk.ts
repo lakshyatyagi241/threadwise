@@ -51,7 +51,7 @@ export interface BulkOutcome {
 }
 
 /** Explicit id lists are capped per request; a longer one is sent in slices and the outcomes added up. */
-async function run(path: string, target: BulkTarget, extra: object = {}): Promise<BulkOutcome> {
+export async function run(path: string, target: BulkTarget, extra: object = {}): Promise<BulkOutcome> {
   const bodies =
     target.kind === 'ids' && target.ids.length > BULK_IDS_MAX
       ? Array.from({ length: Math.ceil(target.ids.length / BULK_IDS_MAX) }, (_, i) => ({

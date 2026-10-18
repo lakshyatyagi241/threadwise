@@ -28,4 +28,13 @@ export const settings = [
     order: 10,
     gates: { permission: 'record.contact-properties.read' },
   }),
+  settingsTile({
+    id: 'uncontacted-leads',
+    shortcutFrom: ['/contacts'],
+    section: 'automation',
+    href: '/uncontacted-leads',
+    icon: 'user',
+    order: 40,
+    gates: { permission: 'admin.settings.manage' },
+  }),
 ];
