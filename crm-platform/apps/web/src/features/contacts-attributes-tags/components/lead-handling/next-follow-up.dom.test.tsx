@@ -81,9 +81,9 @@ afterEach(() => {
 
 describe('isOverdue', () => {
   it('is true for a dated follow-up in the past only; someday is never overdue', () => {
-    expect(isOverdue({ id: 'a', dueAt: past, assigneeId: null })).toBe(true);
-    expect(isOverdue({ id: 'a', dueAt: future, assigneeId: null })).toBe(false);
-    expect(isOverdue({ id: 'a', dueAt: null, assigneeId: null })).toBe(false);
+    expect(isOverdue({ dueAt: past })).toBe(true);
+    expect(isOverdue({ dueAt: future })).toBe(false);
+    expect(isOverdue({ dueAt: null })).toBe(false);
   });
 });
 
