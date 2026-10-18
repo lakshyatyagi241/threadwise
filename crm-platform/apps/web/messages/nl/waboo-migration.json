@@ -1,0 +1,208 @@
+{
+  "waboo-migration": {
+    "nav": {
+      "group": "Migratie",
+      "panel": "Waboo-migratie"
+    },
+    "common": {
+      "loading": "Laden",
+      "retry": "Probeer opnieuw",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Je hebt geen toestemming om dit te doen.",
+        "request": "Dat verzoek kon niet worden voltooid.",
+        "unexpected": "Er ging iets mis aan onze kant. Probeer het over een moment opnieuw.",
+        "network": "De server kon niet worden bereikt. Controleer je verbinding en probeer het opnieuw.",
+        "validation": "Sommige waarden zijn ongeldig. Controleer de gemarkeerde velden.",
+        "notFound": "Deze run of batch bestaat niet meer.",
+        "active": "Er staat al een run voor een van deze organisaties in de wachtrij of die loopt al. Wacht tot die klaar is.",
+        "dryRequired": "Een migratie vereist voor elke organisatie een geslaagde testrun van de afgelopen 24 uur. Voer eerst een testrun uit.",
+        "confirm": "Wat je hebt getypt komt niet overeen.",
+        "notCancellable": "Alleen een run in de wachtrij of een geplande run kan worden geannuleerd. Een lopende migratie kan niet worden gestopt.",
+        "collision": "Dit organisatie-ID levert een klantsleutel op die al door een andere organisatie wordt gebruikt, of komt twee keer in de lijst voor.",
+        "schedule": "Kies een tijdstip in de toekomst, maximaal 90 dagen vooruit."
+      }
+    },
+    "page": {
+      "eyebrow": "Beheer / Systeem / Migratie",
+      "title": "Waboo-migratie",
+      "description": "Verplaats Waboo-organisaties naar WaDesk met de bestaande migratiepijplijn, direct of op een gekozen tijdstip, en volg ze hier stuk voor stuk.",
+      "banner": "Dit paneel maakt nooit verbinding met WhatsApp en schrijft nooit naar Waboo. Een migratie begint altijd met een eigen volledige repetitie die niets wegschrijft en stopt voordat er iets wordt geladen als de repetitie niet schoon is. Organisaties worden na elkaar uitgevoerd.",
+      "superOnly": "Alleen een superbeheerder kan migraties uitvoeren.",
+      "tabSingle": "Eén organisatie",
+      "tabBulk": "Bulk"
+    },
+    "form": {
+      "title": "Een run starten",
+      "org": "Organisatie-ID",
+      "orgHint": "Het ID van de Waboo-organisatie (werkruimte), dat gelijk is aan de naam van de Waboo-database. Letters, cijfers, underscore en plusteken.",
+      "orgInvalid": "Gebruik letters, cijfers, underscore of plusteken (maximaal 128).",
+      "derived": "Klantsleutel: {client} (afgeleid van het ID).",
+      "dryRun": "Testrun",
+      "dryRunning": "Starten",
+      "scheduleDry": "Testrun plannen",
+      "migrate": "Migreren",
+      "scheduleMigrate": "Migratie plannen",
+      "catchUp": "Bijwerken",
+      "migrateHint": "Migreren begint met een volledige repetitie en laadt niets als die niet schoon is. Een aparte testrun is optioneel.",
+      "queued": "Run in de wachtrij geplaatst.",
+      "scheduled": "Run gepland."
+    },
+    "confirm": {
+      "title": "{org} migreren",
+      "body": "Hiermee wordt organisatie {org} in WaDesk geladen. Het begint met een volledige repetitie en laadt niets als die niet schoon is; zodra het laden zelf begint, kan het niet meer worden gestopt. Typ het organisatie-ID ter bevestiging.",
+      "label": "Typ {org} ter bevestiging",
+      "cancel": "Annuleren",
+      "submit": "Migreren",
+      "catchupTitle": "{org} bijwerken",
+      "catchupBody": "Hiermee wordt de al geladen organisatie {org} bijgewerkt: de gegevens worden opnieuw uit Waboo geëxporteerd, alleen nieuwe rijen worden geladen, de portemonnee wordt gesynchroniseerd en het resultaat wordt geverifieerd. Het stopt als de eigen testrun niet schoon is en kan na de start niet meer worden gestopt. Typ het organisatie-ID ter bevestiging.",
+      "catchupSubmit": "Bijwerken"
+    },
+    "bulk": {
+      "title": "Bulkmigratie",
+      "ids": "Organisatie-ID's",
+      "idsHint": "Eén organisatie-ID per regel, maximaal {max}.",
+      "invalid": "Geen geldig ID: {ids}.",
+      "duplicates": "Twee keer opgegeven: {ids}.",
+      "collisions": "Dezelfde klantsleutel als een ander ID: {ids}.",
+      "tooMany": "Maximaal {max} organisaties tegelijk.",
+      "count": "{count} van {max} organisaties",
+      "stopOnFailure": "Stoppen bij eerste fout",
+      "stopHint": "Standaard uit: een mislukte organisatie stopt de rest niet.",
+      "sequential": "Organisaties worden na elkaar uitgevoerd, nooit twee tegelijk, omdat de stagingserver geen twee migraties tegelijk aankan.",
+      "notReady": "{count, plural, one {# organisatie heeft} other {# organisaties hebben}} geen geslaagde testrun van de afgelopen 24 uur, dus Alles migreren is uitgeschakeld.",
+      "dryAll": "Alles testen",
+      "dryRunning": "Starten",
+      "migrateAll": "Alles migreren",
+      "migrateHint": "Elke organisatie begint met een eigen volledige repetitie en laadt niets als die niet schoon is. Een aparte testrun is optioneel.",
+      "queued": "Batch in de wachtrij geplaatst.",
+      "scheduled": "Batch gepland."
+    },
+    "bulkConfirm": {
+      "title": "{count} organisaties migreren",
+      "body": "Hiermee worden {count} organisaties na elkaar in WaDesk geladen. Elke organisatie begint met een eigen volledige repetitie en laadt niets als die niet schoon is; zodra het laden begint, kan het niet meer worden gestopt. Typ het aantal organisaties ter bevestiging.",
+      "label": "Typ {count} ter bevestiging",
+      "cancel": "Annuleren",
+      "submit": "Alles migreren"
+    },
+    "readiness": {
+      "ok": "De laatste testrun is geslaagd en recent. Je kunt migreren.",
+      "okReview": "De laatste testrun is geslaagd maar gaf alarmen die je moet bekijken. Je kunt migreren zodra je ze hebt bekeken.",
+      "no_dry": "Nog geen testrun. Voer eerst een testrun uit.",
+      "not_green": "De laatste testrun is niet geslaagd. Los het op en voer opnieuw een testrun uit.",
+      "stale": "De laatste geslaagde testrun is ouder dan 24 uur. Voer een nieuwe testrun uit."
+    },
+    "schedule": {
+      "label": "Uitvoeren om (optioneel)",
+      "hint": "Je tijdzone: {tz}. Laat leeg om nu te starten.",
+      "utc": "Je tijdzone: {tz}. Dat is {utc} UTC.",
+      "error": {
+        "invalid": "Voer een geldige datum en tijd in.",
+        "past": "Kies een tijdstip in de toekomst.",
+        "tooFar": "Maximaal 90 dagen vooruit."
+      }
+    },
+    "runs": {
+      "title": "Runs",
+      "empty": "Nog geen runs.",
+      "emptyHint": "Start hierboven een testrun.",
+      "open": "Openen",
+      "client": "Klant",
+      "database": "Database",
+      "mode": "Modus",
+      "status": "Status",
+      "created": "Aangemaakt"
+    },
+    "batches": {
+      "title": "Bulkbatches",
+      "empty": "Nog geen batches.",
+      "emptyHint": "Gebruik hierboven het tabblad Bulk.",
+      "open": "Openen",
+      "orgs": "{count, plural, one {# organisatie} other {# organisaties}}"
+    },
+    "batch": {
+      "title": "Batch van {count, plural, one {# organisatie} other {# organisaties}}",
+      "back": "Sluiten",
+      "cancel": "Batch annuleren",
+      "cancelling": "Annuleren",
+      "cancelled": "Batch geannuleerd.",
+      "progress": "Voltooid",
+      "runAt": "Gepland voor",
+      "started": "Gestart",
+      "finished": "Voltooid om",
+      "stopOn": "Stopt bij de eerste fout.",
+      "stopOff": "Een mislukte organisatie stopt de rest niet.",
+      "polling": "Wordt bijgewerkt zolang de batch actief is."
+    },
+    "batchStatus": {
+      "queued": "In wachtrij",
+      "running": "Bezig",
+      "completed": "Voltooid",
+      "failed": "Voltooid met problemen",
+      "cancelled": "Geannuleerd"
+    },
+    "detail": {
+      "title": "Run {org}",
+      "back": "Sluiten",
+      "cancel": "Run annuleren",
+      "cancelling": "Annuleren",
+      "cancelled": "Run geannuleerd.",
+      "clientKey": "Klantsleutel",
+      "runAt": "Gepland voor",
+      "started": "Gestart",
+      "finished": "Voltooid",
+      "steps": "Stappen",
+      "noSteps": "Nog geen stappen gemeld.",
+      "report": "Resultaat van de verificatie",
+      "error": "Fout",
+      "polling": "Wordt bijgewerkt zolang de run actief is.",
+      "counts": "Aantallen"
+    },
+    "verdict": {
+      "green": "Groen: niets onverklaard, geen integriteitsfouten",
+      "amber": "Alarmen bekijken: er ontbreken geen gegevens, maar de verificatie gaf alarmen om te bekijken",
+      "red": "Rood: vraagt aandacht. Beschouw deze run niet als voltooid",
+      "unaccounted": "Onverklaard",
+      "integrityErrors": "Integriteitsfouten",
+      "alarms": "Alarmen",
+      "short": {
+        "green": "Groen",
+        "amber": "Alarmen bekijken",
+        "red": "Rood"
+      }
+    },
+    "mode": {
+      "dry": "Testrun",
+      "load": "Migratie",
+      "catchup": "Bijwerken"
+    },
+    "status": {
+      "queued": "In wachtrij",
+      "scheduled": "Gepland",
+      "running": "Bezig",
+      "completed": "Voltooid",
+      "completedReview": "Voltooid, alarmen bekijken",
+      "completedRed": "Voltooid met fouten",
+      "failed": "Mislukt",
+      "cancelled": "Geannuleerd",
+      "blocked": "Geblokkeerd, niet geladen"
+    },
+    "step": {
+      "export": "Export",
+      "preflight": "Voorafgaande controles",
+      "backup": "Back-up",
+      "dry": "Testlading",
+      "load": "Laden",
+      "core-load": "Kernlading",
+      "flow-state": "Flowstatus",
+      "reconcile": "Afstemmen",
+      "report": "Rapport"
+    },
+    "stepStatus": {
+      "running": "Bezig",
+      "done": "Klaar",
+      "failed": "Mislukt",
+      "skipped": "Overgeslagen"
+    }
+  }
+}

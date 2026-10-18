@@ -1,0 +1,208 @@
+{
+  "waboo-migration": {
+    "nav": {
+      "group": "Migrasi",
+      "panel": "Migrasi Waboo"
+    },
+    "common": {
+      "loading": "Memuat",
+      "retry": "Coba lagi",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Anda tidak memiliki izin untuk melakukan ini.",
+        "request": "Permintaan tersebut tidak dapat diselesaikan.",
+        "unexpected": "Terjadi masalah di pihak kami. Coba lagi sebentar lagi.",
+        "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda lalu coba lagi.",
+        "validation": "Beberapa nilai tidak valid. Periksa kolom yang disorot.",
+        "notFound": "Proses atau batch tersebut sudah tidak ada.",
+        "active": "Proses untuk salah satu organisasi ini sudah mengantre atau berjalan. Tunggu hingga selesai.",
+        "dryRequired": "Migrasi memerlukan uji coba yang lolos dalam 24 jam terakhir untuk setiap organisasi. Jalankan uji coba terlebih dahulu.",
+        "confirm": "Yang Anda ketik tidak cocok.",
+        "notCancellable": "Hanya proses yang mengantre atau terjadwal yang dapat dibatalkan. Migrasi yang sedang berjalan tidak dapat dihentikan.",
+        "collision": "ID organisasi tersebut menghasilkan kunci klien yang sudah dipakai organisasi lain, atau muncul dua kali dalam daftar.",
+        "schedule": "Pilih waktu di masa depan, paling lama 90 hari ke depan."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin / Sistem / Migrasi",
+      "title": "Migrasi Waboo",
+      "description": "Pindahkan organisasi Waboo ke WaDesk dengan alur migrasi yang ada, sekarang atau pada waktu yang dipilih, dan pantau masing-masing dari sini.",
+      "banner": "Panel ini tidak pernah menghubungkan WhatsApp dan tidak pernah menulis ke Waboo. Setiap migrasi selalu diawali gladi penuh sendiri yang tidak menulis apa pun, dan berhenti sebelum memuat data apa pun jika gladi tidak bersih. Organisasi dijalankan satu per satu.",
+      "superOnly": "Hanya super admin yang dapat menjalankan migrasi.",
+      "tabSingle": "Satu organisasi",
+      "tabBulk": "Massal"
+    },
+    "form": {
+      "title": "Mulai proses",
+      "org": "ID organisasi",
+      "orgHint": "ID organisasi (workspace) Waboo, yaitu nama database Waboo. Huruf, angka, garis bawah, dan tanda plus.",
+      "orgInvalid": "Gunakan huruf, angka, garis bawah, atau tanda plus (maksimal 128).",
+      "derived": "Kunci klien: {client} (diturunkan dari ID).",
+      "dryRun": "Uji coba",
+      "dryRunning": "Memulai",
+      "scheduleDry": "Jadwalkan uji coba",
+      "migrate": "Migrasikan",
+      "scheduleMigrate": "Jadwalkan migrasi",
+      "catchUp": "Sinkronkan",
+      "migrateHint": "Migrasi diawali gladi penuh dan tidak memuat apa pun jika gladi tidak bersih. Uji coba terpisah bersifat opsional.",
+      "queued": "Proses masuk antrean.",
+      "scheduled": "Proses dijadwalkan."
+    },
+    "confirm": {
+      "title": "Migrasikan {org}",
+      "body": "Ini akan memuat organisasi {org} ke WaDesk. Proses diawali gladi penuh dan tidak memuat apa pun jika gladi tidak bersih; setelah pemuatan dimulai, proses tidak dapat dihentikan. Ketik ID organisasi untuk mengonfirmasi.",
+      "label": "Ketik {org} untuk mengonfirmasi",
+      "cancel": "Batal",
+      "submit": "Migrasikan",
+      "catchupTitle": "Sinkronkan {org}",
+      "catchupBody": "Ini memperbarui organisasi {org} yang sudah dimuat: mengekspor ulang dari Waboo, hanya memuat baris baru, menyinkronkan dompet, dan memverifikasi hasilnya. Proses berhenti jika uji cobanya sendiri tidak bersih, dan tidak dapat dihentikan setelah dimulai. Ketik ID organisasi untuk mengonfirmasi.",
+      "catchupSubmit": "Sinkronkan"
+    },
+    "bulk": {
+      "title": "Migrasi massal",
+      "ids": "ID organisasi",
+      "idsHint": "Satu ID organisasi per baris, maksimal {max}.",
+      "invalid": "ID tidak valid: {ids}.",
+      "duplicates": "Terdaftar dua kali: {ids}.",
+      "collisions": "Kunci klien sama dengan ID lain: {ids}.",
+      "tooMany": "Maksimal {max} organisasi sekaligus.",
+      "count": "{count} dari {max} organisasi",
+      "stopOnFailure": "Berhenti pada kegagalan pertama",
+      "stopHint": "Nonaktif secara default: organisasi yang gagal tidak menghentikan sisanya.",
+      "sequential": "Organisasi dijalankan satu per satu, tidak pernah dua sekaligus, karena server staging tidak dapat menjalankan dua migrasi bersamaan.",
+      "notReady": "{count, plural, other {# organisasi}} belum memiliki uji coba yang lolos dalam 24 jam terakhir, sehingga Migrasikan semua dinonaktifkan.",
+      "dryAll": "Uji coba semua",
+      "dryRunning": "Memulai",
+      "migrateAll": "Migrasikan semua",
+      "migrateHint": "Setiap organisasi diawali gladi penuh sendiri dan tidak memuat apa pun jika gladi tidak bersih. Uji coba terpisah bersifat opsional.",
+      "queued": "Batch masuk antrean.",
+      "scheduled": "Batch dijadwalkan."
+    },
+    "bulkConfirm": {
+      "title": "Migrasikan {count} organisasi",
+      "body": "Ini akan memuat {count} organisasi ke WaDesk, satu per satu. Masing-masing diawali gladi penuh sendiri dan tidak memuat apa pun jika gladi tidak bersih; setelah pemuatan dimulai, proses tidak dapat dihentikan. Ketik jumlah organisasi untuk mengonfirmasi.",
+      "label": "Ketik {count} untuk mengonfirmasi",
+      "cancel": "Batal",
+      "submit": "Migrasikan semua"
+    },
+    "readiness": {
+      "ok": "Uji coba terakhir lolos dan masih baru. Anda dapat melakukan migrasi.",
+      "okReview": "Uji coba terakhir lolos tetapi memunculkan peringatan yang perlu ditinjau. Anda dapat melakukan migrasi setelah meninjaunya.",
+      "no_dry": "Belum ada uji coba. Jalankan uji coba terlebih dahulu.",
+      "not_green": "Uji coba terakhir tidak lolos. Perbaiki lalu jalankan uji coba lagi.",
+      "stale": "Uji coba lolos terakhir sudah lebih dari 24 jam. Jalankan uji coba baru."
+    },
+    "schedule": {
+      "label": "Jalankan pada (opsional)",
+      "hint": "Zona waktu Anda: {tz}. Kosongkan untuk mulai sekarang.",
+      "utc": "Zona waktu Anda: {tz}. Itu adalah {utc} UTC.",
+      "error": {
+        "invalid": "Masukkan tanggal dan waktu yang valid.",
+        "past": "Pilih waktu di masa depan.",
+        "tooFar": "Paling lama 90 hari ke depan."
+      }
+    },
+    "runs": {
+      "title": "Proses",
+      "empty": "Belum ada proses.",
+      "emptyHint": "Mulai uji coba di atas.",
+      "open": "Buka",
+      "client": "Klien",
+      "database": "Database",
+      "mode": "Mode",
+      "status": "Status",
+      "created": "Dibuat"
+    },
+    "batches": {
+      "title": "Batch massal",
+      "empty": "Belum ada batch.",
+      "emptyHint": "Gunakan tab Massal di atas.",
+      "open": "Buka",
+      "orgs": "{count, plural, other {# organisasi}}"
+    },
+    "batch": {
+      "title": "Batch berisi {count, plural, other {# organisasi}}",
+      "back": "Tutup",
+      "cancel": "Batalkan batch",
+      "cancelling": "Membatalkan",
+      "cancelled": "Batch dibatalkan.",
+      "progress": "Selesai",
+      "runAt": "Dijadwalkan pada",
+      "started": "Dimulai",
+      "finished": "Selesai pada",
+      "stopOn": "Berhenti pada kegagalan pertama.",
+      "stopOff": "Organisasi yang gagal tidak menghentikan sisanya.",
+      "polling": "Diperbarui selama batch aktif."
+    },
+    "batchStatus": {
+      "queued": "Mengantre",
+      "running": "Berjalan",
+      "completed": "Selesai",
+      "failed": "Selesai dengan masalah",
+      "cancelled": "Dibatalkan"
+    },
+    "detail": {
+      "title": "Proses {org}",
+      "back": "Tutup",
+      "cancel": "Batalkan proses",
+      "cancelling": "Membatalkan",
+      "cancelled": "Proses dibatalkan.",
+      "clientKey": "Kunci klien",
+      "runAt": "Dijadwalkan pada",
+      "started": "Dimulai",
+      "finished": "Selesai",
+      "steps": "Langkah",
+      "noSteps": "Belum ada langkah yang dilaporkan.",
+      "report": "Hasil verifikator",
+      "error": "Kesalahan",
+      "polling": "Diperbarui selama proses aktif.",
+      "counts": "Jumlah"
+    },
+    "verdict": {
+      "green": "Hijau: tidak ada yang tak terhitung, tidak ada kesalahan integritas",
+      "amber": "Tinjau peringatan: tidak ada data yang hilang, tetapi verifikator memunculkan peringatan yang perlu dilihat",
+      "red": "Merah: perlu perhatian. Jangan anggap proses ini selesai",
+      "unaccounted": "Tak terhitung",
+      "integrityErrors": "Kesalahan integritas",
+      "alarms": "Peringatan",
+      "short": {
+        "green": "Hijau",
+        "amber": "Tinjau peringatan",
+        "red": "Merah"
+      }
+    },
+    "mode": {
+      "dry": "Uji coba",
+      "load": "Migrasi",
+      "catchup": "Sinkronisasi"
+    },
+    "status": {
+      "queued": "Mengantre",
+      "scheduled": "Terjadwal",
+      "running": "Berjalan",
+      "completed": "Selesai",
+      "completedReview": "Selesai, tinjau peringatan",
+      "completedRed": "Selesai dengan kesalahan",
+      "failed": "Gagal",
+      "cancelled": "Dibatalkan",
+      "blocked": "Diblokir, tidak dimuat"
+    },
+    "step": {
+      "export": "Ekspor",
+      "preflight": "Pemeriksaan awal",
+      "backup": "Cadangan",
+      "dry": "Pemuatan uji coba",
+      "load": "Pemuatan",
+      "core-load": "Pemuatan inti",
+      "flow-state": "Status alur",
+      "reconcile": "Rekonsiliasi",
+      "report": "Laporan"
+    },
+    "stepStatus": {
+      "running": "Berjalan",
+      "done": "Selesai",
+      "failed": "Gagal",
+      "skipped": "Dilewati"
+    }
+  }
+}

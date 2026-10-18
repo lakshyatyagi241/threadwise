@@ -1,0 +1,208 @@
+{
+  "waboo-migration": {
+    "nav": {
+      "group": "Migração",
+      "panel": "Migração do Waboo"
+    },
+    "common": {
+      "loading": "Carregando",
+      "retry": "Tentar novamente",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Você não tem permissão para fazer isso.",
+        "request": "Não foi possível concluir a solicitação.",
+        "unexpected": "Algo deu errado do nosso lado. Tente novamente em instantes.",
+        "network": "Não foi possível acessar o servidor. Verifique sua conexão e tente novamente.",
+        "validation": "Alguns valores não são válidos. Verifique os campos destacados.",
+        "notFound": "Essa execução ou esse lote não existe mais.",
+        "active": "Já há uma execução na fila ou em andamento para uma dessas organizações. Aguarde o término.",
+        "dryRequired": "Uma migração exige uma simulação bem-sucedida nas últimas 24 horas para cada organização. Faça uma simulação primeiro.",
+        "confirm": "O que você digitou não confere.",
+        "notCancellable": "Somente uma execução na fila ou agendada pode ser cancelada. Uma migração em andamento não pode ser interrompida.",
+        "collision": "Esse ID de organização gera uma chave de cliente já usada por outra organização, ou aparece duas vezes na lista.",
+        "schedule": "Escolha um horário futuro, no máximo daqui a 90 dias."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin / Sistema / Migração",
+      "title": "Migração do Waboo",
+      "description": "Mova organizações do Waboo para o WaDesk com o pipeline de migração existente, agora ou em um horário escolhido, e acompanhe cada uma por aqui.",
+      "banner": "Este painel nunca conecta o WhatsApp e nunca grava no Waboo. Toda migração começa com seu próprio ensaio completo, que não grava nada, e é interrompida antes de carregar qualquer dado se o ensaio não estiver limpo. As organizações são executadas uma após a outra.",
+      "superOnly": "Somente um superadministrador pode executar migrações.",
+      "tabSingle": "Uma organização",
+      "tabBulk": "Em massa"
+    },
+    "form": {
+      "title": "Iniciar uma execução",
+      "org": "ID da organização",
+      "orgHint": "O ID da organização (workspace) do Waboo, que é o nome do banco de dados do Waboo. Letras, dígitos, sublinhado e sinal de mais.",
+      "orgInvalid": "Use letras, dígitos, sublinhado ou sinal de mais (até 128).",
+      "derived": "Chave do cliente: {client} (derivada do ID).",
+      "dryRun": "Simulação",
+      "dryRunning": "Iniciando",
+      "scheduleDry": "Agendar simulação",
+      "migrate": "Migrar",
+      "scheduleMigrate": "Agendar migração",
+      "catchUp": "Atualizar",
+      "migrateHint": "Migrar começa com um ensaio completo e não carrega nada se ele não estiver limpo. Uma simulação separada é opcional.",
+      "queued": "Execução na fila.",
+      "scheduled": "Execução agendada."
+    },
+    "confirm": {
+      "title": "Migrar {org}",
+      "body": "Isso carrega a organização {org} no WaDesk. Começa com um ensaio completo e não carrega nada se ele não estiver limpo; depois que a carga começa, ela não pode ser interrompida. Digite o ID da organização para confirmar.",
+      "label": "Digite {org} para confirmar",
+      "cancel": "Cancelar",
+      "submit": "Migrar",
+      "catchupTitle": "Atualizar {org}",
+      "catchupBody": "Isso atualiza a organização {org} já carregada: reexporta do Waboo, carrega apenas as linhas novas, sincroniza a carteira e verifica o resultado. Ela é interrompida se a própria simulação não estiver limpa e não pode ser interrompida depois de iniciada. Digite o ID da organização para confirmar.",
+      "catchupSubmit": "Atualizar"
+    },
+    "bulk": {
+      "title": "Migração em massa",
+      "ids": "IDs das organizações",
+      "idsHint": "Um ID de organização por linha, no máximo {max}.",
+      "invalid": "ID inválido: {ids}.",
+      "duplicates": "Listado duas vezes: {ids}.",
+      "collisions": "Mesma chave de cliente de outro ID: {ids}.",
+      "tooMany": "No máximo {max} organizações por vez.",
+      "count": "{count} de {max} organizações",
+      "stopOnFailure": "Parar na primeira falha",
+      "stopHint": "Desativado por padrão: uma organização com falha não interrompe as demais.",
+      "sequential": "As organizações são executadas uma após a outra, nunca duas ao mesmo tempo, porque o servidor de homologação não consegue executar duas migrações juntas.",
+      "notReady": "{count, plural, one {# organização não tem} other {# organizações não têm}} uma simulação bem-sucedida nas últimas 24 horas, por isso Migrar todas está desativado.",
+      "dryAll": "Simular todas",
+      "dryRunning": "Iniciando",
+      "migrateAll": "Migrar todas",
+      "migrateHint": "Cada organização começa com seu próprio ensaio completo e não carrega nada se ele não estiver limpo. Uma simulação separada é opcional.",
+      "queued": "Lote na fila.",
+      "scheduled": "Lote agendado."
+    },
+    "bulkConfirm": {
+      "title": "Migrar {count} organizações",
+      "body": "Isso carrega {count} organizações no WaDesk, uma após a outra. Cada uma começa com seu próprio ensaio completo e não carrega nada se ele não estiver limpo; depois que uma carga começa, ela não pode ser interrompida. Digite o número de organizações para confirmar.",
+      "label": "Digite {count} para confirmar",
+      "cancel": "Cancelar",
+      "submit": "Migrar todas"
+    },
+    "readiness": {
+      "ok": "A última simulação foi bem-sucedida e é recente. Você pode migrar.",
+      "okReview": "A última simulação foi bem-sucedida, mas gerou alarmes para revisar. Você pode migrar depois de revisá-los.",
+      "no_dry": "Ainda não há simulação. Faça uma simulação primeiro.",
+      "not_green": "A última simulação não foi bem-sucedida. Corrija e faça uma nova simulação.",
+      "stale": "A última simulação bem-sucedida tem mais de 24 horas. Faça uma nova simulação."
+    },
+    "schedule": {
+      "label": "Executar em (opcional)",
+      "hint": "Seu fuso horário: {tz}. Deixe vazio para começar agora.",
+      "utc": "Seu fuso horário: {tz}. Isso equivale a {utc} UTC.",
+      "error": {
+        "invalid": "Informe uma data e hora válidas.",
+        "past": "Escolha um horário futuro.",
+        "tooFar": "No máximo daqui a 90 dias."
+      }
+    },
+    "runs": {
+      "title": "Execuções",
+      "empty": "Ainda não há execuções.",
+      "emptyHint": "Inicie uma simulação acima.",
+      "open": "Abrir",
+      "client": "Cliente",
+      "database": "Banco de dados",
+      "mode": "Modo",
+      "status": "Status",
+      "created": "Criada em"
+    },
+    "batches": {
+      "title": "Lotes em massa",
+      "empty": "Ainda não há lotes.",
+      "emptyHint": "Use a aba Em massa acima.",
+      "open": "Abrir",
+      "orgs": "{count, plural, one {# organização} other {# organizações}}"
+    },
+    "batch": {
+      "title": "Lote de {count, plural, one {# organização} other {# organizações}}",
+      "back": "Fechar",
+      "cancel": "Cancelar lote",
+      "cancelling": "Cancelando",
+      "cancelled": "Lote cancelado.",
+      "progress": "Concluídas",
+      "runAt": "Agendado para",
+      "started": "Iniciado",
+      "finished": "Concluído em",
+      "stopOn": "Para na primeira falha.",
+      "stopOff": "Uma organização com falha não interrompe as demais.",
+      "polling": "Atualizando enquanto o lote está ativo."
+    },
+    "batchStatus": {
+      "queued": "Na fila",
+      "running": "Em andamento",
+      "completed": "Concluído",
+      "failed": "Concluído com problemas",
+      "cancelled": "Cancelado"
+    },
+    "detail": {
+      "title": "Execução {org}",
+      "back": "Fechar",
+      "cancel": "Cancelar execução",
+      "cancelling": "Cancelando",
+      "cancelled": "Execução cancelada.",
+      "clientKey": "Chave do cliente",
+      "runAt": "Agendada para",
+      "started": "Iniciada",
+      "finished": "Concluída",
+      "steps": "Etapas",
+      "noSteps": "Nenhuma etapa informada ainda.",
+      "report": "Resultado do verificador",
+      "error": "Erro",
+      "polling": "Atualizando enquanto a execução está ativa.",
+      "counts": "Contagens"
+    },
+    "verdict": {
+      "green": "Verde: nada sem correspondência, sem erros de integridade",
+      "amber": "Revisar alarmes: nenhum dado está faltando, mas o verificador gerou alarmes para análise",
+      "red": "Vermelho: requer atenção. Não considere esta execução concluída",
+      "unaccounted": "Sem correspondência",
+      "integrityErrors": "Erros de integridade",
+      "alarms": "Alarmes",
+      "short": {
+        "green": "Verde",
+        "amber": "Revisar alarmes",
+        "red": "Vermelho"
+      }
+    },
+    "mode": {
+      "dry": "Simulação",
+      "load": "Migração",
+      "catchup": "Atualização"
+    },
+    "status": {
+      "queued": "Na fila",
+      "scheduled": "Agendada",
+      "running": "Em andamento",
+      "completed": "Concluída",
+      "completedReview": "Concluída, revisar alarmes",
+      "completedRed": "Concluída com erros",
+      "failed": "Falhou",
+      "cancelled": "Cancelada",
+      "blocked": "Bloqueada, não carregada"
+    },
+    "step": {
+      "export": "Exportação",
+      "preflight": "Verificações prévias",
+      "backup": "Backup",
+      "dry": "Carga de teste",
+      "load": "Carga",
+      "core-load": "Carga principal",
+      "flow-state": "Estado dos fluxos",
+      "reconcile": "Conciliação",
+      "report": "Relatório"
+    },
+    "stepStatus": {
+      "running": "Em andamento",
+      "done": "Concluída",
+      "failed": "Falhou",
+      "skipped": "Ignorada"
+    }
+  }
+}

@@ -1,0 +1,208 @@
+{
+  "waboo-migration": {
+    "nav": {
+      "group": "Taşıma",
+      "panel": "Waboo taşıma"
+    },
+    "common": {
+      "loading": "Yükleniyor",
+      "retry": "Tekrar dene",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Bu işlemi yapmak için yetkiniz yok.",
+        "request": "Bu istek tamamlanamadı.",
+        "unexpected": "Bizim tarafımızda bir sorun oluştu. Birazdan tekrar deneyin.",
+        "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+        "validation": "Bazı değerler geçerli değil. Vurgulanan alanları kontrol edin.",
+        "notFound": "Bu çalıştırma veya toplu iş artık mevcut değil.",
+        "active": "Bu kuruluşlardan biri için bir çalıştırma zaten kuyrukta veya çalışıyor. Bitmesini bekleyin.",
+        "dryRequired": "Taşıma için her kuruluşta son 24 saat içinde başarılı bir deneme çalıştırması gerekir. Önce bir deneme çalıştırması yapın.",
+        "confirm": "Yazdığınız metin eşleşmiyor.",
+        "notCancellable": "Yalnızca kuyruktaki veya zamanlanmış bir çalıştırma iptal edilebilir. Çalışmakta olan bir taşıma durdurulamaz.",
+        "collision": "Bu kuruluş kimliği, farklı bir kuruluş tarafından zaten kullanılan bir istemci anahtarı üretiyor veya listede iki kez geçiyor.",
+        "schedule": "Gelecekte bir zaman seçin, en fazla 90 gün sonrası."
+      }
+    },
+    "page": {
+      "eyebrow": "Yönetim / Sistem / Taşıma",
+      "title": "Waboo taşıma",
+      "description": "Waboo kuruluşlarını mevcut taşıma hattıyla WaDesk'e hemen veya seçtiğiniz bir zamanda taşıyın ve her birini buradan takip edin.",
+      "banner": "Bu panel WhatsApp'a asla bağlanmaz ve Waboo'ya asla yazmaz. Her taşıma, hiçbir şey yazmayan kendi tam provasıyla başlar ve prova temiz değilse hiçbir şey yüklenmeden durur. Kuruluşlar birbiri ardına çalışır.",
+      "superOnly": "Taşımaları yalnızca süper yönetici çalıştırabilir.",
+      "tabSingle": "Tek kuruluş",
+      "tabBulk": "Toplu"
+    },
+    "form": {
+      "title": "Çalıştırma başlat",
+      "org": "Kuruluş ID",
+      "orgHint": "Waboo kuruluş (çalışma alanı) kimliği; bu, Waboo veritabanı adıdır. Harf, rakam, alt çizgi ve artı işareti kullanılabilir.",
+      "orgInvalid": "Harf, rakam, alt çizgi veya artı işareti kullanın (en fazla 128).",
+      "derived": "İstemci anahtarı: {client} (kimlikten türetilir).",
+      "dryRun": "Deneme çalıştırması",
+      "dryRunning": "Başlatılıyor",
+      "scheduleDry": "Deneme çalıştırmasını zamanla",
+      "migrate": "Taşı",
+      "scheduleMigrate": "Taşımayı zamanla",
+      "catchUp": "Güncelle",
+      "migrateHint": "Taşıma tam bir provayla başlar ve prova temiz değilse hiçbir şey yüklemez. Ayrı bir deneme çalıştırması isteğe bağlıdır.",
+      "queued": "Çalıştırma kuyruğa alındı.",
+      "scheduled": "Çalıştırma zamanlandı."
+    },
+    "confirm": {
+      "title": "{org} taşı",
+      "body": "Bu işlem {org} kuruluşunu WaDesk'e yükler. Tam bir provayla başlar ve prova temiz değilse hiçbir şey yüklemez; yükleme başladıktan sonra durdurulamaz. Onaylamak için kuruluş ID'sini yazın.",
+      "label": "Onaylamak için {org} yazın",
+      "cancel": "İptal",
+      "submit": "Taşı",
+      "catchupTitle": "{org} güncelle",
+      "catchupBody": "Bu işlem, daha önce yüklenmiş {org} kuruluşunu güncel hale getirir: Waboo'dan yeniden dışa aktarır, yalnızca yeni satırları yükler, cüzdanı eşitler ve sonucu doğrular. Kendi deneme çalıştırması temiz değilse durur ve başladıktan sonra durdurulamaz. Onaylamak için kuruluş ID'sini yazın.",
+      "catchupSubmit": "Güncelle"
+    },
+    "bulk": {
+      "title": "Toplu taşıma",
+      "ids": "Kuruluş ID'leri",
+      "idsHint": "Her satıra bir kuruluş ID'si, en fazla {max}.",
+      "invalid": "Geçerli bir ID değil: {ids}.",
+      "duplicates": "İki kez listelenmiş: {ids}.",
+      "collisions": "Başka bir ID ile aynı istemci anahtarı: {ids}.",
+      "tooMany": "Aynı anda en fazla {max} kuruluş.",
+      "count": "{max} kuruluştan {count} tanesi",
+      "stopOnFailure": "İlk hatada dur",
+      "stopHint": "Varsayılan olarak kapalı: başarısız olan bir kuruluş diğerlerini durdurmaz.",
+      "sequential": "Hazırlık sunucusu iki taşımayı birlikte çalıştıramadığı için kuruluşlar birbiri ardına çalışır, asla ikisi aynı anda çalışmaz.",
+      "notReady": "{count, plural, one {# kuruluşun} other {# kuruluşun}} son 24 saat içinde başarılı bir deneme çalıştırması yok, bu yüzden Tümünü taşı kapalı.",
+      "dryAll": "Tümünü dene",
+      "dryRunning": "Başlatılıyor",
+      "migrateAll": "Tümünü taşı",
+      "migrateHint": "Her kuruluş kendi tam provasıyla başlar ve prova temiz değilse hiçbir şey yüklemez. Ayrı bir deneme çalıştırması isteğe bağlıdır.",
+      "queued": "Toplu iş kuyruğa alındı.",
+      "scheduled": "Toplu iş zamanlandı."
+    },
+    "bulkConfirm": {
+      "title": "{count} kuruluşu taşı",
+      "body": "Bu işlem {count} kuruluşu birbiri ardına WaDesk'e yükler. Her biri kendi tam provasıyla başlar ve prova temiz değilse hiçbir şey yüklemez; yükleme başladıktan sonra durdurulamaz. Onaylamak için kuruluş sayısını yazın.",
+      "label": "Onaylamak için {count} yazın",
+      "cancel": "İptal",
+      "submit": "Tümünü taşı"
+    },
+    "readiness": {
+      "ok": "Son deneme çalıştırması başarılı ve güncel. Taşıyabilirsiniz.",
+      "okReview": "Son deneme çalıştırması başarılı ancak incelenmesi gereken uyarılar verdi. İnceledikten sonra taşıyabilirsiniz.",
+      "no_dry": "Henüz deneme çalıştırması yok. Önce bir deneme çalıştırması yapın.",
+      "not_green": "Son deneme çalıştırması başarılı değil. Düzeltip deneme çalıştırmasını tekrar yapın.",
+      "stale": "Son başarılı deneme çalıştırması 24 saatten eski. Yeni bir deneme çalıştırması yapın."
+    },
+    "schedule": {
+      "label": "Çalışma zamanı (isteğe bağlı)",
+      "hint": "Saat diliminiz: {tz}. Hemen başlatmak için boş bırakın.",
+      "utc": "Saat diliminiz: {tz}. Bu, {utc} UTC eder.",
+      "error": {
+        "invalid": "Geçerli bir tarih ve saat girin.",
+        "past": "Gelecekte bir zaman seçin.",
+        "tooFar": "En fazla 90 gün sonrası."
+      }
+    },
+    "runs": {
+      "title": "Çalıştırmalar",
+      "empty": "Henüz çalıştırma yok.",
+      "emptyHint": "Yukarıdan bir deneme çalıştırması başlatın.",
+      "open": "Aç",
+      "client": "İstemci",
+      "database": "Veritabanı",
+      "mode": "Mod",
+      "status": "Durum",
+      "created": "Oluşturulma"
+    },
+    "batches": {
+      "title": "Toplu işler",
+      "empty": "Henüz toplu iş yok.",
+      "emptyHint": "Yukarıdaki Toplu sekmesini kullanın.",
+      "open": "Aç",
+      "orgs": "{count, plural, one {# kuruluş} other {# kuruluş}}"
+    },
+    "batch": {
+      "title": "{count, plural, one {# kuruluşluk} other {# kuruluşluk}} toplu iş",
+      "back": "Kapat",
+      "cancel": "Toplu işi iptal et",
+      "cancelling": "İptal ediliyor",
+      "cancelled": "Toplu iş iptal edildi.",
+      "progress": "Tamamlanan",
+      "runAt": "Zamanlanan",
+      "started": "Başlangıç",
+      "finished": "Bitiş zamanı",
+      "stopOn": "İlk hatada durur.",
+      "stopOff": "Başarısız olan bir kuruluş diğerlerini durdurmaz.",
+      "polling": "Toplu iş etkin olduğu sürece güncellenir."
+    },
+    "batchStatus": {
+      "queued": "Kuyrukta",
+      "running": "Çalışıyor",
+      "completed": "Tamamlandı",
+      "failed": "Sorunlarla bitti",
+      "cancelled": "İptal edildi"
+    },
+    "detail": {
+      "title": "Çalıştırma {org}",
+      "back": "Kapat",
+      "cancel": "Çalıştırmayı iptal et",
+      "cancelling": "İptal ediliyor",
+      "cancelled": "Çalıştırma iptal edildi.",
+      "clientKey": "İstemci anahtarı",
+      "runAt": "Zamanlanan",
+      "started": "Başlangıç",
+      "finished": "Bitiş",
+      "steps": "Adımlar",
+      "noSteps": "Henüz bildirilen adım yok.",
+      "report": "Doğrulayıcı sonucu",
+      "error": "Hata",
+      "polling": "Çalıştırma etkin olduğu sürece güncellenir.",
+      "counts": "Sayılar"
+    },
+    "verdict": {
+      "green": "Yeşil: açıklanamayan kayıt yok, bütünlük hatası yok",
+      "amber": "Uyarıları inceleyin: eksik veri yok, ancak doğrulayıcı incelenmesi gereken uyarılar verdi",
+      "red": "Kırmızı: dikkat gerekiyor. Bu çalıştırmayı tamamlanmış saymayın",
+      "unaccounted": "Açıklanamayan",
+      "integrityErrors": "Bütünlük hataları",
+      "alarms": "Uyarılar",
+      "short": {
+        "green": "Yeşil",
+        "amber": "Uyarıları incele",
+        "red": "Kırmızı"
+      }
+    },
+    "mode": {
+      "dry": "Deneme çalıştırması",
+      "load": "Taşıma",
+      "catchup": "Güncelleme"
+    },
+    "status": {
+      "queued": "Kuyrukta",
+      "scheduled": "Zamanlandı",
+      "running": "Çalışıyor",
+      "completed": "Tamamlandı",
+      "completedReview": "Tamamlandı, uyarıları inceleyin",
+      "completedRed": "Hatalarla bitti",
+      "failed": "Başarısız",
+      "cancelled": "İptal edildi",
+      "blocked": "Engellendi, yüklenmedi"
+    },
+    "step": {
+      "export": "Dışa aktarma",
+      "preflight": "Ön kontroller",
+      "backup": "Yedekleme",
+      "dry": "Deneme yüklemesi",
+      "load": "Yükleme",
+      "core-load": "Çekirdek yükleme",
+      "flow-state": "Akış durumu",
+      "reconcile": "Mutabakat",
+      "report": "Rapor"
+    },
+    "stepStatus": {
+      "running": "Çalışıyor",
+      "done": "Bitti",
+      "failed": "Başarısız",
+      "skipped": "Atlandı"
+    }
+  }
+}
