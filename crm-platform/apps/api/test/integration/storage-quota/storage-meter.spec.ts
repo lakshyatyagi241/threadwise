@@ -4,6 +4,10 @@ import { resolve } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createDbClientPair, runMigrations, type DbClientPair } from '@crm/db';
 import { sql } from 'drizzle-orm';
+import { vi } from 'vitest';
+import { AppError } from '../../../src/common/errors/app-error';
+import { PlatformStore } from '../../../src/modules/auth';
+import { StorageFleetService } from '../../../src/modules/storage-quota/storage-fleet.service';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { ChatMediaStore } from '../../../src/infra/providers/chat-conversations/media';
 import { StorageBackfillService } from '../../../src/modules/storage-quota/storage-backfill.service';
@@ -334,6 +338,54 @@ describe('storage meter (observe mode) against Postgres', () => {
       const m = new StorageMeterService(db, repo, off);
       await (await m.reserve({ orgId: org, bytes: 10, category: 'inbox_media' })).commit({ key: `chat/${org}/a.png` });
       expect(await row(`SELECT 1 FROM storage_objects WHERE org_id = $1`, [org])).toHaveLength(0);
+    });
+  });
+
+  describe('operator fleet view (read only)', () => {
+    it('totals, categories, the biggest workspaces first, levels and drift; and one workspace panel is audited', async () => {
+      const mkOrg = async (tag: string) => {
+        const r = await owner.query(`INSERT INTO organizations (slug, name) VALUES ($1, $2) RETURNING id, uuid`, [`sq-fl-${tag}-${Date.now().toString(36)}`, `Fleet ${tag}`]);
+        return { id: Number(r.rows[0].id), uuid: String(r.rows[0].uuid) };
+      };
+      const big = await mkOrg('big');
+      const small = await mkOrg('small');
+      const put = async (org: number, bytes: number, category: 'call_recording' | 'inbox_media', n: string) => {
+        const r = await meter.reserve({ orgId: org, bytes, category });
+        await r.commit({ key: `chat/${org}/2027/01/${n}.bin` });
+      };
+      await put(big.id, 900, 'call_recording', 'a');
+      await put(big.id, 100, 'inbox_media', 'b');
+      await put(small.id, 50, 'inbox_media', 'c');
+      // the nightly check gives each a cap (1 byte of plan is impossible, so use the stored columns directly) and a level
+      await owner.query(`UPDATE storage_org_state SET cap_bytes = 1000, level = 'full', last_reconciled_at = now(), last_drift_bytes = 7 WHERE org_id = $1`, [big.id]);
+
+      const audit = { recordStandalone: vi.fn(async () => undefined) };
+      const fleet = new StorageFleetService(new PlatformStore(db), repo, mode, audit as never);
+      const out = await fleet.fleet();
+
+      expect(out.mode).toBe('observe');
+      expect(out.totals.hotBytes).toBeGreaterThanOrEqual(1050);
+      expect(out.totals.workspaces).toBeGreaterThanOrEqual(2);
+      const names = out.top.map((w) => w.name);
+      expect(names.indexOf('Fleet big')).toBeLessThan(names.indexOf('Fleet small'));
+      const bigRow = out.top.find((w) => w.name === 'Fleet big')!;
+      expect(bigRow).toMatchObject({ hotBytes: 1000, capBytes: 1000, level: 'full', workspaceId: big.uuid });
+      expect(out.byCategory.find((c) => c.category === 'call_recording')!.hotBytes).toBeGreaterThanOrEqual(900);
+      expect(out.levels.full).toBeGreaterThanOrEqual(1);
+      expect(Object.keys(out.levels).sort()).toEqual(['full', 'ok', 'over', 'warn80']);
+      expect(out.drift.workspacesWithDrift).toBeGreaterThanOrEqual(1);
+      expect(out.drift.driftBytes).toBeGreaterThanOrEqual(7);
+      expect(out.drift.lastRunAt).not.toBeNull();
+      expect(audit.recordStandalone).not.toHaveBeenCalled(); // the aggregate leaves no per-workspace trace
+
+      const detail = await fleet.workspace(big.uuid);
+      expect(detail).toMatchObject({ workspaceId: big.uuid, name: 'Fleet big' });
+      expect(detail.summary).toMatchObject({ hotBytes: 1000, capBytes: 1000, level: 'full', mode: 'observe' });
+      expect(detail.summary.byCategory.map((c) => c.category).sort()).toEqual(['call_recording', 'inbox_media']);
+      expect(audit.recordStandalone).toHaveBeenCalledWith(
+        expect.objectContaining({ event: 'platform.storage.workspace_viewed', payload: { workspace: big.uuid } }),
+      );
+      await expect(fleet.workspace('00000000-0000-4000-8000-000000000000')).rejects.toBeInstanceOf(AppError);
     });
   });
 });

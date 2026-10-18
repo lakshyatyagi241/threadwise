@@ -27,6 +27,11 @@ export interface ReconcileResult {
  * The nightly counter check for one workspace (spec 4.4, "Counter check" and the DB-only half of "Orphan check"), plus the display fields
  * the operator's fleet view needs. It never touches the object store and never deletes a file.
  *
+ * LEGAL-HOLD INTEGRATION POINT (storage quota S5, spec 9.2): this class, and `StorageQuotaRepository.remove`, delete only REGISTRY rows (never an object),
+ * so they do not consult the legal hold guard. The first code that deletes an OBJECT for a storage reason (the orphan sweep, the cold expiry, the owner
+ * "delete older than") must call `LegalHoldGuard` / `is_subject_held` before it deletes and count `skippedHeld`; add that file to
+ * `legal-hold-coverage.spec.ts`. The guard is on branch `lakshya/next/legal-hold` and is not on `main` yet: do not duplicate it here.
+ *
  *   1. Team chat attachments (Postgres blobs) are synced with their table: they cascade away with their message without telling the
  *      meter, so the table, not the registry, is the truth for that kind.
  *   2. `pending` registry rows are linked to the row that owns their key (the owner map).

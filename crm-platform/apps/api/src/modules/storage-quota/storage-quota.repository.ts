@@ -122,7 +122,10 @@ export class StorageQuotaRepository {
     }
   }
 
-  /** Drops an object's registry row and gives its bytes back. Returns the bytes given back (0 when the object was not registered). */
+  /**
+   * Drops an object's registry row and gives its bytes back. Returns the bytes given back (0 when the object was not registered).
+   * Registry only: the object itself was already deleted by the caller. LEGAL-HOLD INTEGRATION POINT: see `StorageReconcileService`.
+   */
   async remove(tx: Tx, orgId: number, key: string): Promise<number> {
     const res = await tx.execute(sql`
       DELETE FROM storage_objects WHERE org_id = ${orgId} AND key = ${key} RETURNING bytes, category, tier`);
