@@ -71,6 +71,12 @@ export type CalendarOption = z.infer<typeof calendarOptionSchema>;
 export const calendarListResponseSchema = z.object({ data: z.array(calendarOptionSchema) });
 export type CalendarListResponse = z.infer<typeof calendarListResponseSchema>;
 
+/** A spreadsheet of the connected Google account, for the booking type's sheet picker. */
+export const spreadsheetOptionSchema = z.object({ id: z.string(), name: z.string() });
+export type SpreadsheetOption = z.infer<typeof spreadsheetOptionSchema>;
+export const spreadsheetListResponseSchema = z.object({ data: z.array(spreadsheetOptionSchema) });
+export type SpreadsheetListResponse = z.infer<typeof spreadsheetListResponseSchema>;
+
 export const selectCalendarInputSchema = z.object({
   calendarId: z.string().trim().min(1).max(300),
 });

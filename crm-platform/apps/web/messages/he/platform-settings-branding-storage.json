@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. מסך הסכמה",
-              "body": "הוסיפו את ההרשאות (scopes) שהמוצר מבקש (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), ואז פרסמו את האפליקציה: במצב Testing, Google מבטלת כל הרשאה לאחר 7 ימים וסביבות העבודה יצטרכו להתחבר מחדש. ההרשאות של drive מוגבלות ודורשות בדיקה של Google."
+              "body": "הוסיפו את ההרשאות (scopes) שהמוצר מבקש (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), ואז פרסמו את האפליקציה: במצב Testing, Google מבטלת כל הרשאה לאחר 7 ימים וסביבות העבודה יצטרכו להתחבר מחדש. ההרשאות של drive מוגבלות ודורשות בדיקה של Google."
             },
             "workspaces": {
               "title": "4. סביבות העבודה מתחברות",

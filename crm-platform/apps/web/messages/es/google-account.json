@@ -91,8 +91,8 @@
         },
         "sheets": {
           "name": "Sheets",
-          "body": "Añade una fila a una hoja, busca una fila, comprueba una celda o copia una fila en un contacto.",
-          "usedBy": "Google Sheets, Comprobar campo de Google Sheet, Guardar contacto desde Google Sheet"
+          "usedBy": "Google Sheets, Comprobar campo de Google Sheet, Guardar contacto desde Google Sheet",
+          "body": "Añade una fila a una hoja, busca una fila, comprueba una celda o copia una fila en un contacto."
         },
         "docs": {
           "name": "Docs y Drive",
@@ -101,13 +101,13 @@
         },
         "forms": {
           "name": "Forms",
-          "body": "Lee el enlace público de un formulario para que el flujo pueda enviárselo al cliente.",
-          "usedBy": "Paso de Google Form"
+          "usedBy": "Paso de Google Form",
+          "body": "Lee el enlace público de un formulario para que el flujo lo envíe al cliente, y lee las respuestas del formulario para que el flujo continúe cuando lo complete."
         },
         "drive_listing": {
           "name": "Lista de archivos de Drive",
-          "body": "Muestra tus hojas, documentos y formularios por nombre en el editor de flujos, para que puedas elegir en lugar de pegar un enlace.",
-          "usedBy": "Selectores de archivos del editor de flujos"
+          "body": "Lista tus hojas, documentos y formularios por nombre, para elegirlos desde tu cuenta en el creador de flujos y en los ajustes de reservas. Necesario para todos los selectores de archivos.",
+          "usedBy": "Selectores de archivos en el creador de flujos y en los ajustes de reservas"
         }
       },
       "lastError": {

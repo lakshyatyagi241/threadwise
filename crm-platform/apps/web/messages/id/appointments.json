@@ -566,11 +566,12 @@
         "hint": "Pemesanan berfungsi tanpa ini. Hubungkan Google Calendar di Janji Temu, Pengaturan untuk menyinkronkan waktu sibuk/kosong dan menambahkan tautan Meet.",
         "unavailable": "Google Calendar belum disiapkan untuk platform ini. Pengaturan ini disimpan bersama jenis pemesanan untuk saat sudah siap.",
         "calendarId": "Kalender",
-        "calendarPlaceholder": "utama",
         "spreadsheetId": "Tambah ke sheet (opsional)",
-        "spreadsheetPlaceholder": "ID spreadsheet",
         "createMeet": "Buat tautan Google Meet untuk setiap pemesanan",
-        "calendarDefault": "Kalender workspace"
+        "calendarDefault": "Kalender workspace",
+        "connectFirst": "Hubungkan <link>akun Google</link> Anda untuk memilih dari daftarnya.",
+        "spreadsheetNone": "Tanpa sheet",
+        "spreadsheetNoListing": "Daftar sheet Anda tidak dapat ditampilkan karena izin daftar file Drive belum diberikan. Tambahkan di halaman akun Google."
       },
       "messages": {
         "title": "Pesan siklus pemesanan",

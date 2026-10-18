@@ -75,21 +75,6 @@ const rawurlencode = (s: string) =>
 
 type FormInput = CreateProductInput | UpdateProductInput;
 
-/** One product of an outside list (the Sheets add-on, TW-EXT-010): what the list knows; an absent field keeps what is stored. */
-export interface IntegrationProductInput {
-  name: string;
-  sku?: string;
-  category?: string;
-  description?: string;
-  imageUrl?: string;
-  priceMajor: string;
-  currencyCode: ProductCurrency;
-  /** `null` is "unlimited"; absent keeps the stored count. */
-  stockQty?: number | null;
-  /** Reference's `active`: on means active, off means a draft. Absent means on, for a new product and an existing one alike. */
-  active?: boolean;
-}
-
 /** The columns the product form sets; the same mapping serves create and update (TW-CAT-020). */
 function formPatch(input: FormInput): ProductPatch {
   const tags = normalizeTags(input.tags);
@@ -399,59 +384,6 @@ export class ProductsService {
     });
     if (outcome.pushNeeded) await this.sync.pushOne(ctx.orgId, outcome.id);
     return this.reload(ctx.orgId, outcome.id);
-  }
-
-  /**
-   * Writes one product of a list that comes from outside: it matches by SKU, then by name, and creates or updates through the same
-   * `create` and `update` the product form uses (so the plan cap, audit, outbox and the Meta push behave the same). Absent fields keep
-   * what is stored; price and currency always take the list's. `changed` is false when nothing differed.
-   */
-  async upsertForIntegration(
-    input: IntegrationProductInput,
-  ): Promise<{ product: ProductResponse; created: boolean; changed: boolean }> {
-    const ctx = RequestContextStore.require();
-    const found = await this.db.tx((tx) =>
-      this.repo.findBySkuOrName(tx, ctx.orgId, { sku: input.sku, name: input.name }),
-    );
-    const active = input.active ?? true;
-    if (!found) {
-      const product = await this.create({
-        name: input.name,
-        sku: input.sku ?? null,
-        description: input.description ?? null,
-        priceMajor: input.priceMajor,
-        currencyCode: input.currencyCode,
-        inStock: active,
-        stockQty: input.stockQty ?? null,
-        status: active ? 'active' : 'draft',
-        category: input.category ?? null,
-        imageUrl: input.imageUrl ?? null,
-        tags: [],
-        galleryUrls: [],
-      });
-      return { product, created: true, changed: true };
-    }
-    const cur = toProductResponse(found);
-    const product = await this.update(found.uuid, {
-      name: input.name,
-      sku: input.sku ?? cur.sku,
-      description: input.description ?? cur.description,
-      bodyHtml: cur.bodyHtml,
-      priceMajor: input.priceMajor,
-      comparePriceMajor: cur.comparePriceMajor,
-      currencyCode: input.currencyCode,
-      inStock: active,
-      stockQty: input.stockQty === undefined ? cur.stockQty : input.stockQty,
-      sortOrder: cur.sortOrder,
-      status: active ? 'active' : 'draft',
-      weightGrams: cur.weightGrams,
-      category: input.category ?? cur.category,
-      tags: cur.tags,
-      imageUrl: input.imageUrl ?? cur.imageUrl,
-      galleryUrls: cur.galleryUrls,
-      rowVersion: found.rowVersion,
-    });
-    return { product, created: false, changed: product.rowVersion !== found.rowVersion };
   }
 
   /** Hard delete (Reference soft-deleted); nothing is removed from Meta, as before. Reviews and holds go with the product. */

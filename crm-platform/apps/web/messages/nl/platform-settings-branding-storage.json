@@ -1760,7 +1760,7 @@
             },
             "consent": {
               "title": "3. Toestemmingsscherm",
-              "body": "Voeg de scopes toe die het product vraagt (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly) en publiceer daarna de app: in Testing beëindigt Google elke toestemming na 7 dagen en moeten werkruimtes opnieuw verbinden. De drive-scopes zijn beperkt en vereisen een beoordeling door Google."
+              "body": "Voeg de scopes toe die het product vraagt (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly) en publiceer daarna de app: in Testing beëindigt Google elke toestemming na 7 dagen en moeten werkruimtes opnieuw verbinden. De drive-scopes zijn beperkt en vereisen een beoordeling door Google."
             },
             "workspaces": {
               "title": "4. Werkruimtes verbinden",

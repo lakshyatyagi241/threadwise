@@ -1659,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— Tabelle auswählen —",
-              "empty": "Keine Tabellen gefunden — fügen Sie unten eine URL/ID ein",
               "loading": "Tabellen werden geladen…",
-              "notConnected": "Google ist für diesen Arbeitsbereich nicht verbunden, daher können Ihre Tabellen nicht aufgelistet werden. Fügen Sie stattdessen die Tabellen-ID oder den Link ein.",
-              "idPlaceholder": "Tabellen-ID",
-              "saved": "Tabelle {id}… (nicht geladen)"
+              "saved": "Tabelle {id}… (nicht geladen)",
+              "empty": "Im verbundenen Google-Konto wurden keine Tabellen gefunden",
+              "notConnected": "Google ist für diesen Arbeitsbereich nicht verbunden, daher können deine Tabellen nicht aufgelistet werden. Verbinde Google, um eine auszuwählen."
             },
             "docs": {
               "pick": "— Vorlagendokument auswählen —",
               "empty": "Keine Dokumente gefunden",
               "loading": "Dokumente werden geladen…",
-              "notConnected": "Google ist für diesen Arbeitsbereich nicht verbunden, daher können Ihre Dokumente nicht aufgelistet werden. Fügen Sie stattdessen die Dokument-ID oder den Link ein.",
-              "idPlaceholder": "Dokument-ID",
-              "saved": "Dokument {id}… (nicht geladen)"
+              "saved": "Dokument {id}… (nicht geladen)",
+              "notConnected": "Google ist für diesen Arbeitsbereich nicht verbunden, daher können deine Dokumente nicht aufgelistet werden. Verbinde Google, um eines auszuwählen."
             },
             "forms": {
               "pick": "— Formular auswählen —",
               "empty": "Keine Formulare gefunden",
               "loading": "Formulare werden geladen…",
-              "notConnected": "Google ist für diesen Arbeitsbereich nicht verbunden, daher können Ihre Formulare nicht aufgelistet werden. Fügen Sie stattdessen die Formular-ID oder den Link ein.",
-              "idPlaceholder": "Formular-ID",
-              "saved": "Formular {id}… (nicht geladen)"
+              "saved": "Formular {id}… (nicht geladen)",
+              "notConnected": "Google ist für diesen Arbeitsbereich nicht verbunden, daher können deine Formulare nicht aufgelistet werden. Verbinde Google, um eines auszuwählen."
             }
           },
           "sheetsIntro": "Hängt eine Zeile an eine Google-Tabelle an (Schreibmodus) oder sucht eine Zeile anhand einer Schlüsselspalte (Lesemodus). Verwendet das verbundene Google-Konto des Arbeitsbereichs unter <link>/google-account</link>.",
@@ -1701,8 +1698,6 @@
           "addColumn": "Spalte hinzufügen",
           "matchByHeader": "Spalten anhand des Kopfzeilennamens zuordnen",
           "matchByHeaderHint": "Schreibt jeden Wert in die Spalte mit dieser Kopfzeile (beliebige Reihenfolge). Deaktiviert lassen, um nach Position von links nach rechts anzuhängen. Das ist der Standard.",
-          "pasteLabel": "…oder Tabellen-URL / ID einfügen",
-          "pasteHint": "Funktioniert auch, wenn die Auswahl leer ist. Fügen Sie den Tabellenlink ein, wir extrahieren die ID.",
           "docsIntro": "Kopieren Sie ein Vorlagendokument, füllen Sie die <mono>{placeholders}</mono> aus, machen Sie es für alle mit dem Link zugänglich und senden Sie die URL an den Kunden. Platzieren Sie <mono>{key}</mono> in Ihrer Vorlage an der Stelle, an der der Wert erscheinen soll.",
           "templateDocument": "Vorlagendokument",
           "newCopyTitle": "Titel der neuen Kopie",
@@ -1717,7 +1712,6 @@
           "messageTemplateHint": "Die Bot-Nachricht, die an den Kunden gesendet wird. <mono>{token}</mono> erhält den Freigabelink.",
           "messageTemplatePlaceholder": "Hier ist Ihr Dokument:\n'{{'doc_url'}}'",
           "saveUrl": "URL unter Variable speichern",
-          "formIntro": "Sendet die Formular-URL über WhatsApp, pausiert den Flow und setzt ihn über den Ausgang <b>abgesendet</b> fort, sobald der Kunde das Formular ausfüllt. Antworten werden zu Flow-Variablen.",
           "googleForm": "Google-Formular",
           "bodyBubble": "Textblase (über dem Link gesendet)",
           "bodyBubblePlaceholder": "Bitte füllen Sie dieses kurze Formular aus:",
@@ -1725,12 +1719,6 @@
           "saveResponsesHint": "Einzelne Antworten stehen ebenfalls als <mono>{token}</mono> zur Verfügung.",
           "expireAfter": "Ablauf nach (Sekunden)",
           "expireAfterHint": "Wie lange auf eine Übermittlung gewartet wird, bevor eine Zeitüberschreitung eintritt. 86400 = 24 Std.",
-          "setupTitle": "Einmalige Einrichtung: Fügen Sie dies in den Skript-Editor Ihres Formulars ein",
-          "setupOpen": "Öffnen Sie Ihr Formular → <mono>⋮-Menü</mono> → <mono>Skript-Editor</mono>",
-          "setupDownload": "<link>Skript herunterladen (.gs)</link> und einfügen",
-          "setupTrigger": "Fügen Sie einen Trigger hinzu: <mono>onFormSubmit</mono> · Aus Formular · Bei Formularübermittlung",
-          "setupWarning": "Ohne dieses Skript speichert das Formular die Antworten zwar in Google Forms, der Flow wird jedoch nicht fortgesetzt.",
-          "noListing": "Ihre Dateien können nicht aufgelistet werden, weil auf der Seite des Google-Kontos die Berechtigung für die Drive-Dateiliste nicht erteilt wurde. Fügen Sie stattdessen den Link oder die ID ein.",
           "connection": {
             "open": "Google-Konto öffnen",
             "permission": {
@@ -1743,7 +1731,9 @@
             "disconnected": "Es ist kein Google-Konto verbunden. Dieser Schritt schlägt daher fehl, wenn der Flow ausgeführt wird. Verbinden Sie zuerst Google.",
             "needsReconnect": "Google akzeptiert das verbundene Konto nicht mehr. Dieser Schritt schlägt daher fehl, wenn der Flow ausgeführt wird. Verbinden Sie Google zuerst erneut.",
             "missing": "Dem verbundenen Google-Konto wurde die Berechtigung {permission} nicht erteilt. Dieser Schritt schlägt daher fehl, wenn der Flow ausgeführt wird."
-          }
+          },
+          "formIntro": "Sendet die Formular-URL per WhatsApp, pausiert den Flow und setzt ihn über den Port <b>submitted</b> fort, sobald der Kunde das Formular ausfüllt. Die Antworten werden über dein verbundenes Google-Konto aus dem Formular gelesen, daher muss nichts ins Formular eingefügt werden. Die Antworten werden zu Flow-Variablen.",
+          "noListing": "Deine Dateien können nicht aufgelistet werden, weil die Berechtigung „Drive-Dateiliste“ auf der Seite „Google-Konto“ nicht erteilt wurde. Füge sie dort hinzu, um Dateien auszuwählen."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",

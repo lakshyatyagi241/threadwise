@@ -91,8 +91,8 @@
         },
         "sheets": {
           "name": "Sheets",
-          "body": "Voeg een rij toe aan een sheet, zoek een rij op, controleer een cel of kopieer een rij naar een contact.",
-          "usedBy": "Google Sheets, Google Sheets-veld controleren, Contact opslaan uit Google Sheet"
+          "usedBy": "Google Sheets, Google Sheets-veld controleren, Contact opslaan uit Google Sheet",
+          "body": "Voeg een rij toe aan een sheet, zoek een rij op, controleer een cel of kopieer een rij naar een contact."
         },
         "docs": {
           "name": "Docs en Drive",
@@ -101,13 +101,13 @@
         },
         "forms": {
           "name": "Formulieren",
-          "body": "Lees de openbare link van een formulier zodat de flow die naar de klant kan sturen.",
-          "usedBy": "Stap Google Formulier"
+          "usedBy": "Stap Google Formulier",
+          "body": "Lees de openbare link van een formulier zodat de flow deze naar de klant kan sturen, en lees de antwoorden van het formulier zodat de flow verdergaat wanneer het is ingevuld."
         },
         "drive_listing": {
           "name": "Drive-bestandslijst",
-          "body": "Toon je sheets, documenten en formulieren op naam in de flowbuilder, zodat je kunt kiezen in plaats van een link te plakken.",
-          "usedBy": "Bestandskiezers in de flowbuilder"
+          "body": "Toon je sheets, documenten en formulieren op naam, zodat je ze in de flowbuilder en de boekingsinstellingen uit je account kunt kiezen. Nodig voor elke bestandskiezer.",
+          "usedBy": "Bestandskiezers in de flowbuilder en de boekingsinstellingen"
         }
       },
       "lastError": {

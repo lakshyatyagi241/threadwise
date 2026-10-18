@@ -1659,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— シートを選択 —",
-              "empty": "スプレッドシートが見つかりません。下にURLまたはIDを貼り付けてください",
               "loading": "シートを読み込み中…",
-              "notConnected": "このワークスペースはGoogleに接続されていないため、シートを一覧表示できません。代わりにシートのIDまたはリンクを貼り付けてください。",
-              "idPlaceholder": "シートID",
-              "saved": "シート {id}…（未読み込み）"
+              "saved": "シート {id}…（未読み込み）",
+              "empty": "連携中の Google アカウントにスプレッドシートが見つかりません",
+              "notConnected": "このワークスペースでは Google が連携されていないため、シートを一覧表示できません。シートを選ぶには Google を連携してください。"
             },
             "docs": {
               "pick": "— テンプレートのドキュメントを選択 —",
               "empty": "ドキュメントが見つかりません",
               "loading": "ドキュメントを読み込み中…",
-              "notConnected": "このワークスペースはGoogleに接続されていないため、ドキュメントを一覧表示できません。代わりにドキュメントのIDまたはリンクを貼り付けてください。",
-              "idPlaceholder": "ドキュメントID",
-              "saved": "ドキュメント {id}…（未読み込み）"
+              "saved": "ドキュメント {id}…（未読み込み）",
+              "notConnected": "このワークスペースでは Google が連携されていないため、ドキュメントを一覧表示できません。ドキュメントを選ぶには Google を連携してください。"
             },
             "forms": {
               "pick": "— フォームを選択 —",
               "empty": "フォームが見つかりません",
               "loading": "フォームを読み込み中…",
-              "notConnected": "このワークスペースはGoogleに接続されていないため、フォームを一覧表示できません。代わりにフォームのIDまたはリンクを貼り付けてください。",
-              "idPlaceholder": "フォームID",
-              "saved": "フォーム {id}…（未読み込み）"
+              "saved": "フォーム {id}…（未読み込み）",
+              "notConnected": "このワークスペースでは Google が連携されていないため、フォームを一覧表示できません。フォームを選ぶには Google を連携してください。"
             }
           },
           "sheetsIntro": "Googleスプレッドシートに行を追加します（書き込みモード）、またはキー列で行を検索します（読み取りモード）。<link>/google-account</link>で接続されたワークスペースのGoogleアカウントを使用します。",
@@ -1701,8 +1698,6 @@
           "addColumn": "列を追加",
           "matchByHeader": "見出し名で列を照合",
           "matchByHeaderHint": "見出しが一致するシートの列に各値を書き込みます（順序は問いません）。オフにすると位置に従って左から右に追加します（既定）。",
-          "pasteLabel": "…またはスプレッドシートのURL／IDを貼り付け",
-          "pasteHint": "選択肢が空でも使用できます。シートのリンクを貼り付けると、IDを自動で抽出します。",
           "docsIntro": "テンプレートのドキュメントをコピーし、<mono>{placeholders}</mono>を埋めて、リンクを知っている全員が閲覧できるように共有し、そのURLを顧客に送信します。値を入れたい場所にテンプレートで<mono>{key}</mono>を配置してください。",
           "templateDocument": "テンプレートのドキュメント",
           "newCopyTitle": "新しいコピーのタイトル",
@@ -1717,7 +1712,6 @@
           "messageTemplateHint": "顧客に送信されるボットのメッセージです。<mono>{token}</mono>には共有リンクが入ります。",
           "messageTemplatePlaceholder": "ドキュメントはこちらです:\n'{{'doc_url'}}'",
           "saveUrl": "URLの保存先変数",
-          "formIntro": "フォームのURLをWhatsAppで送信し、フローを一時停止します。顧客が入力すると<b>submitted</b>ポートから再開します。回答はフロー変数になります。",
           "googleForm": "Googleフォーム",
           "bodyBubble": "本文（リンクの上に送信）",
           "bodyBubblePlaceholder": "次の簡単なフォームにご記入ください:",
@@ -1725,12 +1719,6 @@
           "saveResponsesHint": "個別の回答も<mono>{token}</mono>として格納されます。",
           "expireAfter": "有効期限（秒）",
           "expireAfterHint": "送信を待つ時間の上限です。86400 = 24時間。",
-          "setupTitle": "初回のみの設定 — フォームのスクリプトエディタに貼り付けてください",
-          "setupOpen": "フォームを開く → <mono>⋮ メニュー</mono> → <mono>スクリプトエディタ</mono>",
-          "setupDownload": "<link>スクリプト（.gs）をダウンロード</link>して貼り付けてください",
-          "setupTrigger": "トリガーを追加: <mono>onFormSubmit</mono> · フォームから · フォーム送信時",
-          "setupWarning": "このスクリプトがない場合、フォームへの回答はGoogleフォームに記録されますが、フローは再開しません。",
-          "noListing": "Google アカウントのページで Drive のファイル一覧の権限が付与されていないため、ファイルを一覧表示できません。リンクまたは ID を貼り付けてください。",
           "connection": {
             "open": "Google アカウントを開く",
             "permission": {
@@ -1743,7 +1731,9 @@
             "disconnected": "Googleアカウントが接続されていないため、フローの実行時にこのステップは失敗します。先にGoogleを接続してください。",
             "needsReconnect": "接続中のアカウントがGoogleに受け付けられなくなったため、フローの実行時にこのステップは失敗します。先にGoogleを再接続してください。",
             "missing": "接続されたGoogleアカウントに{permission}の権限が付与されていないため、フローの実行時にこのステップは失敗します。"
-          }
+          },
+          "formIntro": "フォームの URL を WhatsApp で送信してフローを一時停止し、顧客が入力すると <b>submitted</b> ポートから再開します。回答は連携済みの Google アカウント経由でフォームから読み取られるため、フォームに何かを貼り付ける必要はありません。回答はフロー変数になります。",
+          "noListing": "Google アカウントのページで Drive ファイル一覧の権限が付与されていないため、ファイルを一覧表示できません。ファイルを選ぶには、そこで追加してください。"
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",

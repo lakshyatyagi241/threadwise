@@ -91,10 +91,6 @@
       "reason": "one campaign per distinct (workspace, campaign) pair, bounded by LIMIT 25 in the sweep query; reviewed 2026-10-15"
     },
     {
-      "key": "apps/api/src/modules/chrome-extension-sheets-addon/sheets-contacts.service.ts await this.repo.findByIdentity(",
-      "reason": "optimistic-lock retry loop: one lookup per attempt, not per item; reviewed 2026-10-15"
-    },
-    {
       "key": "apps/api/src/modules/crm/invoicing/recurring-invoices.service.ts await this.repo.findById(",
       "reason": "catch-up loop must re-read the profile each step for the advanced next run date; bounded by RECURRING_CATCH_UP_MAX; reviewed 2026-10-15"
     },

@@ -9,6 +9,7 @@ import {
   type CalendarConnectStartInput,
   type CalendarConnectStartResponse,
   type CalendarListResponse,
+  type SpreadsheetListResponse,
   type CalendarStatusResponse,
   type GoogleAccountResponse,
   type GoogleCapability,
@@ -195,6 +196,21 @@ export class GoogleCalendarConnectService {
       const list = await this.tokens.withToken(orgId, (token) => this.client.listCalendars(token), {
         capability: 'calendar',
       });
+      return { data: list };
+    } catch (err) {
+      throw this.asApiError(err);
+    }
+  }
+
+  /** The spreadsheets of the connected account by name, for the booking type's sheet picker (needs the Drive file list permission). */
+  async spreadsheets(): Promise<SpreadsheetListResponse> {
+    const orgId = RequestContextStore.require().orgId;
+    try {
+      const list = await this.tokens.withToken(
+        orgId,
+        (token) => this.client.listSpreadsheets(token),
+        { capability: 'drive_listing' },
+      );
       return { data: list };
     } catch (err) {
       throw this.asApiError(err);

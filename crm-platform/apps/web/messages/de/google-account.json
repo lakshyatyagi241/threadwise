@@ -91,8 +91,8 @@
         },
         "sheets": {
           "name": "Sheets",
-          "body": "Eine Zeile zu einer Tabelle hinzufügen, eine Zeile nachschlagen, eine Zelle prüfen oder eine Zeile in einen Kontakt kopieren.",
-          "usedBy": "Google Sheets, Google-Sheet-Feld prüfen, Kontakt aus Google Sheet speichern"
+          "usedBy": "Google Sheets, Google-Sheet-Feld prüfen, Kontakt aus Google Sheet speichern",
+          "body": "Füge einer Tabelle eine Zeile hinzu, suche eine Zeile, prüfe eine Zelle oder kopiere eine Zeile in einen Kontakt."
         },
         "docs": {
           "name": "Docs und Drive",
@@ -101,13 +101,13 @@
         },
         "forms": {
           "name": "Forms",
-          "body": "Den öffentlichen Link eines Formulars lesen, damit der Flow ihn an den Kunden senden kann.",
-          "usedBy": "Google-Form-Schritt"
+          "usedBy": "Google-Form-Schritt",
+          "body": "Lies den öffentlichen Link eines Formulars, damit der Flow ihn an den Kunden senden kann, und lies die Antworten des Formulars, damit der Flow weiterläuft, sobald es ausgefüllt wird."
         },
         "drive_listing": {
           "name": "Drive-Dateiliste",
-          "body": "Ihre Tabellen, Dokumente und Formulare im Flow-Builder nach Namen auflisten, damit Sie auswählen können, statt einen Link einzufügen.",
-          "usedBy": "Dateiauswahl im Flow-Builder"
+          "body": "Liste deine Tabellen, Dokumente und Formulare nach Namen auf, damit du sie im Flow-Builder und in den Buchungseinstellungen aus deinem Konto auswählen kannst. Für jede Dateiauswahl erforderlich.",
+          "usedBy": "Dateiauswahl im Flow-Builder und in den Buchungseinstellungen"
         }
       },
       "lastError": {

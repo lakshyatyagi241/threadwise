@@ -566,11 +566,12 @@
         "hint": "Lịch đặt vẫn hoạt động mà không cần mục này. Kết nối Google Calendar trong Lịch hẹn, Cài đặt để đồng bộ giờ bận/rảnh và thêm liên kết Meet.",
         "unavailable": "Google Calendar chưa được thiết lập cho nền tảng này. Các cài đặt này được giữ cùng loại lịch đặt để dùng khi nền tảng sẵn sàng.",
         "calendarId": "Lịch",
-        "calendarPlaceholder": "chính",
         "spreadsheetId": "Thêm vào bảng tính (tùy chọn)",
-        "spreadsheetPlaceholder": "ID bảng tính",
         "createMeet": "Tạo liên kết Google Meet cho mỗi lịch đặt",
-        "calendarDefault": "Lịch của không gian làm việc"
+        "calendarDefault": "Lịch của không gian làm việc",
+        "connectFirst": "Kết nối <link>tài khoản Google</link> của bạn để chọn từ danh sách.",
+        "spreadsheetNone": "Không có trang tính",
+        "spreadsheetNoListing": "Không thể liệt kê các trang tính của bạn vì chưa cấp quyền Danh sách tệp Drive. Hãy thêm quyền này ở trang Tài khoản Google."
       },
       "messages": {
         "title": "Tin nhắn theo vòng đời",

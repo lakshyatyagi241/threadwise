@@ -1313,25 +1313,6 @@ describe('builder context (TW-FLB-014, 026)', () => {
     expect(foreign.body.data).toEqual([]);
   });
 
-  it("TW-FLB-059: the Apps Script download carries this workspace's webhook token and refuses anything that is not a Google form id", async () => {
-    const o = await api.signup('flbgs');
-    const ok = await api
-      .as(o.admin)
-      .get('/v2/flows/builder-context/google/forms/1FAIpQLSc_abc-123/apps-script');
-    expect(ok.status).toBe(200);
-    expect(ok.headers['content-type']).toContain('text/plain');
-    expect(ok.headers['content-disposition']).toMatch(
-      /attachment; filename="[a-z0-9-]*form-1FAIpQLSc_abc-123\.gs"/,
-    );
-    expect(ok.text).toContain('function onFormSubmit(e)');
-    expect(ok.text).toMatch(new RegExp(`FORM_WORKSPACE_TOKEN = "${o.orgId}\\.[0-9a-f]{64}"`));
-    expect(ok.text).toContain('/google/form-response');
-    expect(
-      (await api.as(o.admin).get('/v2/flows/builder-context/google/forms/short/apps-script'))
-        .status,
-    ).toBe(422);
-  });
-
   it('TW-FLB-059: the Google pickers answer 503 FLB_INTEGRATION_DISABLED while the integration is not connected', async () => {
     const res = await api.as(t.admin).get('/v2/flows/builder-context/google/sheets');
     expect(res.status).toBe(503);
