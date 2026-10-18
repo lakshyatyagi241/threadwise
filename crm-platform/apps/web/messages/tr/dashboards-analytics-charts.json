@@ -494,7 +494,8 @@
         "title": "Kuyruklar",
         "name": "Kuyruk",
         "pending": "Bekleyen",
-        "failed": "Başarısız"
+        "failed": "Başarısız",
+        "lastFailure": "Son hatanın nedeni"
       },
       "clear": {
         "button": "Bekleyen işleri temizle",

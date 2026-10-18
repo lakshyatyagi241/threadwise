@@ -803,7 +803,7 @@
         "minPlan": "Ihr Tarif oder ein höherer Tarif enthält diese App, daher fallen keine Kosten an.",
         "plan": "Ihr Tarif enthält diese App, daher fallen keine Kosten an."
       },
-      "needsPurchase": "Im Katalog Ihres Tarifs enthalten. Zur Nutzung müssen Sie sie kaufen.",
+      "needsPurchase": "Zuerst abonnieren. Die Installation ist möglich, sobald die Zahlung abgeschlossen ist.",
       "subscribedNote": "Ihr Workspace hat ein Abonnement für diese App.",
       "trialOffer": "Testen Sie sie {days, plural, one {# Tag} other {# Tage}} kostenlos. Es fallen keine Kosten an, bis Sie sich entscheiden, ein Abonnement abzuschließen.",
       "prepaidNote": "Die Abrechnung erfolgt monatlich über die Abrechnung Ihres Workspace. Jede Zahlung deckt einen Monat ab und wird nicht automatisch belastet: Zahlen Sie vor dem angezeigten Datum erneut, damit die App weiterläuft.",

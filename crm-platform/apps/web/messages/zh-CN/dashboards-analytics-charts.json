@@ -494,7 +494,8 @@
         "title": "队列",
         "name": "队列",
         "pending": "待处理",
-        "failed": "失败"
+        "failed": "失败",
+        "lastFailure": "最近一次失败原因"
       },
       "clear": {
         "button": "清除待处理任务",

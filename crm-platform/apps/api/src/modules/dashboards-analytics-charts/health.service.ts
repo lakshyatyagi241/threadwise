@@ -22,7 +22,7 @@ import { QUEUES } from '../../infra/queue/queues';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { AuthAuditService, PlatformStore } from '../auth';
 import { NodeBridgeSettingsService, NodeWorkerStatus } from '../node-bridge-runtime';
-import { overallState, queueState, shortError } from './health-rules';
+import { failureLine, overallState, queueState, shortError } from './health-rules';
 
 /** A poll storm (several consoles at 20 s) shares one run of the probes. */
 const CACHE_MS = 3_000;
@@ -238,10 +238,14 @@ export class HealthService {
       const rows = await Promise.all(
         this.queues().map(async ({ name, queue }) => {
           const c = await queue.getJobCounts(...JOB_STATES);
+          const failed = c.failed ?? 0;
+          // The newest failure only, and only when there is one: a cheap read that tells the operator what to fix.
+          const [latest] = failed > 0 ? await queue.getJobs(['failed'], 0, 0, false) : [];
           return {
             name,
             pending: (c.waiting ?? 0) + (c.delayed ?? 0) + (c.prioritized ?? 0),
-            failed: c.failed ?? 0,
+            failed,
+            lastFailure: failureLine(latest?.failedReason),
           };
         }),
       );

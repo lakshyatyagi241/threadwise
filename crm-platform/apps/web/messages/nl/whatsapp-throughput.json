@@ -1,0 +1,157 @@
+{
+  "whatsapp-throughput": {
+    "nav": {
+      "group": "WhatsApp",
+      "item": "Verzendlimieten"
+    },
+    "eyebrow": "WhatsApp",
+    "title": "Verzendlimieten en live prestaties",
+    "description": "Hoe snel elk gekoppeld WhatsApp-nummer mag verzenden, hoeveel van de dagelijkse berichtlimiet is gebruikt en wat er nu gebeurt. Wijzigingen gelden voor het volgende bericht dat door elke worker wordt verzonden.",
+    "updated": "Live. Bijgewerkt {time}",
+    "stale": "De laatste vernieuwing is mislukt. De vorige cijfers worden getoond.",
+    "liveUnavailable": "De live tellers konden niet worden gelezen, dus de live kolommen tonen nul. Snelheden, niveaus en instellingen zijn nog juist.",
+    "limiterOff": "De verzendbegrenzer staat uit. Berichten worden hier niet afgeremd; alleen de eigen beperking van Meta geldt.",
+    "footnote": "De snelheid van een nummer wordt door Meta bepaald: standaard 80 berichten per seconde, tot 1.000 zodra Meta het nummer opwaardeert, en 20 voor een nummer dat ook in de WhatsApp Business-app wordt gebruikt. Inkomende en uitgaande berichten delen deze snelheid. Het dagelijkse berichtniveau is een aparte limiet op unieke personen die binnen 24 uur worden benaderd; het aantal hier is een schatting op basis van sjabloonberichten die via dit platform zijn verzonden.",
+    "perSecond": "msg/s",
+    "peak": "Piek {n} in de laatste minuut",
+    "sentCount": "{n} verzonden",
+    "deferredCount": "{n} vastgehouden",
+    "throttledCount": "{n} afgeremd door Meta",
+    "tierUsed": "{used} van {cap} personen in 24 uur",
+    "details": "Details",
+    "common": {
+      "loading": "Laden...",
+      "retry": "Opnieuw proberen"
+    },
+    "errors": {
+      "conflict": "Iemand anders heeft dit zojuist gewijzigd. De nieuwste waarden zijn geladen; controleer ze en pas je wijziging opnieuw toe.",
+      "metaUnavailable": "Meta heeft niet gereageerd. Probeer het over een moment opnieuw te vernieuwen.",
+      "notFound": "Dit nummer bestaat niet meer. Ga terug naar de lijst.",
+      "forbidden": "Alleen een Super Admin kan verzendlimieten wijzigen.",
+      "invalid": "Sommige waarden zijn niet geaccepteerd. Controleer ze en probeer het opnieuw.",
+      "unexpected": "Er ging iets mis aan onze kant. Probeer het over een moment opnieuw."
+    },
+    "kpi": {
+      "now": "Nu aan het verzenden",
+      "nowHint": "berichten per seconde, alle nummers",
+      "sent": "Verzonden",
+      "last5": "laatste 5 minuten",
+      "numbers": "Gekoppelde nummers",
+      "attention": "Aandacht nodig",
+      "attentionHint": "{paused} gepauzeerd, {tier} bijna aan hun dagelijkse limiet",
+      "heldBack": "Vastgehouden",
+      "heldBackHint": "{meta} afgeremd door Meta, laatste 5 minuten"
+    },
+    "settings": {
+      "title": "Platforminstellingen",
+      "description": "Deze gelden voor elk nummer. De eigen overschrijving en pauze van een nummer stel je in op de pagina van dat nummer.",
+      "enabled": "Verzending afstemmen op de limiet van elk nummer",
+      "enabledHelp": "Uit verzendt zonder afremming; de eigen beperking van Meta blijft gelden.",
+      "defaultMps": "Standaardsnelheid (msg/s)",
+      "defaultMpsHelp": "Gebruikt voor een nummer waarvan Meta de snelheid nog niet heeft doorgegeven.",
+      "safetyMargin": "Veiligheidsmarge (%)",
+      "safetyMarginHelp": "Deel van de limiet dat vrij blijft voor inkomend verkeer en timing.",
+      "maxWait": "Langste wachttijd (ms)",
+      "maxWaitHelp": "Een verzending die langer zou moeten wachten, gaat terug naar de wachtrij en wordt opnieuw geprobeerd.",
+      "syncInterval": "Opnieuw ophalen bij Meta (minuten)",
+      "syncIntervalHelp": "Hoe vaak de snelheid en dagelijkse limiet van elk nummer worden vernieuwd.",
+      "adaptive": "Vertragen na een beperking door Meta",
+      "adaptiveHelp": "Halveert de snelheid wanneer Meta een bericht weigert omdat er te snel wordt verzonden, en herstelt daarna binnen een minuut.",
+      "enforceTier": "Sjabloonberichten tegenhouden bij de dagelijkse limiet",
+      "enforceTierHelp": "Stopt nieuwe sjabloonberichten wanneer het nummer zijn dagelijkse berichtniveau heeft bereikt. Uit markeert het alleen.",
+      "tierWarn": "Waarschuwen bij (% van dagelijkse limiet)",
+      "tierWarnHelp": "Een nummer wordt gemarkeerd wanneer het dit deel van zijn niveau gebruikt.",
+      "save": "Instellingen opslaan",
+      "saving": "Opslaan...",
+      "saved": "Opgeslagen. Elk nummer volgt nu de nieuwe instellingen."
+    },
+    "numbers": {
+      "title": "Nummers",
+      "search": "Zoek op workspace, nummer of id",
+      "emptyTitle": "Geen gekoppelde nummers",
+      "emptyBody": "Nummers verschijnen hier zodra een workspace WhatsApp koppelt."
+    },
+    "cols": {
+      "number": "Nummer",
+      "rate": "Snelheidslimiet",
+      "live": "Nu",
+      "last5": "Laatste 5 minuten",
+      "tier": "Dagelijkse limiet",
+      "state": "Status",
+      "actions": "Acties"
+    },
+    "source": {
+      "override": "Overschrijven",
+      "coexistence": "Business-app (vast)",
+      "meta": "Van Meta",
+      "default": "Standaard"
+    },
+    "tier": {
+      "unlimited": "Onbeperkt",
+      "unknown": "Nog niet doorgegeven",
+      "unlimitedBody": "Dit nummer heeft een onbeperkte dagelijkse berichtlimiet.",
+      "unknownBody": "Meta heeft de dagelijkse berichtlimiet van dit nummer nog niet doorgegeven. Vernieuw vanuit Meta."
+    },
+    "state": {
+      "ok": "Gezond",
+      "paused": "Gepauzeerd",
+      "slowed": "Vertraagd tot {pct}%",
+      "tierWarn": "Bijna aan dagelijkse limiet",
+      "tierFull": "Dagelijkse limiet bereikt",
+      "syncFailed": "Ophalen bij Meta mislukt"
+    },
+    "events": {
+      "meta_throttled": "Meta heeft het verzenden beperkt",
+      "upgrade_in_progress": "Doorvoerupgrade bezig",
+      "throughput_upgraded": "Doorvoerniveau gewijzigd",
+      "deferred": "Verzendingen vastgehouden, wachtrij te lang",
+      "paused_block": "Verzending geblokkeerd, nummer gepauzeerd",
+      "tier_full": "Dagelijkse limiet bereikt",
+      "paused": "Gepauzeerd door een operator",
+      "resumed": "Hervat door een operator",
+      "override_set": "Snelheidsoverschrijving ingesteld",
+      "override_cleared": "Snelheidsoverschrijving verwijderd",
+      "synced": "Opnieuw opgehaald bij Meta"
+    },
+    "detail": {
+      "title": "Limieten van WhatsApp-nummer",
+      "back": "Terug naar verzendlimieten",
+      "description": "Telefoonnummer-id {id}. Wordt om de paar seconden bijgewerkt.",
+      "refresh": "Vernieuwen vanuit Meta",
+      "refreshing": "Ophalen bij Meta...",
+      "syncError": "Het laatste ophalen bij Meta is mislukt: {message}",
+      "coexistence": "Dit nummer wordt ook in de WhatsApp Business-app gebruikt, dus Meta stelt het vast op 20 berichten per seconde.",
+      "rate": "Afgestemd op (msg/s)",
+      "speed": "Snelheid",
+      "speedSlowed": "Vertraagd na een beperking door Meta, herstelt",
+      "speedFull": "Volle snelheid",
+      "wait": "Gemiddelde wachttijd",
+      "waitHint": "{n} verzendingen hebben gewacht, laatste 5 minuten",
+      "meta": "Doorvoerniveau van Meta",
+      "metaHint": "{n} msg/s",
+      "unknown": "Niet doorgegeven",
+      "chartSeconds": "Verzendingen per seconde, laatste minuut",
+      "chartLegend": "De stippellijn is de afgestemde snelheid. Rode markeringen zijn seconden waarin Meta een verzending weigerde, oranje seconden waarin verzendingen werden vastgehouden.",
+      "chartMinutes": "Verzendingen per minuut, laatste uur",
+      "chartLegendMinutes": "Rode markeringen zijn minuten waarin Meta een verzending weigerde, oranje minuten waarin verzendingen werden vastgehouden.",
+      "tierTitle": "Dagelijkse berichtlimiet",
+      "tierNote": "Meta beperkt met hoeveel verschillende personen een nummer binnen 24 uur gesprekken mag starten. Dit aantal omvat sjabloonberichten die via dit platform zijn verzonden, dus het kan afwijken van het cijfer van Meta zelf.",
+      "events": "Recente gebeurtenissen",
+      "eventsEmpty": "Nog niets",
+      "eventsEmptyBody": "Beperkingen, onderbrekingen, pauzes en snelheidswijzigingen voor dit nummer staan hier."
+    },
+    "control": {
+      "title": "Beheer",
+      "description": "Overschrijf de snelheid die Meta aan dit nummer geeft, of stop de verzendingen. Beide gelden vanaf het volgende bericht, voor elke workspace die het nummer gebruikt.",
+      "override": "Snelheidsoverschrijving (msg/s)",
+      "overrideHelp": "Geheel getal van 1 tot {max}. Laat leeg om Meta te volgen.",
+      "overrideInvalid": "Voer een geheel getal in van 1 tot {max}.",
+      "overridePlaceholder": "Meta volgen",
+      "pause": "Verzenden vanaf dit nummer pauzeren",
+      "pauseHelp": "Broadcasts en campagnes stoppen en hervatten vanzelf; andere berichten mislukken met de optie Opnieuw proberen.",
+      "reason": "Reden",
+      "reasonHelp": "Wordt getoond in het gebeurtenissenlogboek.",
+      "saved": "Opgeslagen. Het nummer volgt de nieuwe instellingen vanaf het volgende bericht."
+    }
+  }
+}

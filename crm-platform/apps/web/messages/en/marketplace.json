@@ -803,7 +803,7 @@
         "minPlan": "Your plan, or a higher plan, includes this app, so there is nothing to pay.",
         "plan": "Your plan includes this app, so there is nothing to pay."
       },
-      "needsPurchase": "Included in your plan's catalogue, buy it to use it.",
+      "needsPurchase": "Subscribe first. Install unlocks once your payment is complete.",
       "subscribedNote": "Your workspace has a subscription to this app.",
       "trialOffer": "Try it free for {days, plural, one {# day} other {# days}}. Nothing is charged until you choose to subscribe.",
       "prepaidNote": "Billed monthly through your workspace billing. Each payment covers one month and is not charged automatically: pay again before the date shown to keep the app running.",

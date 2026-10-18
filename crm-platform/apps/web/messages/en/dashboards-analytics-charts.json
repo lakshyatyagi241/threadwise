@@ -494,7 +494,8 @@
         "title": "Queues",
         "name": "Queue",
         "pending": "Pending",
-        "failed": "Failed"
+        "failed": "Failed",
+        "lastFailure": "Last failure reason"
       },
       "clear": {
         "button": "Clear pending jobs",

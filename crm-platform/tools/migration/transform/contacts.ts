@@ -22,6 +22,34 @@ import type { SourceIndex } from './source-index';
 import type { Ctx, FieldMap, HandlerSpec, Outcome, Soft } from './types';
 
 /** `__first_name__error_reason`, `__mobile_phone_number__unverified_value`: import-validation rejects that keep the raw bad value. */
+/**
+ * The contact's phone: the first candidate (mobile, then WhatsApp) that reads as an E.164 number. A candidate that does not read is
+ * skipped, so a valid WhatsApp number is kept when the mobile field holds something unreadable. `rejected` is the first raw value that
+ * failed to read, or null when nothing failed (a missing or empty value is not a failure).
+ */
+export function chooseContactPhone(
+  candidates: Array<string | null | undefined>,
+  parse: (raw: string) => string | null,
+): { phone: string | null; rejected: string | null } {
+  let rejected: string | null = null;
+  for (const raw of candidates) {
+    if (typeof raw !== 'string' || raw === '') continue;
+    const phone = parse(raw);
+    if (phone) return { phone, rejected: null };
+    rejected ??= raw;
+  }
+  return { phone: null, rejected };
+}
+
+/** Creation order: the Waboo _id (24 hex characters, so string order is creation order). Display ids are numbered in this order. */
+export function sortForDisplayId<T extends { legacy_id?: unknown }>(rows: T[]): T[] {
+  return [...rows].sort((a, b) => {
+    const x = String(a.legacy_id ?? '');
+    const y = String(b.legacy_id ?? '');
+    return x < y ? -1 : x > y ? 1 : 0;
+  });
+}
+
 export const REJECT_MARKER = /^__.+__(error_reason|unverified_value)$/;
 
 /** Source keys that have a column (or a derived table) of their own. Every other key becomes a custom property in contacts.data. */
@@ -256,18 +284,17 @@ export const contacts: HandlerSpec = {
     }
 
     const ccRaw = str(doc.country_code);
-    const rawPhone = str(doc.mobile_phone_number) ?? str(doc.whatsapp_phone_number);
-    let phone: string | null = null;
-    if (rawPhone) {
-      phone = transformHooks.phoneOf(rawPhone, ccRaw, ctx.defaultCountryCode);
-      if (!phone)
-        soft.push({
-          code: 'INVALID_PHONE',
-          reason:
-            'cannot be read as an E.164 number (letters, an extension, or the wrong digit count); left empty',
-          detail: rawPhone,
-        });
-    }
+    const picked = chooseContactPhone([str(doc.mobile_phone_number), str(doc.whatsapp_phone_number)], (raw) =>
+      transformHooks.phoneOf(raw, ccRaw, ctx.defaultCountryCode),
+    );
+    const phone = picked.phone;
+    if (picked.rejected !== null)
+      soft.push({
+        code: 'INVALID_PHONE',
+        reason:
+          'cannot be read as an E.164 number (letters, an extension, or the wrong digit count); left empty',
+        detail: picked.rejected,
+      });
 
     if (!name && !email && !phone && Object.keys(markers).length === 0) {
       return {
@@ -429,7 +456,7 @@ export const contacts: HandlerSpec = {
       ON CONFLICT (org_id, module_key) DO UPDATE SET current_value = sequence_counters.current_value + ${rows.length}
       RETURNING current_value`);
     const end = Number((res.rows[0] as { current_value: number | string }).current_value);
-    rows.forEach((r, i) => {
+    sortForDisplayId(rows).forEach((r, i) => {
       r.display_id = `CON-${String(end - rows.length + 1 + i).padStart(5, '0')}`;
     });
   },

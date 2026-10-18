@@ -19,6 +19,7 @@ import { NODE_OPERATOR_NAV } from '../../node-bridge-runtime/operator-nav';
 import { SMS_OPERATOR_NAV } from '../../channel-sms/operator/operator-nav';
 import { ROLES_OPERATOR_NAV } from '../../roles-permissions/operator-nav';
 import { WAP_OPERATOR_NAV } from '../../whatsapp-providers/operator-nav';
+import { WAT_OPERATOR_NAV } from '../../whatsapp-throughput/operator-nav';
 import { CAT_OPERATOR_NAV } from '../../catalog-products/operator-nav';
 import { MARKET_OPERATOR_NAV } from '../../marketplace/operator-nav';
 import { SUPP_OPERATOR_NAV } from '../../platform-support-desk/operator-nav';
@@ -83,6 +84,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   ...SMS_OPERATOR_NAV,
   // WhatsApp provider registry (WAP): providers, workspace assignments and the number switch
   ...WAP_OPERATOR_NAV,
+  // WhatsApp send limits and live performance (super admin)
+  ...WAT_OPERATOR_NAV,
   // catalog domain (CAT): the platform's WhatsApp Catalog settings
   ...CAT_OPERATOR_NAV,
   // Marketplace catalogue (MKT): listings, versions and review, categories, requests, usage

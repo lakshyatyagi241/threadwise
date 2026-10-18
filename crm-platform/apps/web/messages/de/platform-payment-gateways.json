@@ -107,6 +107,7 @@
       "noGateway": "Für {currency} ist noch kein Zahlungsanbieter eingerichtet. Bitten Sie Ihren Administrator, einen zu aktivieren.",
       "noGatewayButton": "Kein Zahlungsanbieter eingerichtet",
       "sandbox": "Sandbox",
+      "sandboxNote": "Testmodus: Es wird kein echtes Geld abgebucht. Zahlen Sie mit der Testkarte aus der Dokumentation Ihres Zahlungsanbieters. Die Seite für das Einmalpasswort (OTP) zeigt der Anbieter an, nicht diese App.",
       "pay": "{amount} bezahlen",
       "processing": "Zahlung wird gestartet",
       "summary": "Bestellübersicht",

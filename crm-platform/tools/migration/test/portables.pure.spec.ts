@@ -35,7 +35,8 @@ describe('api_library -> api_library_apis', () => {
     expect(r.url).toBe('https://x.test/a?api_key=&q=1');
     expect(r.headers).toEqual([{ key: 'Authorization', value: '', secret: true }, { key: 'X-Plain', value: 'v', secret: false }]);
     expect(JSON.stringify(o)).not.toContain('ZZZ');
-    expect(JSON.stringify(o)).not.toContain('SECRET');
+    // the secret VALUE is gone; soft-issue codes such as API_URL_SECRET_BLANKED legitimately contain the word
+    expect(JSON.stringify(o)).not.toContain('=SECRET');
     expect(codes(o)).toEqual(expect.arrayContaining(['API_NAME_CHANGED', 'API_HEADER_SECRET_BLANKED', 'API_URL_SECRET_BLANKED', 'API_TOKENS_UNDECLARED']));
   });
   it('quarantines a method WaDesk does not have', () => {
