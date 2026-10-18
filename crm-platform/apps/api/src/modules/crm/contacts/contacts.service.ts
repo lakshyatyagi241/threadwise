@@ -607,6 +607,49 @@ export class ContactsService {
     );
   }
 
+  /**
+   * `resolveOrCreateByIdentity` for many inputs, in the order given. A phone number or email that already belongs to a contact is answered
+   * from two queries for the whole list (the identity and its contact), exactly as the single call answers it; every other input (new,
+   * healed from a stored number, over the plan cap, unusable, or a channel id) goes through the single call unchanged, so locking, quota,
+   * default stage, audit and outbox behave as before. An input repeating an earlier one that was created in this same call is resolved
+   * by the single call too, so it finds the contact just made.
+   */
+  async resolveManyByIdentity(
+    tx: Tx,
+    orgId: number,
+    inputs: readonly ResolveContactInput[],
+  ): Promise<ResolvedContact[]> {
+    const keyOf = (input: ResolveContactInput): { kind: 'email' | 'phone'; value: string } | null => {
+      if (input.kind === 'phone') {
+        const e164 = canonicalizePhone({ number: input.value })?.e164;
+        return e164 ? { kind: 'phone', value: e164 } : null;
+      }
+      if (input.kind === 'email') {
+        const value = input.value.trim().toLowerCase();
+        return value ? { kind: 'email', value } : null;
+      }
+      return null;
+    };
+    const keys = inputs.map(keyOf);
+    const known = await this.repo.contactsByIdentities(
+      tx,
+      orgId,
+      keys.filter((k): k is { kind: 'email' | 'phone'; value: string } => k !== null),
+    );
+    const out: ResolvedContact[] = [];
+    for (const [i, input] of inputs.entries()) {
+      const key = keys[i];
+      const hit = key ? known.get(`${key.kind}|${key.value}`) : undefined;
+      if (hit) {
+        if (input.quiet) await this.fillBlankName(tx, orgId, hit.id, input.name);
+        out.push({ outcome: 'found', contactId: hit.id, uuid: hit.uuid });
+      } else {
+        out.push(await this.resolveOrCreateByIdentity(tx, orgId, input));
+      }
+    }
+    return out;
+  }
+
   private async resolveInContext(
     tx: Tx,
     orgId: number,
