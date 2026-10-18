@@ -401,9 +401,19 @@ export class LeadScoringRepository {
   }
 
   /** Deletes the log older than the retention (privileged: spans workspaces). */
+  /** Is this contact (or the whole workspace) under a legal hold (BL-295)? A held person's data is not sent to an AI provider. */
+  async isRestricted(tx: Tx, orgId: number, contactId: number): Promise<boolean> {
+    const res = await tx.execute(
+      sql`SELECT is_subject_held(${orgId}::bigint, 'contact', ${contactId}::bigint) AS held`,
+    );
+    return (res.rows[0] as { held: boolean }).held === true;
+  }
+
   async deleteOlderThan(tx: Tx, days: number): Promise<number> {
     const res = await tx.execute(
-      sql`DELETE FROM lead_scoring_runs WHERE created_at < now() - make_interval(days => ${days}) RETURNING 1`,
+      // A run about a person under a legal hold (BL-295) is kept with its reasons.
+      sql`DELETE FROM lead_scoring_runs WHERE created_at < now() - make_interval(days => ${days})
+            AND NOT is_subject_held(org_id, 'contact', contact_id) RETURNING 1`,
     );
     return res.rows.length;
   }

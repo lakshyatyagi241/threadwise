@@ -16,6 +16,7 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { ConsentPolicyService } from './consent-policy.service';
 import {
   NO_FACTS,
+  RESTRICTED_PURPOSES,
   decideConsent,
   failureResult,
   isDncChannel,
@@ -228,6 +229,7 @@ export class ConsentGate {
       guardianConsent: false,
       saleShareOptOut: false,
       onDncList: false,
+      restricted: false,
     };
     // Any matched contact that is a minor or opted out counts (the stricter reading); guardian consent must cover EVERY flagged minor.
     let minors = 0;
@@ -240,6 +242,7 @@ export class ConsentGate {
       }
       if (r.saleShare) merged.saleShareOptOut = true;
       if (r.onDnc) merged.onDncList = true;
+      if (r.restricted) merged.restricted = true;
       if (r.state === 'withdrawn') merged.ledgerState = 'withdrawn';
       else if (r.state === 'granted' && merged.ledgerState !== 'withdrawn') {
         merged.ledgerState = 'granted';
@@ -275,6 +278,7 @@ export class ConsentGate {
           guardianConsent: r.guardian,
           saleShareOptOut: r.saleShare,
           onDncList: r.onDnc,
+          restricted: r.restricted,
         });
       }
     }
@@ -301,6 +305,7 @@ export class ConsentGate {
       guardian: boolean;
       saleShare: boolean;
       onDnc: boolean;
+      restricted: boolean;
     }>
   > {
     const consentChannel = consentChannelOfKind(channel);
@@ -309,10 +314,13 @@ export class ConsentGate {
       ledgerPurpose === 'marketing' && isDncChannel(channel)
         ? sql`EXISTS (SELECT 1 FROM dnc_entries d WHERE d.org_id = c.org_id AND d.phone_digits = regexp_replace(coalesce(c.normalized_phone, ''), '[^0-9]', '', 'g'))`
         : sql`false`;
+    // A legal hold (BL-295): the workspace-level question is asked once per statement (an uncorrelated subquery), and the per-contact
+    // function only runs when the workspace has any hold at all, so a broadcast to a workspace without holds pays one index probe.
     const res = await tx.execute(sql`
       SELECT c.id, c.is_unsubscribed AS flag, cs.state,
              coalesce(pf.is_minor, false) AS minor, coalesce(pf.guardian_consent, false) AS guardian,
-             coalesce(pf.do_not_sell_share, false) AS sale_share, ${dnc} AS on_dnc
+             coalesce(pf.do_not_sell_share, false) AS sale_share, ${dnc} AS on_dnc,
+             ((SELECT org_has_active_legal_hold(${orgId}::bigint)) AND is_subject_held(c.org_id, 'contact', c.id)) AS restricted
       FROM contacts c
       LEFT JOIN contact_consent_state cs
         ON cs.org_id = c.org_id AND cs.contact_id = c.id
@@ -327,6 +335,7 @@ export class ConsentGate {
       guardian: r.guardian === true,
       saleShare: r.sale_share === true,
       onDnc: r.on_dnc === true,
+      restricted: r.restricted === true,
     }));
   }
 
@@ -355,7 +364,11 @@ export class ConsentGate {
 
 /** Whether the decision for this purpose reads anything about the contact: the ledger, or the privacy flags (third-party sharing). */
 function readsFacts(def: PurposeDefinition): boolean {
-  return def.ledgerPurpose !== null || def.id === 'third_party_sharing';
+  return (
+    def.ledgerPurpose !== null ||
+    def.id === 'third_party_sharing' ||
+    RESTRICTED_PURPOSES.has(def.id)
+  );
 }
 
 function summarise(decisions: Map<number, ConsentGateResult>): GateManyResult {

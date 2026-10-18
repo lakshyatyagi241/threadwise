@@ -55,6 +55,11 @@ export const CONSENT_GATE_REASONS = [
    * hold; WhatsApp, email and service messages are never held by it.
    */
   'on_dnc_list',
+  /**
+   * The contact's data is under a legal hold (BL-295): marketing, AI processing, profiling and third-party sharing are refused while the
+   * record is kept and locked. The shown text is neutral ("processing of this contact is restricted"): it never mentions a hold or a matter.
+   */
+  'legal_hold',
   // needs_notice
   /** The purpose needs its versioned notice delivered first (a recording announcement, an AI disclosure). */
   'notice_required',

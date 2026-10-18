@@ -106,6 +106,8 @@ export const listPrivacyRequestsQuerySchema = z.object({
   requestType: privacyRequestTypeSchema.optional(),
   /** Open requests past `dueAt`. */
   overdue: z.preprocess((v) => v === 'true' || v === true, z.boolean()).optional(),
+  /** Requests waiting on a legal hold ("restricted: legal hold"), BL-295. */
+  restricted: z.preprocess((v) => v === 'true' || v === true, z.boolean()).optional(),
   limit: z.coerce.number().int().min(1).max(100).default(25),
   cursor: z.string().min(1).max(512).optional(),
 });
@@ -142,6 +144,11 @@ export type ErasePrivacyRequestInput = z.infer<typeof erasePrivacyRequestSchema>
 
 export const privacyRequestsSettingsSchema = z.object({
   slaDays: z.number().int().min(1).max(90),
+  /**
+   * The workspace's own wording of the answer to a person whose erasure is held back by a legal hold (counsel's text). null clears it
+   * (the default text applies); absent leaves it as it is. At most 1500 characters; it must not name the matter.
+   */
+  legalHoldRequesterNotice: z.string().trim().max(1500).nullable().optional(),
 });
 export type PrivacyRequestsSettings = z.infer<typeof privacyRequestsSettingsSchema>;
 export const updatePrivacyRequestsSettingsSchema = privacyRequestsSettingsSchema;
@@ -194,6 +201,8 @@ export const privacyProofSchema = z.object({
   registryDigest: z.string(),
   /** Stated limits: what this erasure does not reach (backups, vendors). */
   notes: z.array(z.string()),
+  /** True when the erasure waited on a legal hold and was executed after it ended (BL-295). Absent otherwise. */
+  resumedAfterHold: z.boolean().optional(),
   sha256: z.string(),
 });
 export type PrivacyProof = z.infer<typeof privacyProofSchema>;
@@ -222,6 +231,11 @@ export const privacyRequestSchema = z.object({
   verifiedAt: z.string().datetime().nullable(),
   legalHold: z.boolean(),
   legalHoldReason: z.string().nullable(),
+  /** True while the case waits on a legal hold on the person (BL-295): the data is kept and locked, the erasure is not executed. */
+  restricted: z.boolean(),
+  restrictedAt: z.string().datetime().nullable(),
+  /** The workspace's own wording of the answer to the person, when it set one; null means the default text applies. */
+  restrictionNotice: z.string().nullable(),
   historyMode: privacyHistoryModeSchema,
   rejectionReason: z.string().nullable(),
   dryRun: privacyErasureReportSchema.nullable(),

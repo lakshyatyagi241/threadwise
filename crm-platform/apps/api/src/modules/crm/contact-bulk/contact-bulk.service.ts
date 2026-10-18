@@ -27,6 +27,7 @@ import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { PersonalDataErasureService } from '../../privacy';
 import { ContactGroupsRepository } from '../contact-groups/contact-groups.repository';
 import { assertOwnerWithinScope } from '../owner-scope';
@@ -90,6 +91,7 @@ export class ContactBulkService {
     private readonly outbox: OutboxService,
     private readonly erasure: PersonalDataErasureService,
     private readonly touch: ContactTouchService,
+    private readonly rbac: RbacService,
   ) {}
 
   private meta(): ActorMeta {
@@ -469,6 +471,9 @@ export class ContactBulkService {
     const orgId = ctx.orgId;
     const exportId = randomUUID();
 
+    // Restricted processing (docs/specs/legal-hold.md 3.2): a held contact is exported only to a user who may manage data requests.
+    const legalExport = this.rbac.can(ctx.grants ?? new Map(), 'privacy.requests.manage').allowed;
+
     const prepared = await this.db.tx(async (tx) => {
       const r = await this.resolve(tx, input, scope, {
         maxMatched: EXPORT_MAX_ROWS,
@@ -495,6 +500,8 @@ export class ContactBulkService {
           exportId: { old: null, new: exportId },
           rows: { old: null, new: r.matched },
           selection: { old: null, new: r.idsMode ? 'ids' : 'filter' },
+          // People under a legal hold (BL-295) are left out of an export unless the caller is an authorised legal user.
+          ...(legalExport ? {} : { legalHoldExcluded: { old: null, new: true } }),
         },
       });
       await this.outbox.emit(tx, {
@@ -540,6 +547,8 @@ export class ContactBulkService {
     // `where` is built from immutable SQL chunks, so later batches (each in a short transaction
     // of their own, so a big export never pins one) reuse it unchanged.
     const conditions = resolved.where ? [resolved.where] : [];
+    if (!legalExport)
+      conditions.push(sql`NOT is_subject_held(contacts.org_id, 'contact', contacts.id)`);
 
     async function* produce(): AsyncGenerator<string> {
       yield (input.bom ? UTF8_BOM : '') + csvLine(header);
@@ -595,9 +604,14 @@ export class ContactBulkService {
       const gz = await gzipAsync(Buffer.concat(keep));
       await db.txAs({ orgId, userId }, async (tx) => {
         // Expired files of this workspace go with the next export; there is no separate sweep.
-        await tx
-          .delete(contactExports)
-          .where(and(eq(contactExports.orgId, orgId), sql`${contactExports.expiresAt} <= now()`));
+        await tx.delete(contactExports).where(
+          and(
+            eq(contactExports.orgId, orgId),
+            sql`${contactExports.expiresAt} <= now()`,
+            // A generated file may be evidence: kept while the workspace is under a workspace-wide legal hold (BL-295).
+            sql`NOT is_subject_held(${contactExports.orgId}, 'contact', NULL)`,
+          ),
+        );
         await tx.insert(contactExports).values({
           orgId,
           uuid: exportId,

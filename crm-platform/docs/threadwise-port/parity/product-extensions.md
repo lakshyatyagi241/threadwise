@@ -619,3 +619,12 @@ Not a reference feature: Reference shows every module to every workspace. Reques
 - **Intended difference:** none for any workspace today. Only the `generic` persona exists until phase 2 (platform console), so nothing is hidden for anyone yet.
 - **Hidden is not locked:** nothing is deleted, no route or API is closed, entitlement (role, channel, app, plan feature) is applied after and wins, and a hidden module that the plan would lock shows no lock and no upsell.
 - **Not verified / open:** the Business type tile with Show more modules and its endpoint; a browser pass with a non-generic persona (none can be set yet); the 21-locale vocabulary overlay (phase 5).
+## Legal hold (BL-295, BL-296)
+
+Not a reference feature. Spec: [legal-hold.md](../../specs/legal-hold.md); API: [privacy.md](../../api/privacy.md) section "Legal holds". Reference has no way to keep a
+person's data against a deletion: its contact delete, its retention and its cleanup jobs destroy whatever they find.
+
+- **New:** `legal_holds` (contact, lead or whole workspace; reason category, case reference, review and end dates); a restricted state for a rights case; `/privacy-requests/legal-holds` register with CSV export; Place / Release in the contact's "..." menu; a banner on the contact for people with `privacy.requests.read`.
+- **Intended differences from the reference:** a held contact cannot be deleted (single, bulk, merge) and the retention sweeps skip it; marketing, AI processing and exports of it are refused with a neutral reason; an erasure confirmed under a hold runs by itself when the hold ends.
+- **Behaviour change:** none for a workspace without a hold. With one: `409 LEGAL_HOLD_ACTIVE` on delete; an import row that would overwrite the contact is skipped (`legal_hold`).
+- Owner decisions open (counsel): the wording of every notice, a second approver for placing a hold, a maximum duration without review, whether Art. 18 restriction should also pause service messages, bulk delete that skips held contacts instead of refusing (BL-297).

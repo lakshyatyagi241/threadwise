@@ -39,6 +39,8 @@ export class CallLogRetentionService {
         UPDATE call_log_entries e
         SET recording_ref = NULL, recording_deleted_at = now()
         WHERE e.recording_ref IS NOT NULL
+          -- A person under a legal hold (BL-295) keeps the reference to the recording; so does every call of a workspace under a workspace hold.
+          AND NOT is_subject_held(e.org_id, 'contact', e.contact_id)
           AND e.recording_stored_at < now() - make_interval(days => coalesce(
                 (SELECT s.retention_days FROM call_recording_settings s WHERE s.org_id = e.org_id),
                 ${CALL_RECORDING_RETENTION_DEFAULT_DAYS}))

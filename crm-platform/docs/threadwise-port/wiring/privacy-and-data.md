@@ -116,3 +116,11 @@ The test in BL-142 produces the same list from the live schema and fails when a 
 
 The register feeds: DSAR export/erase (BL-143), retention engine (BL-146), Help assistant masking (BL-150), the privacy-by-design
 checklist ([privacy-by-design-checklist.md](../../../docs/privacy/privacy-by-design-checklist.md)), and the sub-processor register.
+
+## Legal hold (BL-295)
+
+Table `legal_holds` (tenant, forced RLS; registered in `manifests/privacy.ts` as `fk_null` from `contacts`). Functions `is_subject_held(org, type, id)` and
+`org_has_active_legal_hold(org)`; delete triggers on `contacts` and `leads`. Columns `privacy_requests.restricted_at / restricted_hold_id / erasure_confirmed_by / erasure_confirmed_at`
+and `privacy_settings.legal_hold_requester_notice`. Code: `apps/api/src/modules/privacy/legal-holds/`. Each purge path and what it does is the table in
+[../../specs/legal-hold.md](../../specs/legal-hold.md) section 6; `test/unit/privacy/legal-hold.spec.ts` ("every known purge path asks the legal-hold question") fails when
+one of them stops asking. A NEW purge path (the retention engine, BL-146; any sweep that deletes or clears a person's data) must ask and be added to that list.

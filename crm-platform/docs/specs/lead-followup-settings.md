@@ -173,7 +173,7 @@ system actor after the caller's own permission already allowed the action.
 
 ## 7. Migrations (hand written, RLS-checked)
 
-- Step 1 `20261229090000_lead_handling_uncontacted.sql`: `contacts.uncontacted_since`, index, `contacts_touch()` replaced, `lead_followup_settings`.
+- Step 1 `20261231090200_lead_handling_uncontacted.sql`: `contacts.uncontacted_since`, index, `contacts_touch()` replaced, `lead_followup_settings`.
 - Step 2 `20261229090100_lead_handling_follow_ups.sql`: `tasks.kind`, `chk_tasks_source` gains `auto`, the unique open follow-up index, a contact lookup index.
 - Step 3: no migration (the section value is allowed from step 1).
 

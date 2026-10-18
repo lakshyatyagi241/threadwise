@@ -6,24 +6,25 @@ Product extension (no reference screen). Spec: [privacy-and-data-governance.md](
 
 All routes are `/v2/privacy/...`, user tokens only. Nothing returns a person's name, number or address: a subject is a **masked label**.
 
-| Method and path                                  | Permission               | What                                                                                             |
-| ------------------------------------------------ | ------------------------ | ------------------------------------------------------------------------------------------------ |
-| `GET /settings`, `PATCH /settings`               | read / manage            | `slaDays` (1 to 90, default 30)                                                                  |
-| `GET /subjects?q=`                               | manage                   | find a contact or lead by name, phone or email; phone and email masked                          |
-| `GET /requests`, `POST /requests`                | read / manage            | list (status, requestType, overdue, cursor) / log a request (Idempotency-Key)                   |
-| `GET /requests/:id`                              | read                     | request, events, exports                                                                         |
-| `POST /requests/:id/verify`                      | manage                   | `outcome` pending / verified (needs `method`, optional `evidenceRef` id) / not_verified (rejects) |
-| `POST /requests/:id/hold`                        | manage                   | `{held:true, reason}` or `{held:false}`; a held request refuses erasure                          |
-| `POST /requests/:id/reject`, `/complete`         | manage                   | close without erasure                                                                            |
-| `POST /requests/:id/export` (202)                | manage                   | worker builds the ZIP (queue `privacy-export`); one at a time per request                       |
-| `GET /requests/:id/exports/:exportId/download`   | manage                   | the ZIP, 7 days; audited; delivers an access / export / portability request                      |
-| `POST /requests/:id/erase`                       | `privacy.erase.execute`  | `{dryRun:true}` preview, or `{dryRun:false, confirmation:"ERASE DSR-XXXXXXXX"}`                  |
+| Method and path                                | Permission              | What                                                                                                                                                                           |
+| ---------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `GET /settings`, `PATCH /settings`             | read / manage           | `slaDays` (1 to 90, default 30); `legalHoldRequesterNotice` (the workspace's wording of the answer to a held person, or null)                                                  |
+| `GET /subjects?q=`                             | manage                  | find a contact or lead by name, phone or email; phone and email masked                                                                                                         |
+| `GET /requests`, `POST /requests`              | read / manage           | list (status, requestType, overdue, restricted, cursor) / log a request (Idempotency-Key)                                                                                      |
+| `GET /requests/:id`                            | read                    | request, events, exports                                                                                                                                                       |
+| `POST /requests/:id/verify`                    | manage                  | `outcome` pending / verified (needs `method`, optional `evidenceRef` id) / not_verified (rejects)                                                                              |
+| `POST /requests/:id/hold`                      | manage                  | `{held:true, reason}` or `{held:false}`; a held request refuses erasure                                                                                                        |
+| `POST /requests/:id/reject`, `/complete`       | manage                  | close without erasure                                                                                                                                                          |
+| `POST /requests/:id/export` (202)              | manage                  | worker builds the ZIP (queue `privacy-export`); one at a time per request                                                                                                      |
+| `GET /requests/:id/exports/:exportId/download` | manage                  | the ZIP, 7 days; audited; delivers an access / export / portability request                                                                                                    |
+| `POST /requests/:id/erase`                     | `privacy.erase.execute` | `{dryRun:true}` preview, or `{dryRun:false, confirmation:"ERASE DSR-XXXXXXXX"}`; 409 `LEGAL_HOLD_ACTIVE` when the person is held (the confirmation is kept, nothing is erased) |
 
 Roles: Owner and Admin everything; Manager `privacy.requests.read`.
 
 Status machine: `received -> verifying -> in_progress -> completed`, or `rejected` / `expired` (open and unverified past due date plus 30 days).
 Errors: `PRIVACY_REQUEST_NOT_FOUND` 404, `PRIVACY_SUBJECT_NOT_FOUND` 404, `PRIVACY_REQUEST_STATE_INVALID` 409, `PRIVACY_IDENTITY_NOT_VERIFIED` 409,
-`PRIVACY_LEGAL_HOLD` 409, `PRIVACY_CONFIRMATION_REQUIRED` 422, `PRIVACY_EXPORT_IN_PROGRESS` / `_NOT_READY` 409, `PRIVACY_EXPORT_NOT_FOUND` 404.
+`PRIVACY_LEGAL_HOLD` 409 (the one request is on hold), `PRIVACY_CONFIRMATION_REQUIRED` 422, `PRIVACY_EXPORT_IN_PROGRESS` / `_NOT_READY` 409, `PRIVACY_EXPORT_NOT_FOUND` 404,
+`LEGAL_HOLD_ACTIVE` 409 (the person or workspace is under a legal hold), `LEGAL_HOLD_EXISTS` 409, `LEGAL_HOLD_NOT_FOUND` 404, `LEGAL_HOLD_NOT_ACTIVE` 409.
 
 ## Export
 
@@ -98,3 +99,41 @@ Counsel should confirm the wording of the retention statement and the buyer rule
 files, recordings, call logs, flow runs, AI call logs) with the contact. `?eraseHistory=false` (bulk body `eraseHistory:false`) keeps the
 conversations and call logs without the person's identity (link, name, number, text and media removed). Leads, deals, tasks and invoices are
 not touched by a plain delete (they are anonymised only by a data request). The Developer REST `DELETE /v1/contacts/:id` follows the default.
+
+## Legal holds (BL-295)
+
+Erasure is not absolute: a legal hold freezes erasure and every purge for a contact, a lead or the whole workspace, and **restricts** the data (kept and
+locked). Spec and the legal frame (GDPR Art. 17(3), Art. 18; DPDP s.8(7), s.17; counsel must confirm wording): [../specs/legal-hold.md](../specs/legal-hold.md).
+No new permission key: placing, extending, reviewing and releasing is `privacy.requests.manage` (Owner, Admin); reading the register and a person's
+status is `privacy.requests.read` (Owner, Admin, Manager).
+
+| Method and path                       | Permission | What                                                                                                   |
+| ------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------ |
+| `POST /legal-holds` (Idempotency-Key) | manage     | `{scope: contact                                                                                       | lead | workspace, subjectId?, reasonCategory, caseRef, note?, reviewAt?, expiresAt?}`; 409 `LEGAL_HOLD_EXISTS` |
+| `GET /legal-holds`                    | read       | register, newest first: `status`, `reasonCategory`, `scope`, `reviewDue`, `q` (case reference), cursor |
+| `GET /legal-holds/status?kind=&id=`   | read       | `{held, hold, viaWorkspace}` for a contact or lead (the contact banner)                                |
+| `GET /legal-holds/:id`                | read       | the hold and its history (audit rows, never the note)                                                  |
+| `POST /legal-holds/:id/extend`        | manage     | `reviewAt`, `expiresAt` (null clears), `addCaseRef`, `note`                                            |
+| `POST /legal-holds/:id/review`        | manage     | records reviewer and time, optional `nextReviewAt`                                                     |
+| `POST /legal-holds/:id/release`       | manage     | `{reason?}`; answers `casesLifted` and `erasuresResuming`                                              |
+| `GET /legal-holds/export`             | read       | the register as CSV for auditors (same filters); audited as an export                                  |
+
+Reason categories: `legal_obligation`, `legal_claim`, `regulator_request`, `internal_investigation`. One active hold per subject. A subject is a masked
+label; the note is PII-light by rule (the screen says so) and never travels in an audit delta or an event.
+
+**What a hold does.** Every purge path asks one question (`is_subject_held` in the database, `LegalHoldGuard` in code): the rights erasure, the CRM's contact
+delete (single and bulk, `409 LEGAL_HOLD_ACTIVE`), a merge that would delete a held duplicate, the retention sweeps of call recordings, call-log recording
+references, lead payloads, form answers, the AI scoring log and chat digests, export-file expiry under a workspace hold, the plan-lapse wipe and the workspace
+lifecycle (the hold wins). A database trigger refuses a direct delete of a held contact or lead as the net under all of them. An import row that would overwrite a
+held contact is rejected with the reason `legal_hold`. The ConsentGate refuses marketing, third-party sharing, profiling and AI purposes with the reason
+`legal_hold` (a neutral text: "processing of this contact is restricted"); company briefs, the copilot's contact search and AI lead scoring leave a held contact
+out; the contact CSV export leaves held contacts out unless the caller has `privacy.requests.manage`; opening a held contact writes an audit row. Service messages and
+normal editing go on.
+
+**A rights erasure under a hold.** The case is `restricted` (status stays `in_progress`; `restricted`, `restrictedAt` and `restrictionNotice` on the request) from the
+moment the hold is placed or the request is made. Executing the erasure records the confirmation and answers `409 LEGAL_HOLD_ACTIVE` with `errors[restricted=true]`
+after committing; nothing is erased. When the hold is released or expires, the case leaves the restriction (`restriction_lifted`); an erasure someone confirmed is
+executed by the worker within a minute on fresh counts and the proof carries `resumedAfterHold: true`. The clock keeps running.
+
+Events (outbox): `legal_hold.placed`, `.extended`, `.reviewed`, `.released`, `.expired`, `privacy_request.restricted`, `.resumed`, `.resumed_erased`. Audit module
+`legal_holds`; a refused purge writes `action = read` with `delta.blocked`.

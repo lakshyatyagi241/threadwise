@@ -1,7 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { createHash } from 'node:crypto';
 import { Readable } from 'node:stream';
-import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
   PRIVACY_DEFAULT_SLA_DAYS,
@@ -13,7 +11,6 @@ import {
   type ListPrivacyRequestsQuery,
   type PrivacyErasureReport,
   type PrivacyExport,
-  type PrivacyProof,
   type PrivacyRequest,
   type PrivacyRequestDetail,
   type PrivacyRequestList,
@@ -23,6 +20,7 @@ import {
   type VerifyPrivacyRequestInput,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import type { ResolvedSubject } from '../registry/types';
 import { CryptoService } from '../../../common/crypto/crypto.service';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
@@ -31,7 +29,9 @@ import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { ALL_TIERS, PersonalDataErasureService } from '../engine/erasure.service';
 import { SubjectResolver } from '../engine/subject-resolver';
-import { registryDigest } from '../registry';
+import { LegalHoldGuard, legalHoldActive } from '../legal-holds/legal-hold.guard';
+import { LegalHoldsRepository } from '../legal-holds/legal-holds.repository';
+import { ErasureExecutor, sameCounts } from './erasure-executor';
 import { PrivacyExportPublisher } from './privacy-export.publisher';
 import {
   maskSubject,
@@ -47,14 +47,6 @@ const MODULE_KEY = 'privacy_requests';
 const DAY_MS = 24 * 60 * 60 * 1000;
 /** A preview older than this is not a basis for an irreversible action. */
 const PREVIEW_MAX_AGE_MS = 24 * 60 * 60 * 1000;
-
-/** What an erasure cannot reach, written into every proof so the reader of it is not told more than was done. */
-const PROOF_NOTES = [
-  'Backups keep erased data until they expire (14 days on the local disk, up to 12 months off-site); the erasure is re-applied after any restore.',
-  'Providers that received messages or files (WhatsApp / Meta, SMS and email gateways, AI and translation vendors, payment gateways) keep their own copies under their own terms; see the sub-processor register.',
-  'Financial records are kept for the statutory period with the buyer identity replaced; amounts, numbers, tax facts and dates stay.',
-  'Consent events are kept as proof without a link to the person.',
-];
 
 const stateError = (message: string, status = HttpStatus.CONFLICT) =>
   new AppError(ERROR_CODES.PRIVACY_REQUEST_STATE_INVALID, message, status);
@@ -75,6 +67,9 @@ export class PrivacyRequestsService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly crypto: CryptoService,
+    private readonly guard: LegalHoldGuard,
+    private readonly holds: LegalHoldsRepository,
+    private readonly executor: ErasureExecutor,
   ) {}
 
   // ---- create / read ----------------------------------------------------------------------------------------------------------
@@ -130,7 +125,25 @@ export class PrivacyRequestsService {
       });
       await this.audit.record(tx, { module: MODULE_KEY, recordId: row.id, action: 'insert' });
       await this.emit(tx, row, 'privacy_request.created');
-      return toPrivacyRequest(row);
+      // A request for a person who is already under a legal hold is restricted from the start (docs/specs/legal-hold.md section 4).
+      if (input.requestType === 'erasure' && (contactId !== null || leadId !== null)) {
+        const subject = await this.resolver.resolve(
+          tx,
+          ctx.orgId,
+          contactId !== null ? { kind: 'contact', contactId } : { kind: 'lead', leadId: leadId! },
+        );
+        if (await this.guard.subjectHeld(tx, ctx.orgId, subject)) {
+          const hold = await this.holds.coveringHold(tx, ctx.orgId, subject);
+          await this.repo.restrict(tx, ctx.orgId, row.id, { holdId: hold?.id ?? null });
+          await this.repo.addEvent(tx, ctx.orgId, row.id, {
+            type: 'restricted',
+            actorUserId: ctx.userId,
+          });
+          await this.emit(tx, row, 'privacy_request.restricted');
+          return this.present(tx, ctx.orgId, (await this.repo.byId(tx, ctx.orgId, row.id))!);
+        }
+      }
+      return this.present(tx, ctx.orgId, row);
     });
   }
 
@@ -142,14 +155,18 @@ export class PrivacyRequestsService {
         status: query.status,
         requestType: query.requestType,
         overdue: query.overdue,
+        restricted: query.restricted,
         limit: query.limit,
         after,
       });
       const page = rows.slice(0, query.limit);
       const last = page[page.length - 1];
       const now = new Date();
+      const notice = page.some((r) => r.restrictedAt)
+        ? await this.repo.holdNotice(tx, ctx.orgId)
+        : null;
       return {
-        data: page.map((r) => toPrivacyRequest(r, now)),
+        data: page.map((r) => toPrivacyRequest(r, now, notice)),
         page: {
           nextCursor: rows.length > query.limit && last ? encodeCursor(last) : null,
           hasMore: rows.length > query.limit,
@@ -169,7 +186,11 @@ export class PrivacyRequestsService {
       ]);
       const now = new Date();
       return {
-        request: toPrivacyRequest(row, now),
+        request: toPrivacyRequest(
+          row,
+          now,
+          row.restrictedAt ? await this.repo.holdNotice(tx, ctx.orgId) : null,
+        ),
         events: events.map(toPrivacyEvent),
         exports: exports.map((x) => toPrivacyExport(x, now)),
       };
@@ -254,7 +275,7 @@ export class PrivacyRequestsService {
       await this.emit(tx, after, 'privacy_request.verification_changed', {
         outcome: input.outcome,
       });
-      return toPrivacyRequest(after);
+      return this.present(tx, ctx.orgId, after);
     });
   }
 
@@ -287,7 +308,7 @@ export class PrivacyRequestsService {
       });
       const after = (await this.repo.byId(tx, ctx.orgId, row.id))!;
       await this.emit(tx, after, 'privacy_request.hold_changed', { held: input.held });
-      return toPrivacyRequest(after);
+      return this.present(tx, ctx.orgId, after);
     });
   }
 
@@ -316,7 +337,7 @@ export class PrivacyRequestsService {
       });
       const after = (await this.repo.byId(tx, ctx.orgId, row.id))!;
       await this.emit(tx, after, 'privacy_request.rejected');
-      return toPrivacyRequest(after);
+      return this.present(tx, ctx.orgId, after);
     });
   }
 
@@ -341,7 +362,7 @@ export class PrivacyRequestsService {
       }
       await this.close(tx, ctx.orgId, row, ctx.userId, 'completed_manually');
       const after = (await this.repo.byId(tx, ctx.orgId, row.id))!;
-      return toPrivacyRequest(after);
+      return this.present(tx, ctx.orgId, after);
     });
   }
 
@@ -443,138 +464,122 @@ export class PrivacyRequestsService {
 
   async erase(uuid: string, input: ErasePrivacyRequestInput): Promise<PrivacyErasureReport> {
     const ctx = RequestContextStore.require();
-    return this.db.tx(async (tx) => {
-      const row = await this.mustFind(tx, ctx.orgId, uuid, true);
-      this.assertErasable(row);
-      const stored = storedSubjectOf(row, this.crypto);
-      if (!stored) {
-        throw new AppError(
-          ERROR_CODES.PRIVACY_SUBJECT_NOT_FOUND,
-          'The person is no longer in the workspace.',
-          HttpStatus.CONFLICT,
-        );
-      }
-      const subject = await this.resolver.resolve(tx, ctx.orgId, stored);
-      const mode = row.historyMode === 'anonymise' ? 'anonymise' : 'delete';
-      const base = {
-        orgId: ctx.orgId,
-        requestId: row.id,
-        subject,
-        tiers: ALL_TIERS,
-        mode,
-      } as const;
+    const outcome = await this.db.tx(
+      async (tx): Promise<PrivacyErasureReport | { restricted: true }> => {
+        const row = await this.mustFind(tx, ctx.orgId, uuid, true);
+        this.assertErasable(row);
+        const stored = storedSubjectOf(row, this.crypto);
+        if (!stored) {
+          throw new AppError(
+            ERROR_CODES.PRIVACY_SUBJECT_NOT_FOUND,
+            'The person is no longer in the workspace.',
+            HttpStatus.CONFLICT,
+          );
+        }
+        const subject = await this.resolver.resolve(tx, ctx.orgId, stored);
+        const mode = row.historyMode === 'anonymise' ? 'anonymise' : 'delete';
+        const base = {
+          orgId: ctx.orgId,
+          requestId: row.id,
+          subject,
+          tiers: ALL_TIERS,
+          mode,
+        } as const;
 
-      if (input.dryRun) {
-        const preview = await this.eraser.run(tx, { ...base, dryRun: true });
-        await this.repo.saveDryRun(tx, ctx.orgId, row.id, preview.report);
-        await this.repo.addEvent(tx, ctx.orgId, row.id, {
-          type: 'erase_previewed',
+        if (input.dryRun) {
+          const preview = await this.eraser.run(tx, { ...base, dryRun: true });
+          await this.repo.saveDryRun(tx, ctx.orgId, row.id, preview.report);
+          await this.repo.addEvent(tx, ctx.orgId, row.id, {
+            type: 'erase_previewed',
+            actorUserId: ctx.userId,
+            detail: { ...preview.report.totals, files: preview.report.files },
+          });
+          await this.audit.record(tx, { module: MODULE_KEY, recordId: row.id, action: 'read' });
+          return preview.report;
+        }
+
+        // ---- execute -----------------------------------------------------------------------------------------------------------
+        const stale =
+          !row.dryRunSummary ||
+          !row.dryRunAt ||
+          Date.now() - row.dryRunAt.getTime() > PREVIEW_MAX_AGE_MS;
+        if (stale) {
+          throw new AppError(
+            ERROR_CODES.PRIVACY_CONFIRMATION_REQUIRED,
+            'Preview the erasure first (the preview is valid for 24 hours).',
+            HttpStatus.UNPROCESSABLE_ENTITY,
+          );
+        }
+        const phrase = `${PRIVACY_ERASE_PHRASE} ${referenceOf(row.uuid)}`;
+        if ((input.confirmation ?? '').trim() !== phrase) {
+          throw new AppError(
+            ERROR_CODES.PRIVACY_CONFIRMATION_REQUIRED,
+            `Type "${phrase}" to confirm.`,
+            HttpStatus.UNPROCESSABLE_ENTITY,
+          );
+        }
+
+        // A legal hold (BL-295, docs/specs/legal-hold.md section 4): the person confirmed, but the data must be kept. Nothing is erased; the
+        // case becomes "restricted", the confirmation is kept so the worker can execute it when the hold ends, and the caller is told
+        // 409 after this transaction has committed (an error thrown here would roll the restriction back with it).
+        if (await this.guard.subjectHeld(tx, ctx.orgId, subject)) {
+          await this.restrictAfterAttempt(tx, ctx.orgId, ctx.userId, row, subject);
+          return { restricted: true };
+        }
+
+        // What the person confirmed is what runs: the counts are taken again inside this transaction and must equal the preview.
+        const again = await this.eraser.run(tx, { ...base, dryRun: true });
+        if (!sameCounts(again.report, row.dryRunSummary!)) {
+          throw stateError(
+            'The data changed since the preview. Preview the erasure again before executing it.',
+          );
+        }
+        return this.executor.execute(tx, {
+          orgId: ctx.orgId,
+          row,
+          subject,
+          mode,
           actorUserId: ctx.userId,
-          detail: { ...preview.report.totals, files: preview.report.files },
+          previewed: row.dryRunSummary!,
+          resumedAfterHold: false,
         });
-        await this.audit.record(tx, { module: MODULE_KEY, recordId: row.id, action: 'read' });
-        return preview.report;
-      }
+      },
+    );
+    if ('restricted' in outcome) {
+      throw legalHoldActive(1, true);
+    }
+    return outcome;
+  }
 
-      // ---- execute -------------------------------------------------------------------------------------------------------------
-      const stale =
-        !row.dryRunSummary ||
-        !row.dryRunAt ||
-        Date.now() - row.dryRunAt.getTime() > PREVIEW_MAX_AGE_MS;
-      if (stale) {
-        throw new AppError(
-          ERROR_CODES.PRIVACY_CONFIRMATION_REQUIRED,
-          'Preview the erasure first (the preview is valid for 24 hours).',
-          HttpStatus.UNPROCESSABLE_ENTITY,
-        );
-      }
-      const phrase = `${PRIVACY_ERASE_PHRASE} ${referenceOf(row.uuid)}`;
-      if ((input.confirmation ?? '').trim() !== phrase) {
-        throw new AppError(
-          ERROR_CODES.PRIVACY_CONFIRMATION_REQUIRED,
-          `Type "${phrase}" to confirm.`,
-          HttpStatus.UNPROCESSABLE_ENTITY,
-        );
-      }
-      // What the person confirmed is what runs: the counts are taken again inside this transaction and must equal the preview.
-      const again = await this.eraser.run(tx, { ...base, dryRun: true });
-      if (!sameCounts(again.report, row.dryRunSummary!)) {
-        throw stateError(
-          'The data changed since the preview. Preview the erasure again before executing it.',
-        );
-      }
-
-      const doomed = await this.contactsOf(tx, ctx.orgId, subject.contactIds);
-      const run = await this.eraser.run(tx, { ...base, dryRun: false });
-      if (!sameCounts(run.report, row.dryRunSummary!)) {
-        // Cannot happen inside one transaction without a concurrent writer; if it does, nothing is kept.
-        throw stateError(
-          'The erasure did not match its preview and was rolled back. Preview it again.',
-        );
-      }
-
-      const executedAt = new Date();
-      const userUuid =
-        ctx.userId === null ? null : await this.repo.userUuid(tx, ctx.orgId, ctx.userId);
-      const body: Omit<PrivacyProof, 'sha256'> = {
-        requestReference: referenceOf(row.uuid),
-        requestType: row.requestType as PrivacyProof['requestType'],
-        executedAt: executedAt.toISOString(),
-        executedBy: userUuid,
-        historyMode: mode,
-        lines: run.report.lines,
-        files: run.report.files,
-        registryDigest: registryDigest(),
-        notes: PROOF_NOTES,
-      };
-      const sha256 = createHash('sha256').update(JSON.stringify(body)).digest('hex');
-      await this.repo.saveErasure(tx, ctx.orgId, row.id, {
-        result: {
-          totals: run.report.totals,
-          files: run.report.files,
-          executedAt: executedAt.toISOString(),
-          matchedPreview: true,
-        },
-        proof: { ...body, sha256 },
-        proofSha256: sha256,
-      });
-      await this.repo.addEvent(tx, ctx.orgId, row.id, {
-        type: 'erased',
-        from: 'in_progress',
-        to: 'completed',
-        actorUserId: ctx.userId,
-        detail: { ...run.report.totals, files: run.report.files, proofSha256: sha256 },
-      });
-      // The contacts were deleted by the pipeline, not by the CRM's delete: the audit row and the event the rest of the system listens to
-      // (webhooks, segments, flows) are written here, exactly as a CRM delete writes them.
-      for (const c of doomed) {
-        await this.audit.record(tx, { module: 'contacts', recordId: c.id, action: 'delete' });
-        await this.outbox.emit(tx, {
-          aggregateModule: 'contacts',
-          aggregateId: c.id,
-          eventType: 'contact.deleted',
-          payload: { uuid: c.uuid, displayId: c.displayId },
-        });
-      }
-      await this.audit.record(tx, {
-        module: MODULE_KEY,
-        recordId: row.id,
-        action: 'delete',
-        delta: { status: { old: 'in_progress', new: 'completed' } },
-      });
-      await this.outbox.emit(tx, {
-        aggregateModule: MODULE_KEY,
-        aggregateId: row.id,
-        eventType: 'privacy_request.erased',
-        payload: {
-          uuid: row.uuid,
-          reference: referenceOf(row.uuid),
-          ...run.report.totals,
-          files: run.report.files,
-        },
-      });
-      return run.report;
+  /**
+   * Records that someone tried to execute this erasure while the person is held: the case is restricted (if it was not already), the
+   * confirmation is kept, and the event and audit row are written. No data changes.
+   */
+  private async restrictAfterAttempt(
+    tx: Tx,
+    orgId: number,
+    userId: number | null,
+    row: RequestRow,
+    subject: ResolvedSubject,
+  ): Promise<void> {
+    const hold = await this.holds.coveringHold(tx, orgId, subject);
+    const alreadyRestricted = row.restrictedAt !== null;
+    await this.repo.restrict(tx, orgId, row.id, {
+      holdId: hold?.id ?? null,
+      confirmedBy: userId,
     });
+    await this.repo.addEvent(tx, orgId, row.id, {
+      type: alreadyRestricted ? 'erasure_queued' : 'restricted',
+      actorUserId: userId,
+      detail: { confirmed: true },
+    });
+    await this.audit.record(tx, {
+      module: MODULE_KEY,
+      recordId: row.id,
+      action: 'update',
+      delta: { restricted: { old: alreadyRestricted, new: true } },
+    });
+    if (!alreadyRestricted) await this.emit(tx, row, 'privacy_request.restricted');
   }
 
   // ---- settings ---------------------------------------------------------------------------------------------------------------
@@ -583,6 +588,7 @@ export class PrivacyRequestsService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => ({
       slaDays: (await this.repo.slaDays(tx, ctx.orgId)) ?? PRIVACY_DEFAULT_SLA_DAYS,
+      legalHoldRequesterNotice: await this.repo.holdNotice(tx, ctx.orgId),
     }));
   }
 
@@ -590,17 +596,42 @@ export class PrivacyRequestsService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       await this.repo.saveSla(tx, ctx.orgId, input.slaDays, ctx.userId);
+      const delta: Record<string, { old: unknown; new: unknown }> = {
+        slaDays: { old: null, new: input.slaDays },
+      };
+      if (input.legalHoldRequesterNotice !== undefined) {
+        await this.repo.saveHoldNotice(
+          tx,
+          ctx.orgId,
+          input.legalHoldRequesterNotice || null,
+          ctx.userId,
+        );
+        // The wording is counsel's text, not a personal value; the audit row only says that it changed.
+        delta.legalHoldRequesterNotice = {
+          old: null,
+          new: input.legalHoldRequesterNotice ? 'set' : 'cleared',
+        };
+      }
       await this.audit.record(tx, {
         module: 'privacy_settings',
         recordId: ctx.orgId,
         action: 'update',
-        delta: { slaDays: { old: null, new: input.slaDays } },
+        delta,
       });
-      return { slaDays: input.slaDays };
+      return {
+        slaDays: input.slaDays,
+        legalHoldRequesterNotice: await this.repo.holdNotice(tx, ctx.orgId),
+      };
     });
   }
 
   // ---- helpers ----------------------------------------------------------------------------------------------------------------
+
+  /** The wire shape of a case; a restricted one carries the workspace's own requester wording when it set one. */
+  private async present(tx: Tx, orgId: number, row: RequestRow): Promise<PrivacyRequest> {
+    const notice = row.restrictedAt ? await this.repo.holdNotice(tx, orgId) : null;
+    return toPrivacyRequest(row, new Date(), notice);
+  }
 
   private async mustFind(tx: Tx, orgId: number, uuid: string, lock = false): Promise<RequestRow> {
     const row = await this.repo.byUuid(tx, orgId, uuid, { lock });
@@ -692,37 +723,10 @@ export class PrivacyRequestsService {
       },
     });
   }
-
-  private async contactsOf(
-    tx: Tx,
-    orgId: number,
-    ids: readonly number[],
-  ): Promise<Array<{ id: number; uuid: string; displayId: string | null }>> {
-    if (!ids.length) return [];
-    const res = await tx.execute(sql`
-      SELECT id, uuid, display_id FROM contacts WHERE org_id = ${orgId} AND id = ANY(${`{${ids.join(',')}}`}::bigint[])`);
-    return (
-      res.rows as Array<{ id: number | string; uuid: string; display_id: string | null }>
-    ).map((r) => ({
-      id: Number(r.id),
-      uuid: r.uuid,
-      displayId: r.display_id,
-    }));
-  }
 }
 
 const nextStatus = (o: VerifyPrivacyRequestInput['outcome']): string =>
   o === 'pending' ? 'verifying' : o === 'verified' ? 'in_progress' : 'rejected';
-
-/** Two reports agree when every (table, disposition) line holds the same number of rows. */
-function sameCounts(a: PrivacyErasureReport, b: PrivacyErasureReport): boolean {
-  const key = (r: PrivacyErasureReport) =>
-    r.lines
-      .map((l) => `${l.holder}|${l.table}|${l.disposition}|${l.count}`)
-      .sort()
-      .join('\n') + `\nfiles=${r.files}`;
-  return key(a) === key(b);
-}
 
 function encodeCursor(r: RequestRow): string {
   return Buffer.from(`${r.receivedAt.toISOString()}|${r.id}`, 'utf8').toString('base64url');

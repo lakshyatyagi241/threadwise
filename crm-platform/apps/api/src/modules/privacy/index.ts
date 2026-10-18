@@ -20,3 +20,16 @@ export type {
   TableSpec,
   Tier,
 } from './registry/types';
+export {
+  LegalHoldGuard,
+  LEGAL_HOLD_BLOCKED_MESSAGE,
+  legalHoldActive,
+  isLegalHoldDbError,
+  type HoldedOperation,
+} from './legal-holds/legal-hold.guard';
+export {
+  sqlContactNotHeld,
+  sqlLeadNotHeld,
+  sqlOrgHasNoHold,
+  sqlWorkspaceNotHeld,
+} from './legal-holds/legal-hold.sql';

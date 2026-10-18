@@ -321,7 +321,9 @@ export class AuditLogRepository {
   async expireExports(tx: Tx, now: Date): Promise<number> {
     const res = await tx.execute(sql`
       UPDATE audit_log_exports SET status = 'expired', file_gz = NULL
-      WHERE status = 'ready' AND expires_at < ${now} RETURNING 1`);
+      WHERE status = 'ready' AND expires_at < ${now}
+        AND NOT is_subject_held(org_id, 'contact', NULL)
+        RETURNING 1`);
     return rowsOf(res).length;
   }
 
