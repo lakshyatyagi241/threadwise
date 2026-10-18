@@ -197,7 +197,7 @@ describe('outbox subscribers', () => {
           /idempoten|dedupe|redeliver|at[- ]least[- ]once|a repeat|twice|harmless|jobId/i.test(
             text,
           );
-        const base = rel.split('/').pop()!;
+        const base = rel.split(/[\\/]/).pop()!;
         expect(
           own || AUDIT.includes(base),
           `${rel} is neither explained in the file nor listed in the audit; see docs/adr/0029-idempotency.md`,
