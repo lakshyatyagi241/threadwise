@@ -1,3 +1,4 @@
+import { FailedOperationsModule } from '../failed-operations';
 import { forwardRef, Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { SendWindowModule } from '../compliance-center';
@@ -60,6 +61,7 @@ import {
     forwardRef(() => NodeBridgeRuntimeModule),
     WalletMessageBillingModule,
     PlatformSettingsModule,
+    FailedOperationsModule,
   ],
   controllers: [
     BroadcastsController,

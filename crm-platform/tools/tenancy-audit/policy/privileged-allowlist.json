@@ -533,5 +533,10 @@
     "status": "reviewed",
     "reason": "catalog/schema objects only; no tenant rows",
     "reviewedOn": "2026-10-11"
+  },
+  "modules/failed-operations/failed-operations.repository.ts": {
+    "status": "reviewed",
+    "reason": "operator-only (OperatorGuard, platform_operator; redrive and close need super_admin) and worker-only records of background work that failed for good; failed_operations and failed_operation_events are platform tables whose every policy is app_is_privileged() (no workspace can read one), so privileged is the only way to reach them. A redrive takes nothing from the caller but the record id: payload, workspace and eligibility come from the stored record, a suspended or deleted workspace is refused, and every action is audited with the operator",
+    "reviewedOn": "2026-12-29"
   }
 }

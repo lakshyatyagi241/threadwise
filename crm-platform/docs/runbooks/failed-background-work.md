@@ -10,6 +10,24 @@ message body or a phone number.
 | A WhatsApp webhook payload after 10 tries (about 40 minutes)                   | BullMQ `waba-ingest`, failed set   | `GET waba-ingest/failed`            | `POST waba-ingest/replay` `{limit}`       |
 | A Telegram, Viber, LINE or Facebook event that could not be stored             | BullMQ `webhook-retry`, failed set | `GET webhook-retry/failed`          | `POST webhook-retry/replay` `{limit}`     |
 
+## The durable record (failed operations)
+
+Every job that fails for good on `webhook-ingest`, `waba-ingest`, `webhook-retry`, `ecom-webhook` and `telephony-ingest` is written to `failed_operations`, with a sanitized code
+and no payload. Strategy and states: [dlq strategy](../quality/dlq-strategy.md).
+
+| Action                                    | Call                                                  | Who                 |
+| ----------------------------------------- | ----------------------------------------------------- | ------------------- |
+| List (filter by status, queue, open only) | `GET /v2/platform/failed-operations`                  | any active operator |
+| One record with its event history         | `GET /v2/platform/failed-operations/:uuid`            | any active operator |
+| Redrive one                               | `POST /v2/platform/failed-operations/:uuid/redrive`   | super admin         |
+| Close without redriving (reason required) | `POST /v2/platform/failed-operations/:uuid/terminate` | super admin         |
+
+A redrive is refused, with a code that says why, when the workspace is not active, the record is older than 30 days, it was redriven in the last minute, or it was already
+redriven 3 times (it then goes to `ESCALATED`: read the error code, fix the cause, close it). `waba-ingest/replay` and `webhook-retry/replay` use the same check per job.
+
+Alert on `crm_dead_letter_capture_failures_total > 0` (a record was not written; the job is still in the queue failed set and the sweep retries it), on
+`crm_dead_letter_open` above zero for longer than your response time, and on `crm_dead_letter_oldest_open_seconds`.
+
 ## How the channel webhooks stay durable
 
 Telegram, Viber, LINE and Facebook store a message inline. If that fails after the request was authenticated, the event is put on the `webhook-retry` queue

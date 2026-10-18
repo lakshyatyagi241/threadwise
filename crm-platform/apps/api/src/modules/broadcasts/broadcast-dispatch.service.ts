@@ -1,5 +1,6 @@
 import { OUTCOME_UNKNOWN_PREFIX, isOutcomeUnknown } from './retry-policy';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { FailureRecorder } from '../failed-operations';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { ERROR_CODES } from '@crm/contracts';
 import { sql } from 'drizzle-orm';
 import { AppError } from '../../common/errors/app-error';
@@ -114,6 +115,8 @@ export class BroadcastDispatchService {
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
     private readonly sendWindow: SendWindowService,
     private readonly consentGate: ConsentGate,
+    // Optional so the dispatcher still builds where the record is not wired; the recipient is marked failed either way.
+    @Optional() private readonly failures?: FailureRecorder,
   ) {}
 
   /** Must run inside a request context for `orgId` (the processor sets it from the job). */
@@ -462,7 +465,17 @@ export class BroadcastDispatchService {
             }
             const message = err instanceof Error ? err.message : String(err);
             // A timeout or reset may have been accepted by the provider: say so, and the automatic retry leaves it alone.
-            const reason = isOutcomeUnknown(err) ? `${OUTCOME_UNKNOWN_PREFIX}${message}` : message;
+            const unknown = isOutcomeUnknown(err);
+            const reason = unknown ? `${OUTCOME_UNKNOWN_PREFIX}${message}` : message;
+            // Shown as failed and never resent by itself; the record lets a person check the provider's receipt first (DLQ audit DF-08).
+            if (unknown)
+              await this.failures?.recordUnknownOutcome({
+                source: 'broadcast-send',
+                orgId,
+                ref: `${broadcastId}:${contactId}`,
+                jobName: 'broadcast-recipient',
+                reason: message,
+              });
             await this.db.tx(async (tx) => {
               const from = await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
                 status: 'failed',
