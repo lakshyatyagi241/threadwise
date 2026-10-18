@@ -613,7 +613,9 @@
         "campaign": "Chiến dịch",
         "adset": "Nhóm quảng cáo",
         "ad": "Quảng cáo",
-        "form": "Biểu mẫu"
+        "form": "Biểu mẫu",
+        "channel": "Kênh",
+        "moduleType": "Loại mô-đun"
       },
       "capturedAt": "Thu nhận",
       "openSource": "Mở nguồn khách hàng tiềm năng"

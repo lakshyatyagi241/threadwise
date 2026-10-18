@@ -15,6 +15,8 @@ export interface AttributionRow {
   adset: string | null;
   ad: string | null;
   form: string | null;
+  /** `evidence`: the touch's own record (a migrated Waboo touch keeps its channel and module type here). */
+  evidence: Record<string, unknown>;
   leadSourceUuid: string | null;
   capturedAt: Date;
 }
@@ -29,6 +31,8 @@ const toRow = (r: Raw): AttributionRow => ({
   adset: s(r.adset),
   ad: s(r.ad),
   form: s(r.form),
+  evidence:
+    r.evidence && typeof r.evidence === 'object' ? (r.evidence as Record<string, unknown>) : {},
   leadSourceUuid: s(r.lead_source_uuid),
   capturedAt: new Date(r.captured_at as string),
 });

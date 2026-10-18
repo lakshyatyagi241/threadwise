@@ -294,6 +294,21 @@ export const contacts: HandlerSpec = {
           detail: lcRaw,
         });
     }
+    // a stage date that is present but unreadable would otherwise vanish without a trace
+    const stageDate = (
+      k: 'lifecycle_stage_date' | 'previous_lifecycle_stage_date',
+    ): string | null => {
+      const d = toDate(doc[k]);
+      if (!d && str(doc[k]))
+        soft.push({
+          code: 'BAD_DATE',
+          reason: `${k} is not a readable date; left empty`,
+          detail: plain(doc[k]),
+        });
+      return iso(d);
+    };
+    const stageAt = stageDate('lifecycle_stage_date');
+    const previousAt = stageDate('previous_lifecycle_stage_date');
     let previous: string | null = null;
     const prevRaw = str(doc.previous_lifecycle_stage);
     if (prevRaw) {
@@ -386,9 +401,9 @@ export const contacts: HandlerSpec = {
             legacy_id: primaryKey(doc),
             first_name: firstName,
             last_name: lastName,
-            lifecycle_stage_date: iso(toDate(doc.lifecycle_stage_date)),
+            lifecycle_stage_date: stageAt,
             previous_lifecycle_stage: previous,
-            previous_lifecycle_stage_date: iso(toDate(doc.previous_lifecycle_stage_date)),
+            previous_lifecycle_stage_date: previousAt,
             lost_reason: str(doc.lost_reason),
             whatsapp_subscription_status: wa,
             sms_subscription_status: subscriptionStatus(doc.sms_subscription_status, ctx.idx),

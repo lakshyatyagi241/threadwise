@@ -126,7 +126,12 @@
       "details": {
         "title": "פרטי איש קשר",
         "stage": "שלב במחזור החיים",
-        "otherProperties": "מאפיינים נוספים"
+        "otherProperties": "מאפיינים נוספים",
+        "stageSince": "בשלב הזה מאז",
+        "previousStage": "השלב הקודם",
+        "previousStageSince": "השלב הקודם מאז",
+        "lostReason": "סיבת ההפסד",
+        "updatedAt": "עודכן לאחרונה"
       },
       "company": {
         "title": "חברה",

@@ -111,6 +111,9 @@ export const attributionTouchSchema = z.object({
   adset: z.string().nullable(),
   ad: z.string().nullable(),
   form: z.string().nullable(),
+  /** The channel and module type the touch carried (a migrated Waboo touch keeps them; other touches have none). */
+  channel: z.string().nullable().optional(),
+  moduleType: z.string().nullable().optional(),
   /** The lead source it came through; null once that source was deleted. */
   leadSourceId: uuidSchema.nullable(),
   capturedAt: z.string().datetime(),

@@ -613,7 +613,9 @@
         "campaign": "Kampagne",
         "adset": "Anzeigengruppe",
         "ad": "Anzeige",
-        "form": "Formular"
+        "form": "Formular",
+        "channel": "Kanal",
+        "moduleType": "Modultyp"
       },
       "capturedAt": "Erfasst",
       "openSource": "Lead-Quelle öffnen"

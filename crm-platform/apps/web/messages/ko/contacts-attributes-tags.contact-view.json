@@ -126,7 +126,12 @@
       "details": {
         "title": "연락처 세부 정보",
         "stage": "라이프사이클 단계",
-        "otherProperties": "기타 속성"
+        "otherProperties": "기타 속성",
+        "stageSince": "현재 단계 시작일",
+        "previousStage": "이전 단계",
+        "previousStageSince": "이전 단계 시작일",
+        "lostReason": "실패 사유",
+        "updatedAt": "마지막 업데이트"
       },
       "company": {
         "title": "회사",

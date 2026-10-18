@@ -126,7 +126,12 @@
       "details": {
         "title": "联系人详情",
         "stage": "生命周期阶段",
-        "otherProperties": "其他属性"
+        "otherProperties": "其他属性",
+        "stageSince": "进入当前阶段的时间",
+        "previousStage": "上一阶段",
+        "previousStageSince": "上一阶段的开始时间",
+        "lostReason": "丢单原因",
+        "updatedAt": "最后更新"
       },
       "company": {
         "title": "公司",

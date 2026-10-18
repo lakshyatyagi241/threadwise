@@ -126,7 +126,12 @@
       "details": {
         "title": "رابطے کی تفصیلات",
         "stage": "لائف سائیکل مرحلہ",
-        "otherProperties": "دیگر پراپرٹیز"
+        "otherProperties": "دیگر پراپرٹیز",
+        "stageSince": "اس مرحلے میں کب سے",
+        "previousStage": "پچھلا مرحلہ",
+        "previousStageSince": "پچھلا مرحلہ کب سے",
+        "lostReason": "ہار کی وجہ",
+        "updatedAt": "آخری اپ ڈیٹ"
       },
       "company": {
         "title": "کمپنی",

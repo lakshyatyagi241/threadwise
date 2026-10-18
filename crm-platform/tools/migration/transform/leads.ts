@@ -311,15 +311,36 @@ const ATTR_FIELDS: Record<string, string> = {
   id: 'id',
   contact_id: 'col:contact_id (resolved through id_map)',
   first_touch:
-    'col:platform / source_label / campaign / form / captured_at (first_touch.source, .platform, .raw_utm_campaign, .module_name, .captured_at); first_touch.channel, .module_type, .raw_utm_source|medium|content|term and the registry ids have no column',
+    'col:platform / source_label / campaign / form / captured_at (first_touch.source, .platform, .raw_utm_campaign, .module_name, .captured_at); the whole first_touch (channel, module_type, raw_utm_*, registry ids, non-null values) is kept in evidence.legacy.waboo.firstTouch',
   source: 'col:source_label fallback when first_touch has none',
   platform: 'col:platform fallback when first_touch has none',
   module_name: 'col:form fallback when first_touch has none',
   created_at: 'col:captured_at fallback; created_at of the row = captured_at',
-  channel: 'drop:channel of the CURRENT touch; contact_attributions has no channel column',
-  module_type: 'drop:module type (Contacts / API / Whatsapp Chatbot); no column',
-  updated_at: 'drop:contact_attributions is append-only and has no updated_at',
+  channel: 'evidence.legacy.waboo.current.channel (the CURRENT touch)',
+  module_type: 'evidence.legacy.waboo.current.module_type (Contacts / API / Whatsapp Chatbot)',
+  updated_at:
+    'evidence.legacy.waboo.current.updated_at (contact_attributions is append-only and has no updated_at)',
 };
+
+/**
+ * The Waboo touch exactly as Waboo holds it, for the columns contact_attributions does not have (channel, module type ...): the current
+ * (top-level) touch and the whole first_touch, null values left out, in `evidence.legacy.waboo`. Nothing of the document is lost.
+ */
+export function attributionEvidence(doc: Doc, key: string): Row {
+  const keep = (o: Doc): Doc => {
+    const out: Doc = {};
+    for (const [k, v] of Object.entries(o))
+      if (v !== null && v !== undefined) setOwn(out, k, plain(v));
+    return out;
+  };
+  const ft: Doc =
+    doc.first_touch && typeof doc.first_touch === 'object' ? (doc.first_touch as Doc) : {};
+  const current: Doc = {};
+  for (const [k, v] of Object.entries(doc))
+    if (!['_id', 'id', 'contact_id', 'first_touch'].includes(k)) setOwn(current, k, v);
+  return scrub({ legacy: { waboo: { id: key, current: keep(current), firstTouch: keep(ft) } } })
+    .value as Row;
+}
 
 export const attributions: HandlerSpec = {
   handler: 'attributions',
@@ -335,6 +356,7 @@ export const attributions: HandlerSpec = {
         c('form', 'text'),
         c('captured_at', 'timestamptz'),
         c('created_at', 'timestamptz'),
+        c('evidence', 'jsonb'),
       ],
       constants: { lead_event_id: null, source_id: null, adset: null, ad: null },
     },
@@ -404,6 +426,7 @@ export const attributions: HandlerSpec = {
             form: pick('module_name'),
             captured_at: captured.toISOString(),
             created_at: captured.toISOString(),
+            evidence: attributionEvidence(doc, docKeys(doc)[0]?.key ?? ''),
           },
         },
       ],

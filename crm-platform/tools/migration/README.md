@@ -317,6 +317,7 @@ falls back to `normalized_phone`), and any secret or credential value.
 - A contact whose lifecycle stage cannot be resolved gets the workspace default stage and the raw value is quarantined.
 - Waboo property definitions for built-in properties (`first_name` ...) also become `fields` rows, marked `is_system` when Waboo says so. Exception: Waboo's own web-analytics properties (`referrer`, `referrer_name`, `referrer_keyword`, `referrer_url`, `utm_medium`, `utm_campaign`, `utm_source`, `device_type`, `device_model`, `operating_system`, `operating_system_name`, `browser_version`, `browser_name`, `ip_continent`, `ip_country_region`, `ip_state_region`, `ip_city`, `channel`, `bot_name`, `module_type`, `module_name`, `platform`) are NOT `is_system`: WaDesk has no built-in place for them and a system field is hidden on the contact page, so they stay ordinary fields, and they are also NOT `is_read_only` (the contact Edit panel lists only editable fields, so Waboo's read-only flag would keep the UTM, referrer, device and IP fields out of it) (`source` stays system: it is the native `contacts.source` column). Their values stay in `contacts.data`. Likewise `created_time` and `modified_time` (Waboo's Created Time / Modified Time) are NOT `is_system` and are always `is_read_only`: the contact page shows them as read-only rows, their values are the contact's creation and last-change instants as ISO text in `contacts.data` (the same instants as `contacts.created_at` / `updated_at`).
   Check in the UI that built-in properties are not shown twice. **Unverified.**
+- A contact's `lifecycle_stage_date` / `previous_lifecycle_stage_date` that is present but not a readable date is left empty with the soft issue `BAD_DATE` (it used to vanish silently). The contact page's Details tab shows both dates, the previous stage, the lost reason and the last update.
 - `contacts.channel` is left empty: Waboo `channel` ("WhatsApp", "API") is the capture channel, not the app's `channel` + `channel_uid`
   identity pair. It stays in `contacts.data.channel`.
 - `country_code` is stored as `+<digits>`; the app's own form of this column was not confirmed.
@@ -1242,7 +1243,7 @@ Order: `... contacts -> ... -> credits -> lead_sources -> lead_events -> lead_ev
 
 ## NOT PRESENT (counted in the report)
 
-`first_touch.channel`, `.module_type`, top-level `channel` / `module_type` and the nine always-null keys (no column in `contact_attributions`); `adset` / `ad` (no Waboo field); the current touch when it differs (soft `LATEST_TOUCH_DIFFERS`); `deal_id`, `reason`, `error` of events (Waboo leads carry none); credential-looking keys of an event (names only, never values).
+(nothing of `contact_attribution` is dropped any more: `first_touch.*` and the current top-level touch, `channel` and `module_type` included, are kept as JSON in `contact_attributions.evidence.legacy.waboo`, and the contact page's lead-source panel lists the first touch's channel and module type); `adset` / `ad` (no Waboo field); the current touch when it differs (soft `LATEST_TOUCH_DIFFERS`); `deal_id`, `reason`, `error` of events (Waboo leads carry none); credential-looking keys of an event (names only, never values).
 
 ## UNVERIFIED guesses (confirm after the export)
 
