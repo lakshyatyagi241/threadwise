@@ -4,11 +4,13 @@ import { useQuery } from '@tanstack/react-query';
 import { z } from 'zod';
 import type {
   ContactTouchChannel,
+  DuplicateSettings,
   FollowUpResult,
   FollowUpSettings,
   LeadHandlingSettings,
   SnoozeFollowUpInput,
   UncontactedSettings,
+  UpdateDuplicateSettingsInput,
   UpdateFollowUpSettingsInput,
   UpdateUncontactedSettingsInput,
 } from '@crm/contracts';
@@ -30,13 +32,14 @@ const shape = <T>(...required: string[]): z.ZodType<T, z.ZodTypeDef, unknown> =>
     'Unexpected response',
   );
 
-const settingsShape = shape<LeadHandlingSettings>('uncontacted', 'followUps');
+const settingsShape = shape<LeadHandlingSettings>('uncontacted', 'followUps', 'duplicates');
 const followUpsShape = shape<FollowUpSettings>(
   'updateWhen',
   'defaultDate',
   'defaultTime',
   'rowVersion',
 );
+const duplicatesShape = shape<DuplicateSettings>('mode', 'noteOnMerge', 'rowVersion');
 const followUpResultShape = shape<FollowUpResult>('nextFollowUp');
 const uncontactedShape = shape<UncontactedSettings>(
   'clearOn',
@@ -51,6 +54,12 @@ export const LEAD_HANDLING_KEYS = {
 };
 
 export const leadHandlingApi = {
+  saveDuplicates: (input: UpdateDuplicateSettingsInput) =>
+    apiFetch('/lead-handling/settings/duplicates', {
+      method: 'PUT',
+      body: input,
+      schema: duplicatesShape,
+    }),
   saveFollowUps: (input: UpdateFollowUpSettingsInput) =>
     apiFetch('/lead-handling/settings/follow-ups', {
       method: 'PUT',

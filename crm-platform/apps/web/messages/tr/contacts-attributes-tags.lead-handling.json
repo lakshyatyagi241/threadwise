@@ -93,6 +93,23 @@
             "intro": "Yeni bir takip oluşturulduğunda uyarı saatini şuna ayarla:",
             "hint": "Çalışma alanınızın saat dilimine göre okunur."
           }
+        },
+        "duplicates": {
+          "title": "Yinelenen potansiyel müşteriler",
+          "subtitle": "Bir potansiyel müşteri kaynağından gelen yeni kaydın telefon numarası veya e-postası mevcut bir kişiyle aynıysa ne olacağını belirleyin.",
+          "mode": {
+            "title": "Yeni kayıt bir kişiyle eşleştiğinde",
+            "intro": "Telefon numarası veya e-postası zaten bir kişiye aitse kayıt eşleşir.",
+            "merge": "Mevcut kişiyle birleştir",
+            "mergeHint": "Kişinin boş alanlarını doldurur ve kaydı geçmişine ekler. Önceden doldurulmuş hiçbir şeyin üzerine yazılmaz.",
+            "createNew": "Yeni kişi oluştur",
+            "createNewHint": "Kayıt için ayrı bir kişi oluşturur. Planınızın kişi sınırına dahildir ve daha sonra birleştirilebilir."
+          },
+          "note": {
+            "title": "Zaman çizelgesi",
+            "merge": "Bir kayıt birleştirildiğinde zaman çizelgesine not ekle",
+            "hint": "Varsayılan olarak kapalı, çünkü not kişinin son etkinliğini de kaydırır."
+          }
         }
       },
       "followUp": {

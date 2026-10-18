@@ -368,6 +368,11 @@
         "label": "Opvolgingen",
         "description": "Stel de volgende opvolging van een contact automatisch in wanneer je team contact opneemt, en kies de datum en meldingstijd.",
         "keywords": "opvolging, follow-up, herinnering, volgende actie, taak, plannen, uitstellen, ooit"
+      },
+      "duplicate-leads": {
+        "label": "Dubbele leads",
+        "description": "Kies of een nieuwe lead die bij een contact past daarmee wordt samengevoegd of een nieuw contact wordt.",
+        "keywords": "dubbel, samenvoegen, lead, zelfde telefoon, zelfde e-mail, nieuw contact, leadbron"
       }
     },
     "title": "Instellingen",

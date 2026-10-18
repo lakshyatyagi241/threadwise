@@ -637,3 +637,12 @@ A live WhatsApp or e-mail send through a real provider (the dispatch hook is cov
 | L06 | Settings | Nothing              | Settings > Automation and AI > Follow-ups: four situations (none, overdue, today, later; a someday follow-up counts as none), default date (1 day, 3 days, 1 week, 1 month, custom days, someday, none = complete the open one) and alert time, all read on the workspace's time zone. Everything off by default                            |
 | L07 | Who      | n/a                  | The contact's owner, else the person who got in touch; an existing follow-up keeps its person. A per-user default is not built (BL-293)                                                                                                                                                                                                     |
 | L08 | By hand  | n/a                  | More menu: Set / Change / Remove follow-up; Done, Snooze (1 day, 3 days, next week at the default time) and Change date on the header row                                                                                                                                                                                                   |
+
+### Step 3: duplicate leads (BL-292)
+
+### Intended differences from the reference platform
+
+| #   | Where    | Reference platform | Ours, and why                                                                                                                                                                                                                  |
+| --- | -------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| L09 | Settings | Nothing            | Settings > Automation and AI > Duplicate leads: a lead whose phone or e-mail matches a contact is merged (default, today's behaviour) or becomes a separate contact; optional timeline note on merge (off by default).         |
+| L10 | Identity | n/a                | A separate contact never takes the shared identity: it stays with the first contact so messages keep routing there; the new contact says on its timeline that it may be a duplicate of which contact, and can be merged later. |

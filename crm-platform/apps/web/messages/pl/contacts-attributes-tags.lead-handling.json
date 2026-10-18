@@ -93,6 +93,23 @@
             "intro": "Przy tworzeniu nowego ponownego kontaktu ustaw godzinę przypomnienia na:",
             "hint": "Według strefy czasowej Twojego obszaru roboczego."
           }
+        },
+        "duplicates": {
+          "title": "Zduplikowane leady",
+          "subtitle": "Określ, co się dzieje, gdy nowy lead ze źródła leadów ma ten sam numer telefonu lub e-mail co istniejący kontakt.",
+          "mode": {
+            "title": "Gdy nowy lead pasuje do kontaktu",
+            "intro": "Lead pasuje, gdy jego numer telefonu lub e-mail należy już do kontaktu.",
+            "merge": "Scal z istniejącym kontaktem",
+            "mergeHint": "Uzupełnia puste pola kontaktu i dodaje lead do jego historii. Nic, co już wpisano, nie jest nadpisywane.",
+            "createNew": "Utwórz nowy kontakt",
+            "createNewHint": "Tworzy osobny kontakt dla leada. Wlicza się do limitu kontaktów w Twoim planie i można go później scalić."
+          },
+          "note": {
+            "title": "Oś czasu",
+            "merge": "Dodaj notatkę do osi czasu po scaleniu leada",
+            "hint": "Domyślnie wyłączone, ponieważ notatka przesuwa też ostatnią aktywność kontaktu."
+          }
         }
       },
       "followUp": {

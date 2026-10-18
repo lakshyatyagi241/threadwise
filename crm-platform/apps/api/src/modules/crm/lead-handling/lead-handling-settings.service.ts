@@ -1,14 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
+  mergeDuplicateSettings,
   mergeFollowUpSettings,
   mergeUncontactedSettings,
+  type DuplicateSettings,
+  type DuplicateSettingsValues,
   type FollowUpSettings,
   type FollowUpSettingsValues,
   type LeadHandlingSection,
   type LeadHandlingSettings,
   type UncontactedSettings,
   type UncontactedSettingsValues,
+  type UpdateDuplicateSettingsInput,
   type UpdateFollowUpSettingsInput,
   type UpdateUncontactedSettingsInput,
 } from '@crm/contracts';
@@ -101,6 +105,12 @@ export class LeadHandlingSettingsService {
     return mergeUncontactedSettings(rows.get('uncontacted')?.config);
   }
 
+  /** The duplicate leads section as the lead ingest needs it: merged over the defaults. */
+  async duplicatesIn(tx: Tx, orgId: number): Promise<DuplicateSettingsValues> {
+    const rows = await this.readIn(tx, orgId, ['duplicates']);
+    return mergeDuplicateSettings(rows.get('duplicates')?.config);
+  }
+
   /** The follow-ups section as the hooks need it: merged over the defaults. */
   followUpsOf(config: unknown): FollowUpSettingsValues {
     return mergeFollowUpSettings(config);
@@ -109,12 +119,27 @@ export class LeadHandlingSettingsService {
   async get(): Promise<LeadHandlingSettings> {
     const orgId = RequestContextStore.orgId();
     return this.db.tx(async (tx) => {
-      const rows = await this.readIn(tx, orgId, ['uncontacted', 'follow_ups']);
+      const rows = await this.readIn(tx, orgId, ['uncontacted', 'follow_ups', 'duplicates']);
       return {
         uncontacted: this.uncontactedOf(rows.get('uncontacted')),
         followUps: this.followUpsView(rows.get('follow_ups')),
+        duplicates: this.duplicatesView(rows.get('duplicates')),
       };
     });
+  }
+
+  async updateDuplicates(input: UpdateDuplicateSettingsInput): Promise<DuplicateSettings> {
+    const { rowVersion, ...values } = input;
+    const row = await this.save('duplicates', values, rowVersion, (c) => mergeDuplicateSettings(c));
+    return this.duplicatesView(row);
+  }
+
+  private duplicatesView(row: SectionRow | undefined): DuplicateSettings {
+    return {
+      ...mergeDuplicateSettings(row?.config),
+      rowVersion: row?.rowVersion ?? null,
+      updatedAt: row?.updatedAt.toISOString() ?? null,
+    };
   }
 
   async updateFollowUps(input: UpdateFollowUpSettingsInput): Promise<FollowUpSettings> {

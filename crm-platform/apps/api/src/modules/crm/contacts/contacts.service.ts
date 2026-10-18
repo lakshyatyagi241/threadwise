@@ -155,6 +155,12 @@ export interface ResolveContactInput {
   createdName?: string;
   /** The stage a created contact starts in, instead of the workspace default (a lead source's own stage). A lost stage is ignored. */
   lifecycleStage?: string;
+  /**
+   * Make a separate contact even though this identity already belongs to the contact with this internal id (BL-292, the duplicate leads
+   * setting `create_new`). The identity stays with the original (it is unique per workspace), so the new contact carries the value on its
+   * own record and inbound messages keep routing to the first one; a later "Remove duplicates" can merge them.
+   */
+  duplicateOf?: number;
   /** The owner of a created contact (an internal user id), for a writer that assigns on arrival (lead sources). */
   ownerId?: number | null;
   /** Extra keys of the `contact.created` payload (a lead's source and campaign), next to `via`. Never overrides the keys the event owns. */
@@ -688,7 +694,9 @@ export class ContactsService {
       sql`SELECT pg_advisory_xact_lock(hashtextextended(${`contact-identity:${orgId}:${input.kind}:${value}`}, 0))`,
     );
 
-    const viaIdentity = await this.repo.findByIdentity(tx, orgId, input.kind, value);
+    const viaIdentity = input.duplicateOf
+      ? undefined
+      : await this.repo.findByIdentity(tx, orgId, input.kind, value);
     if (viaIdentity !== undefined) {
       const uuid = await this.uuidOf(tx, orgId, viaIdentity);
       if (uuid) {
@@ -697,15 +705,17 @@ export class ContactsService {
       }
     }
 
-    const stored = await tx.execute(
-      input.kind === 'phone'
-        ? sql`SELECT id, uuid FROM contacts
+    const stored = input.duplicateOf
+      ? { rows: [] }
+      : await tx.execute(
+          input.kind === 'phone'
+            ? sql`SELECT id, uuid FROM contacts
               WHERE org_id = ${orgId} AND normalized_phone IN (${value}, ${phone!.digits})
               ORDER BY id LIMIT 1`
-        : sql`SELECT id, uuid FROM contacts
+            : sql`SELECT id, uuid FROM contacts
               WHERE org_id = ${orgId} AND normalized_email = ${value}
               ORDER BY id LIMIT 1`,
-    );
+        );
     const known = stored.rows[0] as { id: number | string; uuid: string } | undefined;
     if (known) {
       await this.repo.addIdentity(tx, orgId, Number(known.id), input.kind, value);
@@ -760,7 +770,13 @@ export class ContactsService {
       displayId,
       createdBy: null,
     });
-    await this.repo.addIdentity(tx, orgId, created.id, input.kind, value);
+    // A separate contact takes the identity only when nobody holds it (the original does, by definition).
+    if (
+      !input.duplicateOf ||
+      (await this.repo.findByIdentity(tx, orgId, input.kind, value)) === undefined
+    ) {
+      await this.repo.addIdentity(tx, orgId, created.id, input.kind, value);
+    }
     await this.audit.record(tx, { module: MODULE_KEY, recordId: created.id, action: 'insert' });
     // A lead source or a form made the contact: start it uncontacted when the workspace says so (BL-290). A test lead never is.
     const origin = input.eventPayload?.origin;

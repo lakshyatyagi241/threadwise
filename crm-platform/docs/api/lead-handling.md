@@ -72,3 +72,22 @@ Rules. A contact action that counts as reaching out (the same touches as the unc
 (created for the contact's owner, else for the person who got in touch; an existing one keeps its person and re-arms its reminder), made "someday" (`defaultDate: someday`), or completed
 (`defaultDate: none`). The computed instant is a calendar day plus a time, so a redelivered touch writes the same value and changes nothing. Audit and events are the tasks module's:
 `task.created`, `task.updated`, `task.completed`, `task.deleted`, `task.assigned`.
+
+## Duplicate leads (BL-292)
+
+| Route                                    | Permission              | Notes                                                                                                   |
+| ---------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------- |
+| `GET /lead-handling/settings`            | `admin.settings.manage` | gains `duplicates: { mode, noteOnMerge, rowVersion, updatedAt }`                                        |
+| `PUT /lead-handling/settings/duplicates` | `admin.settings.manage` | replaces the section; `rowVersion` required once saved (409 `ROW_VERSION_CONFLICT`), 422 for a bad body |
+
+`duplicates` section: `mode`: `merge` (default, what has always happened) or `create_new`; `noteOnMerge`: boolean, default `false`. Audit row on `lead_handling_settings` and the outbox event
+`lead_handling.settings_changed`, like the other sections.
+
+What a lead from a lead source does when its phone number or e-mail already belongs to a contact (identity first, then the stored number or e-mail of a contact that predates identities):
+
+- `merge`: the lead fills the contact's blanks, never overwrites a filled field, keeps the first source, adds a new attribution row, and records consent only when the lead itself proves it. With
+  `noteOnMerge` a `lead_merged` line ("Lead from <source> merged into this contact") is written on the contact's timeline (and moves its last activity, which is why it starts off).
+- `create_new`: a separate contact is made (same plan contact cap, `contact.created` event, owner rules, attribution of its own). The matched phone or e-mail identity stays with the original (it is unique per
+  workspace), so inbound messages keep routing to the first contact; the new contact carries the value on its own record and a `lead_duplicate` timeline line naming the original by its reference. A later
+  "Remove duplicates" can merge them.
+- Idempotent on the lead id: the same `(source, lead id)` twice is acknowledged and never repeated, whichever mode is on. A test lead never makes a separate contact and leaves no timeline line.

@@ -46,4 +46,13 @@ export const settings = [
     order: 41,
     gates: { permission: 'admin.settings.manage' },
   }),
+  settingsTile({
+    id: 'duplicate-leads',
+    shortcutFrom: ['/contacts'],
+    section: 'automation',
+    href: '/duplicate-leads',
+    icon: 'segment',
+    order: 42,
+    gates: { permission: 'admin.settings.manage' },
+  }),
 ];

@@ -93,6 +93,23 @@
             "intro": "Ogni volta che viene creato un nuovo ricontatto, imposta l'orario di avviso a:",
             "hint": "Basato sul fuso orario del tuo workspace."
           }
+        },
+        "duplicates": {
+          "title": "Lead duplicati",
+          "subtitle": "Scegli cosa succede quando un nuovo lead da una fonte di lead ha lo stesso numero di telefono o la stessa e-mail di un contatto che hai già.",
+          "mode": {
+            "title": "Quando un nuovo lead corrisponde a un contatto",
+            "intro": "Un lead corrisponde quando il suo numero di telefono o la sua e-mail appartiene già a un contatto.",
+            "merge": "Unisci al contatto esistente",
+            "mergeHint": "Compila i campi vuoti del contatto e aggiunge il lead alla sua cronologia. Ciò che è già compilato non viene mai sovrascritto.",
+            "createNew": "Crea un nuovo contatto",
+            "createNewHint": "Crea un contatto separato per il lead. Conta nel limite di contatti del tuo piano e può essere unito in seguito."
+          },
+          "note": {
+            "title": "Cronologia",
+            "merge": "Aggiungi una nota alla cronologia quando un lead viene unito",
+            "hint": "Disattivato per impostazione predefinita, perché una nota sposta anche l'ultima attività del contatto."
+          }
         }
       },
       "followUp": {
