@@ -1,13 +1,15 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
 import { UnrecoverableError, type Queue } from 'bullmq';
+import { CryptoService } from '../../common/crypto/crypto.service';
 import { QUEUES } from '../../infra/queue/queues';
 
 export type WebhookRetryHandler = (payload: never) => Promise<void>;
 
 export interface WebhookRetryJob {
   channel: string;
-  payload: unknown;
+  /** The payload as JSON, sealed with the credentials key (AES-256-GCM): Redis never holds the message text (ASYNC-075/079). */
+  sealed: string;
 }
 
 /**
@@ -25,19 +27,32 @@ export interface WebhookRetryJob {
 export class WebhookRetryService {
   private readonly handlers = new Map<string, WebhookRetryHandler>();
 
-  constructor(@InjectQueue(QUEUES.WEBHOOK_RETRY) private readonly queue: Queue<WebhookRetryJob>) {}
+  constructor(
+    @InjectQueue(QUEUES.WEBHOOK_RETRY) private readonly queue: Queue<WebhookRetryJob>,
+    private readonly crypto: CryptoService,
+  ) {}
 
   register<P>(channel: string, handler: (payload: P) => Promise<void>): void {
     this.handlers.set(channel, handler as WebhookRetryHandler);
   }
 
   async defer(channel: string, payload: unknown): Promise<void> {
-    await this.queue.add('retry', { channel, payload });
+    await this.queue.add('retry', {
+      channel,
+      sealed: this.crypto.encrypt(JSON.stringify(payload)),
+    });
   }
 
-  async run(channel: string, payload: unknown): Promise<void> {
+  async run(channel: string, sealed: string): Promise<void> {
     const handler = this.handlers.get(channel);
     if (!handler) throw new UnrecoverableError(`No webhook retry handler for "${channel}"`);
+    let payload: unknown;
+    try {
+      payload = JSON.parse(this.crypto.decrypt(sealed));
+    } catch {
+      // A blob that does not open (a rotated-away key, a corrupt value) opens no better on the next attempt.
+      throw new UnrecoverableError('Webhook retry payload could not be opened');
+    }
     await handler(payload as never);
   }
 }

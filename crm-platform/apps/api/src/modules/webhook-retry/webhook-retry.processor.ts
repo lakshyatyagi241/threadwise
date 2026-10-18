@@ -13,7 +13,7 @@ export class WebhookRetryProcessor extends WorkerHost {
 
   async process(job: Job<WebhookRetryJob>): Promise<void> {
     try {
-      await this.retry.run(job.data.channel, job.data.payload);
+      await this.retry.run(job.data.channel, job.data.sealed);
     } catch (err) {
       // A rule the data broke fails the same way every time; anything else (database, redis, provider) retries with backoff.
       if (err instanceof AppError) throw new UnrecoverableError(err.message);
