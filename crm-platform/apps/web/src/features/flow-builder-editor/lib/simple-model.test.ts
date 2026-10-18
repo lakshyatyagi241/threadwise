@@ -328,6 +328,42 @@ describe('checks', () => {
     ]);
   });
 
+  it('flags a Location step until it has real coordinates, and keeps a saved one valid', () => {
+    const run = (data: Record<string, unknown>) => {
+      let d = emptyDoc();
+      d = insertStep(d, 0, 0, { ...newStep('location', []), data });
+      d.trigger.data.keywords = 'hi';
+      return problems(d, { senderRequired: false }).map((p) => en(p.message));
+    };
+    const bad = ['Step 1.1: paste a Google Maps link or enter a valid latitude and longitude.'];
+    expect(run({})).toEqual(bad);
+    expect(run({ locMode: 'link', mapsUrl: '', lat: '', lng: '' })).toEqual(bad);
+    expect(run({ lat: '0', lng: '0' })).toEqual(bad);
+    expect(run({ lat: '91', lng: '10' })).toEqual(bad);
+    expect(run({ lat: 'abc', lng: '10' })).toEqual(bad);
+    // place name and address are optional; a step saved before the modes existed stays valid
+    expect(run({ lat: '18.5204', lng: '73.8567', title: '', address: '' })).toEqual([]);
+    expect(
+      run({
+        locMode: 'link',
+        mapsUrl: 'https://maps.google.com/?q=1.5,2.5',
+        lat: '1.5',
+        lng: '2.5',
+      }),
+    ).toEqual([]);
+  });
+
+  it('a new Location step starts empty in link mode, with no placeholder name or address', () => {
+    expect(newStep('location', []).data).toMatchObject({
+      locMode: 'link',
+      mapsUrl: '',
+      lat: '',
+      lng: '',
+      title: '',
+      address: '',
+    });
+  });
+
   it('flags long button labels and repeated variable names', () => {
     let d = emptyDoc();
     const b = newStep('buttons', []);

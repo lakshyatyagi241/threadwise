@@ -855,13 +855,6 @@
             "hour": "saat",
             "day": "gün"
           },
-          "location": {
-            "placeName": "Yer adı",
-            "placePlaceholder": "Ofisimiz",
-            "address": "Adres",
-            "latitude": "Enlem",
-            "longitude": "Boylam"
-          },
           "template": {
             "label": "Onaylı şablon",
             "hint": "Yalnızca WhatsApp numaranızın onayladığı şablonlar listelenir.",
@@ -1070,13 +1063,7 @@
           "info": "Tek bir mesajda en fazla {max} CTA düğmesi ekleyin — Web sitesini ziyaret et, Ara ve Kodu kopyala düğmelerini istediğiniz gibi karıştırın. WhatsApp şablon düğmelerindeki sınırın aynısıdır.",
           "buttonLabel": "Düğme etiketi",
           "addButton": "Düğme ekle",
-          "maxReached": "En fazla {max} düğme eklendi.",
-          "locationTitle": "Başlık",
-          "locationTitlePlaceholder": "Ofisimiz",
-          "locationAddress": "Adres",
-          "locationAddressPlaceholder": "Cadde, şehir, ülke",
-          "locationLatitude": "Enlem",
-          "locationLongitude": "Boylam"
+          "maxReached": "En fazla {max} düğme eklendi."
         },
         "logic": {
           "operator": {
@@ -2042,6 +2029,41 @@
         "endTextHint": "Akış bitmeden önce gönderilir. Yaştan söz etmeyin. Boş bırakılırsa “Devam edemiyoruz.” kullanılır.",
         "continueNote": "Sonraki adımlar, yanıtın değişkenini ve ardından _age_gate ekini (örneğin answer_age_gate) okuyabilir; değeri under veya adult olur. Dallanmak için bir Koşul ekleyin, örneğin ebeveyn veya vasi istemek için.",
         "note": "Yaşı yalnızca ihtiyaç duyduğunuz yerde sorun. Yanıt kişiye yazılır: doğum tarihi doğum tarihi olarak, yaş sınırının altındaki bir yanıt ise kişiyi reşit olmayan olarak işaretler."
+      },
+      "location": {
+        "modeLabel": "Konum nasıl ayarlanır",
+        "modeLink": "Google Haritalar bağlantısı",
+        "modeCoords": "Enlem ve boylam",
+        "linkLabel": "Google Haritalar bağlantısı",
+        "linkPlaceholder": "Bir bağlantı yapıştırın, örn. https://maps.app.goo.gl/…",
+        "linkHint": "Google Haritalar’da yeri açın, Paylaş’a ve ardından Bağlantıyı kopyala’ya dokunun. Kısa ve uzun bağlantılar çalışır.",
+        "finding": "Bağlantı aranıyor…",
+        "retry": "Tekrar dene",
+        "latitude": "Enlem",
+        "longitude": "Boylam",
+        "coordsHint": "Enlem -90 ile 90, boylam -180 ile 180 arasındadır. İki kutudan birine “enlem, boylam” yapıştırabilirsiniz.",
+        "found": "Konum bulundu",
+        "openInMaps": "Google Haritalar’da aç",
+        "optionalHint": "İsteğe bağlı: müşterinin aldığı harita kartında gösterilir. İkisini de boş bırakabilirsiniz.",
+        "optional": "(isteğe bağlı)",
+        "placeName": "Yer adı",
+        "placePlaceholder": "Ofisimiz",
+        "address": "Adres",
+        "problem": {
+          "empty": "Bir Google Haritalar bağlantısı veya koordinat girin.",
+          "lat_missing": "Bir enlem girin.",
+          "lng_missing": "Bir boylam girin.",
+          "lat_nan": "Enlem bir sayı olmalıdır, örneğin 18.5204.",
+          "lng_nan": "Boylam bir sayı olmalıdır, örneğin 73.8567.",
+          "lat_range": "Enlem -90 ile 90 arasında olmalıdır.",
+          "lng_range": "Boylam -180 ile 180 arasında olmalıdır.",
+          "zero": "0, 0 gerçek bir yer değildir. Gerçek koordinatları girin.",
+          "not_url": "Bu bir bağlantıya benzemiyor. Google Haritalar bağlantısının tamamını yapıştırın.",
+          "not_maps": "Bu bir Google Haritalar bağlantısı değil.",
+          "no_coords": "Bu bağlantı tam bir noktayı göstermiyor. Yeri Google Haritalar’da açın, Paylaş’a dokunup o bağlantıyı kopyalayın veya koordinatları girin.",
+          "unresolved": "Bu kısa bağlantı henüz aranmadı. Alandan çıkın veya tekrar deneyin.",
+          "resolve_failed": "Bu bağlantı okunamadı. Google Haritalar’da açıldığını kontrol edin veya koordinatları girin."
+        }
       }
     },
     "contracts": {
@@ -2474,7 +2496,8 @@
         "noSenderInstagram": "Tetikleyici düğümünde bir Instagram hesabı seçilmemiş — Tetikleyici adımında bir hesap seçin.",
         "noSenderFacebook": "Tetikleyici düğümünde bir Facebook Sayfası seçilmemiş — Tetikleyici adımında bir sayfa seçin.",
         "noSenderNumber": "Tetikleyici düğümünde bir numara seçilmemiş — Tetikleyici adımında bir numara seçin.",
-        "faqMinScore": "\"{node}\" için en düşük puan 0.05 ile 0.99 aralığının dışında — düzeltin veya akış ayarını kullanmak için boş bırakın."
+        "faqMinScore": "\"{node}\" için en düşük puan 0.05 ile 0.99 aralığının dışında — düzeltin veya akış ayarını kullanmak için boş bırakın.",
+        "locationInvalid": "“{node}” adımında geçerli bir konum yok — bir Google Haritalar bağlantısı yapıştırın veya enlem (-90 ile 90) ve boylam (-180 ile 180) girin."
       }
     },
     "simpleModel": {
@@ -2615,7 +2638,7 @@
         "writeQuestion": "Adım {stage}: soruyu yazın.",
         "nameVariable": "Adım {stage}: yanıtın kaydedileceği değişkene bir ad verin.",
         "chooseAnswerProperty": "Adım {stage}: yanıtın kopyalanacağı kişi özelliğini seçin.",
-        "setCoordinates": "Adım {stage}: enlem ve boylamı ayarlayın.",
+        "setCoordinates": "{stage}. adım: bir Google Haritalar bağlantısı yapıştırın veya geçerli bir enlem ve boylam girin.",
         "chooseTemplate": "Adım {stage}: bir şablon seçin.",
         "chooseTeam": "Adım {stage}: görüşmenin gideceği ekibi seçin.",
         "ctaLabelLink": "Adım {stage}: düğmeye bir ad ve bağlantı verin.",
@@ -2755,7 +2778,8 @@
       "simPurchase": "Simüle satın alma: {name} → çıkış \"satın alındı\"",
       "simAbandon": "Simüle terk → çıkış \"terk edildi\"",
       "faqAnswered": "(simüle) \"{query}\" için FAQ ile yanıtla: test sohbeti FAQ'larınıza bakmaz, bu yüzden hiçbir şey gönderilmez ve {ref} boş kalır. \"Yanıtlandı\" çıkışı kullanılıyor.",
-      "faqNoMatch": "(simüle) \"{query}\" için FAQ ile yanıtla: test sohbeti FAQ'larınıza bakmaz ve \"yanıtlandı\" çıkışı bağlı değil, bu yüzden \"eşleşme yok\" çıkışı kullanılıyor. {ref} boş kalır."
+      "faqNoMatch": "(simüle) \"{query}\" için FAQ ile yanıtla: test sohbeti FAQ'larınıza bakmaz ve \"yanıtlandı\" çıkışı bağlı değil, bu yüzden \"eşleşme yok\" çıkışı kullanılıyor. {ref} boş kalır.",
+      "locationSkipped": "(konum) atlandı: geçerli koordinat yok"
     }
   }
 }

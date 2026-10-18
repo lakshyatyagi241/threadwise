@@ -287,6 +287,7 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
         return {
           type: 'location',
           data: {
+            locMode: 'coords',
             lat: str(v.latitude),
             lng: str(v.longitude),
             address: str(v.address),

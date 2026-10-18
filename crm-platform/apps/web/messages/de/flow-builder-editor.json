@@ -855,13 +855,6 @@
             "hour": "Stunden",
             "day": "Tage"
           },
-          "location": {
-            "placeName": "Name des Ortes",
-            "placePlaceholder": "Unser Büro",
-            "address": "Adresse",
-            "latitude": "Breitengrad",
-            "longitude": "Längengrad"
-          },
           "template": {
             "label": "Genehmigte Vorlage",
             "hint": "Es werden nur Vorlagen angezeigt, die Ihre WhatsApp-Nummer genehmigt hat.",
@@ -1070,13 +1063,7 @@
           "info": "Fügen Sie bis zu {max} CTA-Schaltflächen in einer Nachricht hinzu, Website besuchen, Anruf und Code kopieren in beliebiger Kombination. Dieselbe Obergrenze wie bei WhatsApp-Vorlagen-Schaltflächen.",
           "buttonLabel": "Schaltflächenbeschriftung",
           "addButton": "Schaltfläche hinzufügen",
-          "maxReached": "Maximal {max} Schaltflächen erreicht.",
-          "locationTitle": "Titel",
-          "locationTitlePlaceholder": "Unser Büro",
-          "locationAddress": "Adresse",
-          "locationAddressPlaceholder": "Straße, Stadt, Land",
-          "locationLatitude": "Breitengrad",
-          "locationLongitude": "Längengrad"
+          "maxReached": "Maximal {max} Schaltflächen erreicht."
         },
         "logic": {
           "operator": {
@@ -2042,6 +2029,41 @@
         "endTextHint": "Wird gesendet, bevor der Flow endet. Erwähnen Sie das Alter nicht. Leer verwendet „Wir können leider nicht fortfahren.“",
         "continueNote": "Die nächsten Schritte können die Variable der Antwort gefolgt von _age_gate lesen (zum Beispiel answer_age_gate); sie lautet under oder adult. Fügen Sie eine Bedingung hinzu, um zu verzweigen, zum Beispiel um nach einem Elternteil oder Vormund zu fragen.",
         "note": "Fragen Sie nur dort nach dem Alter, wo Sie es brauchen. Die Antwort wird in den Kontakt geschrieben: ein Geburtsdatum als Geburtsdatum, und eine Antwort unter dem Mindestalter markiert den Kontakt als minderjährig."
+      },
+      "location": {
+        "modeLabel": "So legen Sie den Standort fest",
+        "modeLink": "Google-Maps-Link",
+        "modeCoords": "Breiten- und Längengrad",
+        "linkLabel": "Google-Maps-Link",
+        "linkPlaceholder": "Link einfügen, z. B. https://maps.app.goo.gl/…",
+        "linkHint": "Öffnen Sie den Ort in Google Maps, tippen Sie auf Teilen und dann auf Link kopieren. Kurze und lange Links funktionieren.",
+        "finding": "Link wird abgerufen…",
+        "retry": "Erneut versuchen",
+        "latitude": "Breitengrad",
+        "longitude": "Längengrad",
+        "coordsHint": "Der Breitengrad reicht von -90 bis 90, der Längengrad von -180 bis 180. Sie können „Breite, Länge“ in eines der Felder einfügen.",
+        "found": "Standort gefunden",
+        "openInMaps": "In Google Maps öffnen",
+        "optionalHint": "Optional: wird auf der Kartenkarte angezeigt, die der Kunde erhält. Beide Felder dürfen leer bleiben.",
+        "optional": "(optional)",
+        "placeName": "Ortsname",
+        "placePlaceholder": "Unser Büro",
+        "address": "Adresse",
+        "problem": {
+          "empty": "Geben Sie einen Google-Maps-Link oder Koordinaten ein.",
+          "lat_missing": "Geben Sie einen Breitengrad ein.",
+          "lng_missing": "Geben Sie einen Längengrad ein.",
+          "lat_nan": "Der Breitengrad muss eine Zahl sein, zum Beispiel 18.5204.",
+          "lng_nan": "Der Längengrad muss eine Zahl sein, zum Beispiel 73.8567.",
+          "lat_range": "Der Breitengrad muss zwischen -90 und 90 liegen.",
+          "lng_range": "Der Längengrad muss zwischen -180 und 180 liegen.",
+          "zero": "0, 0 ist kein echter Ort. Geben Sie die tatsächlichen Koordinaten ein.",
+          "not_url": "Das sieht nicht wie ein Link aus. Fügen Sie den vollständigen Google-Maps-Link ein.",
+          "not_maps": "Das ist kein Google-Maps-Link.",
+          "no_coords": "Dieser Link zeigt keinen genauen Ort an. Öffnen Sie den Ort in Google Maps, tippen Sie auf Teilen und kopieren Sie diesen Link, oder geben Sie die Koordinaten ein.",
+          "unresolved": "Dieser Kurzlink wurde noch nicht abgerufen. Verlassen Sie das Feld oder versuchen Sie es erneut.",
+          "resolve_failed": "Dieser Link konnte nicht gelesen werden. Prüfen Sie, ob er in Google Maps öffnet, oder geben Sie die Koordinaten ein."
+        }
       }
     },
     "contracts": {
@@ -2474,7 +2496,8 @@
         "noSenderInstagram": "Der Auslöser-Knoten hat kein Instagram-Konto ausgewählt. Wählen Sie eines im Auslöser-Schritt.",
         "noSenderFacebook": "Der Auslöser-Knoten hat keine Facebook-Seite ausgewählt. Wählen Sie eine im Auslöser-Schritt.",
         "noSenderNumber": "Der Auslöser-Knoten hat keine Nummer ausgewählt. Wählen Sie eine im Auslöser-Schritt.",
-        "faqMinScore": "„{node}“ hat einen Mindestscore außerhalb von 0.05 bis 0.99. Korrigieren Sie ihn, oder lassen Sie das Feld leer, um die Einstellung des Flows zu verwenden."
+        "faqMinScore": "„{node}“ hat einen Mindestscore außerhalb von 0.05 bis 0.99. Korrigieren Sie ihn, oder lassen Sie das Feld leer, um die Einstellung des Flows zu verwenden.",
+        "locationInvalid": "„{node}“ hat keinen gültigen Standort – fügen Sie einen Google-Maps-Link ein oder geben Sie Breitengrad (-90 bis 90) und Längengrad (-180 bis 180) ein."
       }
     },
     "simpleModel": {
@@ -2615,7 +2638,7 @@
         "writeQuestion": "Schritt {stage}: Schreiben Sie die Frage.",
         "nameVariable": "Schritt {stage}: Benennen Sie die Variable, in der die Antwort gespeichert wird.",
         "chooseAnswerProperty": "Schritt {stage}: Wählen Sie das Kontaktfeld, in das die Antwort kopiert wird.",
-        "setCoordinates": "Schritt {stage}: Legen Sie Breiten- und Längengrad fest.",
+        "setCoordinates": "Schritt {stage}: Fügen Sie einen Google-Maps-Link ein oder geben Sie gültige Koordinaten ein.",
         "chooseTemplate": "Schritt {stage}: Wählen Sie eine Vorlage.",
         "chooseTeam": "Schritt {stage}: Wählen Sie das Team, an das die Unterhaltung geht.",
         "ctaLabelLink": "Schritt {stage}: Geben Sie der Schaltfläche einen Namen und einen Link.",
@@ -2755,7 +2778,8 @@
       "simPurchase": "Simulierter Kauf: {name} → Ausgang „gekauft“",
       "simAbandon": "Simulierter Abbruch → Ausgang „abgebrochen“",
       "faqAnswered": "(simuliert) Antwort aus FAQ für „{query}“: Der Test-Chat durchsucht Ihre FAQs nicht, daher wird nichts gesendet und {ref} bleibt leer. Ausgang „Beantwortet“ wird genommen.",
-      "faqNoMatch": "(simuliert) Antwort aus FAQ für „{query}“: Der Test-Chat durchsucht Ihre FAQs nicht, und der Ausgang „Beantwortet“ ist nicht verbunden, daher wird „Kein Treffer“ genommen. {ref} bleibt leer."
+      "faqNoMatch": "(simuliert) Antwort aus FAQ für „{query}“: Der Test-Chat durchsucht Ihre FAQs nicht, und der Ausgang „Beantwortet“ ist nicht verbunden, daher wird „Kein Treffer“ genommen. {ref} bleibt leer.",
+      "locationSkipped": "(Standort) übersprungen: keine gültigen Koordinaten"
     }
   }
 }

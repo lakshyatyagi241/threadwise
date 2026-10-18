@@ -1,6 +1,7 @@
 import {
   FLB_NODE_TYPES,
   flbNodeInMode,
+  flbReadLocation,
   flbValidateGraph,
   type FlbValidationContext,
   type FlbValidationEdge,
@@ -71,6 +72,10 @@ export function validateGraph(
     );
   }
   // The contracts also have a line for an "API (from library)" step with no API; the popup has none for it yet.
+  for (const n of nodes) {
+    if (n.type === 'location' && !flbReadLocation(n.data).ok)
+      items.push(msg('contracts.validation.locationInvalid'));
+  }
   for (const n of nodes) {
     if (n.type === 'faq' && minScoreOutOfRange(n.data?.minScore))
       items.push(msg('contracts.validation.faqMinScore', { node: nodeLabelMsg(n.type) }));

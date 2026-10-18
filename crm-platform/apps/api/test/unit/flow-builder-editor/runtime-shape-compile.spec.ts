@@ -348,7 +348,7 @@ describe('the ten mismatches: what the executor reads is now populated', () => {
 
   it('location: latitude and longitude are populated in the compiled props', () => {
     const data = { ...flbDefaultNodeData('location'), lat: '12.97', lng: '77.59' };
-    expect(rawNode('location', data).props).toMatchObject({ latitude: 0, longitude: 0 });
+    expect(rawNode('location', data).props).toMatchObject({ latitude: null, longitude: null });
     expect(shapedNode('location', data).props).toMatchObject({ latitude: 12.97, longitude: 77.59 });
   });
 

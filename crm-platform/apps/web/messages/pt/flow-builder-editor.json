@@ -855,13 +855,6 @@
             "hour": "horas",
             "day": "dias"
           },
-          "location": {
-            "placeName": "Nome do local",
-            "placePlaceholder": "Nosso escritório",
-            "address": "Endereço",
-            "latitude": "Latitude",
-            "longitude": "Longitude"
-          },
           "template": {
             "label": "Template aprovado",
             "hint": "Somente templates aprovados para o seu número de WhatsApp são listados.",
@@ -1070,13 +1063,7 @@
           "info": "Adicione até {max} botões de CTA em uma mensagem — combine Visitar site, Ligar e Copiar código como quiser. É o mesmo limite dos botões de template do WhatsApp.",
           "buttonLabel": "Rótulo do botão",
           "addButton": "Adicionar botão",
-          "maxReached": "Máx. de {max} botões atingido.",
-          "locationTitle": "Título",
-          "locationTitlePlaceholder": "Nosso escritório",
-          "locationAddress": "Endereço",
-          "locationAddressPlaceholder": "Rua, cidade, país",
-          "locationLatitude": "Latitude",
-          "locationLongitude": "Longitude"
+          "maxReached": "Máx. de {max} botões atingido."
         },
         "logic": {
           "operator": {
@@ -2042,6 +2029,41 @@
         "endTextHint": "Enviada antes de o fluxo terminar. Não mencione a idade. Se estiver vazio, usa \"Não podemos continuar.\"",
         "continueNote": "As próximas etapas podem ler a variável da resposta seguida de _age_gate (por exemplo answer_age_gate), que vale under ou adult. Adicione uma Condição para ramificar, por exemplo para pedir um dos pais ou responsável.",
         "note": "Peça a idade somente onde precisar. A resposta é gravada no contato: uma data de nascimento como data de nascimento, e uma resposta de menor de idade marca o contato como menor."
+      },
+      "location": {
+        "modeLabel": "Como definir a localização",
+        "modeLink": "Link do Google Maps",
+        "modeCoords": "Latitude e longitude",
+        "linkLabel": "Link do Google Maps",
+        "linkPlaceholder": "Cole um link, por exemplo https://maps.app.goo.gl/…",
+        "linkHint": "No Google Maps, abra o local, toque em Compartilhar e depois em Copiar link. Links curtos e longos funcionam.",
+        "finding": "Consultando o link…",
+        "retry": "Tentar de novo",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "coordsHint": "A latitude vai de -90 a 90 e a longitude de -180 a 180. Você pode colar “lat, lng” em qualquer um dos campos.",
+        "found": "Localização encontrada",
+        "openInMaps": "Abrir no Google Maps",
+        "optionalHint": "Opcional: aparece no cartão de mapa que o cliente recebe. Você pode deixar os dois vazios.",
+        "optional": "(opcional)",
+        "placeName": "Nome do local",
+        "placePlaceholder": "Nosso escritório",
+        "address": "Endereço",
+        "problem": {
+          "empty": "Informe um link do Google Maps ou coordenadas.",
+          "lat_missing": "Informe uma latitude.",
+          "lng_missing": "Informe uma longitude.",
+          "lat_nan": "A latitude deve ser um número, por exemplo 18.5204.",
+          "lng_nan": "A longitude deve ser um número, por exemplo 73.8567.",
+          "lat_range": "A latitude deve estar entre -90 e 90.",
+          "lng_range": "A longitude deve estar entre -180 e 180.",
+          "zero": "0, 0 não é um lugar real. Informe as coordenadas reais.",
+          "not_url": "Isto não parece um link. Cole o link completo do Google Maps.",
+          "not_maps": "Este não é um link do Google Maps.",
+          "no_coords": "Este link não aponta para um ponto exato. Abra o local no Google Maps, toque em Compartilhar e copie esse link, ou informe as coordenadas.",
+          "unresolved": "Este link curto ainda não foi consultado. Saia do campo ou tente de novo.",
+          "resolve_failed": "Não foi possível ler este link. Verifique se ele abre no Google Maps ou informe as coordenadas."
+        }
       }
     },
     "contracts": {
@@ -2474,7 +2496,8 @@
         "noSenderInstagram": "O nó Gatilho não tem conta do Instagram selecionada — escolha uma na etapa Gatilho.",
         "noSenderFacebook": "O nó Gatilho não tem Página do Facebook selecionada — escolha uma na etapa Gatilho.",
         "noSenderNumber": "O nó Gatilho não tem número selecionado — escolha um na etapa Gatilho.",
-        "faqMinScore": "“{node}” tem uma pontuação mínima fora do intervalo de 0.05 a 0.99. Corrija-a ou deixe em branco para usar a configuração do fluxo."
+        "faqMinScore": "“{node}” tem uma pontuação mínima fora do intervalo de 0.05 a 0.99. Corrija-a ou deixe em branco para usar a configuração do fluxo.",
+        "locationInvalid": "“{node}” não tem uma localização válida: cole um link do Google Maps ou informe latitude (-90 a 90) e longitude (-180 a 180)."
       }
     },
     "simpleModel": {
@@ -2615,7 +2638,7 @@
         "writeQuestion": "Etapa {stage}: escreva a pergunta.",
         "nameVariable": "Etapa {stage}: dê um nome à variável em que a resposta é salva.",
         "chooseAnswerProperty": "Etapa {stage}: escolha a propriedade do contato para onde a resposta é copiada.",
-        "setCoordinates": "Etapa {stage}: defina a latitude e a longitude.",
+        "setCoordinates": "Etapa {stage}: cole um link do Google Maps ou informe latitude e longitude válidas.",
         "chooseTemplate": "Etapa {stage}: escolha um modelo.",
         "chooseTeam": "Etapa {stage}: escolha a equipe para onde a conversa vai.",
         "ctaLabelLink": "Etapa {stage}: dê um nome e um link ao botão.",
@@ -2755,7 +2778,8 @@
       "simPurchase": "Compra simulada: {name} → saída \"comprado\"",
       "simAbandon": "Abandono simulado → saída \"abandonado\"",
       "faqAnswered": "(simulado) Responder com FAQ para “{query}”: o chat de teste não consulta suas FAQs, então nada é enviado e {ref} fica vazio. Seguindo pela saída “respondida”.",
-      "faqNoMatch": "(simulado) Responder com FAQ para “{query}”: o chat de teste não consulta suas FAQs e a saída “respondida” não está conectada, então seguindo por “sem correspondência”. {ref} fica vazio."
+      "faqNoMatch": "(simulado) Responder com FAQ para “{query}”: o chat de teste não consulta suas FAQs e a saída “respondida” não está conectada, então seguindo por “sem correspondência”. {ref} fica vazio.",
+      "locationSkipped": "(localização) ignorada: sem coordenadas válidas"
     }
   }
 }
