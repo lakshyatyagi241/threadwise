@@ -1,5 +1,16 @@
 // #40 DB indexing audit: every FK and critical query pattern has an index; no redundant or unjustified indexes.
-import { exists, expectNone, fail, pass, pgClient, read, ROOT, skip, unreviewed, warn } from '../lib/core.mjs';
+import {
+  exists,
+  expectNone,
+  fail,
+  pass,
+  pgClient,
+  read,
+  ROOT,
+  skip,
+  unreviewed,
+  warn,
+} from '../lib/core.mjs';
 import { buildSchema, covered, isTenant } from '../lib/schema.mjs';
 import { join } from 'node:path';
 

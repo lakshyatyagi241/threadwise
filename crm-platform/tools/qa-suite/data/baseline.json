@@ -1044,5 +1044,139 @@
       "key": "saved_replies(org_id,created_by) -> users [packages/db/migrations/20261001102600_tib1_threadwise_schema.sql]",
       "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
     }
+  ],
+  "47": [
+    {
+      "key": "team_members",
+      "reason": "organizations is reached transitively: the composite FKs (org_id,team_id)->teams and (org_id,user_id)->users are ON DELETE CASCADE, and teams/users reference organizations, so no row can name a workspace that does not exist; reviewed 2026-10-18"
+    },
+    {
+      "key": "user_roles",
+      "reason": "organizations is reached transitively: composite FKs to users and roles (both reference organizations) make a row impossible for a workspace that does not exist; reviewed 2026-10-18"
+    },
+    {
+      "key": "role_grants",
+      "reason": "organizations is reached transitively: the composite FK (org_id,role_id)->roles, and roles reference organizations; reviewed 2026-10-18"
+    },
+    {
+      "key": "camp_wizard_csv_rows",
+      "reason": "child of camp_wizard_csv, which carries org_id REFERENCES organizations ON DELETE CASCADE, and the composite FK keeps the row in the same workspace; reviewed 2026-10-18"
+    },
+    {
+      "key": "an_rollup_hour",
+      "reason": "the analytics set deliberately has no foreign keys so it can move to another Postgres (20261217090000_analytics_events.sql header); org_id 0 holds platform-wide rows; reviewed 2026-10-18"
+    },
+    {
+      "key": "an_rollup_day",
+      "reason": "the analytics set deliberately has no foreign keys so it can move to another Postgres (20261217090000_analytics_events.sql header); org_id 0 holds platform-wide rows; reviewed 2026-10-18"
+    },
+    {
+      "key": "an_events",
+      "reason": "the analytics set deliberately has no foreign keys so it can move to another Postgres (20261217090000_analytics_events.sql header); org_id 0 holds platform-wide rows; reviewed 2026-10-18"
+    },
+    {
+      "key": "org_lifecycle_log",
+      "reason": "the workspace lifecycle ledger has no FK so that it outlives the workspace it records the deletion of, and the application roles cannot update or delete it (20261116090000_org_lifecycle.sql header); reviewed 2026-10-18"
+    },
+    {
+      "key": "storage_purge_queue",
+      "reason": "the purge queue must keep its rows after the workspace row is gone, because the files are deleted afterwards; no FK on purpose (20261116090000_org_lifecycle.sql); reviewed 2026-10-18"
+    },
+    {
+      "key": "event_outbox",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "audit_log",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "translation_usage",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "usage_charges",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "ai_token_usage",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "shopify_integration_logs",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "woocommerce_integration_logs",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "ai_crm_actions",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "hubspot_integration_logs",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "slack_integration_logs",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "trello_integration_logs",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "webhook_deliveries",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "auto_reply_lookups",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "keyword_reply_logs",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "conversation_events",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "wa_call_events",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "invoice_logs",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "message_events",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "web_form_events",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "api_library_logs",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "waboo_migration_runs pk(id)",
+      "reason": "operator-run migration table, not a tenant table (20261113100000_wmig_waboo_migration_runs.sql header: 'no tenant column of its own'); the surrogate id is the identity; reviewed 2026-10-18"
+    },
+    {
+      "key": "org_lifecycle_log pk(id)",
+      "reason": "platform ledger that must outlive the workspace and is read by uuid across workspaces; it is not partitioned and org_id is a plain column, not a tenant key; reviewed 2026-10-18"
+    },
+    {
+      "key": "storage_purge_queue pk(id)",
+      "reason": "platform work queue drained by one worker across all workspaces; org_id is a plain column on a row that outlives the workspace; reviewed 2026-10-18"
+    },
+    {
+      "key": "waboo_migration_runs",
+      "reason": "nullable on purpose: org_id is the workspace the load created, NULL for a dry run, and the FK is ON DELETE SET NULL; the table is platform-only (20261113100000_wmig_waboo_migration_runs.sql); reviewed 2026-10-18"
+    }
   ]
 }
