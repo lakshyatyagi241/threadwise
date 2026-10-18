@@ -586,6 +586,19 @@
             "placeholder": "example.com",
             "add": "Adicionar um site",
             "remove": "Remover site"
+          },
+          "feedback": {
+            "label": "Permitir que os visitantes avaliem as respostas",
+            "hint": "Polegares para cima e para baixo sob cada resposta do bot.",
+            "message": "Mensagem exibida após uma avaliação",
+            "keptWhenOff": "O feedback está desativado. Esta mensagem é mantida e volta a aparecer se você reativá-lo."
+          },
+          "languages": {
+            "primary": "Idioma principal",
+            "follow": "Seguir o navegador do visitante",
+            "primaryHint": "O idioma dos textos próprios da janela do chat.",
+            "additional": "Outros idiomas",
+            "additionalHint": "Um visitante cujo navegador usa um destes vê a janela nesse idioma. Os demais veem o idioma principal."
           }
         },
         "rail": {

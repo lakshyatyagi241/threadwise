@@ -1,3 +1,5 @@
+import { pickChatLocale } from './chat-page-text';
+import { chatWindowLocale } from './chat-window-locale';
 import { isAssetSlot } from './asset-slots';
 import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
@@ -176,12 +178,13 @@ export class WidgetPublicService {
     const found = await this.locate(token);
     if (!found || found.widget.status !== 'active') return null;
     const w = found.widget;
+    const spoken = chatWindowLocale(w.launcher.chat.languages, locale);
     return renderChatPage({
       uuid: w.uuid,
       token: w.embedToken,
       name: w.name,
       flow: w.flowId !== null,
-      ...(locale ? { locale } : {}),
+      ...(spoken ? { locale: pickChatLocale(undefined, spoken) } : {}),
     });
   }
 

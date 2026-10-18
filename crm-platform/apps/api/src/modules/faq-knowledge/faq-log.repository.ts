@@ -75,6 +75,7 @@ export interface SettingsRow {
   logQueries: boolean;
   verifyMode: FaqVerifyMode;
   verifyBand: number;
+  fallbackMessage: string | null;
   tunedModel: string | null;
   rowVersion: number;
   updatedAt: Date;
@@ -89,7 +90,7 @@ export class FaqLogRepository {
 
   async getSettings(tx: Tx, orgId: number, flowId: number): Promise<SettingsRow | null> {
     const res = await tx.execute(sql`
-      SELECT enabled, threshold, min_margin, log_queries, verify_mode, verify_band, tuned_model, row_version, updated_at
+      SELECT enabled, threshold, min_margin, log_queries, verify_mode, verify_band, fallback_message, tuned_model, row_version, updated_at
       FROM faq_settings WHERE org_id = ${orgId} AND flow_id = ${flowId}`);
     const r = (res.rows as Raw[])[0];
     return r
@@ -100,6 +101,7 @@ export class FaqLogRepository {
           logQueries: r.log_queries as boolean,
           verifyMode: r.verify_mode as FaqVerifyMode,
           verifyBand: num(r.verify_band),
+          fallbackMessage: text(r.fallback_message),
           tunedModel: text(r.tuned_model),
           rowVersion: num(r.row_version),
           updatedAt: date(r.updated_at),
@@ -119,20 +121,21 @@ export class FaqLogRepository {
       logQueries: boolean;
       verifyMode: FaqVerifyMode;
       verifyBand: number;
+      fallbackMessage: string | null;
       tunedModel: string;
     },
     rowVersion: number | undefined,
   ): Promise<boolean> {
     if (rowVersion === undefined) {
       const res = await tx.execute(sql`
-        INSERT INTO faq_settings (org_id, flow_id, enabled, threshold, min_margin, log_queries, verify_mode, verify_band, tuned_model)
-        VALUES (${orgId}, ${flowId}, ${w.enabled}, ${w.threshold}, ${w.minMargin}, ${w.logQueries}, ${w.verifyMode}, ${w.verifyBand}, ${w.tunedModel})
+        INSERT INTO faq_settings (org_id, flow_id, enabled, threshold, min_margin, log_queries, verify_mode, verify_band, fallback_message, tuned_model)
+        VALUES (${orgId}, ${flowId}, ${w.enabled}, ${w.threshold}, ${w.minMargin}, ${w.logQueries}, ${w.verifyMode}, ${w.verifyBand}, ${w.fallbackMessage}, ${w.tunedModel})
         ON CONFLICT (org_id, flow_id) DO NOTHING RETURNING org_id`);
       return res.rows.length > 0;
     }
     const res = await tx.execute(sql`
       UPDATE faq_settings SET enabled = ${w.enabled}, threshold = ${w.threshold}, min_margin = ${w.minMargin},
-        log_queries = ${w.logQueries}, verify_mode = ${w.verifyMode}, verify_band = ${w.verifyBand}, tuned_model = ${w.tunedModel}
+        log_queries = ${w.logQueries}, verify_mode = ${w.verifyMode}, verify_band = ${w.verifyBand}, fallback_message = ${w.fallbackMessage}, tuned_model = ${w.tunedModel}
       WHERE org_id = ${orgId} AND flow_id = ${flowId} AND row_version = ${rowVersion} RETURNING org_id`);
     return res.rows.length > 0;
   }

@@ -26,7 +26,13 @@ export const LAUNCHER_LIMITS = {
   subHeader: 36,
   cta: 20,
   popupText: 200,
+  /** The line shown after a visitor rates a reply. */
+  feedbackMessage: 200,
 } as const;
+
+/** A language code such as `en`, `pt` or `pt-BR`. */
+export const CHAT_LANGUAGE_CODE = /^[a-z]{2,3}(-[A-Za-z]{2,4})?$/;
+export const CHAT_LANGUAGES_MAX = 10;
 
 /** What draws the eye to a closed launcher: nothing, a bounce, or a ripple ring. */
 export const LAUNCHER_ANIMATIONS = ['none', 'bounce', 'ripple'] as const;
@@ -242,6 +248,30 @@ export const widgetChatOptionsSchema = z.object({
   speak: z.boolean().default(false),
   /** Offer a floating chat window (picture-in-picture) when the visitor switches to another tab mid-conversation. */
   pip: z.boolean().default(false),
+  /**
+   * Thumbs up / down under a bot line. `enabled` off hides the thumbs (copy stays with `actions`) and keeps `message`, the line a visitor
+   * sees after rating a reply, so switching it back on loses nothing.
+   */
+  feedback: z
+    .object({
+      enabled: z.boolean().default(true),
+      message: z.string().max(LAUNCHER_LIMITS.feedbackMessage).default(''),
+    })
+    .default({}),
+  /**
+   * The languages the chat window speaks. `primary` empty follows the visitor's browser (how every window behaved before this setting);
+   * a code makes that language the window's own, and a visitor's browser language is honoured only when listed in `additional`.
+   */
+  languages: z
+    .object({
+      primary: z
+        .string()
+        .regex(CHAT_LANGUAGE_CODE, 'Use a language code like en or pt-BR.')
+        .or(z.literal(''))
+        .default(''),
+      additional: z.array(z.string().regex(CHAT_LANGUAGE_CODE)).max(CHAT_LANGUAGES_MAX).default([]),
+    })
+    .default({}),
   /** Where the widget shows at all. */
   devices: z
     .object({
@@ -561,6 +591,8 @@ export const widgetLauncherViewSchema = z.object({
     soundVolume: z.number().int(),
     speak: z.boolean(),
     pip: z.boolean(),
+    feedback: z.object({ enabled: z.boolean(), message: z.string() }),
+    languages: z.object({ primary: z.string(), additional: z.array(z.string()) }),
     devices: z.object({ desktop: z.boolean(), tablet: z.boolean(), mobile: z.boolean() }),
   }),
   desktop: placementView,
@@ -633,6 +665,8 @@ export const widgetPublicLauncherSchema = z.object({
     soundVolume: z.number().int(),
     speak: z.boolean(),
     pip: z.boolean(),
+    feedback: z.object({ enabled: z.boolean(), message: z.string() }),
+    languages: z.object({ primary: z.string(), additional: z.array(z.string()) }),
     devices: z.object({ desktop: z.boolean(), tablet: z.boolean(), mobile: z.boolean() }),
   }),
   desktop: z.object({

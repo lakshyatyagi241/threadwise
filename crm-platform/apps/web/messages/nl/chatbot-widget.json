@@ -586,6 +586,19 @@
             "placeholder": "example.com",
             "add": "Website toevoegen",
             "remove": "Website verwijderen"
+          },
+          "feedback": {
+            "label": "Bezoekers antwoorden laten beoordelen",
+            "hint": "Duim omhoog en omlaag onder elk antwoord van de bot.",
+            "message": "Bericht na een beoordeling",
+            "keptWhenOff": "Feedback staat uit. Dit bericht blijft bewaard en verschijnt weer als je het opnieuw inschakelt."
+          },
+          "languages": {
+            "primary": "Hoofdtaal",
+            "follow": "De browser van de bezoeker volgen",
+            "primaryHint": "De taal van de eigen teksten van het chatvenster.",
+            "additional": "Andere talen",
+            "additionalHint": "Een bezoeker wiens browser een van deze talen gebruikt, ziet het venster in die taal. Alle anderen zien de hoofdtaal."
           }
         },
         "rail": {

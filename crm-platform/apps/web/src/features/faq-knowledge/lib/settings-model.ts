@@ -12,6 +12,7 @@ export interface SettingsForm {
   logQueries: boolean;
   verifyMode: FaqVerifyMode;
   verifyBand: number;
+  fallbackMessage: string;
 }
 
 export const formFromSettings = (s: FaqSettings): SettingsForm => ({
@@ -21,6 +22,7 @@ export const formFromSettings = (s: FaqSettings): SettingsForm => ({
   logQueries: s.logQueries,
   verifyMode: s.verifyMode,
   verifyBand: s.verifyBand,
+  fallbackMessage: s.fallbackMessage ?? '',
 });
 
 /** Slider noise (0.1 + 0.2) is not a change. */
@@ -32,6 +34,7 @@ export const settingsDirty = (a: SettingsForm, b: SettingsForm): boolean =>
   a.minMargin !== b.minMargin ||
   a.logQueries !== b.logQueries ||
   a.verifyMode !== b.verifyMode ||
+  a.fallbackMessage !== b.fallbackMessage ||
   !sameNumber(a.verifyBand, b.verifyBand);
 
 /** The first save has no row to lock against, so it sends no `rowVersion`; every later one sends the version it read. */
@@ -43,8 +46,14 @@ export function toSettingsInput(form: SettingsForm, current: FaqSettings): Updat
     logQueries: form.logQueries,
     verifyMode: form.verifyMode,
     verifyBand: clampBand(form.verifyBand),
+    fallbackMessage: form.fallbackMessage === '' ? null : form.fallbackMessage,
     ...(current.rowVersion === null ? {} : { rowVersion: current.rowVersion }),
   };
+}
+
+/** A save that changes only the fallback message: every other value is the one the screen read, the text goes exactly as typed. */
+export function fallbackInput(current: FaqSettings, message: string): UpdateFaqSettingsInput {
+  return toSettingsInput({ ...formFromSettings(current), fallbackMessage: message }, current);
 }
 
 export const round2 = (n: number): number => Math.round(n * 100) / 100;

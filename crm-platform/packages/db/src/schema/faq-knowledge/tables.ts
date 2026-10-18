@@ -47,6 +47,8 @@ export const faqSettings = pgTable(
     tunedModel: text('tuned_model'),
     verifyMode: text('verify_mode').notNull().default('off'),
     verifyBand: numeric('verify_band', { precision: 4, scale: 3 }).notNull().default('0.100'),
+    // 20261231090000_faq_fallback_message.sql: what a customer hears when no FAQ answers; null = nothing.
+    fallbackMessage: text('fallback_message'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -67,6 +69,10 @@ export const faqSettings = pgTable(
     check('ck_faq_settings_margin', sql`${t.minMargin} between 0.000 and 0.500`),
     check('ck_faq_settings_verify_mode', sql`${t.verifyMode} in ('off', 'borderline')`),
     check('ck_faq_settings_verify_band', sql`${t.verifyBand} between 0.010 and 0.300`),
+    check(
+      'ck_faq_settings_fallback_message',
+      sql`${t.fallbackMessage} is null or char_length(${t.fallbackMessage}) between 1 and 1024`,
+    ),
   ],
 );
 

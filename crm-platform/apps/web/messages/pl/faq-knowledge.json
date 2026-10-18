@@ -409,7 +409,14 @@
       "learned": "Dodano do „{question}”. Od teraz na taką wiadomość będzie padać odpowiedź.",
       "pickTitle": "Do którego FAQ dodać tę wiadomość?",
       "loadMore": "Wczytaj więcej",
-      "loadingMore": "Wczytywanie"
+      "loadingMore": "Wczytywanie",
+      "fallback": {
+        "title": "Gdy żadne FAQ nie odpowiada",
+        "hint": "Ta odpowiedź trafia do klienta, na którego wiadomość nie odpowiada żadne FAQ. Wiadomość nadal widać poniżej, więc możesz nauczyć FAQ odpowiedzi.",
+        "placeholder": "Przepraszam, nie zrozumiałem. Ktoś z zespołu wkrótce się odezwie.",
+        "save": "Zapisz odpowiedź zapasową",
+        "saved": "Odpowiedź zapasowa zapisana"
+      }
     },
     "picker": {
       "close": "Zamknij",

@@ -40,7 +40,9 @@ export async function armFaqs(
     WHERE f.org_id = ${o.orgId} AND f.status = 'paused' AND f.row_version = coalesce(m.written_version, 1)
       AND f.owner_flow_id IN (SELECT jsonb_array_elements_text(${ids}::jsonb)::bigint)`;
   if (!o.apply) {
-    const n = (await tx.execute(sql`SELECT count(*)::int AS n FROM (${owned}) x`)).rows[0] as { n: number };
+    const n = (await tx.execute(sql`SELECT count(*)::int AS n FROM (${owned}) x`)).rows[0] as {
+      n: number;
+    };
     const s = (
       await tx.execute(sql`SELECT count(*)::int AS n FROM faq_settings WHERE org_id = ${o.orgId} AND NOT enabled
         AND flow_id IN (SELECT jsonb_array_elements_text(${ids}::jsonb)::bigint)`)
@@ -53,4 +55,25 @@ export async function armFaqs(
     UPDATE faq_settings SET enabled = true WHERE org_id = ${o.orgId} AND NOT enabled
       AND flow_id IN (SELECT jsonb_array_elements_text(${ids}::jsonb)::bigint) RETURNING flow_id`);
   return { faqs: f.rows.length, settings: s.rows.length };
+}
+
+/**
+ * The fallback messages of migrated bots, in the widgets step (load/flows.ts): the text goes to faq_settings.fallback_message of the
+ * bot's flow. A settings row that does not exist yet is made with enabled false (nothing answers until a person or flow-state arms it,
+ * the same safety as writeFaqSettings); an existing row keeps what a person already saved (a fallback is only filled in when empty).
+ */
+export async function writeFaqFallbacks(
+  tx: TenantTx,
+  orgId: number,
+  items: Array<{ flowId: number; message: string }>,
+): Promise<number> {
+  if (items.length === 0) return 0;
+  const res = await tx.execute(sql`
+    INSERT INTO faq_settings (org_id, flow_id, enabled, fallback_message)
+    SELECT ${orgId}::bigint, (x->>'flowId')::bigint, false, x->>'message'
+    FROM jsonb_array_elements(${JSON.stringify(items)}::jsonb) AS x
+    ON CONFLICT (org_id, flow_id) DO UPDATE SET fallback_message = EXCLUDED.fallback_message
+      WHERE faq_settings.fallback_message IS NULL
+    RETURNING flow_id`);
+  return res.rows.length;
 }

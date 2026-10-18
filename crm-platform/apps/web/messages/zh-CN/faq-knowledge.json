@@ -409,7 +409,14 @@
       "learned": "已添加到“{question}”，今后将自动回答。",
       "pickTitle": "将这条消息添加到哪个 FAQ？",
       "loadMore": "加载更多",
-      "loadingMore": "加载中"
+      "loadingMore": "加载中",
+      "fallback": {
+        "title": "当没有常见问题能回答时",
+        "hint": "该回复会发给其消息没有任何常见问题能回答的客户。消息仍会显示在下方，方便您完善常见问题。",
+        "placeholder": "抱歉，我没有听懂。团队成员会尽快回复您。",
+        "save": "保存兜底回复",
+        "saved": "兜底回复已保存"
+      }
     },
     "picker": {
       "close": "关闭",

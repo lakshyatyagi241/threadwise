@@ -21,6 +21,7 @@ export interface EffectiveSettings {
   logQueries: boolean;
   verifyMode: 'off' | 'borderline';
   verifyBand: number;
+  fallbackMessage: string | null;
 }
 
 export const SETTINGS_MODULE_KEY = 'faq_settings';
@@ -56,6 +57,7 @@ export class FaqSettingsService {
       logQueries: row?.logQueries ?? true,
       verifyMode: row?.verifyMode ?? 'off',
       verifyBand: row?.verifyBand ?? 0.1,
+      fallbackMessage: row?.fallbackMessage ?? null,
     };
   }
 
@@ -76,6 +78,7 @@ export class FaqSettingsService {
       logQueries: row?.logQueries ?? true,
       verifyMode: row?.verifyMode ?? 'off',
       verifyBand: row?.verifyBand ?? 0.1,
+      fallbackMessage: row?.fallbackMessage ?? null,
       verifyAvailable: cfg.verifyEnabled,
       verifyModel: cfg.verifyModel,
       isDefault: row === null,
@@ -115,6 +118,11 @@ export class FaqSettingsService {
           // A client that does not know the check yet keeps what is saved.
           verifyMode: input.verifyMode ?? before?.verifyMode ?? 'off',
           verifyBand: input.verifyBand ?? before?.verifyBand ?? 0.1,
+          // Absent keeps the saved text; null removes it.
+          fallbackMessage:
+            input.fallbackMessage === undefined
+              ? (before?.fallbackMessage ?? null)
+              : input.fallbackMessage,
           // Saving is the owner's confirmation that the numbers suit the model in force now.
           tunedModel: cfg.embeddingModel,
         },
@@ -129,11 +137,12 @@ export class FaqSettingsService {
         logQueries: true,
         verifyMode: 'off',
         verifyBand: 0.1,
+        fallbackMessage: null,
       };
       for (const k of ['enabled', 'threshold', 'minMargin', 'logQueries'] as const) {
         if (was[k] !== input[k]) delta[k] = { old: was[k], new: input[k] };
       }
-      for (const k of ['verifyMode', 'verifyBand'] as const) {
+      for (const k of ['verifyMode', 'verifyBand', 'fallbackMessage'] as const) {
         if (input[k] !== undefined && was[k] !== input[k])
           delta[k] = { old: was[k], new: input[k] };
       }

@@ -586,6 +586,19 @@
             "placeholder": "example.com",
             "add": "Website hinzufügen",
             "remove": "Website entfernen"
+          },
+          "feedback": {
+            "label": "Besucher dürfen Antworten bewerten",
+            "hint": "Daumen hoch und runter unter jeder Bot-Antwort.",
+            "message": "Nachricht nach einer Bewertung",
+            "keptWhenOff": "Feedback ist aus. Diese Nachricht bleibt gespeichert und erscheint wieder, wenn Sie es einschalten."
+          },
+          "languages": {
+            "primary": "Hauptsprache",
+            "follow": "Dem Browser des Besuchers folgen",
+            "primaryHint": "Die Sprache der eigenen Texte des Chatfensters.",
+            "additional": "Weitere Sprachen",
+            "additionalHint": "Besucher, deren Browser eine dieser Sprachen nutzt, sehen das Fenster in dieser Sprache. Alle anderen sehen die Hauptsprache."
           }
         },
         "rail": {

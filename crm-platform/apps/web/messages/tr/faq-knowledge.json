@@ -409,7 +409,14 @@
       "learned": "\"{question}\" öğesine eklendi. Bundan sonra yanıtlanacak.",
       "pickTitle": "Bu mesaj hangi SSS öğesine eklensin?",
       "loadMore": "Daha fazla yükle",
-      "loadingMore": "Yükleniyor"
+      "loadingMore": "Yükleniyor",
+      "fallback": {
+        "title": "Hiçbir SSS yanıtlamadığında",
+        "hint": "Bu yanıt, mesajını hiçbir SSS'nin yanıtlamadığı müşteriye gider. Mesaj aşağıda görünmeye devam eder, böylece SSS'yi geliştirebilirsiniz.",
+        "placeholder": "Üzgünüm, anlayamadım. Ekip üyelerimizden biri size dönecek.",
+        "save": "Yedek yanıtı kaydet",
+        "saved": "Yedek yanıt kaydedildi"
+      }
     },
     "picker": {
       "close": "Kapat",
