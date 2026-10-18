@@ -1,15 +1,16 @@
 # Grafana dashboards (EL-B04)
 
-Four dashboards for the metrics the API, the worker and the probe already export. Nothing here runs in production: the production
+Five dashboards for the metrics the API, the worker, the web server and the probe export. Nothing here runs in production: the production
 overlay (`deploy/hostinger/observability.compose.yml`) does not start Grafana, because a fifth container on the shared host is the
 owner's call (see "Running it" below).
 
-| File                                     | uid                      | Answers                                                                                                                           |
-| ---------------------------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
-| `dashboards/crm-api.json`                | `crm-api`                | Is the API up, what do callers see (probe), request latency and errors by route, loop delay, heap, GC, CPU                        |
-| `dashboards/crm-workers.json`            | `crm-workers`            | Is work waiting (job wait p95), throughput, failures and retries per queue, the worker loop, heap, GC, CPU                        |
-| `dashboards/crm-realtime.json`           | `crm-realtime`           | The loop behind the sockets (they live in the API process): delay, utilization, open handles, heap, GC, probe                     |
-| `dashboards/crm-release-comparison.json` | `crm-release-comparison` | The same loop, latency, error, heap and queue queries now against 1 h, 6 h, 1 d, 3 d or 7 d earlier, with process restarts marked |
+| File                                     | uid                      | Answers                                                                                                                                 |
+| ---------------------------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `dashboards/crm-api.json`                | `crm-api`                | Is the API up, what do callers see (probe), request latency and errors by route, loop delay, heap, GC, CPU                              |
+| `dashboards/crm-workers.json`            | `crm-workers`            | Is work waiting (job wait p95), throughput, failures and retries per queue, the worker loop, heap, GC, CPU                              |
+| `dashboards/crm-web.json`                | `crm-web`                | Is the Next.js server up, what callers see (probe of `/robots.txt`), its loop, heap, GC, CPU. No per-route request metrics yet (EL-B20) |
+| `dashboards/crm-realtime.json`           | `crm-realtime`           | The loop behind the sockets (they live in the API process): delay, utilization, open handles, heap, GC, probe                           |
+| `dashboards/crm-release-comparison.json` | `crm-release-comparison` | The same loop, latency, error, heap and queue queries now against 1 h, 6 h, 1 d, 3 d or 7 d earlier, with process restarts marked       |
 
 ## What they do not show
 
@@ -29,7 +30,7 @@ owner's call (see "Running it" below).
 
 - `apps/api/test/unit/platform-infrastructure/dashboards.spec.ts`: every metric is one the code exports, every variable is declared,
   PromQL is balanced and `offset` is placed after a selector, every panel uses the provisioned data source.
-- `node tools/event-loop-audit/scrape-demo.mjs --grafana`: a real Grafana 11.3.0 provisions the four dashboards from these files and
+- `node tools/event-loop-audit/scrape-demo.mjs --grafana`: a real Grafana 11.3.0 provisions the five dashboards from these files and
   every panel query is run through Grafana's own `/api/ds/query` against a real Prometheus scraping a real API, worker and probe.
 
 ## Running it

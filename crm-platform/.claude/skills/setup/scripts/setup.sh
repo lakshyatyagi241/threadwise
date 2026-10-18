@@ -165,7 +165,8 @@ step "Building shared packages"
 pnpm --filter @crm/tax build
 pnpm --filter @crm/contracts build
 pnpm --filter @crm/db build
-ok "Tax, contracts and DB packages built"
+pnpm --filter @crm/observability build
+ok "Tax, contracts, DB and observability packages built"
 
 # =============================================================================
 # 6. Restricted app role — normally created by docker/postgres/init/ on first

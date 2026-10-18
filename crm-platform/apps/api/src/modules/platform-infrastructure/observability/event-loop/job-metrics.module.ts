@@ -2,7 +2,7 @@ import { WorkerHost } from '@nestjs/bullmq';
 import { Injectable, Logger, Module, type OnApplicationBootstrap } from '@nestjs/common';
 import { DiscoveryModule, DiscoveryService } from '@nestjs/core';
 import { attachJobMetrics, type ObservableWorker } from './job-metrics';
-import { getRuntimeMonitor } from './start-runtime-monitor';
+import { getRuntimeMonitor } from '@crm/observability';
 
 /**
  * Attaches job timing to every BullMQ worker the process created, in one place, so the ~40 processors need no edit and a new

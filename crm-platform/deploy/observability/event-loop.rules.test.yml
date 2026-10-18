@@ -279,6 +279,39 @@ tests:
             exp_annotations:
               summary: 'Metrics scrape of crm-api a:1 failing'
 
+  # ---- the web server's metrics target is watched the same way (EL-B07) ------------------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'up{job="crm-web",instance="w:9464"}'
+        values: '1x5 0x15'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: RuntimeMetricsTargetDown
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              job: crm-web
+              instance: 'w:9464'
+            exp_annotations:
+              summary: 'Metrics scrape of crm-web w:9464 failing'
+
+  # ---- a long stall in the web server pages like one in the API: the rule is not tied to a service (EL-B07) -------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_max_seconds{service="web",instance="web:1"}'
+        values: '0.02 0.02 12 0.02 0.02 0.02 0.02 0.02'
+    alert_rule_test:
+      - eval_time: 7m
+        alertname: EventLoopLongStallCritical
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              service: web
+              instance: 'web:1'
+            exp_annotations:
+              summary: 'Event loop stalled for 12s on web web:1'
+              description: 'A single stall over 10 s: webhook acknowledgements and ingress timeouts were missed. Capture a CPU profile if it recurs (runbook, section Capture evidence).'
+
   # ---- the probe's own metrics target is watched the same way -------------------------------------------------------------
   - interval: 1m
     input_series:

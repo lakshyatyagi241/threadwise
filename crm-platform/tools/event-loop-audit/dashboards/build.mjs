@@ -920,9 +920,91 @@ function releaseDashboard() {
   });
 }
 
+function webDashboard() {
+  nextId = 1;
+  const S = 'service="web",instance=~"$instance"';
+  const probe = (p) =>
+    `histogram_quantile(${p}, sum by (le) (rate(crm_probe_http_duration_seconds_bucket{target="web"}[${RI}])))`;
+  const panels = [
+    row('Is it up, and what do callers see', 0),
+    stat(
+      'Metrics target',
+      'min(up{job="crm-web"})',
+      { h: 4, w: 4, x: 0, y: 1 },
+      {
+        mappings: UP_DOWN,
+        desc: 'Prometheus can scrape the web server metrics listener. RuntimeMetricsTargetDown.',
+      },
+    ),
+    stat(
+      'Probe',
+      'min(crm_probe_up{target="web"})',
+      { h: 4, w: 4, x: 4, y: 1 },
+      {
+        mappings: UP_DOWN,
+        desc: 'The probe reached the web server from outside its loop (GET /robots.txt). ApiProbeFailing.',
+      },
+    ),
+    stat('Instances reporting', 'count(crm_runtime_last_report_timestamp_seconds{service="web"})', {
+      h: 4,
+      w: 4,
+      x: 8,
+      y: 1,
+    }),
+    stat(
+      'Seconds since last report',
+      'time() - max(crm_runtime_last_report_timestamp_seconds{service="web"})',
+      { h: 4, w: 4, x: 12, y: 1 },
+      { unit: 's', decimals: 0, th: [[60, 'red']], desc: 'RuntimeMetricsStale fires above 60 s.' },
+    ),
+    stat(
+      'Caller p95 (probe, 5 m)',
+      probe(0.95).replace(RI, '5m'),
+      { h: 4, w: 4, x: 16, y: 1 },
+      {
+        unit: 's',
+        decimals: 3,
+        th: [[1, 'red']],
+        desc: 'ApiCallerLatencyHigh fires above 1 s for any probe target, this one included.',
+      },
+    ),
+    row('Caller-visible latency', 5),
+    timeseries(
+      'Probe latency (web)',
+      [
+        [probe(0.5), 'p50'],
+        [probe(0.95), 'p95'],
+        [probe(0.99), 'p99'],
+      ],
+      { h: 8, w: 24, x: 0, y: 6 },
+      {
+        th: [[1, 'red']],
+        desc: 'Timed by a separate process, so a stalled loop shows here even when the web server cannot report it. The web server has no request histogram yet: this probe is its latency view.',
+      },
+    ),
+    ...runtimePanels(S, 14, { who: 'web server' }),
+  ];
+  return dashboard({
+    uid: 'crm-web',
+    title: 'Threadwise web server: event loop, caller latency, process',
+    description:
+      'The Next.js server process: loop delay and utilization, caller-visible latency from the probe, heap, GC and CPU. No per-route request metrics yet (EL-B20).',
+    tags: ['web'],
+    panels,
+    templating: [
+      variable.query(
+        'instance',
+        'Instance',
+        'label_values(crm_runtime_last_report_timestamp_seconds{service="web"}, instance)',
+      ),
+    ],
+  });
+}
+
 export const DASHBOARDS = {
   'crm-api.json': apiDashboard,
   'crm-workers.json': workersDashboard,
+  'crm-web.json': webDashboard,
   'crm-realtime.json': realtimeDashboard,
   'crm-release-comparison.json': releaseDashboard,
 };

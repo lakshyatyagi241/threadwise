@@ -17,6 +17,7 @@ cp .env.example .env
 pnpm infra:up                          # postgres, redis, minio, mailpit
 pnpm --filter @crm/contracts build
 pnpm --filter @crm/db build
+pnpm --filter @crm/observability build
 pnpm db:migrate && pnpm db:seed
 
 pnpm dev                               # API  → http://localhost:3000

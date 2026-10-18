@@ -3,6 +3,25 @@
   "commit": "604c1db95bac5efb2245506552f95f4801b63461 + uncommitted working tree",
   "results": [
     {
+      "suite": "built apps/web (next build, then next start) with the runtime monitor: scrape, listener rule, switches",
+      "status": "PASSED (20 of 20 checks)",
+      "ranOn": "2026-10-18, branch claude/event-loop-web-instrumentation",
+      "rawData": "evidence/web-metrics.json",
+      "observed": {
+        "series": "GET /metrics 200 with service=\"web\": loop delay (p99, max), utilization, heap, rss, active resources, report timestamp, start time; idle p99 17 ms",
+        "listenerRule": "non-loopback host without a token: nothing listens and a warning says why; with a token: 401 without, 401 wrong, 200 right",
+        "switches": "no OBS_METRICS_PORT or OBS_RUNTIME_MONITOR=false: nothing listens",
+        "probeTarget": "GET /robots.txt answers 200"
+      },
+      "caveat": "Idle server on one laptop, no real traffic. Start-up took several minutes on this OneDrive checkout (next.config.ts alone 3.1 min), which says nothing about the image. Prometheus scraping the web container and the probe against it in the stack were not run."
+    },
+    {
+      "suite": "shared package move: apps/api tsc, platform-infrastructure unit (13 files, 218 tests), web unit (7), promtool check and test with the new web cases, dashboards.spec (7), docker build --target deps for both images",
+      "status": "PASSED",
+      "ranOn": "2026-10-18",
+      "note": "The full image builds (build stage) and the five-dashboard Grafana run were not run. The API tests still import the moved classes through the API re-exports, so they now need packages/observability built (pnpm --filter @crm/observability build)."
+    },
+    {
       "suite": "regression-check.mjs on real run-load.mjs runs (profile normal, 90 s, 300 contacts): 3 baseline recordings, a clean run, a run with a 300 ms block injected every 5 s, a run on a starved host",
       "status": "RAN: clean passes, injected block fails, starved host is exit 2",
       "ranOn": "2026-10-17, branch claude/event-loop-regression-check",
@@ -365,6 +384,7 @@
     "dashboards on a real server, viewed in a browser, or used during an incident (they load and every query runs against a real Grafana in the demo)",
     "a 12 h or 24 h soak, or any load test on a dedicated host",
     "the quality.yml event-loop job on GitHub (the workflow only runs manually and never has)",
-    "the regression gate on a GitHub runner, a CI baseline, or its false-alarm rate (EL-B19)"
+    "the regression gate on a GitHub runner, a CI baseline, or its false-alarm rate (EL-B19)",
+    "Prometheus scraping the web container, the probe against web, and the full desk-web and desk-api image builds with @crm/observability"
   ]
 }

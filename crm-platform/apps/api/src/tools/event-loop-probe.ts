@@ -13,12 +13,12 @@
  *
  * It does not import Nest, the database or Redis: it is an HTTP client and a tiny metrics server.
  */
-import { startMetricsServer } from '../modules/platform-infrastructure/observability/event-loop/metrics-server';
+import { startMetricsServer } from '@crm/observability';
 import {
   Prober,
   parseProbeTargets,
 } from '../modules/platform-infrastructure/observability/event-loop/probe';
-import { metricsListenerDecision } from '../modules/platform-infrastructure/observability/event-loop/start-runtime-monitor';
+import { metricsListenerDecision } from '@crm/observability';
 
 const log = (line: Record<string, unknown>) =>
   process.stdout.write(`${JSON.stringify({ service: 'probe', ...line })}\n`);
