@@ -7,6 +7,7 @@ import {
   ICS_FEED_FETCHER,
   MicrosoftCalendarClient,
 } from '../../infra/providers/appointments-booking';
+import { UploadPolicyService } from '../auth';
 import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
@@ -61,9 +62,17 @@ import {
 import { MicrosoftCalendarTokens } from './microsoft-calendar-tokens.service';
 import { MultiCalendarAdapter } from './multi-calendar.adapter';
 import {
+  PublicBookingAssetsController,
   PublicBookingController,
   PublicBookingManageController,
 } from './public-booking.controller';
+import { BookingPageThemesCache } from './booking-page-themes.cache';
+import {
+  BookingPageThemeController,
+  BookingTypePageThemeController,
+} from './booking-page-themes.controller';
+import { BookingPageThemesRepository } from './booking-page-themes.repository';
+import { BookingPageThemesService } from './booking-page-themes.service';
 import { PublicBookingService } from './public-booking.service';
 import { BookingPublicThrottle } from './public-throttle';
 import { SlotsService } from './slots.service';
@@ -91,6 +100,10 @@ import { SlotsService } from './slots.service';
     ContactAppointmentsController,
     PublicBookingController,
     PublicBookingManageController,
+    PublicBookingAssetsController,
+    // The booking page's look (BL-355..358): the workspace theme and one service's override.
+    BookingPageThemeController,
+    BookingTypePageThemeController,
     // `appointments/calendar/google/...` (staff) and the public OAuth callback.
     GoogleCalendarController,
     GoogleCalendarCallbackController,
@@ -122,6 +135,10 @@ import { SlotsService } from './slots.service';
     ContactLinkService,
     PublicBookingService,
     BookingPublicThrottle,
+    BookingPageThemesRepository,
+    BookingPageThemesCache,
+    BookingPageThemesService,
+    UploadPolicyService,
     BookingOffersService,
     GoogleCalendarClient,
     GoogleCalendarConfig,

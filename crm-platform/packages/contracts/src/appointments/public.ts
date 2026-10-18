@@ -6,6 +6,7 @@ import {
   bookingQuestionTypeSchema,
   timeZoneSchema,
 } from './booking-type';
+import { DEFAULT_BOOKING_THEME, publicBookingThemeSchema } from './booking-page';
 
 /**
  * The customer's side (EXT-APPT-01, TW-APPT-024..026). No login: a booking page is public by design (`/v2/public/booking/<workspace
@@ -55,8 +56,18 @@ export type PublicBookingType = z.infer<typeof publicBookingTypeSchema>;
 export const publicBookingPageSchema = z.object({
   organization: z.object({ name: z.string(), slug: z.string() }),
   services: z.array(publicBookingTypeSchema),
+  /** How the page looks (BL-355): the workspace's booking page theme. A server that predates it sends none. */
+  theme: publicBookingThemeSchema.default(DEFAULT_BOOKING_THEME),
 });
 export type PublicBookingPage = z.infer<typeof publicBookingPageSchema>;
+
+/** `GET /public/booking/:orgSlug/:typeSlug`: one service, with its own look (the service's override over the workspace theme). */
+export const publicBookingTypeViewSchema = z.object({
+  organization: z.object({ name: z.string(), slug: z.string() }),
+  service: publicBookingTypeSchema,
+  theme: publicBookingThemeSchema.default(DEFAULT_BOOKING_THEME),
+});
+export type PublicBookingTypeView = z.infer<typeof publicBookingTypeViewSchema>;
 
 export const publicBookInputSchema = z
   .object({
@@ -96,7 +107,8 @@ export type PublicBookResponse = z.infer<typeof publicBookResponseSchema>;
 
 export const publicManageViewSchema = z.object({
   status: appointmentStatusSchema,
-  organization: z.object({ name: z.string() }),
+  organization: z.object({ name: z.string(), slug: z.string().optional() }),
+  theme: publicBookingThemeSchema.default(DEFAULT_BOOKING_THEME),
   bookingType: z
     .object({
       name: z.string(),

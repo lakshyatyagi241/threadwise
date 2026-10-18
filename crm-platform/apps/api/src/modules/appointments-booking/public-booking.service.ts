@@ -5,6 +5,7 @@ import {
   type PublicBookInput,
   type PublicBookResponse,
   type PublicBookingPage,
+  type PublicBookingTypeView,
   type PublicBookingType,
   type PublicCancelInput,
   type PublicManageView,
@@ -38,6 +39,7 @@ import {
   type TypeChildren,
 } from './booking-types.repository';
 import { ContactLinkService, normalizeEmail, normalizePhone } from './contact-link.service';
+import { BookingPageThemesService } from './booking-page-themes.service';
 import { BookingPublicThrottle } from './public-throttle';
 import { generateSlots } from './slot-engine';
 import { SlotsService } from './slots.service';
@@ -74,6 +76,7 @@ export class PublicBookingService {
     private readonly staff: AppointmentsService,
     private readonly throttle: BookingPublicThrottle,
     private readonly notices: ConsentNoticeService,
+    private readonly themes: BookingPageThemesService,
   ) {}
 
   // --- the booking page -------------------------------------------------------------------------------------------------
@@ -91,14 +94,12 @@ export class PublicBookingService {
       return {
         organization: { name: org.name, slug: org.slug },
         services: rows.map((r) => this.presentType(r, children.get(r.id)!, zone)),
+        theme: await this.themes.forWorkspace(tx, org.id),
       };
     });
   }
 
-  async typeView(
-    orgSlug: string,
-    typeSlug: string,
-  ): Promise<{ organization: { name: string; slug: string }; service: PublicBookingType }> {
+  async typeView(orgSlug: string, typeSlug: string): Promise<PublicBookingTypeView> {
     const org = await this.locateOrg(orgSlug, 'browse', `${orgSlug}/${typeSlug}`);
     return this.db.tx(async (tx) => {
       const { row, children } = await this.activeType(tx, org.id, typeSlug);
@@ -110,6 +111,8 @@ export class PublicBookingService {
           // The optional consent line under the form (BL-167); null when the workspace wrote none.
           consent: await this.consentLine(tx, org.id, row.uuid),
         },
+        // The service's own look over the workspace's.
+        theme: await this.themes.forType(tx, org.id, row.id),
       };
     });
   }
@@ -226,6 +229,17 @@ export class PublicBookingService {
     }
   }
 
+  /** A picture of a booking page, by the workspace slug and the id the theme named. Throttled like any browse of the page. */
+  async pageAsset(
+    orgSlug: string,
+    assetId: string,
+  ): Promise<{ mime: string; bytes: Buffer; etag: string }> {
+    const org = await this.locateOrg(orgSlug, 'browse', orgSlug);
+    const found = await this.db.tx((tx) => this.themes.picture(tx, org.id, assetId));
+    if (!found) throw AppError.notFound('Picture');
+    return found;
+  }
+
   // --- the manage page ---------------------------------------------------------------------------------------------------
 
   async manageView(token: string): Promise<PublicManageView> {
@@ -249,7 +263,8 @@ export class PublicBookingService {
         row.startsAt.getTime() - Date.now() <= fin.cancelWindowMinutes * MINUTE;
       return {
         status: row.status,
-        organization: { name: org.name },
+        organization: { name: org.name, slug: org.slug },
+        theme: await this.themes.forType(tx, orgId, type?.id ?? null),
         bookingType: type
           ? {
               name: type.name,

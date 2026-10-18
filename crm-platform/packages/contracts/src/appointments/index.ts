@@ -10,3 +10,4 @@ export * from './calendar-providers';
 export * from './calendar-feeds';
 export * from './booking-tools';
 export * from './public';
+export * from './booking-page';
