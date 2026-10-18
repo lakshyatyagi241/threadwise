@@ -1131,19 +1131,14 @@
           "aiModelPick": "— escolha o modelo —",
           "aiModelNone": "Nenhum modelo de IA ativado — peça ao admin para ativar um",
           "aiModelNotEnabled": "{value} (não ativado)",
-          "aiAssistantNone": "— nenhuma (usar só o prompt acima) —",
           "aiAssistantOption": "{name} · {count, plural, one {# fonte} other {# fontes}}",
           "aiAssistantMissing": "(assistente {id})",
-          "aiAssistantHintNone": "Nenhuma base de conhecimento ainda. Crie uma em <link>Treinamento de IA</link> e clique em Atualizar lista para escolhê-la aqui.",
-          "aiAssistantHintEmpty": "Observação: este assistente tem 0 fontes treinadas. Adicione algumas em <link>Treinamento de IA</link> ou a resposta usará só o prompt.",
-          "aiAssistantHint": "Traz o conteúdo treinado do assistente escolhido para esta resposta. <link>Gerenciar conhecimento →</link>",
           "aiModelLabel": "Modelo",
           "aiModelHint": "Modelos que o admin ativou — mais qualquer provedor para o qual você adicionou sua própria chave (Configurações → Chaves de IA, em planos BYOK).",
           "aiModelHintNone": "Nenhum provedor disponível ainda. Adicione sua própria chave em <link>Configurações → Chaves de IA</link> (planos BYOK) ou peça ao admin para ativar um.",
           "aiPrompt": "Prompt de sistema",
           "aiSave": "Salvar resposta em",
           "aiSaveHint": "Os nós seguintes a leem como <v>{save}</v> — ou <v>{path}</v> ao extrair.",
-          "aiAssistantLabel": "Base de conhecimento (opcional)",
           "aiExtract": "<strong>Extrair dados estruturados (JSON)</strong> — transforma a mensagem em campos",
           "aiFields": "Campos a extrair",
           "aiFieldsHint": "Chaves separadas por vírgula. A IA retorna UM objeto JSON; cada chave vira <v>{key}</v> (e <v>{rows}</v> quando vários registros são detectados — ex.: para um nó do Google Sheets).",
@@ -1156,7 +1151,25 @@
           "subflowMissing": "Fluxo {id} (não está no espaço de trabalho)",
           "subflowLabel": "Fluxo a executar",
           "subflowHint": "Escolha outro fluxo salvo. Quando este nó dispara, esse fluxo roda do início ao fim antes de o controle voltar ao próximo nó daqui.",
-          "endInfo": "Este nó encerra o fluxo. Nada conectado depois dele será executado."
+          "endInfo": "Este nó encerra o fluxo. Nada conectado depois dele será executado.",
+          "aiSetupLegend": "Como esta etapa deve responder?",
+          "aiSetupAgent": "Agente de IA",
+          "aiSetupAgentDesc": "Usa as instruções, o modelo e o conhecimento de um agente do Treinamento de IA.",
+          "aiSetupCustom": "Configuração personalizada",
+          "aiSetupCustomDesc": "Escolha um modelo e escreva as instruções aqui.",
+          "aiAgentLabel": "Agente de IA",
+          "aiAgentPick": "— escolha um agente de IA —",
+          "aiAgentHint": "O agente traz suas próprias instruções, modelo e conhecimento. Altere-os no <link>Treinamento de IA</link>.",
+          "aiAgentNone": "Você ainda não tem agentes de IA. <link>Crie seu primeiro agente de IA</link> e clique em Atualizar lista.",
+          "aiAgentRequired": "Escolha um agente de IA ou mude para uma configuração personalizada.",
+          "aiAgentSummary": "Modelo {model} · {count, plural, one {# fonte de conhecimento} other {# fontes de conhecimento}}",
+          "aiAgentNoSources": "Este agente ainda não tem conhecimento, então responde só com as instruções dele. Adicione fontes no <link>Treinamento de IA</link>.",
+          "aiPromptRequired": "Escreva as instruções para a IA.",
+          "aiKnowledgeLabel": "Conhecimento de um agente de IA (opcional)",
+          "aiKnowledgeNone": "— nenhum —",
+          "aiKnowledgeHint": "Adiciona à resposta as fontes treinadas desse agente. As instruções e o modelo dele não são usados em uma configuração personalizada. <link>Gerenciar no Treinamento de IA →</link>",
+          "aiAdvanced": "Opções avançadas",
+          "aiCreateAgent": "+ Criar agente de IA"
         },
         "options": {
           "prompt": "Prompt",
@@ -2497,7 +2510,8 @@
         "noSenderFacebook": "O nó Gatilho não tem Página do Facebook selecionada — escolha uma na etapa Gatilho.",
         "noSenderNumber": "O nó Gatilho não tem número selecionado — escolha um na etapa Gatilho.",
         "faqMinScore": "“{node}” tem uma pontuação mínima fora do intervalo de 0.05 a 0.99. Corrija-a ou deixe em branco para usar a configuração do fluxo.",
-        "locationInvalid": "“{node}” não tem uma localização válida: cole um link do Google Maps ou informe latitude (-90 a 90) e longitude (-180 a 180)."
+        "locationInvalid": "“{node}” não tem uma localização válida: cole um link do Google Maps ou informe latitude (-90 a 90) e longitude (-180 a 180).",
+        "aiNoAgent": "“{node}” não tem agente de IA nem instruções — escolha um agente de IA ou selecione Configuração personalizada e escreva as instruções."
       }
     },
     "simpleModel": {
@@ -2663,7 +2677,9 @@
         "chooseFlow": "Passo {stage}: escolha o fluxo que o botão inicia.",
         "chooseApi": "Passo {stage}: escolha a API a chamar.",
         "writeCode": "Passo {stage}: escreva o código a executar.",
-        "webhookUrl": "Etapa {stage}: adicione o endereço (URL) a chamar."
+        "webhookUrl": "Etapa {stage}: adicione o endereço (URL) a chamar.",
+        "chooseAiAgent": "Passo {stage}: escolha o agente de IA que responde ou mude o passo para uma configuração personalizada.",
+        "writeAiPrompt": "Passo {stage}: escreva as instruções para a IA ou escolha um agente de IA."
       },
       "faqSummary": "{hasCategory, select, true {Das suas FAQs · {category}} other {Das suas FAQs}}"
     },

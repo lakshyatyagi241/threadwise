@@ -8,6 +8,7 @@ import {
   type FlowVar,
   flbCarouselReplies,
   flbCleanCarouselCards,
+  flbAiNodeProblem,
   flbCondProblems,
   flbReadLocation,
 } from '@crm/contracts';
@@ -993,6 +994,10 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
           bad('carouselButtons');
       }
       if (s.type === 'faq' && minScoreOutOfRange(d.minScore)) bad('faqMinScore');
+      if (s.type === 'ai') {
+        const why = flbAiNodeProblem(d);
+        if (why) bad(why === 'no_agent' ? 'chooseAiAgent' : 'writeAiPrompt');
+      }
       if (s.type === 'cta') {
         const list = arr(d.actions) as Array<Record<string, unknown>>;
         if (list.length === 0 || list.some((a) => !str(a.label).trim() || !str(a.value).trim()))

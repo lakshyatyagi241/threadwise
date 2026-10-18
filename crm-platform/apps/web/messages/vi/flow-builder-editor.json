@@ -1131,19 +1131,14 @@
           "aiModelPick": "— chọn mô hình —",
           "aiModelNone": "Chưa bật mô hình AI nào — nhờ quản trị viên bật một mô hình",
           "aiModelNotEnabled": "{value} (chưa bật)",
-          "aiAssistantNone": "— không có (chỉ dùng lời nhắc ở trên) —",
           "aiAssistantOption": "{name} · {count, plural, other {# nguồn}}",
           "aiAssistantMissing": "(trợ lý {id})",
-          "aiAssistantHintNone": "Chưa có cơ sở tri thức nào. Tạo một cơ sở tại <link>Huấn luyện AI</link>, rồi nhấn Làm mới danh sách để chọn tại đây.",
-          "aiAssistantHintEmpty": "Lưu ý: trợ lý này có 0 nguồn đã huấn luyện. Thêm nguồn tại <link>Huấn luyện AI</link> nếu không phản hồi sẽ chỉ dựa trên lời nhắc.",
-          "aiAssistantHint": "Đưa nội dung đã huấn luyện của trợ lý được chọn vào phản hồi này. <link>Quản lý kiến thức →</link>",
           "aiModelLabel": "Mô hình",
           "aiModelHint": "Các mô hình quản trị viên đã bật — cộng với mọi nhà cung cấp bạn đã thêm khóa riêng (Cài đặt → Khóa AI, trên gói BYOK).",
           "aiModelHintNone": "Chưa có nhà cung cấp nào khả dụng. Thêm khóa riêng tại <link>Cài đặt → Khóa AI</link> (gói BYOK), hoặc nhờ quản trị viên bật một nhà cung cấp.",
           "aiPrompt": "Lời nhắc hệ thống",
           "aiSave": "Lưu phản hồi vào",
           "aiSaveHint": "Các nút sau đọc giá trị này dưới dạng <v>{save}</v> — hoặc <v>{path}</v> khi trích xuất.",
-          "aiAssistantLabel": "Cơ sở tri thức (tùy chọn)",
           "aiExtract": "<strong>Trích xuất dữ liệu có cấu trúc (JSON)</strong> — chuyển tin nhắn thành các trường",
           "aiFields": "Các trường cần trích xuất",
           "aiFieldsHint": "Các khóa phân tách bằng dấu phẩy. AI trả về MỘT object JSON; mỗi khóa trở thành <v>{key}</v> (và <v>{rows}</v> khi phát hiện nhiều bản ghi — ví dụ cho nút Google Sheets).",
@@ -1156,7 +1151,25 @@
           "subflowMissing": "Luồng {id} (không có trong không gian làm việc)",
           "subflowLabel": "Luồng để chạy",
           "subflowHint": "Chọn một luồng đã lưu khác. Khi nút này kích hoạt, luồng đó chạy hết từ đầu đến cuối rồi quyền điều khiển quay lại nút tiếp theo ở đây.",
-          "endInfo": "Nút này kết thúc luồng. Mọi thứ nối sau nó sẽ không chạy."
+          "endInfo": "Nút này kết thúc luồng. Mọi thứ nối sau nó sẽ không chạy.",
+          "aiSetupLegend": "Bước này nên trả lời như thế nào?",
+          "aiSetupAgent": "Tác nhân AI",
+          "aiSetupAgentDesc": "Dùng hướng dẫn, mô hình và kiến thức của một tác nhân trong Huấn luyện AI.",
+          "aiSetupCustom": "Thiết lập tùy chỉnh",
+          "aiSetupCustomDesc": "Chọn mô hình và viết hướng dẫn tại đây.",
+          "aiAgentLabel": "Tác nhân AI",
+          "aiAgentPick": "— chọn tác nhân AI —",
+          "aiAgentHint": "Tác nhân mang theo hướng dẫn, mô hình và kiến thức riêng. Thay đổi chúng trong <link>Huấn luyện AI</link>.",
+          "aiAgentNone": "Bạn chưa có tác nhân AI nào. <link>Tạo tác nhân AI đầu tiên</link>, rồi nhấn Làm mới danh sách.",
+          "aiAgentRequired": "Hãy chọn một tác nhân AI, hoặc chuyển sang thiết lập tùy chỉnh.",
+          "aiAgentSummary": "Mô hình {model} · {count, plural, other {# nguồn kiến thức}}",
+          "aiAgentNoSources": "Tác nhân này chưa có kiến thức nên chỉ trả lời theo hướng dẫn của nó. Thêm nguồn trong <link>Huấn luyện AI</link>.",
+          "aiPromptRequired": "Hãy viết hướng dẫn cho AI.",
+          "aiKnowledgeLabel": "Kiến thức từ một tác nhân AI (tùy chọn)",
+          "aiKnowledgeNone": "— không có —",
+          "aiKnowledgeHint": "Thêm các nguồn đã huấn luyện của tác nhân đó vào phản hồi. Hướng dẫn và mô hình riêng của nó không được dùng trong thiết lập tùy chỉnh. <link>Quản lý trong Huấn luyện AI →</link>",
+          "aiAdvanced": "Tùy chọn nâng cao",
+          "aiCreateAgent": "+ Tạo tác nhân AI"
         },
         "options": {
           "prompt": "Lời nhắc",
@@ -2497,7 +2510,8 @@
         "noSenderFacebook": "Nút Kích hoạt chưa chọn Trang Facebook — hãy chọn ở bước Kích hoạt.",
         "noSenderNumber": "Nút Kích hoạt chưa chọn số — hãy chọn ở bước Kích hoạt.",
         "faqMinScore": "\"{node}\" có điểm tối thiểu ngoài khoảng 0.05 đến 0.99 — hãy sửa hoặc để trống để dùng cài đặt của luồng.",
-        "locationInvalid": "“{node}” chưa có vị trí hợp lệ — hãy dán liên kết Google Maps hoặc nhập vĩ độ (-90 đến 90) và kinh độ (-180 đến 180)."
+        "locationInvalid": "“{node}” chưa có vị trí hợp lệ — hãy dán liên kết Google Maps hoặc nhập vĩ độ (-90 đến 90) và kinh độ (-180 đến 180).",
+        "aiNoAgent": "\"{node}\" không có tác nhân AI và cũng không có lời nhắc — hãy chọn tác nhân AI, hoặc chọn Thiết lập tùy chỉnh và viết hướng dẫn."
       }
     },
     "simpleModel": {
@@ -2663,7 +2677,9 @@
         "chooseFlow": "Bước {stage}: chọn luồng mà nút sẽ bắt đầu.",
         "chooseApi": "Bước {stage}: chọn API cần gọi.",
         "writeCode": "Bước {stage}: viết mã cần chạy.",
-        "webhookUrl": "Bước {stage}: thêm địa chỉ (URL) cần gọi."
+        "webhookUrl": "Bước {stage}: thêm địa chỉ (URL) cần gọi.",
+        "chooseAiAgent": "Bước {stage}: chọn tác nhân AI sẽ trả lời, hoặc chuyển bước này sang thiết lập tùy chỉnh.",
+        "writeAiPrompt": "Bước {stage}: viết hướng dẫn cho AI, hoặc chọn một tác nhân AI."
       },
       "faqSummary": "{hasCategory, select, true {Từ FAQ của bạn · {category}} other {Từ FAQ của bạn}}"
     },

@@ -18,6 +18,24 @@ export function providerOfModel(model: string): string {
   return 'openai';
 }
 
+/**
+ * The system prompt of a step that runs as an AI agent (Settings, AI Training): the agent's own instructions (the step's prompt when
+ * the agent has none), then its tone and default language, as the website chatbot words them. A JSON reply gets no chat-style reminder.
+ */
+export function agentSystemPrompt(
+  agent: { systemPrompt: string | null; tone: string | null; language: string | null },
+  fallback: string,
+  json: boolean,
+): string {
+  const base = (agent.systemPrompt ?? '').trim() || fallback;
+  const tone = (agent.tone ?? '').trim() || 'helpful';
+  const lang = (agent.language ?? '').trim() || 'en';
+  let out = `${base}\nSpeak in a ${tone} tone. Default language: ${lang}. Match the customer's language if different.`;
+  if (!json)
+    out += '\nKeep replies short, chat-style, not essay-style. No role prefixes like "Assistant:".';
+  return out;
+}
+
 /** The text added to the system prompt in extraction mode (the word "json" must appear for OpenAI's json_object mode). */
 export function extractionSuffix(fields: readonly string[]): string {
   const keys = fields.map((f) => f.trim()).filter((f) => f !== '');

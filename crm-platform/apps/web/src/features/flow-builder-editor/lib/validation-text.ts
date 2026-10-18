@@ -1,6 +1,7 @@
 import {
   FLB_NODE_TYPES,
   flbNodeInMode,
+  flbAiNodeProblem,
   flbReadLocation,
   flbValidateGraph,
   type FlbValidationContext,
@@ -75,6 +76,10 @@ export function validateGraph(
   for (const n of nodes) {
     if (n.type === 'location' && !flbReadLocation(n.data).ok)
       items.push(msg('contracts.validation.locationInvalid'));
+  }
+  for (const n of nodes) {
+    if (n.type === 'ai' && flbAiNodeProblem(n.data) !== null)
+      items.push(msg('contracts.validation.aiNoAgent', { node: nodeLabelMsg(n.type) }));
   }
   for (const n of nodes) {
     if (n.type === 'faq' && minScoreOutOfRange(n.data?.minScore))

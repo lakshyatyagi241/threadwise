@@ -251,7 +251,7 @@ export class BuilderContextService {
         ),
         tx.execute(sql`SELECT provider FROM ai_provider_keys WHERE org_id = ${o} AND is_active`),
         tx.execute(sql`
-            SELECT a.uuid, a.name, a.status,
+            SELECT a.uuid, a.name, a.status, a.ai_model,
               (SELECT count(*) FROM ai_training_sources src WHERE src.org_id = a.org_id AND lower(src.status) = 'ready'
                  AND (src.assistant_id IS NULL OR src.assistant_id = a.id)) AS sources
             FROM ai_chat_assistants a WHERE a.org_id = ${o} ORDER BY a.name`),
@@ -353,6 +353,7 @@ export class BuilderContextService {
           id: s(r.uuid),
           name: s(r.name),
           status: (r.status as string | null) ?? null,
+          model: (r.ai_model as string | null) ?? null,
           sources: Number(r.sources),
         })),
         callAssistants: rows(callAssistants).map((r) => ({ id: s(r.uuid), name: s(r.name) })),
