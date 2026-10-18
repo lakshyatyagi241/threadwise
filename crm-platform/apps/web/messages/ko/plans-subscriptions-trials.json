@@ -46,7 +46,8 @@
       "ai_form_generations_monthly": "월별 AI 양식 빌더 생성",
       "sms_monthly": "월간 SMS",
       "email_mailboxes": "이메일 메일함",
-      "email_monthly": "월간 이메일"
+      "email_monthly": "월간 이메일",
+      "storage_gb": "저장 공간 (GB)"
     },
     "features": {
       "automation": "자동화",
@@ -136,7 +137,8 @@
       "ai_form_generations_monthly": "달력 월 기준 AI 양식 빌더 생성 횟수(복구 재시도 포함)입니다. 0 = 무제한",
       "sms_monthly": "달력 기준 한 달 동안 발송된 SMS 메시지 수. 0 = 무제한.",
       "email_mailboxes": "연결된 Gmail 메일함(연결을 해제하면 자리가 비워집니다). 0 = 무제한.",
-      "email_monthly": "달력 기준 한 달 동안 발송된 이메일 수(답장과 캠페인 이메일 합산). 0 = 무제한."
+      "email_monthly": "달력 기준 한 달 동안 발송된 이메일 수(답장과 캠페인 이메일 합산). 0 = 무제한.",
+      "storage_gb": "워크스페이스가 보관할 수 있는 저장 공간(GB)입니다(통화 녹음, 채팅 미디어, 이메일 첨부 파일 및 파일). 0 = 무제한. 현재는 측정만 하며 아직 차단되는 것은 없습니다."
     },
     "planAddons": {
       "title": "요금제에서 이용 가능한 추가 기능",

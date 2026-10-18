@@ -350,6 +350,8 @@ const NOT_A_ROW_COUNT: ReadonlySet<PlanLimitKey> = new Set<PlanLimitKey>([
   'total_campaigns',
   'broadcast_recipients',
   'ai_token_limit_monthly',
+  // Bytes held, counted by the storage meter (modules/storage-quota), not rows; the cap is read there. No panel entry until phase S2.
+  'storage_gb',
 ]);
 
 async function n(tx: Tx, query: ReturnType<typeof sql>): Promise<number> {

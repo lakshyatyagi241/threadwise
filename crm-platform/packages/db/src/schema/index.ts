@@ -55,6 +55,7 @@ export * from './integrations-hubspot-slack-trello-google-webhooks';
 export * from './invoicing';
 export * from './localization-translation';
 export * from './marketing-site-cms';
+export * from './storage-quota';
 export * from './message-templates';
 export * from './meta-ads';
 export * from './node-bridge-runtime';

@@ -46,7 +46,8 @@
       "ai_form_generations_monthly": "月ごとのAIフォームビルダー生成数",
       "sms_monthly": "月間SMS数",
       "email_mailboxes": "メールボックス数",
-      "email_monthly": "月間メール数"
+      "email_monthly": "月間メール数",
+      "storage_gb": "ストレージ (GB)"
     },
     "features": {
       "automation": "自動化",
@@ -136,7 +137,8 @@
       "ai_form_generations_monthly": "暦月内のAIフォームビルダーの生成回数です（修復の再試行を含む）。0は無制限です。",
       "sms_monthly": "暦月に送信した発信SMSメッセージ数。0 = 無制限。",
       "email_mailboxes": "接続済みのGmailメールボックス(接続解除すると枠が空きます)。0 = 無制限。",
-      "email_monthly": "暦月に送信したメールの数(返信とキャンペーンメールの合計)。0 = 無制限。"
+      "email_monthly": "暦月に送信したメールの数(返信とキャンペーンメールの合計)。0 = 無制限。",
+      "storage_gb": "ワークスペースが保持できるストレージ容量(GB)。通話録音、チャットのメディア、メール添付、ファイルが対象です。0 = 無制限。現在は計測のみで、何もブロックされません。"
     },
     "planAddons": {
       "title": "お使いのプランで利用できるアドオン",

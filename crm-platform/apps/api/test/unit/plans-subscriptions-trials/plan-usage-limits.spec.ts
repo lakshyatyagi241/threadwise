@@ -70,7 +70,8 @@ const OTHER_ENFORCEMENT: PlanLimitKey[] = [
   'email_monthly',
 ];
 // The request-rate cap is read by the API-key guard, it counts nothing in the database.
-const NO_METER: PlanLimitKey[] = ['api_rate_limit_per_minute'];
+// `storage_gb` is bytes held, counted by the storage meter (modules/storage-quota). Its usage-panel entry arrives with enforcement (storage quota S2).
+const NO_METER: PlanLimitKey[] = ['api_rate_limit_per_minute', 'storage_gb'];
 const ROW_CAPPED = PLAN_LIMIT_KEYS.filter(
   (k) => !OTHER_ENFORCEMENT.includes(k) && !NO_METER.includes(k),
 );

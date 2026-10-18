@@ -1,6 +1,6 @@
 {
   "generatedFrom": "apps/api/src",
-  "queueCount": 50,
+  "queueCount": 51,
   "queues": [
     {
       "queue": "outbox",
@@ -1147,6 +1147,29 @@
       ],
       "scheduled": false,
       "purpose": "A channel webhook event (Telegram, Viber, LINE, Facebook) that could not be stored when it arrived: kept here and retried with backoff so the provider keeps its 200 (ASYNC-011/017)."
+    },
+    {
+      "queue": "storage-quota",
+      "constant": "STORAGE_QUOTA",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "storage-accounting",
+      "jobKind": "db",
+      "dependency": "postgres,media-store",
+      "consumerFiles": [
+        "apps/api/src/modules/storage-quota/storage-quota.processor.ts"
+      ],
+      "concurrencyPerWorker": 2,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/storage-quota/storage-quota.publisher.ts"
+      ],
+      "scheduled": false,
+      "purpose": "One job per workspace to backfill or reconcile its storage meter (storage quota, BL-300): reads the owner tables, probes sizes on the bucket, recomputes counters. Own queue: a slow bucket or a huge workspace must not hold a send, a receipt or an export."
     }
   ],
   "sweepers": [
@@ -1531,6 +1554,21 @@
       "spec": "3_000"
     },
     {
+      "file": "apps/api/src/modules/storage-quota/storage-quota.scheduler.ts",
+      "kind": "Interval",
+      "spec": "5 * 60_000"
+    },
+    {
+      "file": "apps/api/src/modules/storage-quota/storage-quota.scheduler.ts",
+      "kind": "Interval",
+      "spec": "10 * 60_000"
+    },
+    {
+      "file": "apps/api/src/modules/storage-quota/storage-quota.scheduler.ts",
+      "kind": "Cron",
+      "spec": "'17 3 * * *'"
+    },
+    {
       "file": "apps/api/src/modules/storefront-builder/recovery/cart-recovery-sweep.service.ts",
       "kind": "Interval",
       "spec": "60_000"
@@ -1564,6 +1602,11 @@
       "file": "apps/api/src/modules/webhook-fanout/webhook-forward.processor.ts",
       "kind": "Interval",
       "spec": "5_000"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-throughput-sync.scheduler.ts",
+      "kind": "Interval",
+      "spec": "TICK_MS"
     },
     {
       "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-worker.module.ts",
