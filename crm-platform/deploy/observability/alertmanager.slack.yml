@@ -1,0 +1,24 @@
+# Alertmanager with the NATIVE Slack receiver (EL-B14). Chosen by observability-up.sh when the destination type is "slack"; the file the
+# secret holds is the incoming-webhook URL. Discord works too: it accepts Slack-format messages at the same webhook URL with `/slack`
+# appended (https://discord.com/api/webhooks/<id>/<token>/slack). Not verified against a live Slack or Discord here: the config is
+# checked with amtool in CI, and tools/event-loop-audit/send-test-alert.mjs sends one test alert through the real destination.
+route:
+  receiver: default
+  group_by: [alertname, service]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+
+receivers:
+  - name: default
+    slack_configs:
+      - api_url_file: /run/secrets/alert_webhook_url
+        send_resolved: true
+        title: '{{ .CommonLabels.alertname }} ({{ .Status }}) {{ .CommonLabels.service }}'
+        text: '{{ range .Alerts }}{{ .Annotations.summary }}{{ "\n" }}{{ end }}'
+
+# A critical alert for a process makes its warnings noise.
+inhibit_rules:
+  - source_matchers: [severity="critical"]
+    target_matchers: [severity="warning"]
+    equal: [service, instance]

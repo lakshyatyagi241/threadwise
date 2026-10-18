@@ -23,21 +23,51 @@ into Prometheus. Without `OBS_METRICS_PORT` the process still measures and still
 ### Production (Hostinger stack): one command, opt-in
 
 ```bash
-cd /opt/desk && ./deploy/hostinger/observability-up.sh   # next to docker-compose.yml and .env
+cd /opt/desk && ./observability-up.sh   # next to docker-compose.yml and .env
 ```
 
-It makes `OBS_METRICS_TOKEN`, asks for the URL alerts go to (a webhook that accepts Alertmanager's JSON; hidden input), pulls
-`prom/prometheus:v2.55.0` and `prom/alertmanager:v0.27.0`, and starts `api`, `worker`, a `probe` and the two collectors with
-`deploy/hostinger/observability.compose.yml`. Nothing is published to the internet or routed through Traefik; look with
-`docker compose -f docker-compose.yml -f observability.compose.yml exec prometheus wget -qO- http://localhost:9090/api/v1/alerts`
-or an SSH tunnel. It restarts `api` and `worker`, so run it in a quiet minute. Without the overlay the base compose file keeps the
-metrics listener off (`OBS_METRICS_PORT` defaults to 0), exactly as before. Memory added: Prometheus 384m, Alertmanager 128m, probe 128m.
+It makes `OBS_METRICS_TOKEN`, sets `OBS_METRICS_PORT=9464`, asks where alerts go (a webhook that takes Alertmanager's JSON, Slack or
+Discord, or PagerDuty; the URL or key is typed hidden), pulls `prom/prometheus:v2.55.0` and `prom/alertmanager:v0.27.0`, and starts
+Prometheus, Alertmanager and a `probe` with `deploy/hostinger/observability.compose.yml`. Nothing is published to the internet or routed
+through Traefik; look with
+`docker compose -f docker-compose.yml -f observability.compose.yml exec prometheus wget -qO- http://localhost:9090/api/v1/targets`
+or an SSH tunnel. Memory added: Prometheus 384m, Alertmanager 128m, probe 128m.
+
+**It does not restart the app.** Releases are blue-green (`ci-entry.sh`): the metrics settings live in the base `docker-compose.yml`
+(`OBS_METRICS_*`, default off), so the idle slot a release creates, and the worker it recreates, start serving `/metrics`; Prometheus
+finds each slot by the network alias `api` / `web` that both slots carry (DNS discovery), so a slot that is stopped is absent rather
+than a failed scrape. Until the first release after the script, the api, web and worker targets are simply missing. To not wait: out of
+hours, `docker compose --env-file .env up -d --no-deps <the live slot's api and web, and worker>`, which costs the connections of that slot
+the way any restart does. **Decision:** do not run it unattended and do not do it during working hours; whoever owns the host chooses the minute.
 
 The listener refuses to start on a non-loopback address without `OBS_METRICS_TOKEN` and logs why; an unauthenticated `/metrics`
 would be reachable by anything on the network.
 
-**Not yet done on any real server.** The files are validated (`docker compose config`, bash syntax) and the same three processes and
-the same Prometheus and Alertmanager config files run in the demo, but no host has been changed.
+**Test the destination before relying on it (EL-B14).** On the host Alertmanager is not published, so post to it from inside its container (no
+timestamps needed: it starts the alert now and resolves it after `resolve_timeout`, 5 minutes):
+
+```bash
+docker compose -f docker-compose.yml -f observability.compose.yml exec -T alertmanager wget -qO-   --header 'Content-Type: application/json' http://localhost:9093/api/v2/alerts   --post-data '[{"labels":{"alertname":"EventLoopTestAlert","severity":"warning","service":"test"},"annotations":{"summary":"Test alert: nothing is wrong, this checks the alert path."}}]'
+```
+
+With Alertmanager reachable (a tunnel, or a local one) `node tools/event-loop-audit/send-test-alert.mjs --url=http://localhost:9093` sends the
+same alert with a 90 s life, and `--resolve` ends it at once. A "firing" message must arrive after about 30 s (`group_wait`) and a
+"resolved" one after the alert ends. Only then is the destination proven: `tools/event-loop-audit/rehearse-alert-receivers.mjs` proves the
+shipped Slack and PagerDuty configs and the payload shape against a stand-in for each, not that your Slack or PagerDuty account accepts it
+(last run: `evidence/alert-receivers.json`).
+
+**Probe through the ingress (EL-B15):** `observability-up.sh` sets `PROBE_EXTRA_TARGETS` to `https://<DOMAIN>/health` and `/login`, so the probe
+also times a request that leaves the stack and returns through Traefik; `ApiCallerLatencyHigh` covers every probe target. From the host
+this includes the ingress, not the internet. For the internet, run the same probe image on a second host with only the public URLs in
+`PROBE_TARGETS` and add it as a Prometheus job. **Not verified:** that the public path shows ingress queueing (needs a deployed stack),
+and the 1 s `ApiCallerLatencyHigh` threshold has not been re-derived for the public target (it needs a week of real probe data). The
+heaviest customer-facing routes need a login, and the probe carries no credential on purpose.
+
+**Not yet done on any real server.** The files are validated (`docker compose config`, bash syntax, `amtool check-config` and
+`promtool check config` in CI) and the same Prometheus and Alertmanager files run in the demo. `tools/event-loop-audit/rehearse-slot-discovery.mjs`
+runs the shipped `prometheus.yml` against two containers sharing the alias `api` and checks the release behaviour: both slots are two
+targets, a stopped slot disappears (`up == 0` for a few seconds at most, far under the rule's 2 minute hold), a returning slot is found
+(last run: `evidence/slot-discovery.json`).
 
 ### What pages whom
 
@@ -50,9 +80,7 @@ the same Prometheus and Alertmanager config files run in the demo, but no host h
 | `EventLoopLongStallWarning`, delay and utilization warnings             | warning  | Over 2 s once; sustained delay or utilization. Not for waking people                    |
 
 The 2 s and 10 s long-stall thresholds are judgement calls, not measured limits: change them in `event-loop.rules.yml` and in
-`event-loop.rules.test.yml` together. `alertmanager.yml` has a single webhook receiver and no per-severity routing, so warnings and criticals go to the same place; split
-them there when the destination is chosen (its comments show Slack and PagerDuty receivers). One inhibit rule keeps a warning quiet
-while a critical with the same `service` and `instance` is firing. Slack and Discord webhooks do not accept Alertmanager's JSON as it is.
+`event-loop.rules.test.yml` together. Three Alertmanager files ship, chosen by `observability-up.sh` (`ALERTMANAGER_FILE`): `alertmanager.yml` (a webhook that takes Alertmanager's JSON), `alertmanager.slack.yml` (Slack's native receiver; Discord works with `/slack` appended to its webhook URL) and `alertmanager.pagerduty.yml` (Events API v2 with the integration key). All send warnings and criticals to the same place (PagerDuty's own routing decides who is woken; the severity is passed on). One inhibit rule keeps a warning quiet while a critical with the same `service` and `instance` is firing.
 
 **Verified end to end, locally:** `node tools/event-loop-audit/scrape-demo.mjs [--stall]` runs the BUILT API, worker and probe as
 real processes, a real `prom/prometheus` and `prom/alertmanager` with the files from `deploy/observability` (addresses and

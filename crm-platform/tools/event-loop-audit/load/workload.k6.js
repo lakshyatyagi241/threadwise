@@ -1,7 +1,9 @@
 // k6 workload for the event-loop baselines (docs/performance/event-loop). Run it through run-load.mjs, which starts an isolated stack,
 // seeds one workspace and sets the environment below. It is NOT meant to be pointed at a shared or production server.
 //
-//   PROFILE   normal | peak | spike | soak
+//   PROFILE   normal | peak | spike | soak | webhook
+//             webhook = the normal rate with a share of unauthenticated WhatsApp deliveries carrying a BAD signature (EL-B05, EL-B22):
+//             the refused path, which costs the body parse before the 401. WEBHOOK_KB sets the body size (default 256).
 //   BASE_URL  http://host.docker.internal:3997
 //   ORG_SLUG, EMAIL, PASSWORD   the seeded workspace's owner
 //   SECONDS   length of normal / peak (default 120); SOAK_MINUTES for soak (default 10)
@@ -53,6 +55,14 @@ const scenarios = {
       { duration: '40s', target: 5 },
     ],
   },
+  webhook: {
+    executor: 'constant-arrival-rate',
+    rate: 5,
+    timeUnit: '1s',
+    duration: `${SECONDS}s`,
+    preAllocatedVUs: 20,
+    maxVUs: 200,
+  },
   soak: {
     executor: 'constant-arrival-rate',
     rate: 5,
@@ -72,6 +82,7 @@ const ROUTES = [
   'inbox_list',
   'inbox_counts',
   'health',
+  'webhook_refused',
 ];
 // Naming a threshold per route is what makes k6 export a summary line for each route tag.
 const thresholds = { http_req_failed: ['rate>=0'] };
@@ -131,6 +142,18 @@ const MIX = [
   ['update', 2],
   ['health', 3],
 ];
+// The webhook profile swaps 30 % of the mix for refused deliveries; every other profile is unchanged.
+const WEBHOOK_KB = Number(__ENV.WEBHOOK_KB || 256);
+const WEBHOOK_BODY = JSON.stringify({
+  object: 'whatsapp_business_account',
+  entry: [
+    { id: '1', changes: [{ field: 'messages', value: { pad: 'x'.repeat(WEBHOOK_KB * 1024) } }] },
+  ],
+});
+if (PROFILE === 'webhook') {
+  for (let i = 0; i < MIX.length; i++) MIX[i][1] = MIX[i][1] * 0.7;
+  MIX.push(['webhook_refused', 30]);
+}
 const SEARCH_WORDS = ['Load', 'Contact', 'load1', 'load22', '99', 'example'];
 
 export default function (data) {
@@ -157,6 +180,15 @@ export default function (data) {
     case 'health':
       res = http.get(`${BASE}/health`, { tags: { name: 'health' } });
       break;
+    case 'webhook_refused':
+      // Refusing is the expected answer here: a 401/403 is the route working, anything else (a 5xx, a timeout) is the finding.
+      res = http.post(`${BASE}/v2/public/webhooks/whatsapp`, WEBHOOK_BODY, {
+        headers: { 'Content-Type': 'application/json', 'X-Hub-Signature-256': `sha256=${hex(64)}` },
+        tags: { name: 'webhook_refused' },
+        responseCallback: http.expectedStatuses(401, 403),
+      });
+      check(res, { 'webhook: refused': (r) => r.status === 401 || r.status === 403 });
+      return;
     case 'inbox_list':
       res = http.get(`${BASE}/v2/inbox/conversations?limit=25`, {
         headers: auth,
