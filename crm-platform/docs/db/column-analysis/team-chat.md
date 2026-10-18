@@ -10,7 +10,7 @@ Tables: 7 · Columns: 83. Generated from the live schema (all migrations applied
 
 **Facts:** RLS on+forced · plain · created in `20261005100300_tchat_attachment_blobs.sql` · Drizzle `packages/db/src/schema/team-chat/tables.ts`
 
-**Design notes:** File bytes (up to 20 MB) inside OLTP Postgres bloats backups/WAL and TOAST; the rest of the platform uses object storage (mail attachments, conversation_media_uploads). Move to MinIO/S3 with object_key like mail_outbound_attachments.
+**Design notes:** File bytes (up to 20 MB) inside OLTP Postgres bloats backups/WAL and TOAST; the rest of the platform uses object storage (mail attachments, conversation_media_uploads). Move to S3/R2 with object_key like mail_outbound_attachments.
 
 | Column | Type · null · default | Purpose | Allowed values / format | Best practice | Linked features | Usage | Useful | Evidence |
 |---|---|---|---|---|---|---|---|---|

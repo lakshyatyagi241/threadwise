@@ -37,7 +37,7 @@ not built (A-060, A-061); the business tables themselves (`messages`, `invoices`
   `_default` partition; `PartitionMaintenanceService` creates 3 months ahead and never drops. The message-log archive keeps gzip blobs in a
   Postgres `bytea` column. Every export file is `bytea` in Postgres; `S3_BUCKET_EXPORTS` is declared and unused.
 - **Runtime.** Production is one Docker Compose VM (Hostinger): Postgres 16 (`pgvector/pgvector:pg16`) limited to 1 GB with `shared_buffers`
-  256 MB, Redis 192 MB with `noeviction`, MinIO with buckets `crm-media`, `crm-documents`, `crm-exports`. No timescaledb, pg_partman or pg_cron.
+  256 MB, Redis 192 MB with `noeviction` with buckets `crm-media`, `crm-documents`, `crm-exports`. No timescaledb, pg_partman or pg_cron.
   Disk size is not documented.
 - **Worst queries today** (from the inventory): per-receipt campaign recount (`campaigns.repository.ts:459`), campaign and broadcast tiles polled
   every 15 s, 30-day dashboard scans of `messages`, a per-message hot wallet row, 38 sequential counts on the More hub, per-create quota counts
@@ -224,7 +224,7 @@ Cost and hygiene items folded in, because they are the same job:
   `crm-exports`, using the already-declared and unused `S3_BUCKET_EXPORTS`. File TTLs stay at 7 days (contact exports 30).
 - Redis: completed job payloads kept 1 hour (count 1,000), failed 3 days (count 2,000); `waba-ingest` and `webhook-forward` stop keeping message
   text and phone numbers in job data after completion. This also protects the 192 MB `noeviction` Redis from filling.
-- Docker log rotation (`json-file`, `max-size`) added for `postgres`, `redis` and `minio`, which are unrotated today.
+- Docker log rotation (`json-file`, `max-size`) added for `postgres`, `redis` and `object storage`, which are unrotated today.
 - `ArchiveReader.stream(stream, org, from, to)` lets the Message History 365-day export (and any other long-range export) read live partitions and
   archive objects through one interface.
 - Rule: a stream's retention cut ships only after the screens that read it have switched to events or the archive reader.

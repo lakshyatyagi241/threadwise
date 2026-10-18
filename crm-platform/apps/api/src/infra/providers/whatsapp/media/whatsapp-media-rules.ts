@@ -58,7 +58,7 @@ export const WA_UPLOAD_REFUSAL = {
 /**
  * The host of a link a provider could never reach from the internet, or null when it may be public. A provider that takes files by link
  * (Interakt has no upload endpoint) fetches it from its own servers, so a link on localhost, a private network, a `.local` name or a
- * single-label name (a container such as `minio`) always fails there with "not a valid URI", far from the cause.
+ * single-label name (a container name such as `objects`) always fails there with "not a valid URI", far from the cause.
  */
 export function privateLinkHost(link: string): string | null {
   let host: string;

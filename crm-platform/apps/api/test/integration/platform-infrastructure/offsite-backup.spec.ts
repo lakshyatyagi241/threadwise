@@ -2,7 +2,6 @@ import { randomBytes } from 'node:crypto';
 import { mkdtemp, readFile, rm, utimes, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { GenericContainer, Wait, type StartedTestContainer } from 'testcontainers';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   S3Client,
@@ -18,10 +17,15 @@ import {
 import { syncOffsite } from '../../../src/modules/platform-infrastructure/offsite-backup/sync';
 
 /**
- * The off-host copy against a real S3 server (MinIO), which verifies the request signature itself: a signing bug cannot pass here
- * the way it could against a fake that shares our code. Cloudflare R2 speaks the same protocol (SigV4, path-style, list v2).
+ * The off-host copy against a real S3-compatible server, which verifies the request signature itself: a signing bug cannot pass here
+ * the way it could against a fake that shares our code. Cloudflare R2 speaks the same protocol (SigV4, list v2).
+ * Runs only when S3_TEST_ENDPOINT, S3_TEST_ACCESS_KEY_ID and S3_TEST_SECRET_ACCESS_KEY name a test account (optional S3_TEST_REGION,
+ * default `auto`; S3_TEST_BUCKET, default `backups`; S3_TEST_PATH_STYLE=true for a store that wants path-style).
  */
-let minio: StartedTestContainer;
+const testEnv = process.env;
+const enabled = Boolean(
+  testEnv.S3_TEST_ENDPOINT && testEnv.S3_TEST_ACCESS_KEY_ID && testEnv.S3_TEST_SECRET_ACCESS_KEY,
+);
 let cfg: S3Config;
 let client: S3Client;
 let dir: string;
@@ -41,19 +45,14 @@ async function makeBucket(c: S3Config): Promise<void> {
 }
 
 beforeAll(async () => {
-  minio = await new GenericContainer('minio/minio:latest')
-    .withCommand(['server', '/data'])
-    .withEnvironment({ MINIO_ROOT_USER: 'testkey', MINIO_ROOT_PASSWORD: 'testsecret-1234' })
-    .withExposedPorts(9000)
-    .withWaitStrategy(Wait.forHttp('/minio/health/ready', 9000))
-    .start();
+  if (!enabled) return;
   cfg = {
-    endpoint: `http://${minio.getHost()}:${minio.getMappedPort(9000)}`,
-    region: 'auto',
-    bucket: 'backups',
-    accessKeyId: 'testkey',
-    secretAccessKey: 'testsecret-1234',
-    pathStyle: true,
+    endpoint: testEnv.S3_TEST_ENDPOINT!,
+    region: testEnv.S3_TEST_REGION ?? 'auto',
+    bucket: testEnv.S3_TEST_BUCKET ?? 'backups',
+    accessKeyId: testEnv.S3_TEST_ACCESS_KEY_ID!,
+    secretAccessKey: testEnv.S3_TEST_SECRET_ACCESS_KEY!,
+    pathStyle: testEnv.S3_TEST_PATH_STYLE === 'true',
   };
   client = new S3Client(cfg);
   await makeBucket(cfg);
@@ -61,15 +60,14 @@ beforeAll(async () => {
 }, 180_000);
 
 afterAll(async () => {
-  await rm(dir, { recursive: true, force: true });
-  await minio?.stop();
+  if (dir) await rm(dir, { recursive: true, force: true });
 });
 
 const dumpFile = async (n: string, bytes: Buffer) => writeFile(join(dir, n), bytes);
 const run = (over: Partial<Parameters<typeof syncOffsite>[0]> = {}) =>
   syncOffsite({ dir, client, prefix: 'desk', key, ...over });
 
-describe('off-host sync against S3', () => {
+describe.skipIf(!enabled)('off-host sync against S3', () => {
   it('uploads sealed copies, verifies them, and a second pass uploads nothing', async () => {
     const f1 = name(daysAgo(1));
     const f2 = name(daysAgo(0), 'pre-abc1234');

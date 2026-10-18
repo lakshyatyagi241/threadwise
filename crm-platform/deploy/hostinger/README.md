@@ -1,7 +1,7 @@
 # desk.wabo.ai: deployment
 
-Runs on a shared Dokploy host: Docker Compose project `desk` in `/opt/desk` (web, api, worker, postgres+pgvector, redis,
-minio). The host's Traefik owns 80/443 and issues the TLS certificate (resolver `letsencrypt`); this stack publishes no ports
+Runs on a shared Dokploy host: Docker Compose project `desk` in `/opt/desk` (web, api, worker, postgres+pgvector, redis).
+Object storage is Cloudflare R2 (S3_* in `.env`). The host's Traefik owns 80/443 and issues the TLS certificate (resolver `letsencrypt`); this stack publishes no ports
 and routes through container labels on `dokploy-network`: `/v2`, `/socket.io`, `/health`, `/ready`, `/api/v1` (the customer REST API), `/public/v1` (the signed partner API: leads, flows) and `/docs/api.json` (its OpenAPI document) go to the API,
 everything else to the web app. Images are built elsewhere and loaded over SSH, never on this host: a push to `main` is built on the **build
 server** and released here automatically ([../build-server/README.md](../build-server/README.md)); `ship.sh` does the same by hand from a workstation.
@@ -12,7 +12,7 @@ Memory is capped per container (about 4 GB in total) because the host runs many 
 **Normally nothing to do:** merging to `main` triggers the build server, which builds the images and runs `release` here. The release is
 blue-green: it migrates (expand-only), starts the idle slot (`api-blue`/`api-green` and `web-blue`/`web-green`), moves the public routes to it
 through `traefik-desk.yml.template` (written to Dokploy's Traefik dynamic directory) and restarts the worker. The old slot stops after a
-minute. Shared services (Postgres, Redis, MinIO) are started only if missing, never recreated by a release. Progress, logs, manual runs, rollback and key rotation:
+minute. Shared services (Postgres, Redis) are started only if missing, never recreated by a release. Progress, logs, manual runs, rollback and key rotation:
 [../build-server/README.md](../build-server/README.md). Do not run `ship.sh` while a pipeline run is in progress.
 
 By hand from a workstation (needs Docker and the `desk_deploy` key; it builds here and then runs the same `release` as the pipeline):

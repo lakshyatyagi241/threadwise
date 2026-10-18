@@ -61,7 +61,7 @@ afterAll(async () => {
 });
 
 const storage = (values: Record<string, unknown> = {}) => ({
-  provider: 'minio',
+  provider: 'r2',
   endpoint: s3Url,
   bucket: 'media',
   accessKeyId: 'AKID',

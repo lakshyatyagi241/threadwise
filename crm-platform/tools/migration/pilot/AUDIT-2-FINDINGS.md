@@ -46,3 +46,9 @@ A customer turn with a typed query object but no text, file or reply payload (th
 `copy-files` also copies Waboo-host images of `chatbot_widgets` (`button_image_url`, `body_bg_image_url`, `launcher.avatar`) to `widget-media/<org id>/waboo/...` in the media bucket and rewrites them to
 `<flowMediaPublicBase>/<object key>` (same config line as flows; visitors' browsers load these). `verify` counts widget links still on a Waboo host. Checked and needing no copy: broadcast
 (`custom_image/video/document` are not carried), templates (media stays with Meta), knowledge file sources (no bytes in the dump: quarantined NEEDS_REUPLOAD, re-upload in WaDesk), contacts (`image_url` null).
+
+### What the staging platform uses (read from the staging database and the Storage screen, secrets masked)
+Platform setting `storage`, saved 2026-10-16: enabled, provider Cloudflare R2, endpoint `https://99d54bd9eed7f32cd8a52f36bc843da5.r2.cloudflarestorage.com`, bucket `geta-ai`, path style off, base path empty, region empty, no public/CDN URL, private (signed URLs), connection test passed.
+So the app serves media from the R2 bucket `geta-ai` with no base folder: for `copy-files` use `S3_ENDPOINT` = that host, `S3_REGION=auto`, `S3_FORCE_PATH_STYLE=false`, `S3_BUCKET_MEDIA=geta-ai`, and no `--base-folder`.
+The demo row for `gybyu5_srv_logo.png` has `media_key = chat/31/waboo/49bc6a257ee60431/gybyu5_srv_logo.png`: F-002 is most likely that this object is not in `geta-ai` (never copied, or under another prefix); a bucket listing for that exact key confirms it, and `copy-files copy --apply` then fixes it.
+`flowMediaPublicBase` has no existing public address to reuse (no CDN URL): set it to the custom domain or r2.dev address that fronts `geta-ai`.
