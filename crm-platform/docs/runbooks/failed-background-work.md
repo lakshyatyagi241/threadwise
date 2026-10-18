@@ -34,9 +34,21 @@ The worker heartbeat publishes the dead count; `/health` shows `outbox.status = 
 is also lagging, which takes priority. Alert on any non-zero value. The failed queue sets have no count in `/health`; check `GET waba-ingest/failed` and
 `GET webhook-retry/failed` when a message is reported missing.
 
-## Known limits
+## The dead-event index on a large table
 
-- The `webhook-retry` and `waba-ingest` jobs carry the raw event while they wait. They are dropped once they complete and kept for 3 days when they fail.
-- The per-order order-acknowledgement claim is a Redis key (14 days). A Redis flush inside the retry window could allow one repeat message.
-- The dead-event index (`idx_outbox_dead`) was built without `CONCURRENTLY` (Postgres does not allow it on a partitioned parent). It locks each partition
-  while it builds, which is fine at today's volume. On a large table, build it per partition with `CREATE INDEX CONCURRENTLY` and attach it.
+`idx_outbox_dead` is created by a migration that waits at most 3 seconds for the lock and runs at most 30, so it can never stall writers for long: on a
+small table it finishes in milliseconds. If it times out the table is big. Postgres does not allow `CREATE INDEX CONCURRENTLY` on a partitioned parent,
+so build it partition by partition first (no write lock, safe to run again, rebuilds a piece an interrupted run left invalid), then run the migrations:
+
+```bash
+pnpm --filter @crm/db outbox-dead-index   # as the owner (MIGRATION_DATABASE_URL)
+pnpm db:migrate                            # the migration is now a no-op
+```
+
+## Where the held data lives
+
+- The `webhook-retry` job holds the channel event sealed with the credentials key (AES-256-GCM); Redis never holds the message text. The job is dropped
+  when it completes and kept 3 days when it failed. A payload that cannot be opened (a key rotated away) is failed for good, not retried.
+- The `waba-ingest` job still holds the raw WhatsApp payload (dropped on success, kept 3 days on failure); it is not sealed yet.
+- The order acknowledgement claim is two columns on the order (`wa_orders.ack_claimed_at`, `ack_sent_at`), so it survives a restart and a Redis flush.
+  A claim whose worker died mid-send goes stale after 10 minutes and is taken again, which can at worst repeat the message once.
