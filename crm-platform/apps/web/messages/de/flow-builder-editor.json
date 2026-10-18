@@ -881,7 +881,12 @@
             "add": "Weitere Schaltfläche hinzufügen",
             "remove": "Schaltfläche entfernen",
             "opensPhone": "Telefonnummer",
-            "opensEmail": "E-Mail-Adresse"
+            "opensEmail": "E-Mail-Adresse",
+            "errors": {
+              "url": "Gib eine gültige Webadresse ein, die mit https:// beginnt",
+              "phone": "Gib eine gültige Telefonnummer ein, z. B. +91 98765 43210",
+              "email": "Gib eine gültige E-Mail-Adresse ein, z. B. name@example.com"
+            }
           },
           "carousel": {
             "intro": "Nachricht über den Karten",
@@ -2613,6 +2618,7 @@
         "chooseTemplate": "Schritt {stage}: Wählen Sie eine Vorlage.",
         "chooseTeam": "Schritt {stage}: Wählen Sie das Team, an das die Unterhaltung geht.",
         "ctaLabelLink": "Schritt {stage}: Geben Sie der Schaltfläche einen Namen und einen Link.",
+        "ctaLinkInvalid": "Schritt {stage}: Das Ziel der Schaltfläche passt nicht zu ihrem Typ.",
         "choosePickedProperty": "Schritt {stage}: Wählen Sie das Kontaktfeld, in das die gewählte Option kopiert wird.",
         "buttonsPrompt": "Schritt {stage}: Schreiben Sie die Nachricht über den Schaltflächen.",
         "addButton": "Schritt {stage}: Fügen Sie mindestens eine Schaltfläche hinzu.",

@@ -11,6 +11,7 @@ import {
   flbCondProblems,
 } from '@crm/contracts';
 import { conditionTreeOf } from './condition-tree';
+import { ctaLinkProblem } from './cta-link';
 import { askInputLabelMsg, nodeLabelMsg } from './contract-text';
 import { minScoreOutOfRange } from './faq-node';
 import { dedupeMsgs, msg, renderMsg, type Msg, type Translate } from './msg';
@@ -942,6 +943,8 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
         const list = arr(d.actions) as Array<Record<string, unknown>>;
         if (list.length === 0 || list.some((a) => !str(a.label).trim() || !str(a.value).trim()))
           bad('ctaLabelLink');
+        else if (list.some((a) => ctaLinkProblem(str(a.type) || 'url', a.value)))
+          bad('ctaLinkInvalid');
       }
       if (
         (s.type === 'buttons' || s.type === 'list') &&

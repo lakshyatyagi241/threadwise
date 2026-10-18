@@ -881,7 +881,12 @@
             "add": "Tambah tombol lain",
             "remove": "Hapus tombol",
             "opensPhone": "Nomor telepon",
-            "opensEmail": "Alamat email"
+            "opensEmail": "Alamat email",
+            "errors": {
+              "url": "Masukkan alamat web yang valid yang diawali https://",
+              "phone": "Masukkan nomor telepon yang valid, mis. +91 98765 43210",
+              "email": "Masukkan alamat email yang valid, mis. name@example.com"
+            }
           },
           "carousel": {
             "intro": "Pesan di atas kartu",
@@ -2613,6 +2618,7 @@
         "chooseTemplate": "Langkah {stage}: pilih templat.",
         "chooseTeam": "Langkah {stage}: pilih tim tujuan percakapan.",
         "ctaLabelLink": "Langkah {stage}: beri tombol nama dan tautan.",
+        "ctaLinkInvalid": "Langkah {stage}: tujuan tombol tidak valid untuk jenisnya.",
         "choosePickedProperty": "Langkah {stage}: pilih properti kontak tempat opsi yang dipilih disalin.",
         "buttonsPrompt": "Langkah {stage}: tulis pesan di atas tombol.",
         "addButton": "Langkah {stage}: tambahkan minimal satu tombol.",
