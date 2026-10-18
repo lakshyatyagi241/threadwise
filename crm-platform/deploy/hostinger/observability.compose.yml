@@ -27,16 +27,19 @@ x-obs-logging: &obs-logging
 services:
   api:
     environment:
+      OBS_RELEASE: ${IMAGE_TAG:-local}
       OBS_METRICS_PORT: '9464'
       OBS_METRICS_TOKEN: ${OBS_METRICS_TOKEN:?run ./observability-up.sh, it generates OBS_METRICS_TOKEN}
 
   worker:
     environment:
+      OBS_RELEASE: ${IMAGE_TAG:-local}
       OBS_METRICS_PORT: '9464'
       OBS_METRICS_TOKEN: ${OBS_METRICS_TOKEN:?run ./observability-up.sh, it generates OBS_METRICS_TOKEN}
 
   web:
     environment:
+      OBS_RELEASE: ${IMAGE_TAG:-local}
       OBS_METRICS_PORT: '9464'
       OBS_METRICS_HOST: 0.0.0.0
       OBS_METRICS_TOKEN: ${OBS_METRICS_TOKEN:?run ./observability-up.sh, it generates OBS_METRICS_TOKEN}

@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { forEachLine, gunzipAsync, gzipAsync } from '../../common/async-zlib';
+import { forEachGzipLine, gzipAsync } from '../../common/async-zlib';
 import {
   MESSAGE_LOG_EXPORT_MAX_ROWS,
   MESSAGE_LOG_EXPORT_TTL_DAYS,
@@ -163,9 +163,8 @@ export class MessageLogExportRunner {
       );
       for (const a of archives) {
         const events: Pending[] = [];
-        // Decompressed off the event loop, and parsed in slices that let it breathe: a day's object can be tens of MB.
-        const text = (await gunzipAsync(a.payload)).toString('utf8');
-        await forEachLine(text, (line) => {
+        // Streamed through gunzip a chunk at a time: a day's object can be tens of MB.
+        await forEachGzipLine(a.payload, (line) => {
           const e = JSON.parse(line) as {
             messageId: number;
             messageCreatedAt: string;

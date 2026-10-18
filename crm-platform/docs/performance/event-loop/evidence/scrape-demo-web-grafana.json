@@ -1,0 +1,372 @@
+{
+ "generatedAt": "2026-10-18T08:48:21.973Z",
+ "node": "v22.17.0",
+ "prometheus": "prom/prometheus:v2.55.0",
+ "alertmanager": "prom/alertmanager:v0.27.0",
+ "phases": [],
+ "aborted": false,
+ "delivered": [
+  {
+   "name": "RuntimeMetricsTargetDown",
+   "status": "firing",
+   "at": 1792313299383,
+   "labels": {
+    "alertname": "RuntimeMetricsTargetDown",
+    "instance": "host.docker.internal:9465",
+    "job": "crm-worker",
+    "severity": "critical"
+   }
+  }
+ ],
+ "results": [
+  {
+   "name": "the metrics listener refuses a scrape without the token",
+   "ok": true
+  },
+  {
+   "name": "Prometheus has all four targets up",
+   "ok": true,
+   "detail": "crm-api=up crm-probe=up crm-web=up crm-worker=up"
+  },
+  {
+   "name": "target labels are the job names the rules expect",
+   "ok": true
+  },
+  {
+   "name": "Prometheus found Alertmanager",
+   "ok": true,
+   "detail": "http://alertmanager:9093/api/v2/alerts"
+  },
+  {
+   "name": "crm_event_loop_delay_p99_seconds present for the api and the worker",
+   "ok": true,
+   "detail": "api,worker"
+  },
+  {
+   "name": "crm_event_loop_delay_max_seconds present for the api and the worker",
+   "ok": true,
+   "detail": "api,worker"
+  },
+  {
+   "name": "crm_event_loop_utilization_ratio present for the api and the worker",
+   "ok": true,
+   "detail": "api,worker"
+  },
+  {
+   "name": "crm_process_heap_used_bytes present for the api and the worker",
+   "ok": true,
+   "detail": "api,worker"
+  },
+  {
+   "name": "crm_process_rss_bytes present for the api and the worker",
+   "ok": true,
+   "detail": "api,worker"
+  },
+  {
+   "name": "crm_runtime_last_report_timestamp_seconds present for the api and the worker",
+   "ok": true,
+   "detail": "api,worker"
+  },
+  {
+   "name": "series carry service, instance and the scrape job",
+   "ok": true,
+   "detail": {
+    "__name__": "crm_event_loop_delay_p99_seconds",
+    "exported_instance": "Lakshya:47560",
+    "instance": "host.docker.internal:9465",
+    "job": "crm-worker",
+    "release": "demo-1",
+    "service": "worker"
+   }
+  },
+  {
+   "name": "a healthy idle loop reads in a sane range (under 0.5 s)",
+   "ok": true,
+   "detail": "worker=0.026198015 api=0.038469631"
+  },
+  {
+   "name": "the heartbeat timestamp is fresh (under 30 s old)",
+   "ok": true,
+   "detail": "worker=7.3s api=6.3s"
+  },
+  {
+   "name": "the probe reports both targets up",
+   "ok": true,
+   "detail": "web=1 health=1 ready=1"
+  },
+  {
+   "name": "a healthy /health reads fast from the probe (p95 under 0.25 s)",
+   "ok": true,
+   "detail": "0.010 s"
+  },
+  {
+   "name": "Prometheus has the web server request counts by route template",
+   "ok": true,
+   "detail": "45"
+  },
+  {
+   "name": "a 404 is counted as \"unmatched\", never under its URL",
+   "ok": true
+  },
+  {
+   "name": "the web loop is scraped and reads sane (under 0.5 s)",
+   "ok": true,
+   "detail": "0.06602751899999999"
+  },
+  {
+   "name": "api, worker and web all carry the release label",
+   "ok": true,
+   "detail": "demo-1=3"
+  },
+  {
+   "name": "the probe reaches the web server",
+   "ok": true
+  },
+  {
+   "name": "a job run by the real worker shows as completed in Prometheus",
+   "ok": true,
+   "detail": "service=worker"
+  },
+  {
+   "name": "Prometheus loaded all 16 alert rules",
+   "ok": true,
+   "detail": 16
+  },
+  {
+   "name": "every rule evaluates without error",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "nothing is firing on a healthy idle stack",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "Grafana provisioned the five dashboards",
+   "ok": true,
+   "detail": "crm-api,crm-realtime,crm-release-comparison,crm-web,crm-workers"
+  },
+  {
+   "name": "the provisioned data source reaches Prometheus",
+   "ok": true,
+   "detail": "Successfully queried the Prometheus API."
+  },
+  {
+   "name": "the instance drop-down has a value for the API",
+   "ok": true,
+   "detail": "host.docker.internal:9464"
+  },
+  {
+   "name": "crm-api / Metrics target has data",
+   "ok": true,
+   "detail": "1 points"
+  },
+  {
+   "name": "crm-api / Instances reporting has data",
+   "ok": true,
+   "detail": "1 points"
+  },
+  {
+   "name": "crm-api / Seconds since last report has data",
+   "ok": true,
+   "detail": "1 points"
+  },
+  {
+   "name": "crm-api / Probe latency by target has data",
+   "ok": true,
+   "detail": "72 points"
+  },
+  {
+   "name": "crm-api / Event loop delay has data",
+   "ok": true,
+   "detail": "32 points"
+  },
+  {
+   "name": "crm-api / Event loop utilization has data",
+   "ok": true,
+   "detail": "16 points"
+  },
+  {
+   "name": "crm-api / Heap used against its limit has data",
+   "ok": true,
+   "detail": "8 points"
+  },
+  {
+   "name": "crm-api / Memory has data",
+   "ok": true,
+   "detail": "24 points"
+  },
+  {
+   "name": "crm-api / GC pause has data",
+   "ok": true,
+   "detail": "32 points"
+  },
+  {
+   "name": "crm-api / CPU and throttling has data",
+   "ok": true,
+   "detail": "8 points"
+  },
+  {
+   "name": "crm-realtime / Event loop delay has data",
+   "ok": true,
+   "detail": "24 points"
+  },
+  {
+   "name": "crm-realtime / Event loop utilization has data",
+   "ok": true,
+   "detail": "8 points"
+  },
+  {
+   "name": "crm-realtime / Open handles (sockets, timers, requests) has data",
+   "ok": true,
+   "detail": "16 points"
+  },
+  {
+   "name": "crm-realtime / Heap used against its limit has data",
+   "ok": true,
+   "detail": "8 points"
+  },
+  {
+   "name": "crm-realtime / Probe latency by target has data",
+   "ok": true,
+   "detail": "24 points"
+  },
+  {
+   "name": "crm-web / Metrics target has data",
+   "ok": true,
+   "detail": "1 points"
+  },
+  {
+   "name": "crm-web / Instances reporting has data",
+   "ok": true,
+   "detail": "1 points"
+  },
+  {
+   "name": "crm-web / Seconds since last report has data",
+   "ok": true,
+   "detail": "1 points"
+  },
+  {
+   "name": "crm-web / Event loop delay has data",
+   "ok": true,
+   "detail": "36 points"
+  },
+  {
+   "name": "crm-web / Event loop utilization has data",
+   "ok": true,
+   "detail": "18 points"
+  },
+  {
+   "name": "crm-web / Heap used against its limit has data",
+   "ok": true,
+   "detail": "9 points"
+  },
+  {
+   "name": "crm-web / Memory has data",
+   "ok": true,
+   "detail": "27 points"
+  },
+  {
+   "name": "crm-web / GC pause has data",
+   "ok": true,
+   "detail": "33 points"
+  },
+  {
+   "name": "crm-web / CPU and throttling has data",
+   "ok": true,
+   "detail": "9 points"
+  },
+  {
+   "name": "crm-workers / Metrics target has data",
+   "ok": true,
+   "detail": "1 points"
+  },
+  {
+   "name": "crm-workers / Instances reporting has data",
+   "ok": true,
+   "detail": "1 points"
+  },
+  {
+   "name": "crm-workers / Seconds since last report has data",
+   "ok": true,
+   "detail": "1 points"
+  },
+  {
+   "name": "crm-workers / Event loop delay has data",
+   "ok": true,
+   "detail": "36 points"
+  },
+  {
+   "name": "crm-workers / Event loop utilization has data",
+   "ok": true,
+   "detail": "18 points"
+  },
+  {
+   "name": "crm-workers / Heap used against its limit has data",
+   "ok": true,
+   "detail": "9 points"
+  },
+  {
+   "name": "crm-workers / Memory has data",
+   "ok": true,
+   "detail": "27 points"
+  },
+  {
+   "name": "crm-workers / GC pause has data",
+   "ok": true,
+   "detail": "33 points"
+  },
+  {
+   "name": "crm-workers / CPU and throttling has data",
+   "ok": true,
+   "detail": "9 points"
+  },
+  {
+   "name": "every panel query runs without an error (105 run)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "Prometheus sees the killed worker as down",
+   "ok": true
+  },
+  {
+   "name": "RuntimeMetricsTargetDown goes pending first (the 2 m hold)",
+   "ok": true,
+   "detail": "pending"
+  },
+  {
+   "name": "RuntimeMetricsTargetDown fires for the worker",
+   "ok": true,
+   "detail": {
+    "alertname": "RuntimeMetricsTargetDown",
+    "instance": "host.docker.internal:9465",
+    "job": "crm-worker",
+    "severity": "critical"
+   }
+  },
+  {
+   "name": "the API target stays up while the worker is down",
+   "ok": true
+  },
+  {
+   "name": "RuntimeMetricsStale does NOT fire for a dead process (its series vanish; TargetDown covers it)",
+   "ok": true
+  },
+  {
+   "name": "a firing notification reached the receiver (RuntimeMetricsTargetDown)",
+   "ok": true
+  },
+  {
+   "name": "the notification carries the labels an on-call person needs",
+   "ok": true,
+   "detail": {
+    "alertname": "RuntimeMetricsTargetDown",
+    "instance": "host.docker.internal:9465",
+    "job": "crm-worker",
+    "severity": "critical"
+   }
+  }
+ ]
+}

@@ -28,6 +28,8 @@ export interface RuntimeMonitorOptions {
   intervalMs?: number;
   /** Stable per-process id. Defaults to `<hostname>:<pid>`: low cardinality, restarts get a new one. */
   instance?: string;
+  /** The release this process runs (see `releaseFromEnv`): stamped on every series as `release`. Omitted: no such label. */
+  release?: string;
   /** A window whose worst delay exceeds this is logged with the slowest requests of that window. */
   blockedLogThresholdMs?: number;
   log?: (line: Record<string, unknown>) => void;
@@ -51,7 +53,7 @@ interface SlowRequest {
  */
 export class RuntimeMonitor {
   private readonly registry: Registry;
-  private readonly sampler = new EventLoopSampler();
+  private readonly sampler: EventLoopSampler;
   private readonly intervalMs: number;
   private readonly blockedLogThresholdMs: number;
   private readonly log: (line: Record<string, unknown>) => void;
@@ -101,8 +103,13 @@ export class RuntimeMonitor {
   constructor(opts: RuntimeMonitorOptions) {
     // Same identity the worker heartbeat publishes to Redis, so /ready, Sentry and these series name a process alike.
     const instance = opts.instance ?? instanceId(hostname(), process.pid);
-    this.registry = new Registry({ service: opts.service, instance });
+    this.registry = new Registry({
+      service: opts.service,
+      instance,
+      ...(opts.release ? { release: opts.release } : {}),
+    });
     this.intervalMs = opts.intervalMs ?? 10_000;
+    this.sampler = new EventLoopSampler({ windowHintMs: this.intervalMs });
     this.blockedLogThresholdMs = opts.blockedLogThresholdMs ?? 250;
     this.log = opts.log ?? ((line) => process.stdout.write(`${JSON.stringify(line)}\n`));
     this.cgroupPath = opts.cgroupCpuStatPath ?? '/sys/fs/cgroup/cpu.stat';
@@ -262,6 +269,14 @@ export class RuntimeMonitor {
     this.gcObserver?.disconnect();
     this.gcObserver = undefined;
     this.sampler.stop();
+  }
+
+  /**
+   * The registry behind `render()`, for a module that has series of its own (the realtime gateway's socket counts). Register a family
+   * once per monitor and keep the handle: a registry does not de-duplicate names.
+   */
+  get metrics(): Registry {
+    return this.registry;
   }
 
   /** Called by the HTTP middleware when a response finishes. `route` must be the route template, never the raw URL. */

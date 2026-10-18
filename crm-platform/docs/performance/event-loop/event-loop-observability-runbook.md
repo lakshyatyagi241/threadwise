@@ -57,7 +57,7 @@ while a critical with the same `service` and `instance` is firing. Slack and Dis
 **Verified end to end, locally:** `node tools/event-loop-audit/scrape-demo.mjs [--stall]` runs the BUILT API, worker and probe as
 real processes, a real `prom/prometheus` and `prom/alertmanager` with the files from `deploy/observability` (addresses and
 intervals only are rewritten), and a small HTTP server standing in for the alert destination. It checks: all three targets up and
-labelled as the rules expect, the series present, all 15 rules loaded and evaluating, a real job visible, nothing firing when idle;
+labelled as the rules expect, the series present, all 16 rules loaded and evaluating, a real job visible, nothing firing when idle;
 with `--stall` also a 1.5 s API stall (`EventLoopBlockingWithImpact` and `ApiCallerLatencyHigh` fire; callers and the probe see
 over a second, the server's request histogram sees 7 ms), a 600 ms worker stall with 20,000 queued jobs
 (`WorkerEventLoopBlockingWithQueueImpact` fires), one 12 s block (`EventLoopLongStallCritical` fires), the killed worker
@@ -66,6 +66,10 @@ over a second, the server's request histogram sees 7 ms), a 600 ms worker stall 
 run: `evidence/scrape-demo.json`.
 
 **Dashboards:** `deploy/observability/grafana/` (API, workers, realtime, release comparison; see its README for what each answers and does not show). `scrape-demo.mjs --grafana` starts a real Grafana next to the demo Prometheus, checks that it provisions the four dashboards and runs every panel query through Grafana's own API (last run: `evidence/scrape-demo-grafana.json`, 54 of 54). Edit `tools/event-loop-audit/dashboards/build.mjs`, never the JSON.
+
+**The release label:** every series carries `release` (the image tag; `OBS_RELEASE`, else `GIT_SHA`, else `IMAGE_TAG`). The release-comparison dashboard groups its last section by it, so during a rollout the old and the new release show side by side. A process started without any of the three has no label (its release name is empty on the graphs).
+
+**The web server:** `scrape-demo.mjs --web` (after `pnpm --filter @crm/web build`) runs the built Next.js server as a fourth target; `web-metrics-check.mjs` starts it five times with different `OBS_*` settings and asks its own `/metrics`. `WebEventLoopBlockingWithImpact` is the web counterpart of the API rule (16 rules in all).
 
 **Regression gate:** `bash tools/event-loop-audit/ci-regression.sh` (or the manual `event-loop-regression` job in the Quality workflow) runs one load of the built API and compares it with `docs/performance/event-loop/ci-baseline.json` through `tools/event-loop-audit/regression-check.mjs`. Exit 0 no regression found, 1 regression, 2 cannot decide. **A 2 is not a pass:** no baseline, a baseline from another kind of machine, an aborted run, or a failure on a host whose round trips are far from the baseline's (rerun it on a quiet machine). Record a baseline with three separate runs (`--record`, header of the script). Do not record one on a laptop that is busy: the recorded spread is the tolerance. `run-load.mjs --inject-block-ms=300` proves the gate still trips. Evidence and its limits: `evidence/regression-gate-local.json`.
 
