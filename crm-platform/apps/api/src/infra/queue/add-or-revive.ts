@@ -14,16 +14,17 @@ export interface ReviveQueue<D> {
  * until someone noticed (ASYNC-018/050). A failed job is removed and the work is queued afresh; a waiting, active, delayed or
  * completed job is left alone.
  *
- * The common case (no job with that id) costs one extra Redis call. Not atomic: a concurrent producer can add between the remove and
+ * A producer that only re-adds when its own record says nothing is queued (a resumed broadcast) may also replace a `completed` job, which
+ * is then stale: pass `replaceStates`. The common case (no job with that id) costs one extra Redis call. Not atomic: a concurrent producer can add between the remove and
  * the add, in which case BullMQ simply ignores the second add.
  */
 export async function addOrRevive<D>(
   queue: ReviveQueue<D>,
   name: string,
   data: D,
-  opts: { jobId?: string } = {},
+  { replaceStates = ['failed'], ...opts }: { jobId?: string; replaceStates?: string[] } = {},
 ): Promise<void> {
-  if (opts.jobId !== undefined && (await queue.getJobState(opts.jobId)) === 'failed') {
+  if (opts.jobId !== undefined && replaceStates.includes(await queue.getJobState(opts.jobId))) {
     await (await queue.getJob(opts.jobId))?.remove();
   }
   await queue.add(name, data, opts);

@@ -53,4 +53,26 @@ describe('addOrRevive', () => {
     await addOrRevive(queue, 'payload', { n: 1 });
     expect(calls).toEqual(['add']);
   });
+
+  it('can also replace a completed job, for a producer that only re-adds when its own record says nothing is queued', async () => {
+    const { queue, calls } = fakeQueue('completed');
+    await addOrRevive(
+      queue,
+      'payload',
+      { n: 1 },
+      { jobId: 'j1', replaceStates: ['failed', 'completed'] },
+    );
+    expect(calls).toEqual(['state', 'remove', 'add']);
+  });
+
+  it('still leaves a waiting job alone when completed ones may be replaced', async () => {
+    const { queue, calls } = fakeQueue('waiting');
+    await addOrRevive(
+      queue,
+      'payload',
+      { n: 1 },
+      { jobId: 'j1', replaceStates: ['failed', 'completed'] },
+    );
+    expect(calls).toEqual(['state', 'add']);
+  });
 });
