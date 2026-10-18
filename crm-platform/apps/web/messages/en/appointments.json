@@ -236,7 +236,7 @@
       "declineTitle": "Decline this request?",
       "declineMessage": "The customer is told the request was declined and the time becomes free again.",
       "declineConfirm": "Decline request",
-      "remindersNote": "Reminders follow the booking type. Delivery is not tracked per reminder."
+      "remindersNote": "Reminders follow the booking type. They are set under Appointment settings or in the booking type."
     },
     "source": {
       "chat": "A chat flow",
@@ -407,9 +407,9 @@
         "depositTooHigh": "The deposit cannot be more than the total (fee plus tax).",
         "cancelFeeInvalid": "Enter an amount such as 25.00.",
         "cancelWindowInvalid": "Enter a whole number of minutes from 0 to {cancelWindowMax}.",
-        "reminderInvalid": "Enter whole minutes before the start, from 1 to {reminderMax}.",
-        "remindersDuplicate": "Each reminder needs a different time.",
-        "remindersTooMany": "A booking type can have at most {reminders} reminders.",
+        "reminderInvalid": "Enter a whole number for the time, up to 30 days.",
+        "remindersDuplicate": "Each reminder or follow-up needs a different time.",
+        "remindersTooMany": "A booking type can have at most {reminders} reminders and follow-ups.",
         "questionLabelRequired": "Give the question a label (up to {questionLabelMax} characters).",
         "questionsTooMany": "A booking type can have at most {questions} questions.",
         "questionOptionsRequired": "Add at least one choice, one per line.",
@@ -417,7 +417,9 @@
         "overridesInvalid": "Fix the dates marked in the list of date overrides.",
         "descriptionTooLong": "The description can be at most {descriptionMax} characters.",
         "locationTooLong": "The location can be at most {locationMax} characters.",
-        "server": "The server did not accept this value. Check it and try again."
+        "server": "The server did not accept this value. Check it and try again.",
+        "reminderChannelsNone": "Choose at least one channel.",
+        "reminderBodyTooLong": "The message, subject or label is too long."
       },
       "service": {
         "title": "Service details",
@@ -597,25 +599,6 @@
           "reschedule": "Hi {name}, your {type} moved to {slot}. Details: {manage_link}"
         },
         "templatesNote": "Approved WhatsApp templates cannot be chosen yet. Messages go out as the plain text above."
-      },
-      "reminders": {
-        "title": "Reminders",
-        "hint": "Times must be distinct (1440 = 24 h before, 180 = 3 h before). Up to {max}.",
-        "add": "Add reminder",
-        "quickAdd": "Quick add",
-        "quick": {
-          "h24": "24 h",
-          "h3": "3 h",
-          "h1": "1 h",
-          "m15": "15 min"
-        },
-        "empty": "No reminders. Customers only get the confirmation.",
-        "offsetOf": "Reminder {n}, minutes before the start",
-        "minBefore": "min before",
-        "labelPlaceholder": "24h",
-        "labelOf": "Reminder {n}, label",
-        "remove": "Remove reminder {n}",
-        "count": "{count} of {max} reminders"
       },
       "questions": {
         "title": "Questionnaire",
@@ -1294,6 +1277,151 @@
         "cancel": "Cancel booking",
         "reschedule": "Move booking",
         "acknowledge": "Accept"
+      }
+    },
+    "reminders": {
+      "title": "Reminders and follow-ups",
+      "hint": "Message the contact before an appointment starts or after it ends. Each one is off until you switch it on. Up to {max} per booking type.",
+      "quickAdd": "Quick add",
+      "quick": {
+        "h24": "24 hours before",
+        "h3": "3 hours before",
+        "h1": "1 hour before",
+        "m15": "15 minutes before",
+        "after2h": "2 hours after",
+        "afterDay": "1 day after"
+      },
+      "add": "Add reminder",
+      "empty": "No reminders or follow-ups. The contact only gets the confirmation.",
+      "enabledOf": "Send reminder {n}",
+      "on": "On",
+      "off": "Off",
+      "offsetOf": "Reminder {n}, amount of time",
+      "unitOf": "Reminder {n}, unit of time",
+      "kindOf": "Reminder {n}, before or after",
+      "units": {
+        "minutes": "minutes",
+        "hours": "hours",
+        "days": "days"
+      },
+      "kind": {
+        "before": "before the appointment starts",
+        "after": "after the appointment ends"
+      },
+      "editMessage": "Message and channels",
+      "hideMessage": "Hide",
+      "remove": "Remove reminder {n}",
+      "withTemplate": "WhatsApp template",
+      "channelsTitle": "Send on",
+      "channelsHint": "The first channel that can deliver is used, the next ones are fallbacks. Nobody gets the same reminder twice.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "Email"
+      },
+      "moveUp": "Try {channel} earlier",
+      "moveDown": "Try {channel} later",
+      "removeChannel": "Do not use {channel}",
+      "messageTitle": "Message",
+      "placeholderMeaning": {
+        "name": "The contact's name",
+        "type": "The booking type's name",
+        "slot": "Date and time together",
+        "date": "The date",
+        "time": "The time",
+        "location": "The place, or the join link when it is online",
+        "join_link": "The link to join when it is online",
+        "manage_link": "The link to move or cancel the appointment"
+      },
+      "bodyHintBefore": "Leave it empty to use the booking type's reminder message, or the standard text.",
+      "bodyHintAfter": "Leave it empty to use the standard follow-up text.",
+      "subjectTitle": "Email subject",
+      "subjectPlaceholder": "Leave empty for a standard subject",
+      "templateTitle": "WhatsApp template",
+      "templateNone": "None: free text, only inside the 24 hour window",
+      "templateUnknown": "A template that is no longer available",
+      "templateHint": "Outside 24 hours after the contact last wrote, WhatsApp only delivers an approved template. Its variables are filled in this order: 1 name, 2 service, 3 date, 4 time, 5 place, 6 join link, 7 manage link.",
+      "labelTitle": "Label (optional)",
+      "labelPlaceholder": "e.g. Day before",
+      "previewTitle": "Preview",
+      "previewNote": "An example with sample values. The real message uses the appointment's own details.",
+      "count": "{count} of {max} reminders and follow-ups",
+      "note": "A reminder is never sent after the appointment starts. If the appointment is cancelled or moved, what was waiting stops and is planned again for the new time. Quiet hours hold a message until they end, and a contact who opted out or sits on the do-not-call list is skipped.",
+      "sample": {
+        "name": "Alex",
+        "type": "Consultation",
+        "location": "12 Main Street"
+      },
+      "settingsTitle": "Reminders and follow-ups",
+      "settingsDescription": "For each booking type, message the contact before an appointment and follow up after it. Everything is off until you switch it on.",
+      "loading": "Loading booking types",
+      "noTypes": "There are no booking types yet. Create one to set its reminders.",
+      "paused": "Paused",
+      "summaryNone": "None set",
+      "summary": "{on} of {total} on",
+      "unsaved": "Unsaved changes",
+      "conflict": "This booking type was changed somewhere else. Reload to see the latest version before you save.",
+      "reload": "Reload",
+      "discard": "Discard changes",
+      "saving": "Saving",
+      "save": "Save reminders",
+      "saved": "Reminders saved for {name}.",
+      "readOnly": "You can see these reminders but not change them.",
+      "fixFirst": "Fix the highlighted reminders first.",
+      "problems": {
+        "offsetInvalid": "Enter a whole number for the time, up to 30 days.",
+        "duplicate": "Each reminder or follow-up needs a different time.",
+        "channelsNone": "Choose at least one channel.",
+        "bodyTooLong": "The message is too long.",
+        "subjectTooLong": "The subject is too long.",
+        "labelTooLong": "The label is too long.",
+        "tooMany": "At most 8 reminders and follow-ups for one booking type."
+      },
+      "noneOn": "No reminders or follow-ups are switched on for this booking type.",
+      "when": {
+        "before": "{count, plural, one {# minute before} other {# minutes before}}",
+        "after": "{count, plural, one {# minute after} other {# minutes after}}"
+      },
+      "sentOn": "Sent on {channel}",
+      "status": {
+        "scheduled": "Scheduled",
+        "pending": "Due",
+        "sending": "Sending",
+        "held": "Waiting",
+        "sent": "Sent",
+        "skipped": "Not sent",
+        "failed": "Failed",
+        "cancelled": "Cancelled"
+      },
+      "reasons": {
+        "rule_removed": "The reminder was removed before it was due.",
+        "rule_off": "The reminder was switched off before it was sent.",
+        "rescheduled": "The appointment was moved, so this was replaced.",
+        "booking_cancelled": "The appointment was cancelled.",
+        "booking_declined": "The request was declined.",
+        "booking_no_show": "Marked as a no-show.",
+        "booking_not_confirmed": "The appointment is not confirmed.",
+        "started": "The appointment had already started.",
+        "expired": "It was too late to send.",
+        "no_contact_point": "The contact has no number or address for this channel.",
+        "no_channel": "No channel could deliver it.",
+        "no_sender": "No connected sender for this channel.",
+        "template_required": "WhatsApp needs an approved template outside the 24 hour window.",
+        "template_unavailable": "The chosen WhatsApp template cannot be sent.",
+        "quiet_hours_too_late": "Quiet hours ran past the start.",
+        "no_consent": "No recorded consent.",
+        "opted_out": "The contact opted out.",
+        "do_not_call": "The number is on the do-not-call list.",
+        "minor": "The contact is flagged as a minor.",
+        "processing_restricted": "Messaging this contact is restricted.",
+        "plan_limit": "The plan's limit is reached.",
+        "quiet_hours": "Waiting for quiet hours to end.",
+        "channel_unavailable": "The channel is not connected right now.",
+        "wallet_empty": "The wallet is empty.",
+        "send_halted": "Sending is halted.",
+        "provider_error": "The provider refused it.",
+        "interrupted": "It was interrupted and not retried.",
+        "internal_error": "Something went wrong."
       }
     }
   }

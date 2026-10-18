@@ -236,7 +236,7 @@
       "declineTitle": "Odrzucić tę prośbę?",
       "declineMessage": "Klient zostanie powiadomiony o odrzuceniu prośby, a termin znów będzie wolny.",
       "declineConfirm": "Odrzuć prośbę",
-      "remindersNote": "Przypomnienia wynikają z typu rezerwacji. Dostarczenie nie jest śledzone dla każdego przypomnienia."
+      "remindersNote": "Przypomnienia zależą od typu rezerwacji. Ustawia się je w Ustawieniach spotkań lub w typie rezerwacji."
     },
     "source": {
       "chat": "Przepływ czatu",
@@ -407,9 +407,6 @@
         "depositTooHigh": "Zadatek nie może być wyższy niż suma (opłata plus podatek).",
         "cancelFeeInvalid": "Wpisz kwotę, np. 25.00.",
         "cancelWindowInvalid": "Wpisz liczbę całkowitą minut od 0 do {cancelWindowMax}.",
-        "reminderInvalid": "Wpisz pełne minuty przed rozpoczęciem, od 1 do {reminderMax}.",
-        "remindersDuplicate": "Każde przypomnienie wymaga innego czasu.",
-        "remindersTooMany": "Typ rezerwacji może mieć maksymalnie {reminders} przypomnień.",
         "questionLabelRequired": "Nadaj pytaniu etykietę (do {questionLabelMax} znaków).",
         "questionsTooMany": "Typ rezerwacji może mieć maksymalnie {questions} pytań.",
         "questionOptionsRequired": "Dodaj co najmniej jeden wybór, po jednym w wierszu.",
@@ -417,7 +414,12 @@
         "overridesInvalid": "Popraw daty oznaczone na liście wyjątków dat.",
         "descriptionTooLong": "Opis może mieć maksymalnie {descriptionMax} znaków.",
         "locationTooLong": "Lokalizacja może mieć maksymalnie {locationMax} znaków.",
-        "server": "Serwer nie zaakceptował tej wartości. Sprawdź ją i spróbuj ponownie."
+        "server": "Serwer nie zaakceptował tej wartości. Sprawdź ją i spróbuj ponownie.",
+        "reminderInvalid": "Wpisz liczbę całkowitą, maksymalnie 30 dni.",
+        "remindersDuplicate": "Każde przypomnienie lub wiadomość następcza musi mieć inny czas.",
+        "reminderChannelsNone": "Wybierz co najmniej jeden kanał.",
+        "reminderBodyTooLong": "Wiadomość, temat lub etykieta jest za długa.",
+        "remindersTooMany": "Typ rezerwacji może mieć maksymalnie {reminders} przypomnień i wiadomości następczych."
       },
       "service": {
         "title": "Szczegóły usługi",
@@ -597,25 +599,6 @@
           "reschedule": "Cześć {name}, Twoja rezerwacja {type} została przeniesiona na {slot}. Szczegóły: {manage_link}"
         },
         "templatesNote": "Zatwierdzonych szablonów WhatsApp nie można jeszcze wybrać. Wiadomości są wysyłane jako zwykły tekst powyżej."
-      },
-      "reminders": {
-        "title": "Przypomnienia",
-        "hint": "Czasy muszą się różnić (1440 = 24 godz. przed, 180 = 3 godz. przed). Do {max}.",
-        "add": "Dodaj przypomnienie",
-        "quickAdd": "Szybkie dodanie",
-        "quick": {
-          "h24": "24 godz.",
-          "h3": "3 godz.",
-          "h1": "1 godz.",
-          "m15": "15 min"
-        },
-        "empty": "Brak przypomnień. Klienci otrzymują tylko potwierdzenie.",
-        "offsetOf": "Przypomnienie {n}, minut przed rozpoczęciem",
-        "minBefore": "min przed",
-        "labelPlaceholder": "24 godz.",
-        "labelOf": "Przypomnienie {n}, etykieta",
-        "remove": "Usuń przypomnienie {n}",
-        "count": "{count} z {max} przypomnień"
       },
       "questions": {
         "title": "Kwestionariusz",
@@ -1295,6 +1278,151 @@
         "reschedule": "Przenieś rezerwację",
         "acknowledge": "Zaakceptuj"
       }
+    },
+    "reminders": {
+      "title": "Przypomnienia i wiadomości następcze",
+      "quickAdd": "Szybkie dodawanie",
+      "quick": {
+        "h24": "24 godziny przed",
+        "h3": "3 godziny przed",
+        "h1": "1 godzina przed",
+        "m15": "15 minut przed",
+        "after2h": "2 godziny po",
+        "afterDay": "1 dzień po"
+      },
+      "add": "Dodaj przypomnienie",
+      "empty": "Brak przypomnień i wiadomości następczych. Kontakt otrzyma tylko potwierdzenie.",
+      "on": "Wł.",
+      "off": "Wył.",
+      "units": {
+        "minutes": "minut",
+        "hours": "godzin",
+        "days": "dni"
+      },
+      "kind": {
+        "before": "przed rozpoczęciem spotkania",
+        "after": "po zakończeniu spotkania"
+      },
+      "editMessage": "Wiadomość i kanały",
+      "hideMessage": "Ukryj",
+      "withTemplate": "Szablon WhatsApp",
+      "channelsTitle": "Wyślij przez",
+      "channelsHint": "Używany jest pierwszy kanał, który może dostarczyć wiadomość, kolejne są zapasowe. Nikt nie dostanie tego samego przypomnienia dwa razy.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "E-mail"
+      },
+      "messageTitle": "Wiadomość",
+      "placeholderMeaning": {
+        "name": "Imię i nazwisko kontaktu",
+        "type": "Nazwa typu rezerwacji",
+        "slot": "Data i godzina razem",
+        "date": "Data",
+        "time": "Godzina",
+        "location": "Miejsce lub link do dołączenia, gdy spotkanie jest online",
+        "join_link": "Link do dołączenia, gdy spotkanie jest online",
+        "manage_link": "Link do przeniesienia lub anulowania spotkania"
+      },
+      "bodyHintBefore": "Zostaw puste, aby użyć wiadomości przypominającej z typu rezerwacji lub tekstu standardowego.",
+      "bodyHintAfter": "Zostaw puste, aby użyć standardowego tekstu wiadomości następczej.",
+      "subjectTitle": "Temat e-maila",
+      "subjectPlaceholder": "Zostaw puste, aby użyć standardowego tematu",
+      "templateTitle": "Szablon WhatsApp",
+      "templateNone": "Brak: wolny tekst, tylko w ciągu 24 godzin",
+      "templateUnknown": "Szablon, który nie jest już dostępny",
+      "templateHint": "Po upływie 24 godzin od ostatniej wiadomości kontaktu WhatsApp dostarcza tylko zatwierdzony szablon. Zmienne są wypełniane w tej kolejności: 1 imię, 2 usługa, 3 data, 4 godzina, 5 miejsce, 6 link do dołączenia, 7 link do zarządzania.",
+      "labelTitle": "Etykieta (opcjonalnie)",
+      "labelPlaceholder": "np. Dzień wcześniej",
+      "previewTitle": "Podgląd",
+      "previewNote": "Przykład z przykładowymi wartościami. Prawdziwa wiadomość używa danych danego spotkania.",
+      "note": "Przypomnienie nigdy nie jest wysyłane po rozpoczęciu spotkania. Jeśli spotkanie zostanie anulowane lub przeniesione, oczekujące wiadomości są wstrzymywane i planowane ponownie na nowy termin. Godziny ciszy wstrzymują wiadomość do ich końca, a kontakty, które zrezygnowały lub są na liście „nie dzwonić”, są pomijane.",
+      "sample": {
+        "type": "Konsultacja",
+        "name": "Alex",
+        "location": "ul. Główna 12"
+      },
+      "settingsTitle": "Przypomnienia i wiadomości następcze",
+      "settingsDescription": "Dla każdego typu rezerwacji wyślij kontaktowi wiadomość przed spotkaniem i następczą po nim. Wszystko jest wyłączone, dopóki tego nie włączysz.",
+      "loading": "Wczytywanie typów rezerwacji",
+      "noTypes": "Nie ma jeszcze typów rezerwacji. Utwórz jeden, aby ustawić jego przypomnienia.",
+      "paused": "Wstrzymane",
+      "summaryNone": "Nie ustawiono",
+      "unsaved": "Niezapisane zmiany",
+      "conflict": "Ten typ rezerwacji został zmieniony gdzie indziej. Wczytaj ponownie, aby zobaczyć najnowszą wersję przed zapisem.",
+      "reload": "Wczytaj ponownie",
+      "discard": "Odrzuć zmiany",
+      "saving": "Zapisywanie",
+      "save": "Zapisz przypomnienia",
+      "readOnly": "Możesz zobaczyć te przypomnienia, ale nie możesz ich zmieniać.",
+      "fixFirst": "Najpierw popraw wyróżnione przypomnienia.",
+      "problems": {
+        "offsetInvalid": "Wpisz liczbę całkowitą, maksymalnie 30 dni.",
+        "duplicate": "Każde przypomnienie lub wiadomość następcza musi mieć inny czas.",
+        "bodyTooLong": "Wiadomość jest za długa.",
+        "subjectTooLong": "Temat jest za długi.",
+        "labelTooLong": "Etykieta jest za długa.",
+        "tooMany": "Maksymalnie 8 przypomnień i wiadomości następczych dla jednego typu rezerwacji.",
+        "channelsNone": "Wybierz co najmniej jeden kanał."
+      },
+      "noneOn": "Dla tego typu rezerwacji nie włączono żadnych przypomnień ani wiadomości następczych.",
+      "status": {
+        "scheduled": "Zaplanowane",
+        "pending": "Do wysłania",
+        "sending": "Wysyłanie",
+        "held": "Oczekuje",
+        "skipped": "Niewysłane",
+        "failed": "Nieudane",
+        "cancelled": "Anulowane",
+        "sent": "Wysłane"
+      },
+      "reasons": {
+        "rule_off": "Przypomnienie zostało wyłączone przed wysłaniem.",
+        "rescheduled": "Spotkanie zostało przeniesione, więc to przypomnienie zastąpiono.",
+        "booking_cancelled": "Spotkanie zostało anulowane.",
+        "booking_declined": "Prośba została odrzucona.",
+        "booking_no_show": "Oznaczono jako nieobecność.",
+        "booking_not_confirmed": "Spotkanie nie jest potwierdzone.",
+        "started": "Spotkanie już się rozpoczęło.",
+        "expired": "Było już za późno na wysyłkę.",
+        "no_contact_point": "Kontakt nie ma numeru ani adresu dla tego kanału.",
+        "no_channel": "Żaden kanał nie mógł dostarczyć wiadomości.",
+        "no_sender": "Brak podłączonego nadawcy dla tego kanału.",
+        "template_required": "Poza oknem 24 godzin WhatsApp wymaga zatwierdzonego szablonu.",
+        "template_unavailable": "Wybranego szablonu WhatsApp nie można wysłać.",
+        "quiet_hours_too_late": "Godziny ciszy trwały dłużej niż do rozpoczęcia.",
+        "no_consent": "Brak zapisanej zgody.",
+        "opted_out": "Kontakt zrezygnował z wiadomości.",
+        "minor": "Kontakt jest oznaczony jako niepełnoletni.",
+        "processing_restricted": "Wysyłanie wiadomości do tego kontaktu jest ograniczone.",
+        "channel_unavailable": "Kanał nie jest teraz połączony.",
+        "wallet_empty": "Portfel jest pusty.",
+        "send_halted": "Wysyłka jest wstrzymana.",
+        "provider_error": "Dostawca odrzucił wiadomość.",
+        "interrupted": "Wysyłka została przerwana i nie ponowiono jej.",
+        "internal_error": "Coś poszło nie tak.",
+        "rule_removed": "Przypomnienie zostało usunięte przed terminem.",
+        "do_not_call": "Numer jest na liście „nie dzwonić”.",
+        "plan_limit": "Osiągnięto limit planu.",
+        "quiet_hours": "Oczekiwanie na koniec godzin ciszy."
+      },
+      "hint": "Wyślij wiadomość do kontaktu przed rozpoczęciem spotkania lub po jego zakończeniu. Każda jest wyłączona, dopóki jej nie włączysz. Maksymalnie {max} na typ rezerwacji.",
+      "enabledOf": "Wyślij przypomnienie {n}",
+      "offsetOf": "Przypomnienie {n}, ilość czasu",
+      "unitOf": "Przypomnienie {n}, jednostka czasu",
+      "kindOf": "Przypomnienie {n}, przed czy po",
+      "remove": "Usuń przypomnienie {n}",
+      "moveUp": "Użyj {channel} wcześniej",
+      "moveDown": "Użyj {channel} później",
+      "removeChannel": "Nie używaj {channel}",
+      "count": "{count} z {max} przypomnień i wiadomości następczych",
+      "summary": "Włączone: {on} z {total}",
+      "saved": "Zapisano przypomnienia dla: {name}.",
+      "when": {
+        "before": "{count, plural, one {# minuta przed} few {# minuty przed} many {# minut przed} other {# minuty przed}}",
+        "after": "{count, plural, one {# minuta po} few {# minuty po} many {# minut po} other {# minuty po}}"
+      },
+      "sentOn": "Wysłano przez {channel}"
     }
   }
 }

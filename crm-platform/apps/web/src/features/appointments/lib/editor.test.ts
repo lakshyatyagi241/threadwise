@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { newDraft, validateDraft } from './booking-form';
+import { reminderKeys } from './reminder-rules';
 import {
   COMMON_CURRENCIES,
   PROBLEM_CODES,
+  QUICK_FOLLOW_UPS,
   QUICK_REMINDERS,
   addReminder,
   blockersOf,
@@ -16,7 +18,6 @@ import {
   newQuestion,
   newReminder,
   publicLink,
-  reminderOffsets,
   serverFieldKey,
   serverProblems,
   stepsWithProblems,
@@ -162,19 +163,28 @@ describe('draftPrice', () => {
 });
 
 describe('reminders', () => {
-  it('quick-adds each chip once', () => {
+  it('quick-adds each chip once, and a rule is added OFF', () => {
     let list = addReminder([], 1440, '24 h');
     list = addReminder(list, 1440, '24 h');
     expect(list).toHaveLength(1);
+    expect(list[0]!.enabled).toBe(false);
     list = addReminder(list, 60, '1 h');
-    expect([...reminderOffsets(list)].sort((a, b) => a - b)).toEqual([60, 1440]);
+    expect([...reminderKeys(list)].sort()).toEqual(['before:1440', 'before:60']);
     expect(QUICK_REMINDERS).toEqual([1440, 180, 60, 15]);
+    expect(QUICK_FOLLOW_UPS).toEqual([120, 1440]);
+  });
+
+  it('the same moment before the start and after the end are two different rules', () => {
+    let list = addReminder([], 60, '', 'before');
+    list = addReminder(list, 60, '', 'after');
+    expect(list.map((r) => r.kind)).toEqual(['before', 'after']);
+    expect([...reminderKeys(list)].sort()).toEqual(['after:60', 'before:60']);
   });
 
   it('fills an empty row before adding another', () => {
     const list = addReminder([newReminder('', '')], 180, '3 h');
     expect(list).toHaveLength(1);
-    expect(list[0]).toMatchObject({ offset: '180', label: '3 h' });
+    expect(list[0]).toMatchObject({ offset: '3', unit: 'hours', label: '3 h' });
   });
 
   it('stops at eight', () => {
@@ -184,9 +194,9 @@ describe('reminders', () => {
     expect(addReminder(list, 999)).toHaveLength(8);
   });
 
-  it('does not count an unreadable box as an offset', () => {
-    expect(reminderOffsets([newReminder('abc'), newReminder(''), newReminder(' 45 ')])).toEqual(
-      new Set([45]),
+  it('does not count an unreadable box as a moment', () => {
+    expect(reminderKeys([newReminder('abc'), newReminder(''), newReminder(' 45 ')])).toEqual(
+      new Set(['before:45']),
     );
   });
 });

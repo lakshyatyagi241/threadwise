@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { BookingType } from '../api/schemas';
 import { emptyWeek } from './availability';
+import { newReminder } from './reminder-rules';
 import {
   canPreview,
   draftToInput,
@@ -62,8 +63,39 @@ const stored: BookingType = {
   overrides: [{ date: '2026-12-25', closed: true, from: null, to: null, reason: 'Christmas' }],
   templates: [{ event: 'reminder', waTemplateId: null, plainBody: 'See you {{slot}}' }],
   reminders: [
-    { offsetMinutes: 180, label: '3h' },
-    { offsetMinutes: 1440, label: '24h' },
+    {
+      id: 'r-180',
+      offsetMinutes: 180,
+      label: '3h',
+      isActive: true,
+      kind: 'before',
+      channels: ['sms', 'email'],
+      subject: null,
+      body: 'Hi {{name}}',
+      waTemplateId: null,
+    },
+    {
+      id: 'r-1440',
+      offsetMinutes: 1440,
+      label: '24h',
+      isActive: false,
+      kind: 'before',
+      channels: ['whatsapp', 'sms', 'email'],
+      subject: null,
+      body: null,
+      waTemplateId: null,
+    },
+    {
+      id: 'r-after',
+      offsetMinutes: 120,
+      label: null,
+      isActive: true,
+      kind: 'after',
+      channels: ['email'],
+      subject: 'Thanks',
+      body: null,
+      waTemplateId: null,
+    },
   ],
   questions: [
     {
@@ -144,7 +176,7 @@ describe('validation', () => {
 
   it('wants reminders to be positive, distinct and at most eight', () => {
     const d = base();
-    const r = (id: string, offset: string) => ({ id, offset, label: '' });
+    const r = (id: string, offset: string) => ({ ...newReminder(offset), id });
     expect(validateDraft({ ...d, reminders: [r('a', '1440'), r('b', '1440')] })['reminder:b']).toBe(
       'remindersDuplicate',
     );
@@ -224,8 +256,19 @@ describe('conversion', () => {
     expect(input.overrides).toEqual([
       { date: '2026-12-25', closed: true, from: null, to: null, reason: 'Christmas' },
     ]);
-    // Reminders go out furthest first.
-    expect(input.reminders.map((r) => r.offsetMinutes)).toEqual([1440, 180]);
+    // Reminders go out furthest first, then the follow-ups; a saved rule keeps its id, its switch and its channels.
+    expect(input.reminders.map((r) => [r.kind, r.offsetMinutes, r.isActive])).toEqual([
+      ['before', 1440, false],
+      ['before', 180, true],
+      ['after', 120, true],
+    ]);
+    expect(input.reminders[0]).toMatchObject({ id: 'r-1440' });
+    expect(input.reminders[1]).toMatchObject({
+      id: 'r-180',
+      channels: ['sms', 'email'],
+      body: 'Hi {{name}}',
+    });
+    expect(input.reminders[2]).toMatchObject({ subject: 'Thanks', channels: ['email'] });
     expect(input.questions).toEqual([
       {
         label: 'Style',
@@ -246,7 +289,7 @@ describe('conversion', () => {
       increment: '',
       maxPerDay: '',
       bufferBefore: '',
-      reminders: [{ id: 'a', offset: '', label: '' }],
+      reminders: [newReminder('')],
       questions: [
         { id: 'q', label: ' ', type: 'text' as const, optionsText: '', required: true, map: '' },
       ],

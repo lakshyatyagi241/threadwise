@@ -27,7 +27,7 @@ A booking type is one service customers can book, such as a 30-minute demo or an
 
 1. Open **Settings**, then **Booking types**. You can also open **Booking types** from **Appointments**.
 2. Select **New booking type** to open the editor, or open an existing service from its name.
-3. Work through the five steps shown at the top: **Service** (name, description, location, colour and public link), **Timing** (duration, start step, capacity, buffers, notice and how far ahead people can book), **Availability** (weekly hours and date overrides), **Pricing** and **Messaging** (reminders, questions and the four customer messages).
+3. Work through the five steps shown at the top: **Service** (name, description, location, colour and public link), **Timing** (duration, start step, capacity, buffers, notice and how far ahead people can book), **Availability** (weekly hours and date overrides), **Pricing** and **Messaging** (reminders and follow-ups, questions and the four customer messages).
 4. Select **Create booking type** or **Save changes**. A new type starts paused, so you can check it first.
 5. Turn the **Active** switch on in the list when you are ready. A paused service takes no new bookings.
 

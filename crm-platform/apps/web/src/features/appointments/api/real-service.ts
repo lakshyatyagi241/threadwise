@@ -28,6 +28,7 @@ import type {
   BookingTypeInput,
   CalendarConnection,
   CalendarOption,
+  WaTemplateOption,
   SpreadsheetOption,
   PreviewDraft,
   PublicBookInput,
@@ -52,6 +53,7 @@ import {
   toPublicManage,
   toPublicTypePage,
   toSlotList,
+  toReminderBody,
   toTypeBody,
 } from './wire';
 
@@ -93,6 +95,12 @@ const counts = appointmentCountsResponseSchema.transform((c): AppointmentCounts 
 const calendarOne = calendarStatusResponseSchema.transform(toCalendar);
 const calendarOptions = calendarListResponseSchema.transform(toCalendarOptions);
 const typeOne = bookingTypeResponseSchema.transform(toBookingType);
+/** Only what a rule's template picker needs; the rest of a template summary is not this screen's business. */
+const waTemplateList = z
+  .object({
+    data: z.array(z.object({ id: z.string(), name: z.string(), language: z.string() }).passthrough()),
+  })
+  .transform((r) => r.data.map((x) => ({ id: x.id, name: x.name, language: x.language })));
 const typeList = bookingTypeListResponseSchema.transform((l) => l.data.map(toBookingType));
 
 /** The staff calls of the real API (`/v2/appointments`, `/v2/booking-types`), converted by `./wire`. */
@@ -166,6 +174,28 @@ export const realAppointmentsApi = {
       method: 'PATCH',
       body: toTypeBody(input, type.rowVersion ?? 1),
       schema: typeOne,
+    });
+  },
+  /** Only the reminder rules change: the other child lists stay as they are (a PATCH names just what it changes). */
+  updateTypeReminders(
+    type: Pick<BookingType, 'id' | 'rowVersion'>,
+    reminders: BookingTypeInput['reminders'],
+  ): Promise<BookingType> {
+    return call(`/booking-types/${type.id}`, {
+      method: 'PATCH',
+      body: {
+        rowVersion: type.rowVersion ?? 1,
+        reminders: toReminderBody(reminders),
+      },
+      schema: typeOne,
+    });
+  },
+  /** The approved WhatsApp templates a reminder can use. */
+  waTemplates(signal?: AbortSignal): Promise<WaTemplateOption[]> {
+    return call('/templates', {
+      query: { status: 'approved', limit: 100 },
+      schema: waTemplateList,
+      signal,
     });
   },
   /** Pausing and activating are an update of `isActive` alone: the child lists stay as they are. */

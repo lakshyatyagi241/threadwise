@@ -78,7 +78,19 @@ dev seed for new ones; a running environment sees the keys when the 10-minute gr
       "sortOrder": 0
     }
   ],
-  "reminders": [{ "id": "…", "offsetMinutes": 1440, "label": "24h", "isActive": true }],
+  "reminders": [
+    {
+      "id": "…",
+      "kind": "before",
+      "offsetMinutes": 1440,
+      "label": "24h",
+      "isActive": true,
+      "channels": ["whatsapp", "sms", "email"],
+      "subject": null,
+      "body": null,
+      "waTemplateId": null
+    }
+  ],
   "templates": [
     {
       "event": "reminder",
@@ -137,6 +149,16 @@ Template variables: `{{type}} {{slot}} {{name}} {{date}} {{time}} {{location}} {
 | `PUT /booking-types/:id/overrides/:date`    | `record.booking-types.update` | `{ isClosed, from?, to?, reason? }`: one date, the rest untouched                                      |
 | `DELETE /booking-types/:id/overrides/:date` | `record.booking-types.update` | 404 when the date has no override                                                                      |
 | `DELETE /booking-types/:id`                 | `record.booking-types.delete` | 204; `409 BOOKING_TYPE_HAS_UPCOMING` while pending or confirmed bookings are still to come             |
+
+**Reminder rules** (`reminders`, BL-283). One item per rule; `kind` is `before` (`offsetMinutes` before the start) or `after` (`offsetMinutes`
+after the END: the after-visit follow-up); `offsetMinutes` is 1 to 43,200 (30 days) and `(kind, offsetMinutes)` is distinct within a type (the
+same minutes before and after are two rules); up to 8 per type. `isActive` defaults to **false**: a rule never sends until it is switched on.
+`channels` is an ordered preference over `whatsapp | sms | email` (1 to 3, no repeats; default all three): the first channel that can deliver is
+used, the others are fallbacks, a contact never gets two copies. `body` (up to 2000 characters) is the text with the placeholders `{{name}}`,
+`{{type}}`, `{{title}}`, `{{slot}}`, `{{date}}`, `{{time}}`, `{{location}}`, `{{join_link}}` and `{{manage_link}}`; empty means the type's own `reminder`
+message (before) or the built-in follow-up text (after). `subject` (up to 191) is the email subject. `waTemplateId` is an approved WhatsApp
+template of the workspace (422 when it is not); its numbered variables are filled in the order name, service, date, time, place, join link,
+manage link. A `PATCH` that names only `reminders` and `rowVersion` changes only the rules.
 
 Literal paths (`options`, `preview-slots`) are registered before `:id`. **Children**: `questions` and `reminders` items that carry an `id`
 keep their row (ids stay stable across edits); items without one are created; rows not named are deleted. `availability`, `overrides` and
@@ -325,7 +347,8 @@ what a consumer decides on, **never** the notes, the manage link or the invitee'
 | `appointment.cancelled`                        | cancelled (staff, customer, system)                   | `from`, `by`, `reason`, `notify`, `feeRecorded`            |
 | `appointment.rescheduled`                      | moved                                                 | `previousStartsAt`, `by`, `notify`                         |
 | `appointment.completed`, `appointment.no_show` | closed (staff, or the sweep for a checked-in booking) | `from`, `by`, `reason`, `notify`, `feeRecorded`            |
-| `appointment.reminder_due`                     | the sweep claims a (booking, offset)                  | `offsetMinutes`, `dueAt`, `startsAt`, `endsAt`, `timezone` |
+| `appointment.reminder_due`                     | the sweep claims a (booking, rule)                    | `kind`, `offsetMinutes`, `dueAt`, `startsAt`, `endsAt`, `timezone` |
+| `appointment.reminder_sent`, `_held`, `_skipped`, `_failed`, `_cancelled` | a reminder or follow-up reaches that outcome | `kind`, `reason` (a stable code), `channel` |
 | `appointment.payment_due`                      | a booking with an amount due to book is made          | `amount`, `currency`, `gatewaySlug`, `holdExpiresAt`       |
 | `appointment.payment_received`                 | a payment is recorded                                 | `amount`, `currency`, `method`, `reference`                |
 | `appointment.deleted`                          | a final-status booking is deleted                     |                                                            |
@@ -336,19 +359,29 @@ Every appointment event also carries `uuid`, `status`, `startsAt`, `endsAt`, `ti
 
 ## Workers (the worker process; `AppointmentsBookingWorkerModule`)
 
-- **Reminder sweep**, every 60 s, privileged: claims `(appointment, offset)` pairs with `INSERT ... ON CONFLICT DO NOTHING` on
-  `appointment_reminder_runs` and writes `appointment.reminder_due`, in one transaction. A reminder fires for a **confirmed** booking that has
-  not started, once `start - offset` has come, and only if that time is later than when the booking was made or last moved (`armed_at`):
-  Reference's "skip when booked inside the window". An inactive offset never fires. A reschedule deletes the booking's claims, so every offset is
-  armed again. Two workers sweeping at once announce each reminder exactly once.
+- **Reminder sweep**, every 60 s, privileged, two halves (BL-283). **Claim**: inserts a `pending` run in `appointment_reminder_runs` for every
+  `(appointment, active rule)` whose time has come, with `INSERT ... ON CONFLICT DO NOTHING` on `(appointment, kind, offset, armed_at)`, and
+  writes `appointment.reminder_due`, in one transaction. A `before` rule fires for a **confirmed** booking that has not started, once `start - offset`
+  has come, and only if that time is later than when the booking was made or last moved (`armed_at`): Reference's "skip when booked inside the
+  window". An `after` rule fires for a **confirmed or completed** booking once `end + offset` has come, and not more than a day late. A switched-off
+  rule never fires. A reschedule moves the booking's `armed_at`, which makes every rule claimable again for the new time; the runs still waiting for
+  the old time are `cancelled / rescheduled`. A cancel, decline or no-show cancels what was waiting. Two workers sweeping at once claim each run
+  exactly once. **Deliver**: takes the waiting runs (`pending`, or `held` whose time has come) with `FOR UPDATE SKIP LOCKED`, and for each, from the
+  booking and the rule as they are NOW: drops it if the rule was removed or switched off, the booking was moved, cancelled, declined or marked
+  no-show, a reminder is at or within two minutes of the start, or a follow-up is over a day late; otherwise tries the rule's channels in order
+  through the messenger and records the outcome (`sent` with the channel, `held` with when to look again, `skipped` or `failed` with a reason code)
+  on the run, in the audit log (`appointment_reminder_runs`), on the contact's timeline (`appointment_reminder` activity; the outcome and reason,
+  never the text or an address) and as `appointment.reminder_<outcome>`. A run found `sending` more than ten minutes after it was taken (a worker
+  died mid-delivery) is closed `failed / interrupted` and not retried: a duplicate SMS or email is worse than a missed one.
 - **Lifecycle sweep**, every 60 s: expires reservations; flags confirmed bookings that ended 15+ minutes ago with no check-in as
   `needsReview` (it never guesses a no-show); completes checked-in ones; cancels unpaid pending bookings whose hold ran out
   (`cancelledBy: system`, reason `payment_timeout`); declines pending requests whose time has passed (reason `expired`). Changes go through
   the same transition code as a click, as the system actor.
-- **Message consumer** (`appointment.booked | confirmed | declined | cancelled | rescheduled | reminder_due`): builds the customer message
-  and calls `AppointmentMessenger.send`. The type's plain body for the event (per configured channel) or the default text; WhatsApp when
-  there is a phone, else email; the booking is re-read at delivery (a stale message is dropped; a pending request is not "confirmed").
-  Idempotency key `<outbox event id>:<channel>`.
+- **Message consumer** (`appointment.booked | confirmed | declined | cancelled | rescheduled`): builds the customer message
+  and calls `AppointmentMessenger.send`. The type's plain body for the event (per configured channel) or the default text; with nothing
+  configured, WhatsApp when there is a phone and then email when there is an address (the first that delivers wins); the booking is re-read at
+  delivery (a stale message is dropped; a pending request is not "confirmed"). Idempotency key `<outbox event id>:<channel>`. A `held` or `failed`
+  answer throws, so the drain retries with backoff. (Reminders and follow-ups are no longer sent from here: the deliver half of the sweep does.)
 - **Calendar consumer** (`booked | confirmed | rescheduled | cancelled | declined`): writes or updates the event for a confirmed booking
   and stores `calendar.eventId` and `meetUrl`; deletes it on cancel or decline. A failure throws (the drain retries); the port is idempotent
   on the stored event id (and, before there is one, on the appointment: see Google Calendar). Nothing happens when no calendar is
@@ -627,7 +660,7 @@ Building a tool-calling loop for the customer-facing AI is a design of its own (
 1. **One booking path.** The tools call the services above; there is no second way to book. The double-booking guarantee, the plan cap, `maxPerDay`, buffers and the calendar's busy time (every connected calendar and iCal feed) apply exactly as for a person.
 2. **A write needs the customer's explicit yes** in the conversation (`confirmed: true`). The binding stops at the call, shows the service, the time in the customer's zone and any amount due, and runs only after a clear confirmation turn. `parseBookingToolCall` refuses a write with `confirmed` not true as `not_confirmed`.
 3. **Identity comes from the conversation, never from the model.** A reschedule takes no phone, e-mail or contact id: the appointment must belong to the conversation's contact, else `not_found` (never `forbidden`: no oracle for other people's bookings). A booking made through the tool is attached to the conversation's contact; a name, phone or e-mail is accepted only for a visitor with no contact yet, through the same find-or-create the booking page uses.
-4. **Consent and privacy.** Booking records no marketing consent and grants none. The confirmation and reminder messages it triggers are **utility** messages (the ConsentGate does not hold them). Results carry no phone, e-mail, notes or answers of anyone; the manage link is returned only for the same customer, in the same thread. The schemas drop anything beyond the contract.
+4. **Consent and privacy.** Booking records no marketing consent and grants none. The confirmation and reminder messages it triggers are **service** messages (the ConsentGate asks for the `service_messaging` purpose: a contact who sent STOP still gets them, one who withdrew the service purpose does not). An after-visit follow-up is asked as `marketing_messaging`, so it needs consent where the workspace requires it and is stopped by an opt-out or the do-not-call list. Results carry no phone, e-mail, notes or answers of anyone; the manage link is returned only for the same customer, in the same thread. The schemas drop anything beyond the contract.
 5. **Idempotent and bounded.** A write carries an idempotency key (`<conversation id>:<tool call id>`), so a retried call books once; a conversation may do at most 3 booking writes; `check_availability` returns at most 9 times.
 6. **Refusals are results.** `{ ok: false, code, message }` with the codes `unavailable`, `unknown_service`, `slot_unavailable`, `slot_taken`, `answers_invalid`, `not_found`, `not_changeable`, `too_many_writes`, `not_confirmed`, so the model can say something true instead of the turn failing.
 
@@ -636,9 +669,28 @@ Building a tool-calling loop for the customer-facing AI is a design of its own (
 | Port (token)                                     | File                                                                      | Stub adapter                         | Who binds the real one                                                                         |
 | ------------------------------------------------ | ------------------------------------------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------- |
 | `CalendarSyncPort` (`APPOINTMENT_CALENDAR`)      | `apps/api/src/infra/providers/appointments-booking/calendar-sync.port.ts` | `NoCalendarSync` (not connected)     | bound here: `MultiCalendarAdapter` over `GoogleCalendarAdapter` and `MicrosoftCalendarAdapter` |
-| `AppointmentMessenger` (`APPOINTMENT_MESSENGER`) | `.../appointment-messenger.port.ts`                                       | `NoAppointmentMessenger` (`skipped`) | the channel domains (WhatsApp, email)                                                          |
+| `AppointmentMessenger` (`APPOINTMENT_MESSENGER`) | `.../appointment-messenger.port.ts`                                       | `NoAppointmentMessenger` (`skipped`) | bound in the worker process: `ChannelAppointmentMessenger` (below)                             |
 
 Override the token in a module (`{ provide: APPOINTMENT_MESSENGER, useClass: ... }`); the stubs are what a deployment has until then.
+
+**The messenger (BL-283).** `ChannelAppointmentMessenger` (`modules/appointments-booking/channel-appointment-messenger.ts`, provided by
+`AppointmentsBookingWorkerModule` only) delivers through the stack the rest of the product already sends with, not a transport of its own:
+
+- **WhatsApp** through the conversation core (`enqueueOutbound`, source `bot`): the message lands in the contact's thread and the dispatcher
+  checks the connection, the plan's cap, the wallet and the emergency halt again at send time. An approved **template** goes on the Cloud API
+  number it was approved for (numbered variables filled name, service, date, time, place, join link, manage link; a missing value becomes `-`;
+  a template with a media header, a variable in its header or a link button, or named variables is `template_unavailable`). **Free text** goes
+  only inside the 24 hour window on the Cloud API, anywhere on a QR number; otherwise WhatsApp is skipped as `template_required` and the rule
+  falls to its next channel. The idempotency key becomes the message's `clientMessageId`, so a retry is the first message.
+- **SMS** and **email** through `EngineSenderRegistry` (the engines the broadcast screens use), from the primary connected SMS number and the
+  oldest connected **shared** mailbox (never a personal mailbox). No key at the engines, so the caller never retries an interrupted delivery.
+- **Before delivering**, in order: the address exists (`no_contact_point`); for a reminder or follow-up the **quiet hours** (`SendWindowService`,
+  kind `message`): a hold becomes `held` with the instant they end, never a refusal, except a reminder they would push to within five minutes of
+  the start or past it, which is skipped (`quiet_hours_too_late`); then the **ConsentGate** (`service_messaging` for a booking notice and a
+  reminder, `marketing_messaging` for a follow-up, the template's own category for a WhatsApp template): withdrawn consent, the do-not-call
+  list, a minor and a legal hold are skipped with their own reason. A confirmation or cancellation is not held by quiet hours.
+- A result is `sent`, `held` (+ `holdUntil`), `skipped` or `failed`, each with a stable reason code. The text and the address never reach a result,
+  a run or the timeline; a provider's own error sentence goes to the log's error field only.
 The calendar port is served by `MultiCalendarAdapter` over the Google and Outlook adapters (`NoCalendarSync` stays as the reference "nothing connected" behaviour). The Sheets
 append is not built (`blocked`: it is the Sheets half of TW-APPT-012 and 029, and its scope is not requested).
 

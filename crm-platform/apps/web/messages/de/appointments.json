@@ -236,7 +236,7 @@
       "declineTitle": "Diese Anfrage ablehnen?",
       "declineMessage": "Der Kunde erfährt, dass die Anfrage abgelehnt wurde, und der Zeitpunkt wird wieder frei.",
       "declineConfirm": "Anfrage ablehnen",
-      "remindersNote": "Erinnerungen richten sich nach dem Buchungstyp. Die Zustellung wird nicht pro Erinnerung verfolgt."
+      "remindersNote": "Erinnerungen gehören zur Buchungsart. Sie werden in den Terminvereinbarungs-Einstellungen oder in der Buchungsart festgelegt."
     },
     "source": {
       "chat": "Ein Chat-Flow",
@@ -407,9 +407,6 @@
         "depositTooHigh": "Die Anzahlung darf nicht höher sein als die Gesamtsumme (Gebühr plus Steuer).",
         "cancelFeeInvalid": "Geben Sie einen Betrag wie 25.00 ein.",
         "cancelWindowInvalid": "Geben Sie eine ganze Zahl von Minuten von 0 bis {cancelWindowMax} ein.",
-        "reminderInvalid": "Geben Sie ganze Minuten vor Beginn ein, von 1 bis {reminderMax}.",
-        "remindersDuplicate": "Jede Erinnerung benötigt eine andere Zeit.",
-        "remindersTooMany": "Ein Buchungstyp kann höchstens {reminders} Erinnerungen haben.",
         "questionLabelRequired": "Geben Sie der Frage eine Bezeichnung (bis zu {questionLabelMax} Zeichen).",
         "questionsTooMany": "Ein Buchungstyp kann höchstens {questions} Fragen haben.",
         "questionOptionsRequired": "Fügen Sie mindestens eine Auswahlmöglichkeit hinzu, eine pro Zeile.",
@@ -417,7 +414,12 @@
         "overridesInvalid": "Korrigieren Sie die in der Liste der Datumsausnahmen markierten Daten.",
         "descriptionTooLong": "Die Beschreibung darf höchstens {descriptionMax} Zeichen lang sein.",
         "locationTooLong": "Der Ort darf höchstens {locationMax} Zeichen lang sein.",
-        "server": "Der Server hat diesen Wert nicht akzeptiert. Prüfen Sie ihn und versuchen Sie es erneut."
+        "server": "Der Server hat diesen Wert nicht akzeptiert. Prüfen Sie ihn und versuchen Sie es erneut.",
+        "reminderInvalid": "Gib eine ganze Zahl für die Zeit ein, höchstens 30 Tage.",
+        "remindersDuplicate": "Jede Erinnerung oder Nachfassaktion braucht eine andere Zeit.",
+        "remindersTooMany": "Eine Buchungsart kann höchstens {reminders} Erinnerungen und Nachfassaktionen haben.",
+        "reminderChannelsNone": "Wähle mindestens einen Kanal.",
+        "reminderBodyTooLong": "Die Nachricht, der Betreff oder die Bezeichnung ist zu lang."
       },
       "service": {
         "title": "Servicedetails",
@@ -597,25 +599,6 @@
           "reschedule": "Hallo {name}, Ihr Termin „{type}“ wurde auf {slot} verschoben. Details: {manage_link}"
         },
         "templatesNote": "Genehmigte WhatsApp-Vorlagen können noch nicht ausgewählt werden. Nachrichten werden als einfacher Text von oben gesendet."
-      },
-      "reminders": {
-        "title": "Erinnerungen",
-        "hint": "Die Zeiten müssen unterschiedlich sein (1440 = 24 Std. vorher, 180 = 3 Std. vorher). Bis zu {max}.",
-        "add": "Erinnerung hinzufügen",
-        "quickAdd": "Schnell hinzufügen",
-        "quick": {
-          "h24": "24 Std.",
-          "h3": "3 Std.",
-          "h1": "1 Std.",
-          "m15": "15 Min."
-        },
-        "empty": "Keine Erinnerungen. Kunden erhalten nur die Bestätigung.",
-        "offsetOf": "Erinnerung {n}, Minuten vor dem Start",
-        "minBefore": "Min. vorher",
-        "labelPlaceholder": "24 Std.",
-        "labelOf": "Erinnerung {n}, Bezeichnung",
-        "remove": "Erinnerung {n} entfernen",
-        "count": "{count} von {max} Erinnerungen"
       },
       "questions": {
         "title": "Fragebogen",
@@ -1294,6 +1277,151 @@
         "cancel": "Buchung stornieren",
         "reschedule": "Buchung verschieben",
         "acknowledge": "Übernehmen"
+      }
+    },
+    "reminders": {
+      "title": "Erinnerungen und Nachfassaktionen",
+      "hint": "Schreibe dem Kontakt vor Beginn oder nach Ende eines Termins. Jede Nachricht ist aus, bis du sie einschaltest. Bis zu {max} pro Buchungsart.",
+      "quickAdd": "Schnell hinzufügen",
+      "quick": {
+        "h24": "24 Stunden vorher",
+        "h3": "3 Stunden vorher",
+        "h1": "1 Stunde vorher",
+        "m15": "15 Minuten vorher",
+        "after2h": "2 Stunden danach",
+        "afterDay": "1 Tag danach"
+      },
+      "add": "Erinnerung hinzufügen",
+      "empty": "Keine Erinnerungen oder Nachfassaktionen. Der Kontakt erhält nur die Bestätigung.",
+      "enabledOf": "Erinnerung {n} senden",
+      "on": "An",
+      "off": "Aus",
+      "offsetOf": "Erinnerung {n}, Zeitspanne",
+      "unitOf": "Erinnerung {n}, Zeiteinheit",
+      "kindOf": "Erinnerung {n}, vor oder nach",
+      "units": {
+        "minutes": "Minuten",
+        "hours": "Stunden",
+        "days": "Tage"
+      },
+      "kind": {
+        "before": "vor Beginn des Termins",
+        "after": "nach Ende des Termins"
+      },
+      "editMessage": "Nachricht und Kanäle",
+      "hideMessage": "Ausblenden",
+      "remove": "Erinnerung {n} entfernen",
+      "withTemplate": "WhatsApp-Vorlage",
+      "channelsTitle": "Senden über",
+      "channelsHint": "Es wird der erste Kanal verwendet, über den zugestellt werden kann; die weiteren sind Ersatz. Niemand erhält dieselbe Erinnerung zweimal.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "E-Mail"
+      },
+      "moveUp": "{channel} früher versuchen",
+      "moveDown": "{channel} später versuchen",
+      "removeChannel": "{channel} nicht verwenden",
+      "messageTitle": "Nachricht",
+      "placeholderMeaning": {
+        "name": "Der Name des Kontakts",
+        "type": "Der Name der Buchungsart",
+        "slot": "Datum und Uhrzeit zusammen",
+        "date": "Das Datum",
+        "time": "Die Uhrzeit",
+        "location": "Der Ort oder bei Online-Terminen der Beitrittslink",
+        "join_link": "Der Beitrittslink bei Online-Terminen",
+        "manage_link": "Der Link zum Verschieben oder Absagen des Termins"
+      },
+      "bodyHintBefore": "Leer lassen, um die Erinnerungsnachricht der Buchungsart oder den Standardtext zu verwenden.",
+      "bodyHintAfter": "Leer lassen, um den Standardtext für Nachfassaktionen zu verwenden.",
+      "subjectTitle": "E-Mail-Betreff",
+      "subjectPlaceholder": "Leer lassen für einen Standardbetreff",
+      "templateTitle": "WhatsApp-Vorlage",
+      "templateNone": "Keine: Freitext, nur innerhalb des 24-Stunden-Fensters",
+      "templateUnknown": "Eine nicht mehr verfügbare Vorlage",
+      "templateHint": "Mehr als 24 Stunden nach der letzten Nachricht des Kontakts stellt WhatsApp nur eine genehmigte Vorlage zu. Die Variablen werden in dieser Reihenfolge gefüllt: 1 Name, 2 Leistung, 3 Datum, 4 Uhrzeit, 5 Ort, 6 Beitrittslink, 7 Verwaltungslink.",
+      "labelTitle": "Bezeichnung (optional)",
+      "labelPlaceholder": "z. B. Tag vorher",
+      "previewTitle": "Vorschau",
+      "previewNote": "Ein Beispiel mit Musterwerten. Die echte Nachricht verwendet die Angaben des jeweiligen Termins.",
+      "count": "{count} von {max} Erinnerungen und Nachfassaktionen",
+      "note": "Eine Erinnerung wird nie nach Beginn des Termins gesendet. Wird der Termin abgesagt oder verschoben, wird Wartendes gestoppt und für die neue Zeit neu geplant. Ruhezeiten halten eine Nachricht zurück, bis sie enden, und Kontakte, die sich abgemeldet haben oder auf der Do-not-call-Liste stehen, werden übersprungen.",
+      "sample": {
+        "name": "Alex",
+        "type": "Beratung",
+        "location": "Hauptstraße 12"
+      },
+      "settingsTitle": "Erinnerungen und Nachfassaktionen",
+      "settingsDescription": "Schreibe dem Kontakt für jede Buchungsart vor einem Termin und hake danach nach. Alles ist aus, bis du es einschaltest.",
+      "loading": "Buchungsarten werden geladen",
+      "noTypes": "Es gibt noch keine Buchungsarten. Lege eine an, um ihre Erinnerungen festzulegen.",
+      "paused": "Pausiert",
+      "summaryNone": "Nichts festgelegt",
+      "summary": "{on} von {total} an",
+      "unsaved": "Nicht gespeicherte Änderungen",
+      "conflict": "Diese Buchungsart wurde anderswo geändert. Lade neu, um vor dem Speichern die aktuelle Version zu sehen.",
+      "reload": "Neu laden",
+      "discard": "Änderungen verwerfen",
+      "saving": "Wird gespeichert",
+      "save": "Erinnerungen speichern",
+      "saved": "Erinnerungen für {name} gespeichert.",
+      "readOnly": "Du kannst diese Erinnerungen ansehen, aber nicht ändern.",
+      "fixFirst": "Korrigiere zuerst die markierten Erinnerungen.",
+      "problems": {
+        "offsetInvalid": "Gib eine ganze Zahl für die Zeit ein, höchstens 30 Tage.",
+        "duplicate": "Jede Erinnerung oder Nachfassaktion braucht eine andere Zeit.",
+        "channelsNone": "Wähle mindestens einen Kanal.",
+        "bodyTooLong": "Die Nachricht ist zu lang.",
+        "subjectTooLong": "Der Betreff ist zu lang.",
+        "labelTooLong": "Die Bezeichnung ist zu lang.",
+        "tooMany": "Höchstens 8 Erinnerungen und Nachfassaktionen pro Buchungsart."
+      },
+      "noneOn": "Für diese Buchungsart sind keine Erinnerungen oder Nachfassaktionen eingeschaltet.",
+      "when": {
+        "before": "{count, plural, one {# Minute vorher} other {# Minuten vorher}}",
+        "after": "{count, plural, one {# Minute danach} other {# Minuten danach}}"
+      },
+      "sentOn": "Gesendet über {channel}",
+      "status": {
+        "scheduled": "Geplant",
+        "pending": "Fällig",
+        "sending": "Wird gesendet",
+        "held": "Wartet",
+        "sent": "Gesendet",
+        "skipped": "Nicht gesendet",
+        "failed": "Fehlgeschlagen",
+        "cancelled": "Abgebrochen"
+      },
+      "reasons": {
+        "rule_removed": "Die Erinnerung wurde entfernt, bevor sie fällig war.",
+        "rule_off": "Die Erinnerung wurde ausgeschaltet, bevor sie gesendet wurde.",
+        "rescheduled": "Der Termin wurde verschoben, daher wurde diese Erinnerung ersetzt.",
+        "booking_cancelled": "Der Termin wurde abgesagt.",
+        "booking_declined": "Die Anfrage wurde abgelehnt.",
+        "booking_no_show": "Als nicht erschienen markiert.",
+        "booking_not_confirmed": "Der Termin ist nicht bestätigt.",
+        "started": "Der Termin hatte bereits begonnen.",
+        "expired": "Es war zu spät zum Senden.",
+        "no_contact_point": "Der Kontakt hat für diesen Kanal keine Nummer oder Adresse.",
+        "no_channel": "Kein Kanal konnte zustellen.",
+        "no_sender": "Kein verbundener Absender für diesen Kanal.",
+        "template_required": "WhatsApp braucht außerhalb des 24-Stunden-Fensters eine genehmigte Vorlage.",
+        "template_unavailable": "Die gewählte WhatsApp-Vorlage kann nicht gesendet werden.",
+        "quiet_hours_too_late": "Die Ruhezeit reichte über den Terminbeginn hinaus.",
+        "no_consent": "Keine erfasste Einwilligung.",
+        "opted_out": "Der Kontakt hat sich abgemeldet.",
+        "do_not_call": "Die Nummer steht auf der Do-not-call-Liste.",
+        "minor": "Der Kontakt ist als minderjährig markiert.",
+        "processing_restricted": "Nachrichten an diesen Kontakt sind eingeschränkt.",
+        "plan_limit": "Das Limit des Tarifs ist erreicht.",
+        "quiet_hours": "Wartet auf das Ende der Ruhezeit.",
+        "channel_unavailable": "Der Kanal ist derzeit nicht verbunden.",
+        "wallet_empty": "Das Guthaben ist leer.",
+        "send_halted": "Das Senden ist gestoppt.",
+        "provider_error": "Der Anbieter hat es abgelehnt.",
+        "interrupted": "Es wurde unterbrochen und nicht erneut versucht.",
+        "internal_error": "Etwas ist schiefgelaufen."
       }
     }
   }

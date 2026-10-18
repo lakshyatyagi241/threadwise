@@ -10,22 +10,13 @@ import {
   type QuestionType,
   type TemplateEvent,
 } from '../api/schemas';
-import { LIMITS, type QuestionDraft, type ReminderDraft } from '../lib/booking-form';
-import {
-  PLACEHOLDERS,
-  QUICK_REMINDERS,
-  addReminder,
-  insertAtRange,
-  moveItem,
-  newQuestion,
-  newReminder,
-  reminderOffsets,
-} from '../lib/editor';
+import { LIMITS, type QuestionDraft } from '../lib/booking-form';
+import { PLACEHOLDERS, insertAtRange, moveItem, newQuestion } from '../lib/editor';
+import { REMINDER_MAX_RULES } from '../lib/reminder-rules';
+import { useWaTemplates } from '../api/hooks';
+import { ReminderRulesEditor } from './reminder-rules-editor';
 import { SectionCard, chipClass, iconButtonClass, useEditor } from './editor-shared';
 import { ChevronDownIcon, MinusIcon, PlusIcon } from './icons';
-
-/** The message key of each quick-add chip. */
-const QUICK_KEYS = { 1440: 'h24', 180: 'h3', 60: 'h1', 15: 'm15' } as const;
 
 const MAP_FIELDS = ['email', 'name', 'mobile'] as const;
 
@@ -159,113 +150,20 @@ function LifecycleMessages() {
 }
 
 function Reminders() {
-  const t = useTranslations('appointments.editor.reminders');
+  const t = useTranslations('appointments.reminders');
   const { draft, update, err, fid, disabled } = useEditor();
-  const list = draft.reminders;
-  const used = reminderOffsets(list);
-  const full = list.length >= LIMITS.reminders;
-  const setList = (fn: (l: ReminderDraft[]) => ReminderDraft[]) =>
-    update((d) => ({ ...d, reminders: fn(d.reminders) }));
-  const patch = (id: string, change: Partial<ReminderDraft>) =>
-    setList((l) => l.map((r) => (r.id === id ? { ...r, ...change } : r)));
-  const listError = err('reminders');
-
+  const templates = useWaTemplates();
   return (
-    <SectionCard
-      title={t('title')}
-      hint={t('hint', { max: LIMITS.reminders })}
-      action={
-        <Button
-          variant="secondary"
-          size="sm"
-          disabled={disabled || full}
-          onClick={() => setList((l) => [...l, newReminder()])}
-        >
-          <PlusIcon /> {t('add')}
-        </Button>
-      }
-    >
-      <div
-        className="mb-3 flex flex-wrap items-center gap-2"
-        role="group"
-        aria-label={t('quickAdd')}
-      >
-        <span className="text-xs text-muted-foreground">{t('quickAdd')}</span>
-        {QUICK_REMINDERS.map((m) => (
-          <button
-            key={m}
-            type="button"
-            disabled={disabled || used.has(m) || full}
-            onClick={() => setList((l) => addReminder(l, m, t(`quick.${QUICK_KEYS[m]}`)))}
-            className={chipClass}
-          >
-            <PlusIcon className="size-3" /> {t(`quick.${QUICK_KEYS[m]}`)}
-          </button>
-        ))}
-      </div>
-
-      {list.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-border px-3 py-4 text-center text-sm text-muted-foreground">
-          {t('empty')}
-        </p>
-      ) : (
-        <ul className="space-y-2">
-          {list.map((r, i) => {
-            const error = err(`reminder:${r.id}`);
-            return (
-              <li key={r.id}>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Input
-                    id={fid(`reminder-${r.id}`)}
-                    value={r.offset}
-                    invalid={!!error}
-                    disabled={disabled}
-                    inputMode="numeric"
-                    dir="ltr"
-                    placeholder="1440"
-                    aria-label={t('offsetOf', { n: i + 1 })}
-                    onChange={(e) => patch(r.id, { offset: e.target.value })}
-                    className="w-28 tabular-nums"
-                  />
-                  <span className="text-xs text-muted-foreground">{t('minBefore')}</span>
-                  <Input
-                    value={r.label}
-                    disabled={disabled}
-                    maxLength={40}
-                    placeholder={t('labelPlaceholder')}
-                    aria-label={t('labelOf', { n: i + 1 })}
-                    onChange={(e) => patch(r.id, { label: e.target.value })}
-                    className="w-32 min-w-0 flex-1 sm:flex-none"
-                  />
-                  <button
-                    type="button"
-                    disabled={disabled}
-                    onClick={() => setList((l) => l.filter((x) => x.id !== r.id))}
-                    aria-label={t('remove', { n: i + 1 })}
-                    title={t('remove', { n: i + 1 })}
-                    className={cn(iconButtonClass, 'hover:text-danger')}
-                  >
-                    <MinusIcon />
-                  </button>
-                </div>
-                {error && (
-                  <p role="alert" className="mt-1 text-xs text-danger">
-                    {error}
-                  </p>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      )}
-      <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
-        <span>{t('count', { count: list.length, max: LIMITS.reminders })}</span>
-        {listError && (
-          <span role="alert" className="text-danger">
-            {listError}
-          </span>
-        )}
-      </div>
+    <SectionCard title={t('title')} hint={t('hint', { max: REMINDER_MAX_RULES })}>
+      <ReminderRulesEditor
+        rules={draft.reminders}
+        onChange={(next) => update((d) => ({ ...d, reminders: next }))}
+        disabled={disabled}
+        errorOf={err}
+        typeName={draft.name}
+        templates={templates.data ?? []}
+        idPrefix={fid('reminders')}
+      />
     </SectionCard>
   );
 }

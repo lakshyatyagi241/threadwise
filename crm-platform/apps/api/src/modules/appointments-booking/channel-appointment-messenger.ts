@@ -94,7 +94,8 @@ const toResult = (o: ChannelOutcome, until?: string): BookingMessageResult => {
  * confirmation or cancellation is a service message the person asked for and is not held by quiet hours.
  *
  * Idempotent on `idempotencyKey` for WhatsApp (the conversation ledger returns the first message for a repeat). SMS and email have no
- * key at the engines, so the caller never retries a delivery that was interrupted. The message text and the address never reach a log.
+ * key at the engines, so the caller never retries a delivery that was interrupted. The message text and the address never reach a result, a run or the timeline; a
+ * provider's own error sentence goes to the log's error field only.
  */
 @Injectable()
 export class ChannelAppointmentMessenger implements AppointmentMessenger {
