@@ -753,6 +753,7 @@
         },
         "editors": {
           "linkLabel": "この後の移動先",
+          "linkChoose": "移動先を選択…",
           "linkEnds": "ここで終了(これ以上は送信されません)",
           "linkNext": "次のステップに進む",
           "linkOption": "{stage} · {label}{self, select, true {(このステップ)} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2634,6 +2635,8 @@
         "carouselButtons": "ステップ {stage}: すべてのボタンに名前を付け、何かを開くボタンにはリンク、番号、またはアドレスを入力してください。",
         "conditionIncomplete": "ステップ {stage}: 条件のルールを完成させてください（各ルールに変数と値）。",
         "faqMinScore": "ステップ {stage}: 最小スコアは0.05~0.99にするか、フローの設定を使用してください。",
+        "optionNotConnected": "ステップ {stage}: {kind, select, row {行} other {ボタン}}「{label}」の行き先がありません。ステップを追加するか、アクションを設定してください。",
+        "tooManyOptions": "ステップ {stage}: {kind, select, row {リストの行は最大 {max} 件までです} other {ボタンは最大 {max} 個までです}}。",
         "chooseFlow": "ステップ {stage}: ボタンが開始するフローを選んでください。",
         "chooseApi": "ステップ {stage}: 呼び出す API を選んでください。",
         "writeCode": "ステップ {stage}: 実行するコードを書いてください。",

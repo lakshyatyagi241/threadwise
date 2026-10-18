@@ -753,6 +753,7 @@
         },
         "editors": {
           "linkLabel": "Bu nereye gider",
+          "linkChoose": "Nereye gideceğini seçin…",
           "linkEnds": "Burada biter (başka bir şey gönderilmez)",
           "linkNext": "Sonraki adımla devam eder",
           "linkOption": "{stage} · {label}{self, select, true { (bu adım)} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2634,6 +2635,8 @@
         "carouselButtons": "Adım {stage}: her düğmeye bir ad verin, bir şey açan düğmeye de bağlantı, numara veya adres girin.",
         "conditionIncomplete": "Adım {stage}: koşulun kurallarını tamamlayın (her birinde bir değişken ve bir değer).",
         "faqMinScore": "{stage}. adım: en düşük puan 0.05 ile 0.99 arasında olmalı veya akış ayarı kullanılmalı.",
+        "optionNotConnected": "Adım {stage}: {kind, select, row {\"{label}\" satırı} other {\"{label}\" düğmesi}} hiçbir yere gitmiyor. Ona bir adım ekleyin veya bir eylem verin.",
+        "tooManyOptions": "Adım {stage}: {kind, select, row {bir listede en fazla {max} satır olabilir} other {bir düğme grubunda en fazla {max} düğme olabilir}}.",
         "chooseFlow": "Adım {stage}: düğmenin başlattığı akışı seçin.",
         "chooseApi": "Adım {stage}: çağrılacak API'yi seçin.",
         "writeCode": "Adım {stage}: çalıştırılacak kodu yazın.",

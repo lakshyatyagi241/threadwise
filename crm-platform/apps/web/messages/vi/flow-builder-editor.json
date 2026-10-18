@@ -753,6 +753,7 @@
         },
         "editors": {
           "linkLabel": "Nơi này dẫn tới",
+          "linkChoose": "Chọn nơi nó dẫn đến…",
           "linkEnds": "Kết thúc tại đây (không gửi thêm gì)",
           "linkNext": "Tiếp tục với bước kế tiếp",
           "linkOption": "{stage} · {label}{self, select, true { (bước này)} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2634,6 +2635,8 @@
         "carouselButtons": "Bước {stage}: đặt tên cho mỗi nút, cùng liên kết, số hoặc địa chỉ ở nút mở ra điều gì đó.",
         "conditionIncomplete": "Bước {stage}: hoàn thành các quy tắc của điều kiện (mỗi quy tắc có một biến và một giá trị).",
         "faqMinScore": "Bước {stage}: điểm tối thiểu phải từ 0.05 đến 0.99, hoặc dùng cài đặt của luồng.",
+        "optionNotConnected": "Bước {stage}: {kind, select, row {hàng} other {nút}} \"{label}\" không dẫn đến đâu. Hãy thêm một bước cho nó hoặc gán một hành động.",
+        "tooManyOptions": "Bước {stage}: {kind, select, row {danh sách có tối đa {max} hàng} other {một nhóm nút có tối đa {max} nút}}.",
         "chooseFlow": "Bước {stage}: chọn luồng mà nút sẽ bắt đầu.",
         "chooseApi": "Bước {stage}: chọn API cần gọi.",
         "writeCode": "Bước {stage}: viết mã cần chạy.",

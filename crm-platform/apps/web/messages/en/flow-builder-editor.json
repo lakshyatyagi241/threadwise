@@ -764,6 +764,7 @@
         },
         "editors": {
           "linkLabel": "Where this leads",
+          "linkChoose": "Choose where this leads…",
           "linkEnds": "Ends here (nothing more is sent)",
           "linkNext": "Carries on with the next step",
           "linkOption": "{stage} · {label}{self, select, true { (this step)} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2633,6 +2634,8 @@
         "carouselButtons": "Step {stage}: give every button a name, and a link, number or address where it opens one.",
         "conditionIncomplete": "Step {stage}: finish the rules of the condition (a variable and a value in each).",
         "faqMinScore": "Step {stage}: the minimum score must be from 0.05 to 0.99, or use the flow's setting.",
+        "optionNotConnected": "Step {stage}: {kind, select, row {the row} other {the button}} \"{label}\" leads nowhere. Add a step for it, or give it an action.",
+        "tooManyOptions": "Step {stage}: {kind, select, row {a list can have at most {max} rows} other {a set of buttons can have at most {max} buttons}}.",
         "chooseFlow": "Step {stage}: choose the flow the button starts.",
         "chooseApi": "Step {stage}: choose the API to call.",
         "writeCode": "Step {stage}: write the code to run.",

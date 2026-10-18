@@ -753,6 +753,7 @@
         },
         "editors": {
           "linkLabel": "یہ کہاں لے جاتا ہے",
+          "linkChoose": "منتخب کریں کہ یہ کہاں جاتا ہے…",
           "linkEnds": "یہاں ختم (مزید کچھ نہیں بھیجا جائے گا)",
           "linkNext": "اگلے مرحلے پر جاری رہتا ہے",
           "linkOption": "{stage} · {label}{self, select, true { (یہ قدم)} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2634,6 +2635,8 @@
         "carouselButtons": "مرحلہ {stage}: ہر بٹن کو نام دیں، اور جہاں وہ کچھ کھولتا ہے وہاں لنک، نمبر یا پتہ دیں۔",
         "conditionIncomplete": "مرحلہ {stage}: شرط کے قواعد مکمل کریں (ہر ایک میں ایک متغیر اور ایک قدر)۔",
         "faqMinScore": "مرحلہ {stage}: کم از کم اسکور 0.05 سے 0.99 کے درمیان ہونا چاہیے، یا اس فلو کی ترتیب استعمال کریں۔",
+        "optionNotConnected": "مرحلہ {stage}: {kind, select, row {قطار} other {بٹن}} \"{label}\" کہیں نہیں جاتا۔ اس کے لیے ایک مرحلہ شامل کریں یا اسے کوئی عمل دیں۔",
+        "tooManyOptions": "مرحلہ {stage}: {kind, select, row {فہرست میں زیادہ سے زیادہ {max} قطاریں ہو سکتی ہیں} other {بٹنوں کے سیٹ میں زیادہ سے زیادہ {max} بٹن ہو سکتے ہیں}}۔",
         "chooseFlow": "مرحلہ {stage}: وہ فلو منتخب کریں جو بٹن شروع کرتا ہے۔",
         "chooseApi": "مرحلہ {stage}: کال کرنے کے لیے API منتخب کریں۔",
         "writeCode": "مرحلہ {stage}: چلانے کے لیے کوڈ لکھیں۔",

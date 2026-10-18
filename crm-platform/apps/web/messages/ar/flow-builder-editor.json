@@ -476,6 +476,7 @@
         },
         "editors": {
           "linkLabel": "إلى أين يؤدي هذا",
+          "linkChoose": "اختر إلى أين يؤدي…",
           "linkEnds": "ينتهي هنا (لا يُرسل شيء بعد ذلك)",
           "linkNext": "يتابع بالخطوة التالية",
           "linkOption": "{stage} · {label}{self, select, true { (هذه الخطوة)} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2633,6 +2634,8 @@
         "carouselButtons": "الخطوة {stage}: أعطِ كل زر اسماً، ورابطاً أو رقماً أو عنواناً حيث يفتح شيئاً.",
         "conditionIncomplete": "الخطوة {stage}: أكمل قواعد الشرط (متغير وقيمة في كل قاعدة).",
         "faqMinScore": "الخطوة {stage}: يجب أن يكون الحد الأدنى للدرجة بين 0.05 و0.99، أو استخدم إعداد هذا التدفق.",
+        "optionNotConnected": "الخطوة {stage}: {kind, select, row {الصف} other {الزر}} \"{label}\" لا يؤدي إلى أي مكان. أضف خطوة له أو امنحه إجراءً.",
+        "tooManyOptions": "الخطوة {stage}: {kind, select, row {يمكن أن تحتوي القائمة على {max} صفوف كحد أقصى} other {يمكن أن تحتوي مجموعة الأزرار على {max} أزرار كحد أقصى}}.",
         "chooseFlow": "الخطوة {stage}: اختر التدفق الذي يبدأه الزر.",
         "chooseApi": "الخطوة {stage}: اختر الـ API المطلوب استدعاؤه.",
         "writeCode": "الخطوة {stage}: اكتب الكود المراد تشغيله.",
