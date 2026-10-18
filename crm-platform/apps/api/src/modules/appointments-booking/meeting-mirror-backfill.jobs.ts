@@ -92,6 +92,12 @@ export class MeetingMirrorBackfillScheduler implements OnApplicationBootstrap {
   }
 
   async enqueue(after: number, delayMs = 0): Promise<void> {
+    const jobId =
+      after === 0 ? 'meeting-mirror-backfill' : `meeting-mirror-backfill-after-${after}`;
+    // A job that failed is kept for days under its id, which would make BullMQ ignore every later start: clear it first.
+    if ((await this.queue.getJobState(jobId)) === 'failed') {
+      await (await this.queue.getJob(jobId))?.remove();
+    }
     await this.queue.add(
       'backfill',
       { after },
@@ -101,7 +107,7 @@ export class MeetingMirrorBackfillScheduler implements OnApplicationBootstrap {
         removeOnComplete: true,
         removeOnFail: { age: 7 * 24 * 3600 },
         delay: delayMs,
-        jobId: after === 0 ? 'meeting-mirror-backfill' : `meeting-mirror-backfill-after-${after}`,
+        jobId,
       },
     );
   }
