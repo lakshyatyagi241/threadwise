@@ -24,3 +24,14 @@ describe('job options of the inbound webhook queue', () => {
     expect(jobOptionsFor(QUEUES.WABA_INGEST).removeOnComplete).toBe(true);
   });
 });
+
+describe('job options of the channel webhook retry queue', () => {
+  it('keeps an inbound event for at least 30 minutes of retries, like the WhatsApp ingest queue', () => {
+    expect(retryWindowSeconds(QUEUES.WEBHOOK_RETRY)).toBeGreaterThanOrEqual(30 * 60);
+  });
+
+  it('keeps failed events for replay and drops completed ones (they carry message text)', () => {
+    expect(jobOptionsFor(QUEUES.WEBHOOK_RETRY).removeOnFail).toBeTruthy();
+    expect(jobOptionsFor(QUEUES.WEBHOOK_RETRY).removeOnComplete).toBe(true);
+  });
+});

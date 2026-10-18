@@ -139,13 +139,13 @@ describe('default job options', () => {
   });
 
   it('drops a completed job at once on the queues that carry message text, phone numbers or raw webhook bodies', () => {
-    for (const queue of [QUEUES.WABA_INGEST, QUEUES.WEBHOOK_FORWARD]) {
+    for (const queue of [QUEUES.WABA_INGEST, QUEUES.WEBHOOK_RETRY, QUEUES.WEBHOOK_FORWARD]) {
       expect(jobOptionsFor(queue).removeOnComplete, queue).toBe(true);
       // Failures stay, bounded, so a dead job can still be debugged.
       expect(jobOptionsFor(queue).removeOnFail, queue).toEqual(DEFAULT_JOB_OPTIONS.removeOnFail);
       // The inbound WhatsApp queue deliberately retries longer than the default (a message exists only here once Meta has our 200);
       // the forward queue keeps the default. See queues.spec.ts for the window.
-      if (queue === QUEUES.WABA_INGEST) {
+      if (queue === QUEUES.WABA_INGEST || queue === QUEUES.WEBHOOK_RETRY) {
         expect(jobOptionsFor(queue).attempts, queue).toBeGreaterThan(DEFAULT_JOB_OPTIONS.attempts);
       } else {
         expect(jobOptionsFor(queue).attempts, queue).toBe(DEFAULT_JOB_OPTIONS.attempts);
@@ -155,7 +155,12 @@ describe('default job options', () => {
 
   it('gives every other queue exactly the defaults', () => {
     for (const queue of Object.values(QUEUES)) {
-      if (queue === QUEUES.WABA_INGEST || queue === QUEUES.WEBHOOK_FORWARD) continue;
+      if (
+        queue === QUEUES.WABA_INGEST ||
+        queue === QUEUES.WEBHOOK_RETRY ||
+        queue === QUEUES.WEBHOOK_FORWARD
+      )
+        continue;
       expect(jobOptionsFor(queue), queue).toEqual(DEFAULT_JOB_OPTIONS);
     }
   });

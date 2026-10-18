@@ -1,4 +1,4 @@
-import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger, type OnModuleInit } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Redis } from 'ioredis';
 import { ERROR_CODES } from '@crm/contracts';
@@ -7,6 +7,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { tryParseViberJson } from '../../infra/providers/channel-viber/viber-json';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { WebhookRetryService } from '../webhook-retry';
 import { ChatInboxIngest } from './_shims/chat-inbox-ingest';
 import { signatureMatches } from './channel-rules';
 import { ChannelsRepository, type ChannelRow } from './channels.repository';
@@ -15,6 +16,13 @@ import { VibBroadcastsRepository } from './vib-broadcasts.repository';
 
 /** Reference throttled the route to 240 a minute; this only stops a flood from one routing token. */
 const HITS_PER_MINUTE = 240;
+
+/** What the webhook retry queue carries for a Viber event that could not be stored. */
+interface DeferredEvent {
+  orgId: number;
+  channelId: number;
+  event: ViberEvent;
+}
 
 export interface Ack {
   status: number;
@@ -32,7 +40,7 @@ const ack: Ack = { status: 0 };
  * redelivers it (ASYNC-017): never a 200 for a message that was not kept.
  */
 @Injectable()
-export class InboundService {
+export class InboundService implements OnModuleInit {
   private readonly logger = new Logger(InboundService.name);
 
   constructor(
@@ -42,7 +50,12 @@ export class InboundService {
     private readonly crypto: CryptoService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     private readonly inbox: ChatInboxIngest,
+    private readonly retry: WebhookRetryService,
   ) {}
+
+  onModuleInit(): void {
+    this.retry.register<DeferredEvent>('viber', (p) => this.reprocess(p));
+  }
 
   /** `forbidden` is a wrong signature: the controller answers 403. */
   async ingest(token: string, raw: Buffer, signature: string): Promise<Ack | 'forbidden'> {
@@ -72,18 +85,40 @@ export class InboundService {
       await this.db.txAs({ orgId }, (tx) => this.repo.touchInbound(tx, orgId, channel.id));
       await this.dispatch(orgId, channel, event);
     } catch (err) {
-      // A 2xx tells Viber the message is ours, so it is never sent again: answering 200 here lost the customer's message for good.
-      // The inbox write is idempotent per provider message id, so a 503 and Viber's own redelivery is safe and bounded by Viber's retry window.
       this.logger.error({ err, orgId, channel: channel.id }, 'viber ingest failed');
-      // A rule the data broke (an AppError) fails the same way on every redelivery: acknowledge it instead of making Viber retry for ever.
+      // A rule the data broke (an AppError) fails the same way on every retry: acknowledge it instead of retrying for ever.
       if (err instanceof AppError) return ack;
+      // Anything else (database, redis, provider) may pass: the event is kept in the retry queue and Viber keeps its 200.
+      await this.defer(orgId, channel, event);
+    }
+    return ack;
+  }
+
+  /** Keeps a failed event in the webhook retry queue; when even that fails nothing was kept, so Viber must redeliver (503). */
+  private async defer(orgId: number, channel: ChannelRow, event: ViberEvent): Promise<void> {
+    try {
+      await this.retry.defer('viber', {
+        orgId,
+        channelId: channel.id,
+        event,
+      } satisfies DeferredEvent);
+    } catch (err) {
+      this.logger.error({ err, orgId, channel: channel.id }, 'viber event could not be deferred');
       throw new AppError(
         ERROR_CODES.INTERNAL,
-        'Could not store the event, please retry',
+        'Could not keep the event, please retry',
         HttpStatus.SERVICE_UNAVAILABLE,
       );
     }
-    return ack;
+  }
+
+  /** The retry queue's second go at a deferred event. A failure is thrown so the queue retries it with backoff. */
+  private async reprocess(p: DeferredEvent): Promise<void> {
+    const channel = await this.db.txAs({ orgId: p.orgId }, (tx) =>
+      this.repo.findById(tx, p.orgId, p.channelId),
+    );
+    if (!channel?.active) return;
+    await this.dispatch(p.orgId, channel, p.event);
   }
 
   private async dispatch(orgId: number, channel: ChannelRow, event: ViberEvent): Promise<void> {

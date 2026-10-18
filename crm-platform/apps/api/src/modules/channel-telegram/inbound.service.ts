@@ -1,5 +1,5 @@
 import { timingSafeEqual } from 'node:crypto';
-import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger, type OnModuleInit } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Redis } from 'ioredis';
 import { ERROR_CODES } from '@crm/contracts';
@@ -11,6 +11,7 @@ import {
   type TelegramApiFactory,
 } from '../../infra/providers/channel-telegram/telegram.port';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { WebhookRetryService } from '../webhook-retry';
 import {
   INBOUND_HOOKS,
   INBOX_INGEST,
@@ -36,6 +37,13 @@ import {
 /** Telegram's own limit on a webhook is generous; this only stops a flood from one routing token. */
 const HITS_PER_MINUTE = 120;
 
+/** What the webhook retry queue carries for a Telegram update that could not be stored. */
+interface DeferredUpdate {
+  orgId: number;
+  botRowId: number;
+  update: Update;
+}
+
 export interface Ack {
   ok: true;
   note: string;
@@ -55,7 +63,7 @@ const dict = (x: unknown): Record<string, unknown> =>
  * everything runs under that organization's context.
  */
 @Injectable()
-export class InboundService {
+export class InboundService implements OnModuleInit {
   private readonly logger = new Logger(InboundService.name);
 
   constructor(
@@ -67,7 +75,12 @@ export class InboundService {
     @Inject(INBOX_INGEST) private readonly inbox: InboxIngest,
     @Inject(MEDIA_STORE) private readonly media: MediaStore,
     @Inject(INBOUND_HOOKS) private readonly hooks: InboundHooks,
+    private readonly retry: WebhookRetryService,
   ) {}
+
+  onModuleInit(): void {
+    this.retry.register<DeferredUpdate>('telegram', (p) => this.reprocess(p));
+  }
 
   async ingest(token: string, secretHeader: string, update: Update): Promise<Ack> {
     await this.rateLimit(token);
@@ -93,17 +106,40 @@ export class InboundService {
     try {
       return await this.dispatch(orgId, bot, update);
     } catch (err) {
-      // A 2xx tells Telegram the update is ours, so it is never sent again: answering 200 here lost the message for good. The inbox
-      // write is idempotent per update, so a 503 and Telegram's own redelivery (with its backoff) is safe.
       this.logger.error({ err, orgId, bot: bot.id }, 'telegram ingest failed');
-      // A rule the data broke (an AppError) fails the same way on every redelivery: acknowledge it, or one poison update delays the bot.
+      // A rule the data broke (an AppError) fails the same way on every retry: acknowledge it, or one poison update delays the bot.
       if (err instanceof AppError) return ack('ok');
+      // Anything else (database, redis, provider) may pass: the update is kept in the retry queue and Telegram keeps its 200.
+      await this.defer(orgId, bot, update);
+      return ack('ok');
+    }
+  }
+
+  /** Keeps a failed update in the webhook retry queue; when even that fails nothing was kept, so Telegram must redeliver (503). */
+  private async defer(orgId: number, bot: BotRow, update: Update): Promise<void> {
+    try {
+      await this.retry.defer('telegram', {
+        orgId,
+        botRowId: bot.id,
+        update,
+      } satisfies DeferredUpdate);
+    } catch (err) {
+      this.logger.error({ err, orgId, bot: bot.id }, 'telegram update could not be deferred');
       throw new AppError(
         ERROR_CODES.INTERNAL,
-        'Could not store the update, please retry',
+        'Could not keep the update, please retry',
         HttpStatus.SERVICE_UNAVAILABLE,
       );
     }
+  }
+
+  /** The retry queue's second go at a deferred update. A failure is thrown so the queue retries it with backoff. */
+  private async reprocess(p: DeferredUpdate): Promise<void> {
+    const bot = await this.db.txAs({ orgId: p.orgId }, (tx) =>
+      this.repo.findById(tx, p.orgId, p.botRowId),
+    );
+    if (!bot?.active) return;
+    await this.dispatch(p.orgId, bot, p.update);
   }
 
   private async dispatch(orgId: number, bot: BotRow, update: Update): Promise<Ack> {

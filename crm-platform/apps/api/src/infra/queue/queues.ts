@@ -104,6 +104,8 @@ export const QUEUES = {
   WECHAT_BROADCAST: 'wechat-broadcast',
   /** One job per finished call a telephony provider reported (call logging): finds the contact and writes the call log entry. Own queue: a slow database write must not make a provider retry its callback, and a call burst must not hold WhatsApp ingest. */
   TELEPHONY_INGEST: 'telephony-ingest',
+  /** A channel webhook event (Telegram, Viber, LINE, Facebook) that could not be stored when it arrived: kept here and retried with backoff so the provider keeps its 200 (ASYNC-011/017). */
+  WEBHOOK_RETRY: 'webhook-retry',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];
@@ -125,6 +127,13 @@ export const DEFAULT_JOB_OPTIONS = {
   removeOnFail: { count: 2_000, age: 3 * 24 * 3600 },
 };
 
+/** Queues that carry an inbound event the provider has already been told we have: retried for about 40 minutes, personal data dropped on success. */
+const INBOUND_RETRY_OPTIONS: JobsOptions = {
+  removeOnComplete: true,
+  attempts: 10,
+  backoff: { type: 'exponential', delay: 5_000 },
+};
+
 /**
  * Queues whose job data is personal (message text, phone numbers, the raw webhook body) drop a job the moment it completes. A failed
  * job still keeps its data for `removeOnFail`, which is the point of keeping failures.
@@ -133,11 +142,9 @@ const QUEUE_JOB_OPTIONS: Partial<Record<QueueName, JobsOptions>> = {
   // Inbound WhatsApp is the one place a message exists only here once Meta has our 200. The default (5 attempts from 2 s, about 30 s in
   // all) gave up inside a short database or Redis blip; 10 attempts from 5 s keep a job alive for about 42 minutes (ASYNC-032/036).
   // Ingest is idempotent (the message ledger's unique key), so a retry never stores a message twice.
-  [QUEUES.WABA_INGEST]: {
-    removeOnComplete: true,
-    attempts: 10,
-    backoff: { type: 'exponential', delay: 5_000 },
-  },
+  [QUEUES.WABA_INGEST]: INBOUND_RETRY_OPTIONS,
+  // Carries the raw channel event (message text, usernames), like the WhatsApp payload: dropped once it completes, kept when it failed.
+  [QUEUES.WEBHOOK_RETRY]: INBOUND_RETRY_OPTIONS,
   [QUEUES.WEBHOOK_FORWARD]: { removeOnComplete: true },
 };
 

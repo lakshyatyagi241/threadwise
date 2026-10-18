@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger, type OnModuleInit } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Redis } from 'ioredis';
 import { ERROR_CODES } from '@crm/contracts';
@@ -12,6 +12,7 @@ import {
   type LineApiFactory,
 } from '../../infra/providers/channel-line/line.port';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { WebhookRetryService } from '../webhook-retry';
 import {
   INBOUND_HOOKS,
   INBOX_INGEST,
@@ -29,6 +30,13 @@ import { LineTokenService } from './line-token.service';
 /** Reference throttled the route to 240 requests a minute; here it is per routing token. */
 const HITS_PER_MINUTE = 240;
 
+/** What the webhook retry queue carries for a LINE event that could not be stored. */
+interface DeferredEvent {
+  orgId: number;
+  channelId: number;
+  event: LineEvent;
+}
+
 export type Ack = { kind: 'ack'; note: string } | { kind: 'bad_signature' };
 const ack = (note: string): Ack => ({ kind: 'ack', note });
 
@@ -41,7 +49,7 @@ const ack = (note: string): Ack => ({ kind: 'ack', note });
  * runs under that organization's context. Only a flood is refused (429).
  */
 @Injectable()
-export class InboundService {
+export class InboundService implements OnModuleInit {
   private readonly logger = new Logger(InboundService.name);
 
   constructor(
@@ -53,7 +61,12 @@ export class InboundService {
     @Inject(LINE_API) private readonly line: LineApiFactory,
     @Inject(INBOX_INGEST) private readonly inbox: InboxIngest,
     @Inject(INBOUND_HOOKS) private readonly hooks: InboundHooks,
+    private readonly retry: WebhookRetryService,
   ) {}
+
+  onModuleInit(): void {
+    this.retry.register<DeferredEvent>('line', (p) => this.reprocess(p));
+  }
 
   async ingest(token: string, rawBody: Buffer, signature: string): Promise<Ack> {
     await this.rateLimit(token);
@@ -85,30 +98,58 @@ export class InboundService {
       return ack('not json');
     }
     // One token and one client for the whole delivery (a rotated token is minted at most once).
-    let api: LineApi | undefined;
-    const apiOf = async (): Promise<LineApi> =>
-      (api ??= this.line.forToken(await this.tokens.accessToken(orgId, channel)));
+    const apiOf = this.apiOf(orgId, channel);
 
-    // Every event is tried even if an earlier one failed. A 2xx tells LINE the whole delivery is ours and it is never sent again, so a
-    // failed store answers 503 after the loop: the inbox write is idempotent per webhook event id, so LINE redelivering the batch is safe.
-    let failed = 0;
+    // Every event is tried even if an earlier one failed. A failed one is kept in the webhook retry queue and LINE keeps its 200; only
+    // when something could not even be kept does the delivery answer 503 (after the loop) so LINE redelivers it.
+    let lost = 0;
     for (const event of eventsOf(body)) {
       try {
         await this.handle(orgId, channel, event, apiOf);
       } catch (err) {
-        // A rule the data broke (an AppError) fails the same way on every redelivery, so it is logged and not retried.
-        if (!(err instanceof AppError)) failed += 1;
         this.logger.error({ err, orgId, channel: channel.id }, 'line event ingest failed');
+        // A rule the data broke (an AppError) fails the same way on every retry, so it is logged and not retried.
+        if (err instanceof AppError) continue;
+        if (!(await this.defer(orgId, channel, event))) lost += 1;
       }
     }
-    if (failed > 0) {
+    if (lost > 0) {
       throw new AppError(
         ERROR_CODES.INTERNAL,
-        'Could not store the delivery, please retry',
+        'Could not keep the delivery, please retry',
         HttpStatus.SERVICE_UNAVAILABLE,
       );
     }
     return ack('ok');
+  }
+
+  private apiOf(orgId: number, channel: ChannelRow): () => Promise<LineApi> {
+    let api: LineApi | undefined;
+    return async () => (api ??= this.line.forToken(await this.tokens.accessToken(orgId, channel)));
+  }
+
+  /** Keeps a failed event in the webhook retry queue. False when even that failed (nothing was kept). */
+  private async defer(orgId: number, channel: ChannelRow, event: LineEvent): Promise<boolean> {
+    try {
+      await this.retry.defer('line', {
+        orgId,
+        channelId: channel.id,
+        event,
+      } satisfies DeferredEvent);
+      return true;
+    } catch (err) {
+      this.logger.error({ err, orgId, channel: channel.id }, 'line event could not be deferred');
+      return false;
+    }
+  }
+
+  /** The retry queue's second go at a deferred event. A failure is thrown so the queue retries it with backoff. */
+  private async reprocess(p: DeferredEvent): Promise<void> {
+    const channel = await this.db.txAs({ orgId: p.orgId }, (tx) =>
+      this.repo.findById(tx, p.orgId, p.channelId),
+    );
+    if (!channel?.active) return;
+    await this.handle(p.orgId, channel, p.event, this.apiOf(p.orgId, channel));
   }
 
   private async handle(
