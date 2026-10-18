@@ -62,6 +62,24 @@ export const callsLogs = defineHolder({
         'The call row is kept (the log, the analytics). Calls that are not WhatsApp calls: logged by hand, reported by the mobile app or by a telephony provider. The notes are free text written by a teammate; the recording reference is a pointer on the provider (never audio), cleared by the daily sweep after the workspace recording window (default 90 days) and only ever stored after the recording consent rules allowed it. An erasure clears the number, the notes, the provider call id and the reference.',
     },
     {
+      // A click-to-call the workspace asked a telephony provider to bridge: the placement is only the correlation the provider's
+      // completion callback needs to find the handler and the contact again. It is deleted when that callback arrives and by the
+      // daily sweep after two days (call-log-retention.service.ts), so it is no history worth keeping without the person: an erasure
+      // deletes it in either history mode (no `whenAnonymising`; `customer_phone` is NOT NULL and the row has no other use).
+      // `user_id` is the staff member who clicked (a staff pointer, not the subject) and `contact_id` is ON DELETE SET NULL.
+      // The sibling tables of the same migration hold no person's data and are therefore not registered: `telephony_connections`
+      // keeps the workspace's own provider numbers and an encrypted signing secret, `call_logging_settings` two workspace switches
+      // (the detector in registry.spec.ts flags neither, so an allow-list entry would itself fail the "no unneeded entry" check).
+      table: 'telephony_click_calls',
+      link: [CONTACT, { by: 'phone', column: 'customer_phone' }],
+      disposition: 'delete',
+      tier: 'history',
+      categories: ['identifier', 'communications', 'voice'],
+      pii: ['customer_phone', 'external_id'],
+      retention:
+        'Short-lived: deleted when the provider reports the finished call, otherwise by the daily sweep after 2 days. An erasure deletes whatever placement is still waiting, by contact or by number.',
+    },
+    {
       table: 'ai_call_logs',
       link: [
         { by: 'conversation', column: 'conversation_id' },
