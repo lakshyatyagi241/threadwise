@@ -62,7 +62,12 @@ def findings(sql: str):
                 out.append(("drops a constraint or trigger that is not re-added in the same file", stmt[:140]))
         # each ADD COLUMN item is judged on its own: "ADD COLUMN a text, ADD COLUMN b text NOT NULL DEFAULT ''" is fine
         for item in re.split(r",\s*(?=ADD\s)", stmt, flags=re.I):
-            if NOT_NULL_ADD.search(item) and not re.search(r"\bDEFAULT\b", item, re.I):
+            # An ADD CONSTRAINT adds no column, and "IS NOT NULL" inside a CHECK expression is a test, not a NOT NULL column: both
+            # used to be read as "adds a NOT NULL column" (CHECK (a IS NULL OR b IS NOT NULL) blocked a purely additive migration).
+            if re.match(r"ADD\s+CONSTRAINT\b", item, re.I):
+                continue
+            judged = re.sub(r"\bIS\s+NOT\s+NULL\b", " ", item, flags=re.I)
+            if NOT_NULL_ADD.search(judged) and not re.search(r"\bDEFAULT\b", item, re.I):
                 out.append(("adds a NOT NULL column without a default", item[:140]))
     return out
 
@@ -76,6 +81,10 @@ def selftest() -> None:
         "CREATE INDEX i ON t (c);",
         "DROP INDEX IF EXISTS i;",
         "ALTER TABLE t ADD CONSTRAINT x CHECK (c IS NULL OR c <> '');",
+        # new nullable columns plus a CHECK that tests IS NOT NULL: purely additive (the legal_holds migration)
+        "ALTER TABLE t ADD COLUMN a timestamptz, ADD COLUMN b bigint, ADD CONSTRAINT ck CHECK (b IS NULL OR a IS NOT NULL);",
+        "ALTER TABLE t ADD CONSTRAINT ck CHECK (b IS NULL OR a IS NOT NULL);",
+        "ALTER TABLE t ADD CONSTRAINT fk FOREIGN KEY (a) REFERENCES u (id) ON DELETE SET NULL (a);",
     ]
     for sql in fine:
         assert not findings(sql), sql
@@ -88,6 +97,9 @@ def selftest() -> None:
         "ALTER TYPE e ADD VALUE 'x';",
         "ALTER TABLE t ADD COLUMN c text NOT NULL;",
         "ALTER TABLE t ADD COLUMN a text, ADD COLUMN b text NOT NULL;",
+        # a real NOT NULL column is still caught even when the statement also carries an IS NOT NULL test or a constraint
+        "ALTER TABLE t ADD COLUMN b text NOT NULL, ADD CONSTRAINT ck CHECK (a IS NOT NULL);",
+        "ALTER TABLE t ADD COLUMN c text CHECK (c IS NOT NULL OR a = 1) NOT NULL;",
         "DROP POLICY tenant_isolation ON t;",
         "TRUNCATE t;",
         "ALTER TABLE t DROP CONSTRAINT uq_t;",
