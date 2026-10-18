@@ -753,6 +753,7 @@
         },
         "editors": {
           "linkLabel": "לאן זה מוביל",
+          "linkChoose": "בחרו לאן זה מוביל…",
           "linkEnds": "מסתיים כאן (לא נשלח דבר נוסף)",
           "linkNext": "ממשיך לשלב הבא",
           "linkOption": "{stage} · {label}{self, select, true { (שלב זה)} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2628,6 +2629,8 @@
         "carouselButtons": "שלב {stage}: תנו לכל כפתור שם, וקישור, מספר או כתובת במקום שבו הוא פותח משהו.",
         "conditionIncomplete": "שלב {stage}: השלימו את כללי התנאי (משתנה וערך בכל אחד).",
         "faqMinScore": "שלב {stage}: ציון המינימום חייב להיות בין 0.05 ל-0.99, או שיש להשתמש בהגדרת הפלואו.",
+        "optionNotConnected": "שלב {stage}: {kind, select, row {השורה} other {הכפתור}} \"{label}\" לא מוביל לשום מקום. הוסיפו לו שלב או הגדירו לו פעולה.",
+        "tooManyOptions": "שלב {stage}: {kind, select, row {רשימה יכולה לכלול {max} שורות לכל היותר} other {קבוצת כפתורים יכולה לכלול {max} כפתורים לכל היותר}}.",
         "chooseFlow": "שלב {stage}: בחרו את הזרימה שהכפתור מפעיל.",
         "chooseApi": "שלב {stage}: בחרו את ה-API לקריאה.",
         "writeCode": "שלב {stage}: כתבו את הקוד להרצה.",

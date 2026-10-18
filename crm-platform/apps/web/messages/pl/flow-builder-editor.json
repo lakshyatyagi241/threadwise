@@ -753,6 +753,7 @@
         },
         "editors": {
           "linkLabel": "Dokąd to prowadzi",
+          "linkChoose": "Wybierz, dokąd to prowadzi…",
           "linkEnds": "Kończy się tutaj (nic więcej nie zostanie wysłane)",
           "linkNext": "Przechodzi do następnego kroku",
           "linkOption": "{stage} · {label}{self, select, true { (ten krok)} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2628,6 +2629,8 @@
         "carouselButtons": "Krok {stage}: nadaj każdemu przyciskowi nazwę oraz link, numer lub adres tam, gdzie coś otwiera.",
         "conditionIncomplete": "Krok {stage}: dokończ reguły warunku (w każdej zmienna i wartość).",
         "faqMinScore": "Krok {stage}: minimalny wynik musi mieścić się w zakresie od 0.05 do 0.99 albo użyj ustawienia przepływu.",
+        "optionNotConnected": "Krok {stage}: {kind, select, row {wiersz} other {przycisk}} „{label}\" nigdzie nie prowadzi. Dodaj dla niego krok lub przypisz mu działanie.",
+        "tooManyOptions": "Krok {stage}: {kind, select, row {lista może mieć najwyżej {max} wierszy} other {zestaw przycisków może mieć najwyżej {max} przycisków}}.",
         "chooseFlow": "Krok {stage}: wybierz przepływ uruchamiany przez przycisk.",
         "chooseApi": "Krok {stage}: wybierz API do wywołania.",
         "writeCode": "Krok {stage}: napisz kod do uruchomienia.",

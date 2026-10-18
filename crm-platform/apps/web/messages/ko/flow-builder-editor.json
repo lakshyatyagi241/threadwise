@@ -753,6 +753,7 @@
         },
         "editors": {
           "linkLabel": "연결 대상",
+          "linkChoose": "연결 대상을 선택하세요…",
           "linkEnds": "여기서 종료(더 이상 전송되지 않음)",
           "linkNext": "다음 단계로 이어짐",
           "linkOption": "{stage} · {label}{self, select, true {(이 단계)} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2628,6 +2629,8 @@
         "carouselButtons": "단계 {stage}: 모든 버튼에 이름을 지정하고, 무언가를 여는 버튼에는 링크, 번호 또는 주소를 입력하세요.",
         "conditionIncomplete": "단계 {stage}: 조건의 규칙을 완성하세요(각 규칙에 변수와 값).",
         "faqMinScore": "{stage}단계: 최소 점수는 0.05~0.99여야 합니다. 또는 플로우 설정을 사용하세요.",
+        "optionNotConnected": "{stage}단계: {kind, select, row {행} other {버튼}} \"{label}\"이(가) 어디로도 연결되지 않습니다. 단계를 추가하거나 동작을 지정하세요.",
+        "tooManyOptions": "{stage}단계: {kind, select, row {목록에는 행을 최대 {max}개까지 둘 수 있습니다} other {버튼은 최대 {max}개까지 둘 수 있습니다}}.",
         "chooseFlow": "단계 {stage}: 버튼이 시작할 플로우를 선택하세요.",
         "chooseApi": "단계 {stage}: 호출할 API를 선택하세요.",
         "writeCode": "단계 {stage}: 실행할 코드를 작성하세요.",

@@ -753,6 +753,7 @@
         },
         "editors": {
           "linkLabel": "এটি কোথায় নিয়ে যায়",
+          "linkChoose": "এটি কোথায় যায় তা বেছে নিন…",
           "linkEnds": "এখানে শেষ (আর কিছু পাঠানো হবে না)",
           "linkNext": "পরবর্তী ধাপে এগিয়ে যায়",
           "linkOption": "{stage} · {label}{self, select, true { (এই ধাপ)} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2628,6 +2629,8 @@
         "carouselButtons": "ধাপ {stage}: প্রতিটি বাটনকে একটি নাম দিন, এবং যেখানে কিছু খোলে সেখানে লিংক, নম্বর বা ঠিকানা দিন।",
         "conditionIncomplete": "ধাপ {stage}: শর্তের নিয়মগুলো সম্পূর্ণ করুন (প্রতিটিতে একটি ভেরিয়েবল ও একটি মান)।",
         "faqMinScore": "ধাপ {stage}: ন্যূনতম স্কোর 0.05 থেকে 0.99-এর মধ্যে হতে হবে, অথবা এই ফ্লোর সেটিং ব্যবহার করুন।",
+        "optionNotConnected": "ধাপ {stage}: {kind, select, row {সারি} other {বোতাম}} \"{label}\" কোথাও যায় না। এর জন্য একটি ধাপ যোগ করুন বা একটি কাজ দিন।",
+        "tooManyOptions": "ধাপ {stage}: {kind, select, row {একটি তালিকায় সর্বোচ্চ {max}টি সারি থাকতে পারে} other {একটি বোতাম সেটে সর্বোচ্চ {max}টি বোতাম থাকতে পারে}}।",
         "chooseFlow": "ধাপ {stage}: বোতামটি যে ফ্লো শুরু করবে তা বেছে নিন।",
         "chooseApi": "ধাপ {stage}: কোন API কল করবেন তা বেছে নিন।",
         "writeCode": "ধাপ {stage}: চালানোর কোড লিখুন।",

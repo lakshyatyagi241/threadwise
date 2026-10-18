@@ -72,6 +72,11 @@ export const OPTION_STEPS: ReadonlySet<string> = new Set(['buttons', 'list']);
 export const endsChain = (type: string): boolean => BRANCHING.has(type) && !OPTION_STEPS.has(type);
 /** A button / row link that means "carry on with the next step of this chain" (never a step id). */
 export const LINK_NEXT = '__next';
+/**
+ * A button / row link that means "the conversation ends here", chosen on purpose. A link that is `null` is not decided yet: the
+ * button is shown to the customer but does nothing, so the flow cannot be published like that.
+ */
+export const LINK_END = '__end';
 
 export const FIXED_EXITS: Readonly<Record<string, readonly string[]>> = {
   faq: ['matched', 'no_match'],
@@ -328,8 +333,14 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
         for (let i = 0; i < optionCount({ type: n.type as SimpleType, data: n.data }); i++)
           links.push(carry && wired[i] === carry ? LINK_NEXT : (wired[i] ?? null));
       }
+      // Buttons / rows the author chose to end on ride on the node too (an ended exit has no edge, like an undecided one).
+      const ended = new Set(arr(n.data.endOptions).map(Number));
+      links.forEach((l, i) => {
+        if (l === null && ended.has(i)) links[i] = LINK_END;
+      });
       const step: SimpleStep = { id: n.id, type: n.type as SimpleType, data: { ...n.data }, links };
       delete step.data.carryOn;
+      delete step.data.endOptions;
       if (errorEnds.has(n.id)) step.data.errorEnds = true;
       steps.push(step);
       if (carry && !seen.has(carry)) {
@@ -367,7 +378,9 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
   const ids = new Set(journeys.flatMap((j) => j.steps.map((s) => s.id)));
   for (const j of journeys)
     for (const s of j.steps) {
-      s.links = s.links.map((l) => (l === LINK_NEXT || (l && ids.has(l)) ? l : null));
+      s.links = s.links.map((l) =>
+        l === LINK_NEXT || l === LINK_END || (l && ids.has(l)) ? l : null,
+      );
       if (s.goto && !ids.has(s.goto)) delete s.goto;
     }
 
@@ -408,6 +421,11 @@ export function toGraph(doc: SimpleDoc): FlowGraph {
       const following = j.steps[si + 1];
       if (OPTION_STEPS.has(s.type) && following) data.carryOn = following.id;
       else delete data.carryOn;
+      const ends = BRANCHING.has(s.type)
+        ? s.links.flatMap((l, i) => (l === LINK_END ? [i] : []))
+        : [];
+      if (ends.length > 0) data.endOptions = ends;
+      else delete data.endOptions;
       nodes.push({
         id: s.id,
         type: s.type,
@@ -859,6 +877,47 @@ export interface SimpleProblem {
 
 const cut = (s: string, n: number) => s.length > n;
 
+/**
+ * The buttons, rows and carousel reply buttons of a step that lead nowhere: no step of their own, not "carry on" with a step that is
+ * there, and no action (hand over to a person, start a flow, opt in / out), and not set to end there. The customer sees them, taps one and gets no answer, so
+ * the flow is not published like that (ending there is a choice: `LINK_END`). A condition or FAQ exit left open is fine: the customer never sees it, it just stops there.
+ * Returns the position and label of each (a nameless one reads `#n`).
+ */
+export function deadOptions(
+  s: SimpleStep,
+  following: SimpleStep | undefined,
+): { index: number; label: string }[] {
+  if (s.type !== 'buttons' && s.type !== 'list' && s.type !== 'carousel') return [];
+  const d = s.data;
+  const labels: string[] = [];
+  const agent = new Set<number>();
+  if (s.type === 'carousel') {
+    let i = 0;
+    for (const c of flbCleanCarouselCards(d.cards))
+      for (const b of c.buttons)
+        if (b.type === 'reply' || b.type === 'agent') {
+          if (b.type === 'agent') agent.add(i);
+          labels.push(b.label);
+          i++;
+        }
+  } else {
+    for (const o of arr(d.options)) labels.push(typeof o === 'string' ? o : str(rec(o).title));
+  }
+  const handoffs = rec(d.handoffs);
+  const actions = rec(d.optionActions);
+  const out: { index: number; label: string }[] = [];
+  labels.forEach((label, i) => {
+    const link = s.links[i];
+    if (link === LINK_END || (link === LINK_NEXT ? following : link)) return;
+    if (agent.has(i) || rec(handoffs[String(i)]).team !== undefined) return;
+    const a = rec(actions[String(i)]);
+    if (a.type === 'opt_in' || a.type === 'opt_out' || (a.type === 'flow' && str(a.flow).trim()))
+      return;
+    out.push({ index: i, label: label.trim() || `#${i + 1}` });
+  });
+  return out;
+}
+
 export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): SimpleProblem[] {
   const out: SimpleProblem[] = [];
   const t = doc.trigger.data;
@@ -968,6 +1027,20 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
         if (rows.some((r) => cut(str(r.description), LIMITS.rowDescription)))
           bad('rowDescriptionTooLong', { max: LIMITS.rowDescription });
       }
+      for (const dead of deadOptions(s, j.steps[si + 1])) {
+        out.push({
+          stepId: s.id,
+          message: msg('simpleModel.problems.optionNotConnected', {
+            stage,
+            kind: s.type === 'list' ? 'row' : 'button',
+            label: dead.label,
+          }),
+        });
+      }
+      if (s.type === 'buttons' && arr(d.options).length > LIMITS.buttons)
+        bad('tooManyOptions', { kind: 'button', max: LIMITS.buttons });
+      if (s.type === 'list' && arr(d.options).length > LIMITS.rows)
+        bad('tooManyOptions', { kind: 'row', max: LIMITS.rows });
       const v = str(d.var).trim();
       if (
         v &&

@@ -1146,6 +1146,7 @@
         },
         "editors": {
           "linkLabel": "Waarheen dit leidt",
+          "linkChoose": "Kies waar dit naartoe leidt…",
           "linkEnds": "Eindigt hier (er wordt niets meer verzonden)",
           "linkNext": "Gaat verder met de volgende stap",
           "linkOption": "{stage} · {label}{self, select, true { (deze stap)} other {}}{hasSummary, select, true { · {summary}} other {}}",
@@ -2486,6 +2487,8 @@
         "carouselButtons": "Stap {stage}: geef elke knop een naam, en een link, nummer of adres waar hij iets opent.",
         "conditionIncomplete": "Stap {stage}: maak de regels van de voorwaarde af (in elk een variabele en een waarde).",
         "faqMinScore": "Stap {stage}: de minimumscore moet tussen 0.05 en 0.99 liggen, of gebruik de instelling van de flow.",
+        "optionNotConnected": "Stap {stage}: {kind, select, row {de rij} other {de knop}} \"{label}\" leidt nergens heen. Voeg er een stap voor toe of geef er een actie aan.",
+        "tooManyOptions": "Stap {stage}: {kind, select, row {een lijst kan maximaal {max} rijen hebben} other {een set knoppen kan maximaal {max} knoppen hebben}}.",
         "chooseFlow": "Stap {stage}: kies de flow die de knop start.",
         "chooseApi": "Stap {stage}: kies de API die wordt aangeroepen.",
         "writeCode": "Stap {stage}: schrijf de code die wordt uitgevoerd.",

@@ -21,6 +21,7 @@ import {
   stepLabel,
   removeStep,
   stageLabel,
+  LINK_END,
   LINK_NEXT,
   toGraph,
   toSimple,
@@ -330,6 +331,8 @@ describe('checks', () => {
     const b = newStep('buttons', []);
     d = insertStep(d, 0, 0, b);
     d = updateStep(d, b.id, { data: { prompt: 'p', options: ['x'.repeat(21)] } });
+    const after = { ...newStep('message', allSteps(d)), data: { text: 'hi' } };
+    d = updateStep(addJourney(d, after), b.id, { links: [after.id] });
     d.trigger.data.keywords = 'hi';
     expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
       'Step 1.1: a button label is longer than 20 characters.',
@@ -768,6 +771,7 @@ describe('the carousel step', () => {
     d = insertStep(d, 0, 0, c);
     expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
       'Step 1.1: add at least one card and give every card a title.',
+      'Step 1.1: the button "Choose" leads nowhere. Add a step for it, or give it an action.',
     ]);
     d = updateStep(d, c.id, {
       data: {
@@ -871,6 +875,8 @@ describe('a button that hands the visitor to a person', () => {
         handoffs: { '1': { team: '', message: '' } },
       },
     });
+    const pricing = { ...newStep('message', allSteps(d)), data: { text: 'hi' } };
+    d = updateStep(addJourney(d, pricing), b.id, { links: [pricing.id, null] });
     expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
       'Step 1.1: choose the team the conversation goes to.',
     ]);
@@ -1001,5 +1007,128 @@ describe('Webhook step and the Actions group', () => {
     expect(back.ok).toBe(true);
     if (back.ok)
       expect(back.doc.journeys[0]!.steps.map((s) => s.type)).toEqual(['message', 'webhook']);
+  });
+});
+
+describe('a button, row or reply that leads nowhere is not published', () => {
+  const withStep = (type: 'buttons' | 'list', data: Record<string, unknown>) => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const b = newStep(type, []);
+    d = insertStep(d, 0, 0, b);
+    d = updateStep(d, b.id, { data });
+    return { d, b };
+  };
+  const found = (d: ReturnType<typeof emptyDoc>) =>
+    problems(d, { senderRequired: false }).map((p) => en(p.message));
+  const buttons = { prompt: 'p', options: ['Yes', 'No'] };
+
+  it('names each button with no step', () => {
+    const { d, b } = withStep('buttons', buttons);
+    const yes = { ...newStep('message', allSteps(d)), data: { text: 'hi' } };
+    const wired = updateStep(addJourney(d, yes), b.id, { links: [yes.id, null] });
+    expect(found(d)).toEqual([
+      'Step 1.1: the button "Yes" leads nowhere. Add a step for it, or give it an action.',
+      'Step 1.1: the button "No" leads nowhere. Add a step for it, or give it an action.',
+    ]);
+    expect(found(wired)).toEqual([
+      'Step 1.1: the button "No" leads nowhere. Add a step for it, or give it an action.',
+    ]);
+  });
+
+  it('accepts "ends here" when the author chose it, and keeps the choice through the graph', () => {
+    const { d, b } = withStep('buttons', buttons);
+    const ended = updateStep(d, b.id, { links: [LINK_END, LINK_END] });
+    expect(found(ended)).toEqual([]);
+    const g = toGraph(ended);
+    expect(g.flowEdges.filter((e) => e.source === b.id)).toEqual([]);
+    const back = toSimple({ flowNodes: g.flowNodes, flowEdges: g.flowEdges, vars: g.vars });
+    expect(back.ok && allSteps(back.doc)[0]!.links).toEqual([LINK_END, LINK_END]);
+    expect(back.ok && found(back.doc)).toEqual([]);
+    // the same graph without the choice is an undecided button again
+    const bare = toSimple({
+      flowNodes: g.flowNodes.map((n) => {
+        const { endOptions: _drop, ...data } = n.data as Record<string, unknown>;
+        return { ...n, data };
+      }),
+      flowEdges: g.flowEdges,
+      vars: g.vars,
+    });
+    expect(bare.ok && found(bare.doc)).toHaveLength(2);
+  });
+
+  it('says "row" for a list, and falls back to the position for a nameless one', () => {
+    const { d } = withStep('list', {
+      prompt: 'p',
+      button: 'Pick',
+      options: [{ title: 'Pricing', description: '', section: '' }],
+    });
+    expect(found(d)).toEqual([
+      'Step 1.1: the row "Pricing" leads nowhere. Add a step for it, or give it an action.',
+    ]);
+    const { d: e } = withStep('buttons', { prompt: 'p', options: [' '] });
+    expect(found(e)).toContain('Step 1.1: every button needs a label.');
+    expect(found(e)).toContain(
+      'Step 1.1: the button "#1" leads nowhere. Add a step for it, or give it an action.',
+    );
+  });
+
+  it('accepts "carry on" only when a step follows, and an action as a way out', () => {
+    const { d, b } = withStep('buttons', buttons);
+    const carry = updateStep(d, b.id, { links: [LINK_NEXT, LINK_NEXT] });
+    expect(found(carry)).toHaveLength(2);
+    const next = newStep('message', allSteps(carry));
+    const withNext = insertStep(carry, 0, 1, { ...next, data: { text: 'hi' } });
+    expect(found(withNext)).toEqual([]);
+    const acted = updateStep(d, b.id, {
+      data: {
+        handoffs: { '0': { team: 'team-1', message: '' } },
+        optionActions: { '1': { type: 'opt_out' } },
+      },
+    });
+    expect(found(acted)).toEqual([]);
+    const flowAction = updateStep(d, b.id, {
+      data: { optionActions: { '0': { type: 'flow', flow: 'f-1' }, '1': { type: 'opt_in' } } },
+    });
+    expect(found(flowAction)).toEqual([]);
+  });
+
+  it('checks the reply buttons of a carousel, not its link buttons, and counts a person as a way out', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    d = updateStep(d, c.id, {
+      data: {
+        cards: [
+          {
+            title: 'A',
+            buttons: [
+              { type: 'url', label: 'Open', value: 'https://example.com' },
+              { type: 'reply', label: 'Pick me' },
+              { type: 'agent', label: 'Talk', team: 'team-1' },
+            ],
+          },
+        ],
+      },
+    });
+    expect(found(d)).toEqual([
+      'Step 1.1: the button "Pick me" leads nowhere. Add a step for it, or give it an action.',
+    ]);
+  });
+
+  it('leaves an open condition or FAQ exit alone: nobody taps it', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const f = newStep('faq', []);
+    d = insertStep(d, 0, 0, f);
+    expect(found(d)).toEqual([]);
+  });
+
+  it('refuses more buttons or rows than WhatsApp allows', () => {
+    const { d, b } = withStep('buttons', { prompt: 'p', options: ['a', 'b', 'c', 'd'] });
+    const wired = updateStep(d, b.id, { links: [LINK_NEXT, LINK_NEXT, LINK_NEXT, LINK_NEXT] });
+    const next = insertStep(wired, 0, 1, { ...newStep('message', []), data: { text: 'x' } });
+    expect(found(next)).toEqual(['Step 1.1: a set of buttons can have at most 3 buttons.']);
   });
 });
