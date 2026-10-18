@@ -25,10 +25,14 @@ command below runs on a laptop.
 | Where does each QA-plan task stand (UI scenarios, regression, session expiry, SAST, injection, XSS, audit log, DB indexing, slow queries, plans, N+1, pool, transactions, constraints, integrity, retention, stress, CPU)? | `pnpm qa` (`pnpm qa 30 31`, `pnpm qa -- --fail`)                                    | [../../tools/qa-suite/README.md](../../tools/qa-suite/README.md)                             |
 | Do the public pages and the browser-sensitive flows work in Firefox and WebKit?                                                                                                                                            | `CROSS_BROWSER=1 npx playwright test e2e/cross-browser` (in `apps/web`)             | [cross-browser-testing.md](cross-browser-testing.md)                                         |
 | Does every e2e folder have a browser priority?                                                                                                                                                                             | `node tools/quality/check-browser-priority.mjs`                                     | [cross-browser-testing.md](cross-browser-testing.md)                                         |
+| Does every API route have a latency class? | `node tools/perf/classify.mjs --check` | [performance-testing.md](performance-testing.md) |
+| How fast is the API per class, which endpoints are slowest, and did one get worse? | `bash tools/perf/run-latency.sh` then `node tools/perf/rank.mjs perf/results/latency-vus1-run*.json --baseline perf/baseline.json` (needs k6 and a running API) | [performance-testing.md](performance-testing.md) |
+| What load does the API sustain, and does a 3x spike cascade? | `k6 run perf/throughput.js`, `k6 run perf/spike.js`, then `tools/perf/capacity.mjs` and `tools/perf/spike-check.mjs` | [performance-testing.md](performance-testing.md) |
+| How many bytes do the top endpoints and web routes send? | `node tools/perf/bandwidth.mjs api --token T --check` and `... web --check` | [performance-testing.md](performance-testing.md) |
 
 "Docker" means Testcontainers starts a Postgres and a Redis per test file.
 
 ## Reports
 
 Phase 1 and Phase 2 reports are in this folder (`Phase_2_QA_Report.html`; Phase 1's was handed over separately). Phase 3's is
-`Phase_3_QA_Report.html`. Phase 4's is `Phase_4_QA_Report.html`.
+`Phase_3_QA_Report.html`. Phase 4's is `Phase_4_QA_Report.html`. Phase 5's is `Phase_5_QA_Report.html`.
