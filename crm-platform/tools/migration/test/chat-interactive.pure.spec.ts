@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
-import { parseTurn, sentInteractiveFrom } from '../inbox/parse';
+import { parseTurn, replyTitle, sentInteractiveFrom } from '../inbox/parse';
 import { previewOf } from '../inbox/peer';
 import { elementShapes, repairOf } from '../load/chatreparse';
 import { oracleChat } from '../reconcile/oracle-chat';
@@ -199,5 +199,23 @@ describe('buttons under a message with a header file (F-001)', () => {
       body: 'This is test bot',
       buttons: [{ title: 'Welcome' }, { title: 'Feedback' }, { title: 'No more' }],
     });
+  });
+});
+
+describe('a customer tapping a button or list row is not an empty message', () => {
+  it('reads the title from the reply shapes', () => {
+    expect(replyTitle({ button_reply: { id: 'r1', title: 'Welcome' } })).toBe('Welcome');
+    expect(replyTitle({ interactive: { list_reply: { id: 'x', title: 'Small' } } })).toBe('Small');
+    expect(replyTitle({ type: 'button_reply', title: 'No more' })).toBe('No more');
+    expect(replyTitle({ foo: 1 })).toBeNull();
+  });
+  it('user_query_object with an object value / a user_query object', () => {
+    const a = parseTurn({ user_query_object: { type: 'interactive', value: { button_reply: { id: 'r1', title: 'Feedback' } } } });
+    expect(a.empty).toBe(false);
+    expect(a.body).toBe('Feedback');
+    const b = parseTurn({ user_query: { interactive: { button_reply: { title: 'Welcome' } } } });
+    expect(b.empty).toBe(false);
+    expect(b.body).toBe('Welcome');
+    expect(b.kind).toBe('interactive');
   });
 });

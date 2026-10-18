@@ -236,6 +236,27 @@ function readLocation(el: Doc): { parts: string[]; keep: Record<string, unknown>
 
 const jsonSafe = (v: unknown): unknown => JSON.parse(JSON.stringify(scrub(plain(v)).value ?? null));
 
+/**
+ * The title of a tapped button or list row, in the shapes a customer's reply arrives in: `{button_reply: {id, title}}`,
+ * `{list_reply: {id, title, description}}`, the same inside `{interactive: ...}`, or `{type: 'button_reply', title}`. null: not a reply.
+ */
+export function replyTitle(v: unknown, depth = 0): string | null {
+  const o = obj(v);
+  if (!o || depth > 3) return null;
+  for (const k of ['button_reply', 'list_reply']) {
+    const r = obj(o[k]);
+    const t = r ? (textOf(r.title) ?? textOf(r.text) ?? textOf(r.id)) : null;
+    if (t) return t;
+  }
+  for (const k of ['interactive', 'value', 'message']) {
+    const t = replyTitle(o[k], depth + 1);
+    if (t) return t;
+  }
+  const ty = str(o.type)?.toLowerCase();
+  if (ty && kindOfType(ty) === 'interactive') return textOf(o.title) ?? textOf(o.payload);
+  return null;
+}
+
 /** The text of a user `value` that is not a plain string (a button reply object, a number, a list). */
 function valueText(v: unknown, soft: Soft[]): string | null {
   if (typeof v === 'string') return v.trim() === '' ? null : v;
@@ -243,6 +264,10 @@ function valueText(v: unknown, soft: Soft[]): string | null {
   if (v === null || v === undefined) return null;
   const parts: string[] = [];
   collect(v, parts, { url: null });
+  if (parts.length === 0) {
+    const tapped = replyTitle(v);
+    if (tapped) parts.push(tapped);
+  }
   soft.push({
     code: 'SHAPE_UNEXPECTED',
     reason: 'user_query_object.value is not a string; its text was read from the nested object',
@@ -426,7 +451,8 @@ export function parseTurn(doc: Doc): ParsedTurn {
   } else if (obj(uq)) {
     const u = obj(uq)!;
     const text = typeof u.text === 'string' && u.text.trim() !== '' ? u.text : null;
-    body = text;
+    body = text ?? replyTitle(u);
+    if (body !== null && text === null) kind = 'interactive';
     if (isUrl(u.url)) {
       mediaUrl = u.url.trim();
       kind = kindOfUrl(mediaUrl);
