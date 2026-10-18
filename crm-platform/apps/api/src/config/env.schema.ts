@@ -35,6 +35,8 @@ export const envSchema = z.object({
    */
   TRUST_PROXY: z.string().default('loopback'),
   LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']).default('info'),
+  /** A request that takes at least this long (ms) is logged at warn with its route, organisation and duration. 0 turns it off (QA 51). */
+  SLOW_REQUEST_MS: z.coerce.number().int().min(0).max(600_000).default(500),
   CORS_ORIGINS: z
     .string()
     .default('')
