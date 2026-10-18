@@ -7,22 +7,26 @@ import { useFormatter, useNow, useTranslations } from 'next-intl';
 import {
   CALL_LOG_DIRECTIONS,
   CALL_LOG_RANGES,
-  CALL_LOG_SOURCES,
   CALL_LOG_STATUSES,
   type CallLogRow,
+  type CallLogSource,
 } from '@crm/contracts';
 import { Alert, Badge, Button, EmptyState, Input, Select, Spinner, StatTile, cn } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { AGENT_IGNORE, AGENT_PII } from '@/lib/agent-marks';
+import { usePlanFeature } from '@/lib/plan-features';
 import { useCallLogFilters, useCallLogs, useCallLogsLive } from '../api/call-logs';
 import {
   STATUS_TONE,
   durationText,
+  forPlan,
   logSearch,
   pageCount,
   parseLogParams,
   phoneText,
+  sourcesFor,
   toListQuery,
+  WHATSAPP_CALLING,
   type LogParams,
 } from '../lib/call-logs';
 import { LogCallDialog } from './log-call-dialog';
@@ -35,7 +39,8 @@ export function CallLogsTabs({ active }: { active: 'log' | 'analytics' }) {
   const t = useTranslations('calling-voice.logs.tabs');
   const sp = useSearchParams();
   // The range, the custom days and the number carry across; the log's other filters do not mean anything to the analytics.
-  const p = parseLogParams(sp);
+  const whatsapp = usePlanFeature(WHATSAPP_CALLING);
+  const p = forPlan(parseLogParams(sp), whatsapp);
   const carry = logSearch({ range: p.range, from: p.from, to: p.to, numberId: p.numberId });
   const link = (on: boolean) =>
     cn(
@@ -66,6 +71,10 @@ export function CallLogsTabs({ active }: { active: 'log' | 'analytics' }) {
  * `/call-logs` (TW-CALL-022): the calls of the workspace, newest first. Reference's page, kept: the time range and status on the side,
  * four totals, a search and a table with a page of 25. Added to it: a custom range, direction, number and teammate filters, totals for
  * what the filters select, and a refresh when a call ends. The filters live in the address, so a view can be shared and survives a reload.
+ *
+ * Without the plan feature `waba_calling` (BL-257) it is the same screen for the calls a workspace writes down or has reported (Log a call,
+ * the mobile app, a telephony provider, a click to call): the WhatsApp number filter and the WhatsApp source are left out, and the
+ * words do not promise WhatsApp calls. With the feature nothing changes.
  */
 export function CallLogsScreen() {
   const t = useTranslations('calling-voice.logs');
@@ -74,7 +83,8 @@ export function CallLogsScreen() {
   const router = useRouter();
   const pathname = usePathname();
   const sp = useSearchParams();
-  const params = useMemo(() => parseLogParams(sp), [sp]);
+  const whatsapp = usePlanFeature(WHATSAPP_CALLING);
+  const params = useMemo(() => forPlan(parseLogParams(sp), whatsapp), [sp, whatsapp]);
   const tz = useSession().effectiveTimezone || 'UTC';
   const logs = useCallLogs(toListQuery(params, tz));
   const filters = useCallLogFilters();
@@ -105,7 +115,7 @@ export function CallLogsScreen() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[240px_1fr]">
         <aside className="space-y-3 self-start lg:sticky lg:top-6">
           <p className="rounded-xl border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
-            {t('sideTip')}
+            {whatsapp ? t('sideTip') : t('sideTipLogged')}
           </p>
           <RangeCard params={params} go={go} />
           <StatusCard params={params} go={go} />
@@ -120,7 +130,9 @@ export function CallLogsScreen() {
               <h1 className="mt-1 text-3xl font-normal leading-none tracking-tight sm:text-4xl">
                 {t('title')}
               </h1>
-              <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('subtitle')}</p>
+              <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+                {whatsapp ? t('subtitle') : t('subtitleLogged')}
+              </p>
             </div>
             <div className="flex flex-wrap items-center gap-3">
               {canLog && (
@@ -189,7 +201,8 @@ export function CallLogsScreen() {
                 <FilterBar
                   key={sp.toString()}
                   params={params}
-                  numbers={filters.data?.numbers ?? []}
+                  numbers={whatsapp ? (filters.data?.numbers ?? []) : []}
+                  sources={sourcesFor(whatsapp)}
                   agents={filters.data?.agents ?? []}
                   onApply={(patch) => go(patch)}
                   onClear={() =>
@@ -229,7 +242,10 @@ export function CallLogsScreen() {
                         }
                       />
                     ) : (
-                      <EmptyState title={t('emptyTitle')} message={t('emptyMessage')} />
+                      <EmptyState
+                        title={t('emptyTitle')}
+                        message={whatsapp ? t('emptyMessage') : t('emptyMessageLogged')}
+                      />
                     )}
                   </div>
                 ) : (
@@ -381,6 +397,7 @@ function StatusCard({
 function FilterBar({
   params,
   numbers,
+  sources,
   agents,
   onApply,
   onClear,
@@ -388,6 +405,7 @@ function FilterBar({
 }: {
   params: LogParams;
   numbers: Array<{ id: string; label: string; phoneNumber: string | null }>;
+  sources: readonly CallLogSource[];
   agents: Array<{ id: string; name: string }>;
   onApply: (patch: Partial<LogParams>) => void;
   onClear: () => void;
@@ -442,7 +460,7 @@ function FilterBar({
         <span className="sr-only">{t('source')}</span>
         <Select value={source} onChange={(e) => setSource(e.target.value)} className="w-auto">
           <option value="">{t('allSources')}</option>
-          {CALL_LOG_SOURCES.map((x) => (
+          {sources.map((x) => (
             <option key={x} value={x}>
               {ts(x)}
             </option>

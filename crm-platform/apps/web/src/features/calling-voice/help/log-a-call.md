@@ -1,7 +1,7 @@
 ---
 id: log-a-call
 title: Log a call
-summary: Record a phone call that did not happen on WhatsApp, so it shows in Call logs next to your WhatsApp calls and on the contact's timeline.
+summary: Record a phone call that did not happen on WhatsApp, so it shows in Call logs and on the contact's timeline, with or without WhatsApp calling.
 area: inbox
 order: 26
 documents: [nav:call-logs]
@@ -47,7 +47,7 @@ Logging records what happened. It is never blocked by consent settings or by the
 - You need the right to log calls to see **Log a call**. To see the call afterwards you also need the right to view the call log, and its scope decides whose calls you see (all, your team's, or only your own).
 - A call logged against a contact you are not allowed to see is saved by its number alone, and the contact is not shown to you.
 - Calls reported by a phone or a telephony provider cannot be edited by the people on the team. They are a record of what happened.
-- Call logs follows your plan: it needs the **WhatsApp calling** plan feature, like placing calls.
+- You do not need WhatsApp calling to log a call or to see Call logs. Without it, Call logs shows the calls you wrote down or that a phone or provider reported.
 
 ## If something looks wrong
 

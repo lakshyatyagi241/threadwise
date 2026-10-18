@@ -58,8 +58,9 @@ accept_failed); it has no endpoint.
 
 ## Call logs and call analytics (TW-CALL-022, 036)
 
-Base `/v2/calling/call-logs`, session auth, every route needs the plan feature `waba_calling` (the same gate as the dial routes) and the key
-`call.logs.read`. Its **record scope** says whose calls a person sees, by who handled the call: `all`, `team` (their own and their teammates') or
+Base `/v2/calling/call-logs`, session auth, the key `call.logs.read`. Since BL-257 the plan feature `waba_calling` no longer gates the list, `/filters`,
+`/analytics` and `/:id` (the log holds calls that are not WhatsApp calls, see [call-logging.md](call-logging.md)); it still gates playing a recording and the
+`numberId` filter, and `/filters` offers no numbers without it. Its **record scope** says whose calls a person sees, by who handled the call: `all`, `team` (their own and their teammates') or
 `own`. A call outside the scope, or in another workspace, is a 404 (never 403), and the totals, the filter choices and the analytics follow the same
 scope. Owner and Admin hold the key at `all`; the Manager preset holds it at `own`. Playing a recording also needs `call.recordings.play`.
 

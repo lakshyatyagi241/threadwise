@@ -273,7 +273,7 @@ describe('the list', () => {
 });
 
 describe('who sees which calls', () => {
-  it('needs the key; the plan feature closes every route like the dial routes', async () => {
+  it('needs the key; the plan feature closes only what is WhatsApp’s (BL-257), the log itself is open to every plan', async () => {
     const { t, number } = await setup('cgate');
     const id = await addCall(t, number, { durationSec: 5 });
     const none = await p.api.member(t, 'nokey', [['call.calls.use']]);
@@ -289,19 +289,30 @@ describe('who sees which calls', () => {
       [t.orgId],
     );
     try {
+      // The key still decides; the plan no longer does.
       for (const path of ['', '/filters', '/analytics', `/${id}`]) {
+        expect((await read(none.token, path)).status, path).toBe(403);
+        const r = await read(t.admin, path);
+        expect(r.status, path).toBe(200);
+      }
+      // What is WhatsApp's keeps the plan-locked problem: the filter by number and playing a recording.
+      for (const path of [`?numberId=${number.uuid}`, `/analytics?numberId=${number.uuid}`]) {
         const r = await read(t.admin, path);
         expect(r.status, path).toBe(422);
         expect(r.body.code, path).toBe('PLAN_FEATURE_LOCKED');
       }
       const play = await p.api.as(t.admin).post(`/v2/calling/call-logs/${id}/playback`);
+      expect(play.status).toBe(422);
       expect(play.body.code).toBe('PLAN_FEATURE_LOCKED');
+      // The numbers the filter bar offers are WhatsApp's: none without the feature.
+      expect((await read(t.admin, '/filters')).body.numbers).toEqual([]);
     } finally {
       await p.h.owner.query(`UPDATE org_plan_state SET overrides = '{}' WHERE org_id = $1`, [
         t.orgId,
       ]);
     }
     expect((await read(t.admin, '')).status).toBe(200);
+    expect((await read(t.admin, '/filters')).body.numbers).toHaveLength(1);
   });
 
   it('record scope: all, own and team', async () => {

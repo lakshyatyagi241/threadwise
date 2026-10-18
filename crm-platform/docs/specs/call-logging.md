@@ -1,7 +1,8 @@
 # Call logging framework (calls that are not WhatsApp calls)
 
 Status: built (API, worker, database, contracts, help guide). The screens for it (the "Log a call" form on the contact page, the
-mobile app's sync, the "did you call? log it" prompt) are separate work: see [Open work](#open-work) and BL-250 to BL-258.
+mobile app's sync, the "did you call? log it" prompt) are separate work: see [Open work](#open-work) and BL-250 to BL-258. The Call logs
+screen itself is open to a workspace without WhatsApp calling (BL-257, [section 5](#5-permissions-and-plan)).
 
 API reference: [api/call-logging.md](../api/call-logging.md). Wiring map: [threadwise-port/wiring/call-logging.md](../threadwise-port/wiring/call-logging.md).
 The WhatsApp calling domain this extends: [api/calling-voice.md](../api/calling-voice.md).
@@ -210,9 +211,25 @@ answered, or for how long. The contract for the follow-up prompt (the screen is 
 | `call.logging.manage`       | the "create contacts from unknown callers" switch, the edit window, telephony connections, any manual entry                                   | Owner, Admin                                   |
 | `call.logs.read` (existing) | read the Call logs and a contact's calls; its **record scope** (`all`, `team`, `own`) says whose calls, by who handled them, for both sources | Owner and Admin `all`; Manager and Agent `own` |
 
-The new routes are **not plan-gated** (`waba_calling` gates the WhatsApp-only routes and, as before, the Call logs screen's routes).
-A workspace with no WhatsApp calling can therefore log calls, see them on the contact timeline and in a contact's calls, and not open the
-Call logs screen: see BL-257.
+**The plan feature `waba_calling` gates what is WhatsApp's, not the log (BL-257).** The Call logs list, its cards, the filter choices, the
+detail and the analytics, the new routes and the contact's calls are **not plan-gated**: they need `call.logs.read` (and its record scope) and
+nothing else. A workspace that has no WhatsApp calling and only writes calls down (Log a call, the mobile app, a telephony provider) opens the
+same Call logs screen as any other. The decision, element by element:
+
+| Element                                                                                                                | Without `waba_calling`                                                                               | Why                                                                                                                         |
+| ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Menu entry `Call logs`, `/call-logs`, `/call-logs/analytics`, `/call-logs/:id`                                         | open (permission `call.logs.read` only); no lock, no paywall                                         | The log holds every source. The paywall reads its gates from the menu list, so one gate removes both                        |
+| `GET /calling/call-logs`, `/filters`, `/analytics`, `/:id`                                                             | open; the record scope, RLS and the 404 for what is outside the scope apply as ever                  | Same data the contact's calls already showed without a gate                                                                 |
+| The `source` filter                                                                                                    | open; the screen offers the four logged sources and not `whatsapp` (`source=whatsapp` finds nothing) | There is nothing to find                                                                                                    |
+| The filter by WhatsApp number (`numberId`) on the list and the analytics                                               | `422 PLAN_FEATURE_LOCKED`; the screen drops it from the address and does not show the picker         | A WhatsApp number is a WhatsApp calling object                                                                              |
+| `GET /filters` `numbers`                                                                                               | `[]`; `agents` are those of every source                                                             | The numbers are WhatsApp's; the teammates are not                                                                           |
+| Playing a recording (`POST /:id/playback`), the player and the consent and retention card                              | `422 PLAN_FEATURE_LOCKED`; the screen leaves out the whole recording column                          | Only a WhatsApp call has a recording a person can play; a logged call's reference is never returned                         |
+| Calls already in `wa_calls` (the workspace had the feature once)                                                       | still listed and openable, read only; their recordings cannot be played                              | They are the workspace's own history, as on the contact's calls; hiding them would hide records the owner can see elsewhere |
+| Calling numbers, readiness, calling settings, recording settings, dial and answer routes, the `/calling` Settings tile | unchanged: `422 PLAN_FEATURE_LOCKED` / tile locked                                                   | Recording consent settings govern the operator's browser recording of WhatsApp calls; they belong with WhatsApp calling     |
+| Legal hold on a recording (`PUT /:id/recording-hold`)                                                                  | unchanged (not plan-gated, needs `privacy.requests.manage`)                                          | A privacy action on kept data must stay possible after a downgrade                                                          |
+
+With `waba_calling` nothing changes. The screen reads the same plan list the menu reads (`GET /v2/billing/entitlements`); while that list is
+unknown it behaves as with the feature, like the rest of the app.
 
 ## 6. Privacy
 
@@ -244,8 +261,8 @@ The Call logs analytics accept `source` and return `bySource` (calls, answered a
 
 BL-250 (web: the "Log a call" form on the contact page, the source column and filter on Call logs, the "did you call?" prompt), BL-251 (the
 mobile app's sync), BL-252 (a real vendor adapter and its verification), BL-253 (API-key ingestion), BL-254 (phone masking across Calling),
-BL-255 (playing provider-held recordings, legal hold on entries), BL-256 (interim statuses and agent attribution), BL-257 (Call logs without
-WhatsApp calling), BL-258 (a localisable timeline line).
+BL-255 (playing provider-held recordings, legal hold on entries), BL-256 (interim statuses and agent attribution), BL-258 (a localisable
+timeline line). BL-257 (Call logs without WhatsApp calling) is done: [section 5](#5-permissions-and-plan).
 
 ## 9. Decisions recorded
 
@@ -256,4 +273,8 @@ WhatsApp calling), BL-258 (a localisable timeline line).
   the parity-locked customer API (its scope list and key screen are tied to Reference); it is BL-253, not done here.
 - A reported call (phone or provider) is not editable by anyone below `call.logging.manage`: it is a record, not a note.
 - A number that matches a contact the person may not read is logged by number alone, so the call is not lost and the contact is not revealed.
+- **BL-257: no plan feature of its own.** The open question was whether Call logs needs a new plan feature (`call_logging`) or no gate at all.
+  A new flag would be a second thing to sell and to keep in step with `waba_calling` for no gain: logging a call is a basic CRM action that is
+  already open to every plan (`POST /v2/calls/log`, the contact's calls, the timeline). The log is therefore gated by the right to read it, and only
+  what is WhatsApp's keeps `waba_calling` (table in section 5). A plan-level switch can still be added later without changing the routes.
 - The follow-up task is created with source `manual` (a task the person asked for); deleting the call leaves the task.
