@@ -149,8 +149,10 @@ case "$action" in
       echo "warning: the backup service is not ready; releasing without a pre-release dump" >&2
     fi
 
-    # Expand-only migrations: the live slot keeps serving on the old code while this runs.
-    if ! compose run --rm migrate; then
+    # Expand-only migrations: the live slot keeps serving on the old code while this runs. The migrate service runs from desk-api:$IMAGE_TAG
+    # and .env still names the PREVIOUS release here (it moves at step 3), so the tag is set for this one command: without it the migrations
+    # of the release being deployed were left for the next release and the new code ran on a schema that was a release behind.
+    if ! IMAGE_TAG="$arg" compose run --rm migrate; then
       echo "migration failed; the running release is untouched" >&2; exit 1
     fi
 
