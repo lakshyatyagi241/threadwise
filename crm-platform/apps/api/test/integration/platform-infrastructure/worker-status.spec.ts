@@ -71,7 +71,15 @@ describe('WorkerStatusService', () => {
 
   it('surfaces the dead-lettered count so an alert can fire on any non-zero value', async () => {
     await redis.set(OUTBOX_SAMPLE_KEY, sample({ dead: 3 }));
-    expect((await status().read(NOW)).outbox).toMatchObject({ status: 'ok', dead: 3 });
+    expect((await status().read(NOW)).outbox).toMatchObject({
+      status: 'dead_letters',
+      dead: 3,
+    });
+  });
+
+  it('lag outranks dead letters when both are present', async () => {
+    await redis.set(OUTBOX_SAMPLE_KEY, sample({ lagSeconds: 60, dead: 3 }));
+    expect((await status().read(NOW)).outbox.status).toBe('lagging');
   });
 
   it('says lagging from the warn threshold up', async () => {

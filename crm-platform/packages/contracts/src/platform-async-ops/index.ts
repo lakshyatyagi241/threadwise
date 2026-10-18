@@ -48,7 +48,7 @@ export type WabaReplayRequest = z.infer<typeof wabaReplayRequestSchema>;
 
 export const wabaReplayResultSchema = z.object({
   replayed: z.number().int().nonnegative(),
-  /** Jobs that were no longer failed by the time they were retried (another operator got there first). */
+  /** Jobs left alone: no longer failed (another operator got there first), or failed on purpose before using their attempts. */
   skipped: z.number().int().nonnegative(),
 });
 export type WabaReplayResult = z.infer<typeof wabaReplayResultSchema>;

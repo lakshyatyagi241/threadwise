@@ -123,6 +123,11 @@ export class AsyncOpsService {
     let replayed = 0;
     let skipped = 0;
     for (const job of jobs) {
+      // A job that failed before using its attempts was failed on purpose (UnrecoverableError: a rule the data broke); a retry fails the same way.
+      if (job.attemptsMade < (job.opts?.attempts ?? 1)) {
+        skipped += 1;
+        continue;
+      }
       try {
         // attemptsMade is already at the limit; without a reset the replayed job would get one attempt and no backoff retries.
         await job.retry('failed', { resetAttemptsMade: true });

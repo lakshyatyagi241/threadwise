@@ -41,7 +41,7 @@ export type ReceiveResult = 'ok' | 'forbidden';
 
 /**
  * The public Facebook webhook (TW-FB-006 to 009). Meta delivers at least once, in any order and in batches, so every entry and every
- * event is read, each is stored once by its Meta id, and a failure in one never stops the rest. The tenant is found through a
+ * event is read, each is stored once by its Meta id, and a failure in one never stops the rest from being tried (the delivery then answers 503 so Meta redelivers it, see receive). The tenant is found through a
  * narrow SECURITY DEFINER lookup; from there on everything runs under that organization's context.
  */
 @Injectable()

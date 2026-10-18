@@ -1,13 +1,9 @@
-/** The slice of a BullMQ `Job` that `addOrRevive` uses. */
-export interface ReviveJob {
-  getState(): Promise<string>;
-  remove(): Promise<unknown>;
-}
-
-/** The slice of a BullMQ `Queue` that `addOrRevive` uses. Structural, so it is testable without Redis. */
-export interface ReviveQueue {
-  getJob(id: string): Promise<ReviveJob | undefined>;
-  add(name: string, data: never, opts?: never): Promise<unknown>;
+/** The slice of a BullMQ `Queue<D>` that `addOrRevive` uses. Structural, so it is testable without Redis and keeps the job data type. */
+export interface ReviveQueue<D> {
+  /** One round trip; `'unknown'` when no job has that id. */
+  getJobState(id: string): Promise<string>;
+  getJob(id: string): Promise<{ remove(): Promise<unknown> } | undefined>;
+  add(name: string, data: D, opts?: { jobId?: string }): Promise<unknown>;
 }
 
 /**
@@ -18,17 +14,17 @@ export interface ReviveQueue {
  * until someone noticed (ASYNC-018/050). A failed job is removed and the work is queued afresh; a waiting, active, delayed or
  * completed job is left alone.
  *
- * Not atomic: a concurrent producer can add between the remove and the add, in which case BullMQ simply ignores the second add.
+ * The common case (no job with that id) costs one extra Redis call. Not atomic: a concurrent producer can add between the remove and
+ * the add, in which case BullMQ simply ignores the second add.
  */
-export async function addOrRevive<Q extends ReviveQueue>(
-  queue: Q,
+export async function addOrRevive<D>(
+  queue: ReviveQueue<D>,
   name: string,
-  data: unknown,
-  opts: { jobId?: string } & Record<string, unknown>,
+  data: D,
+  opts: { jobId?: string } = {},
 ): Promise<void> {
-  if (opts.jobId !== undefined) {
-    const existing = await queue.getJob(opts.jobId);
-    if (existing && (await existing.getState()) === 'failed') await existing.remove();
+  if (opts.jobId !== undefined && (await queue.getJobState(opts.jobId)) === 'failed') {
+    await (await queue.getJob(opts.jobId))?.remove();
   }
-  await queue.add(name, data as never, opts as never);
+  await queue.add(name, data, opts);
 }

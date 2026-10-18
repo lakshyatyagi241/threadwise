@@ -74,6 +74,7 @@ describe('AsyncOpsService WhatsApp ingest jobs', () => {
   const failed = (id: string, over: Record<string, unknown> = {}) => ({
     id,
     attemptsMade: 10,
+    opts: { attempts: 10 },
     failedReason: 'db down',
     finishedOn: 1_800_000_000_000,
     data: { changes: [{ phone: '+911234567890', text: 'secret' }] },
@@ -109,6 +110,15 @@ describe('AsyncOpsService WhatsApp ingest jobs', () => {
       actorId: 42,
       payload: { replayed: 2, skipped: 0, limit: 100 },
     });
+  });
+
+  it('does not retry a job that failed before using its attempts (a rule the data broke)', async () => {
+    const permanent = failed('p', { attemptsMade: 2 });
+    const exhausted = failed('e');
+    const { svc } = build({ failedJobs: [permanent, exhausted] });
+    expect(await svc.replayWaba({ limit: 100 }, 42)).toEqual({ replayed: 1, skipped: 1 });
+    expect(permanent.retry).not.toHaveBeenCalled();
+    expect(exhausted.retry).toHaveBeenCalled();
   });
 
   it('counts a job that is no longer failed as skipped instead of failing the whole replay', async () => {

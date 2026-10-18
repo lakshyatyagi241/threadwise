@@ -16,8 +16,8 @@ export interface WorkersCheck {
 }
 
 export interface OutboxCheck {
-  /** `unknown` when no recent sample exists (no worker is sampling); `lagging` past INFRA_OUTBOX_LAG_WARN_SECONDS. */
-  status: 'ok' | 'lagging' | 'unknown';
+  /** `unknown` when no recent sample exists (no worker is sampling); `lagging` past INFRA_OUTBOX_LAG_WARN_SECONDS; `dead_letters` when events ran out of retries (lag wins). */
+  status: 'ok' | 'lagging' | 'dead_letters' | 'unknown';
   /** Events due now and not yet picked up (capped at 10 000). */
   ready?: number;
   /** Seconds the oldest due event has been waiting. */
@@ -55,7 +55,12 @@ export class WorkerStatusService {
     const sample = parse(raw);
     if (!sample || now - sample.sampledAt > aliveMs) return { status: 'unknown' };
     return {
-      status: sample.lagSeconds >= this.env.INFRA_OUTBOX_LAG_WARN_SECONDS ? 'lagging' : 'ok',
+      status:
+        sample.lagSeconds >= this.env.INFRA_OUTBOX_LAG_WARN_SECONDS
+          ? 'lagging'
+          : (sample.dead ?? 0) > 0
+            ? 'dead_letters'
+            : 'ok',
       ready: sample.ready,
       lagSeconds: sample.lagSeconds,
       ...(typeof sample.dead === 'number' ? { dead: sample.dead } : {}),
