@@ -281,7 +281,9 @@
         "couldNotUndo": "Deze wijziging kan niet meer ongedaan worden gemaakt: het contact is doorgegaan of het is al ongedaan gemaakt."
       },
       "heldUntil": "Vastgehouden tot {when}",
-      "heldWhy": "Dit marketingbericht wacht tot uw stille uren voorbij zijn. Het wordt dan verstuurd, tenzij het contact zich ondertussen heeft afgemeld."
+      "heldWhy": "Dit marketingbericht wacht tot uw stille uren voorbij zijn. Het wordt dan verstuurd, tenzij het contact zich ondertussen heeft afgemeld.",
+      "templateSent": "Sjabloon “{name}” verzonden via {channel}",
+      "templateSentPlain": "Sjabloon “{name}” verzonden"
     },
     "media": {
       "openImage": "Afbeelding {name} openen",
@@ -1119,6 +1121,12 @@
       },
       "titleBreached": "{kind}: gemist (was uiterlijk {time})",
       "titleOpen": "{kind}: uiterlijk {time}"
+    },
+    "channelType": {
+      "official": "Officieel",
+      "unofficial": "Onofficieel",
+      "officialFull": "Officieel (WhatsApp Cloud API)",
+      "unofficialFull": "Onofficieel (QR / Baileys)"
     }
   }
 }
