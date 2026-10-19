@@ -15,12 +15,32 @@ export const userRoleRefSchema = z.object({
   name: z.string(),
 });
 
+/** One team a person is on: shown as the Teams column of the members screen. */
+export const userTeamRefSchema = z.object({
+  id: uuidSchema,
+  name: z.string(),
+  color: z.string(),
+  role: z.enum(['member', 'lead']),
+  isPrimary: z.boolean(),
+});
+export type UserTeamRef = z.infer<typeof userTeamRefSchema>;
+
+export const userManagerRefSchema = z.object({ id: uuidSchema, fullName: z.string() });
+export type UserManagerRef = z.infer<typeof userManagerRefSchema>;
+
 export const userResponseSchema = z.object({
   id: uuidSchema,
   email: z.string(),
   fullName: z.string(),
   status: userStatusSchema,
   roles: z.array(userRoleRefSchema),
+  /** The teams of an ACTIVE person, primary first. A deactivated person has places that are kept but not shown. */
+  teams: z.array(userTeamRefSchema).default([]),
+  /**
+   * Who manages this person: the manager of their primary team, else the managers of all their teams. Never the person
+   * themself; deactivated managers are left out.
+   */
+  managers: z.array(userManagerRefSchema).default([]),
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
@@ -48,5 +68,6 @@ export type UpdateUserInput = z.infer<typeof updateUserSchema>;
 export const listUsersQuerySchema = paginationQuerySchema.extend({
   q: z.string().min(1).max(200).optional().describe('Free-text search over name/email'),
   status: userStatusSchema.optional(),
+  teamId: uuidSchema.optional().describe('Only people on this team'),
 });
 export type ListUsersQuery = z.infer<typeof listUsersQuerySchema>;

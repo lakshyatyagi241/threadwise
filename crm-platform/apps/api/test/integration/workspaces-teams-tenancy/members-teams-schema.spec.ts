@@ -371,21 +371,21 @@ describe('wsp members and teams: migration, role presets, isolation and the repo
   });
 
   describe('the teams repository and tenant isolation', () => {
-    it("keeps a kept member's lead flag and capacity when the member list is replaced, and drops the rest", async () => {
+    it("keeps a kept member's role and capacity when the member list is replaced, and drops the rest", async () => {
       const team = await one(
         `INSERT INTO teams (org_id, name, slug) VALUES ($1,'Sales','sales-1') RETURNING id`,
         [orgA],
       );
       await owner.query(
-        `INSERT INTO team_members (org_id, team_id, user_id, is_lead, capacity) VALUES ($1,$2,$3,true,7),($1,$2,$4,false,20)`,
+        `INSERT INTO team_members (org_id, team_id, user_id, role, capacity) VALUES ($1,$2,$3,'lead',7),($1,$2,$4,'member',20)`,
         [orgA, team, ids.agent, ids.viewer],
       );
       await inA(async (tx) => {
         await teams.syncMembers(tx, orgA, team, [ids.agent!, ids.manager!]);
         const rows = await teams.members(tx, orgA, [team]);
-        expect(rows.map((r) => [r.fullName, r.isLead, r.capacity])).toEqual([
-          ['Mo Manager', false, 20],
-          ['Riya Agent', true, 7],
+        expect(rows.map((r) => [r.fullName, r.role, r.capacity])).toEqual([
+          ['Mo Manager', 'member', 20],
+          ['Riya Agent', 'lead', 7],
         ]);
         await teams.syncMembers(tx, orgA, team, []);
         expect(await teams.members(tx, orgA, [team])).toHaveLength(0);

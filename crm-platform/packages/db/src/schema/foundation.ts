@@ -132,6 +132,14 @@ export const teams = pgTable(
     deviceIds: jsonb('device_ids'),
     isDefault: boolean('is_default').notNull().default(false),
     sort: integer('sort').notNull().default(0),
+    /** Teams v2 (BL-381): the optional parent team (no cycles: trigger `trg_teams_guard_parent`). */
+    parentTeamId: idColumn('parent_team_id'),
+    /** The team's manager. Cleared if the user row is deleted; a deactivated lead stays recorded. */
+    leadUserId: idColumn('lead_user_id'),
+    receivesConversations: boolean('receives_conversations').notNull().default(true),
+    receivesRecords: boolean('receives_records').notNull().default(true),
+    /** Reserved for the `team_and_below` scope (phase T2); stored, not read yet. */
+    isScopeBoundary: boolean('is_scope_boundary').notNull().default(true),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -141,6 +149,16 @@ export const teams = pgTable(
     uniqueIndex('teams_org_id_name_key').on(t.orgId, t.name),
     unique('uq_teams_org_slug').on(t.orgId, t.slug),
     index('idx_teams_org_default').on(t.orgId, t.isDefault),
+    foreignKey({
+      name: 'fk_teams_parent_team_id',
+      columns: [t.orgId, t.parentTeamId],
+      foreignColumns: [t.orgId, t.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_teams_lead_user_id',
+      columns: [t.orgId, t.leadUserId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
     foreignKey({
       name: 'fk_teams_default_assignee_id',
       columns: [t.orgId, t.defaultAssigneeId],
@@ -155,13 +173,20 @@ export const teamMembers = pgTable(
     orgId: orgIdColumn(),
     teamId: idColumn('team_id').notNull(),
     userId: idColumn('user_id').notNull(),
-    /** Reference team_user.is_lead / capacity (wsp overlay). */
-    isLead: boolean('is_lead').notNull().default(false),
+    /** Reference team_user.capacity (wsp overlay). */
     capacity: integer('capacity').notNull().default(20),
+    /** Teams v2: 'member' | 'lead' (replaced the unused is_lead). */
+    role: text('role').notNull().default('member'),
+    /** The person's main team, for reporting; at most one per person (partial unique index). */
+    isPrimary: boolean('is_primary').notNull().default(false),
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.teamId, t.userId] }),
     index('idx_team_members_user').on(t.orgId, t.userId),
+    index('idx_team_members_team').on(t.orgId, t.teamId),
+    uniqueIndex('uq_team_members_one_primary')
+      .on(t.orgId, t.userId)
+      .where(sql`${t.isPrimary}`),
   ],
 );
 

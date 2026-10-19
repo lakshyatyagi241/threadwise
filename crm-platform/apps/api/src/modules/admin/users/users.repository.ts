@@ -28,6 +28,20 @@ export interface ListUsersFilter {
   order: 'asc' | 'desc';
   q?: string;
   status?: string;
+  /** Team uuid: only people on it. */
+  teamId?: string;
+}
+
+export interface UserTeamRow {
+  userId: number;
+  teamUuid: string;
+  teamName: string;
+  teamColor: string;
+  role: 'member' | 'lead';
+  isPrimary: boolean;
+  leadUuid: string | null;
+  leadName: string | null;
+  leadUserId: number | null;
 }
 
 /** Data access for staff users. Mirrors ContactsRepository's shape. */
@@ -51,6 +65,11 @@ export class UsersRepository {
 
     if (filter.status) {
       conditions.push(eq(users.status, filter.status));
+    }
+    if (filter.teamId) {
+      conditions.push(sql`EXISTS (
+        SELECT 1 FROM team_members tm JOIN teams t ON t.org_id = tm.org_id AND t.id = tm.team_id
+        WHERE tm.org_id = ${orgId} AND tm.user_id = ${users.id} AND t.uuid = ${filter.teamId}::uuid)`);
     }
     if (filter.q) {
       const pattern = `%${filter.q}%`;
@@ -85,6 +104,34 @@ export class UsersRepository {
       .limit(filter.limit + 1);
 
     return rows as UserRow[];
+  }
+
+  /** Teams of these users with each team's active manager. Inactive people have no visible places (the tenant policy). */
+  async teamsForUsers(tx: Tx, orgId: number, userIds: number[]): Promise<UserTeamRow[]> {
+    if (userIds.length === 0) return [];
+    const res = await tx.execute(sql`
+      SELECT tm.user_id, t.uuid AS team_uuid, t.name AS team_name, t.color AS team_color, tm.role, tm.is_primary,
+             lu.id AS lead_user_id, lu.uuid AS lead_uuid, lu.full_name AS lead_name
+      FROM team_members tm
+      JOIN teams t ON t.org_id = tm.org_id AND t.id = tm.team_id
+      LEFT JOIN users lu ON lu.org_id = t.org_id AND lu.id = t.lead_user_id AND lu.status <> 'inactive'
+      WHERE tm.org_id = ${orgId} AND tm.user_id IN (${sql.join(
+        userIds.map((i) => sql`${i}`),
+        sql`, `,
+      )})
+      ORDER BY tm.is_primary DESC, t.sort, lower(t.name)`);
+    return (res.rows as Array<Record<string, unknown>>).map((r) => ({
+      userId: Number(r.user_id),
+      teamUuid: String(r.team_uuid),
+      teamName: String(r.team_name),
+      teamColor: String(r.team_color),
+      role: r.role === 'lead' ? 'lead' : 'member',
+      isPrimary: Boolean(r.is_primary),
+      leadUuid: (r.lead_uuid as string | null) ?? null,
+      leadName: (r.lead_name as string | null) ?? null,
+      leadUserId:
+        r.lead_user_id === null || r.lead_user_id === undefined ? null : Number(r.lead_user_id),
+    }));
   }
 
   async findByUuid(tx: Tx, orgId: number, uuid: string): Promise<UserRow | undefined> {

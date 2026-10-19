@@ -213,6 +213,63 @@ export class AssignmentService {
   }
 
   /**
+   * Hands the OPEN, non-archived conversations of one person to another active member (the deactivation hand-over). Each
+   * conversation is its own transaction with the manual route's target rules, so one the new person cannot open (a personal
+   * mailbox that is not theirs) is counted as `skipped` and left where it is, never half-moved. At most `limit` are moved per call;
+   * `remaining` says how many are still waiting. The caller decided who may do this (the hand-over route), as for flows.
+   */
+  async handOverOpen(
+    orgId: number,
+    input: { fromUserId: number; toUserUuid: string; actorUserId: number; limit: number },
+  ): Promise<{ moved: number; skipped: number; remaining: number }> {
+    const res = await this.db.tx((tx) =>
+      tx.execute(sql`
+        SELECT uuid FROM conversations
+        WHERE org_id = ${orgId} AND assignee_user_id = ${input.fromUserId} AND archived = FALSE AND status = 'open'
+        ORDER BY id LIMIT ${input.limit + 1}`),
+    );
+    const uuids = (res.rows as Array<{ uuid: string }>).map((r) => r.uuid);
+    const batch = uuids.slice(0, input.limit);
+    let moved = 0;
+    let skipped = 0;
+    for (const conversationUuid of batch) {
+      try {
+        const change = await this.db.tx(async (tx) => {
+          const locked = await this.repo.lockByUuid(tx, orgId, conversationUuid);
+          // Somebody already moved it between the list and the lock.
+          if (!locked || locked.assigneeUserId !== input.fromUserId) return null;
+          const target = await this.resolveTarget(
+            tx,
+            orgId,
+            { rowVersion: locked.rowVersion, strategy: 'manual', userId: input.toUserUuid },
+            locked,
+          );
+          return this.assignInTx(
+            tx,
+            orgId,
+            locked,
+            {
+              userId: target.userId === undefined ? locked.assigneeUserId : target.userId,
+              teamId: locked.assigneeTeamId,
+              userUuid: target.userUuid,
+              teamUuid: null,
+            },
+            { kind: 'user', userId: input.actorUserId },
+          );
+        });
+        if (change) {
+          moved += 1;
+          await this.afterCommit(orgId, change);
+        }
+      } catch (err) {
+        if (!(err instanceof AppError)) throw err;
+        skipped += 1;
+      }
+    }
+    return { moved, skipped, remaining: Math.max(0, uuids.length - batch.length) };
+  }
+
+  /**
    * Writes the assignee columns for a locked conversation, with the timeline event, the audit row and the outbox event, inside the
    * caller's transaction. `locked` must come from `ConversationsRepository.lockByUuid` in that same transaction. The caller decides
    * who may do this (the route does; routing rules are the system); this method only enforces what must hold for every caller.
