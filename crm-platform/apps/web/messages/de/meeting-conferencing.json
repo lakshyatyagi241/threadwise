@@ -1,0 +1,132 @@
+{
+  "settings": {
+    "tiles": {
+      "video-meetings": {
+        "label": "Videomeetings",
+        "description": "Verbinden Sie Ihr eigenes Zoom- oder Microsoft-Teams-Konto, um Ihren Meetings Videolinks hinzuzufügen.",
+        "keywords": "zoom, teams, microsoft teams, video, videoanruf, meeting-link, beitrittslink, konferenz, google meet"
+      }
+    }
+  },
+  "meeting-conferencing": {
+    "common": {
+      "dismiss": "Schließen"
+    },
+    "form": {
+      "label": "Videokonferenz",
+      "add": {
+        "zoom": "Zoom-Link hinzufügen",
+        "teams": "Teams-Link hinzufügen",
+        "meet": "Google-Meet-Link hinzufügen"
+      },
+      "chosen": {
+        "zoom": "Zoom-Link",
+        "teams": "Teams-Link",
+        "meet": "Google-Meet-Link"
+      },
+      "remove": "Videolink entfernen",
+      "needsStart": "Legen Sie eine Startzeit fest, um einen Videolink oder einen Kalendereintrag hinzuzufügen.",
+      "meetNote": "Ein Google-Meet-Link gehört zu einem Kalendertermin, daher wird dieses Meeting auch Ihrem Kalender hinzugefügt.",
+      "teamsViaCalendar": "Dieser Teams-Link wird von Ihrem Microsoft-365-Kalender erstellt, daher wird dieses Meeting auch dort hinzugefügt.",
+      "calendar": "Zu meinem Kalender hinzufügen ({account})",
+      "calendarNamed": "Zu meinem Kalender hinzufügen ({account}, {calendar})",
+      "invite": "Kalendereinladung an den Kontakt senden",
+      "inviteHint": "Ihr Kalender sendet die Einladung an die E-Mail-Adresse des Kontakts. Unsere eigene E-Mail-Einladung bleibt davon unberührt.",
+      "connectLink": "Videokonferenz verbinden"
+    },
+    "row": {
+      "join": "Beitreten",
+      "joinAria": "Dem {provider}-Meeting {title} beitreten",
+      "provider": {
+        "zoom": "Zoom",
+        "teams": "Microsoft Teams",
+        "meet": "Google Meet"
+      },
+      "pending": "Videolink wird hinzugefügt...",
+      "onCalendar": "In Ihrem Kalender",
+      "invited": "Der Kalender hat dem Kontakt eine Einladung gesendet",
+      "retry": "Erneut versuchen",
+      "retrying": "Wird erneut versucht...",
+      "retried": "Videolink und Kalendereintrag wurden erneut geprüft.",
+      "retryFailed": "Das hat nicht funktioniert. Das Meeting ist gespeichert; Sie können es erneut versuchen.",
+      "problem": {
+        "not_installed": "Die Integration {provider} ist für diesen Arbeitsbereich nicht installiert.",
+        "not_connected": "Ihr {provider}-Konto ist nicht verbunden. Verbinden Sie es unter Einstellungen, Videomeetings.",
+        "needs_reconnect": "Ihre {provider}-Verbindung muss erneuert werden. Verbinden Sie sie unter Einstellungen, Videomeetings erneut.",
+        "not_configured": "{provider} wurde für diese Plattform noch nicht eingerichtet. Wenden Sie sich an Ihren Plattformadministrator.",
+        "calendar_not_connected": "Der Kalender ist nicht verbunden, daher konnte das Meeting nicht hinzugefügt werden.",
+        "provider_failed": "{provider} hat nicht geantwortet. Das Meeting ist gespeichert; versuchen Sie es erneut.",
+        "no_start_time": "Ein Videolink benötigt eine Startzeit für das Meeting."
+      },
+      "calendarProblem": {
+        "calendar_not_connected": "Das Meeting konnte dem Kalender nicht hinzugefügt werden, weil kein Kalender verbunden ist.",
+        "provider_failed": "Der Kalender hat nicht geantwortet, daher ist das Meeting noch nicht darin. Das Meeting ist gespeichert; versuchen Sie es erneut.",
+        "other": "Das Meeting konnte dem Kalender nicht hinzugefügt werden."
+      }
+    },
+    "page": {
+      "eyebrow": "Einstellungen",
+      "title": "Videomeetings",
+      "subtitle": "Verbinden Sie Ihr eigenes Zoom- oder Microsoft-Teams-Konto. Das Formular „Meeting hinzufügen“ bietet dann einen Videolink an, der in Ihrem Konto erstellt und mit einer Schaltfläche „Beitreten“ am Meeting angezeigt wird.",
+      "loading": "Ihre Videoverbindungen werden geladen...",
+      "forbidden": {
+        "title": "Sie können diese Seite nicht verwenden",
+        "body": "Bitten Sie einen Arbeitsbereichs-Admin, Ihrer Rolle den Zugriff auf das Bearbeiten von Kontakten zu geben."
+      },
+      "failure": {
+        "generic": "Ihre Videoverbindungen konnten nicht geladen werden."
+      },
+      "retry": "Erneut versuchen",
+      "providers": {
+        "zoom": {
+          "name": "Zoom",
+          "about": "Erstellt für jedes von Ihnen geplante Meeting ein Zoom-Meeting in Ihrem Zoom-Konto, verschiebt es, wenn Sie das Meeting verschieben, und entfernt es, wenn Sie das Meeting löschen."
+        },
+        "teams": {
+          "name": "Microsoft Teams",
+          "about": "Erstellt für jedes von Ihnen geplante Meeting ein Teams-Meeting in Ihrem Microsoft-Geschäfts- oder Schulkonto und aktualisiert oder entfernt es zusammen mit dem Meeting."
+        }
+      },
+      "status": {
+        "connected": "Verbunden",
+        "needs_reconnect": "Muss neu verbunden werden",
+        "disconnected": "Nicht verbunden",
+        "not_installed": "Nicht installiert",
+        "unavailable": "Nicht verfügbar"
+      },
+      "account": "Konto: {account}",
+      "connectedOn": "Verbunden {when}",
+      "lastError": {
+        "forbidden": "Der Anbieter hat die letzte Anfrage abgelehnt. Ihr Konto darf möglicherweise keine Meetings erstellen.",
+        "rate_limited": "Der Anbieter begrenzt gerade die Anfragen.",
+        "unavailable": "Der Anbieter hat auf die letzte Anfrage nicht geantwortet."
+      },
+      "actions": {
+        "connect": "Verbinden",
+        "reconnect": "Erneut verbinden",
+        "disconnect": "Trennen",
+        "install": "Im Marketplace installieren"
+      },
+      "notInstalled": {
+        "canInstall": "Ihr Arbeitsbereich hat {provider} noch nicht installiert. Installieren Sie es über den Marketplace und verbinden Sie dann hier Ihr Konto.",
+        "cannotInstall": "Ihr Arbeitsbereich hat {provider} noch nicht installiert. Bitten Sie einen Arbeitsbereichs-Admin, es über den Marketplace zu installieren."
+      },
+      "unavailable": "{provider} wurde für diese Plattform noch nicht eingerichtet. Wenden Sie sich an Ihren Plattformadministrator.",
+      "outcome": {
+        "connected": "{provider} ist verbunden.",
+        "denied": "{provider} wurde nicht verbunden, weil die Anmeldung abgebrochen wurde.",
+        "failed": "{provider} konnte nicht verbunden werden. Versuchen Sie es erneut.",
+        "expired": "Die Anmeldung hat zu lange gedauert. Klicken Sie erneut auf Verbinden.",
+        "not_configured": "{provider} wurde für diese Plattform noch nicht eingerichtet.",
+        "notYours": "Diese Anmeldung wurde von jemand anderem gestartet, daher wurde nichts verbunden."
+      },
+      "confirming": "Verbindung wird abgeschlossen...",
+      "disconnected": "{provider} getrennt.",
+      "disconnectTitle": "{provider} trennen?",
+      "disconnectBody": "Meetings, die bereits einen {provider}-Link haben, behalten ihn, aber das Verschieben oder Löschen dieser Meetings kann den Raum nicht mehr ändern. Sie können sich jederzeit wieder verbinden.",
+      "disconnectConfirm": "Trennen",
+      "keep": "Verbunden lassen",
+      "calendarNote": "Google-Meet- und Teams-Links, die über Ihren Kalender erstellt werden, brauchen hier keine Verbindung: Sie nutzen den Kalender, den Ihr Arbeitsbereich bereits verbunden hat."
+    }
+  }
+}
