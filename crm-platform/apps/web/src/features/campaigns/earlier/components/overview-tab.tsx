@@ -4,8 +4,8 @@ import { useTranslations } from 'next-intl';
 import type { BroadcastDetail } from '@crm/contracts';
 import { DirectorSummary } from '@/features/campaigns/components/director-summary';
 import { barWidth, funnel } from '../lib/detail-model';
-import { AreaChart, Donut } from './charts';
-import { TemplatePreview } from './template-preview';
+import { AreaChart, Donut } from '@/features/broadcasts/components/charts';
+import { TemplatePreview } from '@/features/broadcasts/components/template-preview';
 
 const KICKER = 'font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground';
 const CARD = 'rounded-2xl border border-border bg-background p-5 shadow-sm';

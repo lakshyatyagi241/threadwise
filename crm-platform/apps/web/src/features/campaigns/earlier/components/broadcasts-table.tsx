@@ -13,7 +13,7 @@ import {
   statusLabel,
   statusTone,
 } from '../lib/list-model';
-import { ChartIcon, DownloadIcon, TrashIcon } from './icons';
+import { ChartIcon, DownloadIcon, TrashIcon } from '@/features/broadcasts/components/icons';
 
 const TH = 'px-3 py-3 text-start font-mono text-[10px] font-normal uppercase tracking-[0.14em]';
 const ICON_BTN =
@@ -85,7 +85,7 @@ export function BroadcastsTable({
               <td className="px-4 py-3">
                 <div className="flex min-w-0 items-center gap-2">
                   <Link
-                    href={`/broadcasts/${b.id}`}
+                    href={`/campaigns/earlier/${b.id}`}
                     className="min-w-0 truncate font-semibold hover:underline"
                   >
                     {b.name}
@@ -128,7 +128,7 @@ export function BroadcastsTable({
               <td className="px-3 py-3 text-end">
                 <div className="inline-flex items-center gap-1">
                   <Link
-                    href={`/broadcasts/${b.id}`}
+                    href={`/campaigns/earlier/${b.id}`}
                     className={ICON_BTN}
                     title={t('viewAnalytics')}
                     aria-label={t('viewAnalytics')}

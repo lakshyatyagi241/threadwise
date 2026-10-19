@@ -208,7 +208,7 @@ export function notificationHref(n: LinkSource): string | null {
     }
     case 'broadcast': {
       const b = outcomeId('broadcast') ?? fromSubject('broadcast');
-      return b ? `/broadcasts/${b}` : null;
+      return b ? `/campaigns/earlier/${b}` : null;
     }
     case 'campaign': {
       const c = outcomeId('campaign') ?? fromSubject('campaign');

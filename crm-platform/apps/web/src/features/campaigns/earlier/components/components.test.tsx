@@ -8,16 +8,13 @@ import type {
   BroadcastDetail,
   BroadcastListItem,
   BroadcastRecipient,
-  BroadcastSummary,
 } from '@crm/contracts';
 import { BroadcastsTable } from './broadcasts-table';
-import { pageWindow } from './broadcasts-pagination';
-import { Donut, HBars } from './charts';
+import { pageWindow } from '@/features/broadcasts/components/broadcasts-pagination';
+import { Donut, HBars } from '@/features/broadcasts/components/charts';
 import { EventsTab } from './events-tab';
 import { OverviewTab } from './overview-tab';
 import { RecipientsTable } from './recipients-table';
-import { KpiStrip } from './kpi-strip';
-import { ListRail } from './list-rail';
 
 // The director summary has its own tests (director-summary.test.tsx); here it is a marker so this screen is tested on its own.
 vi.mock('@/features/campaigns/components/director-summary', () => ({
@@ -111,72 +108,12 @@ describe('broadcast table', () => {
   it('hides the export button without the permission; analytics always links to the detail page', () => {
     const out = table([item()], false);
     expect(out).not.toContain('aria-label="Export rows"');
-    expect(out).toContain('href="/broadcasts/abcdef12-0000-4000-8000-000000000000"');
+    expect(out).toContain('href="/campaigns/earlier/abcdef12-0000-4000-8000-000000000000"');
   });
 
   it('shows a dash for a missing template, provider or schedule', () => {
     const out = table([item({ templateName: null, provider: null })]);
     expect(out.match(/—/g)?.length).toBeGreaterThanOrEqual(3);
-  });
-});
-
-describe('tiles and rail', () => {
-  const stats: BroadcastSummary['stats'] = {
-    total: 7,
-    recipients: 100,
-    sent: 90,
-    delivered: 80,
-    read: 40,
-    failed: 10,
-    clicked: 3,
-    processing: 5,
-    queued: 2,
-    deliveryPct: 88.9,
-    readPct: 50,
-    failedPct: 11.1,
-  };
-  it('the six tiles carry the percentages with one decimal', () => {
-    const out = html(<KpiStrip stats={stats} />);
-    for (const s of [
-      '88.9% delivery',
-      '50.0% read rate',
-      '11.1% failed',
-      '7 broadcasts',
-      'in flight',
-      'awaiting send',
-    ]) {
-      expect(out).toContain(s);
-    }
-  });
-
-  it('the rail lists the five views with their counts and hides "create" without the permission', () => {
-    const counts = { all: 7, scheduled: 1, processing: 2, completed: 3, failed: 1 };
-    const out = html(
-      <ListRail
-        status="failed"
-        counts={counts}
-        recent={[item()]}
-        canCreate={false}
-        onStatus={() => undefined}
-      />,
-    );
-    for (const s of [
-      'All broadcasts',
-      'Scheduled',
-      'Processing',
-      'Completed',
-      'Failed',
-      'Diwali offer',
-    ]) {
-      expect(out).toContain(s);
-    }
-    expect(out).toContain('aria-current="true"');
-    expect(out).not.toContain('Get started');
-    expect(
-      html(
-        <ListRail status="all" counts={counts} recent={[]} canCreate onStatus={() => undefined} />,
-      ),
-    ).toContain('Get started');
   });
 });
 

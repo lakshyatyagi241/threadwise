@@ -19,14 +19,13 @@ import {
 } from '../api/broadcasts';
 import { parseState, RANGES, stateToSearch, type ListState } from '../lib/list-model';
 import { downloadBlob } from '../lib/download';
-import { BroadcastsPagination } from './broadcasts-pagination';
+import { BroadcastsPagination } from '@/features/broadcasts/components/broadcasts-pagination';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { BroadcastsTable } from './broadcasts-table';
-import { RefreshIcon, SearchIcon } from './icons';
+import { RefreshIcon, SearchIcon } from '@/features/broadcasts/components/icons';
 import { KpiStrip } from './kpi-strip';
-import { WizardBroadcastsPanel } from '@/features/campaigns/wizard/components/broadcasts-panel';
-import { NewBroadcast } from './new-broadcast';
 import { ListRail } from './list-rail';
+import { NewCampaignButton } from '../../components/new-campaign-button';
 
 const message = (e: unknown, fallback: string) => (e instanceof ApiError ? e.message : fallback);
 
@@ -34,7 +33,7 @@ const message = (e: unknown, fallback: string) => (e instanceof ApiError ? e.mes
  * `/campaigns/history/legacy` (was `/broadcasts`, TW-BCAST-001, 002): the status views, the six tiles, and the broadcast table with its range, search and pages.
  * The filters and the page live in the address; the counters follow the worker every 15 seconds while the tab is visible.
  */
-export function BroadcastsScreen() {
+export function EarlierScreen() {
   const t = useTranslations('broadcasts.list');
   const router = useRouter();
   const pathname = usePathname();
@@ -48,10 +47,13 @@ export function BroadcastsScreen() {
 
   const state = useMemo(() => parseState(new URLSearchParams(search.toString())), [search]);
   /** Any filter change starts again from page 1; only `page` itself keeps the position. */
+  /** Every address of this view keeps `source=earlier`, which is what picks it on the Campaigns page. */
+  const addressOf = (s: ListState) => {
+    const qs = stateToSearch(s);
+    return `${pathname}${qs ? `${qs}&` : '?'}source=earlier`;
+  };
   const go = (patch: Partial<ListState>) =>
-    router.replace(`${pathname}${stateToSearch({ ...state, page: 1, ...patch })}`, {
-      scroll: false,
-    });
+    router.replace(addressOf({ ...state, page: 1, ...patch }), { scroll: false });
 
   // Search applies 220 ms after typing stops (Reference's rhythm), without a reload.
   const [q, setQ] = useState(state.q);
@@ -147,13 +149,12 @@ export function BroadcastsScreen() {
                 <RefreshIcon className="size-3.5" />
                 {t('refresh')}
               </Button>
-              {canCreate && <NewBroadcast />}
+              {canCreate && <NewCampaignButton />}
             </div>
           </div>
 
           <KpiStrip stats={summary.data?.stats} />
 
-          <WizardBroadcastsPanel />
 
           <div className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border px-5 py-4">
@@ -214,7 +215,7 @@ export function BroadcastsScreen() {
                         <Button
                           variant="secondary"
                           className="rounded-full"
-                          onClick={() => router.replace(pathname)}
+                          onClick={() => router.replace(addressOf(parseState(new URLSearchParams())))}
                         >
                           {t('resetFilters')}
                         </Button>
