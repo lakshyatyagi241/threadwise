@@ -384,12 +384,8 @@ function finish(
   return opts.page ? sql`(${body})` : body;
 }
 
-function messageBranch(ctx: HistoryContext, sel: HistorySelection, o: BranchOptions): SQL {
-  const org = ctx.orgId;
-  const level = o.level;
-  const row = included(level, 'row');
-  const detail = included(level, 'detail');
-  const b: BranchRefs = {
+function messageRefs(ctx: HistoryContext): BranchRefs {
+  return {
     entity: 'message',
     at: sql`m.created_at`,
     id: sql`m.id`,
@@ -405,6 +401,14 @@ function messageBranch(ctx: HistoryContext, sel: HistorySelection, o: BranchOpti
     templateMatch: (t) => sql`m.template_id = ${t}`,
     rank: RANK.message,
   };
+}
+
+function messageBranch(ctx: HistoryContext, sel: HistorySelection, o: BranchOptions): SQL {
+  const org = ctx.orgId;
+  const level = o.level;
+  const row = included(level, 'row');
+  const detail = included(level, 'detail');
+  const b = messageRefs(ctx);
   const joins = sql`
     FROM messages m
     JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
@@ -788,10 +792,11 @@ export function volumeSql(
   unit: 'hour' | 'day' | 'week',
   tz: string,
   seriesFrom: Date,
+  entities?: BranchOptions['entities'],
 ): SQL {
   const u = sql.raw(`'${unit}'`);
   return sql`
-    WITH r AS (${feedSql(ctx, { ...sel, window: { from: seriesFrom, to: sel.window.to } }, { level: 'slim' })}),
+    WITH r AS (${feedSql(ctx, { ...sel, window: { from: seriesFrom, to: sel.window.to } }, { level: 'slim', entities })}),
     agg AS (
       SELECT date_trunc(${u}, r.at AT TIME ZONE ${tz}::text) AS b,
         count(*) FILTER (WHERE r.direction = 'out' AND r.status <> 'failed')::int AS sent,
@@ -809,8 +814,12 @@ export function volumeSql(
 }
 
 /** How many rows of each type the filtered feed has, for the "By message type" card. */
-export function typeMixSql(ctx: HistoryContext, sel: HistorySelection): SQL {
-  return sql`SELECT r.type AS type, count(*)::int AS n FROM (${feedSql(ctx, sel, { level: 'slim' })}) r GROUP BY r.type`;
+export function typeMixSql(
+  ctx: HistoryContext,
+  sel: HistorySelection,
+  entities?: BranchOptions['entities'],
+): SQL {
+  return sql`SELECT r.type AS type, count(*)::int AS n FROM (${feedSql(ctx, sel, { level: 'slim', entities })}) r GROUP BY r.type`;
 }
 
 /**
@@ -844,4 +853,109 @@ export function topConversationsSql(
     WHERE (${ctx.conversationVisible}) ${channel}
     ORDER BY a.n DESC, a.last_at DESC, c.id DESC
     LIMIT ${limit}`;
+}
+
+// --- one scan for the charts ----------------------------------------------------------------------------------------------------
+//
+// The charts (volume, type mix, most active conversations) each read the window's messages: three scans of 750,000 rows for a busy month,
+// each paying for the visibility join, the feed filter and the CASE on `meta`. `insightsScanSql` reads the message branch ONCE and
+// aggregates the three ways at the same time (GROUPING SETS): 760 ms to 400 ms, provided the sort fits in memory (see the repository's
+// work_mem note; at the default 4 MB it spills and is slower, 944 ms). The KPI cards were tried the same way and are SLOWER (467 ms for
+// the counts pass alone against 314 ms for the two count statements), because GROUPING SETS cannot run in parallel workers and a per-conversation
+// pass pays for ten aggregates per row; they keep one statement per number. The recipient rows of broadcasts, campaigns and scheduled messages stay on their own branches and are
+// added by the caller. The fast path is only valid when the filters are the channel alone: a template, campaign, broadcast or scheduled
+// filter changes which rows the volume and the type mix count but not the top list, and the old statements keep that difference.
+
+/** Whether the shared scan gives the same numbers as the separate statements for this selection. */
+export function sharedScanApplies(sel: HistorySelection): boolean {
+  const s = sel.scoping;
+  return !s.templateId && !s.campaignId && !s.broadcastId && !s.scheduledId;
+}
+
+/** The recipient branches (no conversation): what the caller adds to the shared scan's message numbers. */
+export const BULK_ENTITIES = ['broadcast', 'campaign', 'scheduled'] as const;
+
+interface ScanOptions {
+  from: Date;
+  to: Date;
+  /** Also compute the message type of each row (a CASE over `meta`: only when the type mix is asked for). */
+  wantType?: boolean;
+  /** Also compute whether each row passes the screen's narrowing filters (direction, type, source, status, search). */
+  wantNarrow?: boolean;
+}
+
+/** The message branch of the feed for [from, to), one slim row per message, with the filters as columns instead of as a WHERE. */
+function messageScanSql(ctx: HistoryContext, sel: HistorySelection, o: ScanOptions): SQL {
+  const b = messageRefs(ctx);
+  const conds = [
+    sql`m.org_id = ${ctx.orgId}`,
+    ...FEED_MESSAGES('m'),
+    ctx.conversationVisible,
+    sql`m.created_at >= ${o.from} AND m.created_at < ${o.to}`,
+    ...scopingConditions(ctx, sel, b),
+  ];
+  const narrow = o.wantNarrow ? narrowConditions(ctx, sel, b) : [];
+  const narrowOk = narrow.length
+    ? sql.join(
+        narrow.map((c) => sql`(${c})`),
+        sql` AND `,
+      )
+    : sql`TRUE`;
+  return sql`
+    SELECT m.created_at AS at, m.direction AS direction, m.status AS status, m.conversation_id AS conv,
+           ${o.wantType ? sql`${messageType()}` : sql`NULL::text`} AS type, (${narrowOk}) AS narrow_ok
+    FROM messages m
+    JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+    ${ctx.conversationJoins}
+    LEFT JOIN contacts ct ON ct.org_id = c.org_id AND ct.id = c.contact_id
+    WHERE ${sql.join(
+      conds.map((c) => sql`(${c})`),
+      sql` AND `,
+    )}`;
+}
+
+/**
+ * The message branch's numbers for the charts, from one scan of the window: the volume per bucket (every bucket of the series, empty ones
+ * included), the type mix and the most active conversations. Rows: kind 'v' (a bucket: k = its time, a/b/c = sent/received/failed), 'm' (a
+ * type: k = the type, a = its count) and 'c' (a conversation: k = its uuid, a = messages, ts = last message, name, phone, open; `ord` = its id
+ * for the tie-break).
+ */
+export function insightsScanSql(
+  ctx: HistoryContext,
+  sel: HistorySelection,
+  o: { unit: 'hour' | 'day' | 'week'; tz: string; seriesFrom: Date; top: number },
+): SQL {
+  const u = sql.raw(`'${o.unit}'`);
+  const { from, to } = sel.window;
+  return sql`
+    WITH g AS (
+      SELECT GROUPING(x.b, x.t, x.conv) AS g, x.b, x.t, x.conv,
+        count(*) FILTER (WHERE x.direction = 'out' AND x.status <> 'failed')::int AS sent,
+        count(*) FILTER (WHERE x.direction = 'in')::int AS received,
+        count(*) FILTER (WHERE x.direction = 'out' AND x.status = 'failed')::int AS failed,
+        count(*)::int AS n, max(x.at) AS last_at
+      FROM (
+        SELECT s.at, s.direction, s.status, s.conv,
+          CASE WHEN s.narrow_ok AND s.at >= ${o.seriesFrom} THEN date_trunc(${u}, s.at AT TIME ZONE ${o.tz}::text) END AS b,
+          CASE WHEN s.narrow_ok THEN s.type END AS t
+        FROM (${messageScanSql(ctx, sel, { from, to, wantType: true, wantNarrow: true })}) s) x
+      GROUP BY GROUPING SETS ((x.b), (x.t), (x.conv)))
+    SELECT 'v' AS kind,
+           to_char((gs.b AT TIME ZONE ${o.tz}::text) AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS k,
+           COALESCE(a.sent, 0)::bigint AS a, COALESCE(a.received, 0)::bigint AS b, COALESCE(a.failed, 0)::bigint AS c,
+           NULL::timestamptz AS ts, NULL::text AS name, NULL::text AS phone, NULL::boolean AS open,
+           row_number() OVER (ORDER BY gs.b) AS ord
+    FROM generate_series(
+           date_trunc(${u}, ${o.seriesFrom}::timestamptz AT TIME ZONE ${o.tz}::text),
+           date_trunc(${u}, (${to}::timestamptz - interval '1 microsecond') AT TIME ZONE ${o.tz}::text),
+           ${`1 ${o.unit}`}::interval) AS gs(b)
+    LEFT JOIN (SELECT b, sent, received, failed FROM g WHERE g = 3 AND b IS NOT NULL) a ON a.b = gs.b
+    UNION ALL
+    SELECT 'm', g.t, g.n, 0, 0, NULL, NULL, NULL, NULL, 0 FROM g WHERE g.g = 5 AND g.t IS NOT NULL
+    UNION ALL
+    SELECT 'c', c.uuid::text, a.n, 0, 0, a.last_at,
+           COALESCE(${contactName('ct')}, NULLIF(c.peer_name, '')), c.peer_key, ${contactOpen(ctx, 'ct')}, a.conv
+    FROM (SELECT conv, n, last_at FROM g WHERE g = 6 ORDER BY n DESC, last_at DESC, conv DESC LIMIT ${o.top}) a
+    JOIN conversations c ON c.org_id = ${ctx.orgId} AND c.id = a.conv
+    LEFT JOIN contacts ct ON ct.org_id = c.org_id AND ct.id = c.contact_id`;
 }

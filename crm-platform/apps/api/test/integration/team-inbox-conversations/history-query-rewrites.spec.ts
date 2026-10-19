@@ -17,6 +17,7 @@ import {
   visibleToJoinedSql,
   visibleToSql,
 } from '../../../src/modules/team-inbox-conversations/visibility-sql';
+import { MessageHistoryRepository } from '../../../src/modules/chat-conversations/message-history.repository';
 import { DashRepository } from '../../../src/modules/dashboards-analytics-charts/dash.repository';
 
 /**
@@ -42,6 +43,9 @@ describe('rewritten history and dashboard queries equal the statements they repl
     seed = (seed * 1103515245 + 12345) & 0x7fffffff;
     return (seed >> 8) % n; // the low bits of this generator cycle, the high ones do not
   };
+
+  // a spread of milliseconds: rnd() alone reaches only about 2.3 hours, far less than the windows
+  const rndMs = (n: number) => rnd(Math.floor(n / 1000)) * 1000 + rnd(1000);
 
   const q = async (text: string, params: unknown[] = []) => (await owner.query(text, params)).rows;
   const scalar = async (text: string, params: unknown[] = []) =>
@@ -120,7 +124,7 @@ describe('rewritten history and dashboard queries equal the statements they repl
       for (let s = 1; s <= count; s++) {
         const inbound =
           style === 0 ? true : style === 1 ? false : style === 2 ? s % 2 === 1 : s % 2 === 0;
-        const at = new Date(now - rnd(14 * 86_400_000) - 120_000);
+        const at = new Date(now - rndMs(28 * 86_400_000) - 120_000);
         const kind = rnd(15) === 0 ? 'reaction' : rnd(25) === 0 ? 'system' : 'text';
         const meta = rnd(12) === 0 ? { source: 'broadcast', broadcast_id: '1' } : {};
         const status = inbound
@@ -146,6 +150,40 @@ describe('rewritten history and dashboard queries equal the statements they repl
           ],
         );
       }
+    }
+    // messages exactly on the edges of the windows: the current window is [from, to) and the previous one [from - span, from)
+    const edge = await scalar(
+      `INSERT INTO conversations (org_id, channel_id, peer_key, title) VALUES ($1,$2,'edge','t') RETURNING id`,
+      [orgId, wa],
+    );
+    const span = window.to.getTime() - window.from.getTime();
+    for (const [s, at] of [
+      [1, window.from],
+      [2, new Date(window.from.getTime() - span)],
+      [3, window.to],
+    ] as const) {
+      await q(
+        `INSERT INTO messages (org_id, conversation_id, seq, direction, kind, sender_kind, status, created_at) VALUES ($1,$2,$3,'in','text','customer','received',$4)`,
+        [orgId, edge, s, at],
+      );
+    }
+    // recipients of one broadcast: they belong to no conversation, so the history adds them to the messages' numbers
+    const bx = await scalar(`INSERT INTO broadcasts (org_id, name) VALUES ($1,'b1') RETURNING id`, [
+      orgId,
+    ]);
+    for (let i = 0; i < 30; i++) {
+      const at = new Date(now - rndMs(28 * 86_400_000) - 120_000);
+      await q(
+        `INSERT INTO broadcast_contacts (org_id, broadcast_id, contact_id, status, created_at, sent_at) VALUES ($1,$2,$3,$4,$5,$6)`,
+        [
+          orgId,
+          bx,
+          contacts[rnd(contacts.length)],
+          ['pending', 'sent', 'delivered', 'read', 'failed'][rnd(5)],
+          at,
+          rnd(2) === 0 ? at : null,
+        ],
+      );
     }
     // two messages at exactly the same instant in one conversation: the strict "after" must still hold
     const same = await scalar(
@@ -301,5 +339,42 @@ describe('rewritten history and dashboard queries equal the statements they repl
       Number(old.contacts_replied),
       'some conversation must be both messaged and replied to',
     ).toBeGreaterThan(0);
+  });
+
+  // --- the shared scan of the charts against the statement-per-chart it replaced (insightsLegacy) -----------------------------
+  const repo = new MessageHistoryRepository();
+  const narrows: Array<[string, HistorySelection['narrow']]> = [
+    ['no filter', {}],
+    ['outgoing only', { dir: 'out' }],
+    ['failed only', { dir: 'fail' }],
+    ['status read', { status: 'read' }],
+    ['type text', { type: 'text' }],
+    ['source inbox', { source: ['inbox'] }],
+    ['search by contact name', { q: 'C1' }],
+  ];
+
+  it('insights: the shared scan equals one statement per chart, for every viewer, filter and bucket', async () => {
+    let withTop = 0;
+    for (const v of viewers()) {
+      for (const [label, narrow] of narrows) {
+        for (const [bucket, tz] of [
+          ['daily', 'Asia/Kolkata'],
+          ['hourly', 'UTC'],
+          ['weekly', 'America/New_York'],
+        ] as const) {
+          const ctx = { ...ctxOf(v, true), bulk: label === 'no filter' };
+          const s: HistorySelection = { window, scoping: {}, narrow };
+          const seriesFrom =
+            bucket === 'hourly'
+              ? new Date(Math.max(window.from.getTime(), window.to.getTime() - 86_400_000))
+              : window.from;
+          const fast = await repo.insights(tx, ctx, s, { bucket, tz, seriesFrom });
+          const slow = await repo.insightsLegacy(tx, ctx, s, { bucket, tz, seriesFrom });
+          expect(fast, JSON.stringify([v.scope, label, bucket])).toEqual(slow);
+          if (slow.topConversations.length > 0) withTop++;
+        }
+      }
+    }
+    expect(withTop, 'the data must give top conversations').toBeGreaterThan(0);
   });
 });
