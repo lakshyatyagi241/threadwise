@@ -71,7 +71,7 @@
         "email": "البريد الإلكتروني",
         "whatsapp": "WhatsApp"
       },
-      "usedBy": "{count, plural, other {مستخدمة من # أنواع حجز}}",
+      "usedBy": "{count, plural, one {مستخدمة من نوع حجز واحد} two {مستخدمة من نوعي حجز} few {مستخدمة من # أنواع حجز} many {مستخدمة من # نوع حجز} other {مستخدمة من # نوع حجز}}",
       "inactive": "متوقفة",
       "submit": "إرسال إلى Meta للموافقة",
       "submitting": "جارٍ الإرسال...",

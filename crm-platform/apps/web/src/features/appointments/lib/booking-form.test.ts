@@ -61,7 +61,15 @@ const stored: BookingType = {
   },
   availability: [{ weekday: 2, from: '10:00', to: '18:00' }],
   overrides: [{ date: '2026-12-25', closed: true, from: null, to: null, reason: 'Christmas' }],
-  templates: [{ event: 'reminder', waTemplateId: null, plainBody: 'See you {{slot}}' }],
+  templates: [
+    {
+      event: 'reminder',
+      channel: 'whatsapp',
+      waTemplateId: null,
+      libraryTemplateId: null,
+      plainBody: 'See you {{slot}}',
+    },
+  ],
   reminders: [
     {
       id: 'r-180',

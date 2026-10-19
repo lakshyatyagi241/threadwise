@@ -426,7 +426,7 @@ function PredefinedRow({
           {t(`channels.${p.channel}`)}
           {whatsapp && p.metaCategory && (
             <span className="ms-2 text-xs text-muted-foreground">
-              {t(`category.${p.metaCategory}`)}
+              {p.metaCategory === 'MARKETING' ? t('category.MARKETING') : t('category.UTILITY')}
             </span>
           )}
         </span>
