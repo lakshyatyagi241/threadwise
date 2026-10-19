@@ -8,3 +8,5 @@ export {
   type SeriesRow,
 } from './query/analytics-query.service';
 export { RollupService, type RollupPass } from './rollup/rollup.service';
+export { MessageFeedService, orgTimezone } from './query/message-feed.service';
+export { deepEqual, isolated, serve, sourceOf, type MetricSource } from './shadow/metric-source';
