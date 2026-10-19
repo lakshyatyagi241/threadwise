@@ -533,18 +533,18 @@
   },
   {
    "id": "R14",
-   "name": "FAQ query embedding",
+   "name": "Knowledge-base query embedding",
    "layer": "redis",
    "priority": "P1",
-   "location": "apps/api/src/modules/faq-knowledge/faq-embedding.service.ts",
+   "location": "apps/api/src/modules/knowledge-base/kb-embedding.service.ts",
    "what": "The vector for a search question (binary).",
-   "key": "faq:q:${model}:sha256(lower(query))",
+   "key": "kb:q:${model}:sha256(lower(query))",
    "tenant": {
     "mode": "global",
     "org": false,
     "user": false,
     "reason": "Content-addressed: the value is a pure function of (model, question text), so a reader of another workspace can only fetch the vector of a question it typed itself. Tenant isolation does not apply; the cost is shared, which is intended.",
-    "anchor": "faq:q:${model}:"
+    "anchor": "kb:q:${model}:"
    },
    "ttl": "6 h (QUERY_CACHE_TTL_S)",
    "bound": {
@@ -565,7 +565,7 @@
     "documentedSeconds": null,
     "note": null
    },
-   "hitMissPoint": "faq-embedding.service.ts getBuffer(key).",
+   "hitMissPoint": "kb-embedding.service.ts getBuffer(key).",
    "status": "ok",
    "tests": []
   },
@@ -2825,8 +2825,6 @@
     "modules/marketplace/hook-throttle.ts",
     "modules/platform-infrastructure/rate-limit/rate-limiter.ts",
     "modules/whatsapp-devices-baileys/device-limits.service.ts",
-    "modules/faq-knowledge/faq-match.service.ts",
-    "modules/faq-knowledge/faq-verify.service.ts",
     "modules/broadcasts/send-safety.ts",
     "modules/notifications/notification.publisher.ts",
     "modules/notifications/push-subscriptions.service.ts",
@@ -2837,7 +2835,7 @@
     "modules/whatsapp-devices-baileys/device-groups-sweep.service.ts",
     "infra/redis/incr-with-ttl.ts"
    ],
-   "keys": "per IP / per public token / per workspace counters with a time bucket or an EXPIRE (apikey:authfail:*, ratelimit:apikey:*, link_hits:*, faq:rate:${orgId}:*, store_rl:*, ...)",
+   "keys": "per IP / per public token / per workspace counters with a time bucket or an EXPIRE (apikey:authfail:*, ratelimit:apikey:*, link_hits:*, store_rl:*, ...)",
    "tenant": {
     "mode": "mixed",
     "org": false,
@@ -2885,7 +2883,7 @@
     "modules/calling-voice/calling-readiness.service.ts",
     "modules/channel-wechat/broadcast-sender.service.ts",
     "modules/channel-wechat/wechat-token.service.ts",
-    "modules/faq-knowledge/faq-embed.worker.ts"
+    "modules/knowledge-base/kb-embed.worker.ts"
    ],
    "keys": "lock:* with a random owner token and PX / EX",
    "tenant": {
@@ -3056,10 +3054,8 @@
   "modules/crm/sales-docs/public-link-throttle.ts": "S03",
   "modules/crm/segments/segment-throttle.ts": "S03",
   "modules/dashboards-analytics-charts/health.service.ts": "R26",
-  "modules/faq-knowledge/faq-embed.worker.ts": "S05",
-  "modules/faq-knowledge/faq-embedding.service.ts": "R14",
-  "modules/faq-knowledge/faq-match.service.ts": "S03",
-  "modules/faq-knowledge/faq-verify.service.ts": "S03",
+  "modules/knowledge-base/kb-embed.worker.ts": "S05",
+  "modules/knowledge-base/kb-embedding.service.ts": "R14",
   "modules/flow-runtime-engine/runtime/nodes/integrations/google-form-poll.service.ts": "S06",
   "modules/forms-builder/form-notification.consumer.ts": "S06",
   "modules/forms-builder/form-throttle.ts": "S03",
