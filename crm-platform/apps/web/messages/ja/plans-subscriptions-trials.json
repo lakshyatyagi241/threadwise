@@ -84,7 +84,8 @@
       "email_channel": "メール(Gmail)チャネル",
       "personal_history_full": "全履歴インポート(個人用WhatsApp)",
       "ai_crm_copilot": "AI CRM Copilot",
-      "lead_scoring": "AIリードスコアリング"
+      "lead_scoring": "AIリードスコアリング",
+      "record_assignment": "レコード割り当てルール"
     },
     "limitGroups": {
       "messaging": "メッセージング",

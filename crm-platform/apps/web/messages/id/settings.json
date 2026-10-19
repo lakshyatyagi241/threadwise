@@ -306,7 +306,7 @@
         "keywords": "geta, publikasi, bot, konsol, tayang, chatbot"
       },
       "auto-assignment": {
-        "label": "Penugasan otomatis",
+        "label": "Penugasan otomatis percakapan",
         "description": "Berikan percakapan baru ke agen yang tepat secara otomatis, bergiliran atau berdasarkan aturan.",
         "keywords": "routing, round robin, tetapkan, agen, aturan inbox, distribusikan, pemilik"
       },
@@ -360,11 +360,6 @@
         "description": "Lihat seberapa cepat tiap agen membalas dan menyelesaikan hari ini, minggu ini, atau bulan ini.",
         "keywords": "laporan, analitik, agen, waktu respons, balasan pertama, selesai, beban kerja, kinerja"
       },
-      "contact-assignment": {
-        "label": "Penugasan kontak",
-        "description": "Berikan kontak dan deal baru ke orang yang tepat secara otomatis, dengan melewati orang yang sedang cuti.",
-        "keywords": "penugasan, pemilik, round robin, kontak baru, deal baru, cuti, perutean lead"
-      },
       "privacy-requests": {
         "label": "Permintaan data",
         "description": "Jawab orang yang menanyakan data apa yang Anda simpan tentang mereka: pemeriksaan identitas, ekspor, penghapusan dengan pratinjau, dan bukti yang dapat Anda simpan.",
@@ -384,6 +379,21 @@
         "label": "Prospek belum dihubungi",
         "description": "Pilih tindakan yang dianggap sebagai menghubungi prospek, dan kontak baru mana yang dimulai sebagai belum dihubungi.",
         "keywords": "belum dihubungi, sudah dihubungi, prospek, prospek baru, kontak pertama, tindak lanjut, alihkan, penanda"
+      },
+      "record-assignment": {
+        "label": "Aturan penugasan data",
+        "description": "Berikan kontak, perusahaan, dan transaksi baru ke pemilik penjualan Anda secara otomatis, berdasarkan aturan prioritas.",
+        "keywords": "tugaskan, pemilik, round robin, kontak baru, transaksi baru, perusahaan, cuti, perutean prospek, beban kerja, wilayah"
+      },
+      "follow-ups": {
+        "label": "Tindak lanjut",
+        "description": "Atur tindak lanjut berikutnya untuk kontak secara otomatis saat tim Anda menghubunginya, lalu pilih tanggal dan waktu pengingat.",
+        "keywords": "tindak lanjut, pengingat, tindakan berikutnya, tugas, jadwal, tunda, suatu saat nanti"
+      },
+      "duplicate-leads": {
+        "label": "Lead duplikat",
+        "description": "Pilih apakah lead baru yang cocok dengan kontak digabungkan ke kontak itu atau menjadi kontak baru.",
+        "keywords": "duplikat, gabung, lead, telepon sama, e-mail sama, kontak baru, sumber lead"
       }
     },
     "backToMarketplace": "Kembali ke Marketplace"

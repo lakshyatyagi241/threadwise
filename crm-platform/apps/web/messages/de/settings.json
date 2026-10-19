@@ -306,7 +306,7 @@
         "keywords": "geta, veröffentlichen, bot, konsole, live schalten, chatbot"
       },
       "auto-assignment": {
-        "label": "Automatische Zuweisung",
+        "label": "Automatische Zuweisung von Unterhaltungen",
         "description": "Weisen Sie neue Unterhaltungen automatisch dem richtigen Agenten zu, reihum oder nach Regeln.",
         "keywords": "routing, round robin, zuweisen, agenten, posteingangsregeln, verteilen, eigentümer"
       },
@@ -360,11 +360,6 @@
         "description": "Sehen Sie, wie schnell jeder Agent heute, diese Woche oder diesen Monat geantwortet und gelöst hat.",
         "keywords": "Berichte, Analysen, Agenten, Antwortzeit, erste Antwort, gelöst, Auslastung, Leistung"
       },
-      "contact-assignment": {
-        "label": "Kontaktzuweisung",
-        "description": "Neue Kontakte und Deals automatisch der richtigen Person zuweisen, ohne Personen im Urlaub.",
-        "keywords": "zuweisen, Inhaber, Round Robin, neuer Kontakt, neuer Deal, Abwesenheit, Urlaub, Lead-Routing"
-      },
       "privacy-requests": {
         "label": "Datenanfragen",
         "description": "Beantworten Sie Personen, die wissen wollen, was Sie über sie speichern: Identitätsprüfung, Export, Löschung mit Vorschau und ein Nachweis zum Aufbewahren.",
@@ -384,6 +379,21 @@
         "label": "Nicht kontaktierte Leads",
         "description": "Legen Sie fest, welche Aktionen als Kontaktaufnahme mit einem Lead gelten und welche neuen Kontakte als nicht kontaktiert starten.",
         "keywords": "nicht kontaktiert, kontaktiert, Lead, neuer Lead, Erstkontakt, Nachfassen, neu zuweisen, Markierung"
+      },
+      "record-assignment": {
+        "label": "Regeln zur Datensatzzuweisung",
+        "description": "Neue Kontakte, Firmen und Deals automatisch nach Prioritätsregeln Ihren Vertriebsverantwortlichen zuweisen.",
+        "keywords": "zuweisen, Verantwortlicher, Round Robin, neuer Kontakt, neuer Deal, Firma, Abwesenheit, Lead-Routing, Auslastung, Gebiet"
+      },
+      "follow-ups": {
+        "label": "Wiedervorlagen",
+        "description": "Setzen Sie die nächste Wiedervorlage eines Kontakts automatisch, sobald Ihr Team ihn kontaktiert, und legen Sie Datum und Erinnerungszeit fest.",
+        "keywords": "Wiedervorlage, Follow-up, Erinnerung, nächste Aktion, Aufgabe, Termin, zurückstellen, irgendwann"
+      },
+      "duplicate-leads": {
+        "label": "Doppelte Leads",
+        "description": "Wählen Sie, ob ein neuer Lead, der zu einem Kontakt passt, dort zusammengeführt oder als neuer Kontakt angelegt wird.",
+        "keywords": "Duplikat, zusammenführen, Lead, gleiche Telefonnummer, gleiche E-Mail, neuer Kontakt, Lead-Quelle"
       }
     },
     "backToMarketplace": "Zurück zum Marketplace"

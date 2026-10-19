@@ -489,7 +489,18 @@ export const bookingReminders = pgTable(
     offsetMinutes: integer('offset_minutes').notNull(),
     templateEvent: text('template_event').notNull().default('reminder'),
     label: text('label'),
-    isActive: boolean('is_active').notNull().default(true),
+    /** Created OFF: a rule sends nothing until someone switches it on. */
+    isActive: boolean('is_active').notNull().default(false),
+    /** `before`: offset_minutes before the start; `after`: offset_minutes after the end (the follow-up). */
+    kind: text('kind').notNull().default('before'),
+    /** Ordered preference over whatsapp / sms / email; the first channel that can deliver wins. */
+    channels: text('channels')
+      .array()
+      .notNull()
+      .default(sql`ARRAY['whatsapp', 'sms', 'email']::text[]`),
+    subject: text('subject'),
+    body: text('body'),
+    waTemplateId: idColumn('wa_template_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -497,6 +508,13 @@ export const bookingReminders = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
     unique('uq_booking_reminders_org_id_uuid').on(t.orgId, t.uuid),
+    check('chk_booking_reminders_kind', sql`${t.kind} in ('before', 'after')`),
+    foreignKey({
+      name: 'fk_booking_reminders_wa_template_id',
+      columns: [t.orgId, t.waTemplateId],
+      foreignColumns: [waTemplates.orgId, waTemplates.id],
+    }).onDelete('set null'),
+    index('idx_booking_reminders_wa_template_id').on(t.orgId, t.waTemplateId),
     foreignKey({
       name: 'fk_booking_reminders_org',
       columns: [t.orgId],
@@ -507,9 +525,10 @@ export const bookingReminders = pgTable(
       t.bookingTypeId,
       t.offsetIndex,
     ),
-    unique('uq_booking_reminders_booking_type_id_offset_minutes').on(
+    unique('uq_booking_reminders_booking_type_id_kind_offset').on(
       t.orgId,
       t.bookingTypeId,
+      t.kind,
       t.offsetMinutes,
     ),
     foreignKey({
@@ -601,6 +620,18 @@ export const appointmentReminderRuns = pgTable(
     offsetMinutes: integer('offset_minutes').notNull(),
     dueAt: timestamp('due_at', { withTimezone: true }).notNull(),
     claimedAt: timestamp('claimed_at', { withTimezone: true }).notNull().defaultNow(),
+    kind: text('kind').notNull().default('before'),
+    /** The booking's `armed_at` when claimed: a reschedule moves it, so the rule is claimed again for the new time. */
+    armedAt: timestamp('armed_at', { withTimezone: true }).notNull(),
+    status: text('status').notNull().default('pending'),
+    /** A stable code, never a message, a number or an address. */
+    reason: text('reason'),
+    channel: text('channel'),
+    attempts: integer('attempts').notNull().default(0),
+    nextAttemptAt: timestamp('next_attempt_at', { withTimezone: true }).notNull().defaultNow(),
+    lockedAt: timestamp('locked_at', { withTimezone: true }),
+    sentAt: timestamp('sent_at', { withTimezone: true }),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
@@ -609,7 +640,21 @@ export const appointmentReminderRuns = pgTable(
       columns: [t.orgId],
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
-    unique('uq_appointment_reminder_runs').on(t.orgId, t.appointmentId, t.offsetMinutes),
+    unique('uq_appointment_reminder_runs').on(
+      t.orgId,
+      t.appointmentId,
+      t.kind,
+      t.offsetMinutes,
+      t.armedAt,
+    ),
+    check('chk_appointment_reminder_runs_kind', sql`${t.kind} in ('before', 'after')`),
+    check(
+      'chk_appointment_reminder_runs_status',
+      sql`${t.status} in ('pending', 'sending', 'held', 'sent', 'skipped', 'failed', 'cancelled')`,
+    ),
+    index('idx_appointment_reminder_runs_waiting')
+      .on(t.nextAttemptAt)
+      .where(sql`${t.status} in ('pending', 'held', 'sending')`),
     foreignKey({
       name: 'fk_appointment_reminder_runs_appointment',
       columns: [t.orgId, t.appointmentId],

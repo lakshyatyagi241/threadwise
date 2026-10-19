@@ -47,12 +47,14 @@ describe('the bindings registry', () => {
     }
   });
 
-  it('covers contacts, appointments and deals', () => {
+  it('covers contacts, appointments, their reminders and deals', () => {
     expect(BOUND_SURFACES.map((s) => s.id)).toEqual([
       'contacts-menu',
       'contacts-list',
       'contact-record',
       'appointments',
+      'reminders',
+      'booking-page-appearance',
       'deals',
     ]);
   });

@@ -129,6 +129,7 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
       'staff-roles',
       'security',
       'security-events',
+      'dpdp-register',
       'registration',
       'social-login',
       'auth-pages',

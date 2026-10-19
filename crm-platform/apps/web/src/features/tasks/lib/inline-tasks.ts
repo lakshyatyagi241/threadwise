@@ -182,6 +182,7 @@ export function pendingTask(
     company: null,
     outcome: null,
     source: 'manual',
+    kind: 'task',
     rowVersion: 1,
     createdAt: at,
     updatedAt: at,

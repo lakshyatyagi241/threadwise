@@ -3,6 +3,7 @@ import { uuidSchema } from '../common/ids';
 import { pageInfoSchema } from '../common/pagination';
 import { queryBoolean, queryList } from '../contacts-attributes-tags/query-helpers';
 import { taskOutcomeRefSchema } from './task-outcome';
+import { taskKindSchema } from '../lead-handling/follow-up';
 
 /**
  * Tasks (TW-TASK-001..014). A task is open or done. `status` and `doneAt` always agree (a CHECK in the database), and
@@ -18,8 +19,8 @@ export type TaskStatus = z.infer<typeof taskStatusSchema>;
 export const taskPrioritySchema = z.enum(['low', 'medium', 'high']);
 export type TaskPriority = z.infer<typeof taskPrioritySchema>;
 
-/** Who wrote the task: a person (`manual`), the AI copilot, the API, a flow, or the deal timeline (`deal`). */
-export const TASK_SOURCES = ['manual', 'deal', 'ai', 'api', 'flow'] as const;
+/** Who wrote the task: a person (`manual`), the AI copilot, the API, a flow, the deal timeline (`deal`), or a lead handling rule (`auto`). */
+export const TASK_SOURCES = ['manual', 'deal', 'ai', 'api', 'flow', 'auto'] as const;
 export const taskSourceSchema = z.enum(TASK_SOURCES);
 export type TaskSource = z.infer<typeof taskSourceSchema>;
 
@@ -59,6 +60,8 @@ export const taskResponseSchema = z.object({
   /** What the task ended with (Settings > Task outcomes), or null. */
   outcome: taskOutcomeRefSchema.nullable(),
   source: taskSourceSchema,
+  /** `follow_up`: a contact's next follow-up (BL-291). */
+  kind: taskKindSchema,
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),

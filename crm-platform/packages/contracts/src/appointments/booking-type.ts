@@ -182,11 +182,53 @@ export const bookingQuestionInputSchema = z
   });
 export type BookingQuestionInput = z.infer<typeof bookingQuestionInputSchema>;
 
+/** `before`: this many minutes before the start. `after`: this many minutes after the end (the after-visit follow-up). */
+export const BOOKING_REMINDER_KINDS = ['before', 'after'] as const;
+export const bookingReminderKindSchema = z.enum(BOOKING_REMINDER_KINDS);
+export type BookingReminderKind = z.infer<typeof bookingReminderKindSchema>;
+
+/** The channels a reminder can go out on, in the order a rule tries them by default. */
+export const BOOKING_REMINDER_CHANNELS = ['whatsapp', 'sms', 'email'] as const;
+export const bookingReminderChannelSchema = z.enum(BOOKING_REMINDER_CHANNELS);
+export type BookingReminderChannel = z.infer<typeof bookingReminderChannelSchema>;
+
+/** The placeholders a reminder text may use (the same ones the booking messages use). */
+export const BOOKING_REMINDER_PLACEHOLDERS = [
+  'name',
+  'type',
+  'title',
+  'slot',
+  'date',
+  'time',
+  'location',
+  'join_link',
+  'manage_link',
+] as const;
+
+export const BOOKING_REMINDER_BODY_MAX = 2000;
+export const BOOKING_REMINDER_SUBJECT_MAX = 191;
+
 export const bookingReminderInputSchema = z.object({
   id: uuidSchema.optional(),
+  /** Minutes before the start (`before`) or after the end (`after`). */
   offsetMinutes: z.number().int().min(1).max(BOOKING_REMINDER_MAX_MINUTES),
   label: z.string().trim().max(40).nullish(),
-  isActive: z.boolean().default(true),
+  /** A rule is OFF unless it is switched on: a new rule never sends by surprise. */
+  isActive: z.boolean().default(false),
+  kind: bookingReminderKindSchema.default('before'),
+  /** Ordered preference: the first channel the contact can be reached on, with a connected sender, wins. */
+  channels: z
+    .array(bookingReminderChannelSchema)
+    .min(1)
+    .max(BOOKING_REMINDER_CHANNELS.length)
+    .refine((c) => new Set(c).size === c.length, 'a channel is listed once')
+    .default(['whatsapp', 'sms', 'email']),
+  /** An email's subject line; blank = a default one. */
+  subject: z.string().trim().max(BOOKING_REMINDER_SUBJECT_MAX).nullish(),
+  /** The text, with placeholders; blank = the type's reminder message (before) or the built-in follow-up text (after). */
+  body: z.string().trim().max(BOOKING_REMINDER_BODY_MAX).nullish(),
+  /** An approved WhatsApp template of the workspace. Needed to reach a contact on WhatsApp outside the 24 hour window. */
+  waTemplateId: uuidSchema.nullish(),
 });
 export type BookingReminderInput = z.infer<typeof bookingReminderInputSchema>;
 
@@ -195,6 +237,8 @@ export const bookingTemplateInputSchema = z.object({
   channel: bookingTemplateChannelSchema.default('whatsapp'),
   /** A WhatsApp template of the workspace, used instead of the plain body. */
   waTemplateId: uuidSchema.nullish(),
+  /** A message of the appointment library (email, or an APPROVED WhatsApp one); it is read when the message is sent, so editing it updates every type that chose it. */
+  libraryTemplateId: uuidSchema.nullish(),
   /** Variables: {{type}} {{slot}} {{name}} {{date}} {{time}} {{location}} {{manage_link}}. */
   plainBody: z.string().trim().max(2000).nullish(),
   variableMap: z.record(z.string().max(60), z.string().max(200)).nullish(),
@@ -231,7 +275,7 @@ export type BookingCalendarInput = z.infer<typeof bookingCalendarInputSchema>;
 const hexColor = z.string().regex(/^#[0-9a-fA-F]{6}$/, 'colour must be #RRGGBB');
 
 const distinctOffsets = (r: BookingReminderInput[]) =>
-  new Set(r.map((x) => x.offsetMinutes)).size === r.length;
+  new Set(r.map((x) => `${x.kind}:${x.offsetMinutes}`)).size === r.length;
 
 const childShape = {
   availability: availabilityListSchema.optional(),
@@ -336,6 +380,11 @@ export const bookingReminderSchema = z.object({
   offsetMinutes: z.number().int(),
   label: z.string().nullable(),
   isActive: z.boolean(),
+  kind: bookingReminderKindSchema,
+  channels: z.array(bookingReminderChannelSchema),
+  subject: z.string().nullable(),
+  body: z.string().nullable(),
+  waTemplateId: uuidSchema.nullable(),
 });
 export type BookingReminder = z.infer<typeof bookingReminderSchema>;
 
@@ -343,6 +392,7 @@ export const bookingTemplateSchema = z.object({
   event: bookingTemplateEventSchema,
   channel: bookingTemplateChannelSchema,
   waTemplateId: uuidSchema.nullable(),
+  libraryTemplateId: uuidSchema.nullable(),
   plainBody: z.string().nullable(),
   variableMap: z.record(z.string()).nullable(),
 });

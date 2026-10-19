@@ -131,7 +131,8 @@
       "open": "Abrir",
       "edit": "Editar",
       "delete": "Excluir",
-      "unassigned": "Sem responsável"
+      "unassigned": "Sem responsável",
+      "followUpBadge": "Acompanhamento"
     },
     "bulk": {
       "label": "Ações para as tarefas selecionadas",

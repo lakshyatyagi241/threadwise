@@ -12,6 +12,7 @@ export {
   useRealtimeEvent,
   useResync,
   useVisibilityReport,
+  useDeliveryReport,
 } from './hooks';
 export {
   RealtimeClient,

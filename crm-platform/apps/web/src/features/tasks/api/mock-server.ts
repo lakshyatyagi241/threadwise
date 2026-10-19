@@ -157,6 +157,7 @@ function wire(r: Row): TaskResponse {
     // The stand-in has no outcome list; the real API owns it.
     outcome: null,
     source: 'manual',
+    kind: 'task',
     rowVersion: r.rowVersion,
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,

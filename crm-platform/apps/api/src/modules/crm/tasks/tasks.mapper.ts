@@ -23,6 +23,7 @@ export function toTaskResponse(row: TaskRow, notes: string | null): TaskResponse
       ? { id: row.outcomeUuid, name: row.outcomeName ?? '', isActive: row.outcomeActive ?? true }
       : null,
     source: row.source,
+    kind: row.kind,
     rowVersion: row.rowVersion,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
@@ -44,5 +45,6 @@ export function taskEventPayload(row: TaskRow): Record<string, unknown> {
     companyId: row.companyUuid,
     outcomeId: row.outcomeUuid,
     source: row.source,
+    kind: row.kind,
   };
 }

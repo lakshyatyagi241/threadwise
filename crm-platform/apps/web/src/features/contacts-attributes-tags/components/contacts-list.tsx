@@ -70,6 +70,7 @@ import { AddColumnPicker, ColumnHeaderMenu } from './column-menus';
 import { RowMenu } from './row-menu';
 import { StagePicker } from './stage-picker';
 import { UncontactedMarker } from './lead-handling/uncontacted-marker';
+import { FollowUpCell } from './lead-handling/next-follow-up';
 
 export interface ListHandlers {
   selected: ReadonlySet<string>;
@@ -154,6 +155,7 @@ const WIDTH: Record<string, number> = {
   company: 200,
   lastActivity: 190,
   source: 170,
+  nextFollowUp: 190,
 };
 const widthOf = (id: ColumnId) => WIDTH[isAttrId(id) ? 'attr' : id] ?? 160;
 
@@ -200,6 +202,7 @@ function HeaderIcon({ id }: { id: ColumnId }) {
     case 'company':
       return <BuildingIcon className={cls} />;
     case 'lastActivity':
+    case 'nextFollowUp':
       return <ClockIcon className={cls} />;
     case 'source':
       return <GlobeIcon className={cls} />;
@@ -892,6 +895,8 @@ function Cell({
       );
     case 'source':
       return <Clip value={row.source} />;
+    case 'nextFollowUp':
+      return <FollowUpCell followUp={row.nextFollowUp} locale={locale} timeZone={timeZone} />;
   }
 }
 

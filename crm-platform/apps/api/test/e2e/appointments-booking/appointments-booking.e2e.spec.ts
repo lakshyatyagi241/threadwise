@@ -338,6 +338,95 @@ describe('booking types (TW-APPT-005..015)', () => {
     expect(ok.body.slug).toBe(type.slug);
   });
 
+  it('BL-283: a reminder rule is created OFF and carries its kind, channels in order, text and template; a PATCH of just the rules leaves the rest alone', async () => {
+    const tpl = await h.owner.query(
+      `INSERT INTO wa_templates (org_id, template_name, template_body, template_type, status)
+       VALUES ($1, 'visit_reminder', 'Hi {{1}}, your {{2}} is on {{3}}.', 'standard', 'approved') RETURNING uuid`,
+      [t.orgId],
+    );
+    const waId = tpl.rows[0].uuid as string;
+    const type = await api.type(t.admin, {
+      name: 'Rules',
+      questions: [{ label: 'Keep me', type: 'text' }],
+      reminders: [
+        { offsetMinutes: 60 },
+        {
+          offsetMinutes: 60,
+          kind: 'after',
+          channels: ['email', 'sms'],
+          body: 'Thanks {{name}}',
+          subject: 'Thanks',
+        },
+      ],
+    });
+    expect(type.reminders.map((r: { isActive: boolean }) => r.isActive)).toEqual([false, false]);
+    const after = type.reminders.find((r: { kind: string }) => r.kind === 'after')!;
+    expect(after).toMatchObject({
+      channels: ['email', 'sms'],
+      body: 'Thanks {{name}}',
+      subject: 'Thanks',
+    });
+
+    const res = await api
+      .as(t.admin)
+      .patch(`/v2/booking-types/${type.id}`)
+      .send({
+        rowVersion: type.rowVersion,
+        reminders: [
+          ...type.reminders.map((r: { id: string }) => ({
+            id: r.id,
+            offsetMinutes: 60,
+            isActive: true,
+          })),
+        ].map((r, i) =>
+          i === 0
+            ? { ...r, kind: 'before', channels: ['sms', 'whatsapp'], waTemplateId: waId }
+            : { ...r, kind: 'after', channels: ['email'] },
+        ),
+      });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.questions).toHaveLength(1);
+    expect(res.body.reminders).toHaveLength(2);
+    const before = res.body.reminders.find((r: { kind: string }) => r.kind === 'before');
+    expect(before).toMatchObject({
+      isActive: true,
+      channels: ['sms', 'whatsapp'],
+      waTemplateId: waId,
+    });
+  });
+
+  it('BL-283: the same moment before the start and after the end are two rules; the same twice, a bad channel, a template of nobody and an over-long text are refused', async () => {
+    const dup = await api.post(t.admin, '/v2/booking-types', {
+      name: 'Dup rules',
+      durationMinutes: 30,
+      timezone: 'UTC',
+      reminders: [{ offsetMinutes: 60 }, { offsetMinutes: 60 }],
+    });
+    expect(dup.status).toBe(422);
+    for (const bad of [
+      { channels: ['fax'] },
+      { channels: [] },
+      { channels: ['sms', 'sms'] },
+      { kind: 'during' },
+      { body: 'x'.repeat(2001) },
+    ]) {
+      const res = await api.post(t.admin, '/v2/booking-types', {
+        name: 'Bad rule',
+        durationMinutes: 30,
+        timezone: 'UTC',
+        reminders: [{ offsetMinutes: 60, ...bad }],
+      });
+      expect(res.status, JSON.stringify(bad)).toBe(422);
+    }
+    const unknown = await api.post(t.admin, '/v2/booking-types', {
+      name: 'Unknown template',
+      durationMinutes: 30,
+      timezone: 'UTC',
+      reminders: [{ offsetMinutes: 60, waTemplateId: crypto.randomUUID() }],
+    });
+    expect(unknown.status).toBe(422);
+  });
+
   it('D-06: a child list that is sent replaces that list, and an item that carries its id keeps its row', async () => {
     const type = await api.type(t.admin, {
       questions: [
@@ -368,7 +457,17 @@ describe('booking types (TW-APPT-005..015)', () => {
       [false, 'New one'],
     ]);
     expect(res.body.reminders).toEqual([
-      { id: rem.id, offsetMinutes: 90, label: null, isActive: false },
+      {
+        id: rem.id,
+        offsetMinutes: 90,
+        label: null,
+        isActive: false,
+        kind: 'before',
+        channels: ['whatsapp', 'sms', 'email'],
+        subject: null,
+        body: null,
+        waTemplateId: null,
+      },
     ]);
     expect(res.body.availability).toEqual([{ weekday: 2, from: '10:00', to: '11:00' }]);
     const foreign = await api

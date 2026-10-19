@@ -44,6 +44,11 @@
         "editJobTitle": "编辑职位",
         "jobTitleConflict": "其他人已先更改了此联系人。已重新加载，请重试。",
         "jobTitleFailed": "无法保存职位。请重试。",
+        "jobTitleRequired": "职位不能为空：此工作区要求填写。",
+        "jobTitleOtherRequired": "此联系人的其他必填属性为空。请打开“编辑联系人”进行填写。",
+        "jobTitleNotEditable": "在此工作区中，职位为只读或已隐藏，因此无法在此处编辑。",
+        "jobTitleForbidden": "你没有编辑此联系人的权限。",
+        "jobTitleGone": "此联系人对你已不可用：已被删除或已分配给其他人。",
         "owner": "负责人"
       },
       "social": {

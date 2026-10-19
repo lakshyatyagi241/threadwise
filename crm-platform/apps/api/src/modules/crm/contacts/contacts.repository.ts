@@ -73,6 +73,8 @@ export interface ContactRow {
   lastActivityAt: Date | null;
   /** BL-290: null = contacted; set = uncontacted since then. */
   uncontactedSince: Date | null;
+  /** BL-291: the one open follow-up, read in the same statement; `dueAt` is an ISO string (jsonb). */
+  nextFollowUp: { id: string; dueAt: string | null; assigneeId: string | null } | null;
   data: Record<string, unknown>;
   /** BL-193: the contact's own IANA time zone and who set it (staff | import | api); both null when none is stored. */
   timezone: string | null;
@@ -198,6 +200,9 @@ export class ContactsRepository {
       // The stamp on the contact or its latest conversation message, whichever is later (a migrated contact has no stamp).
       lastActivityAt: sql<Date | null>`${contactLastActivity}`.mapWith(contacts.lastActivityAt),
       uncontactedSince: contacts.uncontactedSince,
+      nextFollowUp: sql<
+        ContactRow['nextFollowUp']
+      >`(SELECT jsonb_build_object('id', t.uuid, 'dueAt', t.due_at, 'assigneeId', au.uuid) FROM tasks t LEFT JOIN users au ON au.org_id = t.org_id AND au.id = t.assignee_id WHERE t.org_id = ${contacts.orgId} AND t.contact_id = ${contacts.id} AND t.kind = 'follow_up' AND t.status = 'open')`,
       data: contacts.data,
       timezone: contacts.timezone,
       timezoneSource: contacts.timezoneSource,
@@ -336,6 +341,7 @@ export class ContactsRepository {
     noGroup: number;
     imported: number;
     uncontacted: number;
+    withFollowUp: number;
     groups: number;
   }> {
     const where = whereOf(
@@ -351,6 +357,10 @@ export class ContactsRepository {
              count(*) FILTER (WHERE ${contacts.isUnsubscribed})::int AS unsubscribed,
              count(*) FILTER (WHERE ${contacts.importJobId} IS NOT NULL)::int AS imported,
              count(*) FILTER (WHERE ${contacts.uncontactedSince} IS NOT NULL)::int AS uncontacted,
+             count(*) FILTER (WHERE EXISTS (
+               SELECT 1 FROM tasks t
+               WHERE t.org_id = ${orgId} AND t.contact_id = ${contacts.id} AND t.kind = 'follow_up' AND t.status = 'open'
+             ))::int AS with_follow_up,
              count(*) FILTER (WHERE NOT EXISTS (
                SELECT 1 FROM contact_group_members m
                WHERE m.org_id = ${orgId} AND m.contact_id = ${contacts.id}
@@ -363,6 +373,7 @@ export class ContactsRepository {
       unsubscribed: number;
       imported: number;
       uncontacted: number;
+      with_follow_up: number;
       no_group: number;
     };
     const g = await tx.execute(
@@ -375,6 +386,7 @@ export class ContactsRepository {
       noGroup: Number(r.no_group),
       imported: Number(r.imported),
       uncontacted: Number(r.uncontacted),
+      withFollowUp: Number(r.with_follow_up),
       groups: Number((g.rows[0] as { n: number }).n),
     };
   }
@@ -878,7 +890,12 @@ export class ContactsRepository {
             sql`, `,
           )})
         ORDER BY ci.id`);
-      for (const r of res.rows as Array<{ kind: string; value: string; id: number | string; uuid: string }>) {
+      for (const r of res.rows as Array<{
+        kind: string;
+        value: string;
+        id: number | string;
+        uuid: string;
+      }>) {
         const key = `${r.kind}|${r.value}`;
         if (!out.has(key)) out.set(key, { id: Number(r.id), uuid: r.uuid });
       }

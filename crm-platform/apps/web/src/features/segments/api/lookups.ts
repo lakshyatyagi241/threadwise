@@ -16,7 +16,13 @@ import {
   useTags,
 } from '@/features/contacts-attributes-tags';
 import { useLeadScoringEnabled } from '@/features/lead-scoring';
-import { buildCatalog, type Choice, type FieldDef, type Lookups } from '../lib/fields';
+import {
+  buildCatalog,
+  type Choice,
+  type FieldDef,
+  type Lookups,
+  type PropertyLookup,
+} from '../lib/fields';
 import { fetchAll } from './http';
 import { personSchema, teamOptionSchema } from './schemas';
 
@@ -40,6 +46,26 @@ export function useTeams(enabled = true) {
     staleTime: 5 * 60_000,
     retry: false,
   });
+}
+
+/** A module's property definitions as the catalog reads them (usable ones only, options in their order, hidden options left out). */
+export function propertyLookups(
+  fields: ReadonlyArray<{
+    key: string;
+    label: string;
+    fieldType: PropertyLookup['fieldType'];
+    options?: ReadonlyArray<{ value: string; label: string; position: number; isHidden?: boolean }>;
+  }>,
+): PropertyLookup[] {
+  return fields.map((f) => ({
+    key: f.key,
+    label: f.label,
+    fieldType: f.fieldType,
+    options: (f.options ?? [])
+      .filter((o) => !o.isHidden)
+      .sort((a, b) => a.position - b.position)
+      .map((o) => ({ value: o.value, label: o.label })),
+  }));
 }
 
 export interface SegmentCatalog {

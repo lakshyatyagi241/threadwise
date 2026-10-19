@@ -1,0 +1,302 @@
+{
+  "record-assignment": {
+    "back": "Otomasi",
+    "title": "Aturan penugasan data",
+    "intro": "Tugaskan {contacts}, perusahaan, dan {deals} baru ke pemilik penjualan yang tepat secara otomatis.",
+    "crossNote": "Ini menugaskan {contacts}, perusahaan, dan {deals}. Untuk menugaskan percakapan ke agen, lihat <link>Penugasan otomatis percakapan</link>.",
+    "master": {
+      "title": "Aktifkan penugasan data",
+      "hint": "Nonaktif sampai Anda mengaktifkannya. Jika aktif, aturan di bawah akan menugaskan {contact}, perusahaan, atau {deal} baru yang belum punya pemilik kepada seseorang di tim Anda.",
+      "on": "Penugasan data aktif.",
+      "off": "Penugasan data nonaktif."
+    },
+    "imports": {
+      "title": "Tugaskan juga data yang diimpor",
+      "hint": "Nonaktif secara default agar impor besar tidak mengubah kepemilikan data."
+    },
+    "ownerRule": {
+      "title": "Hanya data tanpa pemilik yang ditugaskan",
+      "body": "Pemilik yang ditetapkan seseorang tidak pernah diganti, begitu pula pemilik yang sengaja dikosongkan. Mesin mengisi pemilik kosong pada data baru. Jika Anda mengaktifkan Tugaskan ulang saat diperbarui pada suatu aturan, mesin juga dapat memindahkan data yang sebelumnya ditugaskannya sendiri, selama belum ada yang mengubah pemiliknya."
+    },
+    "tabs": {
+      "contact": "{Contacts}",
+      "company": "{Companies}",
+      "deal": "{Deals}",
+      "label": "Modul"
+    },
+    "views": {
+      "rules": "Aturan",
+      "log": "Log eksekusi"
+    },
+    "how": {
+      "title": "Cara kerja prioritas",
+      "p1": "Aturan dicoba mulai dari prioritas 1 ke bawah. Aturan pertama yang cocok dan menemukan orang yang tersedia akan mengambil data tersebut.",
+      "p2": "Hanya aturan aktif yang diprioritaskan. Aturan yang dijeda tetap berada di daftar tetapi tidak pernah dijalankan.",
+      "p3": "Aturan tanpa kondisi cocok dengan semua data dan dijalankan setelah semua aturan lain, di mana pun posisinya dalam daftar. Ini adalah fallback.",
+      "p4": "Data yang cocok dengan beberapa aturan diberikan ke aturan dengan prioritas tertinggi.",
+      "p5": "Seret baris, atau gunakan tombol panahnya, untuk mengubah urutan. Aturan fallback dan aturan yang dijeda tetap berada di grupnya sendiri di bagian bawah."
+    },
+    "list": {
+      "title": {
+        "contact": "Aturan untuk {contacts}",
+        "company": "Aturan untuk perusahaan",
+        "deal": "Aturan untuk {deals}"
+      },
+      "create": "Buat aturan",
+      "loading": "Memuat aturan…",
+      "loadFailed": "Aturan gagal dimuat.",
+      "retry": "Coba lagi",
+      "readOnly": "Anda dapat melihat aturan ini tetapi tidak dapat mengubahnya. Untuk mengubahnya diperlukan izin mengelola penugasan data.",
+      "empty": {
+        "title": "Belum ada aturan",
+        "contact": "{contacts} baru tetap memakai pemilik saat dibuat.",
+        "company": "Perusahaan baru tetap memakai pemilik saat dibuat.",
+        "deal": "{deals} baru tetap memakai pemilik saat dibuat.",
+        "create": "Buat aturan pertama"
+      },
+      "col": {
+        "priority": "Prioritas",
+        "rule": "Aturan",
+        "assignTo": "Tugaskan ke",
+        "method": "Metode",
+        "active": "Aktif",
+        "used": "Digunakan",
+        "modified": "Terakhir diubah"
+      },
+      "fallback": "Fallback",
+      "fallbackHint": "Aturan tanpa kondisi cocok dengan semua data dan dijalankan setelah semua aturan lain.",
+      "notPrioritised": "Dijeda",
+      "noConditions": "Tanpa kondisi: cocok dengan semua data",
+      "brokenConditions": "{count, plural, other {# kondisi rusak}}",
+      "brokenHint": "Sebuah kondisi merujuk ke sesuatu yang telah dihapus. Kondisi ini tidak cocok dengan apa pun sampai Anda memperbaikinya.",
+      "usedCount": "{count, plural, =0 {Belum pernah digunakan} other {Digunakan # kali}}",
+      "lastUsed": "Terakhir digunakan {when}",
+      "modifiedBy": "{name}, {when}",
+      "nobody": "Tidak ada",
+      "unknownPerson": "Mantan anggota",
+      "unknownTeam": "Tim dihapus",
+      "teamName": "Tim: {name}",
+      "skipsOffline": "Melewati orang yang offline",
+      "reassigns": "Menugaskan ulang saat diperbarui",
+      "activeFor": "Aturan {name} aktif",
+      "dragHandle": "Seret {name} untuk mengubah prioritasnya",
+      "moveUp": "Naikkan {name}",
+      "moveDown": "Turunkan {name}",
+      "moved": "{name} dipindahkan ke urutan {place}.",
+      "actions": "Tindakan untuk {name}",
+      "edit": "Ubah",
+      "clone": "Duplikat",
+      "delete": "Hapus"
+    },
+    "strategy": {
+      "round_robin": "Round robin (bergiliran)",
+      "least_busy": "Beban kerja terbuka paling sedikit",
+      "fixed": "Pengguna tertentu",
+      "hint": {
+        "round_robin": "Bergiliran di antara orang-orang dengan urutan yang tetap.",
+        "least_busy": {
+          "contact": "Diberikan kepada orang yang saat ini memiliki {contacts} paling sedikit.",
+          "company": "Diberikan kepada orang yang saat ini memiliki perusahaan paling sedikit.",
+          "deal": "Diberikan kepada orang yang saat ini memiliki {deals} terbuka paling sedikit."
+        },
+        "fixed": "Selalu orang yang sama. Saat mereka sedang cuti, delegasinya yang mengambil alih."
+      }
+    },
+    "editor": {
+      "titleNew": "Aturan baru",
+      "titleEdit": "Ubah aturan",
+      "name": "Nama aturan",
+      "description": "Deskripsi (opsional)",
+      "module": "Modul",
+      "moduleLocked": "Modul sebuah aturan tidak dapat diubah. Buat aturan baru untuk modul lain.",
+      "conditions": {
+        "title": "Kondisi",
+        "hint": "Sebuah data cocok jika kolomnya memenuhi kondisi. Pilih kolom, lalu cara membandingkan, lalu nilai.",
+        "emptyTitle": "Tanpa kondisi: cocok dengan semua data, dijalankan terakhir (fallback)",
+        "emptyBody": "Aturan ini mengambil semua data yang tidak diambil aturan lain. Tambahkan kondisi untuk mempersempitnya.",
+        "add": "Tambah kondisi",
+        "counts": "{conditions} dari {max} kondisi",
+        "loading": "Memuat kolom…",
+        "partial": "Beberapa kolom gagal dimuat. Anda tetap dapat membuat aturan dengan kolom yang berhasil dimuat."
+      },
+      "group": {
+        "company": "Kolom perusahaan",
+        "deal": "Kolom {Deal}"
+      },
+      "assign": {
+        "title": "Tugaskan ke",
+        "method": "Metode",
+        "people": "Orang",
+        "person": "Orang",
+        "peoplePlaceholder": "Pilih orang",
+        "personPlaceholder": "Pilih seseorang",
+        "teams": "Tim",
+        "teamsPlaceholder": "Pilih tim",
+        "teamsNote": "Tim di sini adalah kumpulan orang untuk dipilih. Data tidak dimiliki oleh tim: pemiliknya adalah salah satu anggota tim.",
+        "noPeople": "Tidak ada orang yang cocok.",
+        "removePerson": "Hapus {name}",
+        "onLeave": "sedang cuti",
+        "skipOffline": "Lewati orang yang offline",
+        "skipOfflineHint": "Orang yang sedang cuti selalu dilewati.",
+        "reassign": "Tugaskan ulang saat pembaruan membuat aturan ini mulai cocok",
+        "reassignHint": "Hanya berlaku untuk data yang ditugaskan sendiri oleh mesin ini, dan hanya selama belum ada yang mengubah pemiliknya. Nonaktif secara default: data hanya ditugaskan sekali."
+      },
+      "problems": {
+        "name": "Beri nama aturan.",
+        "people": "Pilih setidaknya satu orang atau tim.",
+        "fixedOne": "Aturan pengguna tertentu memerlukan tepat satu orang dan tanpa tim.",
+        "conditions": "Perbaiki kondisi yang disorot sebelum menyimpan.",
+        "server": "Server menolak aturan tersebut."
+      },
+      "saveActivate": "Simpan dan aktifkan",
+      "savePaused": "Simpan sebagai dijeda",
+      "save": "Simpan perubahan",
+      "cancel": "Batal",
+      "unsavedTitle": "Keluar tanpa menyimpan?",
+      "unsavedMessage": "Perubahan Anda pada aturan ini belum disimpan.",
+      "stay": "Lanjut mengedit",
+      "leave": "Keluar"
+    },
+    "fields": {
+      "origin": "Masuk melalui",
+      "company": {
+        "name": "Nama",
+        "email": "Email",
+        "phone": "Telepon",
+        "domain": "Domain situs web",
+        "industry": "Industri",
+        "sizeRange": "Ukuran",
+        "address": "Alamat",
+        "status": "Status",
+        "createdAt": "Dibuat",
+        "updatedAt": "Terakhir diperbarui"
+      },
+      "deal": {
+        "title": "Judul",
+        "value": "Nilai",
+        "currency": "Mata uang",
+        "pipeline": "Pipeline",
+        "stage": "Tahap",
+        "status": "Status",
+        "source": "Sumber",
+        "expectedCloseDate": "Perkiraan tanggal penutupan",
+        "createdAt": "Dibuat",
+        "hasContact": "Memiliki {contact}",
+        "hasCompany": "Memiliki perusahaan"
+      },
+      "dealStatus": {
+        "open": "Terbuka",
+        "won": "Menang",
+        "lost": "Kalah"
+      }
+    },
+    "origin": {
+      "manual": "Ditambahkan oleh orang",
+      "import": "Impor",
+      "inbound": "Pesan pertama",
+      "form": "Formulir",
+      "lead": "Sumber prospek",
+      "api": "API"
+    },
+    "test": {
+      "title": "Uji dengan data",
+      "hint": "Pilih data sungguhan dan lihat aturan mana yang akan mengambilnya dan siapa yang akan menerimanya. Tidak ada yang diubah, dan ini berfungsi saat sakelar nonaktif.",
+      "search": {
+        "contact": "Cari {contacts} berdasarkan nama, email, atau telepon",
+        "company": "Cari perusahaan berdasarkan nama",
+        "deal": "Cari {deals} berdasarkan judul"
+      },
+      "searchLabel": "Data yang diuji",
+      "searching": "Mencari…",
+      "noMatches": "Data tidak ditemukan.",
+      "searchFailed": "Pencarian tidak berhasil. Anda mungkin tidak diizinkan melihat data ini.",
+      "clear": "Pilih data lain",
+      "run": "Uji",
+      "running": "Menguji…",
+      "failed": "Pengujian tidak berjalan. Coba lagi.",
+      "off": "Penugasan data nonaktif, jadi ini menunjukkan apa yang akan terjadi jika aktif.",
+      "outcome": {
+        "would_assign": "{record} akan diberikan kepada {owner} melalui aturan {rule}.",
+        "disabled": "Penugasan data dinonaktifkan untuk ruang kerja ini, jadi tidak akan terjadi apa-apa.",
+        "has_owner": "{record} sudah memiliki pemilik, jadi tidak ada aturan yang dijalankan. Pemilik yang ditetapkan seseorang tidak pernah diganti.",
+        "no_rule": "Tidak ada aturan aktif yang cocok dengan {record}.",
+        "nobody_available": "Sebuah aturan cocok dengan {record}, tetapi semua orang yang disebutkan sedang cuti, offline, atau sudah tidak ada.",
+        "plan": "Paket Anda tidak menyertakan aturan penugasan data.",
+        "not_found": "Data itu tidak ditemukan. Mungkin telah dihapus, atau berada di luar yang dapat Anda lihat."
+      },
+      "traceTitle": "Aturan yang dicoba, berurutan",
+      "traceEmpty": "Tidak ada aturan aktif yang dicoba.",
+      "trace": {
+        "winner": "Cocok dan mengambil data",
+        "matched": "Cocok",
+        "not_matched": "Tidak cocok",
+        "nobody": "Cocok, tetapi tidak ada yang tersedia",
+        "broken": "Memiliki kondisi rusak"
+      },
+      "skipped": "Dilewati karena tidak ada yang tersedia: {names}"
+    },
+    "log": {
+      "title": "Log eksekusi",
+      "intro": "Apa yang dilakukan mesin pada setiap data, terbaru lebih dulu. Entri disimpan selama {days} hari dan hanya berisi id, tidak pernah isi data.",
+      "filterOutcome": "Hasil",
+      "filterRule": "Aturan",
+      "allOutcomes": "Semua hasil",
+      "allRules": "Semua aturan",
+      "loading": "Memuat log eksekusi…",
+      "loadFailed": "Log eksekusi gagal dimuat.",
+      "empty": "Belum ada yang ditugaskan.",
+      "emptyFiltered": "Tidak ada entri yang cocok dengan filter ini.",
+      "loadMore": "Muat lainnya",
+      "col": {
+        "when": "Waktu",
+        "record": "Data",
+        "outcome": "Hasil",
+        "reason": "Alasan",
+        "rule": "Aturan",
+        "assignedTo": "Ditugaskan ke",
+        "method": "Metode",
+        "arrived": "Masuk melalui"
+      },
+      "deletedRecord": "Dihapus",
+      "noRule": "Tanpa aturan",
+      "outcome": {
+        "assigned": "Ditugaskan",
+        "reassigned": "Ditugaskan ulang",
+        "skipped": "Dibiarkan"
+      },
+      "reason": {
+        "matched": "Sebuah aturan cocok",
+        "has_owner": "Sudah memiliki pemilik",
+        "no_rule": "Tidak ada aturan yang cocok",
+        "nobody_available": "Tidak ada yang tersedia",
+        "raced": "Pemilik berubah saat sedang ditugaskan",
+        "unchanged": "Sudah berada di aturan yang tepat"
+      },
+      "trigger": {
+        "created": "Data baru",
+        "updated": "Data diperbarui"
+      },
+      "showTrace": "Tampilkan cara keputusan dibuat",
+      "hideTrace": "Sembunyikan cara keputusan dibuat",
+      "traceFor": "Cara keputusan dibuat untuk {record}"
+    },
+    "toast": {
+      "created": "Aturan dibuat.",
+      "saved": "Aturan disimpan.",
+      "deleted": "Aturan dihapus.",
+      "cloned": "Aturan disalin. Salinannya dijeda.",
+      "activated": "Aturan diaktifkan.",
+      "paused": "Aturan dijeda.",
+      "reordered": "Urutan disimpan.",
+      "conflict": "Orang lain mengubah aturan ini. Versi terbaru telah dimuat. Periksa dan terapkan kembali perubahan Anda.",
+      "failed": "Terjadi kesalahan. Coba lagi."
+    },
+    "delete": {
+      "title": "Hapus aturan ini?",
+      "message": "Aturan {name} akan berhenti menugaskan. Data yang sudah ditugaskannya tetap mempertahankan pemiliknya.",
+      "confirm": "Hapus",
+      "cancel": "Batal"
+    },
+    "dismiss": "Tutup"
+  }
+}

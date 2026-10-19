@@ -44,6 +44,11 @@
         "editJobTitle": "직함 수정",
         "jobTitleConflict": "다른 사용자가 먼저 이 연락처를 변경했습니다. 다시 불러왔으니 다시 시도하세요.",
         "jobTitleFailed": "직함을 저장하지 못했습니다. 다시 시도하세요.",
+        "jobTitleRequired": "이 워크스페이스에서는 직책이 필수이므로 비워 둘 수 없습니다.",
+        "jobTitleOtherRequired": "이 연락처의 다른 필수 속성이 비어 있습니다. 연락처 편집을 열어 입력하세요.",
+        "jobTitleNotEditable": "이 워크스페이스에서 직책은 읽기 전용이거나 숨겨져 있어 여기에서 편집할 수 없습니다.",
+        "jobTitleForbidden": "이 연락처를 편집할 권한이 없습니다.",
+        "jobTitleGone": "이 연락처는 더 이상 사용할 수 없습니다. 삭제되었거나 다른 사람에게 배정되었습니다.",
         "owner": "담당자"
       },
       "social": {

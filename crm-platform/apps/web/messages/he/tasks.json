@@ -131,7 +131,8 @@
       "open": "פתח",
       "edit": "ערוך",
       "delete": "מחק",
-      "unassigned": "לא הוקצתה"
+      "unassigned": "לא הוקצתה",
+      "followUpBadge": "מעקב"
     },
     "bulk": {
       "label": "פעולות עבור המשימות שנבחרו",

@@ -12,11 +12,10 @@ import {
   type OutboxEvent,
   type OutboxSubscriber,
 } from '../../kernel/outbox/outbox-subscribers';
-import { ConsentGate } from '../contact-consent';
 import { AppointmentsRepository, type AppointmentRow } from './appointments.repository';
 import { AppointmentsSupport } from './appointments.support';
 import { BookingTypesRepository, type TemplateRow } from './booking-types.repository';
-import { messageBody } from './message-render';
+import { messageBody, renderTemplate, variablesFor } from './message-render';
 
 export const MESSAGE_EVENTS = [
   'appointment.booked',
@@ -24,7 +23,6 @@ export const MESSAGE_EVENTS = [
   'appointment.declined',
   'appointment.cancelled',
   'appointment.rescheduled',
-  'appointment.reminder_due',
 ] as const;
 
 /** Which lifecycle message an event is, and the status the booking must still have for it to be worth sending. */
@@ -37,7 +35,6 @@ const PLAN: Record<
   'appointment.declined': { template: 'cancellation', status: 'declined' },
   'appointment.cancelled': { template: 'cancellation', status: 'cancelled' },
   'appointment.rescheduled': { template: 'reschedule', status: 'confirmed' },
-  'appointment.reminder_due': { template: 'reminder', status: 'confirmed' },
 };
 
 const SUBJECTS: Record<BookingTemplateEvent, string> = {
@@ -78,7 +75,6 @@ export class AppointmentMessageConsumer implements OutboxSubscriber, OnModuleIni
     private readonly support: AppointmentsSupport,
     private readonly registry: OutboxSubscriberRegistry,
     @Inject(APPOINTMENT_MESSENGER) private readonly messenger: AppointmentMessenger,
-    private readonly consentGate: ConsentGate,
   ) {}
 
   onModuleInit(): void {
@@ -104,9 +100,12 @@ export class AppointmentMessageConsumer implements OutboxSubscriber, OnModuleIni
       const channels: Array<{ channel: BookingMessageChannel; tpl: TemplateRow | null }> = [];
       for (const t of configured)
         if (addressable(t.channel, row)) channels.push({ channel: t.channel, tpl: t });
-      if (channels.length === 0 && configured.length === 0) {
-        const fallback = row.inviteePhone ? 'whatsapp' : row.inviteeEmail ? 'email' : null;
-        if (fallback) channels.push({ channel: fallback, tpl: null });
+      // Nothing configured: WhatsApp when there is a phone, then email when there is an address. The first that delivers wins (WhatsApp
+      // outside its 24 hour window needs a template, so a booker reachable by email still gets the notice).
+      const unconfigured = channels.length === 0 && configured.length === 0;
+      if (unconfigured) {
+        if (row.inviteePhone) channels.push({ channel: 'whatsapp', tpl: null });
+        if (row.inviteeEmail) channels.push({ channel: 'email', tpl: null });
       }
       const facts = {
         typeName: row.bookingTypeName ?? row.title,
@@ -116,44 +115,46 @@ export class AppointmentMessageConsumer implements OutboxSubscriber, OnModuleIni
         timezone: row.timezone,
         location: row.meetUrl ?? row.location,
         manageUrl: this.support.manageUrlOf(row),
+        joinUrl: row.meetUrl,
       };
-      return channels.map(({ channel, tpl }): BookingMessage => ({
-        orgId: event.orgId,
-        appointmentId: row.uuid,
-        event: plan.template,
-        channel,
-        to: { name: row.inviteeName, phone: row.inviteePhone, email: row.inviteeEmail },
-        body: messageBody(plan.template, tpl?.plainBody, facts),
-        subject: `${facts.typeName}: ${SUBJECTS[plan.template]}`,
-        waTemplateId: tpl?.waTemplateUuid ?? null,
-        variableMap: tpl?.variableMap ?? null,
-        idempotencyKey: `${event.id}:${channel}`,
-      }));
+      const vars = variablesFor(facts);
+      return channels.map(({ channel, tpl }): BookingMessage & { firstWins: boolean } => {
+        // A message chosen from the library (BL-351) is read now, so editing it changes what is sent; an inactive one is ignored.
+        const lib = tpl?.libraryTemplateId && tpl.libraryActive ? tpl : null;
+        return {
+          firstWins: unconfigured,
+          orgId: event.orgId,
+          appointmentId: row.uuid,
+          event: plan.template,
+          channel,
+          to: { name: row.inviteeName, phone: row.inviteePhone, email: row.inviteeEmail },
+          body: messageBody(plan.template, lib?.libraryBody ?? tpl?.plainBody, facts),
+          subject: lib?.librarySubject
+            ? renderTemplate(lib.librarySubject, vars)
+            : `${facts.typeName}: ${SUBJECTS[plan.template]}`,
+          waTemplateId: lib?.libraryWaUuid ?? tpl?.waTemplateUuid ?? null,
+          variableMap: tpl?.variableMap ?? null,
+          idempotencyKey: `${event.id}:${channel}`,
+          contactId: row.contactUuid,
+          variables: vars,
+          purpose: 'service',
+        };
+      });
     });
 
-    for (const message of messages) {
-      // Booking notices are service messages (BL-141): a contact who sent STOP still gets them, a contact who withdrew the service
-      // purpose on that channel does not.
-      const verdict = await this.consentGate.check(
-        event.orgId,
-        message.channel === 'email'
-          ? { type: 'email', email: message.to.email ?? '' }
-          : { type: 'phone', phone: message.to.phone ?? '' },
-        message.channel,
-        'service_messaging',
-      );
-      if (verdict.decision === 'deny') {
-        this.logger.debug(
-          { event: event.eventType, channel: message.channel, reason: verdict.reason },
-          'booking message not sent: consent gate',
-        );
-        continue;
-      }
+    let delivered = false;
+    for (const { firstWins, ...message } of messages) {
+      if (firstWins && delivered) continue;
+      // The messenger asks the ConsentGate itself (a booking notice is a service message, BL-141: a contact who sent STOP still gets
+      // it, one who withdrew the service purpose on that channel does not).
       const res = await this.messenger.send(message);
-      if (res.status === 'failed') {
+      if (res.status === 'failed' || res.status === 'held') {
         // Throwing makes the drain retry the event with backoff; the adapter's dedupe makes the retry safe.
-        throw new Error(`booking message failed (${message.channel}): ${res.reason ?? 'unknown'}`);
+        throw new Error(
+          `booking message ${res.status} (${message.channel}): ${res.reason ?? 'unknown'}`,
+        );
       }
+      if (res.status === 'sent') delivered = true;
       if (res.status === 'skipped') {
         this.logger.debug(
           { event: event.eventType, channel: message.channel, reason: res.reason },

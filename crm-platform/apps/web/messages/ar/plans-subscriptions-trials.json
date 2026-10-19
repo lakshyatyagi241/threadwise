@@ -75,7 +75,8 @@
       "email_channel": "قناة البريد الإلكتروني (Gmail)",
       "personal_history_full": "استيراد السجل الكامل (WhatsApp الشخصي)",
       "ai_crm_copilot": "AI CRM Copilot",
-      "lead_scoring": "تقييم العملاء المحتملين بالذكاء الاصطناعي"
+      "lead_scoring": "تقييم العملاء المحتملين بالذكاء الاصطناعي",
+      "record_assignment": "قواعد تعيين السجلات"
     },
     "limitGroups": {
       "messaging": "المراسلة",

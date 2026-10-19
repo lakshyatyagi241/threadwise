@@ -1,0 +1,302 @@
+{
+  "record-assignment": {
+    "back": "Automation",
+    "title": "Record assignment rules",
+    "intro": "Give new {contacts}, companies and {deals} to the right sales owner automatically.",
+    "crossNote": "This assigns {contacts}, companies and {deals}. To assign conversations to agents, see <link>Conversation auto-assignment</link>.",
+    "master": {
+      "title": "Turn on record assignment",
+      "hint": "Off until you turn it on. When it is on, the rules below give a new {contact}, company or {deal} that has no owner to someone on your team.",
+      "on": "Record assignment is on.",
+      "off": "Record assignment is off."
+    },
+    "imports": {
+      "title": "Also assign imported records",
+      "hint": "Off by default so a large import does not change who owns what."
+    },
+    "ownerRule": {
+      "title": "Only records without an owner are assigned",
+      "body": "An owner a person set is never replaced, and neither is an owner someone cleared on purpose. The engine fills an empty owner on a new record. If you turn on Reassign on update for a rule, it may also move a record that the engine itself assigned earlier, as long as nobody has changed the owner since."
+    },
+    "tabs": {
+      "contact": "{Contacts}",
+      "company": "{Companies}",
+      "deal": "{Deals}",
+      "label": "Module"
+    },
+    "views": {
+      "rules": "Rules",
+      "log": "Run log"
+    },
+    "how": {
+      "title": "How priority works",
+      "p1": "Rules are tried from priority 1 downwards. The first rule that matches and finds someone available takes the record.",
+      "p2": "Only active rules are prioritised. A paused rule keeps its place in the list but never runs.",
+      "p3": "A rule with no conditions matches every record and runs after all the other rules, wherever it sits in the list. This is the fallback.",
+      "p4": "A record that matches several rules goes to the one with the highest priority.",
+      "p5": "Drag a row, or use its arrow buttons, to change the order. Fallback rules and paused rules stay in their own group at the bottom."
+    },
+    "list": {
+      "title": {
+        "contact": "Rules for {contacts}",
+        "company": "Rules for companies",
+        "deal": "Rules for {deals}"
+      },
+      "create": "Create rule",
+      "loading": "Loading the rules…",
+      "loadFailed": "The rules did not load.",
+      "retry": "Try again",
+      "readOnly": "You can see these rules but not change them. Changing them needs the permission to manage record assignment.",
+      "empty": {
+        "title": "No rules yet",
+        "contact": "New {contacts} keep whatever owner they are created with.",
+        "company": "New companies keep whatever owner they are created with.",
+        "deal": "New {deals} keep whatever owner they are created with.",
+        "create": "Create the first rule"
+      },
+      "col": {
+        "priority": "Priority",
+        "rule": "Rule",
+        "assignTo": "Assign to",
+        "method": "Method",
+        "active": "Active",
+        "used": "Used",
+        "modified": "Last modified"
+      },
+      "fallback": "Fallback",
+      "fallbackHint": "A rule with no conditions matches every record and runs after all the other rules.",
+      "notPrioritised": "Paused",
+      "noConditions": "No conditions: matches every record",
+      "brokenConditions": "{count, plural, one {# broken condition} other {# broken conditions}}",
+      "brokenHint": "A condition points at something that was deleted. It matches nothing until you fix it.",
+      "usedCount": "{count, plural, =0 {Never used} one {Used # time} other {Used # times}}",
+      "lastUsed": "Last used {when}",
+      "modifiedBy": "{name}, {when}",
+      "nobody": "Nobody",
+      "unknownPerson": "Former member",
+      "unknownTeam": "Removed team",
+      "teamName": "Team: {name}",
+      "skipsOffline": "Skips people who are offline",
+      "reassigns": "Reassigns on update",
+      "activeFor": "Rule {name} is active",
+      "dragHandle": "Drag {name} to change its priority",
+      "moveUp": "Move {name} up",
+      "moveDown": "Move {name} down",
+      "moved": "{name} moved to place {place}.",
+      "actions": "Actions for {name}",
+      "edit": "Edit",
+      "clone": "Clone",
+      "delete": "Delete"
+    },
+    "strategy": {
+      "round_robin": "Round robin",
+      "least_busy": "Least open workload",
+      "fixed": "Specific user",
+      "hint": {
+        "round_robin": "Takes turns between the people, in a steady order.",
+        "least_busy": {
+          "contact": "Gives it to the person who owns the fewest {contacts} right now.",
+          "company": "Gives it to the person who owns the fewest companies right now.",
+          "deal": "Gives it to the person who owns the fewest open {deals} right now."
+        },
+        "fixed": "Always the same person. While they are on leave, their delegate takes over."
+      }
+    },
+    "editor": {
+      "titleNew": "New rule",
+      "titleEdit": "Edit rule",
+      "name": "Rule name",
+      "description": "Description (optional)",
+      "module": "Module",
+      "moduleLocked": "A rule's module cannot be changed. Create a new rule for another module.",
+      "conditions": {
+        "title": "Conditions",
+        "hint": "A record matches when its fields meet the conditions. Pick a field, then how to compare it, then a value.",
+        "emptyTitle": "No conditions: matches every record, runs last (fallback)",
+        "emptyBody": "This rule takes every record that no other rule took. Add a condition to narrow it down.",
+        "add": "Add condition",
+        "counts": "{conditions} of {max} conditions",
+        "loading": "Loading the fields…",
+        "partial": "Some fields could not be loaded. You can still build rules with the ones that did."
+      },
+      "group": {
+        "company": "Company fields",
+        "deal": "{Deal} fields"
+      },
+      "assign": {
+        "title": "Assign to",
+        "method": "Method",
+        "people": "People",
+        "person": "Person",
+        "peoplePlaceholder": "Choose people",
+        "personPlaceholder": "Choose a person",
+        "teams": "Teams",
+        "teamsPlaceholder": "Choose teams",
+        "teamsNote": "A team here is a pool of people to choose from. A record does not belong to a team: its owner is one of the team's members.",
+        "noPeople": "No people matched.",
+        "removePerson": "Remove {name}",
+        "onLeave": "on leave",
+        "skipOffline": "Skip people who are offline",
+        "skipOfflineHint": "People on leave are always skipped.",
+        "reassign": "Reassign when an update makes this rule start matching",
+        "reassignHint": "Applies only to records this engine assigned itself, and only while nobody has changed the owner since. Off by default: a record is assigned once."
+      },
+      "problems": {
+        "name": "Give the rule a name.",
+        "people": "Choose at least one person or team.",
+        "fixedOne": "A specific-user rule needs exactly one person and no teams.",
+        "conditions": "Fix the highlighted conditions before saving.",
+        "server": "The server refused the rules."
+      },
+      "saveActivate": "Save and activate",
+      "savePaused": "Save as paused",
+      "save": "Save changes",
+      "cancel": "Cancel",
+      "unsavedTitle": "Leave without saving?",
+      "unsavedMessage": "Your changes to this rule have not been saved.",
+      "stay": "Keep editing",
+      "leave": "Leave"
+    },
+    "fields": {
+      "origin": "Arrived through",
+      "company": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "domain": "Website domain",
+        "industry": "Industry",
+        "sizeRange": "Size",
+        "address": "Address",
+        "status": "Status",
+        "createdAt": "Created",
+        "updatedAt": "Last updated"
+      },
+      "deal": {
+        "title": "Title",
+        "value": "Value",
+        "currency": "Currency",
+        "pipeline": "Pipeline",
+        "stage": "Stage",
+        "status": "Status",
+        "source": "Source",
+        "expectedCloseDate": "Expected close date",
+        "createdAt": "Created",
+        "hasContact": "Has a {contact}",
+        "hasCompany": "Has a company"
+      },
+      "dealStatus": {
+        "open": "Open",
+        "won": "Won",
+        "lost": "Lost"
+      }
+    },
+    "origin": {
+      "manual": "Added by a person",
+      "import": "Import",
+      "inbound": "First message",
+      "form": "Form",
+      "lead": "Lead source",
+      "api": "API"
+    },
+    "test": {
+      "title": "Test with a record",
+      "hint": "Choose a real record and see which rule would take it and who would get it. Nothing is changed, and it works while the switch is off.",
+      "search": {
+        "contact": "Search {contacts} by name, email or phone",
+        "company": "Search companies by name",
+        "deal": "Search {deals} by title"
+      },
+      "searchLabel": "Record to test",
+      "searching": "Searching…",
+      "noMatches": "No record found.",
+      "searchFailed": "The search did not work. You may not be allowed to see these records.",
+      "clear": "Choose another record",
+      "run": "Test",
+      "running": "Testing…",
+      "failed": "The test did not run. Try again.",
+      "off": "Record assignment is off, so this shows what would happen if it were on.",
+      "outcome": {
+        "would_assign": "{record} would go to {owner} through the rule {rule}.",
+        "disabled": "Record assignment is switched off for this workspace, so nothing would happen.",
+        "has_owner": "{record} already has an owner, so no rule would run. An owner someone set is never replaced.",
+        "no_rule": "No active rule matches {record}.",
+        "nobody_available": "A rule matches {record}, but everyone it names is on leave, offline or no longer here.",
+        "plan": "Your plan does not include record assignment rules.",
+        "not_found": "That record was not found. It may have been deleted, or it is outside what you can see."
+      },
+      "traceTitle": "Rules tried, in order",
+      "traceEmpty": "No active rules were tried.",
+      "trace": {
+        "winner": "Matched and takes the record",
+        "matched": "Matched",
+        "not_matched": "Did not match",
+        "nobody": "Matched, but nobody was available",
+        "broken": "Has a broken condition"
+      },
+      "skipped": "Skipped because nobody was available: {names}"
+    },
+    "log": {
+      "title": "Run log",
+      "intro": "What the engine did with each record, newest first. Entries are kept for {days} days and hold ids only, never the contents of a record.",
+      "filterOutcome": "Outcome",
+      "filterRule": "Rule",
+      "allOutcomes": "All outcomes",
+      "allRules": "All rules",
+      "loading": "Loading the run log…",
+      "loadFailed": "The run log did not load.",
+      "empty": "Nothing has been assigned yet.",
+      "emptyFiltered": "No entries match these filters.",
+      "loadMore": "Load more",
+      "col": {
+        "when": "When",
+        "record": "Record",
+        "outcome": "Outcome",
+        "reason": "Why",
+        "rule": "Rule",
+        "assignedTo": "Assigned to",
+        "method": "Method",
+        "arrived": "Arrived through"
+      },
+      "deletedRecord": "Deleted",
+      "noRule": "No rule",
+      "outcome": {
+        "assigned": "Assigned",
+        "reassigned": "Reassigned",
+        "skipped": "Left alone"
+      },
+      "reason": {
+        "matched": "A rule matched",
+        "has_owner": "It already had an owner",
+        "no_rule": "No rule matched",
+        "nobody_available": "Nobody was available",
+        "raced": "The owner changed while it was being assigned",
+        "unchanged": "It is already with the right rule"
+      },
+      "trigger": {
+        "created": "New record",
+        "updated": "Updated record"
+      },
+      "showTrace": "Show how it was decided",
+      "hideTrace": "Hide how it was decided",
+      "traceFor": "How it was decided for {record}"
+    },
+    "toast": {
+      "created": "Rule created.",
+      "saved": "Rule saved.",
+      "deleted": "Rule deleted.",
+      "cloned": "Rule copied. The copy is paused.",
+      "activated": "Rule activated.",
+      "paused": "Rule paused.",
+      "reordered": "Order saved.",
+      "conflict": "Someone else changed this rule. The latest version is loaded. Check it and apply your change again.",
+      "failed": "Something went wrong. Try again."
+    },
+    "delete": {
+      "title": "Delete this rule?",
+      "message": "The rule {name} will stop assigning. Records it already assigned keep their owner.",
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    },
+    "dismiss": "Dismiss"
+  }
+}

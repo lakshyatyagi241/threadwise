@@ -1,13 +1,11 @@
 import { newId } from './availability';
 import {
-  LIMITS,
   STEPS,
   stepOfProblem,
   type BookingTypeDraft,
   type FormProblem,
   type ProblemMap,
   type QuestionDraft,
-  type ReminderDraft,
   type Step,
 } from './booking-form';
 import { parseMajor, parsePercent, priceBreakdown, type PriceBreakdown } from './money';
@@ -90,6 +88,8 @@ const PROBLEM_TABLE: Record<FormProblem, true> = {
   reminderInvalid: true,
   remindersDuplicate: true,
   remindersTooMany: true,
+  reminderChannelsNone: true,
+  reminderBodyTooLong: true,
   questionLabelRequired: true,
   questionsTooMany: true,
   questionOptionsRequired: true,
@@ -97,6 +97,7 @@ const PROBLEM_TABLE: Record<FormProblem, true> = {
   overridesInvalid: true,
   descriptionTooLong: true,
   locationTooLong: true,
+  templateNoChannel: true,
 };
 
 /** Every problem code `validateDraft` can produce (so a message exists for each one). */
@@ -222,14 +223,7 @@ export function draftPrice(d: BookingTypeDraft): PriceBreakdown {
 
 // ---- reminders and questions ------------------------------------------------------------------------------------------------
 
-/** Quick-add chips: minutes before the start. */
-export const QUICK_REMINDERS = [1440, 180, 60, 15] as const;
-
-export const newReminder = (offset = '', label = ''): ReminderDraft => ({
-  id: newId(),
-  offset,
-  label,
-});
+export { QUICK_FOLLOW_UPS, QUICK_REMINDERS, addReminder, newReminder } from './reminder-rules';
 
 export const newQuestion = (): QuestionDraft => ({
   id: newId(),
@@ -239,34 +233,6 @@ export const newQuestion = (): QuestionDraft => ({
   required: true,
   map: '',
 });
-
-/** The offsets already written, as numbers (an empty or unreadable box is not one). */
-export function reminderOffsets(list: readonly ReminderDraft[]): Set<number> {
-  const out = new Set<number>();
-  for (const r of list) {
-    if (/^\d{1,9}$/.test(r.offset.trim())) out.add(Number(r.offset.trim()));
-  }
-  return out;
-}
-
-/**
- * Adds a reminder `minutes` before the start. An empty row is filled first; an offset that is already there, or a full list
- * (Reference keeps 8), leaves the list as it was.
- */
-export function addReminder(
-  list: readonly ReminderDraft[],
-  minutes: number,
-  label = '',
-): ReminderDraft[] {
-  if (reminderOffsets(list).has(minutes)) return [...list];
-  const blank = list.findIndex((r) => r.offset.trim() === '');
-  if (blank >= 0)
-    return list.map((r, i) =>
-      i === blank ? { ...r, offset: String(minutes), label: r.label || label } : r,
-    );
-  if (list.length >= LIMITS.reminders) return [...list];
-  return [...list, newReminder(String(minutes), label)];
-}
 
 /** The same list with the item at `index` moved by `delta` places (a move off either end changes nothing). */
 export function moveItem<T>(list: readonly T[], index: number, delta: number): T[] {

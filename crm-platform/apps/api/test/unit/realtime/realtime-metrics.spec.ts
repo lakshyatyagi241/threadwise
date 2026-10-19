@@ -7,7 +7,7 @@ import {
 import { REALTIME_EVENT } from '@crm/contracts';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { RealtimeEmitter } from '../../../src/realtime/realtime-emitter.service';
-import { realtimeMetrics } from '../../../src/realtime/realtime-metrics';
+import { acceptDeliveryReport, realtimeMetrics } from '../../../src/realtime/realtime-metrics';
 import { FakeRedis } from './fake-redis';
 
 // EL-B18: what the realtime path exports, and what carries the release label. The monitor is the real one; the assertions read the same
@@ -124,6 +124,53 @@ describe('realtime metrics', () => {
         .split('\n')
         .filter((l) => l.startsWith('# TYPE crm_realtime_connections_total')),
     ).toHaveLength(1);
+  });
+});
+
+describe('delivery lag reports (EL-B23)', () => {
+  it('accepts a well-formed report and returns seconds', () => {
+    expect(acceptDeliveryReport({ lagMs: 1500, events: 4 }, {}, 1_000_000)).toBe(1.5);
+    expect(acceptDeliveryReport({ lagMs: 0, events: 1 }, {}, 1_000_000)).toBe(0);
+  });
+
+  it('refuses anything outside the contract: strings, negatives, huge values, zero events, extra shapes', () => {
+    for (const bad of [
+      null,
+      undefined,
+      'x',
+      42,
+      {},
+      { lagMs: '12', events: 1 },
+      { lagMs: -1, events: 1 },
+      { lagMs: 300_001, events: 1 },
+      { lagMs: 10, events: 0 },
+      { lagMs: 10, events: 1.5 },
+      { lagMs: Number.NaN, events: 1 },
+      { lagMs: Infinity, events: 1 },
+    ]) {
+      expect(acceptDeliveryReport(bad, {}, 1_000_000), JSON.stringify(bad)).toBeNull();
+    }
+  });
+
+  it('counts one report per connection per 20 seconds, so a loop of reports cannot skew the histogram', () => {
+    const state: { lastDeliveryReportAt?: number } = {};
+    const body = { lagMs: 100, events: 1 };
+    expect(acceptDeliveryReport(body, state, 1_000_000)).toBe(0.1);
+    expect(acceptDeliveryReport(body, state, 1_005_000)).toBeNull();
+    expect(acceptDeliveryReport(body, state, 1_019_999)).toBeNull();
+    expect(acceptDeliveryReport(body, state, 1_020_000)).toBe(0.1);
+    // a refused report does not push the window out
+    expect(acceptDeliveryReport({ lagMs: -1, events: 1 }, state, 1_030_000)).toBeNull();
+    expect(acceptDeliveryReport(body, state, 1_040_000)).toBe(0.1);
+  });
+
+  it('records the lag and the rooms held as series', () => {
+    realtimeMetrics.deliveryLag(0.4);
+    realtimeMetrics.deliveryLag(3);
+    realtimeMetrics.setRooms(17);
+    expect(value(/^crm_realtime_delivery_lag_seconds_count\{/)).toBe(2);
+    expect(value(/^crm_realtime_delivery_lag_seconds_bucket\{.*le="0.5"/)).toBe(1);
+    expect(value(/^crm_realtime_rooms\{/)).toBe(17);
   });
 });
 

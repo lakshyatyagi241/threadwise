@@ -236,7 +236,7 @@
       "declineTitle": "Bu talep reddedilsin mi?",
       "declineMessage": "Müşteriye talebin reddedildiği bildirilir ve saat yeniden boşa çıkar.",
       "declineConfirm": "Talebi reddet",
-      "remindersNote": "Hatırlatmalar rezervasyon türünü izler. Teslimat hatırlatma bazında izlenmez."
+      "remindersNote": "Hatırlatmalar randevu türüne bağlıdır. Randevu ayarlarından veya randevu türünün içinden belirlenir."
     },
     "source": {
       "chat": "Bir sohbet akışı",
@@ -407,9 +407,6 @@
         "depositTooHigh": "Kapora toplamdan (ücret artı vergi) fazla olamaz.",
         "cancelFeeInvalid": "25,00 gibi bir tutar girin.",
         "cancelWindowInvalid": "0 ile {cancelWindowMax} arasında tam sayı olarak dakika girin.",
-        "reminderInvalid": "Başlangıçtan önce 1 ile {reminderMax} arasında tam dakika girin.",
-        "remindersDuplicate": "Her hatırlatmanın farklı bir zamanı olmalıdır.",
-        "remindersTooMany": "Bir rezervasyon türünde en fazla {reminders} hatırlatma olabilir.",
         "questionLabelRequired": "Soruya bir etiket verin (en fazla {questionLabelMax} karakter).",
         "questionsTooMany": "Bir rezervasyon türünde en fazla {questions} soru olabilir.",
         "questionOptionsRequired": "Satır başına bir tane olacak şekilde en az bir seçenek ekleyin.",
@@ -417,7 +414,12 @@
         "overridesInvalid": "Tarih istisnaları listesinde işaretlenen tarihleri düzeltin.",
         "descriptionTooLong": "Açıklama en fazla {descriptionMax} karakter olabilir.",
         "locationTooLong": "Konum en fazla {locationMax} karakter olabilir.",
-        "server": "Sunucu bu değeri kabul etmedi. Kontrol edip tekrar deneyin."
+        "server": "Sunucu bu değeri kabul etmedi. Kontrol edip tekrar deneyin.",
+        "reminderInvalid": "Süre için tam sayı girin, en fazla 30 gün.",
+        "remindersDuplicate": "Her hatırlatma veya takip mesajı için farklı bir zaman gerekir.",
+        "remindersTooMany": "Bir randevu türünde en fazla {reminders} hatırlatma ve takip mesajı olabilir.",
+        "reminderChannelsNone": "En az bir kanal seçin.",
+        "reminderBodyTooLong": "Mesaj, konu veya etiket çok uzun."
       },
       "service": {
         "title": "Hizmet ayrıntıları",
@@ -597,25 +599,6 @@
           "reschedule": "Merhaba {name}, {type} randevunuz {slot} tarihine taşındı. Ayrıntılar: {manage_link}"
         },
         "templatesNote": "Onaylı WhatsApp şablonları henüz seçilemiyor. Mesajlar yukarıdaki düz metin olarak gönderilir."
-      },
-      "reminders": {
-        "title": "Hatırlatmalar",
-        "hint": "Süreler farklı olmalıdır (1440 = 24 sa önce, 180 = 3 sa önce). En fazla {max}.",
-        "add": "Hatırlatma ekle",
-        "quickAdd": "Hızlı ekle",
-        "quick": {
-          "h24": "24 sa",
-          "h3": "3 sa",
-          "h1": "1 sa",
-          "m15": "15 dk"
-        },
-        "empty": "Hatırlatma yok. Müşteriler yalnızca onayı alır.",
-        "offsetOf": "Hatırlatma {n}, başlangıçtan kaç dakika önce",
-        "minBefore": "dk önce",
-        "labelPlaceholder": "24sa",
-        "labelOf": "Hatırlatma {n}, etiket",
-        "remove": "{n}. hatırlatmayı kaldır",
-        "count": "{count} / {max} hatırlatma"
       },
       "questions": {
         "title": "Anket",
@@ -1294,6 +1277,151 @@
         "cancel": "Randevuyu iptal et",
         "reschedule": "Randevuyu taşı",
         "acknowledge": "Kabul et"
+      }
+    },
+    "reminders": {
+      "title": "Hatırlatmalar ve takipler",
+      "hint": "Randevu başlamadan önce veya bittikten sonra kişiye mesaj gönderin. Her biri siz açana kadar kapalıdır. Randevu türü başına en fazla {max}.",
+      "quickAdd": "Hızlı ekle",
+      "quick": {
+        "h24": "24 saat önce",
+        "h3": "3 saat önce",
+        "h1": "1 saat önce",
+        "m15": "15 dakika önce",
+        "after2h": "2 saat sonra",
+        "afterDay": "1 gün sonra"
+      },
+      "add": "Hatırlatma ekle",
+      "empty": "Hatırlatma veya takip yok. Kişi yalnızca onay mesajını alır.",
+      "enabledOf": "{n}. hatırlatmayı gönder",
+      "on": "Açık",
+      "off": "Kapalı",
+      "offsetOf": "{n}. hatırlatma, süre miktarı",
+      "unitOf": "{n}. hatırlatma, süre birimi",
+      "kindOf": "{n}. hatırlatma, önce veya sonra",
+      "units": {
+        "minutes": "dakika",
+        "hours": "saat",
+        "days": "gün"
+      },
+      "kind": {
+        "before": "randevu başlamadan önce",
+        "after": "randevu bittikten sonra"
+      },
+      "editMessage": "Mesaj ve kanallar",
+      "hideMessage": "Gizle",
+      "remove": "{n}. hatırlatmayı kaldır",
+      "withTemplate": "WhatsApp şablonu",
+      "channelsTitle": "Gönderim kanalı",
+      "channelsHint": "Teslim edebilen ilk kanal kullanılır, sonrakiler yedektir. Aynı hatırlatma kimseye iki kez gönderilmez.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "E-posta"
+      },
+      "moveUp": "{channel} kanalını öne al",
+      "moveDown": "{channel} kanalını arkaya al",
+      "removeChannel": "{channel} kullanma",
+      "messageTitle": "Mesaj",
+      "placeholderMeaning": {
+        "name": "Kişinin adı",
+        "type": "Randevu türünün adı",
+        "slot": "Tarih ve saat birlikte",
+        "date": "Tarih",
+        "time": "Saat",
+        "location": "Yer veya çevrimiçiyse katılım bağlantısı",
+        "join_link": "Çevrimiçiyse katılım bağlantısı",
+        "manage_link": "Randevuyu değiştirme veya iptal etme bağlantısı"
+      },
+      "bodyHintBefore": "Randevu türünün hatırlatma mesajını veya standart metni kullanmak için boş bırakın.",
+      "bodyHintAfter": "Standart takip metnini kullanmak için boş bırakın.",
+      "subjectTitle": "E-posta konusu",
+      "subjectPlaceholder": "Standart konu için boş bırakın",
+      "templateTitle": "WhatsApp şablonu",
+      "templateNone": "Yok: serbest metin, yalnızca 24 saatlik pencere içinde",
+      "templateUnknown": "Artık mevcut olmayan bir şablon",
+      "templateHint": "Kişi en son yazdıktan 24 saat sonra WhatsApp yalnızca onaylı şablon iletir. Değişkenler şu sırayla doldurulur: 1 ad, 2 hizmet, 3 tarih, 4 saat, 5 yer, 6 katılım bağlantısı, 7 yönetim bağlantısı.",
+      "labelTitle": "Etiket (isteğe bağlı)",
+      "labelPlaceholder": "ör. Bir gün önce",
+      "previewTitle": "Önizleme",
+      "previewNote": "Örnek değerlerle bir örnek. Gerçek mesaj randevunun kendi bilgilerini kullanır.",
+      "count": "{count} / {max} hatırlatma ve takip",
+      "note": "Hatırlatma randevu başladıktan sonra asla gönderilmez. Randevu iptal edilir veya ertelenirse bekleyenler durur ve yeni zamana göre yeniden planlanır. Sessiz saatler bitene kadar mesaj bekletilir; mesaj almayı reddeden veya aranmayanlar listesindeki kişiler atlanır.",
+      "sample": {
+        "name": "Ali",
+        "type": "Danışma",
+        "location": "Ana Cadde 12"
+      },
+      "settingsTitle": "Hatırlatmalar ve takipler",
+      "settingsDescription": "Her randevu türü için randevudan önce kişiye mesaj gönderin, sonrasında takip edin. Siz açana kadar her şey kapalıdır.",
+      "loading": "Randevu türleri yükleniyor",
+      "noTypes": "Henüz randevu türü yok. Hatırlatmalarını ayarlamak için bir tane oluşturun.",
+      "paused": "Duraklatıldı",
+      "summaryNone": "Ayarlanmadı",
+      "summary": "{on} / {total} açık",
+      "unsaved": "Kaydedilmemiş değişiklikler",
+      "conflict": "Bu randevu türü başka bir yerde değiştirildi. Kaydetmeden önce en son sürümü görmek için yeniden yükleyin.",
+      "reload": "Yeniden yükle",
+      "discard": "Değişiklikleri at",
+      "saving": "Kaydediliyor",
+      "save": "Hatırlatmaları kaydet",
+      "saved": "{name} için hatırlatmalar kaydedildi.",
+      "readOnly": "Bu hatırlatmaları görebilirsiniz ancak değiştiremezsiniz.",
+      "fixFirst": "Önce vurgulanan hatırlatmaları düzeltin.",
+      "problems": {
+        "offsetInvalid": "Süre için tam sayı girin, en fazla 30 gün.",
+        "duplicate": "Her hatırlatma veya takip mesajı için farklı bir zaman gerekir.",
+        "channelsNone": "En az bir kanal seçin.",
+        "bodyTooLong": "Mesaj çok uzun.",
+        "subjectTooLong": "Konu çok uzun.",
+        "labelTooLong": "Etiket çok uzun.",
+        "tooMany": "Bir randevu türü için en fazla 8 hatırlatma ve takip."
+      },
+      "noneOn": "Bu randevu türü için açık hatırlatma veya takip yok.",
+      "when": {
+        "before": "{count, plural, one {# dakika önce} other {# dakika önce}}",
+        "after": "{count, plural, one {# dakika sonra} other {# dakika sonra}}"
+      },
+      "sentOn": "{channel} ile gönderildi",
+      "status": {
+        "scheduled": "Planlandı",
+        "pending": "Zamanı geldi",
+        "sending": "Gönderiliyor",
+        "held": "Bekliyor",
+        "sent": "Gönderildi",
+        "skipped": "Gönderilmedi",
+        "failed": "Başarısız",
+        "cancelled": "İptal edildi"
+      },
+      "reasons": {
+        "rule_removed": "Hatırlatma zamanı gelmeden kaldırıldı.",
+        "rule_off": "Hatırlatma gönderilmeden önce kapatıldı.",
+        "rescheduled": "Randevu ertelendi, bu yüzden bu hatırlatma değiştirildi.",
+        "booking_cancelled": "Randevu iptal edildi.",
+        "booking_declined": "İstek reddedildi.",
+        "booking_no_show": "Gelmedi olarak işaretlendi.",
+        "booking_not_confirmed": "Randevu onaylanmadı.",
+        "started": "Randevu zaten başlamıştı.",
+        "expired": "Göndermek için çok geçti.",
+        "no_contact_point": "Kişinin bu kanal için numarası veya adresi yok.",
+        "no_channel": "Hiçbir kanal ileti teslim edemedi.",
+        "no_sender": "Bu kanal için bağlı gönderici yok.",
+        "template_required": "WhatsApp, 24 saatlik pencerenin dışında onaylı şablon gerektirir.",
+        "template_unavailable": "Seçilen WhatsApp şablonu gönderilemiyor.",
+        "quiet_hours_too_late": "Sessiz saatler başlangıç zamanını geçti.",
+        "no_consent": "Kayıtlı izin yok.",
+        "opted_out": "Kişi mesaj almayı reddetti.",
+        "do_not_call": "Numara aranmayanlar listesinde.",
+        "minor": "Kişi reşit olmayan olarak işaretli.",
+        "processing_restricted": "Bu kişiye mesaj göndermek kısıtlı.",
+        "plan_limit": "Planın sınırına ulaşıldı.",
+        "quiet_hours": "Sessiz saatlerin bitmesi bekleniyor.",
+        "channel_unavailable": "Kanal şu anda bağlı değil.",
+        "wallet_empty": "Cüzdan boş.",
+        "send_halted": "Gönderim durduruldu.",
+        "provider_error": "Sağlayıcı reddetti.",
+        "interrupted": "Kesintiye uğradı ve yeniden denenmedi.",
+        "internal_error": "Bir şeyler ters gitti."
       }
     }
   }

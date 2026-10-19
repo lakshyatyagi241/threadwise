@@ -131,7 +131,8 @@
       "open": "打开",
       "edit": "编辑",
       "delete": "删除",
-      "unassigned": "未分配"
+      "unassigned": "未分配",
+      "followUpBadge": "跟进"
     },
     "bulk": {
       "label": "所选任务的操作",

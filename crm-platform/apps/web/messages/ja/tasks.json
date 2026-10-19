@@ -131,7 +131,8 @@
       "open": "開く",
       "edit": "編集",
       "delete": "削除",
-      "unassigned": "未割り当て"
+      "unassigned": "未割り当て",
+      "followUpBadge": "フォローアップ"
     },
     "bulk": {
       "label": "選択したタスクの操作",

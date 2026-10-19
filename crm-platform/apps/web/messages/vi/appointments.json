@@ -236,7 +236,7 @@
       "declineTitle": "Từ chối yêu cầu này?",
       "declineMessage": "Khách hàng được thông báo yêu cầu bị từ chối và khung giờ trống trở lại.",
       "declineConfirm": "Từ chối yêu cầu",
-      "remindersNote": "Lời nhắc theo loại lịch đặt. Việc gửi không được theo dõi theo từng lời nhắc."
+      "remindersNote": "Lời nhắc theo loại lịch hẹn. Thiết lập trong Cài đặt cuộc hẹn hoặc ngay trong loại lịch hẹn."
     },
     "source": {
       "chat": "Một luồng chat",
@@ -407,9 +407,6 @@
         "depositTooHigh": "Tiền đặt cọc không được vượt quá tổng (phí cộng thuế).",
         "cancelFeeInvalid": "Nhập số tiền như 25.00.",
         "cancelWindowInvalid": "Nhập số phút nguyên từ 0 đến {cancelWindowMax}.",
-        "reminderInvalid": "Nhập số phút nguyên trước giờ bắt đầu, từ 1 đến {reminderMax}.",
-        "remindersDuplicate": "Mỗi lời nhắc cần một thời điểm khác nhau.",
-        "remindersTooMany": "Một loại lịch đặt có tối đa {reminders} lời nhắc.",
         "questionLabelRequired": "Đặt nhãn cho câu hỏi (tối đa {questionLabelMax} ký tự).",
         "questionsTooMany": "Một loại lịch đặt có tối đa {questions} câu hỏi.",
         "questionOptionsRequired": "Thêm ít nhất một lựa chọn, mỗi dòng một lựa chọn.",
@@ -417,7 +414,12 @@
         "overridesInvalid": "Sửa các ngày được đánh dấu trong danh sách ngày ngoại lệ.",
         "descriptionTooLong": "Mô tả tối đa {descriptionMax} ký tự.",
         "locationTooLong": "Địa điểm tối đa {locationMax} ký tự.",
-        "server": "Máy chủ không chấp nhận giá trị này. Hãy kiểm tra và thử lại."
+        "server": "Máy chủ không chấp nhận giá trị này. Hãy kiểm tra và thử lại.",
+        "reminderInvalid": "Nhập số nguyên cho thời gian, tối đa 30 ngày.",
+        "remindersDuplicate": "Mỗi lời nhắc hoặc tin nhắn theo dõi cần một thời điểm khác nhau.",
+        "remindersTooMany": "Mỗi loại lịch hẹn có tối đa {reminders} lời nhắc và tin nhắn theo dõi.",
+        "reminderChannelsNone": "Chọn ít nhất một kênh.",
+        "reminderBodyTooLong": "Tin nhắn, tiêu đề hoặc nhãn quá dài."
       },
       "service": {
         "title": "Chi tiết dịch vụ",
@@ -597,25 +599,6 @@
           "reschedule": "Chào {name}, {type} của bạn đã chuyển sang {slot}. Chi tiết: {manage_link}"
         },
         "templatesNote": "Chưa thể chọn mẫu WhatsApp đã duyệt. Tin nhắn được gửi dưới dạng văn bản thuần ở trên."
-      },
-      "reminders": {
-        "title": "Lời nhắc",
-        "hint": "Các mốc giờ phải khác nhau (1440 = trước 24 giờ, 180 = trước 3 giờ). Tối đa {max}.",
-        "add": "Thêm lời nhắc",
-        "quickAdd": "Thêm nhanh",
-        "quick": {
-          "h24": "24 giờ",
-          "h3": "3 giờ",
-          "h1": "1 giờ",
-          "m15": "15 phút"
-        },
-        "empty": "Không có lời nhắc. Khách hàng chỉ nhận xác nhận.",
-        "offsetOf": "Lời nhắc {n}, số phút trước giờ bắt đầu",
-        "minBefore": "phút trước",
-        "labelPlaceholder": "24 giờ",
-        "labelOf": "Lời nhắc {n}, nhãn",
-        "remove": "Gỡ lời nhắc {n}",
-        "count": "{count} trên {max} lời nhắc"
       },
       "questions": {
         "title": "Bảng câu hỏi",
@@ -1294,6 +1277,151 @@
         "cancel": "Hủy lịch hẹn",
         "reschedule": "Chuyển lịch hẹn",
         "acknowledge": "Chấp nhận"
+      }
+    },
+    "reminders": {
+      "title": "Lời nhắc và tin nhắn theo dõi",
+      "hint": "Nhắn tin cho liên hệ trước khi cuộc hẹn bắt đầu hoặc sau khi kết thúc. Mỗi mục đều tắt cho đến khi bạn bật. Tối đa {max} cho mỗi loại lịch hẹn.",
+      "quickAdd": "Thêm nhanh",
+      "quick": {
+        "h24": "Trước 24 giờ",
+        "h3": "Trước 3 giờ",
+        "h1": "Trước 1 giờ",
+        "m15": "Trước 15 phút",
+        "after2h": "Sau 2 giờ",
+        "afterDay": "Sau 1 ngày"
+      },
+      "add": "Thêm lời nhắc",
+      "empty": "Chưa có lời nhắc hay tin nhắn theo dõi. Liên hệ chỉ nhận tin xác nhận.",
+      "enabledOf": "Gửi lời nhắc {n}",
+      "on": "Bật",
+      "off": "Tắt",
+      "offsetOf": "Lời nhắc {n}, khoảng thời gian",
+      "unitOf": "Lời nhắc {n}, đơn vị thời gian",
+      "kindOf": "Lời nhắc {n}, trước hoặc sau",
+      "units": {
+        "minutes": "phút",
+        "hours": "giờ",
+        "days": "ngày"
+      },
+      "kind": {
+        "before": "trước khi cuộc hẹn bắt đầu",
+        "after": "sau khi cuộc hẹn kết thúc"
+      },
+      "editMessage": "Tin nhắn và kênh",
+      "hideMessage": "Ẩn",
+      "remove": "Xóa lời nhắc {n}",
+      "withTemplate": "Mẫu WhatsApp",
+      "channelsTitle": "Gửi qua",
+      "channelsHint": "Kênh đầu tiên có thể gửi được sẽ được dùng, các kênh sau là dự phòng. Không ai nhận cùng một lời nhắc hai lần.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "Email"
+      },
+      "moveUp": "Thử {channel} sớm hơn",
+      "moveDown": "Thử {channel} muộn hơn",
+      "removeChannel": "Không dùng {channel}",
+      "messageTitle": "Tin nhắn",
+      "placeholderMeaning": {
+        "name": "Tên của liên hệ",
+        "type": "Tên loại lịch hẹn",
+        "slot": "Ngày và giờ",
+        "date": "Ngày",
+        "time": "Giờ",
+        "location": "Địa điểm, hoặc liên kết tham gia nếu là trực tuyến",
+        "join_link": "Liên kết tham gia nếu là trực tuyến",
+        "manage_link": "Liên kết để đổi hoặc hủy cuộc hẹn"
+      },
+      "bodyHintBefore": "Để trống để dùng tin nhắn nhắc của loại lịch hẹn, hoặc nội dung mặc định.",
+      "bodyHintAfter": "Để trống để dùng nội dung theo dõi mặc định.",
+      "subjectTitle": "Tiêu đề email",
+      "subjectPlaceholder": "Để trống để dùng tiêu đề mặc định",
+      "templateTitle": "Mẫu WhatsApp",
+      "templateNone": "Không: văn bản tự do, chỉ trong khung 24 giờ",
+      "templateUnknown": "Mẫu không còn khả dụng",
+      "templateHint": "Sau 24 giờ kể từ lần liên hệ nhắn gần nhất, WhatsApp chỉ gửi mẫu đã được duyệt. Các biến được điền theo thứ tự: 1 tên, 2 dịch vụ, 3 ngày, 4 giờ, 5 địa điểm, 6 liên kết tham gia, 7 liên kết quản lý.",
+      "labelTitle": "Nhãn (không bắt buộc)",
+      "labelPlaceholder": "VD: Trước một ngày",
+      "previewTitle": "Xem trước",
+      "previewNote": "Ví dụ với giá trị mẫu. Tin nhắn thật dùng thông tin của chính cuộc hẹn.",
+      "count": "{count}/{max} lời nhắc và tin nhắn theo dõi",
+      "note": "Lời nhắc không bao giờ được gửi sau khi cuộc hẹn bắt đầu. Nếu cuộc hẹn bị hủy hoặc dời, các tin đang chờ sẽ dừng và được lên lịch lại theo thời gian mới. Giờ yên tĩnh sẽ giữ tin nhắn đến khi kết thúc, và liên hệ đã từ chối nhận tin hoặc nằm trong danh sách không gọi sẽ bị bỏ qua.",
+      "sample": {
+        "name": "Minh",
+        "type": "Tư vấn",
+        "location": "12 Đường Chính"
+      },
+      "settingsTitle": "Lời nhắc và tin nhắn theo dõi",
+      "settingsDescription": "Với mỗi loại lịch hẹn, nhắn tin cho liên hệ trước cuộc hẹn và theo dõi sau đó. Mọi thứ đều tắt cho đến khi bạn bật.",
+      "loading": "Đang tải các loại lịch hẹn",
+      "noTypes": "Chưa có loại lịch hẹn nào. Hãy tạo một loại để thiết lập lời nhắc.",
+      "paused": "Tạm dừng",
+      "summaryNone": "Chưa thiết lập",
+      "summary": "Bật {on}/{total}",
+      "unsaved": "Thay đổi chưa lưu",
+      "conflict": "Loại lịch hẹn này đã được thay đổi ở nơi khác. Hãy tải lại để xem phiên bản mới nhất trước khi lưu.",
+      "reload": "Tải lại",
+      "discard": "Hủy thay đổi",
+      "saving": "Đang lưu",
+      "save": "Lưu lời nhắc",
+      "saved": "Đã lưu lời nhắc cho {name}.",
+      "readOnly": "Bạn xem được các lời nhắc này nhưng không thể thay đổi.",
+      "fixFirst": "Hãy sửa các lời nhắc được đánh dấu trước.",
+      "problems": {
+        "offsetInvalid": "Nhập số nguyên cho thời gian, tối đa 30 ngày.",
+        "duplicate": "Mỗi lời nhắc hoặc tin nhắn theo dõi cần một thời điểm khác nhau.",
+        "channelsNone": "Chọn ít nhất một kênh.",
+        "bodyTooLong": "Tin nhắn quá dài.",
+        "subjectTooLong": "Tiêu đề quá dài.",
+        "labelTooLong": "Nhãn quá dài.",
+        "tooMany": "Tối đa 8 lời nhắc và tin nhắn theo dõi cho một loại lịch hẹn."
+      },
+      "noneOn": "Loại lịch hẹn này chưa bật lời nhắc hay tin nhắn theo dõi nào.",
+      "when": {
+        "before": "{count, plural, other {Trước # phút}}",
+        "after": "{count, plural, other {Sau # phút}}"
+      },
+      "sentOn": "Đã gửi qua {channel}",
+      "status": {
+        "scheduled": "Đã lên lịch",
+        "pending": "Đến hạn",
+        "sending": "Đang gửi",
+        "held": "Đang chờ",
+        "sent": "Đã gửi",
+        "skipped": "Chưa gửi",
+        "failed": "Thất bại",
+        "cancelled": "Đã hủy"
+      },
+      "reasons": {
+        "rule_removed": "Lời nhắc đã bị xóa trước khi đến hạn.",
+        "rule_off": "Lời nhắc đã bị tắt trước khi gửi.",
+        "rescheduled": "Cuộc hẹn đã được dời nên lời nhắc này được thay thế.",
+        "booking_cancelled": "Cuộc hẹn đã bị hủy.",
+        "booking_declined": "Yêu cầu đã bị từ chối.",
+        "booking_no_show": "Đã đánh dấu là vắng mặt.",
+        "booking_not_confirmed": "Cuộc hẹn chưa được xác nhận.",
+        "started": "Cuộc hẹn đã bắt đầu.",
+        "expired": "Đã quá muộn để gửi.",
+        "no_contact_point": "Liên hệ không có số hoặc địa chỉ cho kênh này.",
+        "no_channel": "Không có kênh nào gửi được.",
+        "no_sender": "Chưa có người gửi nào được kết nối cho kênh này.",
+        "template_required": "WhatsApp cần mẫu đã được duyệt ngoài khung 24 giờ.",
+        "template_unavailable": "Không thể gửi mẫu WhatsApp đã chọn.",
+        "quiet_hours_too_late": "Giờ yên tĩnh kéo dài qua thời điểm bắt đầu.",
+        "no_consent": "Chưa có ghi nhận đồng ý.",
+        "opted_out": "Liên hệ đã từ chối nhận tin.",
+        "do_not_call": "Số này nằm trong danh sách không gọi.",
+        "minor": "Liên hệ được đánh dấu là người chưa thành niên.",
+        "processing_restricted": "Việc nhắn tin cho liên hệ này bị hạn chế.",
+        "plan_limit": "Đã đạt giới hạn của gói.",
+        "quiet_hours": "Đang chờ giờ yên tĩnh kết thúc.",
+        "channel_unavailable": "Kênh hiện chưa được kết nối.",
+        "wallet_empty": "Ví đã hết tiền.",
+        "send_halted": "Việc gửi đã bị dừng.",
+        "provider_error": "Nhà cung cấp đã từ chối.",
+        "interrupted": "Bị gián đoạn và không thử lại.",
+        "internal_error": "Đã xảy ra lỗi."
       }
     }
   }

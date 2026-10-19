@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { ApiError } from '@/lib/api/errors';
 import type { ApiRequest } from './http';
+import type { WaTemplateOption } from './schemas';
 import {
   appointmentCountsSchema,
   appointmentPageSchema,
@@ -126,6 +127,21 @@ export const mockAppointmentsApi = {
       body: { ...input, rowVersion: type.rowVersion },
       schema: bookingTypeSchema,
     });
+  },
+  /** Only the reminder rules of a type change; every other list stays as it is. */
+  updateTypeReminders(
+    type: Pick<BookingType, 'id' | 'rowVersion'>,
+    reminders: BookingTypeInput['reminders'],
+  ): Promise<BookingType> {
+    return call(`/booking-types/${type.id}`, {
+      method: 'PATCH',
+      body: { reminders, rowVersion: type.rowVersion },
+      schema: bookingTypeSchema,
+    });
+  },
+  /** The stand-in has no WhatsApp templates. */
+  async waTemplates(): Promise<WaTemplateOption[]> {
+    return [];
   },
   setTypeActive(
     type: Pick<BookingType, 'id' | 'rowVersion'>,

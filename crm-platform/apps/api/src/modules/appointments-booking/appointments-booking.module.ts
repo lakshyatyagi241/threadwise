@@ -2,18 +2,26 @@ import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import {
   APPOINTMENT_CALENDAR,
-  APPOINTMENT_MESSENGER,
   GoogleCalendarClient,
   HttpIcsFeedFetcher,
   ICS_FEED_FETCHER,
   MicrosoftCalendarClient,
-  NoAppointmentMessenger,
 } from '../../infra/providers/appointments-booking';
+import { UploadPolicyService } from '../auth';
 import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
+import { MessageTemplatesModule } from '../message-templates';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { AppointmentsController, ContactAppointmentsController } from './appointments.controller';
+import {
+  AppointmentChannelsController,
+  AppointmentTemplatesController,
+} from './appointment-channels.controller';
+import { AppointmentChannelsRepository } from './appointment-channels.repository';
+import { AppointmentChannelsService } from './appointment-channels.service';
+import { AppointmentTemplatesService } from './appointment-templates.service';
+import { AppointmentRemindersRepository } from './appointment-reminders.repository';
 import { AppointmentsRepository } from './appointments.repository';
 import { AppointmentsService } from './appointments.service';
 import { AppointmentCalendarSyncService } from './appointment-calendar-sync.service';
@@ -62,9 +70,17 @@ import {
 import { MicrosoftCalendarTokens } from './microsoft-calendar-tokens.service';
 import { MultiCalendarAdapter } from './multi-calendar.adapter';
 import {
+  PublicBookingAssetsController,
   PublicBookingController,
   PublicBookingManageController,
 } from './public-booking.controller';
+import { BookingPageThemesCache } from './booking-page-themes.cache';
+import {
+  BookingPageThemeController,
+  BookingTypePageThemeController,
+} from './booking-page-themes.controller';
+import { BookingPageThemesRepository } from './booking-page-themes.repository';
+import { BookingPageThemesService } from './booking-page-themes.service';
 import { PublicBookingService } from './public-booking.service';
 import { BookingPublicThrottle } from './public-throttle';
 import { SlotsService } from './slots.service';
@@ -75,23 +91,37 @@ import { SlotsService } from './slots.service';
  *
  * The calendar and the customer messages go through two ports (`infra/providers/appointments-booking`). The calendar port is fronted by
  * `MultiCalendarAdapter`: busy time from every connected Google and Outlook calendar, events written to one (a workspace with nothing
- * connected behaves as the old stub did); the customer messages still have the stub
- * the channel domain replaces under the same token: a booking message is reported as skipped.
+ * connected behaves as the old stub did); the customer messages go through the real channel messenger, which only the worker process
+ * provides (`AppointmentsBookingWorkerModule`): nothing in the API process sends a booking message.
  *
  * The sweeps and the outbox consumers live in `AppointmentsBookingWorkerModule` (the worker process only).
  */
 @Module({
   // CrmModule: contacts (find-or-create by phone and email). PlansCoreModule: the `appointment_booking` flag and the `appointments` cap.
   // PlatformSettingsModule: the operator's Google and Microsoft OAuth clients (console, Google Calendar / Microsoft Calendar).
-  imports: [ContactConsentModule, CrmModule, PlansCoreModule, PlatformSettingsModule],
+  // MessageTemplatesModule: the appointment message library creates and submits its WhatsApp templates through the template library.
+  imports: [
+    ContactConsentModule,
+    CrmModule,
+    MessageTemplatesModule,
+    PlansCoreModule,
+    PlatformSettingsModule,
+  ],
   controllers: [
     // `booking-types/options`, `preview-slots` and `appointments/counts`, `calendar` are literal paths declared before `:id` inside
     // their controllers. The public controllers are unauthenticated (a public page, a bearer token).
     BookingTypesController,
+    // `appointment-channels` and `appointment-message-templates` (BL-350, BL-351).
+    AppointmentChannelsController,
+    AppointmentTemplatesController,
     AppointmentsController,
     ContactAppointmentsController,
     PublicBookingController,
     PublicBookingManageController,
+    PublicBookingAssetsController,
+    // The booking page's look (BL-355..358): the workspace theme and one service's override.
+    BookingPageThemeController,
+    BookingTypePageThemeController,
     // `appointments/calendar/google/...` (staff) and the public OAuth callback.
     GoogleCalendarController,
     GoogleCalendarCallbackController,
@@ -110,6 +140,10 @@ import { SlotsService } from './slots.service';
     AppointmentBookingGuard,
     BookingTypesRepository,
     AppointmentsRepository,
+    AppointmentRemindersRepository,
+    AppointmentChannelsRepository,
+    AppointmentChannelsService,
+    AppointmentTemplatesService,
     AppointmentsSupport,
     AppointmentCalendarWriter,
     AppointmentCalendarSyncService,
@@ -122,6 +156,10 @@ import { SlotsService } from './slots.service';
     ContactLinkService,
     PublicBookingService,
     BookingPublicThrottle,
+    BookingPageThemesRepository,
+    BookingPageThemesCache,
+    BookingPageThemesService,
+    UploadPolicyService,
     BookingOffersService,
     GoogleCalendarClient,
     GoogleCalendarConfig,
@@ -149,7 +187,6 @@ import { SlotsService } from './slots.service';
     MultiCalendarAdapter,
     // The booking code talks to ONE port; it fronts the workspace's Google and Outlook calendars.
     { provide: APPOINTMENT_CALENDAR, useExisting: MultiCalendarAdapter },
-    { provide: APPOINTMENT_MESSENGER, useClass: NoAppointmentMessenger },
   ],
   exports: [
     AppointmentsService,
@@ -157,12 +194,14 @@ import { SlotsService } from './slots.service';
     BookingOffersService,
     BookingTypesRepository,
     AppointmentsRepository,
+    AppointmentRemindersRepository,
+    // The worker's sender asks the owner's channel choice before it sends.
+    AppointmentChannelsRepository,
     AppointmentsSupport,
     AppointmentCalendarWriter,
     AppointmentMeetingMirror,
     SlotsService,
     APPOINTMENT_CALENDAR,
-    APPOINTMENT_MESSENGER,
     // The Google account domain (`/google-account`) shares this module's grant, its token refresh and its consent flow.
     GoogleCalendarConnectService,
     GoogleConsentService,

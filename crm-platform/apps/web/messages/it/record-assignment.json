@@ -1,0 +1,302 @@
+{
+  "record-assignment": {
+    "back": "Automazione",
+    "title": "Regole di assegnazione dei record",
+    "intro": "Assegna automaticamente i nuovi {contacts}, le aziende e i {deals} al responsabile vendite giusto.",
+    "crossNote": "Questa funzione assegna {contacts}, aziende e {deals}. Per assegnare le conversazioni agli agenti, vedi <link>Assegnazione automatica delle conversazioni</link>.",
+    "master": {
+      "title": "Attiva l'assegnazione dei record",
+      "hint": "Disattivata finché non la attivi. Quando è attiva, le regole qui sotto assegnano a un membro del tuo team ogni nuovo {contact}, azienda o {deal} senza responsabile.",
+      "on": "L'assegnazione dei record è attiva.",
+      "off": "L'assegnazione dei record è disattivata."
+    },
+    "imports": {
+      "title": "Assegna anche i record importati",
+      "hint": "Disattivata per impostazione predefinita, così un'importazione di grandi dimensioni non cambia i responsabili esistenti."
+    },
+    "ownerRule": {
+      "title": "Vengono assegnati solo i record senza responsabile",
+      "body": "Un responsabile impostato da una persona non viene mai sostituito, così come un responsabile rimosso di proposito. Il motore compila un responsabile vuoto su un nuovo record. Se attivi Riassegna all'aggiornamento per una regola, potrà anche spostare un record che il motore stesso aveva assegnato in precedenza, purché nessuno abbia cambiato il responsabile nel frattempo."
+    },
+    "tabs": {
+      "contact": "{Contacts}",
+      "company": "{Companies}",
+      "deal": "{Deals}",
+      "label": "Modulo"
+    },
+    "views": {
+      "rules": "Regole",
+      "log": "Registro esecuzioni"
+    },
+    "how": {
+      "title": "Come funziona la priorità",
+      "p1": "Le regole vengono provate dalla priorità 1 in giù. La prima regola che corrisponde e trova qualcuno disponibile prende il record.",
+      "p2": "Solo le regole attive hanno una priorità. Una regola in pausa mantiene il suo posto nell'elenco ma non viene mai eseguita.",
+      "p3": "Una regola senza condizioni corrisponde a ogni record e viene eseguita dopo tutte le altre, ovunque si trovi nell'elenco. È la regola di riserva.",
+      "p4": "Un record che corrisponde a più regole va a quella con la priorità più alta.",
+      "p5": "Trascina una riga o usa i pulsanti freccia per cambiare l'ordine. Le regole di riserva e quelle in pausa restano nel proprio gruppo in fondo."
+    },
+    "list": {
+      "title": {
+        "contact": "Regole per {contacts}",
+        "company": "Regole per le aziende",
+        "deal": "Regole per {deals}"
+      },
+      "create": "Crea regola",
+      "loading": "Caricamento delle regole…",
+      "loadFailed": "Impossibile caricare le regole.",
+      "retry": "Riprova",
+      "readOnly": "Puoi vedere queste regole ma non modificarle. Per modificarle serve l'autorizzazione a gestire l'assegnazione dei record.",
+      "empty": {
+        "title": "Ancora nessuna regola",
+        "contact": "I nuovi {contacts} mantengono il responsabile con cui vengono creati.",
+        "company": "Le nuove aziende mantengono il responsabile con cui vengono create.",
+        "deal": "Le nuove {deals} mantengono il responsabile con cui vengono create.",
+        "create": "Crea la prima regola"
+      },
+      "col": {
+        "priority": "Priorità",
+        "rule": "Regola",
+        "assignTo": "Assegna a",
+        "method": "Metodo",
+        "active": "Attiva",
+        "used": "Utilizzi",
+        "modified": "Ultima modifica"
+      },
+      "fallback": "Riserva",
+      "fallbackHint": "Una regola senza condizioni corrisponde a ogni record e viene eseguita dopo tutte le altre.",
+      "notPrioritised": "In pausa",
+      "noConditions": "Nessuna condizione: corrisponde a ogni record",
+      "brokenConditions": "{count, plural, one {# condizione non valida} other {# condizioni non valide}}",
+      "brokenHint": "Una condizione fa riferimento a qualcosa che è stato eliminato. Non corrisponde a nulla finché non la correggi.",
+      "usedCount": "{count, plural, =0 {Mai utilizzata} one {Utilizzata # volta} other {Utilizzata # volte}}",
+      "lastUsed": "Ultimo utilizzo {when}",
+      "modifiedBy": "{name}, {when}",
+      "nobody": "Nessuno",
+      "unknownPerson": "Ex membro",
+      "unknownTeam": "Team rimosso",
+      "teamName": "Team: {name}",
+      "skipsOffline": "Salta le persone offline",
+      "reassigns": "Riassegna all'aggiornamento",
+      "activeFor": "La regola {name} è attiva",
+      "dragHandle": "Trascina {name} per cambiarne la priorità",
+      "moveUp": "Sposta {name} su",
+      "moveDown": "Sposta {name} giù",
+      "moved": "{name} spostata alla posizione {place}.",
+      "actions": "Azioni per {name}",
+      "edit": "Modifica",
+      "clone": "Duplica",
+      "delete": "Elimina"
+    },
+    "strategy": {
+      "round_robin": "Round robin (a rotazione)",
+      "least_busy": "Minor carico di lavoro aperto",
+      "fixed": "Utente specifico",
+      "hint": {
+        "round_robin": "Assegna a turno tra le persone, in un ordine costante.",
+        "least_busy": {
+          "contact": "Lo assegna alla persona che al momento ha meno {contacts}.",
+          "company": "Lo assegna alla persona che al momento ha meno aziende.",
+          "deal": "Lo assegna alla persona che al momento ha meno {deals} aperte."
+        },
+        "fixed": "Sempre la stessa persona. Quando è in congedo, subentra il suo sostituto."
+      }
+    },
+    "editor": {
+      "titleNew": "Nuova regola",
+      "titleEdit": "Modifica regola",
+      "name": "Nome della regola",
+      "description": "Descrizione (facoltativa)",
+      "module": "Modulo",
+      "moduleLocked": "Il modulo di una regola non può essere cambiato. Crea una nuova regola per un altro modulo.",
+      "conditions": {
+        "title": "Condizioni",
+        "hint": "Un record corrisponde quando i suoi campi soddisfano le condizioni. Scegli un campo, poi come confrontarlo, poi un valore.",
+        "emptyTitle": "Nessuna condizione: corrisponde a ogni record, viene eseguita per ultima (riserva)",
+        "emptyBody": "Questa regola prende ogni record che nessun'altra regola ha preso. Aggiungi una condizione per restringere la selezione.",
+        "add": "Aggiungi condizione",
+        "counts": "{conditions} condizioni su {max}",
+        "loading": "Caricamento dei campi…",
+        "partial": "Alcuni campi non sono stati caricati. Puoi comunque creare regole con quelli disponibili."
+      },
+      "group": {
+        "company": "Campi dell'azienda",
+        "deal": "Campi di {Deal}"
+      },
+      "assign": {
+        "title": "Assegna a",
+        "method": "Metodo",
+        "people": "Persone",
+        "person": "Persona",
+        "peoplePlaceholder": "Scegli le persone",
+        "personPlaceholder": "Scegli una persona",
+        "teams": "Team",
+        "teamsPlaceholder": "Scegli i team",
+        "teamsNote": "Qui un team è un gruppo di persone tra cui scegliere. Un record non appartiene a un team: il suo responsabile è uno dei membri del team.",
+        "noPeople": "Nessuna persona corrispondente.",
+        "removePerson": "Rimuovi {name}",
+        "onLeave": "in congedo",
+        "skipOffline": "Salta le persone offline",
+        "skipOfflineHint": "Le persone in congedo vengono sempre saltate.",
+        "reassign": "Riassegna quando un aggiornamento fa corrispondere il record a questa regola",
+        "reassignHint": "Si applica solo ai record assegnati dal motore stesso e solo finché nessuno ha cambiato il responsabile. Disattivato per impostazione predefinita: un record viene assegnato una sola volta."
+      },
+      "problems": {
+        "name": "Dai un nome alla regola.",
+        "people": "Scegli almeno una persona o un team.",
+        "fixedOne": "Una regola per utente specifico richiede esattamente una persona e nessun team.",
+        "conditions": "Correggi le condizioni evidenziate prima di salvare.",
+        "server": "Il server ha rifiutato le regole."
+      },
+      "saveActivate": "Salva e attiva",
+      "savePaused": "Salva in pausa",
+      "save": "Salva modifiche",
+      "cancel": "Annulla",
+      "unsavedTitle": "Uscire senza salvare?",
+      "unsavedMessage": "Le modifiche a questa regola non sono state salvate.",
+      "stay": "Continua a modificare",
+      "leave": "Esci"
+    },
+    "fields": {
+      "origin": "Arrivato tramite",
+      "company": {
+        "name": "Nome",
+        "email": "Email",
+        "phone": "Telefono",
+        "domain": "Dominio del sito web",
+        "industry": "Settore",
+        "sizeRange": "Dimensione",
+        "address": "Indirizzo",
+        "status": "Stato",
+        "createdAt": "Creato",
+        "updatedAt": "Ultimo aggiornamento"
+      },
+      "deal": {
+        "title": "Titolo",
+        "value": "Valore",
+        "currency": "Valuta",
+        "pipeline": "Pipeline",
+        "stage": "Fase",
+        "status": "Stato",
+        "source": "Origine",
+        "expectedCloseDate": "Data di chiusura prevista",
+        "createdAt": "Creato",
+        "hasContact": "Ha un {contact}",
+        "hasCompany": "Ha un'azienda"
+      },
+      "dealStatus": {
+        "open": "Aperta",
+        "won": "Vinta",
+        "lost": "Persa"
+      }
+    },
+    "origin": {
+      "manual": "Aggiunto da una persona",
+      "import": "Importazione",
+      "inbound": "Primo messaggio",
+      "form": "Modulo",
+      "lead": "Origine del lead",
+      "api": "API"
+    },
+    "test": {
+      "title": "Prova con un record",
+      "hint": "Scegli un record reale e scopri quale regola lo prenderebbe e chi lo riceverebbe. Non viene modificato nulla, e funziona anche con l'interruttore disattivato.",
+      "search": {
+        "contact": "Cerca {contacts} per nome, email o telefono",
+        "company": "Cerca aziende per nome",
+        "deal": "Cerca {deals} per titolo"
+      },
+      "searchLabel": "Record da provare",
+      "searching": "Ricerca in corso…",
+      "noMatches": "Nessun record trovato.",
+      "searchFailed": "La ricerca non ha funzionato. Potresti non avere il permesso di vedere questi record.",
+      "clear": "Scegli un altro record",
+      "run": "Prova",
+      "running": "Prova in corso…",
+      "failed": "La prova non è stata eseguita. Riprova.",
+      "off": "L'assegnazione dei record è disattivata, quindi questo mostra cosa succederebbe se fosse attiva.",
+      "outcome": {
+        "would_assign": "{record} andrebbe a {owner} tramite la regola {rule}.",
+        "disabled": "L'assegnazione dei record è disattivata per questo workspace, quindi non succederebbe nulla.",
+        "has_owner": "{record} ha già un responsabile, quindi nessuna regola verrebbe eseguita. Un responsabile impostato da una persona non viene mai sostituito.",
+        "no_rule": "Nessuna regola attiva corrisponde a {record}.",
+        "nobody_available": "Una regola corrisponde a {record}, ma tutte le persone indicate sono in congedo, offline o non ci sono più.",
+        "plan": "Il tuo piano non include le regole di assegnazione dei record.",
+        "not_found": "Record non trovato. Potrebbe essere stato eliminato oppure non rientrare tra quelli che puoi vedere."
+      },
+      "traceTitle": "Regole provate, in ordine",
+      "traceEmpty": "Nessuna regola attiva è stata provata.",
+      "trace": {
+        "winner": "Corrisponde e prende il record",
+        "matched": "Corrisponde",
+        "not_matched": "Non corrisponde",
+        "nobody": "Corrisponde, ma nessuno era disponibile",
+        "broken": "Ha una condizione non valida"
+      },
+      "skipped": "Saltata perché nessuno era disponibile: {names}"
+    },
+    "log": {
+      "title": "Registro esecuzioni",
+      "intro": "Cosa ha fatto il motore con ogni record, dal più recente. Le voci vengono conservate per {days} giorni e contengono solo id, mai il contenuto di un record.",
+      "filterOutcome": "Esito",
+      "filterRule": "Regola",
+      "allOutcomes": "Tutti gli esiti",
+      "allRules": "Tutte le regole",
+      "loading": "Caricamento del registro esecuzioni…",
+      "loadFailed": "Impossibile caricare il registro esecuzioni.",
+      "empty": "Non è ancora stato assegnato nulla.",
+      "emptyFiltered": "Nessuna voce corrisponde a questi filtri.",
+      "loadMore": "Carica altro",
+      "col": {
+        "when": "Quando",
+        "record": "Record",
+        "outcome": "Esito",
+        "reason": "Motivo",
+        "rule": "Regola",
+        "assignedTo": "Assegnato a",
+        "method": "Metodo",
+        "arrived": "Arrivato tramite"
+      },
+      "deletedRecord": "Eliminato",
+      "noRule": "Nessuna regola",
+      "outcome": {
+        "assigned": "Assegnato",
+        "reassigned": "Riassegnato",
+        "skipped": "Lasciato invariato"
+      },
+      "reason": {
+        "matched": "Una regola corrispondeva",
+        "has_owner": "Aveva già un responsabile",
+        "no_rule": "Nessuna regola corrispondeva",
+        "nobody_available": "Nessuno era disponibile",
+        "raced": "Il responsabile è cambiato durante l'assegnazione",
+        "unchanged": "È già con la regola giusta"
+      },
+      "trigger": {
+        "created": "Nuovo record",
+        "updated": "Record aggiornato"
+      },
+      "showTrace": "Mostra come è stato deciso",
+      "hideTrace": "Nascondi come è stato deciso",
+      "traceFor": "Come è stato deciso per {record}"
+    },
+    "toast": {
+      "created": "Regola creata.",
+      "saved": "Regola salvata.",
+      "deleted": "Regola eliminata.",
+      "cloned": "Regola copiata. La copia è in pausa.",
+      "activated": "Regola attivata.",
+      "paused": "Regola messa in pausa.",
+      "reordered": "Ordine salvato.",
+      "conflict": "Qualcun altro ha modificato questa regola. È stata caricata l'ultima versione. Controllala e applica di nuovo la tua modifica.",
+      "failed": "Qualcosa è andato storto. Riprova."
+    },
+    "delete": {
+      "title": "Eliminare questa regola?",
+      "message": "La regola {name} smetterà di assegnare. I record già assegnati mantengono il loro responsabile.",
+      "confirm": "Elimina",
+      "cancel": "Annulla"
+    },
+    "dismiss": "Ignora"
+  }
+}

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { FieldResponse } from '@crm/contracts';
 import {
   countryOfPhone,
+  jobTitleEditable,
   jobTitleField,
   jobTitleOf,
   networkOf,
@@ -61,6 +62,14 @@ describe('job title', () => {
     expect(jobTitleField([field({ key: 'job_title', isActive: false })])).toBeNull();
     expect(jobTitleField([field({ key: 'job_title', isSystem: true })])).toBeNull();
     expect(jobTitleField(undefined)).toBeNull();
+    expect(jobTitleField([field({ key: 'job_title', isHidden: true })])).toBeNull();
+  });
+
+  it('is editable unless the property is read-only or a formula (the API refuses those)', () => {
+    expect(jobTitleEditable(field({ key: 'job_title' }))).toBe(true);
+    expect(jobTitleEditable(field({ key: 'job_title', isReadOnly: true }))).toBe(false);
+    expect(jobTitleEditable(field({ key: 'job_title', fieldType: 'formula' }))).toBe(false);
+    expect(jobTitleEditable(null)).toBe(false);
   });
   it('reads its text', () => {
     const f = field({ key: 'job_title' });

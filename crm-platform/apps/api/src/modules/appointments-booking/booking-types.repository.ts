@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type {
   BookingLocationType,
+  BookingReminderChannel,
+  BookingReminderKind,
   BookingQuestionType,
   BookingTemplateChannel,
   BookingTemplateEvent,
@@ -75,6 +77,13 @@ export interface ReminderRow {
   offsetMinutes: number;
   label: string | null;
   isActive: boolean;
+  /** `before` the start or `after` the end (the follow-up). */
+  kind: BookingReminderKind;
+  channels: BookingReminderChannel[];
+  subject: string | null;
+  body: string | null;
+  waTemplateId: number | null;
+  waTemplateUuid: string | null;
 }
 export interface TemplateRow {
   event: BookingTemplateEvent;
@@ -83,6 +92,14 @@ export interface TemplateRow {
   waTemplateUuid: string | null;
   plainBody: string | null;
   variableMap: Record<string, string> | null;
+  /** The library message the type chose for this event and channel (BL-351), read live when the message is sent. */
+  libraryTemplateId: number | null;
+  libraryTemplateUuid: string | null;
+  libraryActive: boolean;
+  librarySubject: string | null;
+  libraryBody: string | null;
+  /** The WhatsApp template behind a WhatsApp library message. */
+  libraryWaUuid: string | null;
 }
 export interface FinancialRow {
   feeMinor: bigint;
@@ -112,6 +129,9 @@ export interface TypeChildren {
   financial: FinancialRow | null;
   integration: IntegrationRow | null;
 }
+
+/** A text[] literal for the channels column. The values are a closed set of words, so no quoting is needed. */
+const channelsArray = (channels: readonly string[]) => sql`${`{${channels.join(',')}}`}::text[]`;
 
 const toRow = (r: Raw): BookingTypeRow => ({
   id: Number(r.id),
@@ -318,7 +338,10 @@ export class BookingTypesRepository {
 
     for (const r of (
       await tx.execute(
-        sql`SELECT * FROM booking_reminders WHERE org_id = ${orgId} AND booking_type_id IN ${ids} ORDER BY offset_minutes DESC`,
+        sql`SELECT br.*, w.uuid AS wa_uuid FROM booking_reminders br
+          LEFT JOIN wa_templates w ON w.org_id = br.org_id AND w.id = br.wa_template_id
+          WHERE br.org_id = ${orgId} AND br.booking_type_id IN ${ids}
+          ORDER BY br.kind, br.offset_minutes DESC`,
       )
     ).rows as Raw[])
       get(r.booking_type_id).reminders.push({
@@ -328,11 +351,21 @@ export class BookingTypesRepository {
         offsetMinutes: Number(r.offset_minutes),
         label: s(r.label),
         isActive: r.is_active as boolean,
+        kind: r.kind as BookingReminderKind,
+        channels: (r.channels as BookingReminderChannel[] | null) ?? ['whatsapp', 'sms', 'email'],
+        subject: s(r.subject),
+        body: s(r.body),
+        waTemplateId: n(r.wa_template_id),
+        waTemplateUuid: s(r.wa_uuid),
       });
 
     for (const r of (
-      await tx.execute(sql`SELECT bt.*, w.uuid AS wa_uuid FROM booking_templates bt
+      await tx.execute(sql`SELECT bt.*, w.uuid AS wa_uuid, lt.uuid AS lib_uuid, lt.is_active AS lib_active,
+          lt.subject AS lib_subject, lt.body AS lib_body, lw.uuid AS lib_wa_uuid
+        FROM booking_templates bt
         LEFT JOIN wa_templates w ON w.org_id = bt.org_id AND w.id = bt.wa_template_id
+        LEFT JOIN appointment_message_templates lt ON lt.org_id = bt.org_id AND lt.id = bt.library_template_id
+        LEFT JOIN wa_templates lw ON lw.org_id = lt.org_id AND lw.id = lt.wa_template_id
         WHERE bt.org_id = ${orgId} AND bt.booking_type_id IN ${ids} ORDER BY bt.event, bt.channel`)
     ).rows as Raw[])
       get(r.booking_type_id).templates.push({
@@ -342,6 +375,12 @@ export class BookingTypesRepository {
         waTemplateUuid: s(r.wa_uuid),
         plainBody: s(r.plain_body),
         variableMap: (r.variable_map as Record<string, string> | null) ?? null,
+        libraryTemplateId: n(r.library_template_id),
+        libraryTemplateUuid: s(r.lib_uuid),
+        libraryActive: (r.lib_active as boolean | null) ?? false,
+        librarySubject: s(r.lib_subject),
+        libraryBody: s(r.lib_body),
+        libraryWaUuid: s(r.lib_wa_uuid),
       });
 
     for (const r of (
@@ -454,7 +493,17 @@ export class BookingTypesRepository {
     tx: Tx,
     orgId: number,
     typeId: number,
-    list: Array<{ uuid?: string; offsetMinutes: number; label: string | null; isActive: boolean }>,
+    list: Array<{
+      uuid?: string;
+      offsetMinutes: number;
+      label: string | null;
+      isActive: boolean;
+      kind: BookingReminderKind;
+      channels: BookingReminderChannel[];
+      subject: string | null;
+      body: string | null;
+      waTemplateId: number | null;
+    }>,
   ): Promise<void> {
     const keep = list.filter((r) => r.uuid).map((r) => r.uuid!);
     await tx.execute(sql`DELETE FROM booking_reminders WHERE org_id = ${orgId} AND booking_type_id = ${typeId}
@@ -471,11 +520,14 @@ export class BookingTypesRepository {
     for (const r of list) {
       if (r.uuid) {
         await tx.execute(sql`UPDATE booking_reminders SET offset_minutes = ${r.offsetMinutes}, offset_index = ${i},
-          label = ${r.label}, is_active = ${r.isActive}
+          label = ${r.label}, is_active = ${r.isActive}, kind = ${r.kind}, channels = ${channelsArray(r.channels)},
+          subject = ${r.subject}, body = ${r.body}, wa_template_id = ${r.waTemplateId}
           WHERE org_id = ${orgId} AND booking_type_id = ${typeId} AND uuid = ${r.uuid}::uuid`);
       } else {
-        await tx.execute(sql`INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes, label, is_active)
-          VALUES (${orgId}, ${typeId}, ${i}, ${r.offsetMinutes}, ${r.label}, ${r.isActive})`);
+        await tx.execute(sql`INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes, label, is_active,
+            kind, channels, subject, body, wa_template_id)
+          VALUES (${orgId}, ${typeId}, ${i}, ${r.offsetMinutes}, ${r.label}, ${r.isActive}, ${r.kind},
+            ${channelsArray(r.channels)}, ${r.subject}, ${r.body}, ${r.waTemplateId})`);
       }
       i++;
     }
@@ -491,15 +543,16 @@ export class BookingTypesRepository {
       waTemplateId: number | null;
       plainBody: string | null;
       variableMap: Record<string, string> | null;
+      libraryTemplateId: number | null;
     }>,
   ): Promise<void> {
     await tx.execute(
       sql`DELETE FROM booking_templates WHERE org_id = ${orgId} AND booking_type_id = ${typeId}`,
     );
     for (const t of list)
-      await tx.execute(sql`INSERT INTO booking_templates (org_id, booking_type_id, event, channel, wa_template_id, plain_body, variable_map)
+      await tx.execute(sql`INSERT INTO booking_templates (org_id, booking_type_id, event, channel, wa_template_id, plain_body, variable_map, library_template_id)
         VALUES (${orgId}, ${typeId}, ${t.event}, ${t.channel}, ${t.waTemplateId}, ${t.plainBody},
-                ${t.variableMap ? JSON.stringify(t.variableMap) : null}::jsonb)`);
+                ${t.variableMap ? JSON.stringify(t.variableMap) : null}::jsonb, ${t.libraryTemplateId})`);
   }
 
   async upsertFinancial(

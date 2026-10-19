@@ -84,7 +84,8 @@
       "email_channel": "ইমেল (Gmail) চ্যানেল",
       "personal_history_full": "সম্পূর্ণ ইতিহাস ইমপোর্ট (ব্যক্তিগত WhatsApp)",
       "ai_crm_copilot": "AI CRM Copilot",
-      "lead_scoring": "AI লিড স্কোরিং"
+      "lead_scoring": "AI লিড স্কোরিং",
+      "record_assignment": "রেকর্ড অ্যাসাইনমেন্ট নিয়ম"
     },
     "limitGroups": {
       "messaging": "মেসেজিং",

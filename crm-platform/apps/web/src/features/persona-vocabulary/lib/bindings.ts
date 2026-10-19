@@ -68,6 +68,18 @@ export const BOUND_SURFACES: readonly BoundSurface[] = [
     ],
   },
   {
+    // Reminders and follow-ups of a booking type (BL-283): the card on Appointment settings, the editor's Messaging step and the drawer's
+    // list. Written with the default nouns (appointment, contact) so a workspace that says Visit or Patient reads its own words.
+    id: 'reminders',
+    prefixes: ['appointments.reminders', 'appointments.channels', 'appointments.templates'],
+  },
+  {
+    // The staff screens that style the customer's booking page (BL-355): written with the default nouns. The sample text of its preview
+    // names no noun, because the preview shows what a customer sees.
+    id: 'booking-page-appearance',
+    prefixes: ['appointments.appearance'],
+  },
+  {
     id: 'deals',
     prefixes: [
       'deals-pipelines.nav',

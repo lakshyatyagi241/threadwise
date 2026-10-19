@@ -104,6 +104,11 @@ export class RealtimeClient {
   private retryAttempt = 0;
   private retryTimer?: ReturnType<typeof setTimeout>;
   private ticketRefused = false;
+  /** Server clock minus this tab's clock, from the last `rt.ready`: lets an event's age be measured against the server's time. */
+  private clockOffsetMs = 0;
+  /** The worst event age seen since the last delivery report, and how many events that covers. */
+  private lagMaxMs = 0;
+  private lagEvents = 0;
 
   private readonly rooms = new Map<RealtimeRoomKey, RoomEntry>();
   private readonly lastSeq = new Map<string, number>();
@@ -169,6 +174,28 @@ export class RealtimeClient {
   reportVisible(visible: boolean): void {
     if (this.status !== 'connected' || !this.socket?.connected) return;
     this.socket.emit(REALTIME_CLIENT_EVENTS.visibility, { visible });
+  }
+
+  /**
+   * Tells the server how late events have been reaching this tab since the last report (the worst case and how many events): the one
+   * number the server cannot see for itself. Fire and forget, only while connected and only if events arrived.
+   */
+  reportDelivery(): void {
+    if (this.status !== 'connected' || !this.socket?.connected || this.lagEvents === 0) return;
+    this.socket.emit(REALTIME_CLIENT_EVENTS.deliveryLag, {
+      lagMs: Math.min(300_000, Math.round(this.lagMaxMs)),
+      events: this.lagEvents,
+    });
+    this.lagMaxMs = 0;
+    this.lagEvents = 0;
+  }
+
+  /** An event's age on arrival, against the server's clock. A clock set in the future gives a negative age, which counts as zero. */
+  private trackLag(env: RealtimeEnvelope): void {
+    const age = Date.now() + this.clockOffsetMs - Date.parse(env.at);
+    if (!Number.isFinite(age)) return;
+    this.lagMaxMs = Math.max(this.lagMaxMs, Math.max(0, age));
+    this.lagEvents += 1;
   }
 
   getStatus(): RealtimeStatus {
@@ -294,6 +321,8 @@ export class RealtimeClient {
   private onReady(data: unknown): void {
     const ready = realtimeReadySchema.safeParse(data);
     if (!ready.success) return;
+    const offset = Date.parse(ready.data.serverTime) - Date.now();
+    if (Number.isFinite(offset)) this.clockOffsetMs = offset;
     for (const { room, seq } of ready.data.rooms) this.lastSeq.set(room, seq);
     const reason: ResyncReason = this.readySeen ? 'reconnect' : 'connect';
     this.readySeen = true;
@@ -317,6 +346,7 @@ export class RealtimeClient {
     if (this.seen.size > SEEN_IDS) this.seen.delete(this.seen.values().next().value as string);
 
     this.trackSequence(env);
+    this.trackLag(env);
 
     for (const handler of [
       ...(this.eventHandlers.get(env.type) ?? []),

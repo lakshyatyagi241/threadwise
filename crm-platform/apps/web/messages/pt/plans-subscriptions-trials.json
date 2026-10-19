@@ -84,7 +84,8 @@
       "email_channel": "Canal de e-mail (Gmail)",
       "personal_history_full": "Importação do histórico completo (WhatsApp pessoal)",
       "ai_crm_copilot": "AI CRM Copilot",
-      "lead_scoring": "Pontuação de leads com IA"
+      "lead_scoring": "Pontuação de leads com IA",
+      "record_assignment": "Regras de atribuição de registros"
     },
     "limitGroups": {
       "messaging": "Mensagens",

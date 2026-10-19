@@ -21,6 +21,12 @@ import {
   type Override,
   type WeeklyHours,
 } from './availability';
+import {
+  remindersFromType,
+  remindersToInput,
+  validateReminders,
+  type ReminderDraft,
+} from './reminder-rules';
 import { minorToInput, parseMajor, parsePercent, priceBreakdown } from './money';
 import { isValidZone } from './zone';
 
@@ -46,7 +52,7 @@ export const LIMITS = {
   maxPerDayMax: 500,
   capacityMax: 500,
   reminders: 8,
-  reminderMax: 525_600,
+  reminderMax: 43_200,
   questions: 20,
   questionLabelMax: 191,
   optionMax: 20,
@@ -67,13 +73,6 @@ export const COLORS = [
 ] as const;
 export const DEFAULT_COLOR = COLORS[0];
 
-export interface ReminderDraft {
-  id: string;
-  /** Minutes before the start, as typed. */
-  offset: string;
-  label: string;
-}
-
 export interface QuestionDraft {
   id: string;
   /** The saved question's id, sent back so its row is kept; absent on a question added in this session. */
@@ -87,10 +86,26 @@ export interface QuestionDraft {
   map: string;
 }
 
+/** The channels a lifecycle message can be attached to in the editor (SMS and voice have no library message). */
+export type TemplateChannel = 'whatsapp' | 'email';
+
 export interface TemplateDraft {
   waTemplateId: string;
   plainBody: string;
+  /** The channels this message goes out on. Empty = nothing is attached (the first available channel is used automatically). */
+  channels: TemplateChannel[];
+  /** The appointment-library message chosen for WhatsApp (approved ones only) and for email; '' = the text above. */
+  waLibraryId: string;
+  emailLibraryId: string;
 }
+
+const blankTemplate = (): TemplateDraft => ({
+  waTemplateId: '',
+  plainBody: '',
+  channels: [],
+  waLibraryId: '',
+  emailLibraryId: '',
+});
 
 export interface BookingTypeDraft {
   name: string;
@@ -134,10 +149,10 @@ export interface BookingTypeDraft {
 }
 
 const emptyTemplates = (): Record<TemplateEvent, TemplateDraft> => ({
-  confirmation: { waTemplateId: '', plainBody: '' },
-  reminder: { waTemplateId: '', plainBody: '' },
-  cancellation: { waTemplateId: '', plainBody: '' },
-  reschedule: { waTemplateId: '', plainBody: '' },
+  confirmation: blankTemplate(),
+  reminder: blankTemplate(),
+  cancellation: blankTemplate(),
+  reschedule: blankTemplate(),
 });
 
 /** A new type: Reference's form defaults (30 minutes, 4 hours' notice, 30 days ahead) and Monday to Friday 09:00 to 18:00. */
@@ -191,7 +206,18 @@ export function typeToDraft(t: BookingType): BookingTypeDraft {
   const cur = t.price.currency;
   const templates = emptyTemplates();
   for (const tpl of t.templates) {
-    templates[tpl.event] = { waTemplateId: tpl.waTemplateId ?? '', plainBody: tpl.plainBody ?? '' };
+    const cur = templates[tpl.event];
+    const channel = tpl.channel ?? 'whatsapp';
+    // A message attached to a channel this editor cannot show (Telegram, ...) is kept out of the draft, as before.
+    if (channel !== 'whatsapp' && channel !== 'email') continue;
+    templates[tpl.event] = {
+      ...cur,
+      plainBody: cur.plainBody || (tpl.plainBody ?? ''),
+      channels: cur.channels.includes(channel) ? cur.channels : [...cur.channels, channel],
+      ...(channel === 'whatsapp'
+        ? { waTemplateId: tpl.waTemplateId ?? '', waLibraryId: tpl.libraryTemplateId ?? '' }
+        : { emailLibraryId: tpl.libraryTemplateId ?? '' }),
+    };
   }
   return {
     name: t.name,
@@ -229,11 +255,7 @@ export function typeToDraft(t: BookingType): BookingTypeDraft {
     week: weekFromRules(t.availability),
     overrides: overridesFromWire(t.overrides),
     templates,
-    reminders: t.reminders.map((r) => ({
-      id: newId(),
-      offset: String(r.offsetMinutes),
-      label: r.label ?? '',
-    })),
+    reminders: remindersFromType(t.reminders),
     questions: t.questions.map((q) => ({
       id: newId(),
       ...(q.id ? { serverId: q.id } : {}),
@@ -268,14 +290,29 @@ export type FormProblem =
   | 'reminderInvalid'
   | 'remindersDuplicate'
   | 'remindersTooMany'
+  | 'reminderChannelsNone'
+  | 'reminderBodyTooLong'
   | 'questionLabelRequired'
   | 'questionsTooMany'
   | 'questionOptionsRequired'
   | 'hoursInvalid'
   | 'overridesInvalid'
   | 'descriptionTooLong'
-  | 'locationTooLong';
+  | 'locationTooLong'
+  | 'templateNoChannel';
 
+/** The editor's problem code of each reminder problem (the codes the messages already name). */
+const REMINDER_PROBLEM = {
+  offsetInvalid: 'reminderInvalid',
+  duplicate: 'remindersDuplicate',
+  channelsNone: 'reminderChannelsNone',
+  bodyTooLong: 'reminderBodyTooLong',
+  subjectTooLong: 'reminderBodyTooLong',
+  labelTooLong: 'reminderBodyTooLong',
+  tooMany: 'remindersTooMany',
+} as const;
+
+export type { ReminderDraft };
 export type ProblemMap = Partial<Record<string, FormProblem>>;
 
 /** The wizard step each field belongs to, so a failed save can jump to the first step with a problem. */
@@ -341,17 +378,17 @@ export function validateDraft(d: BookingTypeDraft): ProblemMap {
   const win = d.cancelWindow.trim() === '' ? 0 : int(d.cancelWindow);
   if (win === null || win > LIMITS.cancelWindowMax) p.cancelWindow = 'cancelWindowInvalid';
 
-  // reminders: Reference keeps up to 8 distinct, positive offsets and drops the rest
-  const seen = new Set<number>();
-  for (const r of d.reminders) {
-    if (r.offset.trim() === '') continue;
-    const v = int(r.offset);
-    if (v === null || v < 1 || v > LIMITS.reminderMax) p[`reminder:${r.id}`] = 'reminderInvalid';
-    else if (seen.has(v)) p[`reminder:${r.id}`] = 'remindersDuplicate';
-    else seen.add(v);
+  // reminders and follow-ups (BL-283): up to 8, distinct per kind and moment, each with a channel and a readable text
+  for (const [key, problem] of Object.entries(validateReminders(d.reminders))) {
+    p[key] = REMINDER_PROBLEM[problem];
   }
-  if (d.reminders.filter((r) => r.offset.trim() !== '').length > LIMITS.reminders)
-    p.reminders = 'remindersTooMany';
+
+  // lifecycle messages: a text has to be attached to a channel to be sent (BL-350)
+  for (const event of TEMPLATE_EVENTS) {
+    const t = d.templates[event];
+    if (t.plainBody.trim() !== '' && t.channels.length === 0)
+      p[`template:${event}`] = 'templateNoChannel';
+  }
 
   // questions
   if (d.questions.length > LIMITS.questions) p.questions = 'questionsTooMany';
@@ -420,23 +457,7 @@ const orNull = (v: string): string | null => (v.trim() === '' ? null : v.trim())
 export function draftToInput(d: BookingTypeDraft): BookingTypeInput {
   const cur = d.currency.toUpperCase();
   const duration = Number(d.duration);
-  const reminders: Array<{ offsetMinutes: number; label: string | null }> = [];
-  const used = new Set<number>();
-  for (const r of d.reminders) {
-    const v = Number(r.offset);
-    if (
-      r.offset.trim() === '' ||
-      !Number.isInteger(v) ||
-      v < 1 ||
-      used.has(v) ||
-      reminders.length >= LIMITS.reminders
-    )
-      continue;
-    used.add(v);
-    reminders.push({ offsetMinutes: v, label: orNull(r.label) });
-  }
-  // furthest first, as Reference lists them
-  reminders.sort((a, b) => b.offsetMinutes - a.offsetMinutes);
+  const reminders = remindersToInput(d.reminders);
 
   return {
     name: d.name.trim(),
@@ -477,11 +498,26 @@ export function draftToInput(d: BookingTypeDraft): BookingTypeInput {
     },
     availability: rulesFromWeek(d.week),
     overrides: overridesToWire(d.overrides),
+    // One row per channel the message is attached to; a library choice is read when the message is sent.
     templates: TEMPLATE_EVENTS.flatMap((event) => {
       const t = d.templates[event];
-      return t.waTemplateId.trim() === '' && t.plainBody.trim() === ''
-        ? []
-        : [{ event, waTemplateId: orNull(t.waTemplateId), plainBody: orNull(t.plainBody) }];
+      return t.channels.map((channel) =>
+        channel === 'whatsapp'
+          ? {
+              event,
+              channel,
+              waTemplateId: orNull(t.waTemplateId),
+              libraryTemplateId: orNull(t.waLibraryId),
+              plainBody: orNull(t.plainBody),
+            }
+          : {
+              event,
+              channel,
+              waTemplateId: null,
+              libraryTemplateId: orNull(t.emailLibraryId),
+              plainBody: orNull(t.plainBody),
+            },
+      );
     }),
     reminders,
     // Reference leaves out a question without a label

@@ -88,7 +88,7 @@ export type ProjectsRow = typeof projects.$inferSelect;
 export type NewProjectsRow = typeof projects.$inferInsert;
 
 /**
- * The workspace's list of task outcomes (Interested, Left message, ...). Mirrors migrations/20270110090000_task_outcomes.sql; the
+ * The workspace's list of task outcomes (Interested, Left message, ...). Mirrors migrations/20270126090000_task_outcomes.sql; the
  * unique index on (org_id, lower(btrim(name))) is an expression index and lives there.
  */
 export const taskOutcomes = pgTable(
@@ -137,6 +137,8 @@ export const tasks = pgTable(
     /** The outcome the task ended with (task_outcomes); no ON DELETE action: an outcome in use cannot be deleted. */
     outcomeId: idColumn('outcome_id'),
     source: text('source').notNull().default('manual'),
+    /** BL-291: `follow_up` is a contact's next follow-up (at most one open per contact); every other task is `task`. */
+    kind: text('kind').notNull().default('task'),
     dueAt: timestamp('due_at', { withTimezone: true }),
     remindedAt: timestamp('reminded_at', { withTimezone: true }),
     doneAt: timestamp('done_at', { withTimezone: true }),

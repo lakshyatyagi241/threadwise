@@ -4,7 +4,7 @@ import { selectionBody } from '../api/bulk';
 import { sampleCsv } from '../api/import-export';
 import type { ContactRow } from '../api/schemas';
 import { ApiError } from '@/lib/api/errors';
-import { deleteFailure, errorKind, fieldErrors, planLimitOf } from './errors';
+import { deleteFailure, errorKind, fieldErrors, jobTitleFailure, planLimitOf } from './errors';
 import { stageChoices, statusChoices } from './option-sets';
 import { rowView } from './row-view';
 
@@ -261,5 +261,41 @@ describe('formatDate', () => {
     expect(formatDate('', 'en')).toBe('');
     expect(formatDate('nope', 'en')).toBe('');
     expect(formatDate('2026-10-17T04:08:00.000Z', 'de', 'UTC')).toMatch(/17\.\s?(Okt|10)/);
+  });
+});
+
+describe('jobTitleFailure (the real reason of a refused inline job title save)', () => {
+  const api = (status: number, code: string, paths: string[] = []) =>
+    new ApiError(
+      status,
+      code,
+      'x',
+      undefined,
+      paths.map((path) => ({ path, message: 'm' })),
+    );
+
+  it('maps each refusal to its own message', () => {
+    const k = 'job_title';
+    expect(jobTitleFailure(api(409, ERROR_CODES.ROW_VERSION_CONFLICT), k)).toBe('jobTitleConflict');
+    expect(jobTitleFailure(api(403, ERROR_CODES.FORBIDDEN), k)).toBe('jobTitleForbidden');
+    expect(jobTitleFailure(api(404, 'NOT_FOUND'), k)).toBe('jobTitleGone');
+    expect(
+      jobTitleFailure(
+        api(422, ERROR_CODES.CON_PROPERTY_NOT_EDITABLE, ['customFields.job_title']),
+        k,
+      ),
+    ).toBe('jobTitleNotEditable');
+    expect(jobTitleFailure(api(500, 'INTERNAL'), k)).toBe('jobTitleFailed');
+    expect(jobTitleFailure(new Error('offline'), k)).toBe('jobTitleFailed');
+  });
+
+  it('a required-property refusal says whether it is the title itself or another property', () => {
+    const code = ERROR_CODES.CON_REQUIRED_PROPERTY_MISSING;
+    expect(jobTitleFailure(api(422, code, ['customFields.job_title']), 'job_title')).toBe(
+      'jobTitleRequired',
+    );
+    expect(jobTitleFailure(api(422, code, ['customFields.budget']), 'job_title')).toBe(
+      'jobTitleOtherRequired',
+    );
   });
 });

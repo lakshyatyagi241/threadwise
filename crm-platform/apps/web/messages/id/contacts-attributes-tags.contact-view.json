@@ -44,6 +44,11 @@
         "editJobTitle": "Edit jabatan",
         "jobTitleConflict": "Orang lain mengubah kontak ini lebih dulu. Kontak dimuat ulang; coba lagi.",
         "jobTitleFailed": "Jabatan tidak dapat disimpan. Coba lagi.",
+        "jobTitleRequired": "Jabatan tidak boleh kosong: ruang kerja ini mewajibkannya.",
+        "jobTitleOtherRequired": "Properti wajib lain dari kontak ini masih kosong. Buka Edit kontak untuk mengisinya.",
+        "jobTitleNotEditable": "Jabatan bersifat hanya-baca atau tersembunyi di ruang kerja ini, jadi tidak dapat diedit di sini.",
+        "jobTitleForbidden": "Anda tidak memiliki izin untuk mengedit kontak ini.",
+        "jobTitleGone": "Kontak ini tidak lagi tersedia untuk Anda: sudah dihapus atau ditugaskan ke orang lain.",
         "owner": "Pemilik"
       },
       "social": {

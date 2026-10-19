@@ -131,7 +131,8 @@
       "open": "Aç",
       "edit": "Düzenle",
       "delete": "Sil",
-      "unassigned": "Atanmamış"
+      "unassigned": "Atanmamış",
+      "followUpBadge": "Takip"
     },
     "bulk": {
       "label": "Seçili görevler için işlemler",

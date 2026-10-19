@@ -1,0 +1,302 @@
+{
+  "record-assignment": {
+    "back": "Automatisierung",
+    "title": "Regeln zur Datensatzzuweisung",
+    "intro": "Neue Datensätze ({contacts}, Firmen und {deals}) automatisch dem richtigen Vertriebsverantwortlichen zuweisen.",
+    "crossNote": "Hier werden {contacts}, Firmen und {deals} zugewiesen. Informationen zur Zuweisung von Unterhaltungen an Mitarbeitende finden Sie unter <link>Automatische Zuweisung von Unterhaltungen</link>.",
+    "master": {
+      "title": "Datensatzzuweisung aktivieren",
+      "hint": "Aus, bis Sie sie einschalten. Wenn sie aktiv ist, weisen die folgenden Regeln einem neuen Datensatz ({contact}, Firma oder {deal}) ohne Verantwortlichen eine Person aus Ihrem Team zu.",
+      "on": "Die Datensatzzuweisung ist aktiv.",
+      "off": "Die Datensatzzuweisung ist aus."
+    },
+    "imports": {
+      "title": "Importierte Datensätze ebenfalls zuweisen",
+      "hint": "Standardmäßig aus, damit ein großer Import nicht ändert, wer wofür verantwortlich ist."
+    },
+    "ownerRule": {
+      "title": "Nur Datensätze ohne Verantwortlichen werden zugewiesen",
+      "body": "Ein von einer Person festgelegter Verantwortlicher wird nie ersetzt, ebenso wenig ein absichtlich entfernter. Die Engine füllt nur einen leeren Verantwortlichen bei einem neuen Datensatz. Wenn Sie bei einer Regel „Bei Aktualisierung neu zuweisen“ aktivieren, kann sie auch einen Datensatz verschieben, den die Engine zuvor selbst zugewiesen hat, sofern der Verantwortliche seitdem nicht geändert wurde."
+    },
+    "tabs": {
+      "contact": "{Contacts}",
+      "company": "{Companies}",
+      "deal": "{Deals}",
+      "label": "Modul"
+    },
+    "views": {
+      "rules": "Regeln",
+      "log": "Ausführungsprotokoll"
+    },
+    "how": {
+      "title": "So funktioniert die Priorität",
+      "p1": "Die Regeln werden ab Priorität 1 aufwärts geprüft. Die erste Regel, die zutrifft und jemand Verfügbaren findet, erhält den Datensatz.",
+      "p2": "Nur aktive Regeln werden priorisiert. Eine pausierte Regel behält ihren Platz in der Liste, wird aber nie ausgeführt.",
+      "p3": "Eine Regel ohne Bedingungen trifft auf jeden Datensatz zu und wird nach allen anderen Regeln ausgeführt, egal wo sie in der Liste steht. Das ist die Fallback-Regel.",
+      "p4": "Ein Datensatz, der auf mehrere Regeln zutrifft, geht an die Regel mit der höchsten Priorität.",
+      "p5": "Ziehen Sie eine Zeile oder nutzen Sie die Pfeiltasten, um die Reihenfolge zu ändern. Fallback-Regeln und pausierte Regeln bleiben in ihrer eigenen Gruppe am Ende."
+    },
+    "list": {
+      "title": {
+        "contact": "Regeln für {contacts}",
+        "company": "Regeln für Firmen",
+        "deal": "Regeln für {deals}"
+      },
+      "create": "Regel erstellen",
+      "loading": "Regeln werden geladen …",
+      "loadFailed": "Die Regeln konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "readOnly": "Sie können diese Regeln ansehen, aber nicht ändern. Zum Ändern ist die Berechtigung zur Verwaltung der Datensatzzuweisung nötig.",
+      "empty": {
+        "title": "Noch keine Regeln",
+        "contact": "Neue {contacts} behalten den Verantwortlichen, mit dem sie erstellt werden.",
+        "company": "Neue Firmen behalten den Verantwortlichen, mit dem sie erstellt werden.",
+        "deal": "Neue {deals} behalten den Verantwortlichen, mit dem sie erstellt werden.",
+        "create": "Erste Regel erstellen"
+      },
+      "col": {
+        "priority": "Priorität",
+        "rule": "Regel",
+        "assignTo": "Zuweisen an",
+        "method": "Methode",
+        "active": "Aktiv",
+        "used": "Verwendet",
+        "modified": "Zuletzt geändert"
+      },
+      "fallback": "Fallback",
+      "fallbackHint": "Eine Regel ohne Bedingungen trifft auf jeden Datensatz zu und wird nach allen anderen Regeln ausgeführt.",
+      "notPrioritised": "Pausiert",
+      "noConditions": "Keine Bedingungen: trifft auf jeden Datensatz zu",
+      "brokenConditions": "{count, plural, one {# fehlerhafte Bedingung} other {# fehlerhafte Bedingungen}}",
+      "brokenHint": "Eine Bedingung verweist auf etwas, das gelöscht wurde. Sie trifft auf nichts zu, bis Sie sie korrigieren.",
+      "usedCount": "{count, plural, =0 {Nie verwendet} one {# Mal verwendet} other {# Mal verwendet}}",
+      "lastUsed": "Zuletzt verwendet: {when}",
+      "modifiedBy": "{name}, {when}",
+      "nobody": "Niemand",
+      "unknownPerson": "Ehemaliges Mitglied",
+      "unknownTeam": "Entferntes Team",
+      "teamName": "Team: {name}",
+      "skipsOffline": "Überspringt Offline-Personen",
+      "reassigns": "Weist bei Aktualisierung neu zu",
+      "activeFor": "Regel {name} ist aktiv",
+      "dragHandle": "{name} ziehen, um die Priorität zu ändern",
+      "moveUp": "{name} nach oben verschieben",
+      "moveDown": "{name} nach unten verschieben",
+      "moved": "{name} wurde auf Platz {place} verschoben.",
+      "actions": "Aktionen für {name}",
+      "edit": "Bearbeiten",
+      "clone": "Duplizieren",
+      "delete": "Löschen"
+    },
+    "strategy": {
+      "round_robin": "Round Robin (reihum)",
+      "least_busy": "Geringste offene Auslastung",
+      "fixed": "Bestimmte Person",
+      "hint": {
+        "round_robin": "Wechselt sich in gleichbleibender Reihenfolge zwischen den Personen ab.",
+        "least_busy": {
+          "contact": "Weist der Person zu, die derzeit die wenigsten {contacts} betreut.",
+          "company": "Weist der Person zu, die derzeit die wenigsten Firmen betreut.",
+          "deal": "Weist der Person zu, die derzeit die wenigsten offenen {deals} betreut."
+        },
+        "fixed": "Immer dieselbe Person. Während sie abwesend ist, übernimmt ihre Vertretung."
+      }
+    },
+    "editor": {
+      "titleNew": "Neue Regel",
+      "titleEdit": "Regel bearbeiten",
+      "name": "Regelname",
+      "description": "Beschreibung (optional)",
+      "module": "Modul",
+      "moduleLocked": "Das Modul einer Regel kann nicht geändert werden. Erstellen Sie für ein anderes Modul eine neue Regel.",
+      "conditions": {
+        "title": "Bedingungen",
+        "hint": "Ein Datensatz trifft zu, wenn seine Felder die Bedingungen erfüllen. Wählen Sie ein Feld, dann den Vergleich und dann einen Wert.",
+        "emptyTitle": "Keine Bedingungen: trifft auf jeden Datensatz zu, läuft zuletzt (Fallback)",
+        "emptyBody": "Diese Regel übernimmt jeden Datensatz, den keine andere Regel übernommen hat. Fügen Sie eine Bedingung hinzu, um sie einzuschränken.",
+        "add": "Bedingung hinzufügen",
+        "counts": "{conditions} von {max} Bedingungen",
+        "loading": "Felder werden geladen …",
+        "partial": "Einige Felder konnten nicht geladen werden. Sie können trotzdem Regeln mit den geladenen Feldern erstellen."
+      },
+      "group": {
+        "company": "Firmenfelder",
+        "deal": "Felder: {Deal}"
+      },
+      "assign": {
+        "title": "Zuweisen an",
+        "method": "Methode",
+        "people": "Personen",
+        "person": "Person",
+        "peoplePlaceholder": "Personen auswählen",
+        "personPlaceholder": "Person auswählen",
+        "teams": "Teams",
+        "teamsPlaceholder": "Teams auswählen",
+        "teamsNote": "Ein Team ist hier ein Pool von Personen zur Auswahl. Ein Datensatz gehört nicht zu einem Team: Sein Verantwortlicher ist ein Mitglied des Teams.",
+        "noPeople": "Keine Person gefunden.",
+        "removePerson": "{name} entfernen",
+        "onLeave": "abwesend",
+        "skipOffline": "Offline-Personen überspringen",
+        "skipOfflineHint": "Abwesende Personen werden immer übersprungen.",
+        "reassign": "Neu zuweisen, wenn ein Datensatz nach einer Aktualisierung auf diese Regel zutrifft",
+        "reassignHint": "Gilt nur für Datensätze, die die Engine selbst zugewiesen hat, und nur solange der Verantwortliche seitdem nicht geändert wurde. Standardmäßig aus: Ein Datensatz wird einmal zugewiesen."
+      },
+      "problems": {
+        "name": "Geben Sie der Regel einen Namen.",
+        "people": "Wählen Sie mindestens eine Person oder ein Team aus.",
+        "fixedOne": "Eine Regel für eine bestimmte Person braucht genau eine Person und keine Teams.",
+        "conditions": "Korrigieren Sie die markierten Bedingungen vor dem Speichern.",
+        "server": "Der Server hat die Regeln abgelehnt."
+      },
+      "saveActivate": "Speichern und aktivieren",
+      "savePaused": "Als pausiert speichern",
+      "save": "Änderungen speichern",
+      "cancel": "Abbrechen",
+      "unsavedTitle": "Ohne Speichern verlassen?",
+      "unsavedMessage": "Ihre Änderungen an dieser Regel wurden nicht gespeichert.",
+      "stay": "Weiter bearbeiten",
+      "leave": "Verlassen"
+    },
+    "fields": {
+      "origin": "Eingegangen über",
+      "company": {
+        "name": "Name",
+        "email": "E-Mail",
+        "phone": "Telefon",
+        "domain": "Website-Domain",
+        "industry": "Branche",
+        "sizeRange": "Größe",
+        "address": "Adresse",
+        "status": "Status",
+        "createdAt": "Erstellt",
+        "updatedAt": "Zuletzt aktualisiert"
+      },
+      "deal": {
+        "title": "Titel",
+        "value": "Wert",
+        "currency": "Währung",
+        "pipeline": "Pipeline",
+        "stage": "Phase",
+        "status": "Status",
+        "source": "Quelle",
+        "expectedCloseDate": "Voraussichtliches Abschlussdatum",
+        "createdAt": "Erstellt",
+        "hasContact": "Hat: {contact}",
+        "hasCompany": "Hat eine Firma"
+      },
+      "dealStatus": {
+        "open": "Offen",
+        "won": "Gewonnen",
+        "lost": "Verloren"
+      }
+    },
+    "origin": {
+      "manual": "Von einer Person hinzugefügt",
+      "import": "Import",
+      "inbound": "Erste Nachricht",
+      "form": "Formular",
+      "lead": "Lead-Quelle",
+      "api": "API"
+    },
+    "test": {
+      "title": "Mit einem Datensatz testen",
+      "hint": "Wählen Sie einen echten Datensatz und sehen Sie, welche Regel ihn übernehmen würde und wer ihn erhielte. Es wird nichts geändert, und es funktioniert auch bei ausgeschaltetem Schalter.",
+      "search": {
+        "contact": "{contacts} nach Name, E-Mail oder Telefon suchen",
+        "company": "Firmen nach Name suchen",
+        "deal": "{deals} nach Titel suchen"
+      },
+      "searchLabel": "Zu testender Datensatz",
+      "searching": "Suche läuft …",
+      "noMatches": "Kein Datensatz gefunden.",
+      "searchFailed": "Die Suche hat nicht funktioniert. Möglicherweise dürfen Sie diese Datensätze nicht sehen.",
+      "clear": "Anderen Datensatz wählen",
+      "run": "Testen",
+      "running": "Test läuft …",
+      "failed": "Der Test wurde nicht ausgeführt. Versuchen Sie es erneut.",
+      "off": "Die Datensatzzuweisung ist aus, daher sehen Sie, was bei eingeschalteter Zuweisung passieren würde.",
+      "outcome": {
+        "would_assign": "{record} ginge über die Regel {rule} an {owner}.",
+        "disabled": "Die Datensatzzuweisung ist für diesen Arbeitsbereich ausgeschaltet, daher würde nichts passieren.",
+        "has_owner": "{record} hat bereits einen Verantwortlichen, daher würde keine Regel ausgeführt. Ein von einer Person festgelegter Verantwortlicher wird nie ersetzt.",
+        "no_rule": "Keine aktive Regel trifft auf {record} zu.",
+        "nobody_available": "Eine Regel trifft auf {record} zu, aber alle genannten Personen sind abwesend, offline oder nicht mehr dabei.",
+        "plan": "Ihr Tarif enthält keine Regeln zur Datensatzzuweisung.",
+        "not_found": "Dieser Datensatz wurde nicht gefunden. Er wurde möglicherweise gelöscht oder liegt außerhalb dessen, was Sie sehen dürfen."
+      },
+      "traceTitle": "Geprüfte Regeln in Reihenfolge",
+      "traceEmpty": "Es wurden keine aktiven Regeln geprüft.",
+      "trace": {
+        "winner": "Trifft zu und übernimmt den Datensatz",
+        "matched": "Trifft zu",
+        "not_matched": "Trifft nicht zu",
+        "nobody": "Trifft zu, aber niemand war verfügbar",
+        "broken": "Hat eine fehlerhafte Bedingung"
+      },
+      "skipped": "Übersprungen, weil niemand verfügbar war: {names}"
+    },
+    "log": {
+      "title": "Ausführungsprotokoll",
+      "intro": "Was die Engine mit jedem Datensatz getan hat, neueste zuerst. Einträge werden {days} Tage aufbewahrt und enthalten nur IDs, nie den Inhalt eines Datensatzes.",
+      "filterOutcome": "Ergebnis",
+      "filterRule": "Regel",
+      "allOutcomes": "Alle Ergebnisse",
+      "allRules": "Alle Regeln",
+      "loading": "Ausführungsprotokoll wird geladen …",
+      "loadFailed": "Das Ausführungsprotokoll konnte nicht geladen werden.",
+      "empty": "Es wurde noch nichts zugewiesen.",
+      "emptyFiltered": "Keine Einträge entsprechen diesen Filtern.",
+      "loadMore": "Mehr laden",
+      "col": {
+        "when": "Wann",
+        "record": "Datensatz",
+        "outcome": "Ergebnis",
+        "reason": "Grund",
+        "rule": "Regel",
+        "assignedTo": "Zugewiesen an",
+        "method": "Methode",
+        "arrived": "Eingegangen über"
+      },
+      "deletedRecord": "Gelöscht",
+      "noRule": "Keine Regel",
+      "outcome": {
+        "assigned": "Zugewiesen",
+        "reassigned": "Neu zugewiesen",
+        "skipped": "Unverändert gelassen"
+      },
+      "reason": {
+        "matched": "Eine Regel hat zugetroffen",
+        "has_owner": "Hatte bereits einen Verantwortlichen",
+        "no_rule": "Keine Regel hat zugetroffen",
+        "nobody_available": "Niemand war verfügbar",
+        "raced": "Der Verantwortliche hat sich während der Zuweisung geändert",
+        "unchanged": "Ist bereits bei der richtigen Regel"
+      },
+      "trigger": {
+        "created": "Neuer Datensatz",
+        "updated": "Aktualisierter Datensatz"
+      },
+      "showTrace": "Entscheidungsweg anzeigen",
+      "hideTrace": "Entscheidungsweg ausblenden",
+      "traceFor": "Entscheidungsweg für {record}"
+    },
+    "toast": {
+      "created": "Regel erstellt.",
+      "saved": "Regel gespeichert.",
+      "deleted": "Regel gelöscht.",
+      "cloned": "Regel kopiert. Die Kopie ist pausiert.",
+      "activated": "Regel aktiviert.",
+      "paused": "Regel pausiert.",
+      "reordered": "Reihenfolge gespeichert.",
+      "conflict": "Jemand anderes hat diese Regel geändert. Die neueste Version wurde geladen. Prüfen Sie sie und wenden Sie Ihre Änderung erneut an.",
+      "failed": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+    },
+    "delete": {
+      "title": "Diese Regel löschen?",
+      "message": "Die Regel {name} weist nicht mehr zu. Datensätze, die sie bereits zugewiesen hat, behalten ihren Verantwortlichen.",
+      "confirm": "Löschen",
+      "cancel": "Abbrechen"
+    },
+    "dismiss": "Schließen"
+  }
+}

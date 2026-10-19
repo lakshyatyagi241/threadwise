@@ -131,7 +131,8 @@
       "open": "فتح",
       "edit": "تعديل",
       "delete": "حذف",
-      "unassigned": "غير مسندة"
+      "unassigned": "غير مسندة",
+      "followUpBadge": "متابعة"
     },
     "bulk": {
       "label": "إجراءات المهام المحددة",

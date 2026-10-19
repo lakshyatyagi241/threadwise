@@ -143,6 +143,7 @@ export function ContactsScreen() {
   const t = useTranslations('contacts-attributes-tags.list');
   const tb = useTranslations('contacts-attributes-tags.bulk');
   const tu = useTranslations('contacts-attributes-tags.leadHandling.uncontacted');
+  const tfu = useTranslations('contacts-attributes-tags.leadHandling.followUp');
   const tf = useTranslations('contacts-attributes-tags.form');
   const ts = useTranslations('contacts-attributes-tags.stageMenu');
   const router = useRouter();
@@ -672,6 +673,14 @@ export function ContactsScreen() {
       minor: t('minorLabel'),
       minorYes: t('minorYes'),
       minorNo: t('minorNo'),
+      followUp: tfu('filterLabel'),
+      followUpStates: {
+        overdue: tfu('filter.overdue'),
+        today: tfu('filter.today'),
+        upcoming: tfu('filter.upcoming'),
+        someday: tfu('filter.someday'),
+        none: tfu('filter.none'),
+      },
       consent: t('consentLabel'),
       source: t('sourceLabel'),
       conditions: t('conditionsLabel'),
@@ -901,6 +910,7 @@ export function ContactsScreen() {
                   count={viewId || !filtered ? (viewId ? total : s?.total) : undefined}
                   can={{ create: canCreateViews, update: canUpdateViews, delete: canDeleteViews }}
                   hasUncontacted={(s?.uncontacted ?? 0) > 0}
+                  hasFollowUp={(s?.withFollowUp ?? 0) > 0}
                 />
                 {/* One count only: the pill on the view picker says it, except while a filter is on (the pill would be the workspace's). */}
                 {filtered && !viewId && (

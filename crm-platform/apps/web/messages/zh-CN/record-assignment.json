@@ -1,0 +1,302 @@
+{
+  "record-assignment": {
+    "back": "自动化",
+    "title": "记录分配规则",
+    "intro": "自动将新的{contacts}、公司和{deals}分配给合适的销售负责人。",
+    "crossNote": "此功能分配{contacts}、公司和{deals}。如需将会话分配给客服，请参阅<link>会话自动分配</link>。",
+    "master": {
+      "title": "开启记录分配",
+      "hint": "开启前默认关闭。开启后，下方规则会把没有负责人的新{contact}、公司或{deal}分配给团队成员。",
+      "on": "记录分配已开启。",
+      "off": "记录分配已关闭。"
+    },
+    "imports": {
+      "title": "同时分配导入的记录",
+      "hint": "默认关闭，以免大批量导入改变现有的负责人。"
+    },
+    "ownerRule": {
+      "title": "仅分配没有负责人的记录",
+      "body": "由人工设置的负责人不会被替换，被有意清空的负责人也不会。引擎只会为新记录填入空缺的负责人。如果为某条规则开启“更新时重新分配”，在此后无人更改负责人的前提下，它也可能转移引擎之前自己分配的记录。"
+    },
+    "tabs": {
+      "contact": "{Contacts}",
+      "company": "{Companies}",
+      "deal": "{Deals}",
+      "label": "模块"
+    },
+    "views": {
+      "rules": "规则",
+      "log": "运行日志"
+    },
+    "how": {
+      "title": "优先级的工作方式",
+      "p1": "规则从优先级 1 开始依次尝试。第一条匹配且能找到可用人员的规则会接收该记录。",
+      "p2": "只有启用的规则才有优先级。已暂停的规则保留在列表中的位置，但不会运行。",
+      "p3": "没有条件的规则匹配所有记录，并且无论位于列表何处，都在其他所有规则之后运行。这就是兜底规则。",
+      "p4": "匹配多条规则的记录会归入优先级最高的那条规则。",
+      "p5": "拖动某一行或使用箭头按钮可调整顺序。兜底规则和已暂停的规则保留在底部各自的分组中。"
+    },
+    "list": {
+      "title": {
+        "contact": "{contacts}规则",
+        "company": "公司规则",
+        "deal": "{deals}规则"
+      },
+      "create": "创建规则",
+      "loading": "正在加载规则…",
+      "loadFailed": "规则加载失败。",
+      "retry": "重试",
+      "readOnly": "您可以查看这些规则，但无法修改。修改需要管理记录分配的权限。",
+      "empty": {
+        "title": "还没有规则",
+        "contact": "新的{contacts}保留创建时指定的负责人。",
+        "company": "新的公司保留创建时指定的负责人。",
+        "deal": "新的{deals}保留创建时指定的负责人。",
+        "create": "创建第一条规则"
+      },
+      "col": {
+        "priority": "优先级",
+        "rule": "规则",
+        "assignTo": "分配给",
+        "method": "方式",
+        "active": "启用",
+        "used": "使用次数",
+        "modified": "最后修改"
+      },
+      "fallback": "兜底",
+      "fallbackHint": "没有条件的规则匹配所有记录，并在其他所有规则之后运行。",
+      "notPrioritised": "已暂停",
+      "noConditions": "无条件：匹配所有记录",
+      "brokenConditions": "{count, plural, other {# 个失效条件}}",
+      "brokenHint": "某个条件指向了已被删除的内容。在您修复之前，它不会匹配任何记录。",
+      "usedCount": "{count, plural, =0 {从未使用} other {已使用 # 次}}",
+      "lastUsed": "上次使用：{when}",
+      "modifiedBy": "{name}，{when}",
+      "nobody": "无人",
+      "unknownPerson": "前成员",
+      "unknownTeam": "已移除的团队",
+      "teamName": "团队：{name}",
+      "skipsOffline": "跳过离线的人员",
+      "reassigns": "更新时重新分配",
+      "activeFor": "规则 {name} 已启用",
+      "dragHandle": "拖动 {name} 以更改其优先级",
+      "moveUp": "上移 {name}",
+      "moveDown": "下移 {name}",
+      "moved": "{name} 已移至第 {place} 位。",
+      "actions": "{name} 的操作",
+      "edit": "编辑",
+      "clone": "复制",
+      "delete": "删除"
+    },
+    "strategy": {
+      "round_robin": "轮流分配（round robin）",
+      "least_busy": "未结工作量最少",
+      "fixed": "指定用户",
+      "hint": {
+        "round_robin": "按固定顺序在人员之间轮流分配。",
+        "least_busy": {
+          "contact": "分配给目前负责{contacts}最少的人。",
+          "company": "分配给目前负责公司最少的人。",
+          "deal": "分配给目前负责未结{deals}最少的人。"
+        },
+        "fixed": "始终是同一个人。其休假期间，由其代理人接手。"
+      }
+    },
+    "editor": {
+      "titleNew": "新规则",
+      "titleEdit": "编辑规则",
+      "name": "规则名称",
+      "description": "描述（可选）",
+      "module": "模块",
+      "moduleLocked": "规则的模块无法更改。如需其他模块，请创建新规则。",
+      "conditions": {
+        "title": "条件",
+        "hint": "当记录的字段满足条件时即匹配。先选择字段，再选择比较方式，然后选择值。",
+        "emptyTitle": "无条件：匹配所有记录，最后运行（兜底）",
+        "emptyBody": "此规则会接收其他规则都没有接收的所有记录。添加条件可缩小范围。",
+        "add": "添加条件",
+        "counts": "条件 {conditions}/{max}",
+        "loading": "正在加载字段…",
+        "partial": "部分字段无法加载。您仍可使用已加载的字段创建规则。"
+      },
+      "group": {
+        "company": "公司字段",
+        "deal": "{Deal}字段"
+      },
+      "assign": {
+        "title": "分配给",
+        "method": "方式",
+        "people": "人员",
+        "person": "人员",
+        "peoplePlaceholder": "选择人员",
+        "personPlaceholder": "选择一个人",
+        "teams": "团队",
+        "teamsPlaceholder": "选择团队",
+        "teamsNote": "这里的团队是一个可供选择的人员池。记录并不属于某个团队：其负责人是该团队的成员之一。",
+        "noPeople": "没有匹配的人员。",
+        "removePerson": "移除 {name}",
+        "onLeave": "休假中",
+        "skipOffline": "跳过离线的人员",
+        "skipOfflineHint": "休假中的人员始终会被跳过。",
+        "reassign": "当更新使记录开始匹配此规则时重新分配",
+        "reassignHint": "仅适用于本引擎自己分配的记录，并且仅在此后无人更改负责人时有效。默认关闭：一条记录只分配一次。"
+      },
+      "problems": {
+        "name": "请为规则命名。",
+        "people": "请至少选择一名人员或一个团队。",
+        "fixedOne": "指定用户规则必须恰好选择一人，且不能选择团队。",
+        "conditions": "保存前请先修正高亮显示的条件。",
+        "server": "服务器拒绝了这些规则。"
+      },
+      "saveActivate": "保存并启用",
+      "savePaused": "保存为已暂停",
+      "save": "保存更改",
+      "cancel": "取消",
+      "unsavedTitle": "不保存就离开？",
+      "unsavedMessage": "您对此规则的更改尚未保存。",
+      "stay": "继续编辑",
+      "leave": "离开"
+    },
+    "fields": {
+      "origin": "来源渠道",
+      "company": {
+        "name": "名称",
+        "email": "电子邮件",
+        "phone": "电话",
+        "domain": "网站域名",
+        "industry": "行业",
+        "sizeRange": "规模",
+        "address": "地址",
+        "status": "状态",
+        "createdAt": "创建时间",
+        "updatedAt": "最后更新"
+      },
+      "deal": {
+        "title": "标题",
+        "value": "金额",
+        "currency": "币种",
+        "pipeline": "销售管道",
+        "stage": "阶段",
+        "status": "状态",
+        "source": "来源",
+        "expectedCloseDate": "预计成交日期",
+        "createdAt": "创建时间",
+        "hasContact": "有{contact}",
+        "hasCompany": "有公司"
+      },
+      "dealStatus": {
+        "open": "进行中",
+        "won": "赢单",
+        "lost": "输单"
+      }
+    },
+    "origin": {
+      "manual": "由人工添加",
+      "import": "导入",
+      "inbound": "首条消息",
+      "form": "表单",
+      "lead": "线索来源",
+      "api": "API"
+    },
+    "test": {
+      "title": "用记录测试",
+      "hint": "选择一条真实记录，查看哪条规则会接收它以及会分配给谁。不会更改任何内容，开关关闭时也可使用。",
+      "search": {
+        "contact": "按姓名、电子邮件或电话搜索{contacts}",
+        "company": "按名称搜索公司",
+        "deal": "按标题搜索{deals}"
+      },
+      "searchLabel": "要测试的记录",
+      "searching": "正在搜索…",
+      "noMatches": "未找到记录。",
+      "searchFailed": "搜索未成功。您可能无权查看这些记录。",
+      "clear": "选择其他记录",
+      "run": "测试",
+      "running": "正在测试…",
+      "failed": "测试未运行。请重试。",
+      "off": "记录分配已关闭，因此这里显示的是开启后会发生的情况。",
+      "outcome": {
+        "would_assign": "{record} 将通过规则 {rule} 分配给 {owner}。",
+        "disabled": "此工作区已关闭记录分配，因此不会发生任何操作。",
+        "has_owner": "{record} 已有负责人，因此不会运行任何规则。由人工设置的负责人不会被替换。",
+        "no_rule": "没有启用的规则与 {record} 匹配。",
+        "nobody_available": "有规则与 {record} 匹配，但其指定的人员都在休假、离线或已不在。",
+        "plan": "您的套餐不包含记录分配规则。",
+        "not_found": "未找到该记录。它可能已被删除，或不在您可查看的范围内。"
+      },
+      "traceTitle": "已尝试的规则（按顺序）",
+      "traceEmpty": "没有尝试任何启用的规则。",
+      "trace": {
+        "winner": "匹配并接收该记录",
+        "matched": "匹配",
+        "not_matched": "不匹配",
+        "nobody": "匹配，但无人可用",
+        "broken": "存在失效条件"
+      },
+      "skipped": "因无人可用而跳过：{names}"
+    },
+    "log": {
+      "title": "运行日志",
+      "intro": "引擎对每条记录的处理情况，最新的在前。条目保留 {days} 天，且只包含 ID，不包含记录内容。",
+      "filterOutcome": "结果",
+      "filterRule": "规则",
+      "allOutcomes": "所有结果",
+      "allRules": "所有规则",
+      "loading": "正在加载运行日志…",
+      "loadFailed": "运行日志加载失败。",
+      "empty": "尚未分配任何记录。",
+      "emptyFiltered": "没有符合这些筛选条件的条目。",
+      "loadMore": "加载更多",
+      "col": {
+        "when": "时间",
+        "record": "记录",
+        "outcome": "结果",
+        "reason": "原因",
+        "rule": "规则",
+        "assignedTo": "分配给",
+        "method": "方式",
+        "arrived": "来源渠道"
+      },
+      "deletedRecord": "已删除",
+      "noRule": "无规则",
+      "outcome": {
+        "assigned": "已分配",
+        "reassigned": "已重新分配",
+        "skipped": "未处理"
+      },
+      "reason": {
+        "matched": "有规则匹配",
+        "has_owner": "已有负责人",
+        "no_rule": "没有规则匹配",
+        "nobody_available": "无人可用",
+        "raced": "分配过程中负责人已变更",
+        "unchanged": "已在正确的规则下"
+      },
+      "trigger": {
+        "created": "新记录",
+        "updated": "更新的记录"
+      },
+      "showTrace": "显示决策过程",
+      "hideTrace": "隐藏决策过程",
+      "traceFor": "{record} 的决策过程"
+    },
+    "toast": {
+      "created": "规则已创建。",
+      "saved": "规则已保存。",
+      "deleted": "规则已删除。",
+      "cloned": "规则已复制。副本处于暂停状态。",
+      "activated": "规则已启用。",
+      "paused": "规则已暂停。",
+      "reordered": "顺序已保存。",
+      "conflict": "其他人修改了此规则。已加载最新版本。请检查后重新应用您的更改。",
+      "failed": "出错了。请重试。"
+    },
+    "delete": {
+      "title": "删除此规则？",
+      "message": "规则 {name} 将停止分配。其已分配的记录保留原负责人。",
+      "confirm": "删除",
+      "cancel": "取消"
+    },
+    "dismiss": "忽略"
+  }
+}

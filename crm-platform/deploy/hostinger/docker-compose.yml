@@ -106,9 +106,20 @@ x-api-slot: &api-slot
   # requests time to finish instead of cutting them off on every release.
   stop_grace_period: 30s
   logging: *app-logging
-  networks: [default, dokploy-network]
+  # The alias `api` is shared by both slots and resolves only to a running one: Prometheus (deploy/observability) and the probe find the
+  # API by it, so a stopped slot is not a failed scrape. Public traffic never uses it (the routing file names the slot's container).
+  networks:
+    default:
+      aliases: [api]
+    dokploy-network: {}
   healthcheck:
-    test: ['CMD', 'node', '-e', "fetch('http://127.0.0.1:3000/ready').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+    test:
+      [
+        'CMD',
+        'node',
+        '-e',
+        "fetch('http://127.0.0.1:3000/ready').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+      ]
     interval: 10s
     timeout: 5s
     retries: 6
@@ -125,9 +136,19 @@ x-web-slot: &web-slot
   mem_limit: 768m
   stop_grace_period: 20s
   logging: *app-logging
-  networks: [default, dokploy-network]
+  # Same idea as the API's alias: `web` resolves to whichever slot is running.
+  networks:
+    default:
+      aliases: [web]
+    dokploy-network: {}
   healthcheck:
-    test: ['CMD', 'node', '-e', "fetch('http://127.0.0.1:3001/login').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+    test:
+      [
+        'CMD',
+        'node',
+        '-e',
+        "fetch('http://127.0.0.1:3001/login').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+      ]
     interval: 10s
     timeout: 5s
     retries: 6
@@ -141,6 +162,10 @@ x-web-env: &web-env
   REALTIME_URL: https://${DOMAIN}/realtime
   # What the Developers page shows customers as the API address. API_URL (per slot, below) is the internal container name and must never be shown.
   PUBLIC_API_URL: https://${DOMAIN}
+  # Event-loop and runtime metrics of the Next.js server, same switches as the API's (see x-api-env): off unless a port is set.
+  OBS_METRICS_PORT: ${OBS_METRICS_PORT:-0}
+  OBS_METRICS_HOST: ${OBS_METRICS_HOST:-0.0.0.0}
+  OBS_METRICS_TOKEN: ${OBS_METRICS_TOKEN:-}
 
 services:
   postgres:
@@ -356,6 +381,7 @@ services:
     environment:
       <<: *api-env
       WORKER_MODE: 'false'
+      OBS_RELEASE: ${SLOT_BLUE_TAG:-${IMAGE_TAG:-local}}
 
   api-green:
     <<: *api-slot
@@ -364,6 +390,7 @@ services:
     environment:
       <<: *api-env
       WORKER_MODE: 'false'
+      OBS_RELEASE: ${SLOT_GREEN_TAG:-${IMAGE_TAG:-local}}
 
   web-blue:
     <<: *web-slot
@@ -372,6 +399,7 @@ services:
     environment:
       <<: *web-env
       API_URL: http://desk-api-blue:3000
+      OBS_RELEASE: ${SLOT_BLUE_TAG:-${IMAGE_TAG:-local}}
 
   web-green:
     <<: *web-slot
@@ -380,6 +408,7 @@ services:
     environment:
       <<: *web-env
       API_URL: http://desk-api-green:3000
+      OBS_RELEASE: ${SLOT_GREEN_TAG:-${IMAGE_TAG:-local}}
 
   worker:
     image: desk-api:${IMAGE_TAG:-local}
@@ -403,6 +432,7 @@ services:
     environment:
       <<: *api-env
       WORKER_MODE: 'true'
+      OBS_RELEASE: ${IMAGE_TAG:-local}
       DATABASE_URL: postgres://crm_worker_user:${WORKER_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
       DATABASE_REPLICA_URL: postgres://crm_worker_user:${WORKER_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
     depends_on:

@@ -42,7 +42,12 @@ import { stageEntryValues } from './contact-stage';
 import { planStatus } from './contact-status-stage';
 import { assertFormFieldLimits } from './form-field-limits';
 import { applyPropertyPlan, planPropertyChanges } from './contact-property-values';
-import { missingRequired, requiredPropertiesError } from './required-properties';
+import {
+  missingRequired,
+  requiredPropertiesError,
+  requiredScopeOfEdit,
+  type RequiredRule,
+} from './required-properties';
 import {
   ConsentIntakeService,
   ContactConsentService,
@@ -155,6 +160,12 @@ export interface ResolveContactInput {
   createdName?: string;
   /** The stage a created contact starts in, instead of the workspace default (a lead source's own stage). A lost stage is ignored. */
   lifecycleStage?: string;
+  /**
+   * Make a separate contact even though this identity already belongs to the contact with this internal id (BL-292, the duplicate leads
+   * setting `create_new`). The identity stays with the original (it is unique per workspace), so the new contact carries the value on its
+   * own record and inbound messages keep routing to the first one; a later "Remove duplicates" can merge them.
+   */
+  duplicateOf?: number;
   /** The owner of a created contact (an internal user id), for a writer that assigns on arrival (lead sources). */
   ownerId?: number | null;
   /** Extra keys of the `contact.created` payload (a lead's source and campaign), next to `via`. Never overrides the keys the event owns. */
@@ -641,7 +652,9 @@ export class ContactsService {
     orgId: number,
     inputs: readonly ResolveContactInput[],
   ): Promise<ResolvedContact[]> {
-    const keyOf = (input: ResolveContactInput): { kind: 'email' | 'phone'; value: string } | null => {
+    const keyOf = (
+      input: ResolveContactInput,
+    ): { kind: 'email' | 'phone'; value: string } | null => {
       if (input.kind === 'phone') {
         const e164 = canonicalizePhone({ number: input.value })?.e164;
         return e164 ? { kind: 'phone', value: e164 } : null;
@@ -686,7 +699,9 @@ export class ContactsService {
       sql`SELECT pg_advisory_xact_lock(hashtextextended(${`contact-identity:${orgId}:${input.kind}:${value}`}, 0))`,
     );
 
-    const viaIdentity = await this.repo.findByIdentity(tx, orgId, input.kind, value);
+    const viaIdentity = input.duplicateOf
+      ? undefined
+      : await this.repo.findByIdentity(tx, orgId, input.kind, value);
     if (viaIdentity !== undefined) {
       const uuid = await this.uuidOf(tx, orgId, viaIdentity);
       if (uuid) {
@@ -695,15 +710,17 @@ export class ContactsService {
       }
     }
 
-    const stored = await tx.execute(
-      input.kind === 'phone'
-        ? sql`SELECT id, uuid FROM contacts
+    const stored = input.duplicateOf
+      ? { rows: [] }
+      : await tx.execute(
+          input.kind === 'phone'
+            ? sql`SELECT id, uuid FROM contacts
               WHERE org_id = ${orgId} AND normalized_phone IN (${value}, ${phone!.digits})
               ORDER BY id LIMIT 1`
-        : sql`SELECT id, uuid FROM contacts
+            : sql`SELECT id, uuid FROM contacts
               WHERE org_id = ${orgId} AND normalized_email = ${value}
               ORDER BY id LIMIT 1`,
-    );
+        );
     const known = stored.rows[0] as { id: number | string; uuid: string } | undefined;
     if (known) {
       await this.repo.addIdentity(tx, orgId, Number(known.id), input.kind, value);
@@ -758,7 +775,13 @@ export class ContactsService {
       displayId,
       createdBy: null,
     });
-    await this.repo.addIdentity(tx, orgId, created.id, input.kind, value);
+    // A separate contact takes the identity only when nobody holds it (the original does, by definition).
+    if (
+      !input.duplicateOf ||
+      (await this.repo.findByIdentity(tx, orgId, input.kind, value)) === undefined
+    ) {
+      await this.repo.addIdentity(tx, orgId, created.id, input.kind, value);
+    }
     await this.audit.record(tx, { module: MODULE_KEY, recordId: created.id, action: 'insert' });
     // A lead source or a form made the contact: start it uncontacted when the workspace says so (BL-290). A test lead never is.
     const origin = input.eventPayload?.origin;
@@ -1368,9 +1391,14 @@ export class ContactsService {
         // the other forty the org has defined.
         await this.assertPropertiesWritable(tx, ctx.orgId, input.customFields, existing.data ?? {});
         values.data = { ...(existing.data ?? {}), ...input.customFields };
-        // A save that edits properties answers for all of them; a stage or owner change alone does not (a contact that
-        // predates a newly required property stays editable).
-        await this.assertRequiredProperties(tx, ctx.orgId, values.data as Record<string, unknown>);
+        // A save answers for the properties it names and for the ones it makes required, not for every required property of the
+        // workspace: an inline edit of one property (the job title) must not fail because the contact never had a value for some
+        // other required property, e.g. one added after the contact was created. The contact form sends all its properties, so it
+        // still answers for all of them. A stage or owner change alone is not held to any (see requiredScopeOfEdit).
+        const data = values.data as Record<string, unknown>;
+        await this.assertRequiredProperties(tx, ctx.orgId, data, (rules) =>
+          requiredScopeOfEdit(rules, existing.data ?? {}, data, Object.keys(input.customFields!)),
+        );
       }
       if (input.ownerId !== undefined) {
         const nextOwner = input.ownerId
@@ -1608,9 +1636,14 @@ export class ContactsService {
     tx: Tx,
     orgId: number,
     data: Record<string, unknown>,
-    only?: ReadonlySet<string>,
+    scope?: ReadonlySet<string> | ((rules: readonly RequiredRule[]) => ReadonlySet<string>),
   ): Promise<void> {
-    const missing = missingRequired(await this.repo.requiredRules(tx, orgId), data, only);
+    const rules = await this.repo.requiredRules(tx, orgId);
+    const missing = missingRequired(
+      rules,
+      data,
+      typeof scope === 'function' ? scope(rules) : scope,
+    );
     if (missing.length > 0) throw requiredPropertiesError(missing);
   }
 

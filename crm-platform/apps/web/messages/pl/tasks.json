@@ -131,7 +131,8 @@
       "open": "Otwórz",
       "edit": "Edytuj",
       "delete": "Usuń",
-      "unassigned": "Nieprzypisane"
+      "unassigned": "Nieprzypisane",
+      "followUpBadge": "Ponowny kontakt"
     },
     "bulk": {
       "label": "Działania dla zaznaczonych zadań",

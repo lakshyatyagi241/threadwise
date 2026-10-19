@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-18T07:11:07.692Z",
+ "generatedAt": "2026-10-18T17:44:58.031Z",
  "node": "v22.17.0",
  "results": [
   {
@@ -51,12 +51,12 @@
   {
    "name": "an idle web loop reads in a sane range (under 0.5 s)",
    "ok": true,
-   "detail": "p99 0.016941055 s"
+   "detail": "p99 0.017285119 s"
   },
   {
    "name": "the request histogram counts /robots.txt under its route",
    "ok": true,
-   "detail": 22
+   "detail": 44
   },
   {
    "name": "a page request is counted under a template (login)",

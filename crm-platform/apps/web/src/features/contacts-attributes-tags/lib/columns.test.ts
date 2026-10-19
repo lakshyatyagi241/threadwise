@@ -51,6 +51,7 @@ describe('columns', () => {
       'dateOfBirth',
       'minor',
       'lastActivity',
+      'nextFollowUp',
       'createdOn',
     ]);
   });
@@ -224,6 +225,7 @@ describe('sortKeyOf', () => {
       'company',
       'source',
       'lastActivity',
+      'nextFollowUp',
     ] as const) {
       expect(sortKeyOf(id), id).toBeNull();
     }

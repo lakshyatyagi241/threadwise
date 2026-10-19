@@ -84,7 +84,8 @@
       "email_channel": "ערוץ דוא\"ל (Gmail)",
       "personal_history_full": "ייבוא היסטוריה מלאה (WhatsApp אישי)",
       "ai_crm_copilot": "AI CRM Copilot",
-      "lead_scoring": "דירוג לידים באמצעות AI"
+      "lead_scoring": "דירוג לידים באמצעות AI",
+      "record_assignment": "כללי הקצאת רשומות"
     },
     "limitGroups": {
       "messaging": "הודעות",

@@ -1,0 +1,440 @@
+{
+  "dpdp-register-admin": {
+    "nav": {
+      "group": "Privasi",
+      "register": "Daftar DPDP"
+    },
+    "page": {
+      "eyebrow": "Admin · Tim · Daftar DPDP",
+      "title": "Daftar DPDP",
+      "disclaimer": "Melacak apa yang dilakukan platform hari ini terhadap DPDP Act dan DPDP Rules. Ini bukan sertifikat kepatuhan.",
+      "checkedAt": "Diperiksa: {time}",
+      "refresh": "Segarkan"
+    },
+    "summary": {
+      "label": "Ringkasan daftar",
+      "counts": {
+        "title": "Kewajiban menurut status",
+        "counted": "{total, plural, one {# kewajiban dihitung} other {# kewajiban dihitung}}",
+        "notCounted": "Baris ‘Tidak berlaku’ tercantum tetapi tidak dihitung."
+      },
+      "milestones": {
+        "title": "Tanggal mendatang",
+        "names": {
+          "consent_managers": "Pendaftaran Pengelola Persetujuan (rule 4)",
+          "main_duties": "Tugas utama DPDP Rules"
+        },
+        "left": "Sekitar {days, plural, =0 {0 hari} one {# hari} other {# hari}} lagi",
+        "passed": "Tanggal ini sudah lewat"
+      },
+      "tiers": {
+        "title": "Tingkat sanksi",
+        "tier": "Tingkat sanksi",
+        "hint": "Kewajiban yang tidak dijalankan, dijalankan sebagian, atau belum diverifikasi, menurut batas sanksi yang berlaku."
+      }
+    },
+    "status": {
+      "following": "Dijalankan",
+      "partial": "Sebagian",
+      "not_following": "Tidak dijalankan",
+      "unverified": "Belum diverifikasi",
+      "not_applicable": "Tidak berlaku"
+    },
+    "result": {
+      "pass": "Lulus",
+      "fail": "Gagal",
+      "unknown": "Tidak diketahui"
+    },
+    "source": {
+      "live": "Dibaca langsung",
+      "attested": "Dinyatakan",
+      "code": "Dideklarasikan oleh kode"
+    },
+    "filters": {
+      "label": "Filter menurut status",
+      "all": "Semua",
+      "shown": "{count, plural, one {# kewajiban ditampilkan} other {# kewajiban ditampilkan}}",
+      "empty": {
+        "title": "Tidak ada kewajiban yang cocok dengan filter ini",
+        "message": "Saat ini tidak ada kewajiban dengan status ini.",
+        "reset": "Tampilkan semua"
+      }
+    },
+    "groups": {
+      "A": "Dasar, pemberitahuan, persetujuan (ss4 to 7, rule 3)",
+      "B": "Hak dan keluhan (ss11 to 15, rule 14)",
+      "C": "Retensi dan penghapusan (s8(7), (8), rule 8)",
+      "D": "Keamanan (s8(4), (5), rule 6)",
+      "E": "Pelanggaran data (s8(6), rule 7)",
+      "F": "Anak-anak (s9, rules 10 to 12, Jadwal Keempat)",
+      "G": "Transfer dan prosesor (ss8(1), 8(2), 16, rules 13(4), 15)",
+      "H": "Fidusier Data Signifikan (s10, rule 13)",
+      "I": "Tata kelola dan penegakan (ss27 to 33, rule 19)"
+    },
+    "owners": {
+      "tenant": "Ruang kerja",
+      "platform": "Platform",
+      "both": "Ruang kerja dan platform"
+    },
+    "tiers": {
+      "50": "Rs 50 crore",
+      "150": "Rs 150 crore",
+      "200": "Rs 200 crore",
+      "250": "Rs 250 crore",
+      "none": "Tanpa tingkat sanksi"
+    },
+    "item": {
+      "citation": "Rujukan hukum",
+      "owner": "Pemilik",
+      "penalty": "Tingkat sanksi",
+      "plan": "Butir rencana",
+      "conditional": "Hanya jika diberitahukan",
+      "checks": "Pemeriksaan",
+      "noChecks": "Status yang dideklarasikan. Belum ada pemeriksaan yang membacanya."
+    },
+    "check": {
+      "lapsed": "Kedaluwarsa",
+      "note": "Catatan:",
+      "evidence": "Tautan bukti"
+    },
+    "items": {
+      "r01": {
+        "title": "Memproses data pribadi hanya dengan persetujuan atau untuk penggunaan yang diizinkan"
+      },
+      "r02": {
+        "title": "Memberi pemberitahuan mandiri yang terperinci sebelum meminta persetujuan"
+      },
+      "r03": {
+        "title": "Memberi tahu orang yang sudah menyetujui sebelum undang-undang berlaku"
+      },
+      "r04": {
+        "title": "Menyediakan pemberitahuan dan persetujuan dalam bahasa Inggris atau bahasa dalam daftar resmi"
+      },
+      "r05": {
+        "title": "Membuat persetujuan yang bebas, spesifik, terinformasi, dan tidak ambigu"
+      },
+      "r06": {
+        "title": "Menampilkan narahubung di setiap permintaan persetujuan"
+      },
+      "r07": {
+        "title": "Memudahkan penarikan persetujuan sama seperti saat memberikannya"
+      },
+      "r08": {
+        "title": "Saat ditarik, menghentikan pemrosesan dan membuat prosesor ikut berhenti"
+      },
+      "r09": {
+        "title": "Mampu membuktikan pemberitahuan dan persetujuan"
+      },
+      "r10": {
+        "title": "Memakai data yang diberikan secara sukarela hanya untuk tujuan yang dinyatakan"
+      },
+      "r11": {
+        "title": "Menerima persetujuan yang diberikan atau ditarik lewat Pengelola Persetujuan"
+      },
+      "r12": {
+        "title": "Mensyaratkan persetujuan pada setiap pengiriman keluar saat pengiriman"
+      },
+      "r13": {
+        "title": "Merangkum data yang disimpan, pemrosesannya, dan siapa penerimanya"
+      },
+      "r14": {
+        "title": "Memperbaiki, melengkapi, dan memperbarui data pribadi atas permintaan"
+      },
+      "r15": {
+        "title": "Menghapus atas permintaan kecuali diperlukan untuk tujuan atau oleh hukum"
+      },
+      "r16": {
+        "title": "Menjalankan mekanisme keluhan yang dipublikasikan dan menjawab dalam 90 hari"
+      },
+      "r17": {
+        "title": "Memungkinkan orang menunjuk seseorang untuk bertindak saat meninggal atau tidak cakap"
+      },
+      "r18": {
+        "title": "Mempublikasikan cara mengajukan permintaan dan pengenal apa yang dibutuhkan"
+      },
+      "r19": {
+        "title": "Mempublikasikan kontak dan mencantumkannya di setiap jawaban"
+      },
+      "r20": {
+        "title": "Memverifikasi identitas, membatasi laju, dan mengaudit permintaan hak"
+      },
+      "r21": {
+        "title": "Menjaga data tetap akurat dan lengkap bila dipakai untuk keputusan"
+      },
+      "r22": {
+        "title": "Menghormati hak staf platform sendiri, kontak penagihan, dan pengunjung"
+      },
+      "r23": {
+        "title": "Menghapus data saat persetujuan ditarik atau tujuan berakhir"
+      },
+      "r24": {
+        "title": "Menghapus data tidak aktif setelah tiga tahun, dengan pemberitahuan 48 jam"
+      },
+      "r25": {
+        "title": "Menyimpan data pribadi dan log setidaknya satu tahun"
+      },
+      "r26": {
+        "title": "Menjalankan siklus hidup ketidakaktifan ruang kerja"
+      },
+      "r27": {
+        "title": "Melindungi data dengan enkripsi, penyamaran, atau token"
+      },
+      "r28": {
+        "title": "Mengendalikan akses ke sumber daya komputer"
+      },
+      "r29": {
+        "title": "Mencatat dan memantau akses ke data pribadi"
+      },
+      "r30": {
+        "title": "Mencadangkan data agar pemrosesan dapat berlanjut setelah kehilangan"
+      },
+      "r31": {
+        "title": "Menyimpan log satu tahun untuk mendeteksi dan menyelidiki insiden"
+      },
+      "r32": {
+        "title": "Memiliki klausul keamanan di setiap kontrak prosesor"
+      },
+      "r33": {
+        "title": "Mampu menunjukkan langkah keamanan yang berlaku"
+      },
+      "r34": {
+        "title": "Secara umum menjaga pengamanan yang wajar"
+      },
+      "r35": {
+        "title": "Mengendalikan jalur AI yang mengirim teks kontak ke pihak ketiga"
+      },
+      "r36": {
+        "title": "Memberi tahu setiap orang yang terdampak pelanggaran tanpa penundaan"
+      },
+      "r37": {
+        "title": "Memberi tahu Dewan Perlindungan Data tentang pelanggaran, lalu melapor dalam 72 jam"
+      },
+      "r38": {
+        "title": "Sebagai prosesor, memberi tahu ruang kerja tentang pelanggaran cukup cepat"
+      },
+      "r39": {
+        "title": "Mendapat persetujuan orang tua yang dapat diverifikasi sebelum memproses data anak"
+      },
+      "r40": {
+        "title": "Tanpa pelacakan, pemantauan perilaku, atau iklan bertarget untuk anak"
+      },
+      "r41": {
+        "title": "Menerapkan pengecualian Jadwal Keempat untuk kewajiban data anak"
+      },
+      "r42": {
+        "title": "Menghormati batasan Pemerintah atas transfer data ke luar negeri"
+      },
+      "r43": {
+        "title": "Tetap bertanggung jawab atas apa yang dilakukan prosesor"
+      },
+      "r44": {
+        "title": "Menjalankan tugas Fidusier Data Signifikan, hanya jika diberitahukan secara resmi"
+      },
+      "r45": {
+        "title": "Menyediakan bukti untuk pemeriksaan Dewan Perlindungan Data dalam enam bulan"
+      },
+      "r46": {
+        "title": "Menjaga pemberitahuan platform sendiri, penerimaan ketentuan, dan pilihan cookie"
+      },
+      "r47": {
+        "title": "Menunjuk kontak platform dan jalur keluhan"
+      }
+    },
+    "details": {
+      "probe_error": "Ini tidak dapat dibaca sekarang, jadi hasilnya tidak diketahui.",
+      "probe_missing": "Tidak ada hasil bacaan untuk pemeriksaan ini.",
+      "env_missing": "{key} belum diatur, jadi ini tidak dapat dibaca.",
+      "attestation_missing": "Belum ada yang mencatat ini.",
+      "attestation_expired": "Pernyataan yang dicatat {name} pada {date} kedaluwarsa pada {expires}. Tidak lagi dihitung.",
+      "attested_pass": "Dicatat oleh {name} pada {date} sebagai sudah diterapkan. Dihitung sampai {expires}.",
+      "attested_fail": "Dicatat oleh {name} pada {date} sebagai belum diterapkan. Dihitung sampai {expires}.",
+      "code_declared": "Dideklarasikan dalam kode, tidak diukur saat runtime. Perubahan yang menutup celah akan memperbaruinya.",
+      "unrecognised": "Konsol ini belum punya deskripsi untuk hasil ini ({detail})."
+    },
+    "checks": {
+      "mfa_operators": {
+        "title": "Super admin harus masuk dengan autentikasi dua faktor",
+        "details": {
+          "mfa_on": "Masuk dengan dua faktor diwajibkan untuk super admin.",
+          "mfa_off": "Tidak diwajibkan: super admin bisa masuk tanpa faktor kedua."
+        }
+      },
+      "mfa_workspace_admins": {
+        "title": "Admin ruang kerja harus masuk dengan autentikasi dua faktor",
+        "details": {
+          "mfa_on": "Masuk dengan dua faktor diwajibkan untuk admin ruang kerja.",
+          "mfa_off": "Tidak diwajibkan: admin ruang kerja bisa masuk tanpa faktor kedua."
+        }
+      },
+      "logs_audit_retention": {
+        "title": "Log audit disimpan setidaknya satu tahun",
+        "details": {
+          "retention_ok": "Disimpan selama {days, plural, one {# hari} other {# hari}}.",
+          "retention_unlimited": "Tidak pernah dihapus (0 hari), jadi disimpan setidaknya setahun.",
+          "retention_below_floor": "Hanya disimpan selama {days, plural, one {# hari} other {# hari}}; DPDP Rules meminta setidaknya 365."
+        }
+      },
+      "logs_session_retention": {
+        "title": "Sesi yang berakhir disimpan setidaknya satu tahun",
+        "details": {
+          "retention_ok": "Sesi yang berakhir dibersihkan setelah {days, plural, one {# hari} other {# hari}}.",
+          "retention_below_floor": "Sesi yang berakhir dibersihkan setelah {days, plural, one {# hari} other {# hari}}, di bawah 365 yang diminta DPDP Rules."
+        }
+      },
+      "redis_auth": {
+        "title": "Redis memerlukan kata sandi atau memakai TLS",
+        "details": {
+          "redis_auth_on": "Alamat Redis yang dikonfigurasi memakai kata sandi atau TLS.",
+          "redis_auth_off": "Alamat Redis yang dikonfigurasi tidak memakai kata sandi dan tidak memakai TLS."
+        }
+      },
+      "crypto_rotation_complete": {
+        "title": "Tidak ada kunci enkripsi lama yang tersisa di gantungan kunci",
+        "details": {
+          "rotation_complete": "Tidak ada kunci lama yang dikonfigurasi.",
+          "previous_keys_present": "Kunci lama masih dikonfigurasi, jadi rotasi kunci belum selesai."
+        }
+      },
+      "lifecycle_enabled": {
+        "title": "Siklus hidup ketidakaktifan ruang kerja berjalan",
+        "details": {
+          "lifecycle_on": "Aktif, bukan uji coba, dan penghapusan aktif.",
+          "lifecycle_off": "{enabled, select, true {Aktif} other {Nonaktif}}, {dryRun, select, true {uji coba aktif} other {uji coba nonaktif}}, {deleteEnabled, select, true {penghapusan aktif} other {penghapusan nonaktif}}."
+        }
+      },
+      "errors_vendor_region": {
+        "title": "Laporan error tetap di India atau dimatikan",
+        "details": {
+          "sentry_off": "Pelaporan error dimatikan di server API.",
+          "region_india": "Laporan error dikirim ke wilayah India milik vendor.",
+          "region_outside_india": "Laporan error dikirim ke wilayah {region} milik vendor, di luar India.",
+          "region_unrecognised": "Alamat pelaporan error bukan alamat regional yang dikenal, jadi negaranya tidak dapat diketahui.",
+          "region_unrecognised_host": "Laporan error dikirim ke {host}, yang bukan alamat regional yang dikenal, jadi negaranya tidak dapat diketahui."
+        }
+      },
+      "ai_platform_key_off": {
+        "title": "Tidak ada kunci AI platform yang dikonfigurasi",
+        "details": {
+          "no_platform_key": "Tidak ada kunci platform yang dikonfigurasi untuk penyedia AI mana pun.",
+          "platform_key_set": "Kunci platform dikonfigurasi untuk: {providers}."
+        }
+      },
+      "consent_default_opt_in": {
+        "title": "Ruang kerja baru dimulai dengan persetujuan pemasaran diwajibkan",
+        "details": {
+          "default_opt_in": "Ruang kerja baru dimulai dengan persetujuan tercatat diwajibkan untuk pemasaran.",
+          "default_opt_out": "Ruang kerja baru dimulai tanpa mewajibkan persetujuan tercatat untuk pemasaran.",
+          "default_opt_in_counts": "Ruang kerja baru dimulai dengan persetujuan tercatat diwajibkan untuk pemasaran. Saat ini {on, number} dari {total, number} ruang kerja mewajibkannya.",
+          "default_opt_out_counts": "Ruang kerja baru dimulai tanpa mewajibkan persetujuan tercatat untuk pemasaran. Saat ini {on, number} dari {total, number} ruang kerja mewajibkannya."
+        }
+      },
+      "hosting_region_documented": {
+        "title": "Penyedia hosting, wilayah, dan lokasi data sudah didokumentasikan"
+      },
+      "storage_encrypted_at_rest": {
+        "title": "Bukti enkripsi volume dan penyimpanan objek tersedia"
+      },
+      "backup_offsite_configured": {
+        "title": "Cadangan eksternal tersegel berjalan dan mencakup penyimpanan objek"
+      },
+      "backup_restore_drill": {
+        "title": "Latihan pemulihan dilakukan dalam enam bulan terakhir"
+      },
+      "security_pentest_report": {
+        "title": "Laporan uji penetrasi eksternal tersedia tanpa temuan kritis yang terbuka"
+      },
+      "legal_counsel_engaged": {
+        "title": "Penasihat hukum perlindungan data India sudah dilibatkan"
+      },
+      "legal_vendor_dpas": {
+        "title": "DPA yang telah ditandatangani tersedia untuk sub-prosesor yang menyimpan data pribadi"
+      },
+      "governance_contacts_named": {
+        "title": "Kontak privasi, komandan insiden, dan pemilik keluhan sudah ditunjuk dan dipublikasikan"
+      },
+      "pii_column_encryption": {
+        "title": "Telepon, email, dan isi pesan kontak dienkripsi per kolom"
+      },
+      "rls_privileged_guc_fixed": {
+        "title": "Pengaturan database berhak istimewa tidak bisa diubah dari sebuah sesi"
+      },
+      "logs_erasure_keeps_year": {
+        "title": "Penghapusan menyimpan riwayat dan log selama setahun sebelum menghapusnya"
+      },
+      "ci_security_jobs_scheduled": {
+        "title": "Pemeriksaan keamanan berjalan terjadwal di CI"
+      },
+      "ai_workspace_switch": {
+        "title": "Ruang kerja dapat mematikan jalur AI yang mengirim teks kontak ke vendor"
+      },
+      "transfer_country_killswitch": {
+        "title": "Setiap vendor punya tag negara, dan sebuah negara bisa diputus"
+      },
+      "dpa_acceptance_persisted": {
+        "title": "Penerimaan DPA oleh ruang kerja dicatat beserta versi dan waktunya"
+      },
+      "consent_lawful_basis_dpdp": {
+        "title": "Daftar tujuan memakai penggunaan persetujuan dan section 7 dari Act"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "Ekspor saat ruang kerja ditinggalkan dan pembersihan file sudah dibuat"
+      },
+      "evidence_board_pack": {
+        "title": "Paket bukti yang siap untuk Dewan Perlindungan Data sudah dibuat"
+      },
+      "grievance_intake_built": {
+        "title": "Penerimaan keluhan sudah dibuat"
+      }
+    },
+    "attest": {
+      "action": "Nyatakan",
+      "actionFor": "Nyatakan: {check}",
+      "title": "Catat pernyataan",
+      "intro": "Catat apakah ini benar hari ini. Berlaku sampai kedaluwarsa, lalu pemeriksaan kembali ke tidak diketahui. Setiap pernyataan tetap ada di riwayat.",
+      "result": {
+        "label": "Hasil",
+        "pass": "Sudah diterapkan (lulus)",
+        "fail": "Belum diterapkan (gagal)"
+      },
+      "note": {
+        "label": "Catatan",
+        "hint": "Apa yang Anda periksa dan di mana buktinya. Setidaknya {min} karakter."
+      },
+      "evidence": {
+        "label": "Tautan bukti (opsional)",
+        "hint": "Tautan https ke dokumen atau tiket.",
+        "placeholder": "https://"
+      },
+      "expiry": {
+        "label": "Berlaku selama (hari)",
+        "hint": "{min} sampai {max} hari. Setelah itu pemeriksaan kembali ke tidak diketahui."
+      },
+      "problems": {
+        "noteShort": "Tulis setidaknya {min} karakter.",
+        "noteLong": "Jaga catatan tetap di bawah {max, number} karakter.",
+        "link": "Gunakan tautan https lengkap, atau kosongkan.",
+        "range": "Masukkan bilangan bulat hari dari {min} sampai {max}."
+      },
+      "submit": "Catat pernyataan",
+      "saving": "Menyimpan",
+      "cancel": "Batal",
+      "saved": "Pernyataan dicatat."
+    },
+    "history": {
+      "action": "Riwayat",
+      "actionFor": "Riwayat: {check}",
+      "title": "Riwayat",
+      "empty": "Belum ada yang dicatat untuk pemeriksaan ini.",
+      "validUntil": "Berlaku sampai {date}",
+      "close": "Tutup"
+    },
+    "errors": {
+      "forbidden": "Anda tidak punya izin untuk melakukan ini.",
+      "request": "Permintaan itu tidak dapat diselesaikan.",
+      "unexpected": "Terjadi kesalahan di pihak kami. Coba lagi sebentar lagi.",
+      "network": "Tidak dapat menjangkau server. Periksa koneksi Anda dan coba lagi.",
+      "validation": "Beberapa nilai tidak valid. Periksa kolom yang disorot.",
+      "notFound": "Item itu sudah tidak ada."
+    }
+  }
+}

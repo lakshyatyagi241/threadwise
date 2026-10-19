@@ -10,15 +10,18 @@ import {
   Patch,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createAssignmentRuleSchema,
+  listAssignmentRunsQuerySchema,
   reorderAssignmentRulesSchema,
   testAssignmentSchema,
   updateAssignmentRuleSchema,
   updateAssignmentSettingsSchema,
   type CreateAssignmentRuleInput,
+  type ListAssignmentRunsQuery,
   type ReorderAssignmentRulesInput,
   type TestAssignmentInput,
   type UpdateAssignmentRuleInput,
@@ -26,15 +29,18 @@ import {
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../../common/decorators';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
+import { RequirePlanFeature } from '../../plans-subscriptions-trials';
 import { ContactAssignmentService } from './contact-assignment.service';
 
 /**
- * Settings > Automation > Contact assignment: the switch (default OFF) and the priority-ordered rules that give new contacts and deals to
- * a person. Reading needs `crm.assignment.read`, everything else `crm.assignment.manage` (Manager and above), and writing needs the plan
- * feature routing rules use. Literal paths come before `:id`.
+ * Settings > Automation > Record assignment rules: the switch (default OFF), the priority-ordered rules that give new contacts, companies
+ * and deals to a person, and the log of what the engine did. Reading needs `crm.assignment.read`, everything else `crm.assignment.manage`
+ * (Manager and above). Every route needs the plan feature `record_assignment` (higher plans only; 422 PLAN_FEATURE_LOCKED otherwise).
+ * Literal paths come before `:id`.
  */
 @ApiTags('contact-assignment')
 @ActorKinds('user')
+@RequirePlanFeature('record_assignment')
 @Controller({ path: 'assignment', version: '2' })
 export class ContactAssignmentController {
   constructor(private readonly assignment: ContactAssignmentService) {}
@@ -42,7 +48,7 @@ export class ContactAssignmentController {
   @Get('settings')
   @RequirePermission('crm.assignment.read')
   @ApiOperation({
-    summary: 'Is contact and deal auto-assignment on (default off), and does it cover imports',
+    summary: 'Is record auto-assignment on (default off), and does it cover imports',
   })
   async settings() {
     return this.assignment.getSettings();
@@ -74,6 +80,16 @@ export class ContactAssignmentController {
     return this.assignment.create(body);
   }
 
+  @Get('runs')
+  @RequirePermission('crm.assignment.read')
+  @ApiOperation({
+    summary: 'The run log: why each record was assigned, reassigned or left alone, newest first',
+    description: 'Filter by module, rule, record (with the module) or outcome. Kept 90 days.',
+  })
+  async runs(@Query(zodPipe(listAssignmentRunsQuerySchema)) query: ListAssignmentRunsQuery) {
+    return this.assignment.runs(query);
+  }
+
   @Post('rules/reorder')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('crm.assignment.manage')
@@ -88,10 +104,36 @@ export class ContactAssignmentController {
   @ApiOperation({
     summary: 'Which rule would take this record, and who? Changes nothing',
     description:
-      'Name an existing contact or deal, or describe one. Works while the switch is off.',
+      'Name an existing contact, company or deal. Returns every rule tried and why. Works while the switch is off.',
   })
   async test(@Body(zodPipe(testAssignmentSchema)) body: TestAssignmentInput) {
     return this.assignment.test(body);
+  }
+
+  @Post('rules/:id/clone')
+  @Idempotent()
+  @RequirePermission('crm.assignment.manage')
+  @ApiOperation({ summary: 'Copy a rule: the copy is paused and last in its module' })
+  async clone(@Param('id', ParseUUIDPipe) id: string) {
+    return this.assignment.clone(id);
+  }
+
+  @Post('rules/:id/activate')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('crm.assignment.manage')
+  @ApiOperation({ summary: 'Activate a rule: it is prioritised and starts taking records' })
+  async activate(@Param('id', ParseUUIDPipe) id: string) {
+    return this.assignment.setActive(id, true);
+  }
+
+  @Post('rules/:id/pause')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('crm.assignment.manage')
+  @ApiOperation({
+    summary: 'Pause a rule: it keeps its place but is not prioritised and never runs',
+  })
+  async pause(@Param('id', ParseUUIDPipe) id: string) {
+    return this.assignment.setActive(id, false);
   }
 
   @Patch('rules/:id')

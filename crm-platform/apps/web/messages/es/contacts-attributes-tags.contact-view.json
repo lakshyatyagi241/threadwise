@@ -44,6 +44,11 @@
         "editJobTitle": "Editar cargo",
         "jobTitleConflict": "Otra persona cambió antes este contacto. Se recargó; inténtalo de nuevo.",
         "jobTitleFailed": "No se pudo guardar el cargo. Inténtalo de nuevo.",
+        "jobTitleRequired": "El cargo no puede quedar vacío: este espacio de trabajo lo exige.",
+        "jobTitleOtherRequired": "Otras propiedades obligatorias de este contacto están vacías. Abre Editar contacto para completarlas.",
+        "jobTitleNotEditable": "El cargo es de solo lectura o está oculto en este espacio de trabajo, así que no se puede editar aquí.",
+        "jobTitleForbidden": "No tienes permiso para editar este contacto.",
+        "jobTitleGone": "Este contacto ya no está disponible para ti: se eliminó o está asignado a otra persona.",
         "owner": "Responsable"
       },
       "social": {
