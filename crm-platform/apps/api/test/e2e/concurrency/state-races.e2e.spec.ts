@@ -49,7 +49,13 @@ const scalar = async (text: string, params: unknown[] = []) =>
 describe('CC-WAL: wallet debits and top-ups', () => {
   const post = (
     orgId: number,
-    over: { type: 'topup' | 'spend'; direction: 'in' | 'out'; amountMinor: number; key: string; allowPartial?: boolean },
+    over: {
+      type: 'topup' | 'spend';
+      direction: 'in' | 'out';
+      amountMinor: number;
+      key: string;
+      allowPartial?: boolean;
+    },
   ) =>
     db.txAs({ orgId, userId: null }, (tx) =>
       h.app.get(WalletLedgerService).post(tx, {
@@ -64,9 +70,17 @@ describe('CC-WAL: wallet debits and top-ups', () => {
       }),
     );
   const fund = (orgId: number, minor: number) =>
-    post(orgId, { type: 'topup', direction: 'in', amountMinor: minor, key: `fund-${Math.random()}` });
+    post(orgId, {
+      type: 'topup',
+      direction: 'in',
+      amountMinor: minor,
+      key: `fund-${Math.random()}`,
+    });
   const balance = async (orgId: number) =>
-    scalar(`SELECT coalesce((SELECT (balance * 100)::bigint FROM wallets WHERE org_id = $1), 0) AS n`, [orgId]);
+    scalar(
+      `SELECT coalesce((SELECT (balance * 100)::bigint FROM wallets WHERE org_id = $1), 0) AS n`,
+      [orgId],
+    );
   const ledger = async (orgId: number) =>
     (
       await q(
@@ -84,7 +98,12 @@ describe('CC-WAL: wallet debits and top-ups', () => {
       const t = await api.signup('wal1');
       await fund(t.orgId, 1000);
       const res = await race(12, (i) =>
-        post(t.orgId, { type: 'spend', direction: 'out', amountMinor: 300, key: `d${round}-${i}` }).then(
+        post(t.orgId, {
+          type: 'spend',
+          direction: 'out',
+          amountMinor: 300,
+          key: `d${round}-${i}`,
+        }).then(
           () => 'ok',
           (e: { code?: string }) => e.code ?? 'error',
         ),
@@ -117,7 +136,13 @@ describe('CC-WAL: wallet debits and top-ups', () => {
     const res = await race(24, (i) =>
       i % 2 === 0
         ? post(t.orgId, { type: 'topup', direction: 'in', amountMinor: 700, key: `in-${i}` })
-        : post(t.orgId, { type: 'spend', direction: 'out', amountMinor: 900, key: `out-${i}`, allowPartial: true }),
+        : post(t.orgId, {
+            type: 'spend',
+            direction: 'out',
+            amountMinor: 900,
+            key: `out-${i}`,
+            allowPartial: true,
+          }),
     );
     const net = res.reduce((s, r, i) => s + (i % 2 === 0 ? r.appliedMinor : -r.appliedMinor), 2000);
     expect(await balance(t.orgId)).toBe(net);
@@ -148,7 +173,9 @@ describe('CC-WAL: wallet debits and top-ups', () => {
     const charged = same.filter((o) => o.status === 'charged');
     expect(charged, JSON.stringify(same)).toHaveLength(1);
     expect(same.filter((o) => o.status === 'replayed')).toHaveLength(9);
-    expect(await balance(t.orgId)).toBe(4800 - (charged[0] as { chargedMinor: number }).chargedMinor);
+    expect(await balance(t.orgId)).toBe(
+      4800 - (charged[0] as { chargedMinor: number }).chargedMinor,
+    );
     const many = await race(10, (i) => settle(`wamid.many.${t.orgId}.${i}`));
     expect(many.filter((o) => o.status === 'charged').length).toBeGreaterThan(0);
     expect(await balance(t.orgId)).toBeGreaterThanOrEqual(0);
@@ -156,10 +183,10 @@ describe('CC-WAL: wallet debits and top-ups', () => {
     expect(rows.reduce((s, r) => s + r.signed, 0)).toBe(await balance(t.orgId));
     expect(rows.every((r) => r.after >= 0)).toBe(true);
     expect(
-      await scalar(`SELECT count(*)::int AS n FROM usage_charges WHERE org_id = $1 AND wamid = $2`, [
-        t.orgId,
-        `wamid.same.${t.orgId}`,
-      ]),
+      await scalar(
+        `SELECT count(*)::int AS n FROM usage_charges WHERE org_id = $1 AND wamid = $2`,
+        [t.orgId, `wamid.same.${t.orgId}`],
+      ),
     ).toBe(1);
   });
 });
@@ -186,9 +213,10 @@ describe('CC-REF: referral reward and codes', () => {
       ),
     ).toBe(1);
     expect(
-      await scalar(`SELECT count(*)::int AS n FROM referrals WHERE referred_org_id = $1 AND award_transaction_id IS NOT NULL`, [
-        referee.orgId,
-      ]),
+      await scalar(
+        `SELECT count(*)::int AS n FROM referrals WHERE referred_org_id = $1 AND award_transaction_id IS NOT NULL`,
+        [referee.orgId],
+      ),
     ).toBe(1);
   });
 
@@ -197,7 +225,11 @@ describe('CC-REF: referral reward and codes', () => {
     const svc = h.app.get(ReferralCodeService, { strict: false });
     const same = await race(8, () => svc.ensure(t.orgId, t.adminUserId));
     expect(new Set(same).size).toBe(1);
-    expect(await scalar(`SELECT count(*)::int AS n FROM referral_codes WHERE owner_org_id = $1`, [t.orgId])).toBe(1);
+    expect(
+      await scalar(`SELECT count(*)::int AS n FROM referral_codes WHERE owner_org_id = $1`, [
+        t.orgId,
+      ]),
+    ).toBe(1);
     const tenants = await Promise.all(Array.from({ length: 8 }, (_, i) => api.signup(`refd${i}`)));
     const codes = await race(8, (i) => svc.ensure(tenants[i]!.orgId, tenants[i]!.adminUserId));
     expect(new Set(codes).size).toBe(8);
@@ -226,8 +258,11 @@ describe('CC-CPN: coupon redemption counter', () => {
       ).rows[0].id,
     );
   const redeem = (orderId: number) =>
-    h.app.get(PlatformStore).tx((tx) => h.app.get(CouponCheckoutService).redeemForOrder(tx, t.orgId, orderId));
-  const used = async (id: number) => scalar(`SELECT uses_count AS n FROM coupons WHERE id = $1`, [id]);
+    h.app
+      .get(PlatformStore)
+      .tx((tx) => h.app.get(CouponCheckoutService).redeemForOrder(tx, t.orgId, orderId));
+  const used = async (id: number) =>
+    scalar(`SELECT uses_count AS n FROM coupons WHERE id = $1`, [id]);
 
   beforeAll(async () => {
     t = await api.signup('cpn');
@@ -246,24 +281,32 @@ describe('CC-CPN: coupon redemption counter', () => {
     const orders = await Promise.all(Array.from({ length: 12 }, () => mkOrder(c)));
     await race(12, (i) => redeem(orders[i]!));
     expect(await used(c.id)).toBe(12);
-    expect(await scalar(`SELECT count(*)::int AS n FROM coupon_redemptions WHERE coupon_id = $1`, [c.id])).toBe(12);
+    expect(
+      await scalar(`SELECT count(*)::int AS n FROM coupon_redemptions WHERE coupon_id = $1`, [
+        c.id,
+      ]),
+    ).toBe(12);
   });
 
   // OPEN (D-06): the limit is only checked when the buyer previews the price, not when an order is paid, so buyers racing for the
   // last use all get it. The code comments call this a kept Reference gap. `it.fails` documents it: this passes while the gap exists.
-  it.fails('CC-CPN-03 a coupon with 3 uses left, 8 buyers paying at once: uses never pass max_uses', async () => {
-    const c = await mkCoupon(3);
-    const orders = await Promise.all(Array.from({ length: 8 }, () => mkOrder(c)));
-    await race(8, (i) => redeem(orders[i]!));
-    expect(await used(c.id)).toBeLessThanOrEqual(3);
-  });
+  it.fails(
+    'CC-CPN-03 a coupon with 3 uses left, 8 buyers paying at once: uses never pass max_uses',
+    async () => {
+      const c = await mkCoupon(3);
+      const orders = await Promise.all(Array.from({ length: 8 }, () => mkOrder(c)));
+      await race(8, (i) => redeem(orders[i]!));
+      expect(await used(c.id)).toBeLessThanOrEqual(3);
+    },
+  );
 });
 
 // --- sessions ------------------------------------------------------------------------------------------------------------------------
 
 describe('CC-SES: refresh-token rotation and session cap', () => {
   const mint = async (t: Tenant, remember = true) => {
-    const u = (await q(`SELECT uuid FROM users WHERE id = $1`, [t.adminUserId])).rows[0].uuid as string;
+    const u = (await q(`SELECT uuid FROM users WHERE id = $1`, [t.adminUserId])).rows[0]
+      .uuid as string;
     return h.app.get(SessionService).create({
       orgId: t.orgId,
       userId: t.adminUserId,
@@ -273,12 +316,20 @@ describe('CC-SES: refresh-token rotation and session cap', () => {
     });
   };
   const refresh = (token: string) =>
-    h.app.get(SessionService).refresh(token).then(
-      (r) => ({ ok: true as const, tokens: r.tokens, sessionId: r.sessionId }),
-      (e: { status?: number }) => ({ ok: false as const, status: e.status ?? 0 }),
-    );
+    h.app
+      .get(SessionService)
+      .refresh(token)
+      .then(
+        (r) => ({ ok: true as const, tokens: r.tokens, sessionId: r.sessionId }),
+        (e: { status?: number }) => ({ ok: false as const, status: e.status ?? 0 }),
+      );
   const sessionRow = async (sid: string) =>
-    (await q(`SELECT refresh_version, revoked_at, revoked_reason FROM auth_sessions WHERE uuid = $1`, [sid])).rows[0];
+    (
+      await q(
+        `SELECT refresh_version, revoked_at, revoked_reason FROM auth_sessions WHERE uuid = $1`,
+        [sid],
+      )
+    ).rows[0];
   const rvOf = async (token: string) => (await h.app.get(TokenService).verifyRefresh(token)).rv;
 
   it('CC-SES-01 one refresh token sent 6 times at once (a double click): all succeed, the session is not revoked, one rotation happened', async () => {
@@ -293,13 +344,20 @@ describe('CC-SES: refresh-token rotation and session cap', () => {
       expect(row.revoked_at).toBeNull();
       expect(row.refresh_version).toBe(before + 1);
       // Every answer carries the same current token version: nobody got a second, diverging session.
-      const rvs = await Promise.all(res.map((r) => (r.ok ? rvOf(r.tokens.refreshToken) : Promise.resolve(-1))));
+      const rvs = await Promise.all(
+        res.map((r) => (r.ok ? rvOf(r.tokens.refreshToken) : Promise.resolve(-1))),
+      );
       expect(new Set(rvs)).toEqual(new Set([before + 1]));
       expect(new Set(res.map((r) => (r.ok ? r.sessionId : ''))).size).toBe(1);
       const winner = res[0]!;
       if (winner.ok) token = winner.tokens.refreshToken;
     }
-    expect(await scalar(`SELECT count(*)::int AS n FROM auth_sessions WHERE user_id = $1 AND revoked_at IS NULL AND uuid = $2`, [t.adminUserId, first.sessionId])).toBe(1);
+    expect(
+      await scalar(
+        `SELECT count(*)::int AS n FROM auth_sessions WHERE user_id = $1 AND revoked_at IS NULL AND uuid = $2`,
+        [t.adminUserId, first.sessionId],
+      ),
+    ).toBe(1);
   });
 
   it('CC-SES-02 a token two rotations old is a replay: every parallel attempt is refused and the whole session is revoked', async () => {
@@ -340,7 +398,10 @@ describe('CC-SES: refresh-token rotation and session cap', () => {
 describe('CC-STO: storage counters (observe mode)', () => {
   it('CC-STO-01 20 uploads at once add up exactly; one key committed 6 times counts once; reservations all settle', async () => {
     const t = await api.signup('sto');
-    const mode = { current: async () => 'observe' as const, configured: async () => 'observe' as const };
+    const mode = {
+      current: async () => 'observe' as const,
+      configured: async () => 'observe' as const,
+    };
     const meter = new StorageMeterService(db, new StorageQuotaRepository(), mode as never);
     await race(20, async (i) => {
       const r = await meter.reserve({ orgId: t.orgId, bytes: 1000, category: 'inbox_media' });
@@ -348,7 +409,12 @@ describe('CC-STO: storage counters (observe mode)', () => {
       await r.commit({ key: `conc/${t.orgId}/${i}` });
     });
     const state = async () =>
-      (await q(`SELECT hot_bytes::bigint AS hot, reserved_bytes::bigint AS reserved FROM storage_org_state WHERE org_id = $1`, [t.orgId])).rows[0];
+      (
+        await q(
+          `SELECT hot_bytes::bigint AS hot, reserved_bytes::bigint AS reserved FROM storage_org_state WHERE org_id = $1`,
+          [t.orgId],
+        )
+      ).rows[0];
     expect(Number((await state()).hot)).toBe(20_000);
     expect(Number((await state()).reserved)).toBe(0);
     await race(6, async () => {
@@ -357,7 +423,11 @@ describe('CC-STO: storage counters (observe mode)', () => {
     });
     expect(Number((await state()).hot)).toBe(20_500);
     expect(Number((await state()).reserved)).toBe(0);
-    expect(await scalar(`SELECT count(*)::int AS n FROM storage_reservations WHERE org_id = $1`, [t.orgId])).toBe(0);
+    expect(
+      await scalar(`SELECT count(*)::int AS n FROM storage_reservations WHERE org_id = $1`, [
+        t.orgId,
+      ]),
+    ).toBe(0);
   });
 });
 
@@ -389,18 +459,33 @@ describe('CC-OBX: outbox drain with several workers', () => {
       const eventType = `conc.drain.${type++}`;
       await seed(t.orgId, eventType, 700);
       const seen = new Map<string, number>();
-      const ds = drainers(3, async (id) => {
-        seen.set(id, (seen.get(id) ?? 0) + 1);
-        await sleep(Math.floor(rng() * 3));
-      }, eventType);
-      await Promise.all(ds.map(async (d) => { await sleep(Math.floor(rng() * 20)); await d.drain(); }));
+      const ds = drainers(
+        3,
+        async (id) => {
+          seen.set(id, (seen.get(id) ?? 0) + 1);
+          await sleep(Math.floor(rng() * 3));
+        },
+        eventType,
+      );
+      await Promise.all(
+        ds.map(async (d) => {
+          await sleep(Math.floor(rng() * 20));
+          await d.drain();
+        }),
+      );
       expect(seen.size).toBe(700);
       expect([...seen.values()].every((c) => c === 1)).toBe(true);
       expect(
-        await scalar(`SELECT count(*)::int AS n FROM event_outbox WHERE event_type = $1 AND status = 'done'`, [eventType]),
+        await scalar(
+          `SELECT count(*)::int AS n FROM event_outbox WHERE event_type = $1 AND status = 'done'`,
+          [eventType],
+        ),
       ).toBe(700);
       expect(
-        await scalar(`SELECT count(*)::int AS n FROM event_outbox WHERE event_type = $1 AND status <> 'done'`, [eventType]),
+        await scalar(
+          `SELECT count(*)::int AS n FROM event_outbox WHERE event_type = $1 AND status <> 'done'`,
+          [eventType],
+        ),
       ).toBe(0);
     }
   });
@@ -411,15 +496,22 @@ describe('CC-OBX: outbox drain with several workers', () => {
     await seed(t.orgId, eventType, 300);
     const seen = new Map<string, number>();
     const bad = new Set<string>();
-    const ds = drainers(2, async (id) => {
-      seen.set(id, (seen.get(id) ?? 0) + 1);
-      if (Number(id) % 5 === 0) {
-        bad.add(id);
-        throw new Error('boom');
-      }
-    }, eventType);
+    const ds = drainers(
+      2,
+      async (id) => {
+        seen.set(id, (seen.get(id) ?? 0) + 1);
+        if (Number(id) % 5 === 0) {
+          bad.add(id);
+          throw new Error('boom');
+        }
+      },
+      eventType,
+    );
     await Promise.all(ds.map((d) => d.drain()));
-    const done = await scalar(`SELECT count(*)::int AS n FROM event_outbox WHERE event_type = $1 AND status = 'done'`, [eventType]);
+    const done = await scalar(
+      `SELECT count(*)::int AS n FROM event_outbox WHERE event_type = $1 AND status = 'done'`,
+      [eventType],
+    );
     const pending = await scalar(
       `SELECT count(*)::int AS n FROM event_outbox WHERE event_type = $1 AND status = 'pending' AND attempts = 1 AND last_error IS NOT NULL`,
       [eventType],
@@ -435,7 +527,10 @@ describe('CC-OBX: outbox drain with several workers', () => {
 describe('CC-INV: invoice numbers and payments', () => {
   const LINES = [{ description: 'Widget', qty: '4', unitPrice: '50.00', taxRateId: null }];
   const draft = async (t: Tenant) => {
-    const r = await api.as(t.admin).post('/v2/invoices').send({ buyerName: 'Conc Co', currency: 'USD', lines: LINES });
+    const r = await api
+      .as(t.admin)
+      .post('/v2/invoices')
+      .send({ buyerName: 'Conc Co', currency: 'USD', lines: LINES });
     expect(r.status, JSON.stringify(r.body)).toBe(201);
     return r.body.id as string;
   };
@@ -443,11 +538,17 @@ describe('CC-INV: invoice numbers and payments', () => {
   it('CC-INV-01 10 drafts issued at once get 10 different, gap-free numbers', async () => {
     const t = await api.signup('inv1');
     const ids = await Promise.all(Array.from({ length: 10 }, () => draft(t)));
-    const res = await race(10, (i) => api.as(t.admin).post(`/v2/invoices/${ids[i]}/issue`).send({}));
+    const res = await race(10, (i) =>
+      api.as(t.admin).post(`/v2/invoices/${ids[i]}/issue`).send({}),
+    );
     for (const r of res) expect(r.status, JSON.stringify(r.body)).toBe(200);
     const nums = res.map((r) => r.body.number as string);
     expect(new Set(nums).size).toBe(10);
-    const seqs = (await q(`SELECT seq FROM invoices WHERE org_id = $1 AND status = 'issued' ORDER BY seq`, [t.orgId])).rows.map((r) => Number(r.seq));
+    const seqs = (
+      await q(`SELECT seq FROM invoices WHERE org_id = $1 AND status = 'issued' ORDER BY seq`, [
+        t.orgId,
+      ])
+    ).rows.map((r) => Number(r.seq));
     expect(seqs).toEqual(Array.from({ length: 10 }, (_, i) => i + 1));
   });
 
@@ -462,7 +563,14 @@ describe('CC-INV: invoice numbers and payments', () => {
     const next = await draft(t);
     const issued = await api.as(t.admin).post(`/v2/invoices/${next}/issue`).send({});
     expect(
-      Number((await q(`SELECT seq FROM invoices WHERE org_id = $1 AND uuid = $2`, [t.orgId, issued.body.id])).rows[0].seq),
+      Number(
+        (
+          await q(`SELECT seq FROM invoices WHERE org_id = $1 AND uuid = $2`, [
+            t.orgId,
+            issued.body.id,
+          ])
+        ).rows[0].seq,
+      ),
     ).toBe(2);
   });
 
@@ -476,7 +584,12 @@ describe('CC-INV: invoice numbers and payments', () => {
     );
     for (const r of res) expect(r.status, JSON.stringify(r.body)).toBeLessThan(500);
     const paid = Number(
-      (await q(`SELECT coalesce(sum(amount_minor), 0)::bigint AS n FROM payments WHERE org_id = $1 AND kind = 'payment'`, [t.orgId])).rows[0].n,
+      (
+        await q(
+          `SELECT coalesce(sum(amount_minor), 0)::bigint AS n FROM payments WHERE org_id = $1 AND kind = 'payment'`,
+          [t.orgId],
+        )
+      ).rows[0].n,
     );
     expect(paid).toBeLessThanOrEqual(20_000);
   });

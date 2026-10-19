@@ -94,7 +94,10 @@ describe('CC-RR: round robin under parallel inbound messages', () => {
       expect(Math.abs(n1 - n2), `agent1=${n1} agent2=${n2}`).toBeLessThanOrEqual(1);
     }
     expect(
-      await scalar(`SELECT fired_count AS n FROM routing_rules WHERE org_id = $1 AND name = 'Refunds'`, [t.orgId]),
+      await scalar(
+        `SELECT fired_count AS n FROM routing_rules WHERE org_id = $1 AND name = 'Refunds'`,
+        [t.orgId],
+      ),
     ).toBe(total);
     // One 'assigned' event per conversation: no thread was routed twice.
     expect(
@@ -118,7 +121,7 @@ describe('CC-ASG: two agents take the same conversation', () => {
       await simInbound(p, t, ch, { from, text: 'help' });
       // The pipeline and the routing listener bump the row version after the message lands: claim once it has stopped moving.
       let conv = await conversationOf(p, t, ch, from);
-      for (let stable = 0; stable < 2; ) {
+      for (let stable = 0; stable < 2;) {
         await new Promise((r) => setTimeout(r, 300));
         const again = await conversationOf(p, t, ch, from);
         stable = again.row_version === conv.row_version ? stable + 1 : 0;
@@ -130,7 +133,10 @@ describe('CC-ASG: two agents take the same conversation', () => {
           .post(`/v2/inbox/conversations/${conv.uuid}/assign`)
           .send({ userId: uuids[i], rowVersion: Number(conv.row_version) }),
       );
-      expect(res.filter((r) => r.status === 200), JSON.stringify(statuses(res))).toHaveLength(1);
+      expect(
+        res.filter((r) => r.status === 200),
+        JSON.stringify(statuses(res)),
+      ).toHaveLength(1);
       const lost = res.filter((r) => r.status === 409);
       expect(lost).toHaveLength(2);
       for (const l of lost) expect(l.body.code).toBe('ROW_VERSION_CONFLICT');
@@ -138,7 +144,10 @@ describe('CC-ASG: two agents take the same conversation', () => {
       const winnerIdx = res.findIndex((r) => r.status === 200);
       expect(Number(now.assignee_user_id)).toBe(agents[winnerIdx]!.userId);
       expect(
-        await scalar(`SELECT count(*)::int AS n FROM conversation_events WHERE conversation_id = $1 AND type = 'assigned'`, [conv.id]),
+        await scalar(
+          `SELECT count(*)::int AS n FROM conversation_events WHERE conversation_id = $1 AND type = 'assigned'`,
+          [conv.id],
+        ),
       ).toBe(1);
     }
   });
@@ -177,7 +186,10 @@ describe('CC-JOB: queue job ids and parallel consumers', () => {
       await new Promise((r) => setTimeout(r, 600));
       expect(await messagesOf(p, conv.id as number)).toHaveLength(1);
       expect(
-        await scalar(`SELECT count(*)::int AS n FROM contacts WHERE org_id = $1 AND phone = $2`, [t.orgId, `+${peer}`]),
+        await scalar(`SELECT count(*)::int AS n FROM contacts WHERE org_id = $1 AND phone = $2`, [
+          t.orgId,
+          `+${peer}`,
+        ]),
       ).toBe(1);
     }
   }, 120_000);

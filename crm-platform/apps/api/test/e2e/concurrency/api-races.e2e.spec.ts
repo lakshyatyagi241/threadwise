@@ -29,31 +29,34 @@ describe('CC-LOCK: two writers on one row (row_version)', () => {
   it.each([
     ['CC-LOCK-01 contact', '/v2/contacts', { name: 'Lock', email: 'lock@example.com' }, 'name'],
     ['CC-LOCK-02 company', '/v2/companies', { name: 'Lock Co' }, 'name'],
-  ])('%s: exactly one of 8 parallel updates wins, 7 get 409 ROW_VERSION_CONFLICT', async (_n, path, seed, field) => {
-    const t = await api.signup('lock');
-    const created = await api.as(t.admin).post(path).send(seed);
-    expect(created.status, JSON.stringify(created.body)).toBe(201);
-    let version = created.body.rowVersion as number;
-    for (let round = 0; round < ROUNDS; round++) {
-      const res = await race(8, (i) =>
-        api
-          .as(t.admin)
-          .patch(`${path}/${created.body.id}`)
-          .send({ [field]: `w${round}-${i}`, rowVersion: version }),
-      );
-      const won = res.filter((r) => r.status === 200);
-      const lost = res.filter((r) => r.status === 409);
-      expect(won.length, JSON.stringify(statuses(res))).toBe(1);
-      expect(lost.length).toBe(7);
-      for (const l of lost) expect(l.body.code).toBe('ROW_VERSION_CONFLICT');
-      expect(won[0]!.body.rowVersion).toBe(version + 1);
-      // The row holds the winner's value: no lost update.
-      const get = await api.as(t.admin).get(`${path}/${created.body.id}`);
-      expect(get.body[field]).toBe(won[0]!.body[field]);
-      expect(get.body.rowVersion).toBe(version + 1);
-      version += 1;
-    }
-  });
+  ])(
+    '%s: exactly one of 8 parallel updates wins, 7 get 409 ROW_VERSION_CONFLICT',
+    async (_n, path, seed, field) => {
+      const t = await api.signup('lock');
+      const created = await api.as(t.admin).post(path).send(seed);
+      expect(created.status, JSON.stringify(created.body)).toBe(201);
+      let version = created.body.rowVersion as number;
+      for (let round = 0; round < ROUNDS; round++) {
+        const res = await race(8, (i) =>
+          api
+            .as(t.admin)
+            .patch(`${path}/${created.body.id}`)
+            .send({ [field]: `w${round}-${i}`, rowVersion: version }),
+        );
+        const won = res.filter((r) => r.status === 200);
+        const lost = res.filter((r) => r.status === 409);
+        expect(won.length, JSON.stringify(statuses(res))).toBe(1);
+        expect(lost.length).toBe(7);
+        for (const l of lost) expect(l.body.code).toBe('ROW_VERSION_CONFLICT');
+        expect(won[0]!.body.rowVersion).toBe(version + 1);
+        // The row holds the winner's value: no lost update.
+        const get = await api.as(t.admin).get(`${path}/${created.body.id}`);
+        expect(get.body[field]).toBe(won[0]!.body[field]);
+        expect(get.body.rowVersion).toBe(version + 1);
+        version += 1;
+      }
+    },
+  );
 });
 
 describe('CC-IDEM: Idempotency-Key', () => {
@@ -63,7 +66,11 @@ describe('CC-IDEM: Idempotency-Key', () => {
       const before = await count(t, 'companies');
       const key = `conc-${round}-${Math.random().toString(36).slice(2)}`;
       const res = await race(10, () =>
-        api.as(t.admin).post('/v2/companies').set('Idempotency-Key', key).send({ name: `Idem ${round}` }),
+        api
+          .as(t.admin)
+          .post('/v2/companies')
+          .set('Idempotency-Key', key)
+          .send({ name: `Idem ${round}` }),
       );
       for (const r of res) expect([201, 409], JSON.stringify(r.body)).toContain(r.status);
       const ok = res.filter((r) => r.status === 201);
@@ -79,7 +86,11 @@ describe('CC-IDEM: Idempotency-Key', () => {
       const before = await count(t, 'companies');
       const key = `conc-diff-${round}-${Math.random().toString(36).slice(2)}`;
       const res = await race(6, (i) =>
-        api.as(t.admin).post('/v2/companies').set('Idempotency-Key', key).send({ name: `Diff ${round} ${i}` }),
+        api
+          .as(t.admin)
+          .post('/v2/companies')
+          .set('Idempotency-Key', key)
+          .send({ name: `Diff ${round} ${i}` }),
       );
       for (const r of res) expect([201, 409], JSON.stringify(r.body)).toContain(r.status);
       expect(res.filter((r) => r.status === 201).length).toBe(1);
@@ -93,7 +104,10 @@ describe('CC-DUP: unique constraints', () => {
     const t = await api.signup('dup');
     for (let round = 0; round < ROUNDS; round++) {
       const res = await race(8, () =>
-        api.as(t.admin).post('/v2/tags').send({ name: `Same ${round}` }),
+        api
+          .as(t.admin)
+          .post('/v2/tags')
+          .send({ name: `Same ${round}` }),
       );
       expect(res.filter((r) => r.status === 201).length, JSON.stringify(statuses(res))).toBe(1);
       expect(res.filter((r) => r.status === 409).length).toBe(7);
@@ -116,7 +130,10 @@ describe('CC-LIM: plan limits are check-then-insert', () => {
       [t.orgId],
     );
     const res = await race(12, (i) =>
-      api.as(t.admin).post('/v2/contacts').send({ name: `P${i}`, email: `p${i}@example.com` }),
+      api
+        .as(t.admin)
+        .post('/v2/contacts')
+        .send({ name: `P${i}`, email: `p${i}@example.com` }),
     );
     for (const r of res) expect([201, 422], JSON.stringify(r.body)).toContain(r.status);
     expect(res.filter((r) => r.status === 201).length).toBe(5);
@@ -155,7 +172,12 @@ describe('CC-LIM tags and devices', () => {
       `UPDATE org_plan_state SET overrides = '{"limits":{"tags":4}}'::jsonb WHERE org_id = $1`,
       [t.orgId],
     );
-    const res = await race(10, (i) => api.as(t.admin).post('/v2/tags').send({ name: `T${i}` }));
+    const res = await race(10, (i) =>
+      api
+        .as(t.admin)
+        .post('/v2/tags')
+        .send({ name: `T${i}` }),
+    );
     for (const r of res) expect([201, 422], JSON.stringify(r.body)).toContain(r.status);
     expect(await count(t, 'tags')).toBe(4);
     expect(res.filter((r) => r.status === 201).length).toBe(4);
@@ -175,7 +197,12 @@ describe('CC-LIM tags and devices', () => {
       flowEdges: [{ id: 'e_1', source: 'n_trig', sourceHandle: 'out', target: 'n_msg' }],
       vars: [],
     };
-    const res = await race(8, (i) => api.as(t.admin).post('/v2/flows').send({ name: `F${i}`, graph }));
+    const res = await race(8, (i) =>
+      api
+        .as(t.admin)
+        .post('/v2/flows')
+        .send({ name: `F${i}`, graph }),
+    );
     for (const r of res) expect([201, 422], JSON.stringify(r.body)).toContain(r.status);
     expect(await count(t, 'flows')).toBe(3);
   });
@@ -218,7 +245,10 @@ describe('CC-TEN: tenant isolation under load', () => {
     const b = await api.signup('tenb');
     const mk = (t: Tenant, tag: string) =>
       race(10, (i) =>
-        api.as(t.admin).post('/v2/contacts').send({ name: `${tag}${i}`, email: `${tag}${i}@example.com` }),
+        api
+          .as(t.admin)
+          .post('/v2/contacts')
+          .send({ name: `${tag}${i}`, email: `${tag}${i}@example.com` }),
       );
     const [ra, rb] = await Promise.all([mk(a, 'A'), mk(b, 'B')]);
     for (const r of [...ra, ...rb]) expect(r.status, JSON.stringify(r.body)).toBe(201);
@@ -229,7 +259,8 @@ describe('CC-TEN: tenant isolation under load', () => {
       api.as(a.admin).get(`/v2/contacts/${rb[0]!.body.id}`),
       api.as(b.admin).get(`/v2/contacts/${ra[0]!.body.id}`),
     ]);
-    const names = (r: { body: { data: Array<{ name: string }> } }) => r.body.data.map((c) => c.name);
+    const names = (r: { body: { data: Array<{ name: string }> } }) =>
+      r.body.data.map((c) => c.name);
     expect(names(la).every((n) => n.startsWith('A'))).toBe(true);
     expect(names(lb).every((n) => n.startsWith('B'))).toBe(true);
     expect(names(la)).toHaveLength(10);

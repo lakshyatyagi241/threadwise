@@ -178,7 +178,9 @@ export class TenantDirectory {
 
   /** Takes the e-mail lock (then the number's, always in that order), then 409s when either already has an account. */
   private async assertIdentityFree(tx: Tx, email: string, phoneE164: string | null): Promise<void> {
-    await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtextextended(${`signup-identity:${email}`}, 0))`);
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtextextended(${`signup-identity:${email}`}, 0))`,
+    );
     if (phoneE164) {
       await tx.execute(
         sql`SELECT pg_advisory_xact_lock(hashtextextended(${`signup-identity:${phoneE164}`}, 0))`,
@@ -199,7 +201,11 @@ export class TenantDirectory {
     );
   }
 
-  private async identityExistsIn(tx: Tx, email: string, phoneE164: string | null): Promise<boolean> {
+  private async identityExistsIn(
+    tx: Tx,
+    email: string,
+    phoneE164: string | null,
+  ): Promise<boolean> {
     // Two independent EXISTS probes, each on its own indexed column (idx_users_email,
     // idx_user_profiles_phone_e164), instead of one LEFT JOIN with OR: a join across two tables
     // can't use either index for the OR, so it fell back to a full scan on this public,
