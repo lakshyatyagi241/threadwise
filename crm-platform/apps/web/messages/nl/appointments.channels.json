@@ -1,0 +1,152 @@
+{
+  "appointments": {
+    "channels": {
+      "title": "Berichtkanalen",
+      "description": "Kies welke kanalen afspraakberichten naar je contacten mogen sturen: bevestigingen, herinneringen, verplaatsings- en annuleringsberichten en opvolging na het bezoek. Een boekingstype kan een kanaal alleen gebruiken als het hier is ingeschakeld en verbonden.",
+      "loading": "Kanalen laden...",
+      "undecidedOwner": "Er is nog geen kanaal ingeschakeld, dus er worden geen afspraakberichten verzonden. Schakel de kanalen in die je team mag gebruiken.",
+      "undecidedMember": "Er is nog geen kanaal ingeschakeld, dus er worden geen afspraakberichten verzonden. Vraag de eigenaar van de werkruimte de kanalen te kiezen.",
+      "readOnly": "Alleen de eigenaar van de werkruimte en beheerders kunnen dit wijzigen.",
+      "enableLabel": "{channel} gebruiken voor afspraakberichten",
+      "switchedOn": "{channel} staat aan voor afspraakberichten.",
+      "switchedOff": "{channel} staat uit voor afspraakberichten.",
+      "senderSaved": "De standaardafzender voor {channel} is opgeslagen.",
+      "defaultSender": "Standaardafzender",
+      "defaultSenderOf": "Standaardafzender voor {channel}",
+      "firstConnected": "De eerste verbonden afzender",
+      "sendsFrom": "Verstuurt vanaf {sender}",
+      "notConnected": "Voor dit kanaal is nog niets verbonden.",
+      "connect": "Verbind het in Instellingen",
+      "voiceSoon": "Komt met de spraakbot: een uitgaande herinneringsoproep die je per boekingstype kunt inschakelen. Kan nog niet worden ingeschakeld.",
+      "names": {
+        "email": "E-mail",
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "voice": "Herinneringsoproep"
+      },
+      "about": {
+        "email": "Vanuit een gedeelde mailbox van je werkruimte. Nooit vanuit een persoonlijke mailbox.",
+        "whatsapp": "Vrije tekst binnen het venster van 24 uur; daarbuiten alleen een goedgekeurde sjabloon.",
+        "sms": "Platte tekst vanaf je verbonden sms-afzender.",
+        "voice": "Een automatische uitgaande oproep die het contact herinnert."
+      },
+      "status": {
+        "usable": "Aan en verbonden",
+        "off": "Uit",
+        "notChosen": "Nog niet gekozen",
+        "not_connected": "Aan, niet verbonden",
+        "coming_soon": "Komt met de spraakbot"
+      },
+      "editorTitle": "Kanalen voor dit boekingstype",
+      "editorHint": "Alleen kanalen die de eigenaar heeft ingeschakeld en die verbonden zijn, kunnen worden gebruikt. De rest wordt getoond zodat je weet waarom.",
+      "noneUsable": "Er is nog geen kanaal beschikbaar, dus er kan geen bericht van dit boekingstype worden verzonden.",
+      "openSettings": "Kanaalinstellingen openen",
+      "offByOwner": "De eigenaar van de werkruimte heeft dit kanaal niet ingeschakeld.",
+      "sendOn": "Verzenden via",
+      "sendOnAuto": "Geen kanaal gekozen: het eerste beschikbare kanaal wordt gebruikt, met de standaardtekst.",
+      "sendOnEach": "Het bericht gaat via elk hier aangevinkt kanaal.",
+      "attachedButUnusable": "Dit kanaal is nu niet beschikbaar, dus dit bericht wordt erop overgeslagen. Vink uit of vraag de eigenaar het in te schakelen."
+    },
+    "templates": {
+      "title": "Berichtsjablonen",
+      "description": "Vooraf gedefinieerde berichten voor bevestigingen, herinneringen, verplaatsingen, annuleringen en opvolging na het bezoek. Voeg er met een klik een toe en bewerk het. E-mailberichten staan hier; WhatsApp-berichten gaan ter goedkeuring naar Meta en alleen een goedgekeurd bericht kan worden gebruikt.",
+      "loading": "Berichten laden...",
+      "readOnly": "Alleen gebruikers die afspraaksjablonen beheren kunnen dit wijzigen.",
+      "empty": "Nog geen bericht toegevoegd. Voeg er een toe uit de vooraf gedefinieerde set hieronder.",
+      "yours": "Je berichten",
+      "status": {
+        "draft": "Concept",
+        "pending": "In beoordeling bij Meta",
+        "approved": "Goedgekeurd",
+        "rejected": "Afgewezen"
+      },
+      "kinds": {
+        "confirmation": "Boekingsbevestiging",
+        "reminder": "Herinnering",
+        "reschedule": "Verplaatst",
+        "cancellation": "Geannuleerd",
+        "follow_up": "Opvolging na het bezoek"
+      },
+      "channels": {
+        "email": "E-mail",
+        "whatsapp": "WhatsApp"
+      },
+      "usedBy": "{count, plural, other {gebruikt door # boekingstypen}}",
+      "inactive": "uitgeschakeld",
+      "submit": "Naar Meta sturen ter goedkeuring",
+      "submitting": "Verzenden...",
+      "submitted": "Naar Meta gestuurd. Het wordt nu beoordeeld.",
+      "metaRefused": "Opgeslagen, maar Meta heeft het geweigerd. Open het bericht voor de reden.",
+      "refresh": "Status controleren",
+      "refreshing": "Controleren...",
+      "refreshed": "Status bijgewerkt.",
+      "edit": "Bewerken",
+      "view": "Bekijken",
+      "close": "Sluiten",
+      "delete": "Verwijderen",
+      "deleteTitle": "\"{name}\" verwijderen?",
+      "deleteWhatsapp": "Het wordt uit deze lijst verwijderd. De WhatsApp-sjabloon blijft in je WhatsApp-sjablonen; verwijder hem daar als je hem niet meer nodig hebt.",
+      "deleteBody": "Het wordt uit je bibliotheek verwijderd. Een boekingstype dat het gebruikt moet eerst een ander bericht kiezen.",
+      "deleted": "Bericht verwijderd.",
+      "cancel": "Annuleren",
+      "rejectedBecause": "Meta heeft het afgewezen: {reason}",
+      "pendingNote": "Meta beoordeelt deze sjabloon. Tot de goedkeuring kan hij niet worden gekozen of verzonden.",
+      "nameLabel": "Naam",
+      "subjectLabel": "Onderwerp",
+      "bodyLabel": "Bericht",
+      "textLocked": "Een sjabloon in beoordeling of goedgekeurd kan hier niet worden bewerkt.",
+      "placeholders": "Je kunt gebruiken:",
+      "whatsappPlaceholders": "WhatsApp kan alleen deze invullen, in deze volgorde zonder er een over te slaan:",
+      "activeLabel": "Beschikbaar om te kiezen",
+      "save": "Opslaan",
+      "saving": "Opslaan...",
+      "saveAndSubmit": "Opslaan en naar Meta sturen",
+      "saved": "Bericht opgeslagen.",
+      "predefinedTitle": "Vooraf gedefinieerde berichten",
+      "predefinedHint": "Neem een bericht over in je bibliotheek en bewerk het daarna. Een WhatsApp-bericht wordt eerst als concept gemaakt; jij bepaalt wanneer het naar Meta gaat.",
+      "machineNote": "De vooraf gedefinieerde teksten zijn in het Engels. Pas ze aan je taal aan nadat je ze hebt toegevoegd.",
+      "category": {
+        "UTILITY": "Service",
+        "MARKETING": "Marketing"
+      },
+      "preview": "Voorbeeld",
+      "hidePreview": "Voorbeeld verbergen",
+      "inLibrary": "In je bibliotheek: {status}",
+      "adopt": "Aan mijn berichten toevoegen",
+      "adopting": "Toevoegen...",
+      "adoptDraft": "Als concept toevoegen",
+      "adoptSubmit": "Toevoegen en naar Meta sturen",
+      "adopted": "Aan je berichten toegevoegd.",
+      "newEmail": "Nieuw e-mailbericht",
+      "kindLabel": "Soort",
+      "create": "Maken",
+      "created": "Bericht gemaakt.",
+      "chooseLabel": "Te gebruiken bericht",
+      "useText": "De tekst hierboven",
+      "unknownMessage": "Een bericht dat niet meer beschikbaar is",
+      "noneYet": "Nog geen bericht van dit soort.",
+      "openLibrary": "Voeg er een toe in de instellingen",
+      "whatsappApprovedOnly": "Alleen door Meta goedgekeurde sjablonen kunnen worden gekozen. Buiten het venster van 24 uur stuurt WhatsApp niets anders."
+    },
+    "reminders": {
+      "channels": {
+        "voice": "Herinneringsoproep"
+      },
+      "voiceSoon": "Komt met de spraakbot: een uitgaande herinneringsoproep. Kan nog niet worden toegevoegd.",
+      "voiceSoonShort": "komt met de spraakbot",
+      "channelUnusable": "nu niet beschikbaar",
+      "noUsableChannel": "Geen van de kanalen van deze regel is beschikbaar, dus hij kan niet worden ingeschakeld.",
+      "openChannels": "Kanaalinstellingen openen",
+      "fromLibrary": "Een bericht uit de bibliotheek gebruiken",
+      "openLibrary": "Voeg berichten toe in de instellingen",
+      "reasons": {
+        "channel_disabled": "De werkruimte heeft dit kanaal uitgeschakeld voor afspraakberichten."
+      }
+    },
+    "editor": {
+      "problems": {
+        "templateNoChannel": "Kies minstens één kanaal voor dit bericht of wis de tekst."
+      }
+    }
+  }
+}

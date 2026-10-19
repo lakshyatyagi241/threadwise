@@ -15,7 +15,7 @@ import {
 import { AppointmentsRepository, type AppointmentRow } from './appointments.repository';
 import { AppointmentsSupport } from './appointments.support';
 import { BookingTypesRepository, type TemplateRow } from './booking-types.repository';
-import { messageBody, variablesFor } from './message-render';
+import { messageBody, renderTemplate, variablesFor } from './message-render';
 
 export const MESSAGE_EVENTS = [
   'appointment.booked',
@@ -117,22 +117,29 @@ export class AppointmentMessageConsumer implements OutboxSubscriber, OnModuleIni
         manageUrl: this.support.manageUrlOf(row),
         joinUrl: row.meetUrl,
       };
-      return channels.map(({ channel, tpl }): BookingMessage & { firstWins: boolean } => ({
-        firstWins: unconfigured,
-        orgId: event.orgId,
-        appointmentId: row.uuid,
-        event: plan.template,
-        channel,
-        to: { name: row.inviteeName, phone: row.inviteePhone, email: row.inviteeEmail },
-        body: messageBody(plan.template, tpl?.plainBody, facts),
-        subject: `${facts.typeName}: ${SUBJECTS[plan.template]}`,
-        waTemplateId: tpl?.waTemplateUuid ?? null,
-        variableMap: tpl?.variableMap ?? null,
-        idempotencyKey: `${event.id}:${channel}`,
-        contactId: row.contactUuid,
-        variables: variablesFor(facts),
-        purpose: 'service',
-      }));
+      const vars = variablesFor(facts);
+      return channels.map(({ channel, tpl }): BookingMessage & { firstWins: boolean } => {
+        // A message chosen from the library (BL-351) is read now, so editing it changes what is sent; an inactive one is ignored.
+        const lib = tpl?.libraryTemplateId && tpl.libraryActive ? tpl : null;
+        return {
+          firstWins: unconfigured,
+          orgId: event.orgId,
+          appointmentId: row.uuid,
+          event: plan.template,
+          channel,
+          to: { name: row.inviteeName, phone: row.inviteePhone, email: row.inviteeEmail },
+          body: messageBody(plan.template, lib?.libraryBody ?? tpl?.plainBody, facts),
+          subject: lib?.librarySubject
+            ? renderTemplate(lib.librarySubject, vars)
+            : `${facts.typeName}: ${SUBJECTS[plan.template]}`,
+          waTemplateId: lib?.libraryWaUuid ?? tpl?.waTemplateUuid ?? null,
+          variableMap: tpl?.variableMap ?? null,
+          idempotencyKey: `${event.id}:${channel}`,
+          contactId: row.contactUuid,
+          variables: vars,
+          purpose: 'service',
+        };
+      });
     });
 
     let delivered = false;

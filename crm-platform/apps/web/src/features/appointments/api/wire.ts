@@ -180,6 +180,7 @@ export function toBookingType(r: BookingTypeResponse): BookingType {
       event: t.event,
       channel: t.channel,
       waTemplateId: t.waTemplateId,
+      libraryTemplateId: t.libraryTemplateId,
       plainBody: t.plainBody,
     })),
     // Every rule, switched on or off: the editor shows both.
@@ -278,6 +279,7 @@ export function toTypeBody(i: BookingTypeInput, rowVersion?: number): CreateBody
         (t.channel as 'whatsapp' | 'email' | 'telegram' | 'instagram' | 'facebook' | undefined) ??
         'whatsapp',
       waTemplateId: t.waTemplateId,
+      ...(t.libraryTemplateId ? { libraryTemplateId: t.libraryTemplateId } : {}),
       plainBody: t.plainBody,
     })),
     payment: {

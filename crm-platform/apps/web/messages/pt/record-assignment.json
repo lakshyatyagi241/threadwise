@@ -3,7 +3,7 @@
     "back": "Automação",
     "title": "Regras de atribuição de registros",
     "intro": "Atribua automaticamente novos {contacts}, empresas e {deals} ao responsável de vendas certo.",
-    "crossNote": "Isto atribui {contacts}, empresas e {deals}. Para atribuir conversas a atendentes, veja <link>Atribuição automática</link>.",
+    "crossNote": "Isto atribui {contacts}, empresas e {deals}. Para atribuir conversas a atendentes, veja <link>Atribuição automática de conversas</link>.",
     "master": {
       "title": "Ativar a atribuição de registros",
       "hint": "Desativada até você ativá-la. Quando ativada, as regras abaixo atribuem a alguém da sua equipe cada novo {contact}, empresa ou {deal} que não tenha responsável.",
@@ -296,6 +296,7 @@
       "message": "A regra {name} deixará de atribuir. Os registros que ela já atribuiu mantêm o responsável.",
       "confirm": "Excluir",
       "cancel": "Cancelar"
-    }
+    },
+    "dismiss": "Dispensar"
   }
 }

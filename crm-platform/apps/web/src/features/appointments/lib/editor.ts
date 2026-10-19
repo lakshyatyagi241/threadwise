@@ -97,6 +97,7 @@ const PROBLEM_TABLE: Record<FormProblem, true> = {
   overridesInvalid: true,
   descriptionTooLong: true,
   locationTooLong: true,
+  templateNoChannel: true,
 };
 
 /** Every problem code `validateDraft` can produce (so a message exists for each one). */

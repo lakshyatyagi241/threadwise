@@ -24,7 +24,9 @@ import { AppearanceLinkCard } from './appearance-link-card';
 import { CalendarCard } from './settings-calendar';
 import { CalendarsSection } from './settings-calendars';
 import { DefaultsCard, TemplatesCard, TimeZoneCard, type FormCtx } from './settings-fields';
+import { ChannelsSection } from './settings-channels';
 import { ReminderRulesSection } from './settings-reminders';
+import { MessageLibrarySection } from './settings-templates';
 import { SettingsCard, SettingsHeader } from './settings-parts';
 import { useLeaveGuard } from './use-leave-guard';
 import { WeeklyHoursEditor } from './weekly-hours-editor';
@@ -63,6 +65,8 @@ export function SettingsScreen() {
               <CalendarCard />
               <CalendarsSection />
               <AppearanceLinkCard />
+              <ChannelsSection />
+              <MessageLibrarySection />
             </>
           ) : (
             <ErrorLine error={query.error} onRetry={() => void query.refetch()} />
@@ -270,6 +274,8 @@ function SettingsEditor({
       </SettingsCard>
       <DefaultsCard {...ctx} />
       <AppearanceLinkCard />
+      <ChannelsSection />
+      <MessageLibrarySection />
       <ReminderRulesSection />
       <TemplatesCard {...ctx} />
 

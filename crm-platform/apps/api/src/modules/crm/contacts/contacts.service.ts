@@ -42,7 +42,12 @@ import { stageEntryValues } from './contact-stage';
 import { planStatus } from './contact-status-stage';
 import { assertFormFieldLimits } from './form-field-limits';
 import { applyPropertyPlan, planPropertyChanges } from './contact-property-values';
-import { missingRequired, requiredPropertiesError } from './required-properties';
+import {
+  missingRequired,
+  requiredPropertiesError,
+  requiredScopeOfEdit,
+  type RequiredRule,
+} from './required-properties';
 import {
   ConsentIntakeService,
   ContactConsentService,
@@ -1386,9 +1391,14 @@ export class ContactsService {
         // the other forty the org has defined.
         await this.assertPropertiesWritable(tx, ctx.orgId, input.customFields, existing.data ?? {});
         values.data = { ...(existing.data ?? {}), ...input.customFields };
-        // A save that edits properties answers for all of them; a stage or owner change alone does not (a contact that
-        // predates a newly required property stays editable).
-        await this.assertRequiredProperties(tx, ctx.orgId, values.data as Record<string, unknown>);
+        // A save answers for the properties it names and for the ones it makes required, not for every required property of the
+        // workspace: an inline edit of one property (the job title) must not fail because the contact never had a value for some
+        // other required property, e.g. one added after the contact was created. The contact form sends all its properties, so it
+        // still answers for all of them. A stage or owner change alone is not held to any (see requiredScopeOfEdit).
+        const data = values.data as Record<string, unknown>;
+        await this.assertRequiredProperties(tx, ctx.orgId, data, (rules) =>
+          requiredScopeOfEdit(rules, existing.data ?? {}, data, Object.keys(input.customFields!)),
+        );
       }
       if (input.ownerId !== undefined) {
         const nextOwner = input.ownerId
@@ -1626,9 +1636,14 @@ export class ContactsService {
     tx: Tx,
     orgId: number,
     data: Record<string, unknown>,
-    only?: ReadonlySet<string>,
+    scope?: ReadonlySet<string> | ((rules: readonly RequiredRule[]) => ReadonlySet<string>),
   ): Promise<void> {
-    const missing = missingRequired(await this.repo.requiredRules(tx, orgId), data, only);
+    const rules = await this.repo.requiredRules(tx, orgId);
+    const missing = missingRequired(
+      rules,
+      data,
+      typeof scope === 'function' ? scope(rules) : scope,
+    );
     if (missing.length > 0) throw requiredPropertiesError(missing);
   }
 

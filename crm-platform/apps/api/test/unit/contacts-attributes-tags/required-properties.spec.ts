@@ -5,6 +5,7 @@ import {
   isBlank,
   missingRequired,
   requiredPropertiesError,
+  requiredScopeOfEdit,
   ruleApplies,
   type RequiredRule,
 } from '../../../src/modules/crm/contacts/required-properties';
@@ -84,5 +85,53 @@ describe('requiredPropertiesError', () => {
       { path: 'customFields.city', message: 'required' },
     ]);
     expect(err.message).toContain('BUDGET');
+  });
+});
+
+describe('requiredScopeOfEdit', () => {
+  const budget = rule('budget');
+  const visa = rule('visa_type', [{ parentKey: 'needs_visa', wanted: 'yes' }]);
+  const rules = [budget, visa];
+
+  it('an inline edit answers only for the keys it names', () => {
+    const before = {};
+    const after = { job_title: 'CEO' };
+    const scope = requiredScopeOfEdit(rules, before, after, ['job_title']);
+    expect([...scope]).toEqual(['job_title']);
+    expect(missingRequired(rules, after, scope)).toEqual([]);
+  });
+
+  it('a key it names is held to the rule, blank or not', () => {
+    const scope = requiredScopeOfEdit(rules, { budget: 5 }, { budget: null }, ['budget']);
+    expect(missingRequired(rules, { budget: null }, scope).map((r) => r.key)).toEqual(['budget']);
+  });
+
+  it('a dependent the edit makes required is answered for; one that already applied is not', () => {
+    const turnsOn = requiredScopeOfEdit(rules, {}, { needs_visa: 'yes' }, ['needs_visa']);
+    expect(turnsOn.has('visa_type')).toBe(true);
+    expect(missingRequired(rules, { needs_visa: 'yes' }, turnsOn).map((r) => r.key)).toEqual([
+      'visa_type',
+    ]);
+    const already = requiredScopeOfEdit(
+      rules,
+      { needs_visa: 'yes' },
+      { needs_visa: 'yes', job_title: 'x' },
+      ['job_title'],
+    );
+    expect(already.has('visa_type')).toBe(false);
+    const turnsOff = requiredScopeOfEdit(rules, { needs_visa: 'yes' }, { needs_visa: 'no' }, [
+      'needs_visa',
+    ]);
+    expect(turnsOff.has('visa_type')).toBe(false);
+  });
+
+  it('a form save that sends every property answers for all of them', () => {
+    const scope = requiredScopeOfEdit(rules, {}, { budget: null, needs_visa: 'no' }, [
+      'budget',
+      'needs_visa',
+    ]);
+    expect(
+      missingRequired(rules, { budget: null, needs_visa: 'no' }, scope).map((r) => r.key),
+    ).toEqual(['budget']);
   });
 });

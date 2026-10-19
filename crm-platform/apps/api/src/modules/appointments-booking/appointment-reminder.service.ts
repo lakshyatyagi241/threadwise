@@ -128,9 +128,12 @@ export class AppointmentReminderService {
         row?.bookingTypeId == null
           ? null
           : (await this.types.children(tx, orgId, [row.bookingTypeId])).get(row.bookingTypeId);
+      // The type's own reminder text: a library message it chose (read now), else the text it typed.
       const typeReminderBody =
-        (children?.templates ?? []).find((t) => t.event === 'reminder' && t.plainBody?.trim())
-          ?.plainBody ?? null;
+        (children?.templates ?? [])
+          .filter((t) => t.event === 'reminder')
+          .map((t) => (t.libraryActive && t.libraryBody?.trim() ? t.libraryBody : t.plainBody))
+          .find((b) => b?.trim()) ?? null;
       return { run, row, rule, typeReminderBody };
     });
     if (!loaded) return;

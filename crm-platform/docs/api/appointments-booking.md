@@ -741,3 +741,56 @@ as actor `bot`, source `chat`). Subscribe to `appointment.booked` for the `appoi
 appointments with an event in the next 60 days, each read about once an hour) compares the Google event with what we last wrote and records `drifted` with one of `event_deleted`, `event_missing`, `time_changed`, `attendees_changed`. It never
 changes the appointment; the first detection writes an audit row and the outbox event `appointment.calendar_drifted` (one in-app notification, type `appointment_calendar_drift`, to the host or the person who booked). Our own writes and a guest
 answering are not drift. Plan section 8: [google-workspace-build.md](../threadwise-port/plan/google-workspace-build.md).
+
+## Appointment channels and the message library (BL-350..BL-354)
+
+The workspace owner decides which channels may carry appointment messages, and keeps a library of messages (predefined or their own) that booking
+types choose from. All routes are under `/v2`, behind the plan's `appointment_booking` gate. Reading needs `record.booking-types.read`.
+
+**Channels** (`appointment_channel_settings`, one row per workspace and channel):
+
+| Route | Key | What |
+| ----- | --- | ---- |
+| `GET /appointment-channels` | `record.booking-types.read` | `email`, `whatsapp`, `sms` and the reserved `voice`: `enabled`, `decided`, `source` (`owner` / `legacy_default` / null), `connection` (`connected` / `not_connected` / `coming_soon`), `usable` (enabled and connected), the connected `senders` and the chosen `defaultSenderId` |
+| `PUT /appointment-channels/:channel` | `appointments.channels.manage` | `{ enabled, defaultSenderId? }`; a default must be a connected sender of that channel (`422 APPT_CHANNEL_SENDER_INVALID`); `null` = the first connected one. `voice` answers `422 APPT_CHANNEL_COMING_SOON` (the database also refuses `enabled` for it). Audited (`appointment_channel_settings`). |
+
+Defaults: a workspace that existed when `20270120090000_appt_channels_templates.sql` ran has email, WhatsApp and SMS on with `source = legacy_default`
+(what is not connected stays unusable), so nothing silently stops. A workspace created later has no rows: nothing is on until the owner chooses.
+
+**Enforcement.** A booking type may name only enabled channels: a lifecycle message row or an ACTIVE reminder rule that adds a channel that is off is
+`422 APPT_CHANNEL_NOT_ENABLED` (a channel the type already had is not asked again, so a type keeps saving after the owner switches one off). At send
+time the shared sender (`ChannelAppointmentMessenger`) asks again, before anything else: a channel that is off is skipped with the reason
+`channel_disabled` and the rule falls to its next channel. Quiet hours, the ConsentGate and the WhatsApp template rule are unchanged. The default
+sender is preferred when it is still connected (SMS number, shared mailbox, Cloud API number), else the first connected one.
+
+**Library** (`appointment_message_templates`: kind `confirmation | reminder | reschedule | cancellation | follow_up`, channel `email | whatsapp`,
+language, name, subject, body with `{{placeholders}}`, variables, link to the WhatsApp template, `predefined_key`, `is_active`):
+
+| Route | Key | What |
+| ----- | --- | ---- |
+| `GET /appointment-message-templates/predefined` | read | The built-in set (10 messages, English), which ones are adopted, the placeholders and the ones WhatsApp can fill |
+| `GET /appointment-message-templates?kind&channel&usable` | read | The library. `status` is `draft`, `pending`, `approved` or `rejected` (+ `rejectionReason`); `usable` = active and, for WhatsApp, approved; `usedByTypes` |
+| `POST /appointment-message-templates/adopt` | `appointments.templates.manage` | `{ key, channel, language?, connectionId?, submit? }`. Email: lands at once. WhatsApp: needs `tpl.templates.create` (and `tpl.templates.sync` with `submit`) and a connected Cloud API number (`409 TPL_NO_CONNECTION`); creates a normal WhatsApp template (positional `{{1}}`..., examples, category UTILITY, MARKETING for the follow-up) through `TemplatesService` and links it. Adopting twice is `409`. |
+| `POST /appointment-message-templates` | manage | The owner's own email message |
+| `PATCH /appointment-message-templates/:id` | manage | Email: name, subject, text, `isActive`. WhatsApp: the text of a DRAFT or REJECTED message (`409 APPT_TEMPLATE_INVALID` otherwise), `submit` to send it to Meta again. `rowVersion` required. A WhatsApp text may use only `name, type, date, time, location, join_link, manage_link`, in that order without skipping one (`422 APPT_TEMPLATE_INVALID`): the sender fills numbered variables in that order. |
+| `POST /appointment-message-templates/:id/submit` , `/refresh` | manage | Send to Meta / read the status again (the existing template machinery and sync) |
+| `DELETE /appointment-message-templates/:id` | manage | Refused while a booking type chooses it (`409 APPT_TEMPLATE_IN_USE`); the WhatsApp template stays in the template library |
+
+The status of a WhatsApp message is **read from the linked `wa_templates` row on every request**, never copied, so the library cannot say "approved"
+after Meta paused or disabled the template (paused, disabled, deleted and rejected all read as `rejected` with a reason).
+
+**Booking types choose.** A `templates[]` row (`event`, `channel`) accepts `libraryTemplateId`. It must exist, be active and of the same kind and
+channel; a WhatsApp one must be approved (`422 APPT_TEMPLATE_NOT_APPROVED`; a choice the type already had is not asked again, and the sender skips an
+unapproved template anyway). The message is read when it is sent: an email uses the library subject and text, a WhatsApp one uses the approved
+template (free text from the library body inside the 24 hour window). A reminder rule's text and subject are copied from an email library message in
+the editor (a snapshot, editable); its WhatsApp template stays the rule's own `waTemplateId`.
+
+**Voice (reserved, not built).** The channel id `voice` is allowed by the database in `appointment_channel_settings` (never enabled),
+`appointment_message_templates` (body = the call script), `booking_templates.channel`, `booking_reminders.channels` and
+`appointment_reminder_runs.channel`, so the outbound reminder call arrives with the Voice bot without a migration of these tables. The API contract
+does not accept it on a reminder rule yet (a rule with `voice` is a validation error); the channel settings row has a `config` jsonb reserved for its
+call window and attempts. There is no bot, no call and no adapter.
+
+New error codes: `APPT_CHANNEL_NOT_ENABLED`, `APPT_CHANNEL_COMING_SOON`, `APPT_CHANNEL_SENDER_INVALID`, `APPT_TEMPLATE_NOT_APPROVED`,
+`APPT_TEMPLATE_IN_USE`, `APPT_TEMPLATE_INVALID`. New permission keys: `appointments.channels.manage`, `appointments.templates.manage` (Owner and
+Admin presets).

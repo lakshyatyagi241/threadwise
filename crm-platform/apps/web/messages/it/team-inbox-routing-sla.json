@@ -18,7 +18,7 @@
     },
     "page": {
       "back": "Automazione e AI",
-      "title": "Assegnazione automatica",
+      "title": "Assegnazione automatica delle conversazioni",
       "subtitle": "Assegna automaticamente ogni nuova conversazione all’agente giusto. Le regole vengono applicate in ordine, dall’alto.",
       "noAccess": "Non hai l’autorizzazione per visualizzare le impostazioni di assegnazione automatica.",
       "create": "Crea regola",
@@ -100,7 +100,7 @@
       "autoReplySummary": "Invia la risposta: {body}"
     },
     "form": {
-      "back": "Assegnazione automatica",
+      "back": "Assegnazione automatica delle conversazioni",
       "noAccess": "Non hai l’autorizzazione per modificare le regole di assegnazione automatica.",
       "loading": "Caricamento della regola in corso",
       "notFound": "Questa regola non esiste più.",
@@ -312,7 +312,7 @@
       }
     },
     "businessHours": {
-      "eyebrow": "Assegnazione automatica",
+      "eyebrow": "Assegnazione automatica delle conversazioni",
       "title": "Orario di lavoro",
       "subtitle": "Le regole e gli obiettivi SLA che usano l'orario di lavoro contano il tempo solo entro questi orari.",
       "close": "Chiudi",
