@@ -1,3 +1,4 @@
+import { tokenColumns, tokenOf } from '../../common/crypto/secret-columns';
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { randomBytes } from 'node:crypto';
@@ -89,7 +90,11 @@ export class ShopifyService {
       ordersSyncedAt: iso(row.ordersSyncedAt),
       customersSyncedAt: iso(row.customersSyncedAt),
       syncStats: row.syncStats,
-      webhookUrl: webhookUrl(this.appUrl(), 'shopify', row.webhookSecret),
+      webhookUrl: webhookUrl(
+        this.appUrl(),
+        'shopify',
+        tokenOf(this.crypto, { enc: row.webhookSecretEnc, plain: row.webhookSecret }),
+      ),
       webhookIds: webhookIdsOf(row.metadata),
       createdAt: row.createdAt.toISOString(),
       rowVersion: row.rowVersion,
@@ -223,7 +228,7 @@ export class ShopifyService {
               shopCountry: d?.country ?? null,
               accessToken: this.crypto.encrypt(ex.data.accessToken),
               scopes: ex.data.scope,
-              webhookSecret: secret,
+              webhookSecret: tokenColumns(this.crypto, secret),
             });
             await this.audit.record(tx, {
               module: SHOPIFY_MODULE_KEY,

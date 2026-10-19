@@ -43,7 +43,12 @@ export const shopifyIntegrations = pgTable(
     accessToken: text('access_token').notNull(),
     scopes: text('scopes'),
     status: text('status').notNull().default('active'),
-    webhookSecret: text('webhook_secret').notNull(),
+    /** Legacy plaintext; NULL once the audit backfill has run (encryption audit E2). Look up by `webhookSecretHash`. */
+    webhookSecret: text('webhook_secret'),
+    /** sha256 (hex) of the webhook secret: what ecom_store_lookup() matches. */
+    webhookSecretHash: text('webhook_secret_hash'),
+    /** The webhook secret sealed with CryptoService: the URL shown to the owner and (WooCommerce) the plugin's HMAC key. */
+    webhookSecretEnc: text('webhook_secret_enc'),
     metadata: jsonb('metadata'),
     lastVerifiedAt: timestamp('last_verified_at', { withTimezone: true }),
     connectedAt: timestamp('connected_at', { withTimezone: true }),
@@ -74,6 +79,9 @@ export const shopifyIntegrations = pgTable(
     uniqueIndex('uq_shopify_integrations_webhook_secret')
       .on(t.webhookSecret)
       .where(sql`length(${t.webhookSecret}) >= 16`),
+    uniqueIndex('uq_shopify_integrations_webhook_secret_hash')
+      .on(t.webhookSecretHash)
+      .where(sql`${t.webhookSecretHash} IS NOT NULL`),
   ],
 );
 
@@ -218,7 +226,12 @@ export const woocommerceIntegrations = pgTable(
     /** AES-GCM ciphertext (credential pattern); never plain text. */
     consumerSecret: text('consumer_secret').notNull(),
     status: text('status').notNull().default('active'),
-    webhookSecret: text('webhook_secret').notNull(),
+    /** Legacy plaintext; NULL once the audit backfill has run (encryption audit E2). Look up by `webhookSecretHash`. */
+    webhookSecret: text('webhook_secret'),
+    /** sha256 (hex) of the webhook secret: what ecom_store_lookup() matches. */
+    webhookSecretHash: text('webhook_secret_hash'),
+    /** The webhook secret sealed with CryptoService: the URL shown to the owner and (WooCommerce) the plugin's HMAC key. */
+    webhookSecretEnc: text('webhook_secret_enc'),
     metadata: jsonb('metadata'),
     lastVerifiedAt: timestamp('last_verified_at', { withTimezone: true }),
     connectedAt: timestamp('connected_at', { withTimezone: true }),
@@ -249,6 +262,9 @@ export const woocommerceIntegrations = pgTable(
     uniqueIndex('uq_woocommerce_integrations_webhook_secret')
       .on(t.webhookSecret)
       .where(sql`length(${t.webhookSecret}) >= 16`),
+    uniqueIndex('uq_woocommerce_integrations_webhook_secret_hash')
+      .on(t.webhookSecretHash)
+      .where(sql`${t.webhookSecretHash} IS NOT NULL`),
   ],
 );
 

@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sheet3 #35 - Encryption audit close-out report</title>
+<style>
+  :root {
+    --bg:#ffffff; --fg:#1b1f24; --muted:#586270; --line:#d5dbe1; --card:#f5f7f9; --accent:#0b5cad;
+    --ok:#0a7a3d; --warn:#8a5a00; --bad:#b4231c; --info:#0b5cad;
+    --ok-bg:#e6f4ec; --warn-bg:#fdf1d8; --bad-bg:#fbe7e5; --info-bg:#e5effa;
+    --fig-bg:#fcfcfb; --fig-ink:#1b1f24; --fig-muted:#586270; --fig-grid:#d9dde1;
+    --c-blue:#0072B2; --c-amber:#E69F00; --c-verm:#D55E00; --c-green:#009E73; --c-grey:#8a929b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#0f1318; --fg:#e6ebf0; --muted:#98a3b0; --line:#2f3741; --card:#171d24; --accent:#6db3ff;
+      --ok:#4cc38a; --warn:#e0b04a; --bad:#ff8a80; --info:#6db3ff;
+      --ok-bg:#12281d; --warn-bg:#2d2410; --bad-bg:#32181a; --info-bg:#13233a;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:1040px; margin:0 auto; padding:24px 16px 80px; }
+  h1 { font-size:30px; line-height:1.2; margin:8px 0 6px; }
+  h2 { font-size:22px; margin:44px 0 10px; padding-bottom:6px; border-bottom:2px solid var(--line); }
+  h3 { font-size:17px; margin:26px 0 8px; }
+  p, li { max-width:78ch; }
+  .muted { color:var(--muted); }
+  code { background:var(--card); border:1px solid var(--line); padding:0 5px; border-radius:4px; font-size:13px; word-break:break-word; }
+  a { color:var(--accent); }
+  nav.toc { display:flex; flex-wrap:wrap; gap:6px 14px; font-size:14px; margin:14px 0 0; padding:10px 12px; background:var(--card); border:1px solid var(--line); border-radius:8px; }
+  .meta { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:8px 18px; margin:14px 0; font-size:14px; }
+  .meta div b { display:block; color:var(--muted); font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+  .quote { border-left:4px solid var(--accent); background:var(--card); padding:10px 14px; margin:12px 0; border-radius:0 8px 8px 0; }
+  .chip { display:inline-block; padding:1px 9px; border-radius:99px; font-size:12px; font-weight:700; border:1.5px solid currentColor; white-space:nowrap; vertical-align:middle; }
+  .chip.ok { color:var(--ok); background:var(--ok-bg); } .chip.warn { color:var(--warn); background:var(--warn-bg); }
+  .chip.bad { color:var(--bad); background:var(--bad-bg); } .chip.info { color:var(--info); background:var(--info-bg); }
+  .chip.sev-medium::before { content:"\25B2 "; } .chip.sev-low::before { content:"\25CF "; } .chip.sev-info::before { content:"\25C6 "; }
+  .tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; margin:16px 0; }
+  .tile { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
+  .tile b { display:block; font-size:34px; line-height:1.1; }
+  .tile span { font-size:14px; color:var(--muted); }
+  .verdict { border:2px solid var(--warn); background:var(--warn-bg); border-radius:10px; padding:12px 16px; margin:14px 0; }
+  .box { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin:14px 0; }
+  .callout-bad { border-color:var(--bad); background:var(--bad-bg); }
+  table { border-collapse:collapse; width:100%; font-size:14px; margin:10px 0; display:block; overflow-x:auto; }
+  th, td { border:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top; }
+  th { background:var(--card); }
+  tr, figure, .card, .tile, .step { break-inside:avoid; page-break-inside:avoid; }
+  figure { margin:16px 0; padding:12px; border:1px solid var(--line); border-radius:10px; background:var(--fig-bg); color:var(--fig-ink); }
+  figure svg { width:100%; height:auto; display:block; }
+  figcaption { font-size:14px; color:var(--fig-muted); margin-top:8px; }
+  figcaption b { color:var(--fig-ink); }
+  figure details { font-size:13px; color:var(--fig-muted); margin-top:6px; }
+  figure table { background:#fff; color:#1b1f24; }
+  figure th { background:#eef1f4; } figure td, figure th { border-color:#d9dde1; }
+  .card { border:1px solid var(--line); border-left-width:6px; border-radius:10px; padding:12px 16px; margin:14px 0; background:var(--bg); }
+  .card.sev-medium { border-left-color:var(--c-verm); } .card.sev-low { border-left-color:var(--c-blue); } .card.sev-info { border-left-color:var(--c-grey); }
+  .card h3 { margin:0 0 6px; }
+  .card dl { display:grid; grid-template-columns:150px 1fr; gap:6px 14px; margin:8px 0 0; font-size:15px; }
+  .card dt { font-weight:700; color:var(--muted); } .card dd { margin:0; }
+  @media (max-width:640px) { .card dl { grid-template-columns:1fr; } .card dt { margin-top:6px; } h1 { font-size:25px; } }
+  details.group { border:1px solid var(--line); border-radius:8px; margin:8px 0; padding:6px 12px; background:var(--card); }
+  details.group summary { cursor:pointer; font-weight:600; }
+  details.group ul { columns:1; font-size:13px; }
+  .glossary dt { font-weight:700; margin-top:8px; } .glossary dd { margin:0 0 0 0; color:var(--muted); }
+  .legend { display:flex; flex-wrap:wrap; gap:6px 16px; font-size:13px; margin-top:6px; }
+  .legend i { display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:5px; vertical-align:-1px; }
+  @media print {
+    :root { --bg:#fff; --fg:#000; --card:#f3f3f3; --line:#bbb; }
+    body { font-size:11pt; } main { max-width:none; padding:0; }
+    nav.toc { display:none; } h2 { break-after:avoid; } a { color:#000; text-decoration:none; }
+    details.group { display:block; } details.group[open] > summary { display:block; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+<!-- 1. HEADER -->
+<header>
+<p class="muted" style="margin:0">Sheet3 &middot; item 35 &middot; priority P1</p>
+<h1>Sheet3 #35 - Encryption audit close-out report</h1>
+<p><span class="chip warn">In process</span> <span class="muted">Zero Critical/High is met. Five fixes are in the code but the old plaintext is still in the database until the rollout in section 7 is finished.</span></p>
+<div class="meta">
+  <div><b>Owner</b>Vedant</div>
+  <div><b>Date</b>2026-10-19</div>
+  <div><b>Branch</b><code>vedant/security/encryption-closeout</code></div>
+  <div><b>Based on</b>main <code>eedae60d7</code></div>
+  <div><b>Code commit</b><code>b50be854d</code> (this redesign is the commit on top)</div>
+  <div><b>Pull request</b>none yet (nothing is pushed)</div>
+</div>
+<p class="muted">This report continues <code>docs/quality/security-testing-batch-1.md</code> (findings E1 to E6).</p>
+<div class="quote"><b>Target in the sheet:</b> automated on PR / daily / pre-release as applicable; zero Critical/High release blockers</div>
+<nav class="toc" aria-label="Contents">
+  <a href="#s2">2 In 60 seconds</a><a href="#s3">3 What this is</a><a href="#s4">4 How we tested</a><a href="#s5">5 Results at a glance</a><a href="#s6">6 Findings</a><a href="#s7">7 Rollout and rollback</a><a href="#s8">8 What this does NOT prove</a><a href="#s9">9 Next steps</a><a href="#s10">10 Appendix</a>
+</nav>
+</header>
+
+<!-- 2. IN 60 SECONDS -->
+<h2 id="s2">In 60 seconds</h2>
+<div class="tiles">
+  <div class="tile"><b>9</b><span>findings (E1 to E9): 0 Critical, 0 High, 2 Medium, 5 Low, 2 Info</span></div>
+  <div class="tile"><b>5 of 9</b><span>4 fixed in code, awaiting rollout (E2, E3, E7, E8); E4 partly fixed. 3 closed (E1, E6, E9). 0 findings fully open</span></div>
+  <div class="tile"><b>49</b><span>tests added (39 unit, 10 integration), all passing, 3 of 3 clean runs</span></div>
+  <div class="tile"><b>14</b><span>checks run in round 2: 10 pass, 4 pass with caveats (section 10)</span></div>
+  <div class="tile"><b>75</b><span>secret-looking database columns on the allowlist, 0 unexplained</span></div>
+</div>
+<div class="verdict"><b>Verdict against the sheet target: Partly met.</b>
+<ul>
+<li><b>Zero Critical/High release blockers: met.</b> Nothing found is above Medium. The two Medium findings are E2 (fixed in code, not closed at rest) and E9 (fixed).</li>
+<li><b>Automated on PR / daily / pre-release: met locally, not in CI.</b> The new checks run in every <code>pnpm test</code> and in <code>bash tools/quality/security-specs.sh</code>. The repo's <code>security.yml</code> only runs by hand, so there is no scheduled daily run.</li>
+<li><b>Not finished:</b> the old plaintext stays in the database until the contract step of the rollout (section 7) is done in each environment. Two columns have no code that writes them, so they could not be fixed.</li>
+</ul></div>
+<div class="box"><b>Decisions needed from you</b>
+<ol>
+<li><b>Confirm</b> that three tokens are not secrets (<code>receipt_token</code>, <code>flow_token</code>, <code>wa_link_clicks.token</code>). This is my reading of the code, not an owner decision.</li>
+<li><b>Schedule the rollout</b> (steps 2 to 4 in section 7) in each environment and name who runs it.</li>
+<li><b>Review by zone owners:</b> Punya (ecommerce, storefront) and Lakshya (payments, infrastructure) must review the changes in their files.</li>
+<li><b>E4:</b> accept binding one column for now, or ask for the remaining call sites (about 125) to be bound in stages.</li>
+<li><b>TLS:</b> tell us where Postgres and Redis run in production. If either moves to a managed service, set <code>sslmode=verify-full</code> and <code>rediss://</code> in the env; no code change is needed.</li>
+<li><b>CI:</b> decide whether <code>security-specs.sh</code> gets a scheduled or pull-request trigger.</li>
+</ol></div>
+
+<!-- 3. WHAT IS THIS -->
+<h2 id="s3">What is this, in plain words</h2>
+<p>The product stores secrets for its customers: access tokens for WhatsApp and Telegram, passwords for payment gateways, webhook keys for online stores. If someone could read the database (a stolen backup, a leaked copy, a curious insider), every plain-text secret would be theirs to use.</p>
+<p><b>Analogy.</b> Think of the database as a filing cabinet. A secret stored in <i>plaintext</i> is a house key taped to the front of the drawer. A <i>sealed</i> secret is locked in a small safe; the key to the safe is kept somewhere else (the application). A <i>hash</i> is a fingerprint of the key: enough to recognise it when someone presents it, but useless for opening the door.</p>
+<p>This audit asked four questions: (1) is every secret in the database sealed, hashed, or clearly not a secret? (2) do secrets leak into logs, audit rows or API answers? (3) are the connections to Postgres and Redis encrypted when they need to be? (4) can a new plaintext secret be added by accident? The last one is answered by an automatic check called the <i>ratchet</i>.</p>
+<div class="box glossary"><b>Glossary</b>
+<dl>
+<dt>Plaintext</dt><dd>A value stored as it is, readable by anyone who can read the database.</dd>
+<dt>Sealed (encrypted)</dt><dd>Scrambled with AES-256-GCM through the app's <code>CryptoService</code>. Only the app, which holds the key, can read it back.</dd>
+<dt>Hash</dt><dd>A one-way fingerprint (SHA-256). The app can check a value against it but cannot get the value back. Used to find a record by its token.</dd>
+<dt>Bearer link / token</dt><dd>A web address whose secret part is the only thing needed to use it (for example an invoice link). Whoever holds it has access.</dd>
+<dt>Webhook</dt><dd>An address another service calls to tell us something happened (for example a store reporting a new order).</dd>
+<dt>Ratchet</dt><dd>A test that only lets things get better: if someone adds a new secret-looking column without a reason on the list, the test fails.</dd>
+<dt>Allowlist</dt><dd>The commented list of columns the ratchet accepts, each with a reason (sealed, hash, public, or an open finding).</dd>
+<dt>Associated data (AAD)</dt><dd>Extra text mixed into the sealing so a sealed value only opens in the place it belongs. A value copied to another row no longer opens.</dd>
+<dt>TLS</dt><dd>Encryption of the network connection between the app and Postgres or Redis.</dd>
+<dt>Blue-green deploy</dt><dd>Two copies of the app run side by side during a release, the old and the new, so the old must keep working against the new database.</dd>
+<dt>Expand / contract</dt><dd>Release in two stages: first add new columns and keep the old ones working (expand), later remove the old ones (contract).</dd>
+<dt>Mirror</dt><dd>While the old release may still run, the new release also writes the old plaintext column. A switch turns this off.</dd>
+<dt>Backfill / scrub</dt><dd>Backfill: fill the new hash and sealed columns for rows that already exist. Scrub: set the old plaintext column to empty (NULL).</dd>
+<dt>Migration</dt><dd>A script that changes the database structure.</dd>
+<dt>Row-level security (RLS)</dt><dd>A database rule that stops one customer's workspace from reading another's rows.</dd>
+</dl></div>
+
+<!-- 4. HOW WE TESTED -->
+<h2 id="s4">How we tested</h2>
+<figure>
+<svg viewBox="0 0 980 330" role="img" aria-labelledby="t1 d1">
+<title id="t1">How the plaintext-secret scanner and ratchet work</title>
+<desc id="d1">The test reads the database schema source files, lists every column, keeps names that look secret, drops names that already say sealed or hash, and checks the rest against a commented allowlist. A column not on the list fails the test. A stale list entry also fails.</desc>
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#586270"/></marker></defs>
+<g font-family="system-ui,sans-serif" font-size="13" fill="#1b1f24">
+<rect x="10" y="20" width="170" height="80" rx="8" fill="#eaf2fb" stroke="#0072B2" stroke-width="2"/>
+<text x="95" y="48" text-anchor="middle" font-weight="700">1. Schema files</text><text x="95" y="66" text-anchor="middle">packages/db/src/</text><text x="95" y="82" text-anchor="middle">schema/** (source text)</text>
+<rect x="215" y="20" width="170" height="80" rx="8" fill="#eaf2fb" stroke="#0072B2" stroke-width="2"/>
+<text x="300" y="48" text-anchor="middle" font-weight="700">2. List columns</text><text x="300" y="66" text-anchor="middle">table.column for every</text><text x="300" y="82" text-anchor="middle">column (over 2,000)</text>
+<rect x="420" y="20" width="170" height="80" rx="8" fill="#eaf2fb" stroke="#0072B2" stroke-width="2"/>
+<text x="505" y="48" text-anchor="middle" font-weight="700">3. Looks like a secret?</text><text x="505" y="66" text-anchor="middle">token, secret, key,</text><text x="505" y="82" text-anchor="middle">password, auth ...</text>
+<rect x="625" y="20" width="170" height="80" rx="8" fill="#eaf2fb" stroke="#0072B2" stroke-width="2"/>
+<text x="710" y="48" text-anchor="middle" font-weight="700">4. Already says safe?</text><text x="710" y="66" text-anchor="middle">ends in _enc, _cipher,</text><text x="710" y="82" text-anchor="middle">_hash, _hint, _at ...</text>
+<rect x="800" y="150" width="170" height="90" rx="8" fill="#fdf1d8" stroke="#E69F00" stroke-width="2"/>
+<text x="885" y="178" text-anchor="middle" font-weight="700">5. Allowlist</text><text x="885" y="196" text-anchor="middle">75 columns, each with a</text><text x="885" y="212" text-anchor="middle">reason: sealed, hash,</text><text x="885" y="228" text-anchor="middle">public, or open finding</text>
+<rect x="420" y="150" width="200" height="90" rx="8" fill="#e6f4ec" stroke="#009E73" stroke-width="2"/>
+<text x="520" y="180" text-anchor="middle" font-weight="700">PASS</text><text x="520" y="198" text-anchor="middle">every remaining column</text><text x="520" y="214" text-anchor="middle">is on the allowlist</text>
+<rect x="150" y="150" width="230" height="90" rx="8" fill="#fbe7e5" stroke="#D55E00" stroke-width="2"/>
+<text x="265" y="178" text-anchor="middle" font-weight="700">FAIL (two ways)</text><text x="265" y="196" text-anchor="middle">a new secret-looking column</text><text x="265" y="212" text-anchor="middle">has no reason on the list, or</text><text x="265" y="228" text-anchor="middle">a list entry no longer exists</text>
+<line x1="180" y1="60" x2="213" y2="60" stroke="#586270" stroke-width="2" marker-end="url(#ar)"/>
+<line x1="385" y1="60" x2="418" y2="60" stroke="#586270" stroke-width="2" marker-end="url(#ar)"/>
+<line x1="590" y1="60" x2="623" y2="60" stroke="#586270" stroke-width="2" marker-end="url(#ar)"/>
+<path d="M710 100 L710 125 L885 125 L885 148" fill="none" stroke="#586270" stroke-width="2" marker-end="url(#ar)"/>
+<line x1="800" y1="195" x2="622" y2="195" stroke="#586270" stroke-width="2" marker-end="url(#ar)"/>
+<path d="M520 240 L520 262 L265 262 L265 242" fill="none" stroke="#586270" stroke-width="2" marker-end="url(#ar)" stroke-dasharray="5 4"/>
+<text x="540" y="282" font-size="12" fill="#586270">if the list and the columns disagree</text>
+<text x="722" y="119" font-size="12" fill="#586270">still looks secret</text>
+<text x="10" y="318" font-size="12" fill="#586270">Cross-check done once by hand: all 453 migrations applied to a throwaway database, then its real columns listed. They matched the schema files.</text>
+</g></svg>
+<figcaption><b>Schema files go in, a pass or fail comes out.</b> The test needs no database and runs in well under a second. It was proven to bite: a temporary column named <code>client_secret_new</code> made it fail, and removing the column made it pass.</figcaption>
+</figure>
+<ol>
+<li><b>Re-check old findings.</b> E1 to E6 from the first audit were checked again against current main (<code>eedae60d7</code>, after the Waboo migration, Google OAuth, Marketplace, integrations and the WhatsApp provider changes).</li>
+<li><b>Scan the schema.</b> Every Drizzle column in <code>packages/db/src/schema/**</code> whose name looks like a secret (token, secret, key, password, credential, private, access, refresh, auth, signature, hmac, otp, cert, bearer) was followed to the service that writes it. Each ended up as one of: sealed with <code>CryptoService</code>, a hash, a public identifier, or a named finding.</li>
+<li><b>Cross-check with a real database.</b> All 453 migrations were applied to a throwaway database on the shared Postgres server (<code>enc_audit_tmp_35</code>, dropped afterwards; no container was touched) and its secret-looking columns were listed from <code>information_schema</code>. The result matches the Drizzle schema, so the scan does not miss a table that only exists in SQL. Four old plaintext columns named in earlier migrations (<code>appointments.manage_token</code>, <code>invoices.public_token</code>, <code>sales_docs.public_token</code>, <code>google_form_sessions.webhook_token</code>) no longer exist.</li>
+<li><b>Sample the places a secret can leak:</b> request logs and error reports, audit rows, outbox payloads, API responses and contracts.</li>
+<li><b>Check TLS</b> configuration for the Postgres and Redis clients.</li>
+<li><b>Fix with a failing test first</b>, then prove each rollout step on throwaway databases (section 10).</li>
+</ol>
+
+<!-- 5. RESULTS AT A GLANCE -->
+<h2 id="s5">Results at a glance</h2>
+
+<figure>
+<svg viewBox="0 0 640 270" role="img" aria-labelledby="t2 d2">
+<title id="t2">Findings by severity: 0 Critical, 0 High, 2 Medium, 5 Low, 2 Info</title>
+<desc id="d2">Bar chart of the nine findings E1 to E9 by severity. Critical 0, High 0, Medium 2 (E2, E9), Low 5 (E1, E3, E4, E7, E8), Info 2 (E5, E6).</desc>
+<g font-family="system-ui,sans-serif" font-size="13" fill="#1b1f24">
+<line x1="120" y1="20" x2="120" y2="230" stroke="#586270"/>
+<g stroke="#d9dde1"><line x1="120" y1="230" x2="600" y2="230"/><line x1="240" y1="20" x2="240" y2="230"/><line x1="360" y1="20" x2="360" y2="230"/><line x1="480" y1="20" x2="480" y2="230"/><line x1="600" y1="20" x2="600" y2="230"/></g>
+<g fill="#586270" font-size="12" text-anchor="middle"><text x="120" y="248">0</text><text x="240" y="248">2</text><text x="360" y="248">4</text><text x="480" y="248">6</text><text x="600" y="248">8</text></g>
+<text x="110" y="45" text-anchor="end">Critical</text><text x="125" y="45" font-weight="700">0</text>
+<text x="110" y="85" text-anchor="end">High</text><text x="125" y="85" font-weight="700">0</text>
+<text x="110" y="125" text-anchor="end">Medium</text><rect x="120" y="105" width="120" height="30" rx="0" fill="#D55E00"/><path d="M135 126 l8 -14 l8 14 z" fill="#fff"/><text x="248" y="125" font-weight="700">2  (E2, E9)</text>
+<text x="110" y="165" text-anchor="end">Low</text><rect x="120" y="145" width="300" height="30" fill="#0072B2"/><circle cx="143" cy="160" r="6" fill="#fff"/><text x="428" y="165" font-weight="700">5  (E1, E3, E4, E7, E8)</text>
+<text x="110" y="205" text-anchor="end">Info</text><rect x="120" y="185" width="120" height="30" fill="#8a929b"/><path d="M143 193 l7 7 l-7 7 l-7 -7 z" fill="#fff"/><text x="248" y="205" font-weight="700">2  (E5, E6)</text>
+</g></svg>
+<figcaption><b>No Critical or High finding; the highest is Medium.</b> The shape inside each bar (triangle, circle, diamond) repeats the severity so colour is never the only cue. Total 9 findings.</figcaption>
+<details><summary>Data table</summary><table><tr><th scope="col">Severity</th><th scope="col">Count</th><th scope="col">Findings</th></tr><tr><td>Critical</td><td>0</td><td>-</td></tr><tr><td>High</td><td>0</td><td>-</td></tr><tr><td>Medium</td><td>2</td><td>E2, E9</td></tr><tr><td>Low</td><td>5</td><td>E1, E3, E4, E7, E8</td></tr><tr><td>Info</td><td>2</td><td>E5, E6</td></tr></table></details>
+</figure>
+
+<figure>
+<svg viewBox="0 0 700 190" role="img" aria-labelledby="t3 d3">
+<title id="t3">Status of the 9 findings: 3 closed, 1 verified, 4 fixed in code awaiting rollout, 1 partly fixed, 0 open</title>
+<desc id="d3">Stacked bar. Closed: E1, E6, E9 (3). Verified, nothing to fix: E5 (1). Fixed in code, not closed at rest until the rollout is finished: E2, E3, E7, E8 (4). Partly fixed: E4 (1). Open: none (0).</desc>
+<g font-family="system-ui,sans-serif" font-size="13" fill="#1b1f24">
+<rect x="20" y="40" width="200" height="46" fill="#009E73"/><text x="120" y="68" text-anchor="middle" fill="#fff" font-weight="700">3 closed</text>
+<rect x="222" y="40" width="68" height="46" fill="#8a929b"/><text x="256" y="68" text-anchor="middle" fill="#fff" font-weight="700">1</text>
+<rect x="292" y="40" width="268" height="46" fill="#0072B2"/><text x="426" y="68" text-anchor="middle" fill="#fff" font-weight="700">4 fixed in code, rollout pending</text>
+<rect x="562" y="40" width="68" height="46" fill="#E69F00"/><text x="596" y="68" text-anchor="middle" fill="#1b1f24" font-weight="700">1</text>
+<text x="640" y="68" font-weight="700">0 open</text>
+<text x="20" y="110">Closed: E1, E6, E9</text><text x="222" y="130">Verified, nothing to fix: E5</text><text x="292" y="150">Fixed in code: E2, E3, E7, E8</text><text x="562" y="110">Partly: E4</text>
+<text x="20" y="178" font-size="12" fill="#586270">Each segment is one share of the 9 findings. The 2 sub-items with no writer and the 3 tokens awaiting your confirmation are listed in section 6.</text>
+</g></svg>
+<figcaption><b>No finding is fully open, but only 3 of 9 are closed.</b> Four are fixed in code and become closed at rest when the rollout finishes. Open sub-items: <code>incoming_webhooks.token</code> and <code>crm_briefs.public_token</code> (no code writes them) and 3 tokens waiting for owner confirmation.</figcaption>
+<div class="legend"><span><i style="background:#009E73"></i>Closed</span><span><i style="background:#8a929b"></i>Verified, nothing to fix</span><span><i style="background:#0072B2"></i>Fixed in code, rollout pending</span><span><i style="background:#E69F00"></i>Partly fixed</span></div>
+</figure>
+
+<figure>
+<svg viewBox="0 0 700 380" role="img" aria-labelledby="t4 d4">
+<title id="t4">49 tests added, by area</title>
+<desc id="d4">Horizontal bars. Plaintext-secret ratchet 3, TLS and queue 5, log masking 7, backfill tool 4, token and secret helpers and writers 9, Web Push auth 4, bound ciphertext 7, integration channel tokens 4, integration bearer links 2, integration store secrets 4.</desc>
+<g font-family="system-ui,sans-serif" font-size="13" fill="#1b1f24">
+<g stroke="#d9dde1"><line x1="270" y1="10" x2="270" y2="340"/><line x1="380" y1="10" x2="380" y2="340"/><line x1="490" y1="10" x2="490" y2="340"/><line x1="600" y1="10" x2="600" y2="340"/></g>
+<g fill="#586270" font-size="12" text-anchor="middle"><text x="270" y="358">0</text><text x="380" y="358">5</text><text x="490" y="358">10</text><text x="600" y="358">15</text></g>
+<g text-anchor="end"><text x="262" y="30">Plaintext-secret ratchet</text><text x="262" y="64">TLS and queue connection</text><text x="262" y="98">Log masking (bearer links)</text><text x="262" y="132">Backfill tool</text><text x="262" y="166">Helpers and writers (E2, E3, E8)</text><text x="262" y="200">Web Push auth (E7)</text><text x="262" y="234">Bound ciphertext (E4)</text><text x="262" y="268">Integration: channel tokens</text><text x="262" y="302">Integration: bearer links</text><text x="262" y="336">Integration: store secrets</text></g>
+<rect x="270" y="14" width="66" height="22" fill="#0072B2"/><text x="344" y="31" font-weight="700">3</text>
+<rect x="270" y="48" width="110" height="22" fill="#0072B2"/><text x="388" y="65" font-weight="700">5</text>
+<rect x="270" y="82" width="154" height="22" fill="#0072B2"/><text x="432" y="99" font-weight="700">7</text>
+<rect x="270" y="116" width="88" height="22" fill="#0072B2"/><text x="366" y="133" font-weight="700">4</text>
+<rect x="270" y="150" width="198" height="22" fill="#0072B2"/><text x="476" y="167" font-weight="700">9</text>
+<rect x="270" y="184" width="88" height="22" fill="#0072B2"/><text x="366" y="201" font-weight="700">4</text>
+<rect x="270" y="218" width="154" height="22" fill="#0072B2"/><text x="432" y="235" font-weight="700">7</text>
+<rect x="270" y="252" width="88" height="22" fill="#009E73"/><text x="366" y="269" font-weight="700">4</text>
+<rect x="270" y="286" width="44" height="22" fill="#009E73"/><text x="322" y="303" font-weight="700">2</text>
+<rect x="270" y="320" width="88" height="22" fill="#009E73"/><text x="366" y="337" font-weight="700">4</text>
+</g></svg>
+<figcaption><b>49 new tests: 39 unit (blue) and 10 integration (green).</b> The integration tests run the real database functions on a throwaway Postgres.</figcaption>
+<details><summary>Data table</summary><table><tr><th scope="col">Area</th><th scope="col">Tests</th><th scope="col">Kind</th></tr><tr><td>Plaintext-secret ratchet</td><td>3</td><td>unit</td></tr><tr><td>TLS (<code>transport-tls.spec.ts</code> 4, <code>queue.module.spec.ts</code> 1)</td><td>5</td><td>unit</td></tr><tr><td>Log masking (<code>observability.spec.ts</code>)</td><td>7</td><td>unit</td></tr><tr><td>Backfill tool</td><td>4</td><td>unit</td></tr><tr><td>Helpers and writers (<code>secret-columns.spec.ts</code>)</td><td>9</td><td>unit</td></tr><tr><td>Web Push auth (<code>push-auth-sealed.spec.ts</code>)</td><td>4</td><td>unit</td></tr><tr><td>Bound ciphertext (<code>crypto-bound-blobs.spec.ts</code>)</td><td>7</td><td>unit</td></tr><tr><td>Channel tokens</td><td>4</td><td>integration</td></tr><tr><td>Bearer links</td><td>2</td><td>integration</td></tr><tr><td>Store secrets</td><td>4</td><td>integration</td></tr><tr><th scope="row">Total</th><td>49</td><td>39 unit + 10 integration</td></tr></table></details>
+</figure>
+
+<figure>
+<svg viewBox="0 0 640 150" role="img" aria-labelledby="t5 d5">
+<title id="t5">Flakiness: 3 of 3 runs green, 1289 of 1289 tests each time</title>
+<desc id="d5">Three runs of the 75 new and touched unit spec files. Each passed 1289 of 1289 tests.</desc>
+<g font-family="system-ui,sans-serif" font-size="13" fill="#1b1f24">
+<g fill="#009E73"><circle cx="80" cy="60" r="22"/><circle cx="200" cy="60" r="22"/><circle cx="320" cy="60" r="22"/></g>
+<g fill="#fff" font-weight="700" text-anchor="middle"><text x="80" y="65">3/3</text></g>
+<g stroke="#fff" stroke-width="3" fill="none"><path d="M70 60 l7 7 l13 -14" transform="translate(120 0)"/><path d="M70 60 l7 7 l13 -14" transform="translate(240 0)"/></g>
+<g text-anchor="middle"><text x="80" y="104">run 1</text><text x="200" y="104">run 2</text><text x="320" y="104">run 3</text></g>
+<text x="400" y="56" font-weight="700">1289 / 1289 tests</text><text x="400" y="76" fill="#586270">75 spec files, each run</text>
+</g></svg>
+<figcaption><b>No flaky test:</b> the same 1289 tests passed in all three runs.</figcaption>
+</figure>
+
+<!-- 6. FINDINGS -->
+<h2 id="s6">Findings</h2>
+<p class="muted">Sorted by severity, then status. "Fixed in code" means the new code is merged on the branch and tested; the old plaintext column is only emptied at the end of the rollout (section 7).</p>
+
+<div class="card sev-medium"><h3>E2 - Shopify / WooCommerce webhook secret in plaintext <span class="chip warn sev-medium">Medium</span> <span class="chip info">Fixed in code, rollout pending</span></h3>
+<dl>
+<dt>What went wrong</dt><dd>The webhook secret was stored in plain text in <code>shopify_integrations</code> and <code>woocommerce_integrations</code>. It is three things at once: the last part of the webhook address shown to the store owner, the key the public route uses to find the workspace (<code>ecom_store_lookup()</code>, before any workspace is known), and for WooCommerce the signing key given to the plugin (<code>woocommerce.service.ts</code> returns it to the store owner on purpose). Sealing the column alone would break the lookup and the address display; storing only a hash would break the display and the signing key.</dd>
+<dt>Why it matters</dt><dd>Anyone who can read the database or a backup could forge a webhook for a store and read its WooCommerce signing key. Medium because it needs database access.</dd>
+<dt>How we fixed it</dt><dd>Split into a lookup column and a key column (the round-1 design, section 10). Migration <code>20270202090200</code> adds <code>webhook_secret_hash</code> and <code>webhook_secret_enc</code> on both tables, makes <code>webhook_secret</code> nullable, adds a unique hash index and a trigger (only secrets of 16 characters or more are hashed), and <code>ecom_store_lookup()</code> now matches the hash or the old column. Connect and reconnect write mirror, hash and sealed copy. The address, the plugin download and the signature check read the secret from the sealed copy. Webhook addresses already installed in stores keep working at every step.</dd>
+<dt>Test that proves it</dt><dd><code>test/integration/security/ecom-webhook-secret-hash.spec.ts</code> (4 tests: both stores through legacy, backfilled and scrubbed rows; short fixture secrets; repository round trip with the mirror off).</dd>
+<dt>Still to do</dt><dd>Run the rollout; zone owner (Punya) review.</dd>
+</dl></div>
+
+<div class="card sev-medium"><h3>E9 - Bearer links appeared in request logs <span class="chip warn sev-medium">Medium</span> <span class="chip ok">Fixed</span></h3>
+<dl>
+<dt>What went wrong</dt><dd>The request log, the error filter and Sentry send the request address through <code>maskSecretUrl()</code>, which did not cover three bearer-link routes: <code>/public/invoices/:token</code> (view and pay), <code>/public/sales-docs/:token</code> (accept or decline a proposal) and <code>/public/booking-manage/:token</code> (reschedule or cancel).</dd>
+<dt>Why it matters</dt><dd>Anyone who can read logs could open a customer's invoice or proposal.</dd>
+<dt>How we fixed it</dt><dd>One pattern added in <code>common/logging/mask-secret-url.ts</code>. In round 2 the payment return token (<code>?o=</code>) was masked the same way. Left unmasked on purpose: <code>/r/:token</code> (a campaign short link, identifies a click only), <code>/media/:token</code> (a short-lived signed token) and <code>/widget/:token</code> (a public embed token, printed on the customer's site).</dd>
+<dt>Test that proves it</dt><dd><code>test/unit/platform-infrastructure/observability.spec.ts</code>: the first four masking cases failed before the fix; round 2 added two for the return token (7 cases added in total, including one that checks <code>/public/booking/...</code> is left alone).</dd>
+</dl></div>
+
+<div class="card sev-low"><h3>E3 - Channel webhook tokens in plaintext <span class="chip sev-low info">Low</span> <span class="chip info">Fixed in code, rollout pending</span> <span class="chip warn">One sub-item open</span></h3>
+<dl>
+<dt>What went wrong</dt><dd>Telegram, LINE, Viber and WeChat each had a random token in their webhook address, stored in plaintext in <code>webhook_token</code> and used as the lookup key by the public route (first reported for Telegram only). The routes resolve the channel through SQL lookup functions (<code>tg_bot_lookup</code> and the line, viber, wechat equivalents), so a hash needed a migration. <code>incoming_webhooks.token</code> has the same pattern.</dd>
+<dt>Why it matters</dt><dd>A database read exposes the live webhook addresses of customers' channels.</dd>
+<dt>How we fixed it</dt><dd>Migration <code>20270202090000</code>: <code>webhook_token_hash</code>, <code>webhook_token_enc</code>, nullable <code>webhook_token</code>, a unique hash index, a trigger that hashes rows written by the previous release, and the four lookup functions matching the hash or the old column (an empty token matches nothing). Writers store mirror, hash and sealed copy; the admin address is rebuilt from the sealed copy. Addresses already given to providers keep working at every step.</dd>
+<dt>Still open</dt><dd><code>incoming_webhooks.token</code>: no service writes or reads it, so there was nothing to fix. The writer, when added, must use <code>tokenColumns()</code> (hash + sealed copy).</dd>
+<dt>Test that proves it</dt><dd><code>test/integration/security/webhook-token-hash.spec.ts</code> (4 tests: legacy, backfilled and scrubbed rows resolve by the same token; the trigger), <code>test/unit/security/secret-columns.spec.ts</code>.</dd>
+</dl></div>
+
+<div class="card sev-low"><h3>E4 - Sealed values are not tied to their row <span class="chip sev-low info">Low</span> <span class="chip warn">Partly fixed</span></h3>
+<dl>
+<dt>What went wrong</dt><dd>AES-GCM blobs carried no associated data (<code>crypto.service.ts</code> never called <code>setAAD</code>), so a sealed value copied from one row to another still opened. Binding needs a new format and a context at every call site, and an old instance cannot read the new format.</dd>
+<dt>Why it matters</dt><dd>Someone with database write access could move a secret between rows or customers. Low because it needs write access.</dd>
+<dt>How we fixed it (partly)</dt><dd>New v2 format (<code>v2:iv:tag:ct:keyid:label</code>): a hash of the context is the associated data. <code>encrypt(plain, context?)</code> and <code>decrypt(blob, context?)</code> read v1 and v2. The label travels in the blob, so key rotation re-seals a bound blob without knowing its context, and the rotation scan finds v2. v2 is only written when <code>CREDENTIALS_AAD_WRITE=on</code> (default off), because a release that predates this one cannot parse it. Wired for one column: <code>push_subscriptions.auth</code> (bound to organisation and user). Existing rows stay unbound v1 (the backfill seals without a context) until they are rewritten.</dd>
+<dt>Still open</dt><dd>1 of about 126 call sites is bound; the other 125 (listed by area below) still seal without a context.</dd>
+<dt>Test that proves it</dt><dd><code>test/unit/security/crypto-bound-blobs.spec.ts</code> (7), <code>test/unit/notifications/push-auth-sealed.spec.ts</code> (a bound blob is refused for another person).</dd>
+</dl></div>
+
+<div class="card sev-low"><h3>E7 - Web Push auth secret in plaintext <span class="chip sev-low info">Low</span> <span class="chip info">Fixed in code, rollout pending</span></h3>
+<dl>
+<dt>What went wrong</dt><dd><code>push_subscriptions.auth</code> (the Web Push auth secret) and <code>user_device_tokens.fcm_token</code> were stored in plaintext. Both are needed in clear to send a push.</dd>
+<dt>Why it matters</dt><dd>Whoever holds the keys of a device subscription can push messages to that person's browser.</dd>
+<dt>How we fixed it</dt><dd><code>push_subscriptions.auth</code> is sealed when a browser subscribes and opened by the sender (sealed or legacy plaintext). The sender now fails one unreadable device instead of the whole batch. No migration and no mirror: the value is sealed in place. <code>fcm_token</code> has no writer, so nothing changed there; whoever adds one must seal it.</dd>
+<dt>Known window</dt><dd>A device subscribed on the new release during the switch cannot be opened by the old release; its pushes there fail and are given up after 10 failures. Re-subscribing repairs it. Run the backfill after the switch.</dd>
+<dt>Test that proves it</dt><dd><code>test/unit/notifications/push-auth-sealed.spec.ts</code> (4), integration <code>push-subscriptions.spec.ts</code> (17), workers e2e push subset (11).</dd>
+</dl></div>
+
+<div class="card sev-low"><h3>E8 - Bearer links stored in plaintext <span class="chip sev-low info">Low</span> <span class="chip info">Fixed in code for 2 of 6, rollout pending</span> <span class="chip warn">1 open, 3 need your confirmation</span></h3>
+<dl>
+<dt>What went wrong</dt><dd>Six bearer links were kept in plaintext as the lookup key: <code>crm_briefs.public_token</code>, <code>wa_link_clicks.token</code>, <code>wa_orders.recovery_token</code>, <code>orders.return_token</code>, <code>web_form_submissions.receipt_token</code>, <code>wa_form_submissions.flow_token</code>. Invoices, sales documents and appointments already use the better pattern (<code>*_hash</code> for the lookup, <code>*_cipher</code> to show the link again).</dd>
+<dt>Why it matters</dt><dd>A database read exposes live links.</dd>
+<dt>How we fixed it</dt><dd>Migration <code>20270202090100</code>: <code>orders.return_token_hash</code> and <code>wa_orders.recovery_token_hash</code>/<code>_enc</code> with triggers. The platform checkout generates the return token itself and stores hash plus mirror; the return route matches hash or old column; manual admin orders store no token. Storefront orders store hash and sealed copy; the tracking page finds the order by hash; the admin screen rebuilds the link from the sealed copy. Privacy erasure now also empties the new columns. Links already sent keep working.</dd>
+<dt>Still open</dt><dd><b>Not fixed:</b> <code>crm_briefs.public_token</code> (no code writes it). <b>Reclassified as public, owner to confirm:</b> <code>web_form_submissions.receipt_token</code> (the code calls it "a handle for the thank-you page, not a credential"), <code>wa_form_submissions.flow_token</code> (<code>form-&lt;id&gt;-&lt;run uuid&gt;</code>, echoed by WhatsApp) and <code>wa_link_clicks.token</code> (the short link printed in the message to its recipient).</dd>
+<dt>Test that proves it</dt><dd><code>test/integration/security/bearer-token-hash.spec.ts</code> (2), the log masking cases, <code>test/unit/security/secret-columns.spec.ts</code>.</dd>
+</dl></div>
+
+<div class="card sev-low"><h3>E1 - Empty value did not round-trip <span class="chip sev-low info">Low</span> <span class="chip ok">Fixed earlier, still holds</span></h3>
+<dl>
+<dt>What went wrong</dt><dd><code>CryptoService.encrypt('')</code> made a blob that <code>decrypt</code> rejected.</dd>
+<dt>Why it matters</dt><dd>Any caller that sealed an empty value could not read it back.</dd>
+<dt>Evidence now</dt><dd>The empty and unicode value test in <code>encryption-audit.spec.ts</code> passes; the parser in <code>crypto.service.ts</code> still accepts an empty data segment.</dd>
+</dl></div>
+
+<div class="card sev-info"><h3>E6 - TLS for Postgres and Redis <span class="chip sev-info info">Info</span> <span class="chip ok">Closed (one defect fixed)</span></h3>
+<dl>
+<dt>What went wrong</dt><dd>The first audit found no TLS option for Postgres or Redis. In fact both can be switched on from the connection address. One real defect: <code>queueRedisOptions()</code> rebuilt the BullMQ (job queue) connection from the address parts and dropped the scheme, so with <code>rediss://</code> every queue still connected in clear text.</dd>
+<dt>Why it matters</dt><dd>On a managed Redis the job data would cross the network unencrypted although TLS looked configured.</dd>
+<dt>How we fixed it</dt><dd>One line in <code>apps/api/src/infra/queue/queue.module.ts</code>: add <code>tls: {}</code> when the scheme is <code>rediss:</code>. Postgres: <code>createDbClient</code> passes <code>DATABASE_URL</code> straight to <code>pg</code>, which reads <code>sslmode</code> (<code>sslmode=verify-full</code> gives certificate-checked TLS; <code>DATABASE_REPLICA_URL</code> and the CLIs use the same path). Redis: ioredis turns TLS on for <code>rediss://</code> (shared client and the socket.io adapter). With the default <code>redis://</code> and no <code>sslmode</code> nothing changes.</dd>
+<dt>Test that proves it</dt><dd><code>queue.module.spec.ts</code> (the case "rediss:// turns TLS on for the queue connection" failed first, no <code>tls</code> key), <code>test/unit/security/transport-tls.spec.ts</code> (4).</dd>
+</dl></div>
+
+<div class="card sev-info"><h3>E5 - Cipher, key ring, password hash verified <span class="chip sev-info info">Info</span> <span class="chip ok">Still true</span></h3>
+<dl>
+<dt>What was checked</dt><dd>All 18 tests in <code>encryption-audit.spec.ts</code> pass: no repeated IV in 5,000 seals, tamper and truncation refused, key rotation, argon2 parameters, dummy-hash timing parity.</dd>
+<dt>Reviewed, not waved through</dt><dd>Three source-guard checks had gone red after the merges: <code>throughput-store.ts</code> and <code>routing-engine.service.ts</code> use SHA-1 as a short key / deterministic id, and <code>infra/net/s3-sigv4.ts</code> only signs outbound S3 requests. All three are now in the spec's commented allowlists.</dd>
+</dl></div>
+
+<h3>Secret columns, by outcome</h3>
+<table>
+<tr><th scope="col">Outcome</th><th scope="col">Columns</th></tr>
+<tr><td>Sealed with <code>CryptoService</code> by the service (verified in code)</td><td>AI provider and admin keys; Facebook page tokens; LINE channel token, secret, assertion key and rotating token; Telegram bot, secret and payment tokens; Viber auth token; WeChat app secret, verify token, AES key and cached token; merchant, platform and translation gateway credentials; outbound webhook secrets (<code>webhooks</code>); Shopify access token; WooCommerce consumer key and secret; cart-recovery checkout tokens; webhook-forward auth header values; WABA provider credentials. Also every <code>*_enc</code>, <code>*_cipher</code> and <code>*_encrypted</code> column, by naming convention (not individually checked).</td></tr>
+<tr><td>Schema only, no service writes them yet (comment says ciphertext)</td><td>TikTok account and shop tokens, HubSpot, Slack and Trello credentials, <code>devices.proxy_password</code> (the read side already decrypts), <code>outbound_webhooks.secret</code>. The ratchet lists them as <code>encrypted</code>; whoever adds the writer must call <code>CryptoService.encrypt</code>. A watch item, not a defect today.</td></tr>
+<tr><td>Hash, public identifier or name</td><td>Password, token and key hashes; WebAuthn public keys; form and marketplace public keys; the chatbot embed token; Viber message ids; setting and permission keys; storage object paths; the stored HMAC in <code>webhook_forward_failures.signature_header</code>.</td></tr>
+<tr><td>Open</td><td>E2, E3, E7, E8 until the rollout is finished; <code>incoming_webhooks.token</code> and <code>crm_briefs.public_token</code> until a writer exists.</td></tr>
+</table>
+<p class="muted">The WooCommerce <code>consumer_key</code> column has no "ciphertext" comment in the schema file, but the service seals it (<code>woocommerce.service.ts</code>, <code>this.crypto.encrypt(input.consumerKey)</code>). The schema file belongs to ecommerce, so the comment was not touched.</p>
+
+<h3>Leakage review (sampled, not exhaustive)</h3>
+<ul>
+<li><b>Logs:</b> pino redacts 20 credential and signature headers plus <code>req.body.password</code> and <code>credentials</code>; <code>maskSecretUrl</code> masks path secrets (extended here). The <code>logger</code> calls that mention a secret log only the word or an id, not the value.</li>
+<li><b>Audit rows:</b> the audit view redacts any secret-named key and token-shaped value at read time (<code>audit-pii.ts</code>). The write sites checked store <code>[rotated]</code>, <code>[kept]</code>, <code>[encrypted]</code> or a hint, never the value.</li>
+<li><b>Outbox payloads:</b> the token-refresh failure events (mail, Google, Microsoft, conferencing) carry only a uuid, the provider and a 100-character reason.</li>
+<li><b>API responses and contracts:</b> secrets come back only once, on create or rotate (marketplace <code>inboundSecret</code>, telephony connection <code>secret</code>, API key <code>secret</code>, MFA enrolment <code>secret</code>); the other secret fields found are write-only inputs. The WooCommerce <code>webhookSecret</code> returned to the owner is intended and belongs to E2.</li>
+</ul>
+
+<h3>Round 2 review follow-ups (fixed)</h3>
+<ul>
+<li>The hash unique index for store secrets had no length guard like the plaintext one: now only secrets of 16 characters or more are hashed.</li>
+<li>The channel tables had no trigger for rows written by the previous release: added.</li>
+<li>Privacy erasure of a storefront order left the new hash and sealed token: now emptied.</li>
+<li>The payment return token in <code>?o=</code> was not masked in logs: now masked.</li>
+<li>An unused <code>orders.return_token_enc</code> column: dropped before any release.</li>
+<li>The backfill counted a changed-under-us row twice in "found": fixed.</li>
+<li>Known and accepted: the Web Push rollout window above; the two rollout flags are read from the environment and are not in the typed env schema (that file belongs to the kernel); the backfill does not bind existing rows to a context.</li>
+</ul>
+
+<h3>E4: call sites still sealing without a context (about 125, by area)</h3>
+<p class="muted">Counts are the number of <code>encrypt(</code> calls per file. Open a group to see its files.</p>
+<p><b>125 calls in 64 files</b> (the file list has the same files and counts as the earlier version of this report).</p><details class="group"><summary>Messaging channels (email, Facebook, LINE, SMS, Telegram, Viber, WeChat, chat vault): 31 calls in 17 files</summary><ul><li><code>modules/channel-email/mail-connection.ts</code> (1)</li><li><code>modules/channel-email/mail-connect.service.ts</code> (2)</li><li><code>modules/channel-email/mail-tokens.service.ts</code> (2)</li><li><code>modules/channel-facebook/fb-broadcasts.service.ts</code> (2)</li><li><code>modules/channel-facebook/pages.service.ts</code> (2)</li><li><code>modules/channel-line/channels.service.ts</code> (3)</li><li><code>modules/channel-line/line-broadcasts.service.ts</code> (1)</li><li><code>modules/channel-line/line-token.service.ts</code> (2)</li><li><code>modules/channel-sms/sms-senders.service.ts</code> (1)</li><li><code>modules/channel-telegram/bots.service.ts</code> (3)</li><li><code>modules/channel-telegram/tg-broadcasts.service.ts</code> (2)</li><li><code>modules/channel-viber/channels.service.ts</code> (1)</li><li><code>modules/channel-viber/vib-broadcasts.service.ts</code> (2)</li><li><code>modules/channel-wechat/broadcasts.service.ts</code> (1)</li><li><code>modules/channel-wechat/channels.service.ts</code> (4)</li><li><code>modules/channel-wechat/wechat-token.service.ts</code> (1)</li><li><code>modules/chat-conversations/channel-vault.ts</code> (1)</li></ul></details>
+<details class="group"><summary>CRM (sales documents, invoices, tasks, deals, leads): 27 calls in 8 files</summary><ul><li><code>modules/crm/deals/deal-activities.service.ts</code> (1)</li><li><code>modules/crm/invoicing/invoice-settings.service.ts</code> (1)</li><li><code>modules/crm/invoicing/invoices.service.ts</code> (2)</li><li><code>modules/crm/sales-docs/sales-docs-public.service.ts</code> (4)</li><li><code>modules/crm/sales-docs/sales-docs.service.ts</code> (13)</li><li><code>modules/crm/sales-docs/sales-docs.support.ts</code> (1)</li><li><code>modules/crm/tasks/tasks.service.ts</code> (3)</li><li><code>modules/leads/lead-sources.service.ts</code> (2)</li></ul></details>
+<details class="group"><summary>Appointments and calendars: 15 calls in 9 files</summary><ul><li><code>modules/appointments-booking/appointments.service.ts</code> (2)</li><li><code>modules/appointments-booking/appointments.support.ts</code> (1)</li><li><code>modules/appointments-booking/booking.service.ts</code> (2)</li><li><code>modules/appointments-booking/bookings-feed.service.ts</code> (1)</li><li><code>modules/appointments-booking/google-calendar-tokens.service.ts</code> (1)</li><li><code>modules/appointments-booking/google-consent.service.ts</code> (2)</li><li><code>modules/appointments-booking/ics-feeds.service.ts</code> (1)</li><li><code>modules/appointments-booking/microsoft-calendar-connect.service.ts</code> (3)</li><li><code>modules/appointments-booking/microsoft-calendar-tokens.service.ts</code> (2)</li></ul></details>
+<details class="group"><summary>Commerce and payments (gateways, Shopify, WooCommerce, storefront, catalog): 12 calls in 8 files</summary><ul><li><code>modules/catalog-products/catalog-bindings.ts</code> (1)</li><li><code>modules/catalog-products/catalog-connection.service.ts</code> (3)</li><li><code>modules/checkout-orders-merchant-payments/gateways/merchant-gateways.service.ts</code> (1)</li><li><code>modules/platform-payment-gateways/gateway.service.ts</code> (1)</li><li><code>modules/shopify-woocommerce/cart.service.ts</code> (1)</li><li><code>modules/shopify-woocommerce/shopify.service.ts</code> (2)</li><li><code>modules/shopify-woocommerce/woocommerce.service.ts</code> (2)</li><li><code>modules/storefront-builder/shops/storefront-settings.service.ts</code> (1)</li></ul></details>
+<details class="group"><summary>Integrations and webhooks (webhooks, marketplace, API library, add-ons, voice, conferencing, flow publish, WhatsApp, localization, bridge, media): 30 calls in 15 files</summary><ul><li><code>infra/providers/chat-conversations/media/media-token.service.ts</code> (1)</li><li><code>infra/providers/node-bridge-runtime/device-auth-store.ts</code> (1)</li><li><code>modules/addons-extension-registry/extensions.service.ts</code> (1)</li><li><code>modules/api-library/api-library.service.ts</code> (1)</li><li><code>modules/calling-voice/logging/telephony-connections.service.ts</code> (2)</li><li><code>modules/flow-builder-editor/geta-publish/geta-publish-settings.service.ts</code> (3)</li><li><code>modules/localization-translation/provider-credentials.ts</code> (1)</li><li><code>modules/localization-translation/providers-admin.service.ts</code> (1)</li><li><code>modules/marketplace/installations.service.ts</code> (4)</li><li><code>modules/meeting-conferencing/conferencing-connect.service.ts</code> (3)</li><li><code>modules/meeting-conferencing/conferencing-tokens.service.ts</code> (2)</li><li><code>modules/outbound-webhooks/webhooks.service.ts</code> (4)</li><li><code>modules/webhook-fanout/webhook-targets.service.ts</code> (2)</li><li><code>modules/whatsapp-cloud-api-waba/waba-connect.service.ts</code> (3)</li><li><code>modules/whatsapp-provider-admin/whatsapp-providers.service.ts</code> (1)</li></ul></details>
+<details class="group"><summary>Platform, auth and admin (operator auth, platform settings, MFA, AI keys, workspace settings, privacy, campaigns): 10 calls in 7 files</summary><ul><li><code>modules/admin-console-shell/workspace-settings.service.ts</code> (1)</li><li><code>modules/ai-keys-usage-admin/key-vault.ts</code> (1)</li><li><code>modules/auth/platform/operator-auth.service.ts</code> (2)</li><li><code>modules/auth/platform/platform-settings.service.ts</code> (2)</li><li><code>modules/auth/security/mfa.service.ts</code> (2)</li><li><code>modules/campaigns/campaigns.service.ts</code> (1)</li><li><code>modules/privacy/requests/privacy-requests.service.ts</code> (1)</li></ul></details>
+
+<!-- 7. ROLLOUT -->
+<h2 id="s7">Rollout and rollback</h2>
+<p>Every fix is released in two stages (expand, then contract) so the old release keeps working while the new one goes live. Zone owners: Punya for ecommerce and storefront, Lakshya for payments and infrastructure. One commit per finding sits on the branch; nothing is deployed yet.</p>
+<figure>
+<svg viewBox="0 0 980 360" role="img" aria-labelledby="t6 d6">
+<title id="t6">Four-step rollout with the rollback for each step</title>
+<desc id="d6">Step 1 deploy: migrations add columns, the new release reads both forms; rollback roll the code back freely. Step 2 backfill after the old release is gone: run the seal tool dry-run then for real; rollback nothing to undo, plaintext still present. Step 3 contract: switch the mirror off, redeploy, run the seal tool with scrub; rollback copy the sealed values back into the old columns or keep the new release. Step 4 switch on bound ciphertext, only when every instance reads v2; rollback turn the flag off and re-seal v2 blobs as v1, no tool yet.</desc>
+<defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#586270"/></marker></defs>
+<g font-family="system-ui,sans-serif" font-size="13" fill="#1b1f24">
+<g>
+<rect x="10" y="20" width="220" height="190" rx="10" fill="#eaf2fb" stroke="#0072B2" stroke-width="2"/><text x="26" y="46" font-weight="700" font-size="15">1. Deploy</text>
+<text x="26" y="68">Migrations only add columns,</text><text x="26" y="84">triggers and hash lookups.</text><text x="26" y="104">The new release writes mirror,</text><text x="26" y="120">hash and sealed copy, and</text><text x="26" y="136">reads the sealed copy first.</text><text x="26" y="164" font-weight="700">Run by:</text><text x="26" y="180">release operator (deploy)</text>
+<rect x="255" y="20" width="220" height="190" rx="10" fill="#eaf2fb" stroke="#0072B2" stroke-width="2"/><text x="271" y="46" font-weight="700" font-size="15">2. Backfill</text>
+<text x="271" y="68">Wait until the old release is</text><text x="271" y="84">gone. Run the seal tool with</text><text x="271" y="100">--dry-run, then for real.</text><text x="271" y="120">Idempotent and resumable.</text><text x="271" y="164" font-weight="700">Run by:</text><text x="271" y="180">operator (database owner role)</text>
+<rect x="500" y="20" width="220" height="190" rx="10" fill="#fdf1d8" stroke="#E69F00" stroke-width="2"/><text x="516" y="46" font-weight="700" font-size="15">3. Contract</text>
+<text x="516" y="68">Set the mirror switch to off</text><text x="516" y="84">and redeploy. Then</text><text x="516" y="100">run the seal tool with --scrub:</text><text x="516" y="116">old plaintext columns become</text><text x="516" y="132">NULL. This is when plaintext</text><text x="516" y="148">leaves the database.</text><text x="516" y="172" font-weight="700">Run by:</text><text x="516" y="188">release operator</text>
+<rect x="745" y="20" width="225" height="190" rx="10" fill="#eaf2fb" stroke="#0072B2" stroke-width="2"/><text x="761" y="46" font-weight="700" font-size="15">4. Bind (E4 only)</text>
+<text x="761" y="68">Switch binding on (flag</text><text x="761" y="84">CREDENTIALS_AAD_WRITE)</text><text x="761" y="100">only when every instance reads</text><text x="761" y="116">the v2 format. Only one column</text><text x="761" y="132">is bound today.</text><text x="761" y="164" font-weight="700">Run by:</text><text x="761" y="180">release operator</text>
+</g>
+<g stroke="#586270" stroke-width="2" marker-end="url(#ar2)"><line x1="232" y1="115" x2="253" y2="115"/><line x1="477" y1="115" x2="498" y2="115"/><line x1="722" y1="115" x2="743" y2="115"/></g>
+<g fill="#fbe7e5" stroke="#D55E00" stroke-width="2"><rect x="10" y="240" width="220" height="100" rx="10"/><rect x="255" y="240" width="220" height="100" rx="10"/><rect x="500" y="240" width="220" height="100" rx="10"/><rect x="745" y="240" width="225" height="100" rx="10"/></g>
+<g font-weight="700"><text x="26" y="262">Undo step 1</text><text x="271" y="262">Undo step 2</text><text x="516" y="262">Undo step 3</text><text x="761" y="262">Undo step 4</text></g>
+<text x="26" y="284">Roll the code back freely;</text><text x="26" y="300">the plaintext is still there.</text>
+<text x="271" y="284">Nothing to undo; the plaintext</text><text x="271" y="300">is still there.</text>
+<text x="516" y="284">The sealed copy holds every</text><text x="516" y="300">value: copy it back into the</text><text x="516" y="316">old column, or keep the new</text><text x="516" y="332">release.</text>
+<text x="761" y="284">Turn the flag off and re-seal</text><text x="761" y="300">v2 blobs as v1 before rolling</text><text x="761" y="316">back. No tool for this yet.</text>
+<g stroke="#D55E00" stroke-width="2" stroke-dasharray="4 4"><line x1="120" y1="212" x2="120" y2="238"/><line x1="365" y1="212" x2="365" y2="238"/><line x1="610" y1="212" x2="610" y2="238"/><line x1="857" y1="212" x2="857" y2="238"/></g>
+</g></svg>
+<figcaption><b>Plaintext only leaves the database at step 3.</b> Until then E2, E3, E7 and E8 are fixed in code but not closed at rest. "Run by" names a role: who exactly is for you to decide (section 9).</figcaption>
+</figure>
+<table>
+<tr><th scope="col">Finding</th><th scope="col">Rollout specifics</th></tr>
+<tr><td>E7 push auth</td><td>No migration, no mirror (sealed in place). Run the backfill after the switch. A device subscribed on the new release during the switch cannot be opened by the old release (window described in E7).</td></tr>
+<tr><td>E3 channel tokens</td><td>Webhook addresses already given to providers keep working at every step. <code>incoming_webhooks.token</code> is not part of the rollout (no writer).</td></tr>
+<tr><td>E8 bearer links</td><td>Links already sent keep working. Only <code>orders.return_token</code> and <code>wa_orders.recovery_token</code> are in the rollout.</td></tr>
+<tr><td>E2 store secrets</td><td>Installed webhook addresses and plugins keep working. Rollback as in the diagram (the plugin's signing key is the same value).</td></tr>
+<tr><td>E4 bound ciphertext</td><td>Step 4 only. Wired for <code>push_subscriptions.auth</code>; existing rows stay unbound v1 until rewritten.</td></tr>
+</table>
+<p class="muted">Flags: <code>SECRETS_LEGACY_PLAINTEXT_MIRROR=off</code> stops writing the old plaintext columns (only when no old release runs). <code>CREDENTIALS_AAD_WRITE=on</code> writes context-bound v2 ciphertext where a call site passes a context (only when every instance reads v2). Both are documented in <code>.env.example</code>.</p>
+
+<!-- 8. WHAT THIS DOES NOT PROVE -->
+<h2 id="s8">What this does NOT prove</h2>
+<div class="box callout-bad">
+<ul>
+<li><b>Nothing ran in staging or production.</b> No existing production row was migrated or backfilled, and none was read.</li>
+<li><b>The old plaintext is still in the database</b> until the contract step (flag off, then <code>--scrub</code>) is done in each environment. E2, E3, E7 and E8 are fixed in code, not closed at rest.</li>
+<li><b>No real blue-green switch</b> was exercised: the old release was never run against the new schema. The claim rests on the migrations being additive and on reading the old code's queries.</li>
+<li><b>No live TLS handshake</b> against a TLS-enabled Postgres or Redis; the tests check client options only.</li>
+<li><b>No real client install:</b> no Shopify store, WooCommerce plugin, Telegram, LINE, Viber or WeChat account, payment provider or browser push service was involved; their webhooks and return URLs were exercised only through the lookup functions and repositories.</li>
+<li><b>E4 binds one column.</b> Nothing else is bound, the flag is off by default, and no production data was written in v2. Existing rows are not bound.</li>
+<li>The workers e2e sections outside web push and the other e2e suites did not run (the harness cannot reach its Redis here). <code>audit:authz</code> and <code>audit:auth</code> still fail on main's existing state.</li>
+<li>The leakage review is still a sample, and the reclassification of three tokens as public is my reading of the code, not an owner decision.</li>
+</ul>
+<p><b>Also not verified (from the first round, still true):</b></p>
+<ul>
+<li><code>queueRedisOptions()</code> still drops a username in the Redis URL (ACL users). That is not a TLS issue, but a managed Redis that needs a non-default user would not authenticate. Not changed.</li>
+<li>The leakage review is a sample, not every serializer, mapper and log call. No gitleaks run (not installed); the diff contains test values only.</li>
+<li>The "encrypted" entries were checked by reading the writing service, not by reading rows in a running system.</li>
+<li>Writers that do not exist yet (TikTok, HubSpot, Slack, Trello, proxy password) cannot be checked.</li>
+<li>Existing logs and backups were not inspected for tokens that leaked before the E9 fix.</li>
+</ul>
+</div>
+
+<!-- 9. NEXT STEPS -->
+<h2 id="s9">Next steps and owners</h2>
+<table>
+<tr><th scope="col">Step</th><th scope="col">Owner</th></tr>
+<tr><td>Review the changes in their zones (channels, payments, storefront, shopify-woocommerce, notifications, platform-infrastructure)</td><td>Punya (ecommerce, storefront), Lakshya (payments, infrastructure)</td></tr>
+<tr><td>Confirm that <code>receipt_token</code>, <code>flow_token</code> and <code>wa_link_clicks.token</code> are not secrets</td><td>Project owner</td></tr>
+<tr><td>Plan and run rollout steps 2 to 4 in each environment; decide who runs them</td><td>Project owner to assign; Vedant supports</td></tr>
+<tr><td>E4: accept binding one column, or schedule staged binding of the remaining call sites (readers first, writers second)</td><td>Project owner</td></tr>
+<tr><td>Writers for <code>incoming_webhooks.token</code>, <code>crm_briefs.public_token</code>, <code>user_device_tokens.fcm_token</code> must follow the hash + sealed copy pattern when added</td><td>Whoever builds those features</td></tr>
+<tr><td>Say where Postgres and Redis run in production (TLS settings)</td><td>Project owner</td></tr>
+<tr><td>Give <code>security-specs.sh</code> a scheduled or pull-request trigger</td><td>Project owner</td></tr>
+</table>
+
+<!-- 10. APPENDIX -->
+<h2 id="s10">Appendix</h2>
+
+<h3>A. Commands and checks run in round 2</h3>
+<table>
+<tr><th scope="col">Check</th><th scope="col">Result</th></tr>
+<tr><td><code>bash tools/quality/security-specs.sh</code></td><td><span class="chip ok">pass</span> API 1043 passed, 2 skipped; web 96 passed</td></tr>
+<tr><td>All new and touched unit specs (75 files), run 3 times</td><td><span class="chip ok">pass</span> 1289 / 1289 each time (the earlier count was 1287; two masking cases were added after)</td></tr>
+<tr><td>Integration specs <code>test/integration/security</code> (3 files, 10 tests) on throwaway databases</td><td><span class="chip ok">pass</span></td></tr>
+<tr><td><code>push-subscriptions</code> integration spec (own container)</td><td><span class="chip ok">pass</span> 17 / 17</td></tr>
+<tr><td><code>workers.e2e.spec.ts</code></td><td><span class="chip warn">caveat</span> push subset 11 / 11 pass. The other sections time out because the harness cannot reach its own Redis (connection refused); they are untouched by this change and were not repaired.</td></tr>
+<tr><td>Boot of the built API and worker against a throwaway database and Redis db 13</td><td><span class="chip ok">pass</span> API <code>/ready</code> 200 and <code>/health</code> 200; worker process alive for 10 s with no dependency-injection error</td></tr>
+<tr><td>Real seal CLI on seeded plaintext rows: dry-run, seal, rerun, scrub</td><td><span class="chip ok">pass</span> push auth sealed, tokens hashed and sealed, rerun changes nothing, scrub leaves no plaintext, lookups work before and after</td></tr>
+<tr><td><code>db:verify-schema</code></td><td><span class="chip ok">pass</span> 0 errors</td></tr>
+<tr><td>RLS state of the 8 altered tables (the <code>check-rls.sh</code> queries; <code>psql</code> is not installed, so run through node)</td><td><span class="chip ok">pass</span> enabled, forced and a policy on all 8</td></tr>
+<tr><td><code>pnpm audit:tenancy</code> on the throwaway database</td><td><span class="chip warn">caveat</span> Verdict NO-GO from items that exist on main (7 unclassified tables, unreviewed <code>privileged()</code> and <code>sql.raw()</code> sites); none of the listed files or indexes is from this branch. 2589 generated cross-tenant scenarios passed, 0 failed, 0 blocked.</td></tr>
+<tr><td>ESLint and Prettier on all 56 changed files</td><td><span class="chip ok">pass</span> clean</td></tr>
+<tr><td><code>tsc</code> for <code>apps/api</code></td><td><span class="chip ok">pass</span> <code>tsconfig.json</code>: 0 errors. <code>tsconfig.spec.json</code>: the same 20 errors in 8 files as before, none in a file this branch changed.</td></tr>
+<tr><td>Built-in <code>security-review</code> skill</td><td><span class="chip ok">pass</span> no findings at confidence 8 or above</td></tr>
+<tr><td>Built-in <code>code-review</code> skill (high effort, whole diff)</td><td><span class="chip warn">caveat</span> 8 findings; 6 fixed, 2 recorded as accepted (list in section 6)</td></tr>
+</table>
+<p class="muted"><code>pnpm audit:authz</code> and <code>pnpm audit:auth</code> fail on main's existing state (3 control failures and 2 routes missing from the self-service policy; 3 public routes owned by other teams). <code>pnpm audit --prod --audit-level high</code>: 2 high (already known, ignored), 3 moderate. These were out of scope and not caused by this change. The <code>security-review-gate</code> skill was used: repo audits, secret scan (grep; gitleaks is not installed), both review skills, triage and a stamp (8 confirmed, 6 fixed).</p>
+
+<h3>B. Round 1 checks (historical)</h3>
+<table>
+<tr><th scope="col">Check</th><th scope="col">Result</th></tr>
+<tr><td>New and changed specs (6 files, 60 tests), run 3 times</td><td><span class="chip ok">pass</span> 60 / 60 each time, no flake</td></tr>
+<tr><td><code>bash tools/quality/security-specs.sh</code></td><td><span class="chip ok">pass</span> API 1023 passed, 2 skipped (a live reCAPTCHA file); web 96 passed</td></tr>
+<tr><td>Migrations applied to a throwaway database, columns listed, database dropped</td><td><span class="chip ok">pass</span> 453 applied; no secret-looking column outside the schema scan</td></tr>
+</table>
+
+<h3>C. Round 1 fixes and tests</h3>
+<table>
+<tr><th scope="col">Fix</th><th scope="col">Test that failed first</th><th scope="col">Change</th></tr>
+<tr><td>E6: BullMQ ignored <code>rediss://</code></td><td><code>queue.module.spec.ts</code>: "rediss:// turns TLS on for the queue connection" failed (no <code>tls</code> key)</td><td>One line in <code>queueRedisOptions()</code> (<code>apps/api/src/infra/queue/queue.module.ts</code>): add <code>tls: {}</code> when the protocol is <code>rediss:</code>. A <code>redis://</code> URL produces exactly the same options as before.</td></tr>
+<tr><td>E9: bearer tokens in logs</td><td><code>observability.spec.ts</code>: four new masking cases failed</td><td>One pattern added to <code>common/logging/mask-secret-url.ts</code> for invoices, sales-docs and booking-manage.</td></tr>
+</table>
+<p>The two ratchet and TLS test files live in <code>test/unit/security</code>, which <code>tools/quality/security-specs.sh</code> and <code>pnpm test</code> already run. <code>encryption-audit.spec.ts</code> got an allowlist update (three reviewed SHA-1 and HMAC uses added with reasons; no new tests).</p>
+
+<h3>D. The E2 design (round 1 proposal, implemented in round 2)</h3>
+<p><b>Problem.</b> The webhook secret is three things at once: the path segment of the URL shown to the store owner, the key the public route uses to find the workspace (<code>ecom_store_lookup()</code>, before any tenant is known), and for WooCommerce the HMAC key given to the plugin. Encrypting the column alone breaks the lookup and the URL display. Storing only a hash breaks the display and the HMAC.</p>
+<ol>
+<li><b>Columns.</b> On both tables add <code>webhook_secret_hash text</code> (SHA-256 hex of the secret; the secret is 240 bits of server-generated randomness, so an unsalted hash is safe) and <code>webhook_secret_enc text</code> (the secret sealed with <code>CryptoService</code>, so the URL can still be shown and the WooCommerce HMAC key can still be read). Move the existing uniqueness guarantee (<code>uq_*_webhook_secret</code>) to the hash column.</li>
+<li><b>Lookup.</b> Change <code>ecom_store_lookup()</code> to hash its argument and match <code>webhook_secret_hash</code>. The receiver still refuses values shorter than 16 characters before calling it. Once the hash path works, the plaintext column is never read again.</li>
+<li><b>Service.</b> <code>shopify.service.ts</code> and <code>woocommerce.service.ts</code> write hash and enc on create and rotate, and decrypt the enc column wherever the URL or the HMAC key is shown or used. Verifying an inbound signature is unchanged.</li>
+<li><b>Backfill.</b> A one-off CLI under the owner role fills hash and enc for existing rows in batches. It is idempotent (skips rows already done) and prints the number of rows left. The key-rotation CLI finds sealed values by their format, so the new columns are covered by rotation without changes.</li>
+<li><b>Two-step deploy.</b> Step 1 (expand): a migration adds the nullable columns and the unique index on the hash; new code writes plaintext, hash and enc and looks up by hash with a fallback to the plaintext column; run the backfill; gate: <code>count(*) where webhook_secret_hash is null</code> is 0 on both tables; rolling back is safe. Step 2 (contract): code stops reading and writing the plaintext column; a second migration drops it; rolling back after this means decrypting <code>webhook_secret_enc</code> into a restored column, so take a database backup before step 2. (As built in round 2, the plaintext column is emptied by the seal tool's <code>--scrub</code> instead of being dropped.)</li>
+<li><b>Result.</b> A database read no longer yields a usable webhook URL or HMAC key; only the hash and the ciphertext are stored. The same hash-plus-ciphertext shape was reused for E3 and E8.</li>
+</ol>
+<p><b>Cost and risks.</b> Migrations, a change to a SQL function that serves a public unauthenticated route, a backfill job, and tests for the lookup and both signature-verify paths. The module is owned by ecommerce (Punya). If the owner prefers not to do this, the residual risk is that a database or backup reader can forge a webhook for a store and read its WooCommerce HMAC key: Medium, and it needs database access.</p>
+
+<h3>E. Files changed, by area (61 files on the branch before this redesign)</h3>
+<ul>
+<li><b>Crypto helpers and tools:</b> <code>common/crypto/crypto.service.ts</code>, <code>secret-columns.ts</code>, <code>seal-plaintext-secrets.ts</code>; <code>modules/platform-infrastructure/crypto-rotation/envelope.ts</code>, <code>seal-plaintext-secrets.cli.ts</code>; <code>common/logging/mask-secret-url.ts</code>; <code>infra/queue/queue.module.ts</code>; <code>.env.example</code></li>
+<li><b>Channels:</b> channel-line, channel-telegram, channel-viber, channel-wechat (repository and service each)</li>
+<li><b>Payments and storefront:</b> platform-payment-gateways (admin-billing, checkout, orders), storefront-builder (sql-orders-gateway, store-orders repository and service), privacy manifest <code>sales.ts</code></li>
+<li><b>Store integrations:</b> shopify-woocommerce (shopify, woocommerce, stores repository, webhook service)</li>
+<li><b>Notifications:</b> two modules, push-subscriptions repository and service, web-push sender</li>
+<li><b>Database:</b> 3 migrations (<code>20270202090000</code>, <code>20270202090100</code>, <code>20270202090200</code>), 7 schema files, <code>tools/tenancy-audit/policy/global-unique.json</code></li>
+<li><b>Tests:</b> 6 new unit spec files plus changes to 5 existing ones, 3 new integration specs, <code>test/support/pg-it.ts</code></li>
+<li><b>Docs:</b> this report, <code>docs/quality/security-testing-batch-1.md</code></li>
+</ul>
+
+<h3>F. Flakiness and environment notes</h3>
+<ul>
+<li>Flakiness: 3 of 3 runs green, 1289 / 1289 tests each (75 files). Round 1: 60 / 60 three times.</li>
+<li>Throwaway databases were created on the shared Postgres server and dropped; the final listing shows only <code>crm</code> and <code>postgres</code>. Only Redis db 13 (empty before) was used and flushed. No existing container was stopped, restarted or removed.</li>
+<li>The push-subscriptions integration spec starts its own test container (the image was already local).</li>
+<li>Browser check of this page: headless Google Chrome at 1280 px and 390 px, screenshots viewed. A first render showed text overflowing the rollout stepper boxes and a label crossing a line in the scanner diagram; both were fixed and the page re-rendered. Not inspected: dark mode, and the page breaks of the print-to-PDF output.</li>
+</ul>
+
+</main>
+</body>
+</html>

@@ -10,6 +10,7 @@ import {
   type PushSubscriptionInput,
   type PushTestResponse,
 } from '@crm/contracts';
+import { CryptoService } from '../../common/crypto/crypto.service';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { webPushConfig } from '../../config/domains/web-push.env';
@@ -18,7 +19,11 @@ import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { deviceLabel } from './device-label';
 import { NotificationFanout } from './notification-fanout';
 import { buildTestPayload } from './push-payload';
-import { PushSubscriptionsRepository, type PushDeviceRow } from './push-subscriptions.repository';
+import {
+  PushSubscriptionsRepository,
+  pushAuthContext,
+  type PushDeviceRow,
+} from './push-subscriptions.repository';
 import { WebPushSender } from './web-push.sender';
 
 /** One test per person per this many seconds: it is a button, not a loop. */
@@ -49,6 +54,7 @@ export class PushSubscriptionsService {
     private readonly sender: WebPushSender,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     private readonly fanout: NotificationFanout,
+    private readonly crypto: CryptoService,
   ) {}
 
   private caller(): { orgId: number; userId: number } {
@@ -89,7 +95,9 @@ export class PushSubscriptionsService {
         endpoint: input.endpoint,
         endpointHash,
         p256dh: input.keys.p256dh,
-        auth: input.keys.auth,
+        // Sealed on write with no legacy mirror. During a blue-green switch the previous release cannot open it, so a device subscribed in that
+        // window is skipped by the old slot (its failure count rises, and it is given up on after 10); re-subscribing on the new release repairs it.
+        auth: this.crypto.encrypt(input.keys.auth, pushAuthContext(orgId, userId)),
         ua,
         label: deviceLabel(ua),
       });

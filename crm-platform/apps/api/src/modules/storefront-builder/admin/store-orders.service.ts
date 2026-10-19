@@ -1,3 +1,5 @@
+import { CryptoService } from '../../../common/crypto/crypto.service';
+import { tokenOf } from '../../../common/crypto/secret-columns';
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import {
   ERROR_CODES,
@@ -77,6 +79,7 @@ export class StoreOrdersService {
     private readonly links: GatewayLinkService,
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
     @Inject(RECOVERY_NUDGE_SENDER) private readonly nudges: RecoveryNudgeSender,
+    private readonly crypto: CryptoService,
     @Inject(STORE_ORDER_INVOICE) private readonly invoices: StoreOrderInvoicePort,
   ) {}
 
@@ -261,8 +264,11 @@ export class StoreOrdersService {
     }
 
     const callback =
-      shop && order.recoveryToken
-        ? this.urls.trackUrl(shop, order.recoveryToken)
+      shop && (order.recoveryTokenEnc || order.recoveryToken)
+        ? this.urls.trackUrl(
+            shop,
+            tokenOf(this.crypto, { enc: order.recoveryTokenEnc, plain: order.recoveryToken }),
+          )
         : `${this.urls.env.webAppUrl}/`;
     const link = await this.mint(ctx.orgId, gateway, order, shop, callback);
     if (!link) {

@@ -1,3 +1,4 @@
+import { tokenColumns, tokenOf } from '../../common/crypto/secret-columns';
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
@@ -64,6 +65,11 @@ export class WoocommerceService {
     return this.config.get('APP_URL', { infer: true });
   }
 
+  /** The webhook secret: the sealed copy first, the legacy plaintext column for a row not backfilled yet. */
+  private secretOf(row: WooRow): string {
+    return tokenOf(this.crypto, { enc: row.webhookSecretEnc, plain: row.webhookSecret });
+  }
+
   /** What the API shows of a store: never a key or a secret. */
   toStore(row: WooRow): WoocommerceStore {
     return {
@@ -78,7 +84,7 @@ export class WoocommerceService {
       ordersSyncedAt: iso(row.ordersSyncedAt),
       customersSyncedAt: iso(row.customersSyncedAt),
       syncStats: row.syncStats,
-      webhookUrl: webhookUrl(this.appUrl(), 'woocommerce', row.webhookSecret),
+      webhookUrl: webhookUrl(this.appUrl(), 'woocommerce', this.secretOf(row)),
       webhookIds: webhookIdsOf(row.metadata),
       createdAt: row.createdAt.toISOString(),
       rowVersion: row.rowVersion,
@@ -159,7 +165,7 @@ export class WoocommerceService {
         storeVersion: probe.data.version,
         consumerKey: this.crypto.encrypt(input.consumerKey),
         consumerSecret: this.crypto.encrypt(input.consumerSecret),
-        webhookSecret: secret,
+        webhookSecret: tokenColumns(this.crypto, secret),
       });
       await this.audit.record(tx, {
         module: WOO_MODULE_KEY,
@@ -264,8 +270,8 @@ export class WoocommerceService {
     if (!row) throw AppError.notFound('WooCommerce store', uuid);
     const out = generateWooPlugin({
       brandName: await this.branding.name(),
-      webhookUrl: webhookUrl(this.appUrl(), 'woocommerce', row.webhookSecret),
-      webhookSecret: row.webhookSecret,
+      webhookUrl: webhookUrl(this.appUrl(), 'woocommerce', this.secretOf(row)),
+      webhookSecret: this.secretOf(row),
     });
     await this.db.tx((tx) =>
       this.audit.record(tx, { module: WOO_MODULE_KEY, recordId: row.id, action: 'export' }),
