@@ -92,7 +92,6 @@
         "primaryText": "Votre couleur principale a un contraste de {ratio}:1 sur la page, inférieur à {min}:1, elle est donc ajustée lorsqu'elle sert de couleur de texte.",
         "button": "Le texte du bouton a un contraste de {ratio}:1 sur la couleur de votre bouton, inférieur à {min}:1.",
         "buttonEdge": "La couleur de votre bouton a un contraste de {ratio}:1 avec la page, inférieur à {min}:1, les boutons peuvent donc être difficiles à voir.",
-        "backdropText": "Le texte sur l'arrière-plan de la page a un contraste de {ratio}:1, inférieur à {min}:1.",
         "inDark": "(mode sombre)"
       },
       "wording": {

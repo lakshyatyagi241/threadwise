@@ -45,6 +45,20 @@ import { ErrorLine } from './parts';
 import { SettingsCard } from './settings-parts';
 import { useLeaveGuard } from './use-leave-guard';
 
+/** Literal names of the choice labels (a template string would hide them from the unused-message check). */
+const FONT_LABEL = {
+  default: 'style.fonts.default',
+  system: 'style.fonts.system',
+  serif: 'style.fonts.serif',
+  rounded: 'style.fonts.rounded',
+  humanist: 'style.fonts.humanist',
+} as const;
+const CORNER_LABEL = {
+  square: 'style.cornerStyles.square',
+  rounded: 'style.cornerStyles.rounded',
+  pill: 'style.cornerStyles.pill',
+} as const;
+
 export const THEME_KEYS = {
   workspace: ['appointments', 'page-theme', 'workspace'] as const,
   type: (id: string) => ['appointments', 'page-theme', 'type', id] as const,
@@ -475,7 +489,7 @@ export function AppearanceEditor({
                 >
                   {BOOKING_PAGE_FONTS.map((f) => (
                     <option key={f} value={f}>
-                      {t(`style.fonts.${f}`)}
+                      {t(FONT_LABEL[f])}
                     </option>
                   ))}
                 </Select>
@@ -487,7 +501,7 @@ export function AppearanceEditor({
                 onChange={(v) => patch({ cornerStyle: v })}
                 options={BOOKING_PAGE_CORNERS.map((c) => ({
                   id: c,
-                  label: t(`style.cornerStyles.${c}`),
+                  label: t(CORNER_LABEL[c]),
                 }))}
               />
               <ChoiceGroup

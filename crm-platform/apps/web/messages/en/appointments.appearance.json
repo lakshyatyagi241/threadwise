@@ -92,7 +92,6 @@
         "primaryText": "Your primary colour has a contrast of {ratio}:1 on the page, below {min}:1, so it is adjusted where it is used as text.",
         "button": "Button text has a contrast of {ratio}:1 on your button colour, below {min}:1.",
         "buttonEdge": "Your button colour has a contrast of {ratio}:1 against the page, below {min}:1, so buttons may be hard to see.",
-        "backdropText": "Text on the page background has a contrast of {ratio}:1, below {min}:1.",
         "inDark": "(dark mode)"
       },
       "wording": {

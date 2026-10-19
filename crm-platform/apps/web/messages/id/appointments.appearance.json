@@ -92,7 +92,6 @@
         "primaryText": "Warna utama Anda memiliki kontras {ratio}:1 pada halaman, di bawah {min}:1, sehingga disesuaikan saat dipakai sebagai teks.",
         "button": "Teks tombol memiliki kontras {ratio}:1 pada warna tombol Anda, di bawah {min}:1.",
         "buttonEdge": "Warna tombol Anda memiliki kontras {ratio}:1 terhadap halaman, di bawah {min}:1, sehingga tombol mungkin sulit terlihat.",
-        "backdropText": "Teks pada latar halaman memiliki kontras {ratio}:1, di bawah {min}:1.",
         "inDark": "(mode gelap)"
       },
       "wording": {

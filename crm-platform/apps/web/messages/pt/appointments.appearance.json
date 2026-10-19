@@ -92,7 +92,6 @@
         "primaryText": "Sua cor principal tem contraste de {ratio}:1 sobre a página, abaixo de {min}:1, por isso é ajustada onde é usada como texto.",
         "button": "O texto dos botões tem contraste de {ratio}:1 sobre a cor do botão, abaixo de {min}:1.",
         "buttonEdge": "A cor dos seus botões tem contraste de {ratio}:1 com a página, abaixo de {min}:1, então os botões podem ser difíceis de ver.",
-        "backdropText": "O texto sobre o fundo da página tem contraste de {ratio}:1, abaixo de {min}:1.",
         "inDark": "(modo escuro)"
       },
       "wording": {

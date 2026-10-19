@@ -92,7 +92,6 @@
         "primaryText": "Ihre Primärfarbe hat auf der Seite einen Kontrast von {ratio}:1, unter {min}:1, und wird daher als Textfarbe angepasst.",
         "button": "Der Schaltflächentext hat auf Ihrer Schaltflächenfarbe einen Kontrast von {ratio}:1, unter {min}:1.",
         "buttonEdge": "Ihre Schaltflächenfarbe hat gegenüber der Seite einen Kontrast von {ratio}:1, unter {min}:1, sodass Schaltflächen schwer erkennbar sein können.",
-        "backdropText": "Der Text auf dem Seitenhintergrund hat einen Kontrast von {ratio}:1, unter {min}:1.",
         "inDark": "(dunkler Modus)"
       },
       "wording": {

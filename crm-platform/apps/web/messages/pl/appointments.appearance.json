@@ -92,7 +92,6 @@
         "primaryText": "Kontrast koloru głównego na stronie wynosi {ratio}:1, czyli mniej niż {min}:1, więc jest korygowany tam, gdzie służy jako kolor tekstu.",
         "button": "Kontrast tekstu przycisku na tle koloru przycisku wynosi {ratio}:1, czyli mniej niż {min}:1.",
         "buttonEdge": "Kontrast koloru przycisku względem strony wynosi {ratio}:1, czyli mniej niż {min}:1, więc przyciski mogą być słabo widoczne.",
-        "backdropText": "Kontrast tekstu na tle strony wynosi {ratio}:1, czyli mniej niż {min}:1.",
         "inDark": "(tryb ciemny)"
       },
       "wording": {

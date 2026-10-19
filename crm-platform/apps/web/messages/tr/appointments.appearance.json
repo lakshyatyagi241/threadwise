@@ -92,7 +92,6 @@
         "primaryText": "Ana renginizin sayfadaki kontrastı {ratio}:1 ve {min}:1 değerinin altında; bu yüzden metin olarak kullanıldığı yerlerde ayarlanır.",
         "button": "Düğme metninin düğme renginizdeki kontrastı {ratio}:1 ve {min}:1 değerinin altında.",
         "buttonEdge": "Düğme renginizin sayfaya göre kontrastı {ratio}:1 ve {min}:1 değerinin altında; bu yüzden düğmeler zor görünebilir.",
-        "backdropText": "Sayfa arka planındaki metnin kontrastı {ratio}:1 ve {min}:1 değerinin altında.",
         "inDark": "(koyu mod)"
       },
       "wording": {

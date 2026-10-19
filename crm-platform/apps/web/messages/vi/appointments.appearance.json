@@ -92,7 +92,6 @@
         "primaryText": "Màu chính của bạn có độ tương phản {ratio}:1 trên trang, thấp hơn {min}:1, nên được điều chỉnh khi dùng làm màu chữ.",
         "button": "Chữ trên nút có độ tương phản {ratio}:1 với màu nút của bạn, thấp hơn {min}:1.",
         "buttonEdge": "Màu nút của bạn có độ tương phản {ratio}:1 so với trang, thấp hơn {min}:1, nên các nút có thể khó nhìn thấy.",
-        "backdropText": "Chữ trên nền trang có độ tương phản {ratio}:1, thấp hơn {min}:1.",
         "inDark": "(chế độ tối)"
       },
       "wording": {

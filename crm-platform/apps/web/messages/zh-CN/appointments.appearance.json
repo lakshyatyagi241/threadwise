@@ -92,7 +92,6 @@
         "primaryText": "您的主色在页面上的对比度为 {ratio}:1，低于 {min}:1，因此用作文字时会进行调整。",
         "button": "按钮文字在您的按钮颜色上的对比度为 {ratio}:1，低于 {min}:1。",
         "buttonEdge": "您的按钮颜色与页面的对比度为 {ratio}:1，低于 {min}:1，按钮可能不易看清。",
-        "backdropText": "页面背景上的文字对比度为 {ratio}:1，低于 {min}:1。",
         "inDark": "（深色模式）"
       },
       "wording": {

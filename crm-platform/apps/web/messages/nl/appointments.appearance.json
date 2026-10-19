@@ -92,7 +92,6 @@
         "primaryText": "Je primaire kleur heeft een contrast van {ratio}:1 op de pagina, lager dan {min}:1, dus wordt aangepast waar die als tekst wordt gebruikt.",
         "button": "Knoptekst heeft een contrast van {ratio}:1 op je knopkleur, lager dan {min}:1.",
         "buttonEdge": "Je knopkleur heeft een contrast van {ratio}:1 met de pagina, lager dan {min}:1, dus knoppen zijn mogelijk moeilijk te zien.",
-        "backdropText": "Tekst op de paginaachtergrond heeft een contrast van {ratio}:1, lager dan {min}:1.",
         "inDark": "(donkere modus)"
       },
       "wording": {

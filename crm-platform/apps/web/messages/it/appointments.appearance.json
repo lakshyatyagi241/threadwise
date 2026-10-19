@@ -92,7 +92,6 @@
         "primaryText": "Il colore principale ha un contrasto di {ratio}:1 sulla pagina, inferiore a {min}:1, quindi viene regolato dove è usato come testo.",
         "button": "Il testo del pulsante ha un contrasto di {ratio}:1 sul colore del pulsante, inferiore a {min}:1.",
         "buttonEdge": "Il colore del pulsante ha un contrasto di {ratio}:1 rispetto alla pagina, inferiore a {min}:1, quindi i pulsanti potrebbero essere difficili da vedere.",
-        "backdropText": "Il testo sullo sfondo della pagina ha un contrasto di {ratio}:1, inferiore a {min}:1.",
         "inDark": "(modalità scura)"
       },
       "wording": {

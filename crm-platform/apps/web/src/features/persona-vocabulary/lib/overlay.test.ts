@@ -54,6 +54,7 @@ describe('the bindings registry', () => {
       'contact-record',
       'appointments',
       'reminders',
+      'booking-page-appearance',
       'deals',
     ]);
   });
