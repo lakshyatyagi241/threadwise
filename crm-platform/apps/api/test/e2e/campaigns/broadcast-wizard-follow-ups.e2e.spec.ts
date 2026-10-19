@@ -167,13 +167,41 @@ const attempts = async (c: Launched) =>
     )
   ).rows.map((r) => ({ ...r, step_no: Number(r.step_no) }));
 
-/** An inbound message from the contact at `at`, in a thread the campaign's contact owns. */
-async function reply(c: Launched, name: string, at: Date, body: string | null = 'Yes please') {
+/**
+ * An inbound message from the contact at `at`, in a thread the campaign's contact owns. By default it arrives on the WhatsApp Cloud
+ * API number the campaign was sent from (the channel linked to that connection); `'other'` puts it on an Instagram channel instead.
+ */
+async function reply(
+  c: Launched,
+  name: string,
+  at: Date,
+  body: string | null = 'Yes please',
+  on: 'sender' | 'other' = 'sender',
+) {
   const p = c.who[name]!;
-  const ch = await owner().query(
-    `INSERT INTO channels (org_id, kind, name, status) VALUES ($1, 'whatsapp', 'WA', 'connected') RETURNING id`,
-    [c.orgId],
-  );
+  let ch: { rows: Array<{ id: number }> };
+  if (on === 'other') {
+    ch = await owner().query(
+      `INSERT INTO channels (org_id, kind, name, status) VALUES ($1, 'instagram', 'IG', 'connected') RETURNING id`,
+      [c.orgId],
+    );
+  } else {
+    const cfg = (
+      await owner().query(`SELECT id FROM wa_provider_configs WHERE org_id = $1 AND uuid = $2`, [
+        c.orgId,
+        c.w.config,
+      ])
+    ).rows[0] as { id: number };
+    ch = await owner().query(`SELECT id FROM channels WHERE org_id = $1 AND waba_config_id = $2`, [
+      c.orgId,
+      cfg.id,
+    ]);
+    if (ch.rows.length === 0)
+      ch = await owner().query(
+        `INSERT INTO channels (org_id, kind, name, status, waba_config_id) VALUES ($1, 'whatsapp_cloud', 'WA', 'connected', $2) RETURNING id`,
+        [c.orgId, cfg.id],
+      );
+  }
   const cv = await owner().query(
     `INSERT INTO conversations (org_id, channel_id, peer_key, title, contact_id, msg_seq) VALUES ($1,$2,$3,$4,$5,1) RETURNING id`,
     [c.orgId, ch.rows[0].id, `9199${Math.random().toString().slice(2, 10)}`, name, p.contactId],
@@ -438,6 +466,24 @@ describe('"replied" and "read": watch, fire at once, or run out', () => {
     expect(lab.sent).toHaveLength(0);
     expect(await attempts(c)).toMatchObject([{ name: 'Asha', outcome: 'lapsed' }]);
     expect((await chain(c)).Asha).toEqual({ state: 'done', next: null });
+  });
+
+  it('a message from the contact on another channel (Instagram) is not a reply: the step lapses', async () => {
+    const c = await launch('fu-other-channel', ['Asha'], async (w) => [
+      {
+        trigger: 'replied',
+        waitMinutes: 90,
+        action: { kind: 'template', templateId: (await secondTemplate(w)).uuid },
+      },
+    ]);
+    await reply(c, 'Asha', new Date(c.start.getTime() + 8 * MIN), 'hi on instagram', 'other');
+    after(c, 5);
+    await lab.followUps.tick();
+    expect(lab.sent).toHaveLength(0);
+    after(c, 91);
+    await lab.followUps.tick();
+    expect(await attempts(c)).toMatchObject([{ name: 'Asha', outcome: 'lapsed' }]);
+    expect(lab.sent).toHaveLength(0);
   });
 
   it('"read" fires when the provider reports the campaign message read', async () => {

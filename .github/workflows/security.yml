@@ -55,7 +55,7 @@ jobs:
             --config /repo/.gitleaks.toml --redact --no-banner --report-format json --report-path /repo/gitleaks-report.json
       - name: Keep the report when it fails
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: gitleaks-report
           path: gitleaks-report.json
@@ -92,7 +92,7 @@ jobs:
             --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 --format json --output /out/trivy-lockfile.json /src/pnpm-lock.yaml
       - name: Keep the reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dependency-reports
           path: security-reports/
@@ -130,7 +130,7 @@ jobs:
           done
       - name: Keep the reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: image-reports
           path: security-reports/

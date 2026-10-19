@@ -32,7 +32,7 @@ import {
   type MessageLogFacade,
 } from '../chat-conversations';
 import { InboxAccess } from './inbox-access.service';
-import { visibleToSql } from './visibility-sql';
+import { visibleToJoinedSql } from './visibility-sql';
 
 export const PERM_HISTORY_READ = 'msg.history.read';
 const PERM_CONTACTS_READ = 'record.contacts.read';
@@ -210,9 +210,11 @@ export class MessageHistoryService {
       );
       teamIds = (res.rows as Array<{ team_id: string | number }>).map((r) => Number(r.team_id));
     }
+    const visible = visibleToJoinedSql(viewer, 'c');
     return {
       orgId: ctx.orgId,
-      conversationVisible: visibleToSql(viewer, 'c'),
+      conversationJoins: visible.joins,
+      conversationVisible: visible.where,
       bulk: viewer.scope === 'all',
       contacts: {
         scope: contacts.allowed ? contacts.scope : null,

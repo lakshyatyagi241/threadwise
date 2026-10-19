@@ -47,6 +47,7 @@ export function selectionOfStored(f: Record<string, unknown> | null): HistorySel
 /** What the worker sees: every conversation, every recipient row, every contact; charges are not in the file. */
 export const exportContext = (orgId: number): HistoryContext => ({
   orgId,
+  conversationJoins: sql``,
   conversationVisible: sql`TRUE`,
   bulk: true,
   contacts: { scope: 'all', userId: 0, teamIds: [] },

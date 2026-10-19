@@ -66,9 +66,14 @@ export default {
         `${x.file.split('/').pop()}: ${x.name} is NOT VALID and no later migration validates it`,
     );
     checks.push(
-      expectNone('int-notvalid', 'Constraints added NOT VALID are later validated', notValid, {
-        level: 'warn',
-      }),
+      expectNone(
+        'int-notvalid',
+        'Constraints added NOT VALID are later validated',
+        unreviewed(48, notValid),
+        {
+          level: 'warn',
+        },
+      ),
     );
 
     const { client, error } = await pgClient();
