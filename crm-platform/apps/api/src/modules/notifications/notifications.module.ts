@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { CryptoService } from '../../common/crypto/crypto.service';
 import { WEB_PUSH_PROVIDER } from '../../infra/providers/web-push/web-push.port';
 import { WebPushLibProvider } from '../../infra/providers/web-push/web-push-lib.provider';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
@@ -27,6 +28,7 @@ import { NotificationsService } from './notifications.service';
     NotificationPrefsResolver,
     NotificationPreferencesService,
     ConversationReadState,
+    CryptoService,
     PushSubscriptionsRepository,
     PushSubscriptionsService,
     WebPushSender,

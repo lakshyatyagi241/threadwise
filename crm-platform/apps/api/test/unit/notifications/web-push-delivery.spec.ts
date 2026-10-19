@@ -68,7 +68,7 @@ function harness(
     }),
   };
   const presence = { isVisible: vi.fn(async () => opts.visible === true) };
-  const sender = new WebPushSender(provider, db as never, subscriptions as never);
+  const sender = new WebPushSender(provider, db as never, subscriptions as never, {} as never);
   const delivery = new WebPushDeliveryService(
     db as never,
     notifications as never,

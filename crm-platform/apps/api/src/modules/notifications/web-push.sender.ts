@@ -1,5 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import type { PushPayload } from '@crm/contracts';
+import { CryptoService } from '../../common/crypto/crypto.service';
+import { openIfSealed } from '../../common/crypto/secret-columns';
 import { webPushConfig } from '../../config/domains/web-push.env';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
@@ -51,6 +53,7 @@ export class WebPushSender {
     @Inject(WEB_PUSH_PROVIDER) private readonly provider: WebPushProvider,
     private readonly db: DatabaseService,
     private readonly repo: PushSubscriptionsRepository,
+    private readonly crypto: CryptoService,
   ) {}
 
   isEnabled(): boolean {
@@ -75,7 +78,16 @@ export class WebPushSender {
       targets.map(async (t) => ({
         id: t.id,
         result: await this.provider
-          .send({ endpoint: t.endpoint, p256dh: t.p256dh, auth: t.auth }, body, options)
+          .send(
+            {
+              endpoint: t.endpoint,
+              p256dh: t.p256dh,
+              // Sealed since encryption audit E7; a row written before that is still plaintext.
+              auth: openIfSealed(this.crypto, t.auth),
+            },
+            body,
+            options,
+          )
           // The adapter does not throw for a push-service answer; a bug in it must not lose the other devices' results.
           .catch((): WebPushResult => failed),
       })),

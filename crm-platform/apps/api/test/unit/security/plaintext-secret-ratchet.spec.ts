@@ -65,6 +65,8 @@ const ALLOW: Record<string, Reason> = {
   'trello_integrations.api_key': 'encrypted',
   'trello_integrations.api_secret': 'encrypted',
   'trello_integrations.token': 'encrypted',
+  'push_subscriptions.auth': 'encrypted', // notifications/push-subscriptions.service.ts seals it, web-push.sender.ts opens it (E7)
+  'user_device_tokens.fcm_token': 'encrypted', // no writer yet (E7): the writer must seal it with CryptoService
   'outbound_webhooks.secret': 'encrypted', // an older twin of `webhooks`; only counted today, never written
 
   // --- public: an identifier, a public key or a name, not a credential ---
@@ -100,8 +102,6 @@ const ALLOW: Record<string, Reason> = {
   'viber_channels.webhook_token': 'E3',
   'wechat_channels.webhook_token': 'E3',
   'incoming_webhooks.token': 'E3', // no service writes it yet
-  'push_subscriptions.auth': 'E7', // Web Push auth secret, needed in clear to encrypt a push
-  'user_device_tokens.fcm_token': 'E7', // device push registration, needed in clear to send
   'crm_briefs.public_token': 'E8', // bearer links shown to customers or recipients, kept in clear as the lookup key
   'wa_link_clicks.token': 'E8',
   'wa_orders.recovery_token': 'E8',

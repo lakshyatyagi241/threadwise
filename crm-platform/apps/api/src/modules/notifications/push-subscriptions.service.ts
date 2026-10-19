@@ -10,6 +10,7 @@ import {
   type PushSubscriptionInput,
   type PushTestResponse,
 } from '@crm/contracts';
+import { CryptoService } from '../../common/crypto/crypto.service';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { webPushConfig } from '../../config/domains/web-push.env';
@@ -49,6 +50,7 @@ export class PushSubscriptionsService {
     private readonly sender: WebPushSender,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     private readonly fanout: NotificationFanout,
+    private readonly crypto: CryptoService,
   ) {}
 
   private caller(): { orgId: number; userId: number } {
@@ -89,7 +91,7 @@ export class PushSubscriptionsService {
         endpoint: input.endpoint,
         endpointHash,
         p256dh: input.keys.p256dh,
-        auth: input.keys.auth,
+        auth: this.crypto.encrypt(input.keys.auth),
         ua,
         label: deviceLabel(ua),
       });
