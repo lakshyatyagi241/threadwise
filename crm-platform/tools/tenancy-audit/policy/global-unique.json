@@ -230,5 +230,33 @@
   "woocommerce_integration_logs_pkey": {
     "category": "partitioned-primary-key",
     "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "uq_telegram_bots_webhook_token_hash": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_line_channels_webhook_token_hash": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_viber_channels_webhook_token_hash": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_wechat_channels_webhook_token_hash": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_orders_return_token_hash": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_shopify_integrations_webhook_secret_hash": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_woocommerce_integrations_webhook_secret_hash": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
   }
 }
