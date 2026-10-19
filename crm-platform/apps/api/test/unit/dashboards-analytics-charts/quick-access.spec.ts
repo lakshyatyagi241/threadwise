@@ -6,13 +6,12 @@ import {
 } from '../../../src/modules/dashboards-analytics-charts/quick-access';
 
 describe('quick access (TW-DASH-009)', () => {
-  it('a user who never customised gets the ten defaults, in order', () => {
+  it('a user who never customised gets the nine defaults, in order (no Broadcasts tile)', () => {
     const items = effectiveQuickAccess(null);
     expect(items.map((i) => ('key' in i ? i.key : ''))).toEqual([
       'inbox',
       'contacts',
       'campaigns',
-      'broadcasts',
       'templates',
       'flows',
       'scheduled',

@@ -41,13 +41,6 @@ export const QUICK_ACCESS_CATALOG: readonly QuickAccessCatalogEntry[] = [
     icon: 'campaign',
   },
   {
-    key: 'broadcasts',
-    label: 'Broadcasts',
-    desc: 'Send one message to many contacts',
-    url: '/broadcasts',
-    icon: 'broadcast',
-  },
-  {
     key: 'templates',
     label: 'Templates',
     desc: 'Approved message templates',
@@ -143,12 +136,11 @@ export const QUICK_ACCESS_CATALOG: readonly QuickAccessCatalogEntry[] = [
   { key: 'more', label: 'More apps', desc: 'Every tool in one page', url: '/more', icon: 'grid' },
 ];
 
-/** What a person who never customised sees (Reference's ten). */
+/** What a person who never customised sees. Broadcasts live under Campaigns now, so no separate tile. */
 export const QUICK_ACCESS_DEFAULT_KEYS: readonly string[] = [
   'inbox',
   'contacts',
   'campaigns',
-  'broadcasts',
   'templates',
   'flows',
   'scheduled',
