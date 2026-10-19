@@ -32,13 +32,7 @@
       "calendarNamed": "Add to my calendar ({account}, {calendar})",
       "invite": "Send a calendar invitation to the contact",
       "inviteHint": "Your calendar emails the invitation to the contact's email address. Our own email invitation is not affected.",
-      "connectLink": "Connect video conferencing",
-      "connectNow": "Connect your {providers} account",
-      "providers": {
-        "zoom": "Zoom",
-        "teams": "Microsoft Teams"
-      },
-      "loadFailed": "The video options could not be loaded."
+      "connectLink": "Connect video conferencing"
     },
     "row": {
       "join": "Join",

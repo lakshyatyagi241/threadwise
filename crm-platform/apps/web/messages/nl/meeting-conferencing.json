@@ -1,0 +1,132 @@
+{
+  "settings": {
+    "tiles": {
+      "video-meetings": {
+        "label": "Videovergaderingen",
+        "description": "Verbind je eigen Zoom- of Microsoft Teams-account om videolinks aan je vergaderingen toe te voegen.",
+        "keywords": "zoom, teams, microsoft teams, video, videogesprek, vergaderlink, deelnamelink, videoconferentie, google meet"
+      }
+    }
+  },
+  "meeting-conferencing": {
+    "common": {
+      "dismiss": "Sluiten"
+    },
+    "form": {
+      "label": "Videoconferentie",
+      "add": {
+        "zoom": "Zoom-link toevoegen",
+        "teams": "Teams-link toevoegen",
+        "meet": "Google Meet-link toevoegen"
+      },
+      "chosen": {
+        "zoom": "Zoom-link",
+        "teams": "Teams-link",
+        "meet": "Google Meet-link"
+      },
+      "remove": "Videolink verwijderen",
+      "needsStart": "Stel een starttijd in om een videolink of agenda-item toe te voegen.",
+      "meetNote": "Een Google Meet-link hoort bij een agenda-afspraak, dus deze vergadering wordt ook aan je agenda toegevoegd.",
+      "teamsViaCalendar": "Deze Teams-link wordt gemaakt door je Microsoft 365-agenda, dus deze vergadering wordt daar ook aan toegevoegd.",
+      "calendar": "Toevoegen aan mijn agenda ({account})",
+      "calendarNamed": "Toevoegen aan mijn agenda ({account}, {calendar})",
+      "invite": "Een agenda-uitnodiging naar de contactpersoon sturen",
+      "inviteHint": "Je agenda mailt de uitnodiging naar het e-mailadres van de contactpersoon. Onze eigen e-mailuitnodiging blijft ongewijzigd.",
+      "connectLink": "Videoconferentie verbinden"
+    },
+    "row": {
+      "join": "Deelnemen",
+      "joinAria": "Deelnemen aan de {provider}-vergadering {title}",
+      "provider": {
+        "zoom": "Zoom",
+        "teams": "Microsoft Teams",
+        "meet": "Google Meet"
+      },
+      "pending": "Videolink wordt toegevoegd...",
+      "onCalendar": "In je agenda",
+      "invited": "De agenda heeft de contactpersoon een uitnodiging gestuurd",
+      "retry": "Opnieuw proberen",
+      "retrying": "Opnieuw proberen...",
+      "retried": "De videolink en het agenda-item zijn opnieuw gecontroleerd.",
+      "retryFailed": "Dat is niet gelukt. De vergadering is opgeslagen; je kunt het opnieuw proberen.",
+      "problem": {
+        "not_installed": "De integratie met {provider} is niet geïnstalleerd voor deze werkruimte.",
+        "not_connected": "Je {provider}-account is niet verbonden. Verbind het via Instellingen, Videovergaderingen.",
+        "needs_reconnect": "Je {provider}-verbinding moet worden vernieuwd. Verbind opnieuw via Instellingen, Videovergaderingen.",
+        "not_configured": "{provider} is nog niet ingesteld voor dit platform. Neem contact op met je platformbeheerder.",
+        "calendar_not_connected": "De agenda is niet verbonden, dus de vergadering kon er niet aan worden toegevoegd.",
+        "provider_failed": "{provider} reageerde niet. De vergadering is opgeslagen; probeer het opnieuw.",
+        "no_start_time": "Een videolink heeft een starttijd voor de vergadering nodig."
+      },
+      "calendarProblem": {
+        "calendar_not_connected": "De vergadering kon niet aan de agenda worden toegevoegd omdat er geen agenda is verbonden.",
+        "provider_failed": "De agenda reageerde niet, dus de vergadering staat er nog niet in. De vergadering is opgeslagen; probeer het opnieuw.",
+        "other": "De vergadering kon niet aan de agenda worden toegevoegd."
+      }
+    },
+    "page": {
+      "eyebrow": "Instellingen",
+      "title": "Videovergaderingen",
+      "subtitle": "Verbind je eigen Zoom- of Microsoft Teams-account. Het formulier Vergadering toevoegen biedt dan een videolink aan, gemaakt in je account en getoond bij de vergadering met een knop Deelnemen.",
+      "loading": "Je videoverbindingen worden geladen...",
+      "forbidden": {
+        "title": "Je kunt deze pagina niet gebruiken",
+        "body": "Vraag een werkruimtebeheerder om je rol toegang te geven om contactpersonen te bewerken."
+      },
+      "failure": {
+        "generic": "Je videoverbindingen konden niet worden geladen."
+      },
+      "retry": "Opnieuw proberen",
+      "providers": {
+        "zoom": {
+          "name": "Zoom",
+          "about": "Maakt voor elke vergadering die je plant een Zoom-vergadering in je Zoom-account, verplaatst die als je de vergadering verplaatst en verwijdert die als je de vergadering verwijdert."
+        },
+        "teams": {
+          "name": "Microsoft Teams",
+          "about": "Maakt voor elke vergadering die je plant een Teams-vergadering in je Microsoft-werk- of schoolaccount, en werkt die bij of verwijdert die samen met de vergadering."
+        }
+      },
+      "status": {
+        "connected": "Verbonden",
+        "needs_reconnect": "Opnieuw verbinden nodig",
+        "disconnected": "Niet verbonden",
+        "not_installed": "Niet geïnstalleerd",
+        "unavailable": "Niet beschikbaar"
+      },
+      "account": "Account: {account}",
+      "connectedOn": "Verbonden {when}",
+      "lastError": {
+        "forbidden": "De provider heeft het laatste verzoek geweigerd. Je account mag mogelijk geen vergaderingen maken.",
+        "rate_limited": "De provider beperkt op dit moment het aantal verzoeken.",
+        "unavailable": "De provider reageerde niet op het laatste verzoek."
+      },
+      "actions": {
+        "connect": "Verbinden",
+        "reconnect": "Opnieuw verbinden",
+        "disconnect": "Verbinding verbreken",
+        "install": "Installeren in de Marketplace"
+      },
+      "notInstalled": {
+        "canInstall": "Je werkruimte heeft {provider} nog niet geïnstalleerd. Installeer het via de Marketplace en verbind hier daarna je account.",
+        "cannotInstall": "Je werkruimte heeft {provider} nog niet geïnstalleerd. Vraag een werkruimtebeheerder om het via de Marketplace te installeren."
+      },
+      "unavailable": "{provider} is nog niet ingesteld voor dit platform. Neem contact op met je platformbeheerder.",
+      "outcome": {
+        "connected": "{provider} is verbonden.",
+        "denied": "{provider} is niet verbonden omdat het inloggen is geannuleerd.",
+        "failed": "{provider} kon niet worden verbonden. Probeer het opnieuw.",
+        "expired": "Dat inloggen duurde te lang. Kies opnieuw Verbinden.",
+        "not_configured": "{provider} is nog niet ingesteld voor dit platform.",
+        "notYours": "Dat inloggen is door iemand anders gestart, dus er is niets verbonden."
+      },
+      "confirming": "De verbinding wordt afgerond...",
+      "disconnected": "{provider} losgekoppeld.",
+      "disconnectTitle": "{provider} loskoppelen?",
+      "disconnectBody": "Vergaderingen die al een {provider}-link hebben, houden die, maar als je die vergaderingen verplaatst of verwijdert, kan de ruimte niet meer worden aangepast. Je kunt op elk moment opnieuw verbinden.",
+      "disconnectConfirm": "Verbinding verbreken",
+      "keep": "Verbonden houden",
+      "calendarNote": "Google Meet- en Teams-links die via je agenda worden gemaakt, hebben hier geen verbinding nodig: ze gebruiken de agenda die je werkruimte al heeft verbonden."
+    }
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "settings": {
+    "tiles": {
+      "video-meetings": {
+        "label": "Cuộc họp video",
+        "description": "Kết nối tài khoản Zoom hoặc Microsoft Teams của riêng bạn để thêm liên kết video vào các cuộc họp.",
+        "keywords": "zoom, teams, microsoft teams, video, gọi video, liên kết cuộc họp, liên kết tham gia, hội nghị truyền hình, google meet"
+      }
+    }
+  },
+  "meeting-conferencing": {
+    "common": {
+      "dismiss": "Đóng"
+    },
+    "form": {
+      "label": "Hội nghị truyền hình",
+      "add": {
+        "zoom": "Thêm liên kết Zoom",
+        "teams": "Thêm liên kết Teams",
+        "meet": "Thêm liên kết Google Meet"
+      },
+      "chosen": {
+        "zoom": "Liên kết Zoom",
+        "teams": "Liên kết Teams",
+        "meet": "Liên kết Google Meet"
+      },
+      "remove": "Xóa liên kết video",
+      "needsStart": "Hãy đặt giờ bắt đầu để thêm liên kết video hoặc mục lịch.",
+      "meetNote": "Liên kết Google Meet là một phần của sự kiện lịch, nên cuộc họp này cũng được thêm vào lịch của bạn.",
+      "teamsViaCalendar": "Liên kết Teams này do lịch Microsoft 365 của bạn tạo, nên cuộc họp này cũng được thêm vào đó.",
+      "calendar": "Thêm vào lịch của tôi ({account})",
+      "calendarNamed": "Thêm vào lịch của tôi ({account}, {calendar})",
+      "invite": "Gửi lời mời lịch cho liên hệ",
+      "inviteHint": "Lịch của bạn sẽ gửi lời mời đến địa chỉ email của liên hệ. Lời mời email của chúng tôi không bị ảnh hưởng.",
+      "connectLink": "Kết nối hội nghị truyền hình"
+    },
+    "row": {
+      "join": "Tham gia",
+      "joinAria": "Tham gia cuộc họp {provider} {title}",
+      "provider": {
+        "zoom": "Zoom",
+        "teams": "Microsoft Teams",
+        "meet": "Google Meet"
+      },
+      "pending": "Đang thêm liên kết video...",
+      "onCalendar": "Trên lịch của bạn",
+      "invited": "Lịch đã gửi lời mời cho liên hệ",
+      "retry": "Thử lại",
+      "retrying": "Đang thử lại...",
+      "retried": "Liên kết video và mục lịch đã được kiểm tra lại.",
+      "retryFailed": "Không thành công. Cuộc họp đã được lưu; bạn có thể thử lại.",
+      "problem": {
+        "not_installed": "Tích hợp {provider} chưa được cài đặt cho không gian làm việc này.",
+        "not_connected": "Tài khoản {provider} của bạn chưa được kết nối. Hãy kết nối trong Cài đặt, Cuộc họp video.",
+        "needs_reconnect": "Kết nối {provider} của bạn cần được làm mới. Hãy kết nối lại trong Cài đặt, Cuộc họp video.",
+        "not_configured": "{provider} chưa được thiết lập cho nền tảng này. Hãy hỏi quản trị viên nền tảng.",
+        "calendar_not_connected": "Lịch chưa được kết nối nên không thể thêm cuộc họp vào đó.",
+        "provider_failed": "{provider} không phản hồi. Cuộc họp đã được lưu; hãy thử lại.",
+        "no_start_time": "Liên kết video cần có giờ bắt đầu của cuộc họp."
+      },
+      "calendarProblem": {
+        "calendar_not_connected": "Không thể thêm cuộc họp vào lịch vì chưa có lịch nào được kết nối.",
+        "provider_failed": "Lịch không phản hồi nên cuộc họp chưa có trên đó. Cuộc họp đã được lưu; hãy thử lại.",
+        "other": "Không thể thêm cuộc họp vào lịch."
+      }
+    },
+    "page": {
+      "eyebrow": "Cài đặt",
+      "title": "Cuộc họp video",
+      "subtitle": "Kết nối tài khoản Zoom hoặc Microsoft Teams của riêng bạn. Biểu mẫu Thêm cuộc họp khi đó sẽ cung cấp một liên kết video, được tạo trong tài khoản của bạn và hiển thị trên cuộc họp cùng nút Tham gia.",
+      "loading": "Đang tải các kết nối video của bạn...",
+      "forbidden": {
+        "title": "Bạn không thể dùng trang này",
+        "body": "Hãy nhờ quản trị viên không gian làm việc cấp cho vai trò của bạn quyền chỉnh sửa liên hệ."
+      },
+      "failure": {
+        "generic": "Không thể tải các kết nối video của bạn."
+      },
+      "retry": "Thử lại",
+      "providers": {
+        "zoom": {
+          "name": "Zoom",
+          "about": "Tạo một cuộc họp Zoom trong tài khoản Zoom của bạn cho mỗi cuộc họp bạn lên lịch, dời nó khi bạn dời cuộc họp và xóa nó khi bạn xóa cuộc họp."
+        },
+        "teams": {
+          "name": "Microsoft Teams",
+          "about": "Tạo một cuộc họp Teams trong tài khoản Microsoft công việc hoặc trường học của bạn cho mỗi cuộc họp bạn lên lịch, đồng thời cập nhật hoặc xóa nó cùng cuộc họp."
+        }
+      },
+      "status": {
+        "connected": "Đã kết nối",
+        "needs_reconnect": "Cần kết nối lại",
+        "disconnected": "Chưa kết nối",
+        "not_installed": "Chưa cài đặt",
+        "unavailable": "Không khả dụng"
+      },
+      "account": "Tài khoản: {account}",
+      "connectedOn": "Đã kết nối {when}",
+      "lastError": {
+        "forbidden": "Nhà cung cấp đã từ chối yêu cầu gần nhất. Tài khoản của bạn có thể không được phép tạo cuộc họp.",
+        "rate_limited": "Nhà cung cấp đang giới hạn yêu cầu vào lúc này.",
+        "unavailable": "Nhà cung cấp không phản hồi yêu cầu gần nhất."
+      },
+      "actions": {
+        "connect": "Kết nối",
+        "reconnect": "Kết nối lại",
+        "disconnect": "Ngắt kết nối",
+        "install": "Cài đặt trong Marketplace"
+      },
+      "notInstalled": {
+        "canInstall": "Không gian làm việc của bạn chưa cài đặt {provider}. Hãy cài đặt từ Marketplace, rồi kết nối tài khoản của bạn tại đây.",
+        "cannotInstall": "Không gian làm việc của bạn chưa cài đặt {provider}. Hãy nhờ quản trị viên không gian làm việc cài đặt từ Marketplace."
+      },
+      "unavailable": "{provider} chưa được thiết lập cho nền tảng này. Hãy hỏi quản trị viên nền tảng.",
+      "outcome": {
+        "connected": "{provider} đã được kết nối.",
+        "denied": "{provider} chưa được kết nối vì đã hủy đăng nhập.",
+        "failed": "Không thể kết nối {provider}. Hãy thử lại.",
+        "expired": "Lần đăng nhập đó mất quá nhiều thời gian. Hãy nhấn Kết nối lại một lần nữa.",
+        "not_configured": "{provider} chưa được thiết lập cho nền tảng này.",
+        "notYours": "Lần đăng nhập đó do người khác bắt đầu nên không có gì được kết nối."
+      },
+      "confirming": "Đang hoàn tất kết nối...",
+      "disconnected": "Đã ngắt kết nối {provider}.",
+      "disconnectTitle": "Ngắt kết nối {provider}?",
+      "disconnectBody": "Các cuộc họp đã có liên kết {provider} vẫn giữ liên kết đó, nhưng việc dời hoặc xóa các cuộc họp này sẽ không còn thay đổi được phòng họp. Bạn có thể kết nối lại bất cứ lúc nào.",
+      "disconnectConfirm": "Ngắt kết nối",
+      "keep": "Giữ kết nối",
+      "calendarNote": "Liên kết Google Meet và Teams tạo qua lịch của bạn không cần kết nối tại đây: chúng dùng lịch mà không gian làm việc của bạn đã kết nối."
+    }
+  }
+}
