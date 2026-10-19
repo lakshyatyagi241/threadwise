@@ -1,6 +1,6 @@
 // API + SQL report. Lists every route with its latency class and budget, every SQL statement that matches a known slow shape (static
 // suspicion), and - when a run's results are passed - the measured p95 of every GET route and the measured time of every SQL statement.
-//   node tools/api-inventory/build.mjs [--results perf/results] [--out docs/quality/api-inventory] [--api-ms 300] [--watch-ms 200] [--query-ms 50]
+//   node tools/api-inventory/build.mjs [--results perf/results] [--before perf/results-before] [--out docs/quality/api-inventory] [--api-ms 300] [--watch-ms 200] [--query-ms 50]
 // results dir = the output of measure.mjs (api-timings.json, query-timings.json, not-run.json).
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -21,6 +21,12 @@ const resDir = arg('--results', '') ? resolve(ROOT, arg('--results')) : null;
 const load = (f, d) =>
   resDir && existsSync(join(resDir, f)) ? JSON.parse(readFileSync(join(resDir, f), 'utf8')) : d;
 const timings = load('api-timings.json', null);
+// an earlier run of the same routes, to show what a fix changed
+const beforeDir = arg('--before', '') ? resolve(ROOT, arg('--before')) : null;
+const before =
+  beforeDir && existsSync(join(beforeDir, 'api-timings.json'))
+    ? JSON.parse(readFileSync(join(beforeDir, 'api-timings.json'), 'utf8'))
+    : null;
 const queryTimings = load('query-timings.json', null);
 const classes = new Map(
   JSON.parse(readFileSync(join(ROOT, 'perf/endpoint-classes.json'), 'utf8')).endpoints.map((e) => [
@@ -75,10 +81,9 @@ const byKind = unmeasured.reduce((m, r) => m.set(r.v.kind, (m.get(r.v.kind) ?? 0
 const slowQ = (queryTimings ?? []).filter((q) => q.meanMs > QUERY_MS);
 const maxQ = (queryTimings ?? []).filter((q) => q.meanMs <= QUERY_MS && q.maxMs > QUERY_MS);
 
-const head =
-  '<tr><th>Module</th><th>Method</th><th>URL</th><th>Class</th><th>Budget p95 ms</th><th>p95 ms</th><th>p50 ms</th><th>KB</th><th>Why no figure</th></tr>';
+const head = `<tr><th>Module</th><th>Method</th><th>URL</th><th>Class</th><th>Budget p95 ms</th><th>p95 ms</th>${before ? '<th>before ms</th>' : ''}<th>p50 ms</th><th>KB</th><th>Why no figure</th></tr>`;
 const tr = (r, cls = '') =>
-  `<tr${cls ? ` class="${cls}"` : ''} data-q="${esc((r.route + ' ' + r.module).toLowerCase())}"><td>${esc(r.module)}</td><td>${r.method}</td><td>${esc(r.url)}</td><td>${r.class}</td><td>${r.budgetMs ?? ''}</td><td>${r.t?.p95 != null && r.v.kind === 'timed' ? Math.round(r.t.p95) : ''}</td><td>${r.t?.p50 != null && r.v.kind === 'timed' ? Math.round(r.t.p50) : ''}</td><td>${r.t?.bytes != null ? (r.t.bytes / 1024).toFixed(1) : ''}</td><td>${esc(r.v.why)}</td></tr>`;
+  `<tr${cls ? ` class="${cls}"` : ''} data-q="${esc((r.route + ' ' + r.module).toLowerCase())}"><td>${esc(r.module)}</td><td>${r.method}</td><td>${esc(r.url)}</td><td>${r.class}</td><td>${r.budgetMs ?? ''}</td><td>${r.t?.p95 != null && r.v.kind === 'timed' ? Math.round(r.t.p95) : ''}</td>${before ? `<td>${before[r.route]?.p95 != null ? Math.round(before[r.route].p95) : ''}</td>` : ''}<td>${r.t?.p50 != null && r.v.kind === 'timed' ? Math.round(r.t.p50) : ''}</td><td>${r.t?.bytes != null ? (r.t.bytes / 1024).toFixed(1) : ''}</td><td>${esc(r.v.why)}</td></tr>`;
 const qHead =
   '<tr><th>Mean ms</th><th>Max ms</th><th>Calls</th><th>Rows</th><th>Statement</th></tr>';
 const qr = (q, cls = '') =>

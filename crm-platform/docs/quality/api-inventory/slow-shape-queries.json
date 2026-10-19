@@ -764,35 +764,42 @@
  },
  {
   "shape": "SELECT *",
-  "line": 712,
+  "line": 715,
   "text": "SELECT * FROM (${feedSql(ctx, sel, { level, page: { cursor, limit } })}) f ORDER BY f.at DESC, f.rank DESC, f.id DESC LIMIT ${limit + 1}",
   "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
   "module": "chat-conversations"
  },
  {
   "shape": "count(*) FILTER aggregate",
-  "line": 717,
+  "line": 720,
   "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE r.direction = 'in')::int AS received, count(*) FILTER (WHERE r.direction = 'out' AND r",
   "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
   "module": "chat-conversations"
  },
  {
   "shape": "DISTINCT over a join",
-  "line": 730,
+  "line": 733,
   "text": "SELECT u.currency AS currency, sum(u.credits)::bigint AS minor, count(*)::int AS messages FROM (SELECT DISTINCT r.provider_id FROM (${feedSq",
   "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
   "module": "chat-conversations"
  },
  {
   "shape": "correlated subquery in SELECT list",
-  "line": 730,
+  "line": 733,
   "text": "SELECT u.currency AS currency, sum(u.credits)::bigint AS minor, count(*)::int AS messages FROM (SELECT DISTINCT r.provider_id FROM (${feedSq",
   "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
   "module": "chat-conversations"
  },
  {
+  "shape": "correlated subquery in SELECT list",
+  "line": 757,
+  "text": "WITH per_conversation AS ( SELECT m.conversation_id, min(m.created_at) FILTER (WHERE m.direction = 'in') AS at, min(m.created_at) FILTER (WH",
+  "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
+  "module": "chat-conversations"
+ },
+ {
   "shape": "count(*) FILTER aggregate",
-  "line": 775,
+  "line": 793,
   "text": "WITH r AS (${feedSql(ctx, { ...sel, window: { from: seriesFrom, to: sel.window.to } }, { level: 'slim' })}), agg AS ( SELECT date_trunc(${u}",
   "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
   "module": "chat-conversations"
@@ -1204,36 +1211,29 @@
   "module": "dashboards-analytics-charts"
  },
  {
-  "shape": "SELECT *",
-  "line": 53,
-  "text": "WITH s AS (SELECT * FROM ${stream(orgId, from, to)}) SELECT count(*) FILTER (WHERE direction = 'out')::int AS sent, count(*) FILTER (WHERE d",
+  "shape": "count(*) FILTER aggregate",
+  "line": 56,
+  "text": "WITH per AS ( SELECT conversation_id, count(*) FILTER (WHERE direction = 'out') AS sent, count(*) FILTER (WHERE direction = 'out' AND ${DELI",
   "file": "apps/api/src/modules/dashboards-analytics-charts/dash.repository.ts",
   "module": "dashboards-analytics-charts"
  },
  {
   "shape": "count(*) FILTER aggregate",
-  "line": 53,
-  "text": "WITH s AS (SELECT * FROM ${stream(orgId, from, to)}) SELECT count(*) FILTER (WHERE direction = 'out')::int AS sent, count(*) FILTER (WHERE d",
-  "file": "apps/api/src/modules/dashboards-analytics-charts/dash.repository.ts",
-  "module": "dashboards-analytics-charts"
- },
- {
-  "shape": "count(*) FILTER aggregate",
-  "line": 129,
+  "line": 137,
   "text": "SELECT ${idx} AS i, count(*)::int AS sent, count(*) FILTER (WHERE ${DELIVERED})::int AS delivered, count(*) FILTER (WHERE ${FAILED})::int AS",
   "file": "apps/api/src/modules/dashboards-analytics-charts/dash.repository.ts",
   "module": "dashboards-analytics-charts"
  },
  {
   "shape": "count(*) FILTER aggregate",
-  "line": 150,
+  "line": 158,
   "text": "SELECT CASE WHEN template_id IS NOT NULL OR kind = 'template' THEN 'template' WHEN kind IN ('image','video','audio','voice','document','stic",
   "file": "apps/api/src/modules/dashboards-analytics-charts/dash.repository.ts",
   "module": "dashboards-analytics-charts"
  },
  {
   "shape": "count(*) FILTER aggregate",
-  "line": 182,
+  "line": 190,
   "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE status IN ('resolved','closed'))::int AS closed, count(*) FILTER ( WHERE assignee_user",
   "file": "apps/api/src/modules/dashboards-analytics-charts/dash.repository.ts",
   "module": "dashboards-analytics-charts"
