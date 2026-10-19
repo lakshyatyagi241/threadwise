@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -35,6 +35,7 @@ export function InboxPage() {
   const ts = useTranslations(`${NS}.status`);
   const tp = useTranslations(`${NS}.priority`);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const router = useRouter();
   const params = useSearchParams();
   const openId = params.get('open');
@@ -179,9 +180,9 @@ export function InboxPage() {
                   data-testid="ticket-row"
                 >
                   <td className="whitespace-nowrap p-3 text-muted-foreground">
-                    {shortDate(r.createdAt, locale).day}
+                    {shortDate(r.createdAt, locale, timeZone).day}
                     <br />
-                    <span className="text-xs">{shortDate(r.createdAt, locale).time}</span>
+                    <span className="text-xs">{shortDate(r.createdAt, locale, timeZone).time}</span>
                   </td>
                   <td className="p-3">
                     <p className="font-medium">{r.subject || t('table.noSubject')}</p>

@@ -15,6 +15,7 @@ import {
   text,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { conversations } from '../chat-conversations/tables';
@@ -41,7 +42,12 @@ export const lineChannels = pgTable(
     /** AES-GCM ciphertext (credential pattern); never plain text. */
     rotatingTokenKeyId: text('rotating_token_key_id'),
     rotatingTokenExpiresAt: timestamp('rotating_token_expires_at', { withTimezone: true }),
-    webhookToken: text('webhook_token').notNull(),
+    /** Legacy plaintext routing token; NULL once the audit backfill has run (encryption audit E3). Read `webhookTokenEnc` first. */
+    webhookToken: text('webhook_token'),
+    /** sha256 (hex) of the routing token: what the public lookup function matches. */
+    webhookTokenHash: text('webhook_token_hash'),
+    /** The routing token sealed with CryptoService, so the webhook URL can be shown again. */
+    webhookTokenEnc: text('webhook_token_enc'),
     lineChannelId: text('line_channel_id'),
     basicId: text('basic_id'),
     displayName: text('display_name'),
@@ -63,6 +69,9 @@ export const lineChannels = pgTable(
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
     unique('uq_line_channels_webhook_token').on(t.webhookToken),
+    uniqueIndex('uq_line_channels_webhook_token_hash')
+      .on(t.webhookTokenHash)
+      .where(sql`${t.webhookTokenHash} IS NOT NULL`),
     foreignKey({
       name: 'fk_line_channels_connected_by',
       columns: [t.orgId, t.connectedBy],

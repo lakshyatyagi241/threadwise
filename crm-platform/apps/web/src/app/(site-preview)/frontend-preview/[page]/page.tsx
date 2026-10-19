@@ -6,6 +6,7 @@ import { SiteFrame } from '@/features/marketing-site-cms/site/site-frame';
 import { SitePage } from '@/features/marketing-site-cms/site/site-page';
 import { cookieNames } from '@/lib/auth/cookies';
 import { apiBase, getOperatorSession } from '@/lib/auth/server';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,7 +20,7 @@ export default async function PreviewPage({ params }: { params: Promise<{ page: 
   const { session } = await getOperatorSession();
   if (!session) redirect('/admin/login');
   const token = (await cookies()).get(cookieNames('operator').access)?.value;
-  const res = await fetch(`${apiBase()}/v2/platform/cms/content`, {
+  const res = await upstreamFetch(`${apiBase()}/v2/platform/cms/content`, {
     headers: { Authorization: `Bearer ${token ?? ''}` },
     cache: 'no-store',
   });

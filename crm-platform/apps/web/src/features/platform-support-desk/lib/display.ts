@@ -27,8 +27,8 @@ export function errorKey(
   return 'unexpected';
 }
 
-export const formatWhen = (iso: string, locale: string): string =>
-  new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(
+export const formatWhen = (iso: string, locale: string, timeZone?: string): string =>
+  new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone }).format(
     new Date(iso),
   );
 

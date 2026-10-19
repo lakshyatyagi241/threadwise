@@ -9,10 +9,12 @@ import { loadMessages } from '@/i18n/messages';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
-const state = vi.hoisted(() => ({ fetch: vi.fn() }));
+const state = vi.hoisted(() => ({ fetch: vi.fn(), publishes: vi.fn(), releases: vi.fn() }));
 vi.mock('../api', async (orig) => ({
   ...(await orig<typeof import('../api')>()),
   fetchDeployments: (status: unknown, signal?: AbortSignal) => state.fetch(status, signal),
+  fetchPublishes: (status: unknown, signal?: AbortSignal) => state.publishes(status, signal),
+  fetchReleases: (signal?: AbortSignal) => state.releases(signal),
 }));
 
 import { DeploymentsPage } from './deployments-page';
@@ -54,6 +56,16 @@ const en = (path: string): string => {
 let host: HTMLElement;
 let root: Root;
 
+async function openTab(label: string) {
+  const tab = [...host.querySelectorAll('button')].find((b) => b.textContent === label);
+  await act(async () => {
+    tab?.click();
+  });
+  await act(async () => {
+    await new Promise((r) => setTimeout(r, 0));
+  });
+}
+
 async function mount() {
   host = document.createElement('div');
   document.body.appendChild(host);
@@ -77,6 +89,20 @@ async function mount() {
 
 beforeEach(() => {
   state.fetch.mockReset();
+  state.publishes.mockReset();
+  state.releases.mockReset();
+  state.releases.mockResolvedValue({
+    generatedAt: '2026-10-19T10:00:05.000Z',
+    live: { tag: '701ca2c1a', finishedAt: '2026-10-19T09:30:00.000Z' },
+    inProgress: false,
+    rows: [],
+  });
+  state.publishes.mockResolvedValue({
+    generatedAt: '2026-10-19T10:00:05.000Z',
+    counts: { running: 0, queued: 0, failed: 0, done: 0, stalled: 0 },
+    rows: [],
+    truncated: false,
+  });
 });
 
 afterEach(() => {
@@ -103,6 +129,7 @@ describe('DeploymentsPage', () => {
       ),
     );
     await mount();
+    await openTab(en('tabs.geta'));
     expect(host.textContent).toContain('Acme Retail');
     expect(host.textContent).toContain('Welcome flow');
     expect(host.textContent).toContain('Order alerts');
@@ -127,6 +154,7 @@ describe('DeploymentsPage', () => {
       ),
     );
     await mount();
+    await openTab(en('tabs.geta'));
     expect(host.textContent).toContain(en('failedAt').replace('{step}', en('steps.publish_bot')));
     expect(host.textContent).toContain('Geta answered 503');
   });
@@ -136,6 +164,7 @@ describe('DeploymentsPage', () => {
       page([row({ status: 'running', stalled: true })], { running: 1, stalled: 1 }),
     );
     await mount();
+    await openTab(en('tabs.geta'));
     expect(host.textContent).toContain(en('stalledBadge'));
     expect(host.textContent).toContain('1 deployment(s) have not changed for 10 minutes');
   });
@@ -143,7 +172,65 @@ describe('DeploymentsPage', () => {
   it('shows the empty state when nothing matches', async () => {
     state.fetch.mockResolvedValue(page([]));
     await mount();
+    await openTab(en('tabs.geta'));
     expect(host.textContent).toContain(en('empty.title'));
     expect(host.textContent).toContain(en('empty.all'));
+  });
+
+  it('shows the live release and any failed attempt on the product releases tab by default', async () => {
+    state.releases.mockResolvedValue({
+      generatedAt: '2026-10-19T10:00:05.000Z',
+      live: { tag: '701ca2c1a', finishedAt: '2026-10-19T09:30:00.000Z' },
+      inProgress: false,
+      rows: [
+        {
+          id: '11111111-2222-4333-8444-555555555555',
+          tag: '29f32b7b6',
+          state: 'failed',
+          step: 'schema',
+          error: 'migration failed; the running release is untouched',
+          startedAt: '2026-10-19T10:00:00.000Z',
+          updatedAt: '2026-10-19T10:01:00.000Z',
+          finishedAt: '2026-10-19T10:01:00.000Z',
+          stalled: false,
+        },
+      ],
+    });
+    state.fetch.mockResolvedValue(page([]));
+    await mount();
+    expect(host.textContent).toContain('701ca2c1a');
+    expect(host.textContent).toContain('29f32b7b6');
+    expect(host.textContent).toContain(en('releases.state.failed'));
+    expect(host.textContent).toContain('migration failed; the running release is untouched');
+  });
+
+  it('lists flow publishes with their state, attempts and error', async () => {
+    state.publishes.mockResolvedValue({
+      generatedAt: '2026-10-19T10:00:05.000Z',
+      counts: { running: 0, queued: 1, failed: 1, done: 4, stalled: 0 },
+      rows: [
+        {
+          workspaceId: '6f1e0c1a-0000-4000-8000-0000000000b1',
+          workspaceName: 'Acme Retail',
+          flowId: '6f1e0c1a-0000-4000-8000-0000000000c1',
+          flowName: 'Welcome flow',
+          status: 'failed',
+          attempts: 5,
+          lastError: 'Connection refused',
+          queuedAt: '2026-10-19T09:00:00.000Z',
+          processedAt: null,
+          stalled: false,
+        },
+      ],
+      truncated: false,
+    });
+    state.fetch.mockResolvedValue(page([]));
+    await mount();
+    await openTab(en('tabs.publishes'));
+    expect(host.textContent).toContain('Acme Retail');
+    expect(host.textContent).toContain('Welcome flow');
+    expect(host.textContent).toContain(en('status.failed'));
+    expect(host.textContent).toContain('Connection refused');
+    expect(host.textContent).toContain(en('publishes.notProcessed'));
   });
 });

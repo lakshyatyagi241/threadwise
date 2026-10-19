@@ -30,10 +30,18 @@ export function IpBlockedView({ ip }: { ip: string | null }) {
 
   const signOut = async () => {
     setSigningOut(true);
-    ipBlockStore.clear();
-    // The sign-out call is itself an operator route and may be refused too; the helper navigates either way, and fully, so no
-    // query cache of this operator outlives the sign-out.
-    await doSignOut(OPERATOR_LOGIN_PATH, '/api/platform-auth/logout');
+    try {
+      // The sign-out call is itself an operator route and may be refused too; the cookies are cleared either way.
+      await fetch('/api/platform-auth/logout', {
+        signal: AbortSignal.timeout(5000),
+        method: 'POST',
+        credentials: 'same-origin',
+      });
+    } finally {
+      ipBlockStore.clear();
+      router.replace(OPERATOR_LOGIN_PATH);
+      router.refresh();
+    }
   };
 
   return (

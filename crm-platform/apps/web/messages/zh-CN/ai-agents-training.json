@@ -224,20 +224,20 @@
           "title": "自由文本",
           "body": "粘贴帮助片段或政策。"
         },
-        "qa": {
-          "title": "问答对",
-          "body": "一个问题及其标准答案。"
-        },
         "file": {
           "title": "PDF、DOCX、TXT 等",
           "body": "上传文件，文本将自动提取。"
+        },
+        "faq": {
+          "title": "添加常见问题",
+          "body": "问题以及你希望给出的回答。"
         }
       },
       "panel": {
         "url": "抓取公开 URL",
         "text": "粘贴纯文本",
-        "qa": "单个问答",
-        "file": "上传知识文件"
+        "file": "上传知识文件",
+        "faq": "添加问题和回答"
       },
       "label": "标签",
       "url": "URL",
@@ -249,21 +249,20 @@
         "label": {
           "url": "标签（例如 价格页面）",
           "text": "标签（例如 退款政策摘要）",
-          "qa": "标签（例如 退款时效）",
           "file": "标签（例如 产品手册）"
         },
         "content": "粘贴智能体应该了解的任何文本…",
         "question": "问题，例如 退款需要多久？",
         "answer": "答案，例如 退款将在 3 到 5 个工作日内到账。"
       },
-      "urlHint": "仅读取公开的 http 和 https 页面。页面在后台抓取，因此条目会短暂显示为处理中。",
+      "urlHint": "只会读取公开的 http 和 https 页面。页面在后台读取，可能需要片刻。",
       "fileHint": "PDF、DOCX、TXT、Markdown、CSV 或 HTML，最大 10 MB。文本会自动提取。",
       "uploading": "上传进度",
       "submit": {
         "url": "抓取并训练",
         "text": "保存文本",
-        "qa": "保存问答对",
-        "file": "上传"
+        "file": "上传",
+        "faq": "保存常见问题"
       },
       "cancel": "取消",
       "added": "知识已添加。",
@@ -281,25 +280,6 @@
         "file_empty": "该文件是空的。",
         "tooLarge": "一次粘贴的文本太多。请改为作为文件上传。"
       },
-      "col": {
-        "kind": "类型",
-        "label": "标签",
-        "state": "状态",
-        "actions": "操作"
-      },
-      "kind": {
-        "url": "url",
-        "text": "文本",
-        "qa": "问答",
-        "file": "文件"
-      },
-      "state": {
-        "ready": "就绪",
-        "processing": "处理中",
-        "failed": "失败"
-      },
-      "tokens": "约 {count} 个 token",
-      "workspaceWide": "工作区范围",
       "loading": "正在加载条目",
       "loadError": "无法加载条目。",
       "retry": "重试",
@@ -310,7 +290,14 @@
       "removeBody": "智能体将不再用它生成新的回复。较早的会话保持不变。",
       "keep": "保留",
       "removed": "已移除。",
-      "removeFailed": "移除失败。"
+      "removeFailed": "移除失败。",
+      "ownedNote": "这些知识仅属于这个智能体，其他智能体无法使用。",
+      "faq": {
+        "addAnother": "再添加一个问题",
+        "removeRow": "删除此问题"
+      },
+      "reading": "正在读取…",
+      "failed": "无法读取。"
     }
   }
 }

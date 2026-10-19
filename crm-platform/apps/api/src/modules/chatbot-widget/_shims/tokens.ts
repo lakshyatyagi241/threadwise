@@ -38,8 +38,6 @@ export interface AssistantDirectory {
   /** Any status: Reference only checked that the assistant belongs to the workspace. */
   findByUuid(tx: Tx, orgId: number, uuid: string): Promise<AssistantRef | undefined>;
   profile(tx: Tx, orgId: number, assistantId: number): Promise<AssistantProfile | undefined>;
-  /** `ready` sources that are organization-wide or scoped to this assistant, oldest first. */
-  knowledge(tx: Tx, orgId: number, assistantId: number): Promise<KnowledgeSource[]>;
 }
 export const ASSISTANT_DIRECTORY = Symbol('WGT_ASSISTANT_DIRECTORY');
 

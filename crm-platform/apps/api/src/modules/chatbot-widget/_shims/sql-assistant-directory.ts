@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import type { AssistantDirectory, AssistantProfile, AssistantRef, KnowledgeSource } from './tokens';
+import type { AssistantDirectory, AssistantProfile, AssistantRef } from './tokens';
 
 interface RefRow {
   id: number | string;
@@ -25,7 +25,7 @@ interface ProfileRow extends RefRow {
 
 const toRef = (r: RefRow): AssistantRef => ({ id: Number(r.id), uuid: r.uuid, name: r.name });
 
-/** Reads `ai_chat_assistants` and `ai_training_sources` directly until the AI agents domain exports its service. */
+/** Reads `ai_chat_assistants` directly until the AI agents domain exports its service. (An agent's knowledge is read through the knowledge base module.) */
 @Injectable()
 export class SqlAssistantDirectory implements AssistantDirectory {
   async listActive(tx: Tx, orgId: number): Promise<AssistantRef[]> {
@@ -64,13 +64,5 @@ export class SqlAssistantDirectory implements AssistantDirectory {
       handoffKeyword: r.handoff_keyword,
       handoffMessage: r.handoff_message,
     };
-  }
-
-  async knowledge(tx: Tx, orgId: number, assistantId: number): Promise<KnowledgeSource[]> {
-    const res = await tx.execute(sql`
-      SELECT label, kind, content, question, answer FROM ai_training_sources
-      WHERE org_id = ${orgId} AND (assistant_id IS NULL OR assistant_id = ${assistantId}) AND status = 'ready'
-      ORDER BY id`);
-    return res.rows as unknown as KnowledgeSource[];
   }
 }

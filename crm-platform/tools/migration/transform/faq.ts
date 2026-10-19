@@ -1,58 +1,53 @@
-import { buildFaqDocs, type FaqDoc } from '../flows/faq';
+import {
+  buildFaqDocs,
+  buildKbFaqDocs,
+  faqEntryText,
+  KB_FAQ_LABEL,
+  type FaqDoc,
+  type KbFaqDoc,
+} from '../flows/faq';
 import type { Doc } from '../util';
 import { c, times, TS_COLS } from './common';
-import type { Ctx, FieldMap, HandlerSpec, Outcome, Row } from './types';
+import type { Ctx, FieldMap, HandlerSpec, Outcome } from './types';
 
 /**
- * Waboo FAQ knowledge -> WaDesk FAQs (the feature on main: faqs, faq_variations, faq_settings; ADR-0021). A DERIVED step, like flow_bots:
- * the collection is faq_variations, but the question text and the answer live in the bot's Intent / FAQ records (bot_workspace), so one
- * document per question is built from both (flows/faq.ts) and the step reads those. The older step faq_replies (faq_variations ->
- * inactive keyword replies) is untouched and still runs; both read the same collection, which the registry model cannot say (one
- * handler per collection), so this step carries its own id_map collection `faq_knowledge`.
+ * Waboo FAQ knowledge -> ONE text entry labelled "FAQ" per AI agent in the knowledge base (ai_training_sources, kind text; ADR-0021
+ * addendum 3: the FAQ engine is retired, a FAQ is text an agent reads). A DERIVED step, like flow_bots: the collection is
+ * faq_variations, but the question text and the answer live in the bot's Intent / FAQ records (bot_workspace), so one document per
+ * question is built from both (flows/faq.ts) and those are grouped by the agent that will hold them.
  *
- *   faqs            one per question, owner_flow_id = the flow the bot became, status 'paused' (nothing answers a customer until a
- *                   person enables it), answer = the record's own text, else the flow (flow_id = the owner, flow_node_id empty)
- *   faq_variations  the question itself (source 'question', as the application keeps it), the other phrasings (source 'import');
- *                   embed_state 'pending', embedding NULL: WaDesk's own worker makes the vectors, this tool makes no call
- *   faq_settings    one row per flow that owns an FAQ, enabled = false (written by the loader hook: the table has no uuid)
+ *   entry text      'Q: question\nAlso asked as: a | b\nA: answer' blocks separated by a blank line (the format of the knowledge-base
+ *                   merge migration 20270205090000); status ready, no chunks (the application's embed worker cuts and embeds them)
+ *   which agent     the bot's own assistant (ai_chat_assistants of the widgets step); a bot without one shares ONE entry that goes to the
+ *                   workspace's first active agent, else its first agent, else a new "FAQ assistant" (assigned in the loader hook,
+ *                   load/flows.ts, because it needs the target database)
+ *   not carried     a question that answers by starting a flow (no text to keep): quarantined FLOW_ANSWER_NOT_CARRIED, like the merge
  *
- * SAFETY: paused FAQs and a disabled flow switch, always. No event_outbox, audit or match-log row. Vectors are never copied.
+ * SAFETY: the agents are loaded paused (widgets step), so nothing answers a customer until a person enables an agent. No event_outbox,
+ * audit row or vector is written: the chunks are made by the application's own worker.
  */
 export const FAQ_DOC_FIELDS: FieldMap = {
-  id: 'id (registered in migration.id_map): the bot and the qid of the question',
-  botid: 'faqs.owner_flow_id: the flow the bot became (a bot without a flow is quarantined NO_OWNER_FLOW)',
-  qid: 'groups the Intent / FAQ records and the faq_variations documents of one question; not stored (QID_NOT_ADDRESSABLE for a flow answer)',
-  question: 'faqs.question (first question string of the records) and its own faq_variations row, source question',
-  answer_type: "faqs.answer_type: 'text' when the record answers inline, else 'flow' when it names a journey, else NO_ANSWER",
-  answer_text: 'faqs.answer_text: the text of the inline response, credential-looking parts redacted, at most 4096 characters',
-  variations:
-    'faq_variations: the other question strings and the phrases of faq_variations, source import, pending; over-long and over-cap ones counted',
-  created_at: 'faqs / faq_variations created_at (earliest record)',
-  updated_at: 'faqs / faq_variations updated_at (latest record)',
-  records: 'drop:how many Intent / FAQ records were merged (soft RECORDS_MERGED when more than one)',
+  id: 'id (registered in migration.id_map): the entry (kb|botid, or kb|* for the shared one) or, for a question left behind, botid|qid',
+  botid: 'the bot whose assistant holds the entry (null: the shared entry); for a quarantined question, the bot that owned it',
+  qid: 'groups the Intent / FAQ records and the faq_variations documents of one question; not stored',
+  question: 'drop:the question (inside entries for a loaded one; recorded in quarantine for a left-behind one)',
+  answer_type: "drop:'text' or 'flow' (a flow answer is quarantined FLOW_ANSWER_NOT_CARRIED)",
+  answer_text: 'drop:inside entries',
+  variations: 'drop:inside entries as "Also asked as"',
+  entries: 'ai_training_sources.content: the questions as Q / Also asked as / A blocks, answers credential-redacted',
+  created_at: 'ai_training_sources.created_at (earliest question)',
+  updated_at: 'ai_training_sources.updated_at (latest question)',
+  records: 'drop:how many Intent / FAQ records were merged',
   soft: 'drop:soft issues of the builder (recorded in quarantine, not stored)',
   problem: 'drop:the reason a question is quarantined (recorded in quarantine, not stored)',
 };
-
-/** Columns the application's embed worker settles once it has seen a variation; the loader never writes them. */
-const VARIATION_LIVE = [
-  'text',
-  'source',
-  'embed_state',
-  'embedding_model',
-  'embedded_at',
-  'embed_attempts',
-  'embed_error',
-  'updated_at',
-  'row_version',
-];
 
 export const faqKnowledge: HandlerSpec = {
   handler: 'faq_knowledge',
   collection: 'faq_variations',
   mapCollection: 'faq_knowledge',
   virtual: true,
-  // the plan inputs of the flows step decide which bots have a flow; bot_workspace holds the questions and answers
+  // the plan inputs of the flows step decide which bots have a flow and an assistant; bot_workspace holds the questions and answers
   shaCollections: [
     'bot_workspace',
     'chatbots',
@@ -66,60 +61,31 @@ export const faqKnowledge: HandlerSpec = {
   ],
   fields: FAQ_DOC_FIELDS,
   tables: {
-    faqs: {
+    ai_training_sources: {
+      // assistant_id is resolved in the loader hook when the bot has no assistant of its own (so it is not in the fingerprint; the
+      // verifier, reconcile/faq.ts, checks it)
       columns: [
-        c('owner_flow_id', 'bigint'),
-        c('question', 'text'),
-        c('answer_type', 'text'),
-        c('answer_text', 'text'),
-        c('flow_id', 'bigint'),
+        c('assistant_id', 'bigint'),
+        c('kind', 'text'),
+        c('label', 'text'),
+        c('content', 'text'),
         c('status', 'text'),
+        c('tokens_estimate', 'integer'),
         ...TS_COLS,
       ],
-      fp: ['question', 'answer_type', 'answer_text', 'status'],
-      constants: {
-        category: null,
-        threshold_override: null,
-        created_by: null,
-        flow_node_id: null,
-        row_version: 1,
-      },
-      // what people change in the FAQ screen once they work on it
+      fp: ['kind', 'label', 'content', 'status'],
+      constants: { row_version: 1 },
+      // what the application's worker and the people of the knowledge screen change
       liveColumns: [
-        'question',
-        'answer_type',
-        'answer_text',
-        'flow_id',
-        'flow_node_id',
-        'category',
+        'assistant_id',
+        'label',
+        'content',
         'status',
-        'threshold_override',
-        'created_by',
+        'error',
+        'tokens_estimate',
         'updated_at',
         'row_version',
       ],
-    },
-    faq_variations: {
-      // no uuid is written: the row hangs off its FAQ (faq_id), conflicts on uq_faq_variations_text are skipped, and a rerun never
-      // reads a question whose FAQ is in id_map. The embedding column (halfvec) is deliberately not in the column list.
-      keyless: { parent: 'faqs', parentCol: 'faq_id' },
-      columns: [c('faq_id', 'bigint'), c('text', 'text'), c('source', 'text'), ...TS_COLS],
-      constants: {
-        embed_state: 'pending',
-        embedding_model: null,
-        embedded_at: null,
-        embed_attempts: 0,
-        embed_error: null,
-        row_version: 1,
-      },
-      liveColumns: VARIATION_LIVE,
-    },
-    // written by the loader hook (load/flows.ts): the table is keyed by (org_id, flow_id) and has no uuid; reconcile/faq.ts verifies it
-    faq_settings: {
-      noUuid: true,
-      columns: [c('flow_id', 'bigint'), c('enabled', 'boolean')],
-      constants: { threshold: '0.450', min_margin: '0.000', log_queries: true, tuned_model: null, row_version: 1 },
-      liveColumns: ['enabled', 'threshold', 'min_margin', 'log_queries', 'tuned_model', 'updated_at', 'row_version'],
     },
   },
   async *read({ source, client, ctx }): AsyncIterable<Doc> {
@@ -142,44 +108,49 @@ export const faqKnowledge: HandlerSpec = {
           : { ok: false, code: 'UNKNOWN_BOT', reason: 'the flows plan does not know this bot' };
       },
     });
-    for (const d of docs) yield d as unknown as Doc;
+    const grouped = buildKbFaqDocs(docs, (botId) => {
+      const w = plan.widgets.get(botId);
+      return Boolean(w?.assistant) && w?.verdict.kind === 'load';
+    });
+    for (const d of grouped) yield d as unknown as Doc;
   },
   transform(raw: Doc, ctx: Ctx): Outcome {
-    const doc = raw as unknown as FaqDoc;
+    const doc = raw as unknown as FaqDoc & Partial<KbFaqDoc>;
     if (doc.problem) return { kind: 'quarantine', code: doc.problem.code, reason: doc.problem.reason };
-    const owner = ctx.ref('flow_bots', doc.botid);
-    if (!owner || owner.table !== 'flows')
-      return {
-        kind: 'quarantine',
-        code: 'NO_OWNER_FLOW',
-        reason: 'the flow of its bot was not loaded into flows, so there is no flow to own the FAQ',
-      };
-    if (doc.question === null || doc.answer_type === null)
+    if (!doc.entries || doc.entries.length === 0)
       return { kind: 'quarantine', code: 'NOT_PLANNED', reason: 'the document has no question or answer' };
+    let assistantId: number | null = null;
+    if (doc.botid !== null && doc.botid !== undefined) {
+      const ref = ctx.ref('widget_assistants', doc.botid);
+      if (!ref || ref.table !== 'ai_chat_assistants')
+        return {
+          kind: 'quarantine',
+          code: 'ASSISTANT_NOT_LOADED',
+          reason: 'the assistant of its bot was not loaded into ai_chat_assistants, so there is no agent to hold the FAQ',
+        };
+      assistantId = ref.id;
+    }
+    const content = faqEntryText(doc.entries);
     const t = times(doc as unknown as Doc, ctx.fallbackAt);
-    const rows: Array<{ table: string; sub: string; row: Row }> = [
-      {
-        table: 'faqs',
-        sub: '',
-        row: {
-          owner_flow_id: owner.id,
-          question: doc.question,
-          answer_type: doc.answer_type,
-          answer_text: doc.answer_type === 'text' ? doc.answer_text : null,
-          // a flow answer starts the flow of the bot (the owner); which journey inside it cannot be said (QID_NOT_ADDRESSABLE)
-          flow_id: doc.answer_type === 'flow' ? owner.id : null,
-          // SAFETY: nothing may answer a customer until a person enables it
-          status: 'paused',
-          created_at: t.created,
-          updated_at: t.updated,
+    return {
+      kind: 'rows',
+      rows: [
+        {
+          table: 'ai_training_sources',
+          sub: '',
+          row: {
+            assistant_id: assistantId,
+            kind: 'text',
+            label: KB_FAQ_LABEL,
+            content,
+            status: 'ready',
+            tokens_estimate: Math.ceil(content.length / 4),
+            created_at: t.created,
+            updated_at: t.updated,
+          },
         },
-      },
-      ...doc.variations.map((v, i) => ({
-        table: 'faq_variations',
-        sub: `#${i + 1}`,
-        row: { text: v.text, source: v.source, created_at: t.created, updated_at: t.updated } as Row,
-      })),
-    ];
-    return { kind: 'rows', rows, soft: [...t.soft, ...doc.soft] };
+      ],
+      soft: [...t.soft, ...(doc.soft ?? [])],
+    };
   },
 };

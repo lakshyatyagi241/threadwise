@@ -30,7 +30,7 @@ A lead nobody has reached yet is easy to lose in a long list. The **Uncontacted*
 
 - The four **Mark as contacted** options start switched on, because they only act on contacts that are already marked. The options that mark contacts (new leads, reassigned leads) start switched off.
 - A lead that arrives from a lead source and matches a contact you already have is not marked: only a newly created contact can start as uncontacted.
-- Automatic replies, FAQ answers and consent keyword replies do not count as reaching out, so a new lead keeps its marker until a person or one of your own campaigns or flows contacts it.
+- Automatic replies and consent keyword replies do not count as reaching out, so a new lead keeps its marker until a person or one of your own campaigns or flows contacts it.
 - A call counts when a person placed it (even if nobody answered) or answered it; a missed call from the lead does not.
 
 ## Plan and access

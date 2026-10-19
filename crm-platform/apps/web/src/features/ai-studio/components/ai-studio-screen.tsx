@@ -84,6 +84,7 @@ export function AiStudioScreen() {
   const t = useTranslations('aiStudio');
   const canAgents = useCan('aiag.training.create');
   const canFlows = useCan('flb.flows.create');
+  const canWeb = useCan('wgt.widgets.read');
   return (
     <div className="mx-auto w-full max-w-5xl space-y-6 p-4 sm:p-6 lg:p-8">
       <header>
@@ -118,10 +119,12 @@ export function AiStudioScreen() {
           body={t('chatbot.body')}
           locked={canFlows ? null : t('noAccess')}
         >
-          <Link href="/flows/simple?type=web" className={PRIMARY}>
-            {t('chatbot.web')}
-          </Link>
-          <Link href="/flows/simple" className={SECONDARY}>
+          {canWeb ? (
+            <Link href="/flows/simple?type=web" className={PRIMARY}>
+              {t('chatbot.web')}
+            </Link>
+          ) : null}
+          <Link href="/flows/simple" className={canWeb ? SECONDARY : PRIMARY}>
             {t('chatbot.whatsapp')}
           </Link>
         </Start>

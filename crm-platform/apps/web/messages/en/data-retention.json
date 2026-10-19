@@ -7,20 +7,20 @@
     "page": {
       "title": "Data retention",
       "eyebrow": "platform · data retention",
-      "description": "For each kind of data, choose how many days it stays in the database and how many more days the cold archive keeps it before it is deleted for good. Nothing changes for an item until you save values for it.",
+      "description": "Every kind of data the platform deletes on a schedule, in one table. For each, set how many days it stays in the database and, where it can be archived, how many more days the archive keeps it before it is deleted for good. Nothing changes for an item until you save values for it.",
       "superOnly": "Only a super admin can change retention. You can see the saved values and what the last run did.",
       "loading": "Loading retention policies…",
       "retry": "Try again"
     },
     "engine": {
       "offTitle": "The archive job is switched off",
-      "offBody": "Values saved for the analytics events and the audit log are stored, but nothing is archived or dropped until the job is enabled (RETENTION_ENABLED). Until then both keep their current behaviour.",
+      "offBody": "Values saved for the analytics events and the audit log are stored, but nothing is archived to S3 / R2 or dropped until the job is enabled (RETENTION_ENABLED). Until then both keep their current behaviour. Every other item below is carried out by its own nightly job and is not affected.",
       "dryRunTitle": "The archive job only logs what it would do",
-      "dryRunBody": "It is on but in dry-run mode (RETENTION_DRY_RUN). Saved values for the analytics events and the audit log are not carried out yet.",
+      "dryRunBody": "It is on but in dry-run mode (RETENTION_DRY_RUN). Saved values for the analytics events and the audit log are not carried out yet. Every other item below is unaffected.",
       "notDurableTitle": "The archive is not durable",
       "notDurableBody": "The archive is a folder on the server's own disk, which a redeploy erases. The job refuses to drop any data until it points at S3 or R2 (ARCHIVE_DRIVER=s3).",
       "liveTitle": "The archive job is running",
-      "liveBody": "Saved values are carried out by the nightly run. Archived data is kept in {driver}."
+      "liveBody": "Saved values for the analytics events and the audit log are carried out by the nightly run. Their archive is kept in {driver}. Every other item is carried out by its own nightly job."
     },
     "items": {
       "an_events": {
@@ -38,6 +38,58 @@
       "audit_log_exports": {
         "title": "Audit export files",
         "description": "The CSV a workspace requests from its audit log. The requester gets an email with a link to sign in and download it; the file is deleted after the live days."
+      },
+      "message_log": {
+        "title": "Message delivery log",
+        "description": "The delivery log of each message: sent, delivered, failed, retried. Events leave the live table after the live days and move, compressed, into the archive; archive days then count from that day. The log of a message, and the log exports, can still read the archive."
+      },
+      "notifications_read": {
+        "title": "Notifications (read)",
+        "description": "Bell notifications a user has already read. They are deleted once they are this many days old. The built-in number comes from the server settings (NOTIFY_RETENTION_READ_DAYS)."
+      },
+      "notifications_unread": {
+        "title": "Notifications (never read)",
+        "description": "Bell notifications nobody opened. They are deleted once they are this many days old, and never before the read ones (the save is refused if it would be). The built-in number comes from the server settings (NOTIFY_RETENTION_UNREAD_DAYS)."
+      },
+      "push_devices_revoked": {
+        "title": "Revoked push devices",
+        "description": "Browsers and phones that stopped accepting push notifications. Kept briefly so a device that comes back can switch notifications on again, then deleted."
+      },
+      "assignment_runs": {
+        "title": "Assignment run log",
+        "description": "The record of each automatic contact assignment run, with who got what and why. Deleted after the live days."
+      },
+      "form_events": {
+        "title": "Form analytics events",
+        "description": "Views, starts and submits of the web forms, used for the form conversion charts. They hold no answers. Deleted after the live days. The answers themselves follow each form's own retention."
+      },
+      "lead_sync_runs": {
+        "title": "Lead sync runs",
+        "description": "The record of each lead sync or backfill from an ad platform: who pulled what and when. Deleted after the live days. The raw lead payloads follow each source's own retention."
+      },
+      "lead_scoring_runs": {
+        "title": "AI lead scoring log",
+        "description": "Each AI lead score with its reasons, and the conversation readings and stage suggestions behind it. Until you save a value here, the number set in the AI lead scoring settings is used. A person under a legal hold keeps their records."
+      },
+      "api_library_logs": {
+        "title": "API Library run log",
+        "description": "The request and response log of each API Library call. Deleted after the live days."
+      },
+      "flow_run_logs": {
+        "title": "Automation run log",
+        "description": "Each finished run of an automation flow with its steps, and flow versions no run points at any more. Runs still in progress are never touched."
+      },
+      "webhook_forward_failures": {
+        "title": "Failed webhook deliveries",
+        "description": "Webhook deliveries that failed and can still be replayed. After the live days they can no longer be replayed and are deleted."
+      },
+      "click_calls": {
+        "title": "Unreported click-to-call placements",
+        "description": "A click-to-call whose finished call never came back from the provider. Forgotten after the live days."
+      },
+      "call_recordings": {
+        "title": "Call recordings",
+        "description": "The default number of days a call recording is kept, for workspaces that never chose their own window; a workspace's own window still wins. After it the recording file is deleted and the call stays. A recording under a legal hold is kept."
       }
     },
     "fields": {
@@ -45,7 +97,8 @@
       "liveDaysHint": "Days the data stays in the database. Allowed: {min} to {max}.",
       "keepForever": "Keep the archive for ever",
       "archiveDays": "Archive days",
-      "archiveDaysHint": "Further days the archive keeps it, then it is deleted. Allowed: {min} to {max}."
+      "archiveDaysHint": "Further days the archive keeps it, then it is deleted. Allowed: {min} to {max}.",
+      "keepForeverShort": "Keep for ever"
     },
     "summary": {
       "noArchive": "Deleted for good {live, plural, one {# day} other {# days}} after it is written.",
@@ -73,7 +126,9 @@
       "neverRun": "Has not run yet",
       "runLive": "{when}: {months, plural, one {# month} other {# months}} archived ({rows} rows, {size}), {expired} deleted from the archive, {deleted} rows or files deleted",
       "runDry": "{when}: dry run, nothing was changed",
-      "runFailed": "The last run had a problem: {error}"
+      "runFailed": "The last run had a problem: {error}",
+      "runDeleted": "{when}: {deleted, plural, one {# row or file} other {# rows or files}} deleted",
+      "runDaily": "{when}: {rows} events moved to the archive, {expired} archived days deleted"
     },
     "actions": {
       "save": "Save",
@@ -85,7 +140,8 @@
       "confirmSave": "Save and apply",
       "resetTitle": "Return {item} to its current behaviour?",
       "resetBody": "The saved values are removed. The nightly jobs go back to the built-in rules for this item. Data already archived stays in the archive.",
-      "confirmReset": "Return to current behaviour"
+      "confirmReset": "Return to current behaviour",
+      "resetShort": "Reset"
     },
     "preview": {
       "title": "Save retention for {item}?",
@@ -94,7 +150,8 @@
       "toDeleteFromArchive": "{count, plural, one {# archived month} other {# archived months}} will be deleted from the archive for good.",
       "rowsToDelete": "{count, plural, one {# row or file} other {# rows or files}} will be deleted for good.",
       "notApplied": "The archive job is not carrying out saved values yet, so none of this happens until it is enabled.",
-      "permanent": "Deleting is permanent and cannot be undone."
+      "permanent": "Deleting is permanent and cannot be undone.",
+      "rowsToArchive": "{count, plural, one {# event} other {# events}} will move from the live table into the archive."
     },
     "saved": "Retention saved.",
     "resetDone": "Back to the current behaviour.",
@@ -103,7 +160,8 @@
       "archive_out_of_range": "Archive days must be a whole number from {min} to {max}.",
       "archive_not_supported": "This item cannot be archived.",
       "delete_before_archive": "The data cannot be deleted before it is archived.",
-      "not_a_number": "Enter a whole number of days."
+      "not_a_number": "Enter a whole number of days.",
+      "unread_before_read": "Unread notifications cannot be deleted before read ones. Set the unread days to at least the read days."
     },
     "errors": {
       "forbidden": "You are not allowed to do that.",
@@ -112,6 +170,36 @@
       "request": "The request was refused.",
       "unexpected": "Something went wrong on the server. Try again.",
       "network": "Could not reach the server. Check your connection and try again."
+    },
+    "groups": {
+      "analytics": "Analytics",
+      "security": "Security and audit",
+      "messaging": "Messaging and notifications",
+      "crm": "CRM and leads",
+      "automation": "Automation and integrations",
+      "calling": "Calling"
+    },
+    "table": {
+      "title": "Retention at a glance",
+      "description": "What each kind of data keeps, and for how long. Select an item to change its numbers below.",
+      "item": "Data",
+      "storedIn": "Stored in",
+      "live": "Live (database)",
+      "archive": "Archive",
+      "deleted": "Deleted for good after",
+      "setting": "Setting",
+      "days": "{count, plural, one {# day} other {# days}}",
+      "noArchive": "No archive",
+      "forever": "For ever",
+      "never": "Never",
+      "where": {
+        "partitioned": "Database, then {driver} archive",
+        "daily_archive": "Database, then database archive",
+        "table": "Database only",
+        "file": "Files"
+      },
+      "actions": "Actions",
+      "about": "What is this?"
     }
   }
 }

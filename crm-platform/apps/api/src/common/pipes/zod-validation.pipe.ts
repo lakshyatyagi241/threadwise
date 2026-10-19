@@ -25,7 +25,17 @@ export class ZodValidationPipe<T> implements PipeTransform<unknown, T> {
         { path: nul, message: 'must not contain a NUL (0x00) character' },
       ]);
     }
-    const result = this.schema.safeParse(value);
+    // A schema can throw instead of failing: `z.coerce.number()` on `{"toString": []}` (a query string `?limit[toString]=1` parses to
+    // that) is a TypeError, and a `.refine` that stringifies a very deep body is a RangeError. Both are the caller's bad input.
+    let result: ReturnType<ZodType<T, ZodTypeDef, unknown>['safeParse']>;
+    try {
+      result = this.schema.safeParse(value);
+    } catch (e) {
+      if (e instanceof Error && /Async refinement/.test(e.message)) throw e;
+      throw AppError.validation('Request payload failed validation', [
+        { path: '', message: 'the value could not be read' },
+      ]);
+    }
     if (!result.success) {
       throw AppError.validation(
         'Request payload failed validation',
@@ -39,13 +49,29 @@ export class ZodValidationPipe<T> implements PipeTransform<unknown, T> {
   }
 }
 
-/** The path of the first string holding a NUL character anywhere in a JSON-like value, or null. */
-export function findNul(value: unknown, path = '', depth = 0): string | null {
-  if (typeof value === 'string') return value.includes('\u0000') ? path : null;
-  if (depth > 32 || value === null || typeof value !== 'object') return null;
-  for (const [key, item] of Object.entries(value)) {
-    const found = findNul(item, path === '' ? key : `${path}.${key}`, depth + 1);
-    if (found !== null) return found;
+/**
+ * The path of the first string, or object key, holding a NUL character anywhere in a JSON-like value, or null. Walks the whole value
+ * (no depth cut-off: a NUL at depth 40 is as fatal to Postgres as one at depth 1) without recursion, so a body nested 30 000 deep is
+ * fine. Keys count: `{"a\u0000b": 1}` stored in jsonb fails like a value does.
+ */
+export function findNul(value: unknown, path = ''): string | null {
+  type Node = { v: unknown; key: string; parent: Node | null };
+  const pathOf = (n: Node): string => {
+    const keys: string[] = [];
+    for (let c: Node | null = n; c && c.parent; c = c.parent) keys.push(c.key);
+    return [path, ...keys.reverse()].filter((k) => k !== '').join('.');
+  };
+  const stack: Node[] = [{ v: value, key: '', parent: null }];
+  while (stack.length > 0) {
+    const n = stack.pop()!;
+    if (typeof n.v === 'string') {
+      if (n.v.includes('\u0000')) return pathOf(n);
+    } else if (n.v !== null && typeof n.v === 'object') {
+      for (const [key, item] of Object.entries(n.v)) {
+        if (key.includes('\u0000')) return pathOf({ v: item, key, parent: n });
+        stack.push({ v: item, key, parent: n });
+      }
+    }
   }
   return null;
 }

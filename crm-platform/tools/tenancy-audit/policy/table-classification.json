@@ -268,5 +268,10 @@
     "class": "GLOBAL",
     "reason": "role preset template; no RLS, no tenant data",
     "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "platform_releases": {
+    "class": "GLOBAL",
+    "reason": "product release history written by the deploy scripts as the database owner; no tenant data, no RLS",
+    "reviewed": "2026-10-19 (migration 20270204090000 read)"
   }
 }

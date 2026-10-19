@@ -14,7 +14,7 @@ const hrefOf = (html: string, text: string): string | null => {
 
 describe('AI Studio', () => {
   beforeEach(() => {
-    can.rights = new Set(['aiag.training.create', 'flb.flows.create']);
+    can.rights = new Set(['aiag.training.create', 'flb.flows.create', 'wgt.widgets.read']);
   });
 
   it('starts an AI agent, a website chat bot, a WhatsApp bot and a workflow, each on its own screen', () => {
@@ -28,10 +28,17 @@ describe('AI Studio', () => {
   });
 
   it('shows a note instead of links for a start the person has no right to', () => {
-    can.rights = new Set(['flb.flows.create']);
+    can.rights = new Set(['flb.flows.create', 'wgt.widgets.read']);
     const html = renderIntl(<AiStudioScreen />);
     expect(hrefOf(html, 'Create an AI agent')).toBeNull();
     expect(html).toContain('You do not have the right to start this one');
     expect(hrefOf(html, 'Website chat bot')).toBe('/flows/simple?type=web');
+  });
+
+  it('offers no website chat bot to a workspace without website permission (a Waboo workspace)', () => {
+    can.rights = new Set(['aiag.training.create', 'flb.flows.create']);
+    const html = renderIntl(<AiStudioScreen />);
+    expect(hrefOf(html, 'Website chat bot')).toBeNull();
+    expect(hrefOf(html, 'WhatsApp bot')).toBe('/flows/simple');
   });
 });

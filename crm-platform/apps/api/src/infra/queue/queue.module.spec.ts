@@ -29,6 +29,8 @@ describe('queue connections (RF-05)', () => {
       db: 3,
       maxRetriesPerRequest: null,
     });
+    // A command deadline on a worker would cut its blocking read (BZPOPMIN waits longer than any deadline by design).
+    expect(opts.connection.commandTimeout).toBeUndefined();
     expect(opts.concurrency).toBe(4);
   });
 
@@ -36,6 +38,12 @@ describe('queue connections (RF-05)', () => {
     expect(PRODUCER_CONNECTION_OPTIONS).toEqual({
       maxRetriesPerRequest: 1,
       enableOfflineQueue: false,
+      commandTimeout: 2_000,
     });
+  });
+
+  it('rediss:// turns TLS on for the queue connection, redis:// leaves it off (E6)', () => {
+    expect(queueRedisOptions('rediss://:pw@h:6380/3')).toMatchObject({ host: 'h', tls: {} });
+    expect(queueRedisOptions('redis://:pw@h:6380/3')).not.toHaveProperty('tls');
   });
 });

@@ -27,6 +27,7 @@ import {
 import { WidgetPublicService } from './widget-public.service';
 import { WidgetThrottleService } from './widget-throttle.service';
 import { WidgetVisitorsRepository } from './widget-visitors.repository';
+import { KnowledgeBaseModule } from '../knowledge-base';
 import { WidgetsController } from './widgets.controller';
 import { FlowWidgetController } from './flow-widget.controller';
 import { WidgetsRepository } from './widgets.repository';
@@ -44,6 +45,7 @@ import { WidgetsService } from './widgets.service';
     ChatConversationsModule,
     ContactConsentModule,
     CrmModule,
+    KnowledgeBaseModule,
   ],
   controllers: [
     WidgetsController,

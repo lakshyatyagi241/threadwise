@@ -30,7 +30,6 @@ import { WADEV_ERROR_CODES } from '../whatsapp-devices-baileys/errors';
 import { AIAG_ERROR_CODES } from '../ai-agents-training/errors';
 import { GOOGLE_ERROR_CODES } from '../google-account/errors';
 import { ALIB_ERROR_CODES } from '../api-library/errors';
-import { FAQ_ERROR_CODES } from '../faq-knowledge/errors';
 import { LSC_ERROR_CODES } from '../lead-scoring/errors';
 import { CONSENT_ERROR_CODES } from '../contact-consent/errors';
 import { PRIVACY_ERROR_CODES } from '../privacy/errors';
@@ -47,7 +46,6 @@ import { CONF_ERROR_CODES } from '../meeting-conferencing/errors';
 export const ERROR_CODES = {
   ...STORAGE_ERROR_CODES,
   ...CONF_ERROR_CODES,
-  ...FAQ_ERROR_CODES,
   ...LSC_ERROR_CODES,
   ...GROWTH_ERROR_CODES,
   ...CONSENT_ERROR_CODES,
@@ -99,6 +97,8 @@ export const ERROR_CODES = {
   /** The request body is larger than the server accepts (body-parser limit). */
   PAYLOAD_TOO_LARGE: 'PAYLOAD_TOO_LARGE',
   INTERNAL: 'INTERNAL',
+  /** A dependency (database, Redis, queue) could not be reached or stopped answering: 503, retry shortly. */
+  SERVICE_UNAVAILABLE: 'SERVICE_UNAVAILABLE',
 
   // platform invariants
   ROW_VERSION_CONFLICT: 'ROW_VERSION_CONFLICT',

@@ -10,6 +10,8 @@ export interface RunnerJobArgs {
   sourceClient: string;
   sourceDb: string;
   mode: RunMode;
+  /** testing switch: the agent starts the pipeline with --no-whatsapp (absent on jobs queued before the switch existed) */
+  skipWhatsapp?: boolean;
 }
 
 export type JobStatus = 'queued' | 'claimed' | 'done' | 'abandoned';
@@ -132,6 +134,7 @@ export class RunnerJobs implements RunnerJobStore {
         sourceClient: row.args.sourceClient,
         sourceDb: row.args.sourceDb,
         mode: row.args.mode,
+        skipWhatsapp: row.args.skipWhatsapp === true,
       };
     });
   }

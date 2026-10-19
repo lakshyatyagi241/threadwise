@@ -111,6 +111,7 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
     enabled: allFields(spec).some((f) => f.kind === 'language'),
     queryFn: async () => {
       const res = await fetch('/api/v2/i18n/languages', {
+        signal: AbortSignal.timeout(30000),
         headers: { Accept: 'application/json' },
       });
       return activeLanguagesResponseSchema.parse(await res.json());
@@ -123,6 +124,7 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
     enabled: spec.sections.some((s) => s.custom === 'seoPreview'),
     queryFn: async () => {
       const res = await fetch('/api/v2/public/site-config', {
+        signal: AbortSignal.timeout(30000),
         headers: { Accept: 'application/json' },
       });
       return publicSiteConfigSchema.parse(await res.json());

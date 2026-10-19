@@ -2,6 +2,7 @@ import 'server-only';
 import { publicFormSchema, type PublicForm } from '@crm/contracts';
 import { apiBase } from '@/lib/auth/server';
 import { FORM_KEY } from '../lib/public-paths';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 export type PublicFormResult =
   { status: 'ok'; form: PublicForm } | { status: 'missing' } | { status: 'unavailable' };
@@ -15,7 +16,7 @@ export async function fetchPublicForm(key: string): Promise<PublicFormResult> {
   if (!FORM_KEY.test(key)) return { status: 'missing' };
   let res: Response;
   try {
-    res = await fetch(`${apiBase()}/v2/public/forms/${encodeURIComponent(key)}`, {
+    res = await upstreamFetch(`${apiBase()}/v2/public/forms/${encodeURIComponent(key)}`, {
       headers: { Accept: 'application/json' },
       cache: 'no-store',
     });

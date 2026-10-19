@@ -125,12 +125,12 @@ export class AssistantsRepository {
     };
   }
 
-  /** Active assistants by name, with the count of ready entries each would answer from (its own plus workspace-wide). */
+  /** Active assistants by name, with the count of ready entries each answers from (its own: a knowledge base belongs to one agent). */
   async picker(tx: Tx, orgId: number): Promise<PickerRow[]> {
     const res = await tx.execute(sql`
       SELECT a.uuid, a.name, a.ai_provider, a.ai_model,
         (SELECT count(*) FROM ai_training_sources s WHERE s.org_id = a.org_id AND s.status = 'ready'
-           AND (s.assistant_id IS NULL OR s.assistant_id = a.id)) AS sources
+           AND s.assistant_id = a.id) AS sources
       FROM ai_chat_assistants a
       WHERE a.org_id = ${orgId} AND a.status = 'active'
       ORDER BY a.name, a.id`);

@@ -10,6 +10,8 @@ const CONV = '22222222-2222-4222-8222-222222222222';
 
 const target = (id: number, failureCount = 0): PushTarget => ({
   id,
+  orgId: 4,
+  userId: 7,
   uuid: `00000000-0000-4000-8000-00000000000${id}`,
   endpoint: `https://push.example.test/${id}/secret-endpoint-value`,
   p256dh: `p256dh-secret-${id}`,
@@ -68,7 +70,7 @@ function harness(
     }),
   };
   const presence = { isVisible: vi.fn(async () => opts.visible === true) };
-  const sender = new WebPushSender(provider, db as never, subscriptions as never);
+  const sender = new WebPushSender(provider, db as never, subscriptions as never, {} as never);
   const delivery = new WebPushDeliveryService(
     db as never,
     notifications as never,

@@ -8,6 +8,7 @@ function fakeService(overrides: Partial<Record<keyof RollupService, unknown>> = 
     watermarkAgeSeconds: vi.fn().mockResolvedValue(5),
     reconcile: vi.fn().mockResolvedValue({ fixedRows: 0 }),
     trimHourRows: vi.fn().mockResolvedValue(0),
+    rebuildMessageBase: vi.fn().mockResolvedValue(0),
     ...overrides,
   } as unknown as RollupService & Record<string, ReturnType<typeof vi.fn>>;
 }
@@ -57,6 +58,7 @@ describe('RollupWorker', () => {
     await new RollupWorker(svc).nightly();
     const yesterday = new Date(Date.now() - 86_400_000).toISOString().slice(0, 10);
     expect(svc.reconcile).toHaveBeenCalledWith(yesterday);
+    expect(svc.rebuildMessageBase).toHaveBeenCalledWith(7);
     expect(svc.trimHourRows).toHaveBeenCalledWith(120);
   });
 

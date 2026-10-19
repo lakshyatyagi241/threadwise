@@ -26,6 +26,9 @@ import {
   storeOption,
 } from './builder-context-rules';
 
+/** The engines a workspace's default engine can be (as the broadcasts sender directory reads them). */
+const ENGINES = new Set(['baileys', 'waba', 'twilio', 'sms', 'email']);
+
 /** The store tables a commerce provider's `storeId` is checked against (instagram has no store, it reads the catalogue). */
 const STORE_TABLES: Partial<Record<FlbCommerceProductsQuery['provider'], string>> = {
   whatsapp_shop: 'wa_catalogs',
@@ -237,9 +240,7 @@ export class BuilderContextService {
             SELECT st.uuid, st.name, p.name AS pipeline
             FROM pipeline_stages st JOIN pipelines p ON p.org_id = st.org_id AND p.id = st.pipeline_id
             WHERE st.org_id = ${o} ORDER BY p.sort_order, p.id, st.sort_order, st.id`),
-        tx.execute(sql`
-            SELECT uuid, template_name, category, header, template_body, footer, attachment_type, attachment_file, buttons, carousel_data, variable_map
-            FROM wa_templates WHERE org_id = ${o} AND lower(status) = 'approved' ORDER BY template_name, id`),
+        this.approvedTemplates(tx, o),
         tx.execute(
           sql`SELECT uuid, flow_name, flow_type, is_published FROM flows WHERE org_id = ${o} ORDER BY updated_at DESC, id DESC`,
         ),
@@ -247,7 +248,7 @@ export class BuilderContextService {
         tx.execute(sql`
             SELECT a.uuid, a.name, a.status, a.ai_model,
               (SELECT count(*) FROM ai_training_sources src WHERE src.org_id = a.org_id AND lower(src.status) = 'ready'
-                 AND (src.assistant_id IS NULL OR src.assistant_id = a.id)) AS sources
+                 AND src.assistant_id = a.id) AS sources
             FROM ai_chat_assistants a WHERE a.org_id = ${o} ORDER BY a.name`),
         tx.execute(
           sql`SELECT uuid, name FROM ai_call_assistants WHERE org_id = ${o} ORDER BY name`,
@@ -422,6 +423,40 @@ export class BuilderContextService {
       this.logger.warn(`platform setting ${key} unreadable: ${(err as Error).message}`);
       return false;
     }
+  }
+
+  /**
+   * The templates the Template step offers: the `approved` scope the broadcast composer and the wizard read (Reference's
+   * `WaTemplate::approved()`). On a Meta workspace only what Meta approved (a Meta id, status APPROVED, not paused); on any other
+   * engine the locally approved or public ones. A template on a number that is no longer connected is hidden, SMS templates are not
+   * WhatsApp templates. Keep this in step with `BroadcastsComposeService.compose`.
+   */
+  private async approvedTemplates(tx: Tx, orgId: number) {
+    const engine = await this.templateEngine(tx, orgId);
+    const approved =
+      engine === 'waba'
+        ? sql`t.meta_template_id IS NOT NULL AND t.meta_status = 'APPROVED' AND (t.paused_until IS NULL OR t.paused_until <= now())`
+        : sql`t.status IN ('approved', 'public')`;
+    return tx.execute(sql`
+            SELECT t.uuid, t.template_name, t.category, t.header, t.template_body, t.footer, t.attachment_type, t.attachment_file,
+                   t.buttons, t.carousel_data, t.variable_map
+            FROM wa_templates t
+            LEFT JOIN wa_provider_configs c ON c.org_id = t.org_id AND c.id = t.provider_config_id
+            WHERE t.org_id = ${orgId} AND ${approved}
+              AND (t.provider_config_id IS NULL OR c.status = 'connected')
+              AND coalesce(t.channel, 'waba') <> 'sms'
+            ORDER BY t.template_name, t.id`);
+  }
+
+  /** The engine the workspace's templates are judged by: its default engine, or the one the sender directory falls back to. */
+  private async templateEngine(tx: Tx, orgId: number): Promise<string> {
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
+    const res = await tx.execute(
+      sql`SELECT default_engine FROM workspace_settings WHERE org_id = ${orgId} LIMIT 1`,
+    );
+    const def = (res.rows[0] as { default_engine: string | null } | undefined)?.default_engine;
+    if (def && ENGINES.has(def) && (def !== 'baileys' || unofficialOn)) return def;
+    return unofficialOn ? 'baileys' : 'waba';
   }
 
   private async chatSenders(tx: Tx, orgId: number): Promise<FlowSender[]> {

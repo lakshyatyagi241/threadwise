@@ -14,6 +14,7 @@ import {
   type UpdateActivityTypeInput,
 } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
+import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { activityTypesApi, useActivityMutation } from '../api/activity-types';
 import { useActivityLabels } from '../lib/labels';
 import { OptionList } from './option-list';
@@ -58,6 +59,8 @@ export function ActivityDrawer({
   onRemoved: () => void;
 }) {
   const t = useTranslations('sales-activities.drawer');
+  // the outcomes screen needs its own key: no link to a screen the person cannot use
+  const canOutcomes = useCan('settings.task_outcomes.manage');
   const { toast } = useToast();
   const labels = useActivityLabels();
   const cap = activityCapabilities(activity.behavesAs);
@@ -240,12 +243,14 @@ export function ActivityDrawer({
           <section className="space-y-1">
             <h3 className="text-sm font-semibold">{t('outcomes')}</h3>
             <p className="text-xs text-muted-foreground">{t('taskOutcomesHint')}</p>
-            <Link
-              href="/tasks/outcomes"
-              className="text-sm text-primary underline underline-offset-2"
-            >
-              {t('taskOutcomesLink')}
-            </Link>
+            {canOutcomes ? (
+              <Link
+                href="/tasks/outcomes"
+                className="text-sm text-primary underline underline-offset-2"
+              >
+                {t('taskOutcomesLink')}
+              </Link>
+            ) : null}
           </section>
         )}
 

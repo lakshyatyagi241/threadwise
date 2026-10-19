@@ -1,5 +1,7 @@
 # FAQ knowledge base (FAQ)
 
+> **Retired (2026-10-19).** FAQs are now entries of an AI agent's knowledge base, searched by meaning for every reader; this FAQ engine's screens, settings and routes are gone. See [ADR-0021 addendum 3](../adr/0021-faq-semantic-matching-pgvector.md) and [knowledge-base/README.md](../threadwise-port/knowledge-base/README.md). The text below is kept as history.
+
 A flow writes FAQs (they belong to the flow, not to the workspace): a question, what answers it (a text, or a flow that starts) and many **variations**, the other ways a customer
 might ask. When a customer writes in, the message is compared with every variation by meaning (pgvector embeddings), and above the
 flow's bar the answer is sent or the flow starts. Replaces Geta's NLU service (MiniLM plus fuzzy matching over a pickle file per

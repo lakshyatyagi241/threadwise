@@ -45,6 +45,39 @@ describe('ProblemExceptionFilter body-parser errors', () => {
     });
   });
 
+  // Found by the security fuzz (finding F-12): a form body with 1 200 fields or `a[b][b]...` nested 50 deep was a 500.
+  it('answers 413 for a form body with too many parameters and 400 for one nested too deep', () => {
+    expect(run(bodyParserError('parameters.too.many', 413)).status).toBe(413);
+    const deep = run(bodyParserError('querystring.parse.rangeError', 400));
+    expect(deep.status).toBe(400);
+    expect(deep.body).toMatchObject({
+      code: 'VALIDATION_FAILED',
+      detail: 'The request body could not be read.',
+    });
+  });
+
+  // Found by the security fuzz (F-16): `POST /v2/viber/inbound/%00` bound a NUL byte as a SQL parameter and was a 500.
+  it('answers 422 for a Postgres data exception (a NUL in a parameter), also when the driver error is wrapped', () => {
+    const pg = Object.assign(new Error('invalid byte sequence for encoding "UTF8": 0x00'), {
+      code: '22021',
+    });
+    const wrapped = Object.assign(new Error('Failed query: SELECT * FROM vib_channel_lookup($1)'), {
+      cause: pg,
+    });
+    const { status, body } = run(wrapped);
+    expect(status).toBe(422);
+    expect(body).toMatchObject({ code: 'VALIDATION_FAILED' });
+    // Any other database failure stays a 500.
+    expect(run(Object.assign(new Error('x'), { code: '23505' })).status).toBe(500);
+    expect(run(Object.assign(new Error('x'), { code: '57014' })).status).toBe(500);
+  });
+
+  it('keeps a 500 for an error that is not a client error', () => {
+    expect(
+      run(Object.assign(new Error('x'), { type: 'boom', status: 500, expose: false })).status,
+    ).toBe(500);
+  });
+
   it('answers 400 for JSON that cannot be parsed', () => {
     const { status, body } = run(bodyParserError('entity.parse.failed', 400));
     expect(status).toBe(400);

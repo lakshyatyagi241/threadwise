@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sheet3 #18 - Network-failure testing, part 2 (Postgres, Redis, queues, web fetch)</title>
+<style>
+  :root {
+    --bg:#ffffff; --fg:#1b1f24; --muted:#5b6570; --line:#d8dee4; --card:#f6f8fa; --link:#0b5cad;
+    --ok:#157347; --warn:#8a5a00; --bad:#b4232c;
+    --c-before:#D55E00; --c-after:#0072B2; --c-high:#B4232C; --c-med:#C77700; --c-fixed:#0072B2; --c-open:#6c4ab6; --c-neutral:#7a8591; --c-green:#009E73;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#0d1117; --fg:#e6edf3; --muted:#9aa4af; --line:#30363d; --card:#161b22; --link:#6cb2ff;
+      --ok:#3fb950; --warn:#e3b341; --bad:#ff7b72;
+      --c-before:#F08A3C; --c-after:#56B4E9; --c-high:#FF7B72; --c-med:#E3B341; --c-fixed:#56B4E9; --c-open:#b39cf0; --c-neutral:#8b949e; --c-green:#3fcf9f;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:980px; margin:0 auto; padding:24px 16px 72px; }
+  a { color:var(--link); }
+  h1 { font-size:28px; line-height:1.25; margin:0 0 6px; }
+  h2 { font-size:21px; margin:44px 0 10px; padding-bottom:5px; border-bottom:2px solid var(--line); }
+  h3 { font-size:17px; margin:22px 0 6px; }
+  p, li { max-width:78ch; }
+  .muted { color:var(--muted); }
+  code { background:var(--card); padding:1px 5px; border-radius:4px; font-size:13px; overflow-wrap:anywhere; }
+  table { border-collapse:collapse; width:100%; font-size:14px; margin:10px 0; }
+  .scroll { overflow-x:auto; }
+  th, td { border:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top; }
+  th { background:var(--card); }
+  .badge { display:inline-block; padding:2px 12px; border-radius:99px; font-size:13px; font-weight:700; border:2px solid currentColor; }
+  .b-proc { color:var(--warn); }
+  .chip { display:inline-block; padding:1px 9px; border-radius:6px; font-size:12px; font-weight:700; border:2px solid currentColor; white-space:nowrap; }
+  .high { color:var(--c-high); } .med { color:var(--c-med); } .okc { color:var(--ok); } .openc { color:var(--c-open); }
+  .meta { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:6px 18px; margin:14px 0; font-size:14px; }
+  .meta div b { display:block; color:var(--muted); font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+  blockquote { margin:12px 0; padding:8px 14px; border-left:4px solid var(--c-after); background:var(--card); max-width:78ch; }
+  .tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; margin:14px 0; }
+  .tile { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
+  .tile b { display:block; font-size:32px; line-height:1.1; }
+  .tile span { font-size:13px; color:var(--muted); }
+  .verdict { border:2px solid var(--warn); border-radius:10px; padding:10px 14px; margin:14px 0; background:var(--card); }
+  .box { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px 16px; margin:14px 0; }
+  figure { margin:18px 0; padding:12px; border:1px solid var(--line); border-radius:10px; background:var(--bg); break-inside:avoid; }
+  figcaption { font-size:14px; color:var(--muted); margin-top:6px; max-width:80ch; }
+  figcaption b { color:var(--fg); }
+  svg { max-width:100%; height:auto; display:block; }
+  svg text { fill:var(--fg); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  svg .mut { fill:var(--muted); }
+  svg .axis { stroke:var(--line); stroke-width:1; }
+  svg .node { fill:var(--card); stroke:var(--fg); stroke-width:1.5; }
+  svg .arrow { stroke:var(--fg); stroke-width:1.6; fill:none; }
+  .card { border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin:14px 0; break-inside:avoid; }
+  .card h3 { margin:0 0 6px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  .card dl { margin:0; display:grid; grid-template-columns:150px 1fr; gap:4px 12px; font-size:14.5px; }
+  .card dt { color:var(--muted); font-weight:600; }
+  .card dd { margin:0; }
+  @media (max-width:600px) { .card dl { grid-template-columns:1fr; } .card dt { margin-top:6px; } h1 { font-size:23px; } .tile b { font-size:27px; } }
+  tr, .card, figure, table { break-inside:avoid; }
+  @media print {
+    :root { --bg:#fff; --fg:#000; --muted:#444; --line:#bbb; --card:#f3f3f3; }
+    main { max-width:none; padding:0; } body { font-size:11pt; }
+    h2 { break-after:avoid; } a { color:#000; }
+    .scroll { overflow:visible; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+<!-- 1. HEADER -->
+<h1>Sheet3 #18 - Network-failure testing, part 2</h1>
+<p class="muted">What happens to our system when its database, its cache or its job queue goes away, and does it come back by itself?</p>
+<p><span class="badge b-proc">In process</span></p>
+<div class="meta">
+  <div><b>Sheet item</b>Sheet 3, item 18, priority P1</div>
+  <div><b>Owner</b>Vedant</div>
+  <div><b>Date</b>2026-10-19</div>
+  <div><b>Branch</b><code>vedant/qa/network-failure-2</code></div>
+  <div><b>Work commit</b><code>ec161dac3</code></div>
+  <div><b>Pull request</b>#663 (open)</div>
+  <div><b>Part 1</b><a href="REPORT.html">REPORT.html</a> (outbound HTTP clients, PR #436)</div>
+</div>
+<p><b>Sheet target, word for word:</b></p>
+<blockquote>Automated suite with &ge;95% P0/P1 scenario coverage and zero flaky P0 tests.</blockquote>
+
+<!-- 2. IN 60 SECONDS -->
+<h2>In 60 seconds</h2>
+<div class="tiles" role="list">
+  <div class="tile" role="listitem"><b>8 of 8</b><span>defects found and fixed (3 high, 5 medium)</span></div>
+  <div class="tile" role="listitem"><b>43</b><span>new automated tests (15 + 13 + 9 + 6)</span></div>
+  <div class="tile" role="listitem"><b>3 of 3</b><span>runs green for every new test file: no flaky test seen</span></div>
+  <div class="tile" role="listitem"><b>7</b><span>items left open or not tested (section 8)</span></div>
+</div>
+<div class="verdict"><b>Verdict against the sheet target: partly met.</b> Zero flaky tests is shown (3 of 3 clean runs of every new file). The 95% scenario coverage figure is <b>not measured</b>, because there is no list of P0/P1 scenarios to divide by. Status stays <b>In process</b>.</div>
+<p>In plain words: we cut the connection to the database and to the cache in six different ways and watched the system. It used to hang, lose database connections for good, or answer with a confusing error. It now gives up in seconds, answers "try again in a moment" (HTTP 503), and recovers on its own when the dependency returns.</p>
+<div class="box">
+  <b>Decisions needed from you</b>
+  <ol>
+    <li>Half-open network links (O1): choose TCP keepalive settings with whoever runs the servers, or accept that recovery can take minutes in that case.</li>
+    <li>Redis down in "open" mode (O2): accept one request taking about 9 to 13 seconds in non-production, or ask for a circuit breaker (new behaviour).</li>
+    <li>Database connect wait (O3): keep the existing 10 second wait before a 503 when the database host is silent, or shorten it.</li>
+    <li>Agree who covers the worker, duplicate-send and dead-letter cases (O4, O5): items 69 to 72, owner Lakshya.</li>
+    <li>Provide or approve a list of P0/P1 scenarios so the 95% coverage figure can be calculated (O7).</li>
+  </ol>
+</div>
+
+<!-- 3. WHAT IS THIS -->
+<h2>What is this, in plain words</h2>
+<p>Our application depends on three things it does not own: a <b>database</b> (Postgres) that stores everything, a <b>cache</b> (Redis) that remembers who is signed in and counts requests, and a <b>job queue</b> (BullMQ, which also uses Redis) that holds background work such as sending messages. Servers break, networks drop, and machines restart. The question is not "will it break" but "how does our system behave when it does".</p>
+<p><b>Analogy.</b> A shop whose till (the database) or card reader (the cache) stops working. A good shop tells the customer "the card reader is down, please try again in a minute" and carries on when it is fixed. A bad shop leaves the customer standing at the counter for ever, or locks the door and never reopens. We tested which kind of shop we are.</p>
+<p>Part 1 of this item (PR #436) tested our calls to <i>outside</i> services (WhatsApp, customer webhooks). This part tests the <i>inside</i> dependencies and also reviews every <code>fetch</code> call in the web app.</p>
+<div class="box">
+  <b>Glossary</b>
+  <dl style="margin:6px 0 0">
+    <dt><b>Timeout / deadline</b></dt><dd>The longest we wait for an answer before giving up.</dd>
+    <dt><b>503</b></dt><dd>The standard "service unavailable, try again shortly" answer. A 500 means "something is broken in your request".</dd>
+    <dt><b>Connection pool</b></dt><dd>A fixed set of ready database connections that requests borrow and return. If borrowed ones are never returned, the pool runs dry.</dd>
+    <dt><b>Silent (hung) connection</b></dt><dd>The connection looks open but the other side no longer answers. No error ever arrives, so only our own deadline can end the wait.</dd>
+    <dt><b>Half-open link</b></dt><dd>A network path that was cut without telling us. The operating system only notices after minutes.</dd>
+    <dt><b>Fail fast</b></dt><dd>Refuse at once instead of waiting.</dd>
+    <dt><b>Outbox</b></dt><dd>A database table where events are saved with the change that caused them, then delivered by a background process.</dd>
+    <dt><b>Worker</b></dt><dd>A background process that takes jobs from the queue.</dd>
+    <dt><b>Producer</b></dt><dd>Code that puts a job on the queue (usually inside a web request).</dd>
+    <dt><b>Readiness (<code>/ready</code>) and liveness (<code>/health</code>)</b></dt><dd>Two probe addresses the hosting platform calls. Liveness asks "is the process alive". Readiness asks "can it serve traffic right now".</dd>
+    <dt><b>Ratchet test</b></dt><dd>A test that fails when someone adds a new case of a known problem, so the problem cannot creep back.</dd>
+    <dt><b>Closed / open mode</b></dt><dd>Setting <code>AUTH_REDIS_FAILURE_MODE</code>. Closed: if the cache is down, refuse sign-in related checks with 503 (production default). Open: carry on without the check (non-production default).</dd>
+  </dl>
+</div>
+
+<!-- 4. HOW WE TESTED -->
+<h2>How we tested</h2>
+<p>We never stopped, restarted or changed the shared database and cache. Instead the application under test was pointed at a small <b>fault proxy</b> that sits in front of the real service and misbehaves on command.</p>
+<figure>
+  <svg viewBox="0 0 900 330" role="img" aria-labelledby="t1 d1">
+    <title id="t1">The test setup: the app talks to a local fault proxy, which forwards to Postgres or Redis, or misbehaves</title>
+    <desc id="d1">Three boxes in a row: application under test, local fault proxy on 127.0.0.1, real Postgres or Redis. Below the proxy are the five faults it can inject: refuse, reset, hang, half-open (stall) and slow (held bytes delivered late).</desc>
+    <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--fg)"/></marker></defs>
+    <rect class="node" x="20" y="40" width="220" height="80" rx="10"/><text x="130" y="72" text-anchor="middle" font-size="16" font-weight="700">Application</text><text x="130" y="94" text-anchor="middle" font-size="13" class="mut">API, workers, web app</text>
+    <rect class="node" x="340" y="40" width="220" height="80" rx="10" style="stroke:var(--c-before);stroke-width:3"/><text x="450" y="72" text-anchor="middle" font-size="16" font-weight="700">Local fault proxy</text><text x="450" y="94" text-anchor="middle" font-size="13" class="mut">127.0.0.1 only, test code</text>
+    <rect class="node" x="660" y="40" width="220" height="80" rx="10"/><text x="770" y="72" text-anchor="middle" font-size="16" font-weight="700">Postgres / Redis</text><text x="770" y="94" text-anchor="middle" font-size="13" class="mut">real, shared, never touched</text>
+    <line class="arrow" x1="240" y1="80" x2="338" y2="80" marker-end="url(#ah)"/>
+    <line class="arrow" x1="560" y1="80" x2="658" y2="80" marker-end="url(#ah)"/>
+    <text x="290" y="68" text-anchor="middle" font-size="12" class="mut">connects</text>
+    <text x="610" y="68" text-anchor="middle" font-size="12" class="mut">forwards</text>
+    <text x="450" y="160" text-anchor="middle" font-size="14" font-weight="700">Faults the proxy can inject (and the two fakes)</text>
+    <g font-size="12.5">
+      <rect class="node" x="20" y="175" width="160" height="88" rx="8"/><text x="100" y="197" text-anchor="middle" font-weight="700">refuse</text><text x="100" y="217" text-anchor="middle" class="mut">nothing listens;</text><text x="100" y="233" text-anchor="middle" class="mut">connect is refused</text>
+      <rect class="node" x="190" y="175" width="160" height="88" rx="8"/><text x="270" y="197" text-anchor="middle" font-weight="700">reset</text><text x="270" y="217" text-anchor="middle" class="mut">connections are cut,</text><text x="270" y="233" text-anchor="middle" class="mut">no answer</text>
+      <rect class="node" x="360" y="175" width="160" height="88" rx="8"/><text x="440" y="197" text-anchor="middle" font-weight="700">hang (black hole)</text><text x="440" y="217" text-anchor="middle" class="mut">accepts, swallows,</text><text x="440" y="233" text-anchor="middle" class="mut">never answers</text>
+      <rect class="node" x="530" y="175" width="160" height="88" rx="8"/><text x="610" y="197" text-anchor="middle" font-weight="700">half-open (stall)</text><text x="610" y="217" text-anchor="middle" class="mut">stays open, bytes</text><text x="610" y="233" text-anchor="middle" class="mut">are held back</text>
+      <rect class="node" x="700" y="175" width="180" height="88" rx="8"/><text x="790" y="197" text-anchor="middle" font-weight="700">slow</text><text x="790" y="217" text-anchor="middle" class="mut">held bytes are delivered</text><text x="790" y="233" text-anchor="middle" class="mut">late when the link returns</text>
+    </g>
+    <text x="450" y="298" text-anchor="middle" font-size="12.5" class="mut">Two small fakes also exist (no real server needed): "connected, then silent" and "dies at the first statement".</text>
+    <text x="450" y="316" text-anchor="middle" font-size="12.5" class="mut">The proxy never drops bytes on a live link: like real TCP it delivers late or breaks the connection.</text>
+  </svg>
+  <figcaption><b>Figure 1. The fault-injection setup.</b> The "slow" fault is the stall mode followed by letting the link pass again; no separate latency knob was built.</figcaption>
+</figure>
+<h3>Method</h3>
+<ol>
+  <li>Point the part of the system under test at the proxy, never at the real service.</li>
+  <li>Inject one fault. Each case must (a) end within a deadline, (b) end in an error the caller can classify (503 or a typed error, no stack trace, no address), and (c) leave no connection or pool slot behind.</li>
+  <li>Remove the fault. The same app instance, pool or client must (d) work again by itself, with no restart.</li>
+  <li>Layers: a hermetic unit file (no server needed); integration files on real Postgres and Redis; and the real application (AppModule) behind the proxies, exercising sign-in, session, a read, a write, <code>/ready</code> and <code>/health</code>.</li>
+  <li>Integration files use their own containers by default. With <code>NF_PG_ADMIN_URL</code> and <code>NF_REDIS_URL</code> set they use running servers: a throwaway database <code>crm_nf2_&lt;random&gt;</code> (dropped at the end) and BullMQ queues with a random prefix (removed at the end). Redis keys written by the full-application run (rate limits, sessions) were not deleted from the shared Redis; they carry expiry times.</li>
+  <li>Review all <code>fetch</code> calls in the web app, fix the unsafe ones, and add a ratchet test.</li>
+</ol>
+<div class="scroll"><table>
+<caption class="muted" style="text-align:left;caption-side:top">Fault table</caption>
+<thead><tr><th scope="col">Fault</th><th scope="col">What the proxy does</th></tr></thead>
+<tbody>
+<tr><th scope="row">refuse</th><td>nothing listens: connect is refused at once</td></tr>
+<tr><th scope="row">reset</th><td>connections are dropped (existing ones killed, new ones closed unanswered)</td></tr>
+<tr><th scope="row">stall</th><td>connections stay open, bytes are held and delivered when the link returns</td></tr>
+<tr><th scope="row">blackhole</th><td>new connections are accepted and swallowed, existing ones go silent</td></tr>
+<tr><th scope="row">connected, then silent (fake)</th><td>handshake done, every later request ignored</td></tr>
+<tr><th scope="row">dies at first statement (fake)</th><td>handshake done, connection dropped at the first query (a restarted server under a pooled connection)</td></tr>
+</tbody></table></div>
+
+<!-- 5. RESULTS AT A GLANCE -->
+<h2>Results at a glance</h2>
+
+<figure>
+  <svg viewBox="0 0 640 170" role="img" aria-labelledby="t2 d2">
+    <title id="t2">Findings by severity: 3 high and 5 medium</title>
+    <desc id="d2">Horizontal bars: high 3, medium 5. Total 8 defects, all fixed.</desc>
+    <line class="axis" x1="110" y1="20" x2="110" y2="120"/>
+    <text x="100" y="52" text-anchor="end" font-size="14">High</text>
+    <rect x="110" y="30" width="180" height="32" style="fill:var(--c-high)"/><text x="300" y="52" font-size="15" font-weight="700">3 (N6, N7, N10)</text>
+    <text x="100" y="102" text-anchor="end" font-size="14">Medium</text>
+    <rect x="110" y="80" width="300" height="32" style="fill:var(--c-med)"/><text x="420" y="102" font-size="15" font-weight="700">5 (N8, N9, N11, N12, N13)</text>
+    <text x="110" y="150" font-size="12.5" class="mut">Each unit is one defect. No critical or low findings.</text>
+  </svg>
+  <figcaption><b>Figure 2. 3 high and 5 medium defects were found.</b> Data: High 3, Medium 5, total 8.</figcaption>
+</figure>
+
+<figure>
+  <svg viewBox="0 0 640 190" role="img" aria-labelledby="t3 d3">
+    <title id="t3">8 of 8 defects fixed, 7 other items left open</title>
+    <desc id="d3">One stacked bar for the 8 defects: 8 fixed, 0 partly fixed, 0 open. A second bar for 7 separate risks and untested areas that remain open.</desc>
+    <text x="10" y="32" font-size="14" font-weight="700">Defects found (8)</text>
+    <rect x="10" y="40" width="440" height="30" style="fill:var(--c-fixed)"/><text x="230" y="61" text-anchor="middle" font-size="15" font-weight="700" style="fill:#fff">8 fixed</text>
+    <text x="460" y="61" font-size="12.5" class="mut">0 partly, 0 open</text>
+    <text x="10" y="112" font-size="14" font-weight="700">Open risks and untested areas (7, O1 to O7)</text>
+    <rect x="10" y="120" width="385" height="30" style="fill:var(--c-open)"/><text x="202" y="141" text-anchor="middle" font-size="15" font-weight="700" style="fill:#fff">7 open</text>
+    <text x="405" y="141" font-size="12.5" class="mut">not defects: see section 8</text>
+  </svg>
+  <figcaption><b>Figure 3. All 8 defects are fixed; 7 risks or untested areas remain.</b> Bars are scaled to their own counts (8 and 7).</figcaption>
+</figure>
+
+<figure>
+  <svg viewBox="0 0 640 230" role="img" aria-labelledby="t4 d4">
+    <title id="t4">43 tests added: 15 unit, 13 recovery, 9 full-app, 6 web</title>
+    <desc id="d4">Horizontal bars: unit tests without servers 15, recovery tests on real Postgres and Redis 13, full application outage tests 9, web tests 6. Total 43.</desc>
+    <line class="axis" x1="230" y1="15" x2="230" y2="165"/>
+    <g font-size="13.5">
+      <text x="220" y="42" text-anchor="end">Unit, no servers needed</text><rect x="230" y="26" width="225" height="26" style="fill:var(--c-after)"/><text x="463" y="45" font-weight="700">15</text>
+      <text x="220" y="84" text-anchor="end">Recovery, real Postgres/Redis</text><rect x="230" y="68" width="195" height="26" style="fill:var(--c-green)"/><text x="433" y="87" font-weight="700">13</text>
+      <text x="220" y="126" text-anchor="end">Full application outages</text><rect x="230" y="110" width="135" height="26" style="fill:var(--c-med)"/><text x="373" y="129" font-weight="700">9</text>
+      <text x="220" y="168" text-anchor="end">Web app</text><rect x="230" y="152" width="90" height="26" style="fill:var(--c-neutral)"/><text x="328" y="171" font-weight="700">6</text>
+    </g>
+    <text x="230" y="205" font-size="12.5" class="mut">15 px per test. Total 43 (15 + 13 + 9 + 6).</text>
+  </svg>
+  <figcaption><b>Figure 4. 43 tests were added across four areas.</b> The web number is 3 (fetch ratchet) + 3 (client deadline). One existing spec (<code>queue.module.spec.ts</code>) was also updated.</figcaption>
+</figure>
+
+<figure>
+  <svg viewBox="0 0 760 330" role="img" aria-labelledby="t5 d5">
+    <title id="t5">Time for one request to finish during a Redis outage, before and after the fixes</title>
+    <desc id="d5">Pairs of horizontal bars, in seconds. Open mode, Redis refused: 35.8 before, 9.3 after. Open mode, Redis silent: 40.3 before, at most 13.1 after. Closed mode, connection reset: 11.3 before, under 6 after. Closed mode, Redis silent: 15.0 before, at most 10.3 after. Dashed bars are upper limits that a test asserted, not exact measurements.</desc>
+    <g font-size="13">
+      <text x="10" y="22" font-weight="700">Seconds for one request to end (0 to 45 s)</text>
+      <line class="axis" x1="250" y1="34" x2="250" y2="296"/>
+      <!-- 11 px per second: 250 + s*11 -->
+      <text x="240" y="62" text-anchor="end">Open mode, Redis refused</text>
+      <rect x="250" y="40" width="394" height="18" style="fill:var(--c-before)"/><text x="650" y="54" font-weight="700">35.8 s before</text>
+      <rect x="250" y="62" width="102" height="18" style="fill:var(--c-after)"/><text x="358" y="76" font-weight="700">9.3 s after</text>
+      <text x="240" y="130" text-anchor="end">Open mode, Redis silent</text>
+      <rect x="250" y="108" width="443" height="18" style="fill:var(--c-before)"/><text x="698" y="122" font-weight="700" font-size="12">40.3 s</text>
+      <rect x="250" y="130" width="144" height="18" style="fill:none;stroke:var(--c-after);stroke-width:3;stroke-dasharray:6 3"/><text x="400" y="144" font-weight="700">at most 13.1 s after</text>
+      <text x="240" y="198" text-anchor="end">Closed mode, connection reset</text>
+      <rect x="250" y="176" width="124" height="18" style="fill:var(--c-before)"/><text x="380" y="190" font-weight="700">11.3 s before</text>
+      <rect x="250" y="198" width="66" height="18" style="fill:none;stroke:var(--c-after);stroke-width:3;stroke-dasharray:6 3"/><text x="322" y="212" font-weight="700">under 6 s after</text>
+      <text x="240" y="266" text-anchor="end">Closed mode, Redis silent</text>
+      <rect x="250" y="244" width="165" height="18" style="fill:var(--c-before)"/><text x="421" y="258" font-weight="700">15.0 s before</text>
+      <rect x="250" y="266" width="113" height="18" style="fill:none;stroke:var(--c-after);stroke-width:3;stroke-dasharray:6 3"/><text x="369" y="280" font-weight="700">at most 10.3 s after</text>
+    </g>
+    <rect x="10" y="304" width="14" height="12" style="fill:var(--c-before)"/><text x="30" y="315" font-size="12">before (measured)</text>
+    <rect x="150" y="304" width="14" height="12" style="fill:var(--c-after)"/><text x="170" y="315" font-size="12">after (measured)</text>
+    <rect x="290" y="304" width="22" height="12" style="fill:none;stroke:var(--c-after);stroke-width:3;stroke-dasharray:6 3"/><text x="318" y="315" font-size="12">after: upper limit a test asserted</text>
+  </svg>
+  <figcaption><b>Figure 5. During a Redis outage a request used to take 11 to 40 seconds; now it is bounded.</b> Only the open-mode "refused" case has an exact "after" measurement (9.3 s). The other "after" values are ceilings that the tests asserted and passed (for closed mode, each call under 6 s for reset; for the silent cases, the whole test, including the recovery wait, finished in 13.1 s and 10.3 s). "Before" values are the first full-application run. The 5 s command timeout in that run was later cut to 2 s together with a back-off cap of 500 ms.</figcaption>
+</figure>
+
+<div class="scroll"><table>
+<caption class="muted" style="text-align:left;caption-side:top">Other measured before and after numbers</caption>
+<thead><tr><th scope="col">Case</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Postgres connected but silent: one query (N6)</th><td>never ended; the test was cut off at its 20 s limit</td><td>2.8 s (measured 2818 ms)</td></tr>
+<tr><th scope="row">Third failing transaction on a 2-slot pool (N10)</th><td>10.0 s wait for a free slot (measured 10003 ms): the pool had run dry</td><td>28, 14 and 15 ms for three failing attempts; nothing leaked</td></tr>
+<tr><th scope="row">Queue add with Redis down since process start (N8)</th><td>did not end (the probe was cut at 4 s; the test hit its limit)</td><td>about 3.5 s (test duration 3.5 s; the wait is capped at 3 s)</td></tr>
+<tr><th scope="row">Redis silent: one command (N7)</th><td>no deadline</td><td>ends at the command timeout (first run with 5 s: 5.0 s; now 2 s, asserted under 3.5 s)</td></tr>
+<tr><th scope="row">Readiness probe, Postgres and Redis silent (N9)</th><td>did not end (cut at 8 s)</td><td>test finished in 2.5 s, answer 503</td></tr>
+</tbody></table></div>
+
+<figure>
+  <svg viewBox="0 0 640 215" role="img" aria-labelledby="t6 d6">
+    <title id="t6">Web fetch calls reviewed, by outcome</title>
+    <desc id="d6">Browser side, 49 calls: 20 got a deadline, 29 are reviewed exceptions. Server side, 27 calls: all 27 got a deadline. In addition 31 other fetch matches already had a deadline.</desc>
+    <g font-size="13.5">
+      <text x="10" y="30" font-weight="700">Browser side: 49 calls</text>
+      <rect x="10" y="38" width="196" height="30" style="fill:var(--c-fixed)"/><text x="108" y="58" text-anchor="middle" font-weight="700" style="fill:#fff">20 got a deadline</text>
+      <rect x="206" y="38" width="284" height="30" style="fill:var(--c-neutral)"/><text x="348" y="58" text-anchor="middle" font-weight="700" style="fill:#fff">29 reviewed exceptions</text>
+      <text x="10" y="106" font-weight="700">Server side: 27 calls</text>
+      <rect x="10" y="114" width="265" height="30" style="fill:var(--c-fixed)"/><text x="142" y="134" text-anchor="middle" font-weight="700" style="fill:#fff">27 got a deadline</text>
+      <text x="10" y="176" font-weight="700">Already had a deadline (not counted above): 31</text>
+      <rect x="10" y="184" width="304" height="20" style="fill:var(--c-green)"/>
+    </g>
+    <text x="500" y="134" font-size="12" class="mut">10 px per call</text>
+  </svg>
+  <figcaption><b>Figure 6. 47 of 76 reviewed calls got a deadline; the other 29 are reviewed exceptions with a stated reason.</b> The 31 "already had one" is the remainder of a text scan that matched 107 <code>fetch(</code> calls in total, so treat it as approximate; the 49 and 27 are exact.</figcaption>
+</figure>
+
+<figure>
+  <svg viewBox="0 0 640 175" role="img" aria-labelledby="t7 d7">
+    <title id="t7">Flakiness: every new test file passed 3 runs out of 3</title>
+    <desc id="d7">Three rows (API unit 313 of 313, web 136 of 136, integration 22 of 22), each with three filled circles for runs 1, 2 and 3, all passed.</desc>
+    <g font-size="13.5">
+      <text x="10" y="40" font-weight="700">Suite</text><text x="330" y="40" font-weight="700">Run 1</text><text x="400" y="40" font-weight="700">Run 2</text><text x="470" y="40" font-weight="700">Run 3</text><text x="540" y="40" font-weight="700">Tests per run</text>
+      <text x="10" y="72">API unit (25 files)</text>
+      <text x="10" y="106">Web (lib/network-failure, api, auth)</text>
+      <text x="10" y="140">Integration (recovery + api-outage)</text>
+    </g>
+    <g style="fill:var(--c-green)">
+      <circle cx="345" cy="66" r="11"/><circle cx="415" cy="66" r="11"/><circle cx="485" cy="66" r="11"/>
+      <circle cx="345" cy="100" r="11"/><circle cx="415" cy="100" r="11"/><circle cx="485" cy="100" r="11"/>
+      <circle cx="345" cy="134" r="11"/><circle cx="415" cy="134" r="11"/><circle cx="485" cy="134" r="11"/>
+    </g>
+    <g font-size="14" font-weight="700" style="fill:#fff" text-anchor="middle"><text x="345" y="71">&#10003;</text><text x="415" y="71">&#10003;</text><text x="485" y="71">&#10003;</text><text x="345" y="105">&#10003;</text><text x="415" y="105">&#10003;</text><text x="485" y="105">&#10003;</text><text x="345" y="139">&#10003;</text><text x="415" y="139">&#10003;</text><text x="485" y="139">&#10003;</text></g>
+    <g font-size="13.5"><text x="540" y="71">313 / 313</text><text x="540" y="105">136 / 136</text><text x="540" y="139">22 / 22</text></g>
+  </svg>
+  <figcaption><b>Figure 7. 9 of 9 runs passed, so no flaky test was observed.</b> Three runs show no flakiness in those runs; they cannot prove it never happens. The API unit and web runs include existing tests in the same folders.</figcaption>
+</figure>
+
+<!-- 6. FINDINGS -->
+<h2>Findings</h2>
+<p>Sorted by severity, then status. All 8 are fixed. "Test that proves it" files are under <code>apps/api/test/</code> unless noted; the same behaviour is also covered by <code>integration/network-failure/api-outage.spec.ts</code> where it touches the request path.</p>
+
+<div class="card">
+  <h3><span class="chip high">HIGH &#9650;</span> N6 &mdash; A silent database hung requests and stopped the outbox <span class="chip okc">&#10003; Fixed</span></h3>
+  <dl>
+    <dt>What went wrong</dt><dd>Postgres had no client-side query timeout. The server-side limit (<code>statement_timeout</code>) cannot fire when the connection is up but the other end is silent, so the query waited for ever. Before the fix the test hung until the test runner's timeout.</dd>
+    <dt>Why it matters</dt><dd>A web request hangs. A background outbox tick hangs too, and its "already running" guard is never cleared, so the outbox stops delivering events for good, even after the database returns.</dd>
+    <dt>How we fixed it</dt><dd><code>query_timeout</code> = statement timeout + 2.5 s (<code>packages/db/src/client.ts</code>).</dd>
+    <dt>Test that proves it</dt><dd><code>unit/network-failure/dependency-outage.spec.ts</code> ("connected, then silent", outbox drain); <code>integration/network-failure/recovery.spec.ts</code>.</dd>
+  </dl>
+</div>
+<div class="card">
+  <h3><span class="chip high">HIGH &#9650;</span> N10 &mdash; A failed transaction start leaked a database connection for good <span class="chip okc">&#10003; Fixed</span></h3>
+  <dl>
+    <dt>What went wrong</dt><dd>The database library (drizzle) runs <code>begin</code> outside its try/finally. When <code>begin</code> fails (the connection died or went silent between checkout and first statement) the connection is never released: one pool slot lost per failure. Observed: the 3rd transaction on a 2-slot pool waited the full 10 s connection timeout. The dead checked-out connection also raises an unhandled <code>error</code> event, which is a process crash.</dd>
+    <dt>Why it matters</dt><dd>A database restart or network blip drains the pool, so the API cannot recover even after the database is back. Process-level exception risk.</dd>
+    <dt>How we fixed it</dt><dd>Fixed once in shared code: <code>runTransaction</code>, used by <code>withTenant</code> and <code>withPrivileged</code>, so every tenant and privileged transaction. It always releases the connection, discards one with an unanswered query, and holds an error listener while the connection is checked out.</dd>
+    <dt>Test that proves it</dt><dd><code>unit/network-failure/dependency-outage.spec.ts</code> ("dies at the first statement ... gives its pool slot back (N10)"); <code>integration/network-failure/recovery.spec.ts</code>.</dd>
+  </dl>
+</div>
+<div class="card">
+  <h3><span class="chip high">HIGH &#9650;</span> N7 &mdash; A silent Redis hung every request <span class="chip okc">&#10003; Fixed</span></h3>
+  <dl>
+    <dt>What went wrong</dt><dd>The shared Redis client had no command timeout. A connected-but-silent Redis hangs every auth check, rate limit and cache read.</dd>
+    <dt>Why it matters</dt><dd>Every authenticated request hangs.</dd>
+    <dt>How we fixed it</dt><dd><code>commandTimeout</code> of 2 s (nothing blocks on this client) in <code>infra/redis/redis.module.ts</code>.</dd>
+    <dt>Test that proves it</dt><dd><code>unit/network-failure/dependency-outage.spec.ts</code> (shared Redis client); <code>integration/network-failure/recovery.spec.ts</code> and <code>api-outage.spec.ts</code>.</dd>
+  </dl>
+</div>
+<div class="card">
+  <h3><span class="chip med">MEDIUM &#9670;</span> N8 &mdash; Queue producers could wait for ever <span class="chip okc">&#10003; Fixed</span></h3>
+  <dl>
+    <dt>What went wrong</dt><dd>BullMQ producers: (a) with a connected-but-silent Redis, <code>queue.add</code> waits for ever; (b) a process that started while Redis was down waits for ever on its first connection, whatever the "fail fast" options say. Outages in mid-life already failed fast, as the earlier commit intended.</dd>
+    <dt>Why it matters</dt><dd>Any request that adds a job hangs for the length of the outage after a restart during an outage.</dd>
+    <dt>How we fixed it</dt><dd>Producer <code>commandTimeout</code>, and <code>BoundedQueue</code> (registered for all Nest queues) bounds the first-connection wait to 3 s on <code>add</code> and <code>addBulk</code>. The wait carries on in the background, so the queue works once Redis returns. Workers keep waiting (<code>commandTimeout</code> is explicitly unset for them).</dd>
+    <dt>Test that proves it</dt><dd><code>unit/network-failure/dependency-outage.spec.ts</code> (producer cold start and silent); <code>integration/network-failure/recovery.spec.ts</code> (cold start, mid-life, workers).</dd>
+  </dl>
+</div>
+<div class="card">
+  <h3><span class="chip med">MEDIUM &#9670;</span> N9 &mdash; The readiness probe could hang and told strangers internal addresses <span class="chip okc">&#10003; Fixed</span></h3>
+  <dl>
+    <dt>What went wrong</dt><dd><code>/ready</code> had no deadline per check and returned the driver's raw message on a public endpoint (host, port, role name).</dd>
+    <dt>Why it matters</dt><dd>A hanging probe makes the platform kill a healthy pod. Internal addresses are disclosed to anonymous callers.</dd>
+    <dt>How we fixed it</dt><dd>2 s per check, all checks in parallel, and the error is one of <code>timeout</code>, <code>unreachable</code>, <code>error</code> (<code>health/health.controller.ts</code>).</dd>
+    <dt>Test that proves it</dt><dd><code>unit/network-failure/dependency-outage.spec.ts</code> (readiness: refused, silent); <code>integration/network-failure/api-outage.spec.ts</code>.</dd>
+  </dl>
+</div>
+<div class="card">
+  <h3><span class="chip med">MEDIUM &#9670;</span> N11 &mdash; An outage was reported as a 500 <span class="chip okc">&#10003; Fixed</span></h3>
+  <dl>
+    <dt>What went wrong</dt><dd>A dead database, Redis or queue surfaced as 500 <code>INTERNAL</code>, which a client reads as "my request is broken".</dd>
+    <dt>Why it matters</dt><dd>Clients and retry logic cannot tell an outage from a bug. The web app retries reads on 5xx other than 501, so a 503 now gets that retry.</dd>
+    <dt>How we fixed it</dt><dd>The <code>isDependencyOutage</code> classifier and <code>ProblemExceptionFilter</code> answer 503 <code>SERVICE_UNAVAILABLE</code> with <code>Retry-After: 5</code> (new code in <code>@crm/contracts</code>); no address or driver text in the body.</dd>
+    <dt>Test that proves it</dt><dd><code>unit/network-failure/dependency-outage.spec.ts</code> (error mapping); <code>integration/network-failure/api-outage.spec.ts</code>.</dd>
+  </dl>
+</div>
+<div class="card">
+  <h3><span class="chip med">MEDIUM &#9670;</span> N12 &mdash; Redis retry back-off made every request take 11 to 35 seconds <span class="chip okc">&#10003; Fixed</span></h3>
+  <dl>
+    <dt>What went wrong</dt><dd>The Redis client's back-off grew to 2 s a try and <code>maxRetriesPerRequest</code> counts tries, so in a long outage each Redis command took about 5 s to fail. An authenticated request took 11 to 35 s.</dd>
+    <dt>Why it matters</dt><dd>Slow, not stuck, but the request path is unusable during an outage.</dd>
+    <dt>How we fixed it</dt><dd>Back-off capped at 500 ms. Measured evidence: in closed mode each call finished under the 6 s test limit (see Figure 5); the previous version of this report said "about 2 s", which was not measured.</dd>
+    <dt>Test that proves it</dt><dd><code>integration/network-failure/api-outage.spec.ts</code> (Redis outage, closed and open mode).</dd>
+  </dl>
+</div>
+<div class="card">
+  <h3><span class="chip med">MEDIUM &#9670;</span> N13 &mdash; Web app calls with no deadline <span class="chip okc">&#10003; Fixed</span></h3>
+  <dl>
+    <dt>What went wrong</dt><dd>27 server-side calls to the API (SSR pages, route handlers, public proxies, widget proxy) had no deadline. In the browser, 13 JSON helpers and 7 sign-out calls had none either, and neither did the central <code>apiFetch</code> unless the caller passed a signal. (The previous version of this report counted these as "16 browser JSON helpers"; the call-by-call count is 13 JSON + 7 sign-out = 20.)</dd>
+    <dt>Why it matters</dt><dd>A stalled API freezes page renders, the sign-in form, the sign-out button and public form submits.</dd>
+    <dt>How we fixed it</dt><dd>Server-side calls use <code>upstreamFetch</code> (30 s to first byte). Browser JSON calls 30 s, sign-out 5 s, <code>apiFetch</code> 60 s unless the caller passes its own signal.</dd>
+    <dt>Test that proves it</dt><dd><code>apps/web/src/lib/network-failure/fetch-ratchet.test.ts</code>; <code>apps/web/src/lib/api/client-deadline.test.ts</code>.</dd>
+  </dl>
+</div>
+<p><b>Already correct before this work:</b> a Postgres or Redis that is refused or resets fails in milliseconds; a worker keeps waiting through an outage and picks the next job up; a producer that lost Redis mid-life fails at once and recovers; liveness (<code>/health</code>) stays 200 during every outage; the closed-mode auth path answers 503 <code>AUTH_SERVICE_DEGRADED</code>.</p>
+
+<h3>Web fetch review in detail (the "about 45" calls)</h3>
+<div class="scroll"><table>
+<thead><tr><th scope="col">Group</th><th scope="col">Calls</th><th scope="col">Timeout before</th><th scope="col">Error handling</th><th scope="col">Retry safety</th><th scope="col">Result</th></tr></thead>
+<tbody>
+<tr><th scope="row">Server-side calls to the API (pages, route handlers, proxies)</th><td>27</td><td>none</td><td>most catch and degrade</td><td>reads and idempotent proxies; nothing retries by itself</td><td>now <code>upstreamFetch</code> (30 s to first byte, bodies are not cut off)</td></tr>
+<tr><th scope="row">Browser JSON helpers (auth actions, setup, invoices, form submit, storefront, impersonation, group form, flow platform call, unsubscribe)</th><td>13</td><td>none</td><td>network error mapped or thrown</td><td>mutations are never replayed automatically (<code>transientRetry</code> wraps reads only)</td><td>30 s deadline</td></tr>
+<tr><th scope="row">Sign-out / logout calls</th><td>7</td><td>none; sign-out waited for it before navigating</td><td>swallowed</td><td>idempotent</td><td>5 s deadline</td></tr>
+<tr><th scope="row"><code>apiFetch</code> (the central client)</th><td>1</td><td>only if the caller passed a signal</td><td>problem+json parsed</td><td>reads retried by <code>transientRetry</code>, mutations carry an Idempotency-Key</td><td>60 s default, caller's signal wins</td></tr>
+<tr><th scope="row">Uploads (avatar, branding, logos, media, extension package, proof, groups picture, CSV)</th><td>11</td><td>none</td><td>caller handles</td><td>not retried</td><td>reviewed exception: duration follows the file size</td></tr>
+<tr><th scope="row">Downloads and exports (CSV, zip, recording, sitemap)</th><td>15</td><td>none</td><td>caller handles</td><td>reads</td><td>reviewed exception: duration follows the transfer</td></tr>
+<tr><th scope="row">AI flow generation, analytics beacon, injectable wrapper</th><td>3</td><td>none</td><td>caller handles / swallowed</td><td>not retried</td><td>reviewed exceptions with reasons</td></tr>
+</tbody></table></div>
+<p class="muted">The browser-side 49 = 13 + 7 + 11 + 15 + 3 (the central <code>apiFetch</code> change is not one of the 49; it is a default for calls that go through it). The previous version of this report listed the groups with 12, 13 and 18 calls, which did not add up; these counts come from the final call-by-call scan. Nothing else changed.</p>
+<p>The ratchet <code>fetch-ratchet.test.ts</code> fails when a new <code>fetch(</code> has no signal or timeout and is not on the reviewed list with a stated reason, when the list has a stale entry, and when a server-side file that calls <code>apiBase()</code> uses a bare <code>fetch</code>.</p>
+
+<!-- 7. ROLLOUT -->
+<h2>Rollout and rollback</h2>
+<p>No staged deploy is needed. All changes ship in one release and are tuning-level: timeouts, a connection-release fix, a new error code, and a stable <code>/ready</code> error vocabulary. To undo, revert the commit <code>ec161dac3</code>. One thing to watch after release: monitoring that parses the old <code>/ready</code> <code>error</code> text will now see <code>timeout</code>, <code>unreachable</code> or <code>error</code>, and API clients will now see 503 <code>SERVICE_UNAVAILABLE</code> where they saw 500. Whether any dashboard or alert depends on the old text was <b>not checked</b>.</p>
+
+<!-- 8. WHAT THIS DOES NOT PROVE -->
+<h2>What this does NOT prove</h2>
+<div class="scroll"><table>
+<thead><tr><th scope="col">#</th><th scope="col">Item</th><th scope="col">Why left open</th></tr></thead>
+<tbody>
+<tr><th scope="row">O1</th><td>A half-open TCP link (route dropped, no reset): every call is bounded and returns 503, but the connection stays "up" until the operating system gives up on it (minutes), so calls keep failing for that long. No TCP keepalive or user-timeout tuning, and no drop-after-N-timeouts.</td><td>Needs an infrastructure decision (keepalive values, platform). The system does recover by itself, just not at once.</td></tr>
+<tr><th scope="row">O2</th><td>Redis outage with <code>AUTH_REDIS_FAILURE_MODE=open</code> (the non-production default): each degraded check waits its own deadline, so one request took about 9 s (refused) and about 13 s (silent).</td><td>Non-production default; production default is closed. A circuit breaker would be new behaviour.</td></tr>
+<tr><th scope="row">O3</th><td>A new Postgres connection to a silent host waits the existing 10 s connection timeout before a 503.</td><td>Existing setting; changing it is a judgement call.</td></tr>
+<tr><th scope="row">O4</th><td>Not tested: the socket.io Redis adapter (<code>maxRetriesPerRequest: null</code>), the worker process end to end (only <code>BlockingWorker</code> and the outbox drain), the other sweepers and consumers, the read replica, TLS, DNS, packet loss, a real Postgres restart or failover, Redis Sentinel or cluster, commit-time ambiguity (a connection lost between COMMIT and its answer).</td><td>Out of scope for this pass; queue worker behaviour overlaps items 69 to 72 (owner Lakshya).</td></tr>
+<tr><th scope="row">O5</th><td>Duplicate sends on job retry, dead-letter policy.</td><td>Items 69 to 72.</td></tr>
+<tr><th scope="row">O6</th><td>Browser offline behaviour (what the UI shows).</td><td>Needs a browser; item 10 (Playwright).</td></tr>
+<tr><th scope="row">O7</th><td>The 95% P0/P1 scenario coverage figure is not measured; there is no scenario inventory to divide by.</td><td>Status stays In process.</td></tr>
+</tbody></table></div>
+<ul>
+  <li>Faults are injected on loopback with a proxy. The kernel's own behaviour on a really lost route, and packet loss, are not simulated.</li>
+  <li>Timing checks use generous limits so they do not flake on a busy machine; the numbers in Figure 5 are from specific runs, not averages.</li>
+  <li>Three clean runs show no flakiness in those runs; they do not prove it can never happen.</li>
+  <li>Existing failures on this branch's base were not caused by this work but were also <b>not confirmed against a pristine main</b> (section 10).</li>
+  <li>The built-in <code>security-review</code> pass found nothing, but its diff input was empty, so the diff was reviewed by hand; the <code>code-review</code> step was not run; <code>pre-pr</code> was not run.</li>
+</ul>
+
+<!-- 9. NEXT STEPS -->
+<h2>Next steps and owners</h2>
+<div class="scroll"><table>
+<thead><tr><th scope="col">Step</th><th scope="col">Owner</th></tr></thead>
+<tbody>
+<tr><td>Review and merge PR #663</td><td>Reviewer (owner to name)</td></tr>
+<tr><td>Decide keepalive / half-open handling (O1), open-mode slowness (O2) and the connect wait (O3)</td><td>Project owner with infrastructure</td></tr>
+<tr><td>Cover worker end to end, duplicate sends and dead letters (O4, O5)</td><td>Lakshya (items 69 to 72)</td></tr>
+<tr><td>Browser offline behaviour (O6)</td><td>Item 10 (Playwright)</td></tr>
+<tr><td>Write the P0/P1 scenario list so the 95% figure can be calculated (O7)</td><td>Vedant, to be confirmed by the project owner</td></tr>
+<tr><td>Check whether any alert or dashboard reads the old <code>/ready</code> error text or counts 500s as outages</td><td>Whoever owns monitoring</td></tr>
+</tbody></table></div>
+
+<!-- 10. APPENDIX -->
+<h2>Appendix</h2>
+<h3>Tests added</h3>
+<div class="scroll"><table>
+<thead><tr><th scope="col">File</th><th scope="col">Tests</th><th scope="col">Needs</th></tr></thead>
+<tbody>
+<tr><th scope="row"><code>apps/api/test/unit/network-failure/dependency-outage.spec.ts</code> (+ <code>tcp-fault-proxy.ts</code>, <code>frozen-backends.ts</code>)</th><td>15: Postgres refuse/reset/black hole/silent/dies-at-first-statement, Redis refused/silent, producer cold start and silent, readiness (refused, silent), outbox drain (refused, silent), error mapping</td><td>nothing external</td></tr>
+<tr><th scope="row"><code>apps/api/test/integration/network-failure/recovery.spec.ts</code></th><td>13: Postgres and Redis x reset/refuse/stall/blackhole with recovery on the same pool/client; producer cold start and mid-life; worker through reset and black hole; outbox drain across an outage delivers exactly once</td><td>Postgres + Redis</td></tr>
+<tr><th scope="row"><code>apps/api/test/integration/network-failure/api-outage.spec.ts</code></th><td>9: the real AppModule behind the proxies: sign-in, session, contacts list (read), contact create (write), <code>/ready</code>, <code>/health</code>, for Postgres and for Redis in closed and open mode, with recovery</td><td>Postgres + Redis</td></tr>
+<tr><th scope="row"><code>apps/web/src/lib/network-failure/fetch-ratchet.test.ts</code>, <code>apps/web/src/lib/api/client-deadline.test.ts</code></th><td>3 + 3</td><td>nothing external</td></tr>
+<tr><th scope="row"><code>apps/api/src/infra/queue/queue.module.spec.ts</code> (changed)</th><td>producer options now include the command timeout; the worker connection has none</td><td>nothing external</td></tr>
+</tbody></table></div>
+
+<h3>Commands run and results</h3>
+<div class="scroll"><table>
+<thead><tr><th scope="col">Command or check</th><th scope="col">Result</th></tr></thead>
+<tbody>
+<tr><th scope="row">ESLint on every changed file (api, web, packages)</th><td class="okc">pass</td></tr>
+<tr><th scope="row">Prettier check on every changed file</th><td class="okc">pass</td></tr>
+<tr><th scope="row">Typecheck: api source, web, <code>packages/db</code>, <code>packages/contracts</code></th><td class="okc">pass</td></tr>
+<tr><th scope="row">Typecheck: api spec config</th><td>my files clean; 20 errors remain in files this work did not touch</td></tr>
+<tr><th scope="row">API unit: <code>test/unit/network-failure</code>, <code>src/infra/queue</code>, <code>test/unit/platform-infrastructure</code> (3 runs)</th><td class="okc">25 files, 313 of 313 tests, every run</td></tr>
+<tr><th scope="row">Web: <code>src/lib/network-failure</code>, <code>src/lib/api</code>, <code>src/lib/auth</code> (3 runs)</th><td class="okc">136 of 136 tests, every run</td></tr>
+<tr><th scope="row">Integration: <code>test/integration/network-failure</code> (3 runs, shared Postgres and Redis via the proxy)</th><td class="okc">2 files, 22 of 22 tests, every run</td></tr>
+<tr><th scope="row">Full web vitest</th><td>11 939 pass, 3 fail: help-center coverage gate (2) and settings registry (1); unrelated files</td></tr>
+<tr><th scope="row">Full API unit run</th><td>cut off by the tool timeout after about 557 files; 7 spec files failed (boundaries matrix, route-permission coverage, dashboards health, chatbot launcher, flow editor seam, google capabilities, encryption audit). All 7 were re-run and fail on code this change does not touch. Not confirmed against a pristine main.</td></tr>
+<tr><th scope="row"><code>tools/quality/security-specs.sh</code></th><td>The script itself could not be run in this session, so its commands were run one by one. Web part passed (96 tests). API part: 2 failures in <code>encryption-audit.spec.ts</code> about files this change does not touch (<code>throughput-store.ts</code>, <code>routing-engine.service.ts</code>, <code>s3-sigv4.ts</code>).</td></tr>
+<tr><th scope="row"><code>pnpm audit:tenancy</code>, <code>audit:authz</code>, <code>audit:auth</code></th><td>exit non-zero because of open findings that already exist on the base (for example TI-014, TI-018, TI-022; authz and auth exit 20); none points at a file this change touches</td></tr>
+<tr><th scope="row">Built-in <code>security-review</code></th><td>found nothing (diff reviewed by hand, see section 8)</td></tr>
+<tr><th scope="row">Not run</th><td><code>code-review</code>, <code>pre-pr</code>, <code>pnpm audit --prod</code>, a gitleaks scan, the security-gate stamp</td></tr>
+</tbody></table></div>
+
+<h3>Files changed, by area</h3>
+<ul>
+  <li><b>Database package:</b> <code>packages/db/src/client.ts</code>, <code>packages/db/src/tenant.ts</code></li>
+  <li><b>Contracts:</b> <code>packages/contracts/src/common/errors.ts</code> (new code <code>SERVICE_UNAVAILABLE</code>)</li>
+  <li><b>API source:</b> new <code>apps/api/src/common/errors/dependency-outage.ts</code>; changed <code>health/health.controller.ts</code>, <code>common/filters/problem-exception.filter.ts</code>, <code>infra/redis/redis.module.ts</code>, <code>infra/queue/queue.module.ts</code>, <code>infra/queue/queue.module.spec.ts</code></li>
+  <li><b>API tests (new):</b> <code>test/unit/network-failure/{tcp-fault-proxy,frozen-backends,dependency-outage.spec}.ts</code>, <code>test/integration/network-failure/{infra,recovery.spec,api-outage.spec}.ts</code></li>
+  <li><b>Web:</b> new <code>src/lib/network-failure/fetch-ratchet.test.ts</code> and <code>src/lib/api/client-deadline.test.ts</code>; changed <code>src/lib/api/client.ts</code> and the web files that now use <code>upstreamFetch</code> or a deadline</li>
+  <li><b>Docs:</b> this report (the part-1 <code>REPORT.html</code> only gained one link line)</li>
+</ul>
+
+<h3>Environment notes</h3>
+<p>The integration runs used the already-running Postgres and Redis (Redis database 9) through the proxy, with a throwaway database that was dropped (none left over). No container was stopped, restarted or reconfigured. One local Linux machine, pnpm. Facts in this redesign are the same as in the previous version of the report; only the layout changed, plus the corrections noted in N12, N13 and the web fetch table (counts that did not add up).</p>
+
+</main>
+</body>
+</html>

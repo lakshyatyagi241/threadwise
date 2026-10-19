@@ -7,6 +7,7 @@ import {
   type ViberChannelList,
   type ViberChannelResponse,
 } from '@crm/contracts';
+import { tokenColumns, tokenOf } from '../../common/crypto/secret-columns';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
@@ -60,7 +61,10 @@ export class ChannelsService {
   }
 
   private url(row: ChannelRow): string {
-    return webhookUrl(this.config.get('APP_URL', { infer: true }), row.webhookToken);
+    return webhookUrl(
+      this.config.get('APP_URL', { infer: true }),
+      tokenOf(this.crypto, { enc: row.webhookTokenEnc, plain: row.webhookToken }),
+    );
   }
 
   /** What the API shows of a channel: never the token. */
@@ -116,7 +120,7 @@ export class ChannelsService {
         : await this.repo.insert(tx, ctx.orgId, {
             ...values,
             viberId,
-            webhookToken: randomToken(),
+            webhookToken: tokenColumns(this.crypto, randomToken()),
           });
       await this.audit.record(tx, {
         module: MODULE_KEY,

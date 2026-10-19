@@ -3,8 +3,8 @@ import type { Soft } from '../transform/types';
 import { arr, isDisplayDate, obj, s, wabooDate } from './rules';
 
 /**
- * Waboo FAQ knowledge -> WaDesk FAQs (faqs + faq_variations + faq_settings), pass 1: from the dump alone, one derived document per
- * question. The loader and the verifier build the same documents (transform/faq.ts reads them through `read`).
+ * Waboo FAQ knowledge -> one derived document per question (pass 1, from the dump alone; pass 2 below groups them into the "FAQ" text
+ * entry of each AI agent). The loader and the verifier build the same documents (transform/faq.ts reads them through `read`).
  *
  * Where the pieces live in Waboo:
  *   bot_workspace   records of type Intent / FAQ: botid, qid, `question` / `query` (a string or a list of strings), `intent` (a label),
@@ -413,4 +413,120 @@ export function buildFaqDocs(a: FaqInput): FaqDoc[] {
     used.add(q.toLowerCase());
   }
   return docs;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------
+// Pass 2: the questions become ONE text entry labelled "FAQ" per AI agent in the knowledge base (ai_training_sources, kind text).
+// The FAQ engine (faqs / faq_variations / faq_settings) is retired; the format and the agent choice are those of
+// packages/db/migrations/20270205090000_kb_per_agent_vector_faq_merge.sql.
+// ---------------------------------------------------------------------------------------------------------------------------------
+
+/** The most characters one "FAQ" entry holds (the migration cuts its body at the same size). */
+export const KB_FAQ_BODY_MAX = 200000;
+export const KB_FAQ_LABEL = 'FAQ';
+/** The group of questions whose bot has no AI agent of its own: they go to the workspace's first active agent. */
+export const KB_FAQ_SHARED = '*';
+
+export interface KbFaqEntry {
+  question: string;
+  /** the other phrasings (the question itself is not repeated) */
+  also: string[];
+  answer: string;
+}
+
+/** The derived document of one agent's "FAQ" entry. */
+export interface KbFaqDoc {
+  /** `kb|${botid}` (the bot's own agent) or `kb|*` (the workspace's first active agent) */
+  id: string;
+  /** the bot whose agent holds the entry; null = the shared group */
+  botid: string | null;
+  entries: KbFaqEntry[];
+  created_at: string | null;
+  updated_at: string | null;
+  soft: Soft[];
+}
+
+/** 'Q: question\nAlso asked as: a | b\nA: answer' blocks separated by a blank line (the migration's text). */
+export function faqEntryText(entries: KbFaqEntry[]): string {
+  return entries
+    .map(
+      (e) =>
+        `Q: ${e.question}\n${e.also.length > 0 ? `Also asked as: ${e.also.join(' | ')}\n` : ''}A: ${e.answer}`,
+    )
+    .join('\n\n');
+}
+
+/**
+ * Turns the per-question documents into what the knowledge base can hold. A question that cannot be loaded keeps its problem (it is
+ * quarantined as before); a question that answers by starting a flow has no text to keep and is quarantined FLOW_ANSWER_NOT_CARRIED
+ * (the migration does not carry those either). The rest are grouped by the agent that will hold them: the bot's own agent
+ * (`hasAgent(botid)`), else the shared group.
+ */
+export function buildKbFaqDocs(
+  docs: FaqDoc[],
+  hasAgent: (botid: string) => boolean,
+): Array<FaqDoc | KbFaqDoc> {
+  const out: Array<FaqDoc | KbFaqDoc> = [];
+  const groups = new Map<string, KbFaqDoc>();
+  for (const d of docs) {
+    if (d.problem || d.question === null || d.answer_type === null) {
+      out.push(d);
+      continue;
+    }
+    if (d.answer_type !== 'text' || !d.answer_text || d.answer_text.trim() === '') {
+      out.push({
+        ...d,
+        problem: {
+          code: 'FLOW_ANSWER_NOT_CARRIED',
+          reason:
+            'the answer starts a flow, not a text: the knowledge base holds text only (the same FAQs are left behind by the knowledge-base merge migration)',
+        },
+      });
+      continue;
+    }
+    const own = hasAgent(d.botid);
+    const key = own ? d.botid : KB_FAQ_SHARED;
+    const g = groups.get(key) ?? {
+      id: `kb|${key}`,
+      botid: own ? d.botid : null,
+      entries: [],
+      created_at: null,
+      updated_at: null,
+      soft: [],
+    };
+    groups.set(key, g);
+    g.entries.push({
+      question: d.question,
+      also: d.variations.filter((v) => v.source !== 'question').map((v) => v.text),
+      answer: d.answer_text.trim(),
+    });
+    const lo = (a: string | null, b: string | null): string | null =>
+      a === null || (b !== null && b < a) ? b : a;
+    const hi = (a: string | null, b: string | null): string | null =>
+      a === null || (b !== null && b > a) ? b : a;
+    g.created_at = lo(g.created_at, d.created_at);
+    g.updated_at = hi(g.updated_at, d.updated_at);
+    for (const s of d.soft)
+      if (s.code !== 'INTENT_ONLY' && !g.soft.some((x) => x.code === s.code)) g.soft.push(s);
+  }
+  // a body over the limit keeps the questions that fit, in order, and says so
+  for (const g of groups.values()) {
+    let size = 0;
+    const kept: KbFaqEntry[] = [];
+    for (const e of g.entries) {
+      const add = faqEntryText([e]).length + (kept.length > 0 ? 2 : 0);
+      if (size + add > KB_FAQ_BODY_MAX) continue;
+      size += add;
+      kept.push(e);
+    }
+    if (kept.length < g.entries.length)
+      g.soft.push({
+        code: 'FAQ_BODY_CAPPED',
+        reason: `the FAQ entry is limited to ${KB_FAQ_BODY_MAX} characters: ${g.entries.length - kept.length} question(s) did not fit and were left out`,
+        detail: g.entries.length - kept.length,
+      });
+    g.entries = kept;
+    out.push(g);
+  }
+  return out;
 }

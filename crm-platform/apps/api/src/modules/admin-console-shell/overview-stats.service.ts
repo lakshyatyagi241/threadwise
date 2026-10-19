@@ -8,6 +8,25 @@ import { DatabaseService } from '../../infra/db/database.service';
 type Counts = Omit<OverviewStatsResponse, 'recentActivity' | 'nextScheduledAt'>;
 
 /**
+ * Three figures of the outbound message stream (the delivered share of the last 30 days, sent in the last 7 days, sent this month) from
+ * ONE pass over the workspace's recent messages. They were three statements that each read the same
+ * rows with a different window; the pass starts at the oldest of the windows (the month can begin before 30 days ago).
+ */
+export function messageFiguresSql(orgId: number, at?: Date): SQL {
+  // the database clock, as the separate statements used; a test passes a date to reach the end of a long month
+  const n = at ? sql`${at.toISOString()}::timestamptz` : sql`now()`;
+  return sql`SELECT
+      CASE WHEN count(*) FILTER (WHERE created_at >= ${n} - interval '30 days') = 0 THEN NULL
+        ELSE round(100.0 * count(*) FILTER (WHERE created_at >= ${n} - interval '30 days' AND status IN ('delivered', 'read'))
+                   / count(*) FILTER (WHERE created_at >= ${n} - interval '30 days')) END AS delivered_pct,
+      count(*) FILTER (WHERE created_at >= ${n} - interval '7 days') AS outbound_7d,
+      count(*) FILTER (WHERE created_at >= date_trunc('month', ${n})) AS messages_this_month
+    FROM messages
+    WHERE org_id = ${orgId} AND direction = 'out' AND kind <> 'reaction'
+      AND created_at >= least(${n} - interval '30 days', date_trunc('month', ${n}))`;
+}
+
+/**
  * The More hub's numbers (TW-ASHELL-020). Reference ran about forty uncached queries in the page; here it is one read per page
  * view, one transaction, each figure in its own savepoint so a lookup that fails leaves a `null` and never the page. Every
  * query is the caller's workspace under row-level security (the `org_id` filter is there as well, for the planner). The
@@ -26,7 +45,10 @@ export class OverviewStatsService {
     const week = sql`created_at >= now() - interval '7 days'`;
     const month = sql`created_at >= date_trunc('month', now())`;
 
-    const counts: Record<keyof Counts, SQL> = {
+    const counts: Record<
+      Exclude<keyof Counts, 'deliveredPct' | 'outbound7d' | 'messagesThisMonth'>,
+      SQL
+    > = {
       activeRules: sql`SELECT (SELECT count(*) FROM keyword_replies WHERE org_id = ${o} AND status)
         + (SELECT count(*) FROM flows WHERE org_id = ${o} AND is_published AND is_active)
         + (SELECT count(*) FROM webhooks WHERE org_id = ${o} AND status)`,
@@ -42,9 +64,6 @@ export class OverviewStatsService {
       tags: sql`SELECT count(*) FROM tags WHERE org_id = ${o}`,
       attributes: sql`SELECT count(*) FROM fields WHERE org_id = ${o} AND NOT is_system AND is_active`,
       broadcastsQueued: sql`SELECT count(*) FROM broadcasts WHERE org_id = ${o} AND status IN ('pending', 'processing', 'scheduled')`,
-      deliveredPct: sql`SELECT CASE WHEN count(*) = 0 THEN NULL
-          ELSE round(100.0 * count(*) FILTER (WHERE status IN ('delivered', 'read')) / count(*)) END
-        FROM messages WHERE org_id = ${o} AND direction = 'out' AND kind <> 'reaction' AND created_at >= now() - interval '30 days'`,
       autoReplyRules: sql`SELECT count(*) FROM keyword_replies WHERE org_id = ${o} AND status`,
       autoReplyMatchPct: sql`SELECT CASE WHEN count(*) = 0 THEN NULL
           ELSE round(100.0 * count(*) FILTER (WHERE matched_keyword_reply_id IS NOT NULL) / count(*)) END
@@ -54,10 +73,8 @@ export class OverviewStatsService {
       supportTotal: sql`SELECT count(*) FROM support_tickets WHERE org_id = ${o}`,
       supportOpen: sql`SELECT count(*) FROM support_tickets WHERE org_id = ${o} AND status NOT IN ('resolved', 'closed')`,
       messageHistory: sql`SELECT count(*) FROM messages WHERE org_id = ${o}`,
-      outbound7d: sql`SELECT count(*) FROM messages WHERE org_id = ${o} AND direction = 'out' AND kind <> 'reaction' AND ${week}`,
       activity24h: sql`SELECT count(*) FROM audit_log WHERE org_id = ${o} AND at >= now() - interval '24 hours'`,
       seats: sql`SELECT count(*) FROM users WHERE org_id = ${o} AND status = 'active'`,
-      messagesThisMonth: sql`SELECT count(*) FROM messages WHERE org_id = ${o} AND direction = 'out' AND kind <> 'reaction' AND ${month}`,
       widgetsBuilt: sql`SELECT count(*) FROM chatbot_widgets WHERE org_id = ${o}`,
       widgetsLive: sql`SELECT count(*) FROM chatbot_widgets WHERE org_id = ${o} AND status = 'active'`,
       bookingTypes: sql`SELECT count(*) FROM booking_types WHERE org_id = ${o}`,
@@ -101,6 +118,13 @@ export class OverviewStatsService {
           return v === null || v === undefined ? null : Number(v);
         });
       }
+      // the three message figures from one pass (see messageFiguresSql); if it fails they are null, as each was before
+      const msg = await one(messageFiguresSql(orgId), (r) => r);
+      const figure = (v: unknown): number | null =>
+        v === null || v === undefined ? null : Number(v);
+      out.deliveredPct = figure(msg?.delivered_pct);
+      out.outbound7d = figure(msg?.outbound_7d);
+      out.messagesThisMonth = figure(msg?.messages_this_month);
       const next = await one(
         sql`SELECT min(next_run_at) AS at FROM scheduled_messages
              WHERE org_id = ${o} AND status IN ('scheduled', 'running') AND next_run_at > now()`,
