@@ -53,12 +53,11 @@ describe('flow card (TW-FLB-001)', () => {
     expect(html).not.toContain('data-flow-enroll');
   });
 
-  it('QUIRK: a manual-enroll flow shows "Enroll contacts" in place of "Open builder"', () => {
+  it('a manual-enroll flow opens the builder like any other flow, with no enroll button on the card', () => {
     const html = card({ triggerKind: 'manual_enroll' });
-    expect(html).toContain('data-flow-enroll');
-    expect(html).toContain('href="/flow-runtime/flows/11111111-1111-4111-8111-111111111111"');
-    expect(html).not.toContain('openBuilder');
-    expect(html).not.toContain('href="/flows/builder/');
+    expect(html).not.toContain('data-flow-enroll');
+    expect(html).toContain('href="/flows/builder/11111111-1111-4111-8111-111111111111"');
+    expect(html).not.toContain('href="/flow-runtime/flows/');
   });
 
   it('an Instagram flow has no analytics link (it runs remotely) and carries the Instagram badge', () => {

@@ -19,7 +19,7 @@ import { useCan, useSession } from '@/features/auth-registration-security/shared
 import { flowsApi } from '../api/flows';
 import { FLB_KEYS } from '../api/hooks';
 import { useFlowsOverview, useFlowsPage } from '../api/list';
-import { newHref, openHref, type BuilderMode } from '../lib/builder-mode';
+import { openHref, type BuilderMode } from '../lib/builder-mode';
 import { isWaboExport, waboToGraph } from '../lib/wabo-import';
 import {
   PAGE_SIZE,
@@ -356,24 +356,6 @@ export function FlowsScreen() {
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              {canUpdate && overview.data ? (
-                <BuilderPicker
-                  platform={overview.data.platformBuilderMode}
-                  own={overview.data.workspaceBuilderMode}
-                  onChange={async (mode) => {
-                    try {
-                      const next = await flowsApi.setBuilderMode({ mode });
-                      toast(
-                        t('builder.saved', { mode: t(`builder.${next.builderMode}`) }),
-                        'success',
-                      );
-                      await refresh();
-                    } catch (e) {
-                      fail(e);
-                    }
-                  }}
-                />
-              ) : null}
               <Link
                 href="/flow-runtime/analytics"
                 title={t('analyticsTitle')}
@@ -685,7 +667,7 @@ export function FlowsScreen() {
         </div>
       </div>
 
-      <CreateSheet open={createOpen} mode={builderMode} onClose={() => setCreateOpen(false)} />
+      <CreateSheet open={createOpen} onClose={() => setCreateOpen(false)} />
       <RenameDialog
         key={renaming?.id ?? 'none'}
         flow={renaming}
@@ -775,48 +757,10 @@ function TemplateGallery({
   );
 }
 
-/** Flows > Builder: this workspace's own builder, or the platform default (set in the admin panel). */
-function BuilderPicker({
-  platform,
-  own,
-  onChange,
-}: {
-  platform: BuilderMode;
-  own: BuilderMode | null;
-  onChange: (mode: 'inherit' | BuilderMode) => void;
-}) {
-  const t = useTranslations('flb.list.builder');
-  return (
-    <label
-      className="flex items-center gap-2 rounded-full border border-border bg-background py-1.5 pe-2 ps-4 text-[12px] font-medium"
-      title={t('title')}
-    >
-      {t('label')}
-      <select
-        data-builder-mode
-        value={own ?? 'inherit'}
-        onChange={(e) => onChange(e.target.value as 'inherit' | BuilderMode)}
-        className="rounded-full bg-transparent py-0.5 text-[12px] font-semibold text-brand outline-none"
-      >
-        <option value="inherit">{t('inherit', { mode: t(platform) })}</option>
-        <option value="simple">{t('simple')}</option>
-        <option value="advanced">{t('advanced')}</option>
-      </select>
-    </label>
-  );
-}
-
-function CreateSheet({
-  open,
-  mode,
-  onClose,
-}: {
-  open: boolean;
-  mode: BuilderMode;
-  onClose: () => void;
-}) {
+function CreateSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const t = useTranslations('flb.create');
   const tc = useTranslations('flb.common');
+  const tb = useTranslations('flb.list.builder');
   const router = useRouter();
   const go = (href: string) => {
     onClose();
@@ -865,36 +809,48 @@ function CreateSheet({
         </Button>
       }
     >
-      <p className="mb-3 text-[12px] text-muted-foreground">
-        {mode === 'simple' ? t('subtitleSimple') : t('subtitle')}
-      </p>
+      <p className="mb-3 text-[12px] text-muted-foreground">{t('subtitle')}</p>
       <div className="space-y-2">
         {row(
-          newHref(mode),
-          mode === 'simple' ? t('whatsapp') : t('messaging'),
-          mode === 'simple' ? t('whatsappNote') : t('messagingNote'),
+          '/flows/simple',
+          `${t('whatsapp')} (${tb('simple')})`,
+          t('whatsappNote'),
           'M3 5.5A2.5 2.5 0 0 1 5.5 3h5A2.5 2.5 0 0 1 13 5.5v3A2.5 2.5 0 0 1 10.5 11H8l-3.5 2v-2A2.5 2.5 0 0 1 3 8.5v-3Z',
           'bg-[var(--flb-mint)]',
-          'chat',
+          'whatsapp-simple',
         )}
         {row(
-          newHref(mode, 'web'),
-          t('web'),
+          '/flows/simple?type=web',
+          `${t('web')} (${tb('simple')})`,
           t('webNote'),
           'M2 8a6 6 0 1 0 12 0A6 6 0 0 0 2 8Zm0 0h12M8 2c1.7 1.7 2.5 3.7 2.5 6S9.7 12.3 8 14C6.3 12.3 5.5 10.3 5.5 8S6.3 3.7 8 2Z',
           'bg-muted',
-          'web',
+          'web-simple',
         )}
-        {mode === 'simple'
-          ? null
-          : row(
-              '/flows/builder?type=call',
-              t('call'),
-              t('callNote'),
-              'M3 4c0 5 4 9 9 9l1.5-2.5-3-1.5-1 1A7 7 0 0 1 6 6l1-1L5.5 2 3 3.5z',
-              'bg-muted',
-              'call',
-            )}
+        {row(
+          '/flows/builder',
+          `${t('messaging')} (${tb('advanced')})`,
+          t('messagingNote'),
+          'M3 5.5A2.5 2.5 0 0 1 5.5 3h5A2.5 2.5 0 0 1 13 5.5v3A2.5 2.5 0 0 1 10.5 11H8l-3.5 2v-2A2.5 2.5 0 0 1 3 8.5v-3Z',
+          'bg-[var(--flb-mint)]',
+          'messaging-advanced',
+        )}
+        {row(
+          '/flows/builder?type=web',
+          `${t('web')} (${tb('advanced')})`,
+          t('webNote'),
+          'M2 8a6 6 0 1 0 12 0A6 6 0 0 0 2 8Zm0 0h12M8 2c1.7 1.7 2.5 3.7 2.5 6S9.7 12.3 8 14C6.3 12.3 5.5 10.3 5.5 8S6.3 3.7 8 2Z',
+          'bg-muted',
+          'web-advanced',
+        )}
+        {row(
+          '/flows/builder?type=call',
+          `${t('call')} (${tb('advanced')})`,
+          t('callNote'),
+          'M3 4c0 5 4 9 9 9l1.5-2.5-3-1.5-1 1A7 7 0 0 1 6 6l1-1L5.5 2 3 3.5z',
+          'bg-muted',
+          'call-advanced',
+        )}
       </div>
     </Modal>
   );

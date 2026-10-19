@@ -294,23 +294,12 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
       </ul>
 
       <div className="mt-4 flex items-center gap-2">
-        {flow.triggerKind === 'manual_enroll' ? (
-          // QUIRK kept: a manual-enroll flow has "Enroll contacts" in place of "Open builder" on its card.
-          <Link
-            href={`/flow-runtime/flows/${flow.id}`}
-            data-flow-enroll={flow.id}
-            className="min-w-0 flex-1 rounded-full bg-brand px-2 py-1.5 text-center text-[11.5px] font-semibold text-brand-foreground hover:opacity-90"
-          >
-            {t('enroll')}
-          </Link>
-        ) : (
-          <Link
-            href={openHref(actions.builderMode ?? 'advanced', flow.id, flow.flowType)}
-            className="min-w-0 flex-1 rounded-full border border-border px-2 py-1.5 text-center text-[11.5px] font-medium whitespace-nowrap hover:bg-muted"
-          >
-            {t('openBuilder')}
-          </Link>
-        )}
+        <Link
+          href={openHref(actions.builderMode ?? 'advanced', flow.id, flow.flowType)}
+          className="min-w-0 flex-1 rounded-full border border-border px-2 py-1.5 text-center text-[11.5px] font-medium whitespace-nowrap hover:bg-muted"
+        >
+          {t('openBuilder')}
+        </Link>
         {flow.flowType !== 'instagram' ? (
           // Per-flow runs, errors and retries live in the runtime's analytics (FLR); an Instagram flow has no local runs.
           <Link
