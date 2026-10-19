@@ -1,0 +1,59 @@
+{
+  "platform-deployments": {
+    "nav": { "item": "Despliegues" },
+    "eyebrow": "Operaciones",
+    "title": "Despliegues",
+    "description": "Cada flujo publicado en la consola de Geta: qué está en cola, qué se ejecuta ahora y qué falló y por qué. Se actualiza cada pocos segundos.",
+    "updated": "En vivo. Actualizado {time}",
+    "stale": "La última actualización falló. Se muestran los despliegues anteriores.",
+    "stalledAlert": "{count} despliegue(s) no han cambiado durante {minutes} minutos. Puede que su worker se haya detenido.",
+    "truncated": "Se muestran los primeros {limit} despliegues. Elija un estado para ver el resto.",
+    "kpi": {
+      "running": "Ejecutando",
+      "queued": "En cola",
+      "failed": "Fallidos",
+      "live": "Activos",
+      "stalled": "Atascados"
+    },
+    "filter": {
+      "label": "Filtrar por estado",
+      "all": "Todos",
+      "running": "Ejecutando",
+      "queued": "En cola",
+      "failed": "Fallidos",
+      "live": "Activos"
+    },
+    "cols": {
+      "workspace": "Espacio de trabajo",
+      "flow": "Flujo",
+      "status": "Estado",
+      "step": "Paso",
+      "attempted": "Último intento",
+      "updated": "Último cambio",
+      "error": "Error"
+    },
+    "status": {
+      "running": "Ejecutando",
+      "queued": "En cola",
+      "failed": "Fallido",
+      "live": "Activo"
+    },
+    "steps": {
+      "configuration_update": "Actualización de configuración",
+      "publish_bot": "Publicar bot"
+    },
+    "stalledBadge": "Atascado",
+    "version": "Versión {version}",
+    "notStarted": "Sin iniciar",
+    "failedAt": "Falló en {step}",
+    "noDetail": "No se guardó ningún texto de error.",
+    "empty": {
+      "title": "Nada que mostrar",
+      "all": "Ningún flujo se ha publicado todavía en la consola de Geta.",
+      "running": "Ninguna publicación se está ejecutando ahora.",
+      "queued": "No hay nada esperando en la cola.",
+      "failed": "Ninguna publicación ha fallado.",
+      "live": "Ningún flujo está activo en la consola de Geta todavía."
+    }
+  }
+}

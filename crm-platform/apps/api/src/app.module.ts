@@ -65,6 +65,7 @@ import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
 import { LocalizationTranslationModule } from './modules/localization-translation';
 import { PlatformAsyncOpsModule } from './modules/platform-async-ops';
+import { PlatformDeploymentsModule } from './modules/platform-deployments';
 import { PlatformDataRetentionModule } from './modules/platform-data-retention';
 import { FailedOperationsModule } from './modules/failed-operations';
 import { WebhookRetryModule } from './modules/webhook-retry';
@@ -259,6 +260,7 @@ import { HealthModule } from './health/health.module';
     DeveloperRestApiV1Module,
     PlatformSupportDeskModule,
     PlatformAsyncOpsModule,
+    PlatformDeploymentsModule,
     PlatformDataRetentionModule,
     FailedOperationsModule,
     WebhookRetryModule,

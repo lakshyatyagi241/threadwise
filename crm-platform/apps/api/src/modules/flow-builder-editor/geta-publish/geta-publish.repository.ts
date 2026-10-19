@@ -146,7 +146,7 @@ export class GetaPublishRepository {
   /** Retry of a failed push: same version, back to `pending`, at the step that failed. */
   async resume(tx: Tx, orgId: number, syncId: number, step: GetaPublishStep): Promise<void> {
     await tx.execute(sql`
-      UPDATE flb_geta_publish_syncs SET state = 'pending', step = ${step}, last_error = NULL
+      UPDATE flb_geta_publish_syncs SET state = 'pending', step = ${step}, last_error = NULL, attempted_at = NULL
       WHERE org_id = ${orgId} AND id = ${syncId}
     `);
   }
