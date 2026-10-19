@@ -33,6 +33,10 @@ export function useAppointmentsCan() {
   const has = (key: string) => !registered || key in permissions;
   return {
     read: has('record.appointments.read'),
+    /** Choose which channels carry appointment messages and their default sender (the owner and the admin). */
+    manageChannels: has('appointments.channels.manage'),
+    /** Adopt, edit and submit the predefined messages. */
+    manageTemplates: has('appointments.templates.manage'),
     update: has('record.appointments.update'),
     /** Create and edit booking types (and pause or duplicate them). */
     manageTypes: has('record.booking-types.update') || has('record.booking-types.create'),

@@ -154,6 +154,7 @@ export class AppointmentTemplatesController {
 
   @Post(':id/refresh')
   @HttpCode(HttpStatus.OK)
+  @Idempotent()
   @RequirePermission('appointments.templates.manage')
   @ApiOperation({ summary: "Read a WhatsApp message's status from Meta again" })
   refresh(@Param('id', ParseUUIDPipe) id: string) {

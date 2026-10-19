@@ -212,6 +212,8 @@ export const bookingTemplateSchema = z.object({
   /** `whatsapp` unless the API says otherwise; sent back as it came. */
   channel: z.string().optional(),
   waTemplateId: nullableText,
+  /** The appointment-library message the type chose for this event and channel (BL-351). */
+  libraryTemplateId: nullableText.optional(),
   plainBody: nullableText,
 });
 

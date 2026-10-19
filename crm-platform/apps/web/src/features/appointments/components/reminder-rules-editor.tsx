@@ -1,9 +1,12 @@
 'use client';
 
+import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { useId, useRef, useState } from 'react';
+import type { AppointmentChannelState, AppointmentTemplate } from '@crm/contracts';
 import { Alert, Button, Input, Select, Switch, Textarea, cn } from '@crm/ui';
 import type { WaTemplateOption } from '../api/schemas';
+import { CONNECT_HREF, useOfChannel, usableChannels } from '../lib/channel-availability';
 import { insertAtRange } from '../lib/editor';
 import {
   QUICK_FOLLOW_UPS,
@@ -47,6 +50,14 @@ export interface ReminderRulesEditorProps {
   typeName: string;
   /** Approved WhatsApp templates to pick from. */
   templates?: readonly WaTemplateOption[];
+  /**
+   * What the workspace owner allows (BL-350). A channel that is off or not connected cannot be added to a rule, a new rule starts with the
+   * usable ones, and a rule with no usable channel cannot be switched on. Left out = every channel is offered (the API still refuses one
+   * that is off).
+   */
+  channelStates?: readonly AppointmentChannelState[];
+  /** The appointment message library (BL-351): an email message can be copied into a rule. */
+  library?: readonly AppointmentTemplate[];
   /** Makes element ids unique when several editors are on one page. */
   idPrefix?: string;
 }
@@ -64,6 +75,8 @@ export function ReminderRulesEditor({
   errorOf,
   typeName,
   templates = [],
+  channelStates,
+  library = [],
   idPrefix,
 }: ReminderRulesEditorProps) {
   const t = useTranslations('appointments.reminders');
@@ -84,11 +97,18 @@ export function ReminderRulesEditor({
       else next.add(id);
       return next;
     });
+  const usableNow = usableChannels(channelStates, REMINDER_CHANNELS);
   const add = (
     fn: () => ReminderDraft[],
     opened?: (next: ReminderDraft[]) => string | undefined,
   ) => {
-    const next = fn();
+    const before = new Set(rules.map((r) => r.id));
+    // A rule that is new starts with the channels the owner allows, so switching it on is never refused for a channel nobody chose.
+    const next = fn().map((r) =>
+      before.has(r.id) || usableNow.length === 0 || channelStates === undefined
+        ? r
+        : { ...r, channels: r.channels.filter((c) => usableNow.includes(c)) },
+    );
     onChange(next);
     const id = opened?.(next);
     if (id) setOpen((cur) => new Set(cur).add(id));
@@ -139,6 +159,14 @@ export function ReminderRulesEditor({
     }),
   );
   const listError = errorOf?.('reminders');
+  /** The usable email messages of the library that fit a rule: a reminder for "before", the follow-up for "after". */
+  const emailChoices = (r: ReminderDraft) =>
+    library.filter(
+      (m) =>
+        m.channel === 'email' &&
+        m.usable &&
+        m.kind === (r.kind === 'before' ? 'reminder' : 'follow_up'),
+    );
 
   return (
     <div className="space-y-3">
@@ -218,9 +246,19 @@ export function ReminderRulesEditor({
                   <Switch
                     id={`${prefix}-on-${r.id}`}
                     checked={r.enabled}
-                    disabled={disabled}
+                    disabled={disabled || (!r.enabled && !r.channels.some((c) => usableNow.includes(c)))}
                     label={t('enabledOf', { n })}
-                    onCheckedChange={(on) => patch(r.id, { enabled: on })}
+                    onCheckedChange={(on) =>
+                      patch(
+                        r.id,
+                        on && channelStates !== undefined
+                          ? {
+                              enabled: true,
+                              channels: r.channels.filter((c) => usableNow.includes(c)),
+                            }
+                          : { enabled: on },
+                      )
+                    }
                   />
                   <span
                     className={cn(
@@ -293,6 +331,19 @@ export function ReminderRulesEditor({
                     {error}
                   </p>
                 )}
+                {!r.enabled &&
+                  channelStates !== undefined &&
+                  !r.channels.some((c) => usableNow.includes(c)) && (
+                    <p className="mt-1 text-xs text-warning">
+                      {t('noUsableChannel')}{' '}
+                      <Link
+                        href="/appointments/settings#channels"
+                        className="font-medium underline"
+                      >
+                        {t('openChannels')}
+                      </Link>
+                    </p>
+                  )}
                 <p className="mt-2 text-xs text-muted-foreground">
                   {r.channels.map((c) => t(`channels.${c}`)).join(' › ')}
                   {r.waTemplateId && usesWhatsapp ? ` · ${t('withTemplate')}` : ''}
@@ -315,7 +366,12 @@ export function ReminderRulesEditor({
                             >
                               {ci + 1}
                             </span>
-                            <span className="flex-1 text-sm">{t(`channels.${c}`)}</span>
+                            <span className="flex-1 text-sm">
+                              {t(`channels.${c}`)}
+                              {channelStates !== undefined && !usableNow.includes(c) && (
+                                <span className="ms-2 text-xs text-warning">{t('channelUnusable')}</span>
+                              )}
+                            </span>
                             <button
                               type="button"
                               disabled={disabled || ci === 0}
@@ -358,19 +414,22 @@ export function ReminderRulesEditor({
                       <div className="flex flex-wrap gap-2">
                         {REMINDER_CHANNELS.filter((c) => !r.channels.includes(c)).map(
                           (c: ReminderChannel) => (
-                            <button
+                            <AddChannelChip
                               key={c}
-                              type="button"
+                              channel={c}
+                              states={channelStates}
                               disabled={disabled}
-                              onClick={() =>
-                                patch(r.id, { channels: toggleChannel(r.channels, c) })
-                              }
-                              className={chipClass}
-                            >
-                              <PlusIcon className="size-3" /> {t(`channels.${c}`)}
-                            </button>
+                              onAdd={() => patch(r.id, { channels: toggleChannel(r.channels, c) })}
+                            />
                           ),
                         )}
+                        <span
+                          className={cn(chipClass, 'cursor-not-allowed opacity-60')}
+                          aria-disabled="true"
+                          title={t('voiceSoon')}
+                        >
+                          {t('channels.voice')} · {t('voiceSoonShort')}
+                        </span>
                       </div>
                     </fieldset>
 
@@ -431,6 +490,24 @@ export function ReminderRulesEditor({
                           placeholder={t('subjectPlaceholder')}
                           onChange={(e) => patch(r.id, { subject: e.target.value })}
                         />
+                        {emailChoices(r).length > 0 && (
+                          <Select
+                            value=""
+                            disabled={disabled}
+                            aria-label={t('fromLibrary')}
+                            onChange={(e) => {
+                              const m = library.find((x) => x.id === e.target.value);
+                              if (m) patch(r.id, { subject: m.subject ?? '', body: m.body });
+                            }}
+                          >
+                            <option value="">{t('fromLibrary')}</option>
+                            {emailChoices(r).map((m) => (
+                              <option key={m.id} value={m.id}>
+                                {m.name}
+                              </option>
+                            ))}
+                          </Select>
+                        )}
                       </div>
                     )}
 
@@ -459,7 +536,15 @@ export function ReminderRulesEditor({
                             </option>
                           ))}
                         </Select>
-                        <p className="text-xs text-muted-foreground">{t('templateHint')}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {t('templateHint')}{' '}
+                          <Link
+                            href="/appointments/settings#templates"
+                            className="font-medium text-primary hover:underline"
+                          >
+                            {t('openLibrary')}
+                          </Link>
+                        </p>
                       </div>
                     )}
 
@@ -505,5 +590,45 @@ export function ReminderRulesEditor({
         {t('note')}
       </Alert>
     </div>
+  );
+}
+
+function AddChannelChip({
+  channel,
+  states,
+  disabled,
+  onAdd,
+}: {
+  channel: ReminderChannel;
+  states: readonly AppointmentChannelState[] | undefined;
+  disabled: boolean;
+  onAdd: () => void;
+}) {
+  const t = useTranslations('appointments.reminders');
+  const tc = useTranslations('appointments.channels');
+  const use = useOfChannel(states, channel);
+  const href = CONNECT_HREF[channel];
+  if (use === 'usable') {
+    return (
+      <button type="button" disabled={disabled} onClick={onAdd} className={chipClass}>
+        <PlusIcon className="size-3" /> {t(`channels.${channel}`)}
+      </button>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1.5">
+      <span
+        className={cn(chipClass, 'cursor-not-allowed opacity-60')}
+        aria-disabled="true"
+        title={tc(`status.${use}`)}
+      >
+        {t(`channels.${channel}`)} · {tc(`status.${use}`)}
+      </span>
+      {use === 'not_connected' && href && (
+        <Link href={href} className="text-xs font-medium text-primary hover:underline">
+          {tc('connect')}
+        </Link>
+      )}
+    </span>
   );
 }
