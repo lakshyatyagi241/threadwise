@@ -19,7 +19,11 @@ import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { deviceLabel } from './device-label';
 import { NotificationFanout } from './notification-fanout';
 import { buildTestPayload } from './push-payload';
-import { PushSubscriptionsRepository, type PushDeviceRow } from './push-subscriptions.repository';
+import {
+  PushSubscriptionsRepository,
+  pushAuthContext,
+  type PushDeviceRow,
+} from './push-subscriptions.repository';
 import { WebPushSender } from './web-push.sender';
 
 /** One test per person per this many seconds: it is a button, not a loop. */
@@ -91,7 +95,7 @@ export class PushSubscriptionsService {
         endpoint: input.endpoint,
         endpointHash,
         p256dh: input.keys.p256dh,
-        auth: this.crypto.encrypt(input.keys.auth),
+        auth: this.crypto.encrypt(input.keys.auth, pushAuthContext(orgId, userId)),
         ua,
         label: deviceLabel(ua),
       });

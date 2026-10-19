@@ -85,7 +85,7 @@ const q = (id: string): string => `"${id}"`;
 /** What still needs doing, as a WHERE clause. Sealed blobs start with `v1:`; an empty legacy column means "already scrubbed". */
 function pending(t: SealTarget): string {
   if (t.inPlace)
-    return `${q(t.plain)} IS NOT NULL AND ${q(t.plain)} <> '' AND ${q(t.plain)} NOT LIKE 'v1:%'`;
+    return `${q(t.plain)} IS NOT NULL AND ${q(t.plain)} <> '' AND ${q(t.plain)} NOT LIKE 'v_:%'`;
   // A trigger may have filled the hash already (a row from the previous release), so a missing sealed copy counts as pending too.
   const missing = t.enc
     ? `(${q(t.hash!)} IS NULL OR ${q(t.enc)} IS NULL)`

@@ -12,13 +12,17 @@ import type { CryptoService } from './crypto.service';
  */
 
 /** A `CryptoService` blob: `v1:<iv>:<tag>:<data>[:<key id>]`. Plaintext tokens and base64url keys never contain a colon after `v1`. */
-const SEALED = /^v1:[A-Za-z0-9+/=]+:[A-Za-z0-9+/=]+:[A-Za-z0-9+/=]*(?::[0-9a-f]{8})?$/;
+const SEALED =
+  /^(?:v1:[A-Za-z0-9+/=]+:[A-Za-z0-9+/=]+:[A-Za-z0-9+/=]*(?::[0-9a-f]{8})?|v2:[A-Za-z0-9+/=]+:[A-Za-z0-9+/=]+:[A-Za-z0-9+/=]*:[0-9a-f]{8}:[0-9a-f]{32})$/;
 
 export const isSealed = (value: string): boolean => SEALED.test(value);
 
 /** The plaintext of a stored value: opened when it is a sealed blob, returned as it is when it is a legacy plaintext one. */
-export const openIfSealed = (crypto: Pick<CryptoService, 'decrypt'>, value: string): string =>
-  isSealed(value) ? crypto.decrypt(value) : value;
+export const openIfSealed = (
+  crypto: Pick<CryptoService, 'decrypt'>,
+  value: string,
+  context?: string,
+): string => (isSealed(value) ? crypto.decrypt(value, context) : value);
 
 /**
  * Lookup hash of a bearer token or webhook secret: SHA-256 hex. These values are 128 to 240 bits of server-generated randomness, so

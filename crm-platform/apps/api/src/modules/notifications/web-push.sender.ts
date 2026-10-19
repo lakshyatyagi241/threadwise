@@ -14,6 +14,7 @@ import { pushTopic } from './push-payload';
 import {
   PUSH_MAX_FAILURES,
   PushSubscriptionsRepository,
+  pushAuthContext,
   type PushTarget,
 } from './push-subscriptions.repository';
 
@@ -74,23 +75,25 @@ export class WebPushSender {
       urgency: type && HIGH_URGENCY_TYPES.has(type) ? 'high' : 'normal',
     };
     const failed: WebPushResult = { ok: false, gone: false, retryable: true, status: null };
+    const unreadable: WebPushResult = { ok: false, gone: false, retryable: false, status: null };
     const results = await Promise.all(
-      targets.map(async (t) => ({
-        id: t.id,
-        result: await this.provider
-          .send(
-            {
-              endpoint: t.endpoint,
-              p256dh: t.p256dh,
-              // Sealed since encryption audit E7; a row written before that is still plaintext.
-              auth: openIfSealed(this.crypto, t.auth),
-            },
-            body,
-            options,
-          )
-          // The adapter does not throw for a push-service answer; a bug in it must not lose the other devices' results.
-          .catch((): WebPushResult => failed),
-      })),
+      targets.map(async (t) => {
+        // Sealed since encryption audit E7 (a row written before that is still plaintext). A secret that cannot be opened (a key rotated
+        // away, a blob copied from another person's row) fails that one device for good and never the others in the batch.
+        let auth: string;
+        try {
+          auth = openIfSealed(this.crypto, t.auth, pushAuthContext(t.orgId, t.userId));
+        } catch {
+          return { id: t.id, result: unreadable };
+        }
+        return {
+          id: t.id,
+          result: await this.provider
+            .send({ endpoint: t.endpoint, p256dh: t.p256dh, auth }, body, options)
+            // The adapter does not throw for a push-service answer; a bug in it must not lose the other devices' results.
+            .catch((): WebPushResult => failed),
+        };
+      }),
     );
     for (const { id, result } of results) {
       if (result.ok) report.sent.push(id);

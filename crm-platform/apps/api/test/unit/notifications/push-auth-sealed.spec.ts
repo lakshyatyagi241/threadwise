@@ -6,7 +6,10 @@ import { isSealed, openIfSealed } from '../../../src/common/crypto/secret-column
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import { PushSubscriptionsService } from '../../../src/modules/notifications/push-subscriptions.service';
 import { WebPushSender } from '../../../src/modules/notifications/web-push.sender';
-import type { PushTarget } from '../../../src/modules/notifications/push-subscriptions.repository';
+import {
+  pushAuthContext,
+  type PushTarget,
+} from '../../../src/modules/notifications/push-subscriptions.repository';
 import { FakeWebPushProvider, useVapidEnv } from '../../support/web-push-fakes';
 
 /** Encryption audit E7: the Web Push auth secret is sealed at rest; a row written before this change (plaintext) still sends. */
@@ -64,6 +67,8 @@ describe('push subscription auth secret', () => {
 
   const target = (auth: string): PushTarget => ({
     id: 1,
+    orgId: 1,
+    userId: 2,
     uuid: 'u',
     endpoint: 'https://push.example.test/e',
     p256dh: 'pk',
@@ -81,5 +86,28 @@ describe('push subscription auth secret', () => {
       test: true,
     } as never);
     expect(provider.sent.map((s) => s.target.auth)).toEqual(['sealed-auth', 'legacy-auth']);
+  });
+
+  it('with the context-binding flag on, the secret opens for its own person and for nobody else (E4)', async () => {
+    const bound = new CryptoService({
+      get: (n: string) =>
+        n === 'CREDENTIALS_ENCRYPTION_PREVIOUS_KEYS'
+          ? ''
+          : n === 'CREDENTIALS_AAD_WRITE'
+            ? 'on'
+            : key,
+    } as unknown as ConfigService<never, true>);
+    const sealed = bound.encrypt('bound-auth', pushAuthContext(1, 2));
+    expect(bound.isBound(sealed)).toBe(true);
+    const provider = new FakeWebPushProvider();
+    const sender = new WebPushSender(provider, {} as never, {} as never, bound);
+    const payload = { title: 't', body: 'b', tag: 'x', test: true } as never;
+    await sender.send([target(sealed)], payload);
+    expect(provider.sent[0]!.target.auth).toBe('bound-auth');
+    // The same blob copied onto another person's device row does not open: that device is refused, the others in the batch are unaffected.
+    const stolen: PushTarget = { ...target(sealed), userId: 3 };
+    const report = await sender.send([stolen], payload);
+    expect(report.sent).toEqual([]);
+    expect(report.refused).toEqual([1]);
   });
 });
