@@ -1,0 +1,27 @@
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { uploadTemplateMedia } from './media';
+
+afterEach(() => vi.unstubAllGlobals());
+
+describe('uploadTemplateMedia', () => {
+  it('sends the number and the file in one multipart form, as the API expects', async () => {
+    const reply = { handle: '4::abc', fileName: 'a.png', mimeType: 'image/png' };
+    const fetchMock = vi.fn(
+      async () =>
+        new Response(JSON.stringify(reply), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+    const file = new File(['png'], 'a.png', { type: 'image/png' });
+
+    const result = await uploadTemplateMedia(file, 'conn-1');
+
+    expect(result).toEqual({ handle: '4::abc', fileName: 'a.png', mimeType: 'image/png' });
+    const init = fetchMock.mock.calls[0]![1] as RequestInit;
+    const body = init.body as FormData;
+    expect(body.get('connectionId')).toBe('conn-1');
+    expect(body.get('file')).toBeInstanceOf(File);
+  });
+});

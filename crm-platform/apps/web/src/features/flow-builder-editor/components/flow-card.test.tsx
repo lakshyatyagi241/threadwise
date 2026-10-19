@@ -53,14 +53,11 @@ describe('flow card (TW-FLB-001)', () => {
     expect(html).not.toContain('data-flow-enroll');
   });
 
-  it('a manual-enroll flow (a never-published draft too) offers the builder beside "Enroll contacts"', () => {
-    for (const state of ['live', 'draft'] as const) {
-      const html = card({ triggerKind: 'manual_enroll', state, isPublished: state === 'live' });
-      expect(html).toContain('data-flow-enroll');
-      expect(html).toContain('href="/flow-runtime/flows/11111111-1111-4111-8111-111111111111"');
-      expect(html).toContain('openBuilder');
-      expect(html).toContain('href="/flows/builder/11111111-1111-4111-8111-111111111111"');
-    }
+  it('a manual-enroll flow opens the builder like any other flow, with no enroll button on the card', () => {
+    const html = card({ triggerKind: 'manual_enroll' });
+    expect(html).not.toContain('data-flow-enroll');
+    expect(html).toContain('href="/flows/builder/11111111-1111-4111-8111-111111111111"');
+    expect(html).not.toContain('href="/flow-runtime/flows/');
   });
 
   it('offers the flow\'s FAQs tab only to a person who can read FAQs, and never on a call flow', () => {

@@ -5,7 +5,9 @@
  * defaulted, never thrown, so a half-filled node saves (as a keyword trigger with no keywords does) and simply never fires.
  */
 
-/** Operators of the field-match trigger: the Condition node's, minus the numeric-only extras. */
+import { flbCondRulesOf, flbSanitizeConditionGroup, type FlbCondGroup } from './condition-group';
+
+/** Operators of the field-match trigger: the Condition node's, minus the numeric-only extras, plus the empty tests. */
 export const FLB_FIELD_MATCH_OPERATORS = [
   'equals',
   'not_equals',
@@ -17,6 +19,8 @@ export const FLB_FIELD_MATCH_OPERATORS = [
   'less_than',
   'is_set',
   'is_not_set',
+  'is_empty',
+  'is_not_empty',
 ] as const;
 export type FlbFieldMatchOperator = (typeof FLB_FIELD_MATCH_OPERATORS)[number];
 
@@ -44,9 +48,12 @@ export interface FlbSegmentJoinConfig {
   segmentId: string;
 }
 export interface FlbFieldMatchConfig {
+  /** The first rule's field, kept so a flow saved with one field reads the same as before. */
   field: string;
   operator: FlbFieldMatchOperator;
   value: string;
+  /** AND/OR groups of field rules (beyond Reference). When present it decides; `field`, `operator` and `value` mirror its first rule. */
+  conditionGroup: FlbCondGroup | null;
 }
 export interface FlbDateFieldMatchConfig {
   field: string;
@@ -88,6 +95,8 @@ export type FlbTriggerConfig =
 const text = (v: unknown): string => (v === null || v === undefined ? '' : String(v)).trim();
 const oneOf = <T extends string>(list: readonly T[], v: unknown, fallback: T): T =>
   (list as readonly string[]).includes(text(v)) ? (text(v) as T) : fallback;
+/** A field as the person typed it, with the `{{ }}` braces of a variable taken off. */
+const cleanField = (v: unknown): string => text(v).replace(/^\{\{|\}\}$/g, '').trim();
 const time = (v: unknown, fallback: string): string => {
   const m = /^(\d{1,2}):(\d{2})$/.exec(text(v));
   if (!m) return fallback;
@@ -109,14 +118,24 @@ export function flbTriggerConfig(
     case 'segment_join':
     case 'segment_leave':
       return { segmentId: text(d.segmentId) };
-    case 'field_match':
+    case 'field_match': {
+      const conditionGroup = flbSanitizeConditionGroup(d.conditionGroup, cleanField);
+      const first = conditionGroup ? (flbCondRulesOf(conditionGroup)[0] ?? null) : null;
+      if (first) {
+        return {
+          field: first.variable,
+          operator: oneOf(FLB_FIELD_MATCH_OPERATORS, first.operator, 'equals'),
+          value: first.value,
+          conditionGroup,
+        };
+      }
       return {
-        field: text(d.field)
-          .replace(/^\{\{|\}\}$/g, '')
-          .trim(),
+        field: cleanField(d.field),
         operator: oneOf(FLB_FIELD_MATCH_OPERATORS, d.operator, 'equals'),
         value: text(d.value),
+        conditionGroup,
       };
+    }
     case 'date_field_match':
       return {
         field: text(d.field)

@@ -33,6 +33,8 @@ export const OPERATOR_OPTIONS: Opt[] = FLB_FIELD_MATCH_OPERATORS.map((v) => ({
     less_than: 'is less than',
     is_set: 'has a value',
     is_not_set: 'is blank',
+    is_empty: 'is empty',
+    is_not_empty: 'is not empty',
   }[v],
 }));
 

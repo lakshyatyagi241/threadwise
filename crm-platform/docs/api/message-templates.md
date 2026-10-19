@@ -14,7 +14,7 @@ Contracts: `@crm/contracts` (`message-templates`). Every route is tenant-scoped:
 | `POST /:id/refresh` | `tpl.templates.sync`              | Re-read status, quality and category from Meta; returns the detail. Never-submitted templates and a second call within 15 s answer from the row.                        |
 | `POST /sync`        | `tpl.templates.sync`              | Body `{connectionId}`. Pull every template of one number. Returns `{created, updated, missing, total}`.                                                                 |
 | `POST /lint`        | `tpl.templates.create`            | The form's instant feedback: `{issues, normalized, metaPayload}`. Nothing saved, nothing sent.                                                                          |
-| `POST /media`       | `tpl.templates.create` (+ `sync`) | Multipart `file` + `connectionId`. JPG/PNG up to 5 MB, MP4/3GP up to 16 MB, PDF up to 100 MB; content is checked, not the name. Returns `{handle, fileName, mimeType}`. |
+| `POST /media`       | `tpl.templates.create` (+ `sync`) | Multipart `file` + `connectionId`. JPG/PNG up to 5 MB, MP4/3GP up to 16 MB, PDF up to 100 MB; content is checked, not the name. Returns `{handle, fileName, mimeType}`. Meta takes only this handle as the header example: an image link is not accepted, so the file must be uploaded here. GIF headers are not supported. |
 | `POST /ai-generate` | `tpl.templates.create`            | "Build with AI" (TW-TPL-016): a business brief in, a template draft out. Nothing saved, nothing sent to Meta. See below.                                       |
 
 ## Behaviour worth knowing
