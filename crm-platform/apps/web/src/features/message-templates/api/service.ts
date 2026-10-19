@@ -67,7 +67,7 @@ export const templatesApi = {
       signal,
     }),
   refresh: (id: string) =>
-    apiFetch(`${base}/${id}/refresh`, { method: 'POST', schema: templateSubmitResultSchema }),
+    apiFetch(`${base}/${id}/refresh`, { method: 'POST', schema: templateDetailSchema }),
   sync: (input: SyncTemplatesInput) =>
     apiFetch(`${base}/sync`, { method: 'POST', body: input, schema: syncTemplatesResultSchema }),
   lint: (input: LintTemplateInput, signal?: AbortSignal) =>

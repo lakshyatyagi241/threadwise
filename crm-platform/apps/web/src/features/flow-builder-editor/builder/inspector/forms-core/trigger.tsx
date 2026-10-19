@@ -1,7 +1,14 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
-import { FLB_SCHEDULE_AUDIENCES, FLB_SCHEDULE_FREQUENCIES, FLB_STORE_EVENTS } from '@crm/contracts';
+import {
+  FLB_FIELD_MATCH_OPERATORS,
+  FLB_SCHEDULE_AUDIENCES,
+  FLB_SCHEDULE_FREQUENCIES,
+  FLB_STORE_EVENTS,
+  flbIsCondGroup,
+  type FlbCondGroup,
+} from '@crm/contracts';
 import { offerSenders } from '@/lib/unofficial-whatsapp';
 import type { ReactNode } from 'react';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
@@ -21,7 +28,29 @@ import {
   toggleId,
 } from './helpers';
 import { Link, LinkedText } from './parts';
+import { ConditionGroupEditor, type OperatorSet } from './logic';
 import { OPERATOR_OPTIONS } from '../forms-channels/workflow';
+
+/** The operators a field-match rule offers: the trigger's own list, labelled as the trigger form always has been. */
+const FIELD_MATCH_OPS: OperatorSet = {
+  ids: FLB_FIELD_MATCH_OPERATORS,
+  label: (id) => OPERATOR_OPTIONS.find((o) => o.v === id)?.l ?? id,
+};
+
+/** The rule tree the editor shows: the saved groups, or the one field, operator and value a flow saved before groups existed. */
+function fieldMatchTree(d: Record<string, unknown>): FlbCondGroup {
+  if (flbIsCondGroup(d.conditionGroup)) return d.conditionGroup;
+  return {
+    op: 'and',
+    items: [
+      {
+        variable: str(d.field),
+        operator: str(d.operator) || 'equals',
+        value: str(d.value),
+      },
+    ],
+  };
+}
 
 /** The trigger kinds every channel offers; their labels are the messages `trigger.kind.<id>`. */
 const KIND_OPTIONS = [
@@ -183,31 +212,23 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
         </>
       ) : null}
 
-      {kind === 'field_match' || kind === 'date_field_match' ? (
+      {kind === 'date_field_match' ? (
         <Field label={t('ext.fieldLabel')} hint={t('ext.fieldHint')}>
           <TextInput
             value={d.field}
-            placeholder={kind === 'date_field_match' ? 'birthday' : 'city'}
+            placeholder="birthday"
             onChange={(v) => set('field', v)}
           />
         </Field>
       ) : null}
 
       {kind === 'field_match' ? (
-        <>
-          <Field label={t('ext.test')}>
-            <SelectInput
-              value={d.operator || 'equals'}
-              options={OPERATOR_OPTIONS}
-              onChange={(v) => set('operator', v)}
-            />
-          </Field>
-          {d.operator !== 'is_set' && d.operator !== 'is_not_set' ? (
-            <Field label={t('ext.value')} hint={t('ext.valueHint')}>
-              <TextInput value={d.value} placeholder="Pune" onChange={(v) => set('value', v)} />
-            </Field>
-          ) : null}
-        </>
+        // Beyond Reference: one or more field rules joined by AND / OR groups, the same editor as the Condition node.
+        <ConditionGroupEditor
+          tree={fieldMatchTree(d)}
+          ops={FIELD_MATCH_OPS}
+          onChange={(next) => set('conditionGroup', next)}
+        />
       ) : null}
 
       {kind === 'date_field_match' ? (

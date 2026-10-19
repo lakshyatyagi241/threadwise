@@ -90,6 +90,32 @@ describe('trigger settings from the editor', () => {
       field: 'city',
       operator: 'equals',
       value: 'Pune',
+      conditionGroup: null,
+    });
+    expect(
+      flbTriggerConfig('field_match', {
+        conditionGroup: {
+          op: 'or',
+          items: [
+            { variable: '{{ city }}', operator: 'is_not_empty', value: '' },
+            {
+              op: 'and',
+              items: [{ variable: 'plan', operator: 'is_empty', value: 'ignored' }],
+            },
+          ],
+        },
+      }),
+    ).toEqual({
+      field: 'city',
+      operator: 'is_not_empty',
+      value: '',
+      conditionGroup: {
+        op: 'or',
+        items: [
+          { variable: 'city', operator: 'is_not_empty', value: '' },
+          { op: 'and', items: [{ variable: 'plan', operator: 'is_empty', value: 'ignored' }] },
+        ],
+      },
     });
     expect(
       flbTriggerConfig('date_field_match', {
