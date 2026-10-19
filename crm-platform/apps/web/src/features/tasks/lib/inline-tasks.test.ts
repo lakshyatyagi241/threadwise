@@ -37,6 +37,8 @@ const task = (over: Partial<TaskResponse> = {}): TaskResponse => ({
   company: null,
   source: 'manual',
   kind: 'task',
+  taskType: null,
+  outcome: null,
   rowVersion: 1,
   createdAt: '2026-10-16T08:00:00.000Z',
   updatedAt: '2026-10-16T08:00:00.000Z',

@@ -9,3 +9,4 @@ export {
   useActivityTypes,
 } from './api/activity-types';
 export { useActivityLabels, humanKey } from './lib/labels';
+export { useCompletionOffText } from './lib/use-text';

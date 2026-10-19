@@ -8,7 +8,7 @@ import {
   ACTIVITY_NAME_MAX,
   CUSTOM_ACTIVITY_BEHAVIOURS,
   ERROR_CODES,
-  type ActivityType,
+  type SalesActivityType,
   type CreateActivityTypeInput,
 } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
@@ -23,7 +23,7 @@ export function CreateActivityDialog({
   onCreated,
 }: {
   onClose: () => void;
-  onCreated: (a: ActivityType) => void;
+  onCreated: (a: SalesActivityType) => void;
 }) {
   const t = useTranslations('sales-activities.create');
   const [name, setName] = useState('');
@@ -31,7 +31,7 @@ export function CreateActivityDialog({
   const [behavesAs, setBehavesAs] = useState<Behaviour>('task');
   const [error, setError] = useState<string | null>(null);
   const create = useActivityMutation(
-    (v: CreateActivityTypeInput) => activityTypesApi.create(v) as Promise<ActivityType>,
+    (v: CreateActivityTypeInput) => activityTypesApi.create(v) as Promise<SalesActivityType>,
   );
 
   const submit = (e: FormEvent) => {
@@ -42,7 +42,7 @@ export function CreateActivityDialog({
     create.mutate(
       { name: v, icon, behavesAs },
       {
-        onSuccess: (a) => onCreated(a as ActivityType),
+        onSuccess: (a) => onCreated(a as SalesActivityType),
         onError: (err) => {
           const code = err instanceof ApiError ? err.code : '';
           setError(

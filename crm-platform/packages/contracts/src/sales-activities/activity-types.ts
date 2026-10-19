@@ -96,7 +96,7 @@ export const activityOptionRefSchema = z.object({
 });
 export type ActivityOptionRef = z.infer<typeof activityOptionRefSchema>;
 
-export const activityTypeSchema = z.object({
+export const salesActivityTypeSchema = z.object({
   id: uuidSchema,
   key: z.string(),
   /** Null on a default activity (the web shows its localised name). */
@@ -120,9 +120,9 @@ export const activityTypeSchema = z.object({
   outcomes: z.array(activityOptionSchema),
   rowVersion: z.number().int(),
 });
-export type ActivityType = z.infer<typeof activityTypeSchema>;
+export type SalesActivityType = z.infer<typeof salesActivityTypeSchema>;
 
-export const activityTypesResponseSchema = z.object({ data: z.array(activityTypeSchema) });
+export const activityTypesResponseSchema = z.object({ data: z.array(salesActivityTypeSchema) });
 export type ActivityTypesResponse = z.infer<typeof activityTypesResponseSchema>;
 
 /** Which switches and lists each behaviour offers. The drawer and the API read the same table. */

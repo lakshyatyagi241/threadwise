@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { useCallback } from 'react';
-import type { ActivityOption, ActivityOptionRef, ActivityType } from '@crm/contracts';
+import type { ActivityOption, ActivityOptionRef, SalesActivityType } from '@crm/contracts';
 import { useVocabulary } from '@/features/persona-vocabulary';
 
 /** "follow_up" -> "Follow up": what a seeded item with no translation yet is drawn as, so nothing shows a raw key twice. */
@@ -13,7 +13,7 @@ export function humanKey(key: string): string {
 
 export interface ActivityLabels {
   /** The name of an activity: the workspace's own for a custom one, the localised word for a default (Meeting follows the workspace vocabulary). */
-  activity: (a: Pick<ActivityType, 'key' | 'name'>) => string;
+  activity: (a: Pick<SalesActivityType, 'key' | 'name'>) => string;
   /** The name of a task type or an outcome of the activity with this key. */
   option: (activityKey: string, o: Pick<ActivityOption, 'key' | 'name'>) => string;
   /** The same for the short reference a record carries. */

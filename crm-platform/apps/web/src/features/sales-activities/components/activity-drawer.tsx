@@ -8,7 +8,7 @@ import {
   ERROR_CODES,
   activityCapabilities,
   type ActivityOption,
-  type ActivityType,
+  type SalesActivityType,
   type PhoneCountsAs,
   type UpdateActivityTypeInput,
 } from '@crm/contracts';
@@ -51,7 +51,7 @@ export function ActivityDrawer({
   onClose,
   onRemoved,
 }: {
-  activity: ActivityType;
+  activity: SalesActivityType;
   canManage: boolean;
   onClose: () => void;
   onRemoved: () => void;

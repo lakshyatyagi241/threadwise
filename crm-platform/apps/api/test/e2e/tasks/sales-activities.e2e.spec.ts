@@ -183,7 +183,7 @@ describe('the switches and the lists', () => {
     expect(order.status, JSON.stringify(order.body)).toBe(200);
     expect((order.body as Activity).taskTypes.map((o) => o.id)).toEqual(reversed);
     const partial = await as(t.admin).put(`/v2/activity-types/${task.id}/options/order`).send({ kind: 'type', ids: reversed.slice(1) });
-    expect(partial.status).toBe(400);
+    expect(partial.status).toBe(422);
 
     const gone = (order.body as Activity).taskTypes.find((o) => o.key === 'call_reminder')!;
     const removed = await as(t.admin).delete(`/v2/activity-types/${task.id}/options/${gone.id}`);
@@ -294,7 +294,7 @@ describe('tasks', () => {
     expect(new Date(edited.body.doneAt).toISOString()).toBe(early);
     const open = await mk({ title: 'Open one' });
     const notDone = await as(t.admin).patch(`/v2/tasks/${open.id}`).send({ doneAt: early, rowVersion: open.rowVersion });
-    expect(notDone.status).toBe(400);
+    expect(notDone.status).toBe(422);
   });
 
   it('a follow-up task made by lead handling carries the seeded Follow up type, and the backfill typed the old ones', async () => {
@@ -392,7 +392,7 @@ describe('calls', () => {
     expect(res.body.entry.outcome).toBe('connected');
     expect(res.body.entry.outcomeOption).toBeNull();
     const neither = await as(t.admin).post('/v2/calls/log').send({ contactId: contact, direction: 'inbound', durationSec: 30 });
-    expect(neither.status).toBe(400);
+    expect(neither.status).toBe(422);
   });
 
   it('refuses an outcome item of another activity', async () => {

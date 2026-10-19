@@ -2,11 +2,11 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  activityTypeSchema,
+  salesActivityTypeSchema,
   activityTypesResponseSchema,
   meetingResultSchema,
   meetingResultsResponseSchema,
-  type ActivityType,
+  type SalesActivityType,
   type AddActivityOptionInput,
   type CreateActivityTypeInput,
   type ReorderActivityOptionsInput,
@@ -27,12 +27,12 @@ export const activityTypesApi = {
   list: (signal?: AbortSignal) =>
     apiFetch('/activity-types', { schema: activityTypesResponseSchema, signal }),
   create: (input: CreateActivityTypeInput) =>
-    apiFetch('/activity-types', { method: 'POST', body: input, schema: activityTypeSchema }),
+    apiFetch('/activity-types', { method: 'POST', body: input, schema: salesActivityTypeSchema }),
   update: (id: string, input: UpdateActivityTypeInput) =>
     apiFetch(`/activity-types/${encodeURIComponent(id)}`, {
       method: 'PATCH',
       body: input,
-      schema: activityTypeSchema,
+      schema: salesActivityTypeSchema,
     }),
   remove: (id: string): Promise<void> =>
     apiFetch(`/activity-types/${encodeURIComponent(id)}`, { method: 'DELETE' }),
@@ -40,18 +40,18 @@ export const activityTypesApi = {
     apiFetch(`/activity-types/${encodeURIComponent(id)}/options`, {
       method: 'POST',
       body: input,
-      schema: activityTypeSchema,
+      schema: salesActivityTypeSchema,
     }),
   removeOption: (id: string, optionId: string) =>
     apiFetch(
       `/activity-types/${encodeURIComponent(id)}/options/${encodeURIComponent(optionId)}`,
-      { method: 'DELETE', schema: activityTypeSchema },
+      { method: 'DELETE', schema: salesActivityTypeSchema },
     ),
   reorder: (id: string, input: ReorderActivityOptionsInput) =>
     apiFetch(`/activity-types/${encodeURIComponent(id)}/options/order`, {
       method: 'PUT',
       body: input,
-      schema: activityTypeSchema,
+      schema: salesActivityTypeSchema,
     }),
   meetingResults: (contactId: string, signal?: AbortSignal) =>
     apiFetch(`/contacts/${encodeURIComponent(contactId)}/meeting-results`, {
@@ -96,7 +96,7 @@ export const FALLBACK_SETTINGS = {
 
 /** The switches and lists of one default activity ('task', 'meeting', 'phone'), or the unchanged behaviour while unknown. */
 export function useActivitySettings(key: 'task' | 'meeting' | 'phone'): {
-  activity: ActivityType | undefined;
+  activity: SalesActivityType | undefined;
   allowComplete: boolean;
   allowEditCompleted: boolean;
   outcomesEnabled: boolean;
@@ -114,7 +114,7 @@ export function useActivitySettings(key: 'task' | 'meeting' | 'phone'): {
 }
 
 /** Runs a settings write, then replaces the cached lists with the answer (the API returns the whole activity). */
-export function useActivityMutation<V>(fn: (v: V) => Promise<ActivityType | void>) {
+export function useActivityMutation<V>(fn: (v: V) => Promise<SalesActivityType | void>) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: fn,

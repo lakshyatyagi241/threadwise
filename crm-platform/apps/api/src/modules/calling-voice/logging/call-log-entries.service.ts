@@ -501,7 +501,7 @@ export class CallLogEntriesService {
     tx: Tx,
     orgId: number,
     contactId: number,
-    outcome: LogCallInput['outcome'],
+    outcome: CallOutcome,
   ) {
     const current = await this.repo.contactStage(tx, orgId, contactId);
     if (!current) return null;

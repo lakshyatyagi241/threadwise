@@ -110,5 +110,5 @@ export const contactMeetingOutcomes = pgTable(
   ],
 );
 
-export type ActivityType = typeof activityTypes.$inferSelect;
-export type ActivityTypeOption = typeof activityTypeOptions.$inferSelect;
+export type SalesActivityType = typeof activityTypes.$inferSelect;
+export type SalesActivityTypeOption = typeof activityTypeOptions.$inferSelect;

@@ -18,8 +18,6 @@ export function OptionSelect({
   current,
   onChange,
   id,
-  label,
-  emptyLabel,
   disabled,
   className,
 }: {
@@ -31,8 +29,6 @@ export function OptionSelect({
   current?: ActivityOptionRef | null;
   onChange: (id: string) => void;
   id: string;
-  label: string;
-  emptyLabel: string;
   disabled?: boolean;
   className?: string;
 }) {
@@ -46,10 +42,10 @@ export function OptionSelect({
   return (
     <div className={className}>
       <label htmlFor={id} className="mb-1.5 block text-sm font-medium">
-        {label}
+        {t(kind === 'type' ? 'taskType' : 'outcome')}
       </label>
       <Select id={id} value={value} disabled={disabled} onChange={(e) => onChange(e.target.value)}>
-        <option value="">{emptyLabel}</option>
+        <option value="">{t(kind === 'type' ? 'taskTypeNone' : 'outcomeNone')}</option>
         {keep && (
           <option value={keep.id}>
             {labels.ref(keep)} {t('removedSuffix')}

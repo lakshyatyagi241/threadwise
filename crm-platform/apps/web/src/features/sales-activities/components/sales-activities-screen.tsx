@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Alert, Badge, Button, Spinner } from '@crm/ui';
-import { activityCapabilities, type ActivityType } from '@crm/contracts';
+import { activityCapabilities, type SalesActivityType } from '@crm/contracts';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useActivityTypes } from '../api/activity-types';
 import { useActivityLabels } from '../lib/labels';
@@ -15,7 +15,7 @@ import { CreateActivityDialog } from './create-activity-dialog';
 /** A line that says what the activity's switches are now, so the list shows the setup without opening each one. */
 function useSummary() {
   const t = useTranslations('sales-activities.list');
-  return (a: ActivityType): string[] => {
+  return (a: SalesActivityType): string[] => {
     const cap = activityCapabilities(a.behavesAs);
     const out: string[] = [];
     if (cap.allowComplete) out.push(a.allowComplete ? t('chip.completable') : t('chip.notCompletable'));

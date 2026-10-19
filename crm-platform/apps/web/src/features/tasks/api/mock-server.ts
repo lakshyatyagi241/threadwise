@@ -156,6 +156,8 @@ function wire(r: Row): TaskResponse {
     company: null,
     source: 'manual',
     kind: 'task',
+    taskType: null,
+    outcome: null,
     rowVersion: r.rowVersion,
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,

@@ -40,7 +40,6 @@ type FormField = 'title' | 'notes' | 'due' | 'assignee' | 'priority' | 'form';
 export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: TaskFormModalProps) {
   const t = useTranslations('tasks.form');
   const toastText = useTranslations('tasks.toast');
-  const tp = useTranslations('sales-activities.picker');
   const { toast } = useToast();
   const session = useSession();
   const members = useMembers();
@@ -210,8 +209,6 @@ export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: Ta
           activity="task"
           kind="type"
           id="task-type"
-          label={tp('taskType')}
-          emptyLabel={tp('taskTypeNone')}
           value={draft.taskTypeId}
           current={task?.taskType}
           onChange={(id) => set('taskTypeId', id)}
@@ -221,8 +218,6 @@ export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: Ta
             activity="task"
             kind="outcome"
             id="task-outcome"
-            label={tp('outcome')}
-            emptyLabel={tp('outcomeNone')}
             value={draft.outcomeId}
             current={task.outcome}
             onChange={(id) => set('outcomeId', id)}

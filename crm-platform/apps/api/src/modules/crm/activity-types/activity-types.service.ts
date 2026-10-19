@@ -7,7 +7,7 @@ import {
   type ActivityBehaviour,
   type ActivityOption,
   type ActivityOptionKind,
-  type ActivityType,
+  type SalesActivityType,
   type ActivityTypesResponse,
   type AddActivityOptionInput,
   type CreateActivityTypeInput,
@@ -48,7 +48,7 @@ const toOption = (o: ActivityOptionRow): ActivityOption => ({
   position: o.position,
 });
 
-function toActivity(a: ActivityTypeRow, options: ActivityOptionRow[]): ActivityType {
+function toActivity(a: ActivityTypeRow, options: ActivityOptionRow[]): SalesActivityType {
   const mine = options.filter((o) => o.activityTypeId === a.id);
   return {
     id: a.uuid,
@@ -89,7 +89,7 @@ export class ActivityTypesService {
     return this.db.tx(async (tx) => ({ data: await this.snapshot(tx, ctx.orgId) }));
   }
 
-  async create(input: CreateActivityTypeInput): Promise<ActivityType> {
+  async create(input: CreateActivityTypeInput): Promise<SalesActivityType> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       await this.ensureSeeded(tx, ctx.orgId);
@@ -130,11 +130,11 @@ export class ActivityTypesService {
     });
   }
 
-  async update(uuid: string, input: UpdateActivityTypeInput): Promise<ActivityType> {
+  async update(uuid: string, input: UpdateActivityTypeInput): Promise<SalesActivityType> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.requireType(tx, ctx.orgId, uuid, true);
-      if (input.rowVersion !== row.rowVersion) throw AppError.rowVersionConflict('ActivityType');
+      if (input.rowVersion !== row.rowVersion) throw AppError.rowVersionConflict('SalesActivityType');
       if (row.isDefault && input.name !== undefined) throw this.locked();
       if (row.isDefault && input.icon !== undefined) throw this.locked();
       const bad = unsupportedSwitches(row.behavesAs, input);
@@ -171,7 +171,7 @@ export class ActivityTypesService {
       set('outcomesEnabled');
       if (Object.keys(patch).length > 0) {
         const ok = await this.repo.updateType(tx, ctx.orgId, row.id, input.rowVersion, patch);
-        if (!ok) throw AppError.rowVersionConflict('ActivityType');
+        if (!ok) throw AppError.rowVersionConflict('SalesActivityType');
         await this.audit.record(tx, { module: MODULE_KEY, recordId: row.id, action: 'update', delta });
       }
       return this.one(tx, ctx.orgId, row.id);
@@ -194,7 +194,7 @@ export class ActivityTypesService {
     });
   }
 
-  async addOption(uuid: string, input: AddActivityOptionInput): Promise<ActivityType> {
+  async addOption(uuid: string, input: AddActivityOptionInput): Promise<SalesActivityType> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.requireType(tx, ctx.orgId, uuid, true);
@@ -240,7 +240,7 @@ export class ActivityTypesService {
     });
   }
 
-  async removeOption(uuid: string, optionUuid: string): Promise<ActivityType> {
+  async removeOption(uuid: string, optionUuid: string): Promise<SalesActivityType> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.requireType(tx, ctx.orgId, uuid, true);
@@ -258,7 +258,7 @@ export class ActivityTypesService {
     });
   }
 
-  async reorderOptions(uuid: string, input: ReorderActivityOptionsInput): Promise<ActivityType> {
+  async reorderOptions(uuid: string, input: ReorderActivityOptionsInput): Promise<SalesActivityType> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.requireType(tx, ctx.orgId, uuid, true);
@@ -288,7 +288,7 @@ export class ActivityTypesService {
       await this.repo.seed(tx, orgId);
       row = await this.repo.findTypeByKey(tx, orgId, key);
     }
-    if (!row) throw AppError.notFound('ActivityType', key);
+    if (!row) throw AppError.notFound('SalesActivityType', key);
     return row;
   }
 
@@ -333,24 +333,24 @@ export class ActivityTypesService {
     if ((await this.repo.findTypeByKey(tx, orgId, 'task')) === undefined) await this.repo.seed(tx, orgId);
   }
 
-  private async snapshot(tx: Tx, orgId: number): Promise<ActivityType[]> {
+  private async snapshot(tx: Tx, orgId: number): Promise<SalesActivityType[]> {
     await this.ensureSeeded(tx, orgId);
     const [types, options] = await Promise.all([this.repo.listTypes(tx, orgId), this.repo.listOptions(tx, orgId)]);
     return types.map((t) => toActivity(t, options));
   }
 
-  private async one(tx: Tx, orgId: number, id: number): Promise<ActivityType> {
+  private async one(tx: Tx, orgId: number, id: number): Promise<SalesActivityType> {
     const all = await this.snapshot(tx, orgId);
     const types = await this.repo.listTypes(tx, orgId);
     const row = types.find((t) => t.id === id);
     const found = all.find((a) => a.id === row?.uuid);
-    if (!found) throw AppError.notFound('ActivityType');
+    if (!found) throw AppError.notFound('SalesActivityType');
     return found;
   }
 
   private async requireType(tx: Tx, orgId: number, uuid: string, lock: boolean): Promise<ActivityTypeRow> {
     const row = await this.repo.findTypeByUuid(tx, orgId, uuid, lock);
-    if (!row) throw AppError.notFound('ActivityType', uuid);
+    if (!row) throw AppError.notFound('SalesActivityType', uuid);
     return row;
   }
 

@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Button, ConfirmDialog, Field, Input, Select, Textarea, cn } from '@crm/ui';
 import { TASK_NOTES_MAX, TASK_TITLE_MAX, type TaskResponse } from '@crm/contracts';
-import { OptionSelect, useActivitySettings } from '@/features/sales-activities';
+import { OptionSelect, useActivitySettings, useCompletionOffText } from '@/features/sales-activities';
 import { useMembers, useTask } from '../api/hooks';
 import { PRIORITIES, type RecordRef } from '../api/schemas';
 import { fromLocalInput, presetDue, toLocalInput, type DuePreset } from '../lib/dates';
@@ -68,7 +68,7 @@ function DrawerBody({
 }: TaskDrawerProps & { task: TaskResponse }) {
   const t = useTranslations('tasks.drawer');
   const tf = useTranslations('tasks.form');
-  const tp = useTranslations('sales-activities.picker');
+  const completeOff = useCompletionOffText();
   const taskSettings = useActivitySettings('task');
   const locale = useLocale();
   const now = useNow();
@@ -159,7 +159,7 @@ function DrawerBody({
             <Button
               variant={done ? 'secondary' : 'brand'}
               disabled={!done && !taskSettings.allowComplete}
-              title={!done && !taskSettings.allowComplete ? tp('completeOff') : undefined}
+              title={!done && !taskSettings.allowComplete ? completeOff : undefined}
               onClick={() => void actions.toggle(task)}
             >
               <CheckIcon /> {done ? t('reopen') : t('complete')}
@@ -224,8 +224,6 @@ function DrawerBody({
               activity="task"
               kind="type"
               id="task-drawer-type"
-              label={tp('taskType')}
-              emptyLabel={tp('taskTypeNone')}
               disabled={!canUpdate}
               value={task.taskType?.id ?? ''}
               current={task.taskType}
@@ -236,8 +234,6 @@ function DrawerBody({
                 activity="task"
                 kind="outcome"
                 id="task-drawer-outcome"
-                label={tp('outcome')}
-                emptyLabel={tp('outcomeNone')}
                 disabled={!canUpdate}
                 value={task.outcome?.id ?? ''}
                 current={task.outcome}
