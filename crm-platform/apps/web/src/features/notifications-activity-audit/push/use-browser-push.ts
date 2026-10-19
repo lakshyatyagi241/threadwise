@@ -73,6 +73,8 @@ export type PushProblem = 'enable_failed' | 'disable_failed' | 'remove_failed' |
 
 export interface BrowserPush {
   state: PushUiState;
+  /** The browser's answer to the permission question (`default` until the person has answered); null before the browser is read. */
+  permission: PushEnv['permission'] | null;
   devices: PushDevice[] | undefined;
   devicesFailed: boolean;
   /** The id the server gave THIS browser, to mark it in the list. */
@@ -84,7 +86,7 @@ export interface BrowserPush {
   testInApp: boolean | null;
   /** The live socket is connected right now, so the in-app part of the test can show on this page. */
   liveConnected: boolean;
-  /** Asks the browser for permission and subscribes. Only ever call it from the person's click. */
+  /** Asks the browser for permission and subscribes. Called from the person's click, or from the one automatic ask on arrival. */
   enable(): Promise<void>;
   disable(): Promise<void>;
   remove(id: string): Promise<void>;
@@ -94,10 +96,10 @@ export interface BrowserPush {
 
 /**
  * Browser notifications on this device: what the browser can do, whether this device is enabled (the browser holds a subscription AND
- * the server lists the device), the person's devices, and the four actions. Permission is requested only inside `enable`, which the
- * card calls from the click on "Enable"; nothing here asks on page load.
+ * the server lists the device), the person's devices, and the four actions. Permission is requested only inside `enable`. Its callers
+ * are the Enable click on the Settings card, and the prompt that asks once on arrival (sign-up, then the app) until the person answers.
  */
-export function useBrowserPush(): BrowserPush {
+export function useBrowserPush(options: { devices?: boolean } = {}): BrowserPush {
   const qc = useQueryClient();
   const deployment = usePushDeployment();
   const raw = useSyncExternalStore(subscribeBrowser, browserSnapshot, () => '');
@@ -129,7 +131,8 @@ export function useBrowserPush(): BrowserPush {
   const devicesQuery = useQuery({
     queryKey: NOTIFICATION_KEYS.pushDevices,
     queryFn: ({ signal }) => notificationsApi.pushDevices(signal),
-    enabled: deployment.configured,
+    // The arrival prompt runs on every page and needs only the permission, so it skips the device list (`devices: false`).
+    enabled: deployment.configured && (options.devices ?? true),
     retry: false,
   });
   const devices = devicesQuery.data?.items;
@@ -246,6 +249,7 @@ export function useBrowserPush(): BrowserPush {
 
   return {
     state,
+    permission: env?.permission ?? null,
     devices,
     devicesFailed: devicesQuery.isError,
     thisDeviceId,

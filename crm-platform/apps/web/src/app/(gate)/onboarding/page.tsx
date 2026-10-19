@@ -6,6 +6,7 @@ import { GuestFrame } from '@/features/auth-registration-security/guest/guest-fr
 import { loadRegistrationConfig } from '@/features/auth-registration-security/guest/server';
 import { OnboardingView } from '@/features/auth-registration-security/account/onboarding/onboarding-view';
 import { getRequestSession } from '@/features/auth-registration-security/shared/session.server';
+import { NotificationPermissionPrompt } from '@/features/notifications-activity-audit';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('auth-registration-security.account.onboarding');
@@ -22,6 +23,8 @@ export default async function OnboardingPage() {
   const config = await loadRegistrationConfig();
   return (
     <GuestFrame page="register" config={config} header={null}>
+      {/* Sign-up is where the person first meets the browser's notification question: asked here, then in the app until answered. */}
+      <NotificationPermissionPrompt />
       <OnboardingView defaultCountryIso={config.defaultCountryIso} />
     </GuestFrame>
   );

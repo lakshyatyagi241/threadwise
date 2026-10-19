@@ -513,6 +513,11 @@
           "watch": "Powinno pojawić się wyskakujące okno, a liczba przy dzwonku i tytuł karty powinny się zmienić.",
           "notConnected": "Aktualizacje na żywo nie są połączone na tej stronie, więc wyskakujące okno nie może się tu pojawić. Odśwież stronę i spróbuj ponownie.",
           "off": "W dzwonku nie utworzono powiadomienia: dzwonek jest wyłączony dla „Powiadomienie testowe” w tabeli poniżej albo przez właściciela Twojego obszaru roboczego."
+        },
+        "prompt": {
+          "message": "Włącz powiadomienia przeglądarki, aby dostawać alert o wybranych zdarzeniach, nawet gdy CRM jest zamknięty.",
+          "enable": "Zezwól na powiadomienia",
+          "enabling": "Włączanie..."
         }
       }
     },

@@ -513,6 +513,11 @@
           "watch": "Du solltest ein Pop-up sehen, und die Zahl an der Glocke und der Tab-Titel ändern sich.",
           "notConnected": "Live-Aktualisierungen sind auf dieser Seite nicht verbunden, daher kann hier kein Pop-up erscheinen. Lade die Seite neu und versuche es erneut.",
           "off": "Es wurde keine Benachrichtigung in der Glocke erstellt: Die Glocke ist für „Testbenachrichtigung“ in der Tabelle unten ausgeschaltet, oder vom Inhaber deines Arbeitsbereichs."
+        },
+        "prompt": {
+          "message": "Aktivieren Sie Browser-Benachrichtigungen, um auch bei geschlossenem CRM über die gewählten Ereignisse informiert zu werden.",
+          "enable": "Benachrichtigungen erlauben",
+          "enabling": "Wird aktiviert..."
         }
       }
     },
