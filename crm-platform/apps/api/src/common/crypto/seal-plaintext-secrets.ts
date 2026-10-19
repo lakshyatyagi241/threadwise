@@ -58,6 +58,15 @@ export const SEAL_TARGETS: SealTarget[] = [
     hash: 'recovery_token_hash',
     enc: 'recovery_token_enc',
   },
+  // E2: the Shopify / WooCommerce webhook URL secret (also the WooCommerce plugin's HMAC key): hash for the lookup, sealed copy to use
+  ...['shopify_integrations', 'woocommerce_integrations'].map((table): SealTarget => ({
+    name: `${table}.webhook_secret`,
+    table,
+    pk: ['org_id', 'id'],
+    plain: 'webhook_secret',
+    hash: 'webhook_secret_hash',
+    enc: 'webhook_secret_enc',
+  })),
 ];
 
 export interface SealReport {

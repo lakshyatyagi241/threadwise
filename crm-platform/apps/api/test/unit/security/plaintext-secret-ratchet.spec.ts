@@ -97,6 +97,8 @@ const ALLOW: Record<string, Reason> = {
   'viber_channels.webhook_token': 'hash',
   'wechat_channels.webhook_token': 'hash',
 
+  'shopify_integrations.webhook_secret': 'hash', // E2: webhook_secret_hash (lookup) / webhook_secret_enc (URL, HMAC key); the plaintext is the rollout mirror
+  'woocommerce_integrations.webhook_secret': 'hash',
   'orders.return_token': 'hash', // E8: return_token_hash is authoritative; the plaintext is the rollout mirror
   'wa_orders.recovery_token': 'hash', // E8: recovery_token_hash / recovery_token_enc
 
@@ -109,8 +111,6 @@ const ALLOW: Record<string, Reason> = {
   'webhook_forward_failures.signature_header': 'hash', // the HMAC the sender computed over the body, kept to replay the forward
 
   // --- accepted risks, open findings (docs/security/encryption-audit/Sheet3-35-encryption-audit-REPORT.html) ---
-  'shopify_integrations.webhook_secret': 'E2', // the URL path secret and the lookup key; needs the hash + encrypted split
-  'woocommerce_integrations.webhook_secret': 'E2', // as above, and the HMAC key given to the store plugin
   'incoming_webhooks.token': 'E3', // no service writes it yet: the writer must use tokenColumns() (hash + sealed copy)
   'crm_briefs.public_token': 'E8', // no service writes it yet: the writer must use tokenColumns() (hash + sealed copy)
 };

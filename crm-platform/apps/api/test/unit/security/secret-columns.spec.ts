@@ -74,3 +74,18 @@ describe('the bearer-link writers store the hash (E8)', () => {
     );
   });
 });
+
+describe('the store webhook secret is hashed and sealed (E2)', () => {
+  const src = (p: string) => readFileSync(resolve(__dirname, '../../../src/modules', p), 'utf8');
+  it('both services write hash + sealed copy and read the secret back from the sealed copy', () => {
+    expect(src('shopify-woocommerce/shopify.service.ts')).toContain(
+      'tokenColumns(this.crypto, secret)',
+    );
+    expect(src('shopify-woocommerce/woocommerce.service.ts')).toContain(
+      'tokenColumns(this.crypto, secret)',
+    );
+    expect(src('shopify-woocommerce/woocommerce.service.ts')).toContain('webhookSecretEnc');
+    expect(src('shopify-woocommerce/webhook.service.ts')).toContain('store.webhookSecretEnc');
+    expect(src('shopify-woocommerce/stores.repository.ts')).toContain('webhook_secret_hash');
+  });
+});
