@@ -33,7 +33,11 @@ export function IpBlockedView({ ip }: { ip: string | null }) {
     setSigningOut(true);
     try {
       // The sign-out call is itself an operator route and may be refused too; the cookies are cleared either way.
-      await fetch('/api/platform-auth/logout', { method: 'POST', credentials: 'same-origin' });
+      await fetch('/api/platform-auth/logout', {
+        signal: AbortSignal.timeout(5000),
+        method: 'POST',
+        credentials: 'same-origin',
+      });
     } finally {
       ipBlockStore.clear();
       router.replace(OPERATOR_LOGIN_PATH);

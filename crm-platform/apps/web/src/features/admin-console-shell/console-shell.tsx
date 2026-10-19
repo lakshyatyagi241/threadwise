@@ -211,7 +211,11 @@ export function ConsoleShell({
   const signOut = async () => {
     setSigningOut(true);
     try {
-      await fetch('/api/platform-auth/logout', { method: 'POST', credentials: 'same-origin' });
+      await fetch('/api/platform-auth/logout', {
+        signal: AbortSignal.timeout(5000),
+        method: 'POST',
+        credentials: 'same-origin',
+      });
     } finally {
       router.replace('/admin/login');
       router.refresh();

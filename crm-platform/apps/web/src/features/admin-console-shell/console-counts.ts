@@ -9,6 +9,7 @@ import {
 } from '@crm/contracts';
 import { cookieNames } from '@/lib/auth/cookies';
 import { apiBase } from '@/lib/auth/server';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 /** Rail badge counts by name. A name with no entry has no badge. */
 export type ConsoleCounts = Partial<Record<string, number>>;
@@ -25,7 +26,7 @@ export async function getConsoleCounts(): Promise<ConsoleCounts> {
   const counts: ConsoleCounts = {};
 
   try {
-    const res = await fetch(`${apiBase()}/v2/platform/plans`, {
+    const res = await upstreamFetch(`${apiBase()}/v2/platform/plans`, {
       headers: { Authorization: `Bearer ${token}` },
       cache: 'no-store',
     });
@@ -40,7 +41,7 @@ export async function getConsoleCounts(): Promise<ConsoleCounts> {
   // Roles and permissions: one call carries both totals (Reference's sidebar badges are raw row counts). An operator without
   // platform.role.manage gets a 403 here and simply sees no badge.
   try {
-    const res = await fetch(`${apiBase()}/v2/platform/roles`, {
+    const res = await upstreamFetch(`${apiBase()}/v2/platform/roles`, {
       headers: { Authorization: `Bearer ${token}` },
       cache: 'no-store',
     });
@@ -57,7 +58,7 @@ export async function getConsoleCounts(): Promise<ConsoleCounts> {
 
   // Coupons: the badge counts ACTIVE coupons only, whatever their expiry (TW-CPN-001 rule 3).
   try {
-    const res = await fetch(`${apiBase()}/v2/platform/coupons`, {
+    const res = await upstreamFetch(`${apiBase()}/v2/platform/coupons`, {
       headers: { Authorization: `Bearer ${token}` },
       cache: 'no-store',
     });
@@ -71,7 +72,7 @@ export async function getConsoleCounts(): Promise<ConsoleCounts> {
 
   // Marketing: announcements switched on (whatever their window), as Reference's badge.
   try {
-    const a = await fetch(`${apiBase()}/v2/platform/cms/announcements?limit=1`, {
+    const a = await upstreamFetch(`${apiBase()}/v2/platform/cms/announcements?limit=1`, {
       headers: { Authorization: `Bearer ${token}` },
       cache: 'no-store',
     });
@@ -87,7 +88,7 @@ export async function getConsoleCounts(): Promise<ConsoleCounts> {
   // allow-list is empty. `unofficialOff` and `unofficialNoWorkspaces` are flags, not counts;
   // an operator who cannot read the bridge settings, or an API without the field, simply sees no badge.
   try {
-    const res = await fetch(`${apiBase()}/v2/platform/node-bridge`, {
+    const res = await upstreamFetch(`${apiBase()}/v2/platform/node-bridge`, {
       headers: { Authorization: `Bearer ${token}` },
       cache: 'no-store',
     });

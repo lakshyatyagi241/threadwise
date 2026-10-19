@@ -160,7 +160,7 @@ export function UserMenu({
   const close = () => setOpen(false);
 
   const logout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
+    await fetch('/api/auth/logout', { signal: AbortSignal.timeout(5000), method: 'POST' });
     router.replace('/login');
   };
   const support = helpItems.find((i) => i.id === 'support' && !i.comingSoon);
