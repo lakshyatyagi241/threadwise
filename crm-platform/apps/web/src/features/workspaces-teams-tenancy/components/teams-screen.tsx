@@ -208,7 +208,10 @@ function TeamRow({
         <p className="mt-1 text-xs">
           {t('members', { count: team.members.length })}
           {primaryCount > 0 && (
-            <span className="text-muted-foreground"> · {t('primaryCount', { count: primaryCount })}</span>
+            <span className="text-muted-foreground">
+              {' '}
+              · {t('primaryCount', { count: primaryCount })}
+            </span>
           )}
           {online > 0 && <span className="text-success"> · {t('online', { count: online })}</span>}
         </p>

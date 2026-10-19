@@ -50,7 +50,11 @@ const uuidOf = async (userId: number) =>
 const count = async (sql: string, params: unknown[]) =>
   Number((await h.owner.query(sql, params)).rows[0].n);
 
-async function person(t: Tenant, name: string, extra: Array<[string, ('all' | 'team' | 'own')?]> = []) {
+async function person(
+  t: Tenant,
+  name: string,
+  extra: Array<[string, ('all' | 'team' | 'own')?]> = [],
+) {
   // `team.read` so the person can open the Teams list in the checks that need it; extra grants are on top.
   const m = await api.member(t, name, [['team.read'], ...extra]);
   return { ...m, uuid: await uuidOf(m.userId) };
@@ -90,7 +94,13 @@ describe('Teams v2: hierarchy', () => {
       receivesRecords: true,
       isScopeBoundary: true,
       memberCount: 0,
-      usage: { routingRules: 0, assignmentRules: 0, segmentShares: 0, childTeams: 0, conversations: 0 },
+      usage: {
+        routingRules: 0,
+        assignmentRules: 0,
+        segmentShares: 0,
+        childTeams: 0,
+        conversations: 0,
+      },
       unusedSettings: { businessHours: null, timezone: null, defaultAssignee: null },
     });
 
@@ -196,14 +206,16 @@ describe('Teams v2: manager, members, primary team', () => {
     expect(made.body.members[0].isPrimary).toBe(true);
     expect((await getTeam(t.admin, one.id)).members[0]!.isPrimary).toBe(false);
     expect(
-      await count(`SELECT count(*) n FROM team_members WHERE org_id = $1 AND user_id = $2 AND is_primary`, [
-        t.orgId,
-        ben.userId,
-      ]),
+      await count(
+        `SELECT count(*) n FROM team_members WHERE org_id = $1 AND user_id = $2 AND is_primary`,
+        [t.orgId, ben.userId],
+      ),
     ).toBe(1);
 
     // Taking Ben off Two leaves him on One alone, so One becomes his primary again.
-    const removed = await api.as(t.admin).delete(`/v2/workspace/teams/${two.id}/members/${ben.uuid}`);
+    const removed = await api
+      .as(t.admin)
+      .delete(`/v2/workspace/teams/${two.id}/members/${ben.uuid}`);
     expect(removed.status, JSON.stringify(removed.body)).toBe(200);
     expect(removed.body.members).toEqual([]);
     expect((await getTeam(t.admin, one.id)).members[0]!.isPrimary).toBe(true);
@@ -231,11 +243,15 @@ describe('Teams v2: manager, members, primary team', () => {
     const withEli = await patchTeam(t.admin, team, { leadId: eli.uuid });
     expect(withEli.status, JSON.stringify(withEli.body)).toBe(200);
     expect(withEli.body.lead.id).toBe(eli.uuid);
-    expect(withEli.body.members.find((m: Team['members'][0]) => m.id === eli.uuid).role).toBe('lead');
+    expect(withEli.body.members.find((m: Team['members'][0]) => m.id === eli.uuid).role).toBe(
+      'lead',
+    );
 
     const switched = await patchTeam(t.admin, withEli.body as Team, { leadId: dee.uuid });
     expect(switched.body.lead.id).toBe(dee.uuid);
-    expect(switched.body.members.find((m: Team['members'][0]) => m.id === eli.uuid).role).toBe('member');
+    expect(switched.body.members.find((m: Team['members'][0]) => m.id === eli.uuid).role).toBe(
+      'member',
+    );
 
     const demoted = await api
       .as(t.admin)
@@ -271,7 +287,10 @@ describe('Teams v2: manager, members, primary team', () => {
 
     await h.owner.query(
       `INSERT INTO routing_rules (org_id, name, conditions, actions) VALUES ($1, 'To used', '{}'::jsonb, $2::jsonb)`,
-      [t.orgId, JSON.stringify([{ assign: { strategy: 'round_robin', userIds: [], teamIds: [team.id] } }])],
+      [
+        t.orgId,
+        JSON.stringify([{ assign: { strategy: 'round_robin', userIds: [], teamIds: [team.id] } }]),
+      ],
     );
     await createTeam(t.admin, { name: 'Used child', parentId: team.id });
     const list = await api.as(t.admin).get('/v2/workspace/teams?limit=100');
@@ -310,8 +329,12 @@ describe('Teams v2: permissions', () => {
     expect((await api.as(nobody.token).get('/v2/workspace/teams')).status).toBe(403);
     expect((await createTeam(nobody.token, { name: 'Nope' })).status).toBe(403);
     expect(
-      (await api.as(reader.token).post(`/v2/workspace/teams/${made.body.id}/members`).send({ userId: randomUUID() }))
-        .status,
+      (
+        await api
+          .as(reader.token)
+          .post(`/v2/workspace/teams/${made.body.id}/members`)
+          .send({ userId: randomUUID() })
+      ).status,
     ).toBe(403);
   });
 
@@ -338,12 +361,16 @@ describe('Teams v2: deactivation keeps membership and an inactive person never g
   it('removing a member keeps their team rows, hides them from every tenant query, and reactivating brings them back', async () => {
     const gus = await person(t, 'Gus');
     const hal = await person(t, 'Hal');
-    const team = (await createTeam(t.admin, { name: 'Keep', memberIds: [gus.uuid, hal.uuid] })).body as Team;
+    const team = (await createTeam(t.admin, { name: 'Keep', memberIds: [gus.uuid, hal.uuid] }))
+      .body as Team;
 
     expect((await api.as(t.admin).delete(`/v2/workspace/members/${gus.uuid}`)).status).toBe(204);
     // The row is still there for the migration role (history), the tenant sees only the active member.
     expect(
-      await count(`SELECT count(*) n FROM team_members WHERE org_id = $1 AND user_id = $2`, [t.orgId, gus.userId]),
+      await count(`SELECT count(*) n FROM team_members WHERE org_id = $1 AND user_id = $2`, [
+        t.orgId,
+        gus.userId,
+      ]),
     ).toBe(1);
     const during = await getTeam(t.admin, team.id);
     expect(during.members.map((m) => m.id)).toEqual([hal.uuid]);
@@ -367,9 +394,11 @@ describe('Teams v2: deactivation keeps membership and an inactive person never g
     await createTeam(t.admin, { name: 'Scope', memberIds: [viewerP.uuid, ownerP.uuid] });
     const [contact] = await api.seedContacts(t, [{ name: 'Held by Jon', ownerId: ownerP.userId }]);
     const sees = async () =>
-      ((await api.as(viewerP.token).get('/v2/contacts?limit=100')).body.data as Array<{ id: string }>).some(
-        (c) => c.id === contact,
-      );
+      (
+        (await api.as(viewerP.token).get('/v2/contacts?limit=100')).body.data as Array<{
+          id: string;
+        }>
+      ).some((c) => c.id === contact);
 
     expect(await sees()).toBe(true);
 
@@ -383,7 +412,10 @@ describe('Teams v2: deactivation keeps membership and an inactive person never g
     expect(await sees()).toBe(false);
     // ... and the places are still stored.
     expect(
-      await count(`SELECT count(*) n FROM team_members WHERE org_id = $1 AND user_id = $2`, [t.orgId, ownerP.userId]),
+      await count(`SELECT count(*) n FROM team_members WHERE org_id = $1 AND user_id = $2`, [
+        t.orgId,
+        ownerP.userId,
+      ]),
     ).toBe(1);
 
     const on = await api
@@ -394,18 +426,41 @@ describe('Teams v2: deactivation keeps membership and an inactive person never g
     expect(await sees()).toBe(true);
   });
 
-  it('GET /users reports each person\'s teams and managers, and filters by team', async () => {
+  it("GET /users reports each person's teams and managers, and filters by team", async () => {
     const lead = await person(t, 'Kim');
     const mate = await person(t, 'Lou');
-    const team = (await createTeam(t.admin, { name: 'Listed', memberIds: [mate.uuid], leadId: lead.uuid })).body as Team;
+    const team = (
+      await createTeam(t.admin, { name: 'Listed', memberIds: [mate.uuid], leadId: lead.uuid })
+    ).body as Team;
     const res = await api.as(t.admin).get(`/v2/users?teamId=${team.id}&limit=50`);
     expect(res.status, JSON.stringify(res.body)).toBe(200);
-    const byId = new Map((res.body.data as Array<{ id: string; teams: Array<{ name: string; isPrimary: boolean }>; managers: Array<{ id: string }> }>).map((u) => [u.id, u]));
+    const byId = new Map(
+      (
+        res.body.data as Array<{
+          id: string;
+          teams: Array<{ name: string; isPrimary: boolean }>;
+          managers: Array<{ id: string }>;
+        }>
+      ).map((u) => [u.id, u]),
+    );
     expect([...byId.keys()].sort()).toEqual([lead.uuid, mate.uuid].sort());
-    expect(byId.get(mate.uuid)!.teams).toEqual([expect.objectContaining({ name: 'Listed', isPrimary: true })]);
+    expect(byId.get(mate.uuid)!.teams).toEqual([
+      expect.objectContaining({ name: 'Listed', isPrimary: true }),
+    ]);
     expect(byId.get(mate.uuid)!.managers).toEqual([expect.objectContaining({ id: lead.uuid })]);
-    // The manager has no manager above them.
+    // The manager has no manager above them ...
     expect(byId.get(lead.uuid)!.managers).toEqual([]);
+    // ... until the team sits under another team: then the parent's manager manages them.
+    const boss = await person(t, 'Nia');
+    const parent = (await createTeam(t.admin, { name: 'Listed parent', leadId: boss.uuid }))
+      .body as Team;
+    const moved = await patchTeam(t.admin, team, { parentId: parent.id });
+    expect(moved.status, JSON.stringify(moved.body)).toBe(200);
+    const again = await api.as(t.admin).get(`/v2/users?teamId=${team.id}&limit=50`);
+    const leadRow = (
+      again.body.data as Array<{ id: string; managers: Array<{ id: string }> }>
+    ).find((u) => u.id === lead.uuid)!;
+    expect(leadRow.managers).toEqual([expect.objectContaining({ id: boss.uuid })]);
   });
 });
 
@@ -446,13 +501,29 @@ describe('Teams v2: the hand-over the deactivate dialog asks for', () => {
     const preview = await api.as(t.admin).get(`/v2/workspace/members/${leaver.uuid}/handover`);
     expect(preview.status, JSON.stringify(preview.body)).toBe(200);
     expect(preview.body).toMatchObject({ contacts: 2, openDeals: 0, openConversations: 3 });
-    expect(preview.body.teamLeads).toEqual([{ id: boss.uuid, fullName: expect.any(String), teamName: 'Handover' }]);
+    expect(preview.body.teamLeads).toEqual([
+      { id: boss.uuid, fullName: expect.any(String), teamName: 'Handover' },
+    ]);
 
     // Leave them: nothing moves and it is not an error.
-    const left = await api.as(t.admin).post(`/v2/workspace/members/${leaver.uuid}/handover`).set('Idempotency-Key', randomUUID()).send({ mode: 'leave' });
+    const left = await api
+      .as(t.admin)
+      .post(`/v2/workspace/members/${leaver.uuid}/handover`)
+      .set('Idempotency-Key', randomUUID())
+      .send({ mode: 'leave' });
     expect(left.status, JSON.stringify(left.body)).toBe(200);
-    expect(left.body).toMatchObject({ mode: 'leave', movedContacts: 0, movedConversations: 0, toUser: null });
-    expect(await count(`SELECT count(*) n FROM contacts WHERE org_id = $1 AND owner_id = $2`, [t.orgId, leaver.userId])).toBe(2);
+    expect(left.body).toMatchObject({
+      mode: 'leave',
+      movedContacts: 0,
+      movedConversations: 0,
+      toUser: null,
+    });
+    expect(
+      await count(`SELECT count(*) n FROM contacts WHERE org_id = $1 AND owner_id = $2`, [
+        t.orgId,
+        leaver.userId,
+      ]),
+    ).toBe(2);
 
     // To a person: contacts go through the reassign batch, open chats are reassigned one by one.
     const toSpare = await api
@@ -461,11 +532,31 @@ describe('Teams v2: the hand-over the deactivate dialog asks for', () => {
       .set('Idempotency-Key', randomUUID())
       .send({ mode: 'person', userId: spare.uuid });
     expect(toSpare.status, JSON.stringify(toSpare.body)).toBe(200);
-    expect(toSpare.body).toMatchObject({ mode: 'person', movedContacts: 2, movedConversations: 3, remaining: 0 });
+    expect(toSpare.body).toMatchObject({
+      mode: 'person',
+      movedContacts: 2,
+      movedConversations: 3,
+      remaining: 0,
+    });
     expect(toSpare.body.toUser.id).toBe(spare.uuid);
-    expect(await count(`SELECT count(*) n FROM contacts WHERE org_id = $1 AND owner_id = $2`, [t.orgId, spare.userId])).toBe(2);
-    expect(await count(`SELECT count(*) n FROM conversations WHERE org_id = $1 AND assignee_user_id = $2`, [t.orgId, spare.userId])).toBe(3);
-    expect(await count(`SELECT count(*) n FROM owner_reassign_batches WHERE org_id = $1 AND from_user_id = $2`, [t.orgId, leaver.userId])).toBe(1);
+    expect(
+      await count(`SELECT count(*) n FROM contacts WHERE org_id = $1 AND owner_id = $2`, [
+        t.orgId,
+        spare.userId,
+      ]),
+    ).toBe(2);
+    expect(
+      await count(
+        `SELECT count(*) n FROM conversations WHERE org_id = $1 AND assignee_user_id = $2`,
+        [t.orgId, spare.userId],
+      ),
+    ).toBe(3);
+    expect(
+      await count(
+        `SELECT count(*) n FROM owner_reassign_batches WHERE org_id = $1 AND from_user_id = $2`,
+        [t.orgId, leaver.userId],
+      ),
+    ).toBe(1);
     expect(await api.auditCount(t.orgId, 'conversations', 'update')).toBeGreaterThanOrEqual(3);
 
     // Nothing left to move: the preview says so, and to-the-manager has nothing to do either.
@@ -506,7 +597,9 @@ describe('Teams v2: the hand-over the deactivate dialog asks for', () => {
     expect(toGhost.status).toBe(422);
 
     const reader = await person(t, 'Plain');
-    expect((await api.as(reader.token).get(`/v2/workspace/members/${lone.uuid}/handover`)).status).toBe(403);
+    expect(
+      (await api.as(reader.token).get(`/v2/workspace/members/${lone.uuid}/handover`)).status,
+    ).toBe(403);
     expect(
       (
         await api
@@ -528,9 +621,14 @@ describe('Teams v2: "can receive" switches are enforced where a team is chosen',
   it('a team that does not receive conversations is not offered, not routed to and not assignable by hand', async () => {
     const ned = await person(t, 'Ned', [['inbox.conversation.read']]);
     const off = (
-      await createTeam(t.admin, { name: 'Records only', memberIds: [ned.uuid], receivesConversations: false })
+      await createTeam(t.admin, {
+        name: 'Records only',
+        memberIds: [ned.uuid],
+        receivesConversations: false,
+      })
     ).body as Team;
-    const on = (await createTeam(t.admin, { name: 'Chat team', memberIds: [ned.uuid] })).body as Team;
+    const on = (await createTeam(t.admin, { name: 'Chat team', memberIds: [ned.uuid] }))
+      .body as Team;
 
     const assignees = await api.as(t.admin).get('/v2/inbox/assignees');
     expect(assignees.status, JSON.stringify(assignees.body)).toBe(200);
@@ -570,13 +668,21 @@ describe('Teams v2: "can receive" switches are enforced where a team is chosen',
       .as(t.admin)
       .post('/v2/inbox/routing/rules')
       .set('Idempotency-Key', randomUUID())
-      .send({ name: 'To records team', assign: { strategy: 'round_robin', teamIds: [off.id] }, isFallback: true });
+      .send({
+        name: 'To records team',
+        assign: { strategy: 'round_robin', teamIds: [off.id] },
+        isFallback: true,
+      });
     expect(rule.status, JSON.stringify(rule.body)).toBe(422);
     const ok = await api
       .as(t.admin)
       .post('/v2/inbox/routing/rules')
       .set('Idempotency-Key', randomUUID())
-      .send({ name: 'To chat team', assign: { strategy: 'round_robin', teamIds: [on.id] }, isFallback: true });
+      .send({
+        name: 'To chat team',
+        assign: { strategy: 'round_robin', teamIds: [on.id] },
+        isFallback: true,
+      });
     expect(ok.status, JSON.stringify(ok.body)).toBe(201);
   });
 
@@ -584,7 +690,11 @@ describe('Teams v2: "can receive" switches are enforced where a team is chosen',
     const oli = await person(t, 'Oli');
     const pat = await person(t, 'Pat');
     const team = (
-      await createTeam(t.admin, { name: 'Chat only', memberIds: [pat.uuid], receivesRecords: false })
+      await createTeam(t.admin, {
+        name: 'Chat only',
+        memberIds: [pat.uuid],
+        receivesRecords: false,
+      })
     ).body as Team;
     await api.seedContacts(t, [{ name: 'Oli book', ownerId: oli.userId }]);
     const res = await api

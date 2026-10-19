@@ -96,7 +96,8 @@ const toTeam = (r: Raw): TeamRow => ({
   isDefault: Boolean(r.is_default),
   sort: Number(r.sort),
   deviceIds: Array.isArray(r.device_ids) ? (r.device_ids as string[]) : [],
-  parentId: r.parent_team_id === null || r.parent_team_id === undefined ? null : Number(r.parent_team_id),
+  parentId:
+    r.parent_team_id === null || r.parent_team_id === undefined ? null : Number(r.parent_team_id),
   parentUuid: (r.parent_uuid as string | null) ?? null,
   depth: Number(r.depth ?? 1),
   leadUserId: r.lead_uuid ? Number(r.lead_user_id) : null,

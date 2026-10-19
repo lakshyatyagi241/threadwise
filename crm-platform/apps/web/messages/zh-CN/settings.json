@@ -196,7 +196,9 @@
         "keywords": "访问, 管理员, 经理, 坐席, rbac, 权限"
       },
       "teams": {
-        "label": "团队"
+        "label": "团队",
+        "description": "将人员分组,用于会话、分配和报表。",
+        "keywords": "分组、部门、负责人、层级、分配、路由"
       },
       "ai-keys": {
         "label": "AI 服务商密钥",

@@ -90,7 +90,9 @@
         "member": "Lid",
         "roles": "Rollen",
         "status": "Status",
-        "actions": "Acties"
+        "actions": "Acties",
+        "teams": "Teams",
+        "manager": "Manager"
       },
       "empty": {
         "none": "Er zijn nog geen leden.",
@@ -138,7 +140,15 @@
         "atLeastOne": "Kies minstens één rol.",
         "save": "Rollen opslaan",
         "reload": "Opnieuw laden"
-      }
+      },
+      "teamFilter": {
+        "label": "Leden filteren op team",
+        "all": "Alle teams"
+      },
+      "noTeams": "Geen team",
+      "primaryTeam": "Primair team",
+      "primaryMark": "primair",
+      "noManager": "Geen manager"
     },
     "list": {
       "crumb": "Rollen",
@@ -235,7 +245,8 @@
       "lockedHint": "Deze machtiging is nog niet beschikbaar voor deze workspace. Ze wordt vrijgegeven zodra de abonnementsfunctie is ingeschakeld of de app is geïnstalleerd.",
       "scope": {
         "all": "Alle records",
-        "own": "Eigen records"
+        "own": "Eigen records",
+        "team": "Records van mijn team"
       }
     },
     "delete": {

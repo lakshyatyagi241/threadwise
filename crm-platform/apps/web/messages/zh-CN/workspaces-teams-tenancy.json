@@ -106,7 +106,9 @@
       "leaveAction": "休假与代理",
       "noLimit": "不限",
       "neverSignedIn": "从未",
-      "editAction": "更改电话和聊天上限"
+      "editAction": "更改电话和聊天上限",
+      "moreAction": "更多",
+      "moreLabel": "{name} 的更多操作"
     },
     "invite": {
       "eyebrow": "工作区",
@@ -164,7 +166,12 @@
         "sticky": "粘性"
       },
       "howTitle": "团队说明",
-      "how": {},
+      "how": {
+        "one": "为团队命名(例如销售),选择颜色,并添加一起工作的人员。",
+        "two": "可用于会话(将新聊天路由到该团队,或手动分配聊天)、记录(将联系人、公司和交易分配给其成员)以及报表。",
+        "three": "负责人是带领团队的人。上级团队可将其置于另一个团队之下,从而构建树状结构,例如销售和华西销售。",
+        "four": "一个人的主团队是其主要团队,用于报表(报表将在后续版本中开始使用)。路由、分配和可见性会使用其所在的所有团队。"
+      },
       "created": "团队已创建。",
       "updated": "团队已更新。",
       "deleted": "团队已删除。",
@@ -174,7 +181,33 @@
       "deleteTitle": "删除此团队？",
       "deleteMessage": "删除团队“{name}”？分配给该团队的会话将变为未分配状态。",
       "deleteConfirm": "删除团队",
-      "delete": "删除团队"
+      "delete": "删除团队",
+      "subtitle": "团队将人员分组,用于会话、分配和报表。",
+      "emptyMessage": "创建团队并添加一起工作的人员。您可以将会话路由到该团队,并把联系人、公司和交易分配给其成员。",
+      "noAccess": "您没有查看团队的权限。请向工作区所有者或管理员申请 team.read 权限。",
+      "manager": "负责人:{name}",
+      "noManager": "无负责人",
+      "receivesConversations": "会话",
+      "receivesRecords": "记录",
+      "primaryCount": "{count, plural, one {# 人将其设为主团队} other {# 人将其设为主团队}}",
+      "usedBy": "使用方",
+      "usedByNone": "尚未被任何规则使用",
+      "usage": {
+        "routingRules": "{count, plural, one {# 条路由规则} other {# 条路由规则}}",
+        "assignmentRules": "{count, plural, one {# 条分配规则} other {# 条分配规则}}",
+        "segmentShares": "{count, plural, one {# 个共享细分} other {# 个共享细分}}",
+        "conversations": "{count, plural, one {# 个会话} other {# 个会话}}",
+        "childTeams": "{count, plural, one {# 个子团队} other {# 个子团队}}"
+      },
+      "notUsed": {
+        "title": "已存储,尚未使用",
+        "body": "这些设置已保存在团队中,但目前尚无任何功能读取它们。它们将随路由更新开始生效。",
+        "strategy": "自动分配策略:{value}",
+        "devices": "{count, plural, one {限制为 # 台设备} other {限制为 # 台设备}}",
+        "businessHours": "营业时间:已保存",
+        "timezone": "时区:{value}",
+        "defaultAssignee": "默认受理人:{name}"
+      }
     },
     "teamDialog": {
       "eyebrow": "工作区",
@@ -186,13 +219,6 @@
       "nameTooLong": "名称最多 {max} 个字符。",
       "color": "颜色",
       "colorOption": "颜色 {color}",
-      "strategy": "自动分配策略",
-      "strategyOptions": {
-        "manual": "手动：由经理决定分配给谁",
-        "round_robin": "轮询：平均分配",
-        "least_loaded": "最少负载：优先分配给未关闭会话最少的人",
-        "sticky": "粘性：分配给最后回复该联系人的客服"
-      },
       "members": "成员",
       "membersLoading": "正在加载团队成员",
       "membersFailed": "无法加载团队成员。",
@@ -203,7 +229,28 @@
       "create": "创建团队",
       "creating": "正在创建…",
       "save": "保存更改",
-      "saving": "正在保存…"
+      "saving": "正在保存…",
+      "hint": "团队将人员分组,用于会话、分配和报表。请选择负责人、可选的上级团队以及团队可接收的内容。",
+      "description": "描述",
+      "descriptionPlaceholder": "该团队的职责(可选)",
+      "lead": "负责人",
+      "leadNone": "无负责人",
+      "leadHint": "带领团队的人。系统会将其作为组长加入团队。",
+      "parent": "上级团队",
+      "parentNone": "无(顶层)",
+      "parentHint": "将此团队置于另一个团队之下以构建树状结构,最多 5 层。",
+      "receive": "可接收",
+      "receiveHint": "可选择此团队的位置。关闭某一项即可使团队不出现在相应选择器中。",
+      "receiveConversations": "会话(收件箱路由和分配)",
+      "receiveRecords": "记录(联系人、公司和交易)",
+      "membersHint": "勾选该团队的成员。标记组长,并选择每个人的主团队。",
+      "leadFlag": "组长",
+      "leadToggle": "设为此团队的组长",
+      "leadLocked": "负责人始终是组长",
+      "primaryFlag": "主团队",
+      "primaryToggle": "将此团队设为该成员的主团队",
+      "primaryLocked": "成员唯一的团队始终是其主团队",
+      "primaryHint": "一个人的主团队是其主要团队,用于报表(报表将在后续版本中开始使用)。路由、分配和可见性会使用其所在的所有团队。"
     },
     "errors": {
       "network": "连接已断开。请检查后重试。",
@@ -232,7 +279,10 @@
       "delegateInvalid": "代理人必须是此工作区中另一位活跃成员。",
       "delegateCycle": "这会形成循环：所选的人已经把此人设为其代理人。",
       "reassignInvalid": "无法重新分配任何内容。请确认此人名下有联系人或未结商机，且目标对象可以接收。",
-      "reassignNotRestorable": "此次重新分配已无法撤销。"
+      "reassignNotRestorable": "此次重新分配已无法撤销。",
+      "teamParentCycle": "团队不能置于自身或其子团队之下。",
+      "teamParentInvalid": "该上级团队不可用,或层级将超过 5 层。",
+      "teamNotOnTeam": "此人不在该团队中。"
     },
     "accept": {
       "title": "加入您的工作区",
@@ -352,6 +402,26 @@
       "offline": "离线",
       "hint": "离线期间，系统不会自动给你分配新聊天。你已有的聊天仍归你。",
       "failed": "无法更改"
+    },
+    "deactivate": {
+      "eyebrow": "团队成员",
+      "title": "停用成员",
+      "message": "{name} 将无法再登录。您可以随时重新启用。",
+      "loading": "正在检查其名下内容",
+      "previewFailed": "无法检查此人名下的内容。您仍可停用该成员;其工作将保留在其名下。",
+      "holds": "{name} 名下有 {contacts, plural, one {# 个联系人} other {# 个联系人}}、{deals, plural, one {# 个未结交易} other {# 个未结交易}}和 {chats, plural, one {# 个未结会话} other {# 个未结会话}}。应如何处理?",
+      "optLead": "交给团队负责人 {name}({team})",
+      "optLeadNone": "交给团队负责人(此人没有在职的团队负责人)",
+      "optPerson": "交给指定人员",
+      "pickPerson": "人员",
+      "pickPlaceholder": "选择人员",
+      "optLeave": "保留给 {name}",
+      "undoNote": "联系人和未结交易可在 14 天内通过重新分配历史撤销。未结会话将逐个重新分配。",
+      "nothing": "{name} 名下没有联系人、未结交易或未结会话。",
+      "membership": "其团队归属将被保留,因此重新启用 {name} 后会恢复到原团队。",
+      "confirm": "停用",
+      "moved": "已将 {contacts, plural, one {# 个联系人} other {# 个联系人}}、{deals, plural, one {# 个交易} other {# 个交易}}和 {chats, plural, one {# 个会话} other {# 个会话}}移交给 {name}。",
+      "remaining": "还有 {count} 项待处理。请再次运行移交以继续转移。"
     }
   }
 }

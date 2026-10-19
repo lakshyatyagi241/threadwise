@@ -183,9 +183,7 @@ export function useMemberAccount({ initialLeave, onChanged }: Options = {}) {
       />
       <MemberLeaveDialog
         memberId={leaveFor?.id ?? null}
-        memberName={
-          leaveFor ? leaveFor.name || (directory.get(leaveFor.id)?.fullName ?? '') : ''
-        }
+        memberName={leaveFor ? leaveFor.name || (directory.get(leaveFor.id)?.fullName ?? '') : ''}
         open={leaveFor !== null}
         focusReassign={leaveFor?.reassign ?? false}
         onClose={() => setLeaveFor(null)}

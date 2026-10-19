@@ -3,8 +3,9 @@ import type { WspHandoverInput, WspHandoverPreview } from '@crm/contracts';
 export type HandoverChoice = 'person' | 'team_lead' | 'leave';
 
 /** What the person holds in all: nothing to ask when it is zero. */
-export const heldTotal = (p: Pick<WspHandoverPreview, 'contacts' | 'openDeals' | 'openConversations'>) =>
-  p.contacts + p.openDeals + p.openConversations;
+export const heldTotal = (
+  p: Pick<WspHandoverPreview, 'contacts' | 'openDeals' | 'openConversations'>,
+) => p.contacts + p.openDeals + p.openConversations;
 
 /**
  * The call the dialog makes for the chosen option, or null when there is nothing to send (leave them, or nothing is held, or the

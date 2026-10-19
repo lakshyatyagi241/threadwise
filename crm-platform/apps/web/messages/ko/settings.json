@@ -196,7 +196,9 @@
         "keywords": "접근, 관리자, 매니저, 상담원, rbac, 권한"
       },
       "teams": {
-        "label": "팀"
+        "label": "팀",
+        "description": "대화, 배정, 보고서를 위해 사람들을 그룹으로 묶습니다.",
+        "keywords": "그룹, 부서, 매니저, 계층, 배정, 라우팅"
       },
       "ai-keys": {
         "label": "AI 제공업체 키",

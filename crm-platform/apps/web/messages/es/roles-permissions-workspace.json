@@ -90,7 +90,9 @@
         "member": "Miembro",
         "roles": "Roles",
         "status": "Estado",
-        "actions": "Acciones"
+        "actions": "Acciones",
+        "teams": "Equipos",
+        "manager": "Responsable"
       },
       "empty": {
         "none": "Todavía no hay miembros.",
@@ -138,7 +140,15 @@
         "atLeastOne": "Elige al menos un rol.",
         "save": "Guardar roles",
         "reload": "Recargar"
-      }
+      },
+      "teamFilter": {
+        "label": "Filtrar miembros por equipo",
+        "all": "Todos los equipos"
+      },
+      "noTeams": "Sin equipo",
+      "primaryTeam": "Equipo principal",
+      "primaryMark": "principal",
+      "noManager": "Sin responsable"
     },
     "list": {
       "crumb": "Roles",
@@ -235,7 +245,8 @@
       "lockedHint": "Este permiso todavía no está disponible para este espacio de trabajo. Se activa cuando se habilita la función del plan o se instala la app.",
       "scope": {
         "all": "Todos los registros",
-        "own": "Registros propios"
+        "own": "Registros propios",
+        "team": "Registros de mi equipo"
       }
     },
     "delete": {

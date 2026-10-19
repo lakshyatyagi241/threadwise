@@ -3,7 +3,12 @@
 import { Button, Field, Input, Select, Spinner, Switch, Textarea, cn, useToast } from '@crm/ui';
 import { useTranslations } from 'next-intl';
 import { useId, useMemo, useState, type FormEvent } from 'react';
-import { WSP_TEAM_MAX_DEPTH, WSP_TEAM_NAME_MAX, type WspMember, type WspTeam } from '@crm/contracts';
+import {
+  WSP_TEAM_MAX_DEPTH,
+  WSP_TEAM_NAME_MAX,
+  type WspMember,
+  type WspTeam,
+} from '@crm/contracts';
 import { useAllMembers, useAllTeams, useRefreshWorkspace } from '../api/hooks';
 import { wspApi } from '../api/service';
 import { errorKind } from '../lib/errors';
@@ -68,7 +73,10 @@ export function TeamEditorForm({
   const devicesShown = showsDevicePicker(devices);
   const patch = (p: Partial<TeamForm>) => setForm((f) => ({ ...f, ...p }));
 
-  const people = useMemo(() => members.items.filter((m) => m.status !== 'inactive'), [members.items]);
+  const people = useMemo(
+    () => members.items.filter((m) => m.status !== 'inactive'),
+    [members.items],
+  );
   const parents = useMemo(
     () => parentChoices(teams.items, team, WSP_TEAM_MAX_DEPTH),
     [teams.items, team],
@@ -123,7 +131,10 @@ export function TeamEditorForm({
 
   return (
     <form onSubmit={(e) => void submit(e)} noValidate className="space-y-3">
-      <p className="rounded-md bg-muted/60 px-3 py-2 text-xs text-muted-foreground" data-testid="team-hint">
+      <p
+        className="rounded-md bg-muted/60 px-3 py-2 text-xs text-muted-foreground"
+        data-testid="team-hint"
+      >
         {t('hint')}
       </p>
 
@@ -422,7 +433,8 @@ export function unusedLines(
 ): string[] {
   if (!team) return [];
   const lines = [tt('notUsed.strategy', { value: tt(`strategies.${team.assignmentStrategy}`) })];
-  if (team.deviceIds.length > 0) lines.push(tt('notUsed.devices', { count: team.deviceIds.length }));
+  if (team.deviceIds.length > 0)
+    lines.push(tt('notUsed.devices', { count: team.deviceIds.length }));
   if (team.unusedSettings.businessHours) lines.push(tt('notUsed.businessHours'));
   if (team.unusedSettings.timezone)
     lines.push(tt('notUsed.timezone', { value: team.unusedSettings.timezone }));

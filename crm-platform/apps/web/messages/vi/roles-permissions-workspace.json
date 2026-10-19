@@ -90,7 +90,9 @@
         "member": "Thành viên",
         "roles": "Vai trò",
         "status": "Trạng thái",
-        "actions": "Thao tác"
+        "actions": "Thao tác",
+        "teams": "Nhóm",
+        "manager": "Quản lý"
       },
       "empty": {
         "none": "Chưa có thành viên nào.",
@@ -138,7 +140,15 @@
         "atLeastOne": "Chọn ít nhất một vai trò.",
         "save": "Lưu vai trò",
         "reload": "Tải lại"
-      }
+      },
+      "teamFilter": {
+        "label": "Lọc thành viên theo nhóm",
+        "all": "Tất cả nhóm"
+      },
+      "noTeams": "Không có nhóm",
+      "primaryTeam": "Nhóm chính",
+      "primaryMark": "chính",
+      "noManager": "Không có quản lý"
     },
     "list": {
       "crumb": "Vai trò",
@@ -235,7 +245,8 @@
       "lockedHint": "Quyền này chưa khả dụng cho không gian làm việc này. Quyền sẽ mở khi tính năng của gói được bật hoặc ứng dụng được cài.",
       "scope": {
         "all": "Tất cả bản ghi",
-        "own": "Bản ghi của riêng tôi"
+        "own": "Bản ghi của riêng tôi",
+        "team": "Bản ghi của nhóm tôi"
       }
     },
     "delete": {

@@ -90,7 +90,9 @@
         "member": "Mitglied",
         "roles": "Rollen",
         "status": "Status",
-        "actions": "Aktionen"
+        "actions": "Aktionen",
+        "teams": "Teams",
+        "manager": "Manager"
       },
       "empty": {
         "none": "Es gibt noch keine Mitglieder.",
@@ -138,7 +140,15 @@
         "atLeastOne": "Wählen Sie mindestens eine Rolle aus.",
         "save": "Rollen speichern",
         "reload": "Neu laden"
-      }
+      },
+      "teamFilter": {
+        "label": "Mitglieder nach Team filtern",
+        "all": "Alle Teams"
+      },
+      "noTeams": "Kein Team",
+      "primaryTeam": "Primäres Team",
+      "primaryMark": "primär",
+      "noManager": "Kein Manager"
     },
     "list": {
       "crumb": "Rollen",
@@ -235,7 +245,8 @@
       "lockedHint": "Diese Berechtigung ist für diesen Workspace noch nicht verfügbar. Sie wird freigeschaltet, wenn die Tariffunktion aktiv oder die App installiert ist.",
       "scope": {
         "all": "Alle Datensätze",
-        "own": "Eigene Datensätze"
+        "own": "Eigene Datensätze",
+        "team": "Datensätze meines Teams"
       }
     },
     "delete": {

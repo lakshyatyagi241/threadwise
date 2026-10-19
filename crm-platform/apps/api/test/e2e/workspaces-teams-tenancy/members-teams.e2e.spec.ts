@@ -71,7 +71,13 @@ interface Team {
   receivesConversations: boolean;
   receivesRecords: boolean;
   memberCount: number;
-  usage: { routingRules: number; assignmentRules: number; segmentShares: number; childTeams: number; conversations: number };
+  usage: {
+    routingRules: number;
+    assignmentRules: number;
+    segmentShares: number;
+    childTeams: number;
+    conversations: number;
+  };
   rowVersion: number;
 }
 
@@ -1402,7 +1408,9 @@ describe('TW-WSP-022: teams', () => {
     });
     expect(team.id).toMatch(uuidRe);
     expect(team.members.map((m) => m.fullName).sort()).toEqual(['Ava Team', 'Ben Team']);
-    expect(team.members.every((m) => m.isLead === false && m.role === 'member' && m.capacity === 20)).toBe(true);
+    expect(
+      team.members.every((m) => m.isLead === false && m.role === 'member' && m.capacity === 20),
+    ).toBe(true);
     expect(
       await count(
         `SELECT count(*) n FROM team_members tm JOIN teams t ON t.org_id = tm.org_id AND t.id = tm.team_id WHERE tm.org_id = $1 AND t.uuid = $2`,

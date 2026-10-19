@@ -219,13 +219,6 @@
       "nameTooLong": "The name can be at most {max} characters.",
       "color": "Color",
       "colorOption": "Colour {color}",
-      "strategy": "Auto-assignment strategy",
-      "strategyOptions": {
-        "manual": "Manual — a manager picks who gets it",
-        "round_robin": "Round robin — spread evenly",
-        "least_loaded": "Least loaded — fewest open first",
-        "sticky": "Sticky — last agent who replied to this contact"
-      },
       "members": "Members",
       "membersLoading": "Loading teammates",
       "membersFailed": "Teammates could not be loaded.",

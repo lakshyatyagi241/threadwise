@@ -90,7 +90,9 @@
         "member": "Anggota",
         "roles": "Peran",
         "status": "Status",
-        "actions": "Tindakan"
+        "actions": "Tindakan",
+        "teams": "Tim",
+        "manager": "Manajer"
       },
       "empty": {
         "none": "Belum ada anggota.",
@@ -138,7 +140,15 @@
         "atLeastOne": "Pilih minimal satu peran.",
         "save": "Simpan peran",
         "reload": "Muat ulang"
-      }
+      },
+      "teamFilter": {
+        "label": "Filter anggota berdasarkan tim",
+        "all": "Semua tim"
+      },
+      "noTeams": "Tanpa tim",
+      "primaryTeam": "Tim utama",
+      "primaryMark": "utama",
+      "noManager": "Tanpa manajer"
     },
     "list": {
       "crumb": "Peran",
@@ -235,7 +245,8 @@
       "lockedHint": "Izin ini belum tersedia untuk workspace ini. Akan aktif saat fitur paket diaktifkan atau aplikasi dipasang.",
       "scope": {
         "all": "Semua data",
-        "own": "Data sendiri"
+        "own": "Data sendiri",
+        "team": "Catatan tim saya"
       }
     },
     "delete": {

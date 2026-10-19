@@ -2,7 +2,7 @@
 
 import { Alert, Button, Field, Modal, Select, Spinner, useToast } from '@crm/ui';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAllMembers } from '../api/hooks';
 import { wspApi } from '../api/service';
@@ -39,7 +39,13 @@ export function DeactivateDialog({
     >
       {/* Mounted per person, so every opening asks again from a clean slate. */}
       {member && (
-        <DeactivateBody key={member.id} member={member} busy={busy} onConfirm={onConfirm} onClose={onClose} />
+        <DeactivateBody
+          key={member.id}
+          member={member}
+          busy={busy}
+          onConfirm={onConfirm}
+          onClose={onClose}
+        />
       )}
     </Modal>
   );
@@ -70,16 +76,14 @@ function DeactivateBody({
   const data = preview.data;
   const holds = data ? heldTotal(data) > 0 : false;
 
-  const [choice, setChoice] = useState<HandoverChoice>('person');
+  const [picked, setChoice] = useState<HandoverChoice | null>(null);
   const [userId, setUserId] = useState('');
   const [working, setWorking] = useState(false);
   const [failure, setFailure] = useState<string | null>(null);
 
-  // "Their team manager" is the natural first choice when there is one.
+  // "Their team manager" is the natural first choice when there is one; until the person picks, that is what is selected.
   const hasLead = (data?.teamLeads.length ?? 0) > 0;
-  useEffect(() => {
-    if (hasLead) setChoice('team_lead');
-  }, [hasLead]);
+  const choice: HandoverChoice = picked ?? (hasLead ? 'team_lead' : 'person');
 
   const candidates = everyone.items.filter((m) => m.status === 'active' && m.id !== member.id);
 
@@ -143,7 +147,10 @@ function DeactivateBody({
             />
             <span>
               {hasLead
-                ? t('optLead', { name: data.teamLeads[0]!.fullName, team: data.teamLeads[0]!.teamName })
+                ? t('optLead', {
+                    name: data.teamLeads[0]!.fullName,
+                    team: data.teamLeads[0]!.teamName,
+                  })
                 : t('optLeadNone')}
             </span>
           </label>

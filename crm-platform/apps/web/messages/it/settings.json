@@ -196,7 +196,9 @@
         "keywords": "accesso, admin, manager, agente, rbac, permessi"
       },
       "teams": {
-        "label": "Team"
+        "label": "Team",
+        "description": "Raggruppa le persone per conversazioni, assegnazioni e report.",
+        "keywords": "gruppi, reparti, responsabili, gerarchia, assegnazione, instradamento"
       },
       "ai-keys": {
         "label": "Chiavi dei provider IA",

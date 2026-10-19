@@ -196,7 +196,9 @@
         "keywords": "zugriff, admin, manager, agent, rbac, berechtigungen"
       },
       "teams": {
-        "label": "Teams"
+        "label": "Teams",
+        "description": "Personen für Unterhaltungen, Zuweisungen und Berichte gruppieren.",
+        "keywords": "Gruppen, Abteilungen, Manager, Hierarchie, Zuweisung, Routing"
       },
       "ai-keys": {
         "label": "KI-Anbieter-Schlüssel",

@@ -106,7 +106,9 @@
       "leaveAction": "Ferie e delegato",
       "noLimit": "Nessun limite",
       "neverSignedIn": "Mai",
-      "editAction": "Modifica telefono e limite chat"
+      "editAction": "Modifica telefono e limite chat",
+      "moreAction": "Altro",
+      "moreLabel": "Altre azioni per {name}"
     },
     "invite": {
       "eyebrow": "Workspace",
@@ -164,7 +166,12 @@
         "sticky": "Persistente"
       },
       "howTitle": "Come funzionano i team",
-      "how": {},
+      "how": {
+        "one": "Dai un nome al team (ad esempio Vendite), scegli un colore e aggiungi le persone che lavorano insieme.",
+        "two": "Usalo per le conversazioni (instrada le nuove chat o assegna una chat a mano), per i record (assegna contatti, aziende e trattative ai suoi membri) e per i report.",
+        "three": "Il responsabile è la persona che guida il team. Un team padre colloca il team sotto un altro team, così puoi costruire un albero come Vendite e Vendite Ovest.",
+        "four": "Il team principale di una persona è il suo team di riferimento, conservato per i report (i report inizieranno a usarlo in una prossima versione). Instradamento, assegnazione e visibilità usano tutti i team della persona."
+      },
       "created": "Team creato.",
       "updated": "Team aggiornato.",
       "deleted": "Team eliminato.",
@@ -174,7 +181,33 @@
       "deleteTitle": "Eliminare questo team?",
       "deleteMessage": "Eliminare il team «{name}»? Le conversazioni assegnate a questo team torneranno non assegnate.",
       "deleteConfirm": "Elimina team",
-      "delete": "Elimina team"
+      "delete": "Elimina team",
+      "subtitle": "I team raggruppano le persone per conversazioni, assegnazioni e report.",
+      "emptyMessage": "Crea un team e aggiungi le persone che lavorano insieme. Puoi instradargli le conversazioni e assegnare contatti, aziende e trattative ai suoi membri.",
+      "noAccess": "Non hai il permesso di vedere i team. Chiedi il permesso team.read a un proprietario o amministratore dello spazio di lavoro.",
+      "manager": "Responsabile: {name}",
+      "noManager": "Nessun responsabile",
+      "receivesConversations": "Conversazioni",
+      "receivesRecords": "Record",
+      "primaryCount": "{count, plural, one {# lo ha come team principale} other {# lo hanno come team principale}}",
+      "usedBy": "Usato da",
+      "usedByNone": "Non ancora usato da nessuna regola",
+      "usage": {
+        "routingRules": "{count, plural, one {# regola di instradamento} other {# regole di instradamento}}",
+        "assignmentRules": "{count, plural, one {# regola di assegnazione} other {# regole di assegnazione}}",
+        "segmentShares": "{count, plural, one {# segmento condiviso} other {# segmenti condivisi}}",
+        "conversations": "{count, plural, one {# conversazione} other {# conversazioni}}",
+        "childTeams": "{count, plural, one {# sotto-team} other {# sotto-team}}"
+      },
+      "notUsed": {
+        "title": "Salvato, non ancora usato",
+        "body": "Queste impostazioni sono salvate sul team, ma per ora nulla le legge. Inizieranno ad applicarsi con l'aggiornamento dell'instradamento.",
+        "strategy": "Strategia di assegnazione automatica: {value}",
+        "devices": "{count, plural, one {Limitato a # dispositivo} other {Limitato a # dispositivi}}",
+        "businessHours": "Orari di lavoro: salvati",
+        "timezone": "Fuso orario: {value}",
+        "defaultAssignee": "Assegnatario predefinito: {name}"
+      }
     },
     "teamDialog": {
       "eyebrow": "Workspace",
@@ -186,13 +219,6 @@
       "nameTooLong": "Il nome può contenere al massimo {max} caratteri.",
       "color": "Colore",
       "colorOption": "Colore {color}",
-      "strategy": "Strategia di assegnazione automatica",
-      "strategyOptions": {
-        "manual": "Manuale — un responsabile sceglie chi la riceve",
-        "round_robin": "A rotazione — distribuzione uniforme",
-        "least_loaded": "Meno carico — prima chi ha meno conversazioni aperte",
-        "sticky": "Persistente — l’ultimo agente che ha risposto a questo contatto"
-      },
       "members": "Membri",
       "membersLoading": "Caricamento dei colleghi",
       "membersFailed": "Impossibile caricare i colleghi.",
@@ -203,7 +229,28 @@
       "create": "Crea team",
       "creating": "Creazione in corso…",
       "save": "Salva modifiche",
-      "saving": "Salvataggio in corso…"
+      "saving": "Salvataggio in corso…",
+      "hint": "I team raggruppano le persone per conversazioni, assegnazioni e report. Scegli un responsabile, un team padre facoltativo e cosa può ricevere il team.",
+      "description": "Descrizione",
+      "descriptionPlaceholder": "Cosa fa questo team (facoltativo)",
+      "lead": "Responsabile",
+      "leadNone": "Nessun responsabile",
+      "leadHint": "La persona che guida il team. Viene aggiunta al team come lead.",
+      "parent": "Team padre",
+      "parentNone": "Nessuno (primo livello)",
+      "parentHint": "Colloca questo team sotto un altro team per costruire un albero, fino a 5 livelli di profondità.",
+      "receive": "Può ricevere",
+      "receiveHint": "Dove questo team può essere scelto. Disattiva un'opzione per escludere il team da quei selettori.",
+      "receiveConversations": "Conversazioni (instradamento e assegnazione della posta in arrivo)",
+      "receiveRecords": "Record (contatti, aziende e trattative)",
+      "membersHint": "Spunta le persone di questo team. Segna i lead e scegli il team principale di ciascuna persona.",
+      "leadFlag": "Lead",
+      "leadToggle": "Segna come lead di questo team",
+      "leadLocked": "Il responsabile è sempre un lead",
+      "primaryFlag": "Principale",
+      "primaryToggle": "Imposta come team principale della persona",
+      "primaryLocked": "L'unico team di una persona è sempre il suo team principale",
+      "primaryHint": "Il team principale di una persona è il suo team di riferimento, conservato per i report (i report inizieranno a usarlo in una prossima versione). Instradamento, assegnazione e visibilità usano tutti i suoi team."
     },
     "errors": {
       "network": "La connessione si è interrotta. Controllala e riprova.",
@@ -232,7 +279,10 @@
       "delegateInvalid": "Il delegato deve essere un altro membro attivo di questo spazio di lavoro.",
       "delegateCycle": "Si creerebbe un cerchio: la persona scelta ha già questa persona come delegato.",
       "reassignInvalid": "Non è stato possibile riassegnare nulla. Verifica che la persona abbia contatti o trattative aperte e che il destinatario possa riceverli.",
-      "reassignNotRestorable": "Questa riassegnazione non può più essere annullata."
+      "reassignNotRestorable": "Questa riassegnazione non può più essere annullata.",
+      "teamParentCycle": "Un team non può trovarsi sotto se stesso o sotto uno dei propri sotto-team.",
+      "teamParentInvalid": "Quel team padre non è disponibile, oppure l'albero supererebbe i 5 livelli.",
+      "teamNotOnTeam": "Quella persona non fa parte di questo team."
     },
     "accept": {
       "title": "Unisciti al tuo workspace",
@@ -352,6 +402,26 @@
       "offline": "Offline",
       "hint": "Finché sei offline, nessuna nuova chat ti viene assegnata automaticamente. Le chat che hai già restano tue.",
       "failed": "Impossibile modificare"
+    },
+    "deactivate": {
+      "eyebrow": "Membri del team",
+      "title": "Disattiva membro",
+      "message": "{name} non potrà più accedere. Puoi riattivarlo in qualsiasi momento.",
+      "loading": "Controllo di ciò che possiede",
+      "previewFailed": "Non è stato possibile controllare cosa possiede questa persona. Puoi comunque disattivarla; il suo lavoro resta con lei.",
+      "holds": "{name} possiede {contacts, plural, one {# contatto} other {# contatti}}, {deals, plural, one {# trattativa aperta} other {# trattative aperte}} e {chats, plural, one {# conversazione aperta} other {# conversazioni aperte}}. Cosa farne?",
+      "optLead": "Passali al responsabile del team, {name} ({team})",
+      "optLeadNone": "Passali al responsabile del team (questa persona non ha un responsabile del team attivo)",
+      "optPerson": "Passali a una persona",
+      "pickPerson": "Persona",
+      "pickPlaceholder": "Scegli una persona",
+      "optLeave": "Lasciali a {name}",
+      "undoNote": "I contatti e le trattative aperte possono essere ripristinati per 14 giorni dalla cronologia delle riassegnazioni. Le conversazioni aperte vengono riassegnate una per una.",
+      "nothing": "{name} non possiede contatti, trattative aperte né conversazioni aperte.",
+      "membership": "Le sue appartenenze ai team vengono mantenute, quindi riattivare {name} lo riporta nei suoi team.",
+      "confirm": "Disattiva",
+      "moved": "{contacts, plural, one {# contatto} other {# contatti}}, {deals, plural, one {# trattativa} other {# trattative}} e {chats, plural, one {# conversazione} other {# conversazioni}} spostati a {name}.",
+      "remaining": "Altri {count} sono ancora in attesa. Esegui di nuovo il passaggio di consegne per spostarli."
     }
   }
 }

@@ -196,7 +196,9 @@
         "keywords": "akses, admin, manajer, agen, rbac, izin"
       },
       "teams": {
-        "label": "Tim"
+        "label": "Tim",
+        "description": "Kelompokkan orang untuk percakapan, penugasan, dan laporan.",
+        "keywords": "grup, departemen, manajer, hierarki, penugasan, perutean"
       },
       "ai-keys": {
         "label": "Kunci penyedia AI",

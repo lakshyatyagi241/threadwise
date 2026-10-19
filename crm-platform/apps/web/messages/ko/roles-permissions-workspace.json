@@ -90,7 +90,9 @@
         "member": "멤버",
         "roles": "역할",
         "status": "상태",
-        "actions": "작업"
+        "actions": "작업",
+        "teams": "팀",
+        "manager": "매니저"
       },
       "empty": {
         "none": "아직 멤버가 없습니다.",
@@ -138,7 +140,15 @@
         "atLeastOne": "역할을 하나 이상 선택하세요.",
         "save": "역할 저장",
         "reload": "새로고침"
-      }
+      },
+      "teamFilter": {
+        "label": "팀별로 멤버 필터링",
+        "all": "모든 팀"
+      },
+      "noTeams": "팀 없음",
+      "primaryTeam": "주 팀",
+      "primaryMark": "주 팀",
+      "noManager": "매니저 없음"
     },
     "list": {
       "crumb": "역할",
@@ -235,7 +245,8 @@
       "lockedHint": "이 권한은 아직 이 워크스페이스에서 사용할 수 없습니다. 요금제 기능이 켜지거나 앱이 설치되면 사용할 수 있습니다.",
       "scope": {
         "all": "모든 레코드",
-        "own": "본인 레코드"
+        "own": "본인 레코드",
+        "team": "내 팀의 레코드"
       }
     },
     "delete": {

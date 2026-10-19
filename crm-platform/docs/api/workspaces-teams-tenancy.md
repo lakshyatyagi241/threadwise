@@ -237,7 +237,13 @@ Writes also accept `inbox.team.manage` (alias). A list or read needs `team.read`
     }
   ],
   "memberCount": 1,
-  "usage": { "routingRules": 1, "assignmentRules": 0, "segmentShares": 0, "childTeams": 0, "conversations": 3 },
+  "usage": {
+    "routingRules": 1,
+    "assignmentRules": 0,
+    "segmentShares": 0,
+    "childTeams": 0,
+    "conversations": 3
+  },
   "unusedSettings": { "businessHours": null, "timezone": null, "defaultAssignee": null },
   "rowVersion": 1,
   "createdAt": "2026-10-02T13:25:20.195Z"

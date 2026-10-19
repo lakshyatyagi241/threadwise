@@ -90,7 +90,9 @@
         "member": "Membro",
         "roles": "Funções",
         "status": "Status",
-        "actions": "Ações"
+        "actions": "Ações",
+        "teams": "Equipes",
+        "manager": "Gerente"
       },
       "empty": {
         "none": "Ainda não há membros.",
@@ -138,7 +140,15 @@
         "atLeastOne": "Escolha pelo menos uma função.",
         "save": "Salvar funções",
         "reload": "Recarregar"
-      }
+      },
+      "teamFilter": {
+        "label": "Filtrar membros por equipe",
+        "all": "Todas as equipes"
+      },
+      "noTeams": "Sem equipe",
+      "primaryTeam": "Equipe principal",
+      "primaryMark": "principal",
+      "noManager": "Sem gerente"
     },
     "list": {
       "crumb": "Funções",
@@ -235,7 +245,8 @@
       "lockedHint": "Esta permissão ainda não está disponível para este espaço de trabalho. Ela é liberada quando o recurso do plano está ativo ou o app está instalado.",
       "scope": {
         "all": "Todos os registros",
-        "own": "Registros próprios"
+        "own": "Registros próprios",
+        "team": "Registros da minha equipe"
       }
     },
     "delete": {

@@ -196,7 +196,9 @@
         "keywords": "truy cập, quản trị, quản lý, nhân viên, rbac, quyền"
       },
       "teams": {
-        "label": "Đội nhóm"
+        "label": "Đội nhóm",
+        "description": "Gom mọi người lại cho hội thoại, phân công và báo cáo.",
+        "keywords": "nhóm, phòng ban, quản lý, phân cấp, phân công, định tuyến"
       },
       "ai-keys": {
         "label": "Khóa nhà cung cấp AI",

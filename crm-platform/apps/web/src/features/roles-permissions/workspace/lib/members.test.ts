@@ -125,8 +125,12 @@ describe('team filter', () => {
   ];
 
   it('keeps only the people on the chosen team, together with the role and search filters', () => {
-    expect(filterMembers(people, { roleId: null, search: '', teamId: 's' }).map((m) => m.id)).toEqual(['1', '2']);
-    expect(filterMembers(people, { roleId: 'agent', search: '', teamId: 's' }).map((m) => m.id)).toEqual(['2']);
+    expect(
+      filterMembers(people, { roleId: null, search: '', teamId: 's' }).map((m) => m.id),
+    ).toEqual(['1', '2']);
+    expect(
+      filterMembers(people, { roleId: 'agent', search: '', teamId: 's' }).map((m) => m.id),
+    ).toEqual(['2']);
     expect(filterMembers(people, { roleId: null, search: 'cy', teamId: 's' })).toEqual([]);
     expect(filterMembers(people, { roleId: null, search: '', teamId: null })).toHaveLength(3);
     expect(filterMembers(people, { roleId: null, search: '' })).toHaveLength(3);

@@ -95,7 +95,7 @@ export class TeamsController {
   @ApiOperation({
     summary: 'Add a person to a team, or change their role / primary mark when already on it',
     description:
-      'Only active members of the workspace. `isPrimary: true` makes this the person\'s main team (their mark on any other team is cleared). A person on exactly one team always has it as primary.',
+      "Only active members of the workspace. `isPrimary: true` makes this the person's main team (their mark on any other team is cleared). A person on exactly one team always has it as primary.",
   })
   async addMember(
     @Param('id', ParseUUIDPipe) id: string,
@@ -109,7 +109,7 @@ export class TeamsController {
   @ApiOperation({
     summary: "Change a member's role (member or lead) and/or primary mark",
     description:
-      'Making the team\'s manager a plain member removes them as manager. Not on the team is 422 WSP_TEAM_MEMBER_NOT_ON_TEAM.',
+      "Making the team's manager a plain member removes them as manager. Not on the team is 422 WSP_TEAM_MEMBER_NOT_ON_TEAM.",
   })
   async updateMember(
     @Param('id', ParseUUIDPipe) id: string,

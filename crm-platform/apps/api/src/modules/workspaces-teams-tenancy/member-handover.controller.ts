@@ -29,7 +29,7 @@ export class MemberHandoverController {
   @ApiOperation({
     summary: 'What a person holds (contacts, open deals, open chats) and who could take it over',
     description:
-      'Owned contacts, open deals, open conversations, and the active managers of the person\'s teams, nearest first (primary team first).',
+      "Owned contacts, open deals, open conversations, and the active managers of the person's teams, nearest first (primary team first).",
   })
   async preview(@Param('id', ParseUUIDPipe) id: string) {
     return this.handover.preview(id);

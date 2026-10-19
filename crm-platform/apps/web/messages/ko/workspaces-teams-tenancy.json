@@ -106,7 +106,9 @@
       "leaveAction": "휴가 및 대리인",
       "noLimit": "제한 없음",
       "neverSignedIn": "없음",
-      "editAction": "전화번호 및 채팅 한도 변경"
+      "editAction": "전화번호 및 채팅 한도 변경",
+      "moreAction": "더보기",
+      "moreLabel": "{name}에 대한 추가 작업"
     },
     "invite": {
       "eyebrow": "워크스페이스",
@@ -164,7 +166,12 @@
         "sticky": "고정 배정"
       },
       "howTitle": "팀 작동 방식",
-      "how": {},
+      "how": {
+        "one": "팀 이름(예: 영업)을 정하고 색상을 고른 다음 함께 일하는 사람들을 추가하세요.",
+        "two": "대화(새 채팅을 팀으로 라우팅하거나 채팅을 직접 배정), 레코드(연락처, 회사, 거래를 팀 멤버에게 배정), 보고서에 사용합니다.",
+        "three": "매니저는 팀을 이끄는 사람입니다. 상위 팀을 지정하면 다른 팀 아래에 놓이므로 영업과 영업 서부 같은 트리를 만들 수 있습니다.",
+        "four": "개인의 주 팀은 메인 팀이며 보고서용으로 보관됩니다(보고서는 향후 릴리스부터 사용). 라우팅, 배정, 공개 범위에는 그 사람이 속한 모든 팀이 사용됩니다."
+      },
       "created": "팀이 생성되었습니다.",
       "updated": "팀이 변경되었습니다.",
       "deleted": "팀이 삭제되었습니다.",
@@ -174,7 +181,33 @@
       "deleteTitle": "이 팀을 삭제하시겠습니까?",
       "deleteMessage": "팀 “{name}”을(를) 삭제하시겠습니까? 이 팀에 할당된 대화는 할당 해제됩니다.",
       "deleteConfirm": "팀 삭제",
-      "delete": "팀 삭제"
+      "delete": "팀 삭제",
+      "subtitle": "팀은 대화, 배정, 보고서를 위해 사람들을 그룹으로 묶습니다.",
+      "emptyMessage": "팀을 만들고 함께 일하는 사람들을 추가하세요. 대화를 팀으로 라우팅하고 연락처, 회사, 거래를 팀 멤버에게 배정할 수 있습니다.",
+      "noAccess": "팀을 볼 권한이 없습니다. 워크스페이스 소유자 또는 관리자에게 team.read 권한을 요청하세요.",
+      "manager": "매니저: {name}",
+      "noManager": "매니저 없음",
+      "receivesConversations": "대화",
+      "receivesRecords": "레코드",
+      "primaryCount": "{count, plural, one {#명이 주 팀으로 지정함} other {#명이 주 팀으로 지정함}}",
+      "usedBy": "사용처",
+      "usedByNone": "아직 어떤 규칙에서도 사용하지 않음",
+      "usage": {
+        "routingRules": "{count, plural, one {라우팅 규칙 #개} other {라우팅 규칙 #개}}",
+        "assignmentRules": "{count, plural, one {배정 규칙 #개} other {배정 규칙 #개}}",
+        "segmentShares": "{count, plural, one {공유 세그먼트 #개} other {공유 세그먼트 #개}}",
+        "conversations": "{count, plural, one {대화 #개} other {대화 #개}}",
+        "childTeams": "{count, plural, one {하위 팀 #개} other {하위 팀 #개}}"
+      },
+      "notUsed": {
+        "title": "저장됨, 아직 사용 안 함",
+        "body": "이 설정은 팀에 저장되지만 아직 어디에서도 읽지 않습니다. 라우팅 업데이트와 함께 적용되기 시작합니다.",
+        "strategy": "자동 배정 전략: {value}",
+        "devices": "{count, plural, one {기기 #대로 제한} other {기기 #대로 제한}}",
+        "businessHours": "업무 시간: 저장됨",
+        "timezone": "시간대: {value}",
+        "defaultAssignee": "기본 담당자: {name}"
+      }
     },
     "teamDialog": {
       "eyebrow": "워크스페이스",
@@ -186,13 +219,6 @@
       "nameTooLong": "이름은 최대 {max}자까지 입력할 수 있습니다.",
       "color": "색상",
       "colorOption": "색상 {color}",
-      "strategy": "자동 할당 방식",
-      "strategyOptions": {
-        "manual": "수동 — 매니저가 담당자를 직접 선택",
-        "round_robin": "라운드 로빈 — 고르게 분배",
-        "least_loaded": "최소 부하 — 열린 대화가 가장 적은 순",
-        "sticky": "고정 배정 — 이 연락처에 마지막으로 답장한 상담원"
-      },
       "members": "멤버",
       "membersLoading": "팀원을 불러오는 중",
       "membersFailed": "팀원을 불러올 수 없습니다.",
@@ -203,7 +229,28 @@
       "create": "팀 생성",
       "creating": "생성 중…",
       "save": "변경 사항 저장",
-      "saving": "저장 중…"
+      "saving": "저장 중…",
+      "hint": "팀은 대화, 배정, 보고서를 위해 사람들을 그룹으로 묶습니다. 매니저, 선택 사항인 상위 팀, 팀이 받을 수 있는 항목을 선택하세요.",
+      "description": "설명",
+      "descriptionPlaceholder": "이 팀이 하는 일(선택 사항)",
+      "lead": "매니저",
+      "leadNone": "매니저 없음",
+      "leadHint": "팀을 이끄는 사람입니다. 리더로 팀에 추가됩니다.",
+      "parent": "상위 팀",
+      "parentNone": "없음(최상위)",
+      "parentHint": "이 팀을 다른 팀 아래에 두어 최대 5단계 깊이의 트리를 만듭니다.",
+      "receive": "수신 가능 항목",
+      "receiveHint": "이 팀을 선택할 수 있는 위치입니다. 항목을 끄면 해당 선택 목록에서 팀이 제외됩니다.",
+      "receiveConversations": "대화(받은편지함 라우팅 및 배정)",
+      "receiveRecords": "레코드(연락처, 회사, 거래)",
+      "membersHint": "이 팀에 속한 사람을 선택하세요. 리더를 지정하고 각 사람의 주 팀을 선택하세요.",
+      "leadFlag": "리더",
+      "leadToggle": "이 팀의 리더로 지정",
+      "leadLocked": "매니저는 항상 리더입니다",
+      "primaryFlag": "주 팀",
+      "primaryToggle": "이 팀을 해당 사람의 주 팀으로 지정",
+      "primaryLocked": "한 팀에만 속한 사람은 항상 그 팀이 주 팀입니다",
+      "primaryHint": "개인의 주 팀은 메인 팀이며 보고서용으로 보관됩니다(보고서는 향후 릴리스부터 사용). 라우팅, 배정, 공개 범위에는 그 사람의 모든 팀이 사용됩니다."
     },
     "errors": {
       "network": "연결이 끊어졌습니다. 연결을 확인하고 다시 시도하세요.",
@@ -232,7 +279,10 @@
       "delegateInvalid": "대리인은 이 워크스페이스의 다른 활성 구성원이어야 합니다.",
       "delegateCycle": "순환이 생기게 됩니다. 선택한 사람이 이미 이 사람을 대리인으로 지정했습니다.",
       "reassignInvalid": "재배정된 항목이 없습니다. 이 사람이 연락처나 진행 중인 거래를 가지고 있는지, 대상이 인수할 수 있는지 확인하세요.",
-      "reassignNotRestorable": "이 재배정은 더 이상 되돌릴 수 없습니다."
+      "reassignNotRestorable": "이 재배정은 더 이상 되돌릴 수 없습니다.",
+      "teamParentCycle": "팀은 자기 자신이나 자신의 하위 팀 아래에 둘 수 없습니다.",
+      "teamParentInvalid": "해당 상위 팀을 사용할 수 없거나 트리가 5단계를 넘게 됩니다.",
+      "teamNotOnTeam": "해당 사람은 이 팀에 속해 있지 않습니다."
     },
     "accept": {
       "title": "워크스페이스에 참여하기",
@@ -352,6 +402,26 @@
       "offline": "오프라인",
       "hint": "오프라인인 동안에는 새 채팅이 자동으로 배정되지 않습니다. 이미 맡고 있는 채팅은 그대로 유지됩니다.",
       "failed": "변경하지 못했습니다"
+    },
+    "deactivate": {
+      "eyebrow": "팀 멤버",
+      "title": "멤버 비활성화",
+      "message": "{name} 님은 더 이상 로그인할 수 없습니다. 언제든지 다시 활성화할 수 있습니다.",
+      "loading": "보유 항목 확인 중",
+      "previewFailed": "이 사람이 보유한 항목을 확인하지 못했습니다. 그래도 비활성화할 수 있으며, 해당 작업은 그대로 남습니다.",
+      "holds": "{name} 님은 {contacts, plural, one {연락처 #개} other {연락처 #개}}, {deals, plural, one {진행 중인 거래 #개} other {진행 중인 거래 #개}}, {chats, plural, one {진행 중인 대화 #개} other {진행 중인 대화 #개}}를 보유하고 있습니다. 어떻게 처리할까요?",
+      "optLead": "팀 매니저 {name}({team})에게 넘기기",
+      "optLeadNone": "팀 매니저에게 넘기기(이 사람에게는 활성 팀 매니저가 없습니다)",
+      "optPerson": "다른 사람에게 넘기기",
+      "pickPerson": "담당자",
+      "pickPlaceholder": "담당자 선택",
+      "optLeave": "{name} 님에게 그대로 두기",
+      "undoNote": "연락처와 진행 중인 거래는 재배정 기록에서 14일 동안 되돌릴 수 있습니다. 진행 중인 대화는 하나씩 재배정됩니다.",
+      "nothing": "{name} 님은 보유한 연락처, 진행 중인 거래, 진행 중인 대화가 없습니다.",
+      "membership": "팀 소속은 유지되므로 {name} 님을 다시 활성화하면 기존 팀으로 복귀합니다.",
+      "confirm": "비활성화",
+      "moved": "{contacts, plural, one {연락처 #개} other {연락처 #개}}, {deals, plural, one {거래 #개} other {거래 #개}}, {chats, plural, one {대화 #개} other {대화 #개}}를 {name} 님에게 이동했습니다.",
+      "remaining": "{count}개가 아직 대기 중입니다. 인수인계를 다시 실행하여 이동하세요."
     }
   }
 }

@@ -2,7 +2,7 @@
 id: teams-managers-access
 title: Teams, managers and who sees what
 summary: How teams, managers, the primary team and the own, team and all record scopes fit together for chat, the CRM, or both.
-area: settings
+area: getting-started
 order: 85
 documents: []
 keywords:

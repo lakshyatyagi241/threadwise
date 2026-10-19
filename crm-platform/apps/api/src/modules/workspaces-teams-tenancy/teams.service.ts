@@ -216,7 +216,11 @@ export class TeamsService {
       if (memberIds !== undefined) {
         touched.push(...(await this.repo.syncMembers(tx, ctx.orgId, team.id, memberIds)));
         // Somebody taken off the list cannot stay the manager.
-        if (previousLead !== null && !memberIds.includes(previousLead) && leadUserId === undefined) {
+        if (
+          previousLead !== null &&
+          !memberIds.includes(previousLead) &&
+          leadUserId === undefined
+        ) {
           await this.repo.setLeadRaw(tx, ctx.orgId, team.id, null);
         }
       }
@@ -253,7 +257,8 @@ export class TeamsService {
       if (memberIds !== undefined) delta.members = { old: null, new: memberIds.length };
       if (after.parentUuid !== team.parentUuid)
         delta.parent = { old: team.parentUuid, new: after.parentUuid };
-      if (after.leadUuid !== team.leadUuid) delta.lead = { old: team.leadUuid, new: after.leadUuid };
+      if (after.leadUuid !== team.leadUuid)
+        delta.lead = { old: team.leadUuid, new: after.leadUuid };
       if (after.receivesConversations !== team.receivesConversations) {
         delta.receivesConversations = {
           old: team.receivesConversations,
@@ -331,7 +336,8 @@ export class TeamsService {
     return this.db.tx(async (tx) => {
       const team = await this.requireTeam(tx, ctx.orgId, uuid);
       const [userId] = await this.resolveMembers(tx, ctx.orgId, [userUuid]);
-      if (!(await this.repo.isMember(tx, ctx.orgId, team.id, userId!))) throw this.notOnTeam(userUuid);
+      if (!(await this.repo.isMember(tx, ctx.orgId, team.id, userId!)))
+        throw this.notOnTeam(userUuid);
       await this.applyMember(tx, ctx.orgId, team, userId!, input.role, input.isPrimary);
       await this.auditMember(tx, ctx, team, 'team.member_updated', {
         userId: userUuid,

@@ -163,7 +163,7 @@ export class UsersService {
 
       const row = await this.repo.findById(tx, ctx.orgId, created.id);
       const roleRows = await this.repo.rolesForUsers(tx, ctx.orgId, [created.id]);
-      return toUserResponse(row!, roleRows, []);
+      return toUserResponse(row!, roleRows);
     });
   }
 
