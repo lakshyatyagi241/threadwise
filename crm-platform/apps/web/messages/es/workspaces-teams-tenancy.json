@@ -148,12 +148,10 @@
       "eyebrow": "Espacio de trabajo",
       "title": "Equipos",
       "pageTitle": "Equipos",
-      "subtitle": "Agrupa a tus agentes por departamento. Las conversaciones se pueden asignar automáticamente por equipo mediante reglas de enrutamiento.",
       "create": "Crear equipo",
       "edit": "Editar equipo",
       "loading": "Cargando equipos",
       "emptyTitle": "Todavía no hay equipos",
-      "emptyMessage": "Crea un equipo, añade a tus agentes y enruta las conversaciones hacia él.",
       "emptyAction": "Crear equipo",
       "members": "{count, plural, =0 {Sin miembros} one {# miembro} other {# miembros}}",
       "online": "{count} en línea",
@@ -166,11 +164,7 @@
         "sticky": "Fijo"
       },
       "howTitle": "Cómo funcionan los equipos",
-      "how": {
-        "one": "Ponle nombre a un equipo (por ejemplo, Ventas), elige un color y añade a tus agentes.",
-        "two": "Úsalo de tres formas: asignar un chat al equipo a mano, enrutar los chats nuevos hacia él con una regla de enrutamiento o consultar su rendimiento en analítica.",
-        "three": "El color del equipo es el color de la etiqueta en la cola de la bandeja, así puedes distinguir de un vistazo los chats de cada equipo."
-      },
+      "how": {},
       "created": "Equipo creado.",
       "updated": "Equipo actualizado.",
       "deleted": "Equipo eliminado.",

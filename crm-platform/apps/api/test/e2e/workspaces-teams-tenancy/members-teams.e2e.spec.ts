@@ -1428,25 +1428,32 @@ describe('TW-WSP-022: teams', () => {
     expect(plain.body.color).toBe('#075E54');
   });
 
-  it('022 #2: a manager (no inbox.team.manage) cannot create, edit or delete a team: 403; any signed-in member can list', async () => {
-    const manager = await addMember(t, 'Mgr22', 'Manager');
-    expect((await createTeam(manager.token, { name: 'Denied' })).status).toBe(403);
+  it('022 #2: an agent (team.read only) can list but not create, edit or delete a team: 403; a manager (team.manage) can', async () => {
+    const agent = await addMember(t, 'Agt22', 'Agent');
+    expect((await createTeam(agent.token, { name: 'Denied' })).status).toBe(403);
     const list = await api.as(t.admin).get('/v2/workspace/teams');
     const id = (list.body.data as Team[])[0]!.id;
     const rv = (list.body.data as Team[])[0]!.rowVersion;
     expect(
       (
         await api
-          .as(manager.token)
+          .as(agent.token)
           .patch(`/v2/workspace/teams/${id}`)
           .send({ name: 'x', rowVersion: rv })
       ).status,
     ).toBe(403);
-    expect((await api.as(manager.token).delete(`/v2/workspace/teams/${id}`)).status).toBe(403);
-    expect((await api.as(ava.token).get('/v2/workspace/teams')).status).toBe(200);
+    expect((await api.as(agent.token).delete(`/v2/workspace/teams/${id}`)).status).toBe(403);
+    expect((await api.as(agent.token).get('/v2/workspace/teams')).status).toBe(200);
     expect(
       await count(`SELECT count(*) n FROM teams WHERE org_id = $1 AND name = 'Denied'`, [t.orgId]),
     ).toBe(0);
+    // Teams v2: the Manager preset holds team.manage.
+    const manager = await addMember(t, 'Mgr22', 'Manager');
+    const made = await createTeam(manager.token, { name: 'ByManager' });
+    expect(made.status, JSON.stringify(made.body)).toBe(201);
+    expect((await api.as(manager.token).delete(`/v2/workspace/teams/${made.body.id}`)).status).toBe(
+      204,
+    );
   });
 
   it('022 #3: deviceIds of another workspace, or that do not exist, are dropped from the saved list; none left means every device', async () => {

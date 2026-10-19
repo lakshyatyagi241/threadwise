@@ -196,9 +196,7 @@
         "keywords": "acceso, administrador, gerente, agente, rbac, permisos"
       },
       "teams": {
-        "label": "Equipos",
-        "description": "Agrupa personas en equipos para el enrutamiento y los informes.",
-        "keywords": "grupos, departamentos, asignación, enrutamiento"
+        "label": "Equipos"
       },
       "ai-keys": {
         "label": "Claves de proveedores de IA",

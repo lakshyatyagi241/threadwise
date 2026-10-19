@@ -196,9 +196,7 @@
         "keywords": "erişim, yönetici, müdür, temsilci, rbac, izinler"
       },
       "teams": {
-        "label": "Ekipler",
-        "description": "Yönlendirme ve raporlama için kişileri ekiplere ayırın.",
-        "keywords": "gruplar, departmanlar, atama, yönlendirme"
+        "label": "Ekipler"
       },
       "ai-keys": {
         "label": "AI sağlayıcı anahtarları",

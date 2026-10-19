@@ -235,7 +235,6 @@
       "lockedHint": "Bu izin henüz bu çalışma alanında kullanılamıyor. Plan özelliği açıldığında veya uygulama kurulduğunda kullanılabilir olur.",
       "scope": {
         "all": "Tüm kayıtlar",
-        "team": "Ekip kayıtları",
         "own": "Kendi kayıtları"
       }
     },

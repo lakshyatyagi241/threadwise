@@ -475,10 +475,14 @@ export class AssignmentService {
     if (input.teamId === null) teamId = null;
     else if (input.teamId !== undefined) {
       const res = await tx.execute(
-        sql`SELECT id FROM teams WHERE org_id = ${orgId} AND uuid = ${input.teamId}`,
+        sql`SELECT id FROM teams WHERE org_id = ${orgId} AND uuid = ${input.teamId} AND receives_conversations`,
       );
       const row = res.rows[0] as { id: string | number } | undefined;
-      if (!row) throw invalid('That team is not part of this workspace.', 'teamId');
+      if (!row)
+        throw invalid(
+          'That team is not part of this workspace, or it is set not to receive conversations.',
+          'teamId',
+        );
       teamId = Number(row.id);
       teamUuid = input.teamId;
     }

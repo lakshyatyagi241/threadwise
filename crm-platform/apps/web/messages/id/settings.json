@@ -196,9 +196,7 @@
         "keywords": "akses, admin, manajer, agen, rbac, izin"
       },
       "teams": {
-        "label": "Tim",
-        "description": "Kelompokkan orang ke dalam tim untuk routing dan pelaporan.",
-        "keywords": "grup, departemen, penugasan, routing"
+        "label": "Tim"
       },
       "ai-keys": {
         "label": "Kunci penyedia AI",

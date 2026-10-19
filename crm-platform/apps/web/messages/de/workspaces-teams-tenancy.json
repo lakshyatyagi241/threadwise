@@ -148,12 +148,10 @@
       "eyebrow": "Workspace",
       "title": "Teams",
       "pageTitle": "Teams",
-      "subtitle": "Gruppieren Sie Ihre Agenten nach Abteilung. Unterhaltungen können per Routing-Regeln automatisch nach Team zugewiesen werden.",
       "create": "Team erstellen",
       "edit": "Team bearbeiten",
       "loading": "Teams werden geladen",
       "emptyTitle": "Noch keine Teams",
-      "emptyMessage": "Erstellen Sie ein Team, fügen Sie Ihre Agenten hinzu und leiten Sie Unterhaltungen an dieses Team weiter.",
       "emptyAction": "Team erstellen",
       "members": "{count, plural, =0 {Keine Mitglieder} one {# Mitglied} other {# Mitglieder}}",
       "online": "{count} online",
@@ -166,11 +164,7 @@
         "sticky": "Fest"
       },
       "howTitle": "So funktionieren Teams",
-      "how": {
-        "one": "Benennen Sie ein Team (zum Beispiel Vertrieb), wählen Sie eine Farbe und fügen Sie Ihre Agenten hinzu.",
-        "two": "Nutzen Sie es auf drei Arten: Chats von Hand dem Team zuweisen, neue Chats mit einer Routing-Regel dorthin leiten oder seine Leistung in der Analyse lesen.",
-        "three": "Die Teamfarbe ist die Farbe des Kennzeichens in der Posteingangs-Warteschlange, sodass Sie die Chats jedes Teams auf einen Blick unterscheiden können."
-      },
+      "how": {},
       "created": "Team erstellt.",
       "updated": "Team aktualisiert.",
       "deleted": "Team gelöscht.",

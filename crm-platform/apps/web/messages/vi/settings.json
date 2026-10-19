@@ -196,9 +196,7 @@
         "keywords": "truy cập, quản trị, quản lý, nhân viên, rbac, quyền"
       },
       "teams": {
-        "label": "Đội nhóm",
-        "description": "Nhóm người vào đội để phân công và báo cáo.",
-        "keywords": "nhóm, phòng ban, phân công, định tuyến"
+        "label": "Đội nhóm"
       },
       "ai-keys": {
         "label": "Khóa nhà cung cấp AI",

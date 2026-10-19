@@ -148,12 +148,10 @@
       "eyebrow": "Workspace",
       "title": "Teams",
       "pageTitle": "Teams",
-      "subtitle": "Groepeer je medewerkers per afdeling. Gesprekken kunnen per team automatisch worden toegewezen via routeringsregels.",
       "create": "Team aanmaken",
       "edit": "Team bewerken",
       "loading": "Teams laden",
       "emptyTitle": "Nog geen teams",
-      "emptyMessage": "Maak een team aan, voeg je medewerkers toe en stuur gesprekken ernaartoe.",
       "emptyAction": "Team aanmaken",
       "members": "{count, plural, =0 {Geen leden} one {# lid} other {# leden}}",
       "online": "{count} online",
@@ -166,11 +164,7 @@
         "sticky": "Vast"
       },
       "howTitle": "Hoe teams werken",
-      "how": {
-        "one": "Geef een team een naam (bijvoorbeeld Sales), kies een kleur en voeg je medewerkers toe.",
-        "two": "Je gebruikt het op drie manieren: wijs een chat handmatig aan het team toe, stuur nieuwe chats ernaartoe met een routeringsregel, of lees de prestaties ervan in de analyse.",
-        "three": "De teamkleur is de kleur van het label in de inbox-wachtrij, zodat je in één oogopslag de chats van elk team herkent."
-      },
+      "how": {},
       "created": "Team aangemaakt.",
       "updated": "Team bijgewerkt.",
       "deleted": "Team verwijderd.",

@@ -196,9 +196,7 @@
         "keywords": "dostęp, administrator, menedżer, agent, rbac, uprawnienia"
       },
       "teams": {
-        "label": "Zespoły",
-        "description": "Grupuj osoby w zespoły do przydzielania i raportowania.",
-        "keywords": "grupy, działy, przydział, routing"
+        "label": "Zespoły"
       },
       "ai-keys": {
         "label": "Klucze dostawców AI",

@@ -235,7 +235,6 @@
       "lockedHint": "Quyền này chưa khả dụng cho không gian làm việc này. Quyền sẽ mở khi tính năng của gói được bật hoặc ứng dụng được cài.",
       "scope": {
         "all": "Tất cả bản ghi",
-        "team": "Bản ghi của nhóm",
         "own": "Bản ghi của riêng tôi"
       }
     },

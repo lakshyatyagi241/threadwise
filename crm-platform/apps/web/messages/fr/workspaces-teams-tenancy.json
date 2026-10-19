@@ -148,12 +148,10 @@
       "eyebrow": "Espace de travail",
       "title": "Équipes",
       "pageTitle": "Équipes",
-      "subtitle": "Regroupez vos agents par service. Les conversations peuvent être assignées automatiquement par équipe grâce aux règles de routage.",
       "create": "Créer une équipe",
       "edit": "Modifier l’équipe",
       "loading": "Chargement des équipes",
       "emptyTitle": "Aucune équipe pour le moment",
-      "emptyMessage": "Créez une équipe, ajoutez-y vos agents et acheminez-lui les conversations.",
       "emptyAction": "Créer une équipe",
       "members": "{count, plural, =0 {Aucun membre} one {# membre} other {# membres}}",
       "online": "{count} en ligne",
@@ -166,11 +164,7 @@
         "sticky": "Fidélisation"
       },
       "howTitle": "Fonctionnement des équipes",
-      "how": {
-        "one": "Nommez une équipe (par exemple Ventes), choisissez une couleur et ajoutez-y vos agents.",
-        "two": "Vous pouvez l’utiliser de trois façons : assigner une conversation à l’équipe manuellement, acheminer les nouvelles conversations vers elle grâce à une règle de routage, ou consulter ses performances dans les analyses.",
-        "three": "La couleur de l’équipe est celle de la pastille dans la file de la boîte de réception, pour distinguer d’un coup d’œil les conversations de chaque équipe."
-      },
+      "how": {},
       "created": "Équipe créée.",
       "updated": "Équipe mise à jour.",
       "deleted": "Équipe supprimée.",

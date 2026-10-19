@@ -148,12 +148,10 @@
       "eyebrow": "Espaço de trabalho",
       "title": "Equipes",
       "pageTitle": "Equipes",
-      "subtitle": "Agrupe seus agentes por departamento. As conversas podem ser atribuídas automaticamente por equipe usando regras de roteamento.",
       "create": "Criar equipe",
       "edit": "Editar equipe",
       "loading": "Carregando equipes",
       "emptyTitle": "Nenhuma equipe ainda",
-      "emptyMessage": "Crie uma equipe, adicione seus agentes a ela e roteie conversas para ela.",
       "emptyAction": "Criar equipe",
       "members": "{count, plural, =0 {Sem membros} one {# membro} other {# membros}}",
       "online": "{count} online",
@@ -166,11 +164,7 @@
         "sticky": "Fixo"
       },
       "howTitle": "Como funcionam as equipes",
-      "how": {
-        "one": "Dê um nome à equipe (por exemplo, Vendas), escolha uma cor e adicione seus agentes a ela.",
-        "two": "Use de três formas: atribuir uma conversa à equipe manualmente, direcionar novas conversas para ela com uma regra de roteamento ou acompanhar o desempenho dela na análise.",
-        "three": "A cor da equipe é a cor da etiqueta na fila da caixa de entrada, para que você identifique as conversas de cada equipe de relance."
-      },
+      "how": {},
       "created": "Equipe criada.",
       "updated": "Equipe atualizada.",
       "deleted": "Equipe excluída.",

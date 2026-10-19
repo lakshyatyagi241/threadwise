@@ -148,12 +148,10 @@
       "eyebrow": "Çalışma alanı",
       "title": "Ekipler",
       "pageTitle": "Ekipler",
-      "subtitle": "Temsilcilerinizi departmana göre gruplayın. Görüşmeler yönlendirme kurallarıyla ekibe göre otomatik atanabilir.",
       "create": "Ekip oluştur",
       "edit": "Ekibi düzenle",
       "loading": "Ekipler yükleniyor",
       "emptyTitle": "Henüz ekip yok",
-      "emptyMessage": "Bir ekip oluşturun, temsilcilerinizi ekleyin ve görüşmeleri bu ekibe yönlendirin.",
       "emptyAction": "Ekip oluştur",
       "members": "{count, plural, =0 {Üye yok} other {# üye}}",
       "online": "{count} çevrimiçi",
@@ -166,11 +164,7 @@
         "sticky": "Sabit"
       },
       "howTitle": "Ekipler nasıl çalışır",
-      "how": {
-        "one": "Bir ekip adı verin (örneğin Satış), bir renk seçin ve temsilcilerinizi ekleyin.",
-        "two": "Üç şekilde kullanın: bir sohbeti elle ekibe atayın, yönlendirme kuralıyla yeni sohbetleri ekibe yönlendirin veya performansını analizlerde inceleyin.",
-        "three": "Ekip rengi, gelen kutusu kuyruğundaki etiket rengidir; böylece her ekibin sohbetlerini bir bakışta ayırt edebilirsiniz."
-      },
+      "how": {},
       "created": "Ekip oluşturuldu.",
       "updated": "Ekip güncellendi.",
       "deleted": "Ekip silindi.",

@@ -196,9 +196,7 @@
         "keywords": "zugriff, admin, manager, agent, rbac, berechtigungen"
       },
       "teams": {
-        "label": "Teams",
-        "description": "Gruppieren Sie Personen in Teams für Weiterleitung und Auswertung.",
-        "keywords": "gruppen, abteilungen, zuweisung, routing"
+        "label": "Teams"
       },
       "ai-keys": {
         "label": "KI-Anbieter-Schlüssel",

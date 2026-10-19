@@ -235,7 +235,6 @@
       "lockedHint": "To uprawnienie nie jest jeszcze dostępne w tej przestrzeni roboczej. Odblokuje się po włączeniu funkcji w planie lub instalacji aplikacji.",
       "scope": {
         "all": "Wszystkie rekordy",
-        "team": "Rekordy zespołu",
         "own": "Własne rekordy"
       }
     },

@@ -180,9 +180,7 @@
         "keywords": "toegang, admin, manager, agent, rbac, rechten"
       },
       "teams": {
-        "label": "Teams",
-        "description": "Groepeer mensen in teams voor routering en rapportage.",
-        "keywords": "groepen, afdelingen, toewijzing, routering"
+        "label": "Teams"
       },
       "ai-keys": {
         "label": "AI-providersleutels",

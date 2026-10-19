@@ -235,7 +235,6 @@
       "lockedHint": "Deze machtiging is nog niet beschikbaar voor deze workspace. Ze wordt vrijgegeven zodra de abonnementsfunctie is ingeschakeld of de app is geïnstalleerd.",
       "scope": {
         "all": "Alle records",
-        "team": "Teamrecords",
         "own": "Eigen records"
       }
     },

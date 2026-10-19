@@ -148,12 +148,10 @@
       "eyebrow": "Workspace",
       "title": "Team",
       "pageTitle": "Team",
-      "subtitle": "Raggruppa i tuoi agenti per reparto. Le conversazioni possono essere assegnate automaticamente per team tramite le regole di instradamento.",
       "create": "Crea team",
       "edit": "Modifica team",
       "loading": "Caricamento team",
       "emptyTitle": "Nessun team ancora",
-      "emptyMessage": "Crea un team, aggiungi i tuoi agenti e instrada le conversazioni verso di esso.",
       "emptyAction": "Crea team",
       "members": "{count, plural, =0 {Nessun membro} one {# membro} other {# membri}}",
       "online": "{count} online",
@@ -166,11 +164,7 @@
         "sticky": "Persistente"
       },
       "howTitle": "Come funzionano i team",
-      "how": {
-        "one": "Assegna un nome al team (ad esempio Vendite), scegli un colore e aggiungi i tuoi agenti.",
-        "two": "Puoi usarlo in tre modi: assegnare manualmente una chat al team, instradare le nuove chat verso di esso con una regola, oppure leggerne le prestazioni nelle analisi.",
-        "three": "Il colore del team è il colore del chip nella coda dell’inbox, così riconosci a colpo d’occhio le chat di ciascun team."
-      },
+      "how": {},
       "created": "Team creato.",
       "updated": "Team aggiornato.",
       "deleted": "Team eliminato.",

@@ -148,12 +148,10 @@
       "eyebrow": "Przestrzeń robocza",
       "title": "Zespoły",
       "pageTitle": "Zespoły",
-      "subtitle": "Grupuj agentów według działów. Rozmowy mogą być przypisywane automatycznie według zespołu za pomocą reguł routingu.",
       "create": "Utwórz zespół",
       "edit": "Edytuj zespół",
       "loading": "Wczytywanie zespołów",
       "emptyTitle": "Brak zespołów",
-      "emptyMessage": "Utwórz zespół, dodaj do niego agentów i kieruj do niego rozmowy.",
       "emptyAction": "Utwórz zespół",
       "members": "{count, plural, =0 {Brak członków} one {# członek} few {# członkowie} many {# członków} other {# członka}}",
       "online": "{count} online",
@@ -166,11 +164,7 @@
         "sticky": "Przypięty"
       },
       "howTitle": "Jak działają zespoły",
-      "how": {
-        "one": "Nazwij zespół (na przykład Sprzedaż), wybierz kolor i dodaj do niego agentów.",
-        "two": "Używaj go na trzy sposoby: przypisuj czat do zespołu ręcznie, kieruj nowe czaty do niego regułą routingu albo sprawdzaj jego wyniki w analityce.",
-        "three": "Kolor zespołu to kolor etykiety w kolejce Skrzynki, dzięki czemu od razu widzisz czaty każdego zespołu."
-      },
+      "how": {},
       "created": "Zespół utworzony.",
       "updated": "Zespół zaktualizowany.",
       "deleted": "Zespół usunięty.",

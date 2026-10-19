@@ -196,9 +196,7 @@
         "keywords": "acesso, admin, gerente, atendente, rbac, permissões"
       },
       "teams": {
-        "label": "Equipes",
-        "description": "Agrupe pessoas em equipes para roteamento e relatórios.",
-        "keywords": "grupos, departamentos, atribuição, roteamento"
+        "label": "Equipes"
       },
       "ai-keys": {
         "label": "Chaves de provedores de IA",

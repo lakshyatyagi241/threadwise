@@ -106,7 +106,9 @@
       "leaveAction": "Leave and delegate",
       "noLimit": "No limit",
       "neverSignedIn": "Never",
-      "editAction": "Change phone and chat limit"
+      "editAction": "Change phone and chat limit",
+      "moreAction": "More",
+      "moreLabel": "More actions for {name}"
     },
     "invite": {
       "eyebrow": "Workspace",
@@ -148,12 +150,12 @@
       "eyebrow": "Workspace",
       "title": "Teams",
       "pageTitle": "Teams",
-      "subtitle": "Group your agents by department. Conversations can be auto-assigned by team via routing rules.",
+      "subtitle": "Teams group people for conversations, assignments and reports.",
       "create": "Create team",
       "edit": "Edit team",
       "loading": "Loading teams",
       "emptyTitle": "No teams yet",
-      "emptyMessage": "Create a team, add your agents to it and route conversations to it.",
+      "emptyMessage": "Create a team and add the people who work together. You can route conversations to it and assign contacts, companies and deals to its members.",
       "emptyAction": "Create team",
       "members": "{count, plural, =0 {No members} one {# member} other {# members}}",
       "online": "{count} online",
@@ -167,9 +169,10 @@
       },
       "howTitle": "How teams work",
       "how": {
-        "one": "Name a team (for example Sales), pick a colour and add your agents to it.",
-        "two": "Use it three ways: assign a chat to the team by hand, route new chats to it with a routing rule, or read its performance in analytics.",
-        "three": "The team colour is the chip colour in the inbox queue, so you can tell each team's chats apart at a glance."
+        "one": "Name a team (for example Sales), pick a colour, and add the people who work together.",
+        "two": "Use it for conversations (route new chats to it, or assign a chat by hand), for records (assign contacts, companies and deals to its members) and for reports.",
+        "three": "A manager is the person who leads the team. A parent team puts it under another team, so you can build a tree such as Sales and Sales West.",
+        "four": "A person's primary team is their main team, kept for reports (reports start to use it in a coming release). Routing, assignment and visibility use every team a person is on."
       },
       "created": "Team created.",
       "updated": "Team updated.",
@@ -180,7 +183,31 @@
       "deleteTitle": "Delete this team?",
       "deleteMessage": "Delete team \"{name}\"? Conversations assigned to this team will become unassigned.",
       "deleteConfirm": "Delete team",
-      "delete": "Delete team"
+      "delete": "Delete team",
+      "noAccess": "You do not have permission to see teams. Ask a workspace Owner or Admin for the team.read permission.",
+      "manager": "Manager: {name}",
+      "noManager": "No manager",
+      "receivesConversations": "Conversations",
+      "receivesRecords": "Records",
+      "primaryCount": "{count, plural, one {# has it as primary team} other {# have it as primary team}}",
+      "usedBy": "Used by",
+      "usedByNone": "Not used by any rule yet",
+      "usage": {
+        "routingRules": "{count, plural, one {# routing rule} other {# routing rules}}",
+        "assignmentRules": "{count, plural, one {# assignment rule} other {# assignment rules}}",
+        "segmentShares": "{count, plural, one {# shared segment} other {# shared segments}}",
+        "conversations": "{count, plural, one {# conversation} other {# conversations}}",
+        "childTeams": "{count, plural, one {# sub-team} other {# sub-teams}}"
+      },
+      "notUsed": {
+        "title": "Stored, not used yet",
+        "body": "These settings are saved on the team, but nothing reads them yet. They start to apply with the routing update.",
+        "strategy": "Auto-assignment strategy: {value}",
+        "devices": "{count, plural, one {Limited to # device} other {Limited to # devices}}",
+        "businessHours": "Business hours: saved",
+        "timezone": "Time zone: {value}",
+        "defaultAssignee": "Default assignee: {name}"
+      }
     },
     "teamDialog": {
       "eyebrow": "Workspace",
@@ -209,7 +236,28 @@
       "create": "Create team",
       "creating": "Creating…",
       "save": "Save changes",
-      "saving": "Saving…"
+      "saving": "Saving…",
+      "hint": "Teams group people for conversations, assignments and reports. Choose a manager, an optional parent team and what the team can receive.",
+      "description": "Description",
+      "descriptionPlaceholder": "What this team does (optional)",
+      "lead": "Manager",
+      "leadNone": "No manager",
+      "leadHint": "The person who leads the team. They are added to it as a lead.",
+      "parent": "Parent team",
+      "parentNone": "None (top level)",
+      "parentHint": "Put this team under another team to build a tree, up to 5 levels deep.",
+      "receive": "Can receive",
+      "receiveHint": "Where this team can be chosen. Turn one off to keep the team out of those pickers.",
+      "receiveConversations": "Conversations (inbox routing and assignment)",
+      "receiveRecords": "Records (contacts, companies and deals)",
+      "membersHint": "Tick the people on this team. Mark leads, and choose each person's primary team.",
+      "leadFlag": "Lead",
+      "leadToggle": "Mark as a lead of this team",
+      "leadLocked": "The manager is always a lead",
+      "primaryFlag": "Primary",
+      "primaryToggle": "Make this the person's primary team",
+      "primaryLocked": "A person's only team is always their primary team",
+      "primaryHint": "A person's primary team is their main team, kept for reports (reports start to use it in a coming release). Routing, assignment and visibility use all their teams."
     },
     "errors": {
       "network": "The connection dropped. Check it and try again.",
@@ -238,7 +286,10 @@
       "delegateInvalid": "The delegate must be another active member of this workspace.",
       "delegateCycle": "That would make a circle: the chosen person already has this person as their delegate.",
       "reassignInvalid": "Nothing could be reassigned. Check that the person holds contacts or open deals and that the target can take them.",
-      "reassignNotRestorable": "This reassignment can no longer be undone."
+      "reassignNotRestorable": "This reassignment can no longer be undone.",
+      "teamParentCycle": "A team cannot sit under itself or under one of its own sub-teams.",
+      "teamParentInvalid": "That parent team is not available, or the tree would be deeper than 5 levels.",
+      "teamNotOnTeam": "That person is not on this team."
     },
     "accept": {
       "title": "Join your workspace",
@@ -358,6 +409,26 @@
       "offline": "Offline",
       "hint": "While you are offline, no new chats are assigned to you automatically. Chats you already have stay yours.",
       "failed": "Could not change"
+    },
+    "deactivate": {
+      "eyebrow": "Team members",
+      "title": "Deactivate member",
+      "message": "{name} will no longer be able to sign in. You can reactivate them at any time.",
+      "loading": "Checking what they hold",
+      "previewFailed": "We could not check what this person holds. You can still deactivate them; their work stays with them.",
+      "holds": "{name} owns {contacts, plural, one {# contact} other {# contacts}}, {deals, plural, one {# open deal} other {# open deals}} and {chats, plural, one {# open conversation} other {# open conversations}}. What should happen to them?",
+      "optLead": "Give them to the team manager, {name} ({team})",
+      "optLeadNone": "Give them to the team manager (this person has no active team manager)",
+      "optPerson": "Give them to a person",
+      "pickPerson": "Person",
+      "pickPlaceholder": "Choose a person",
+      "optLeave": "Leave them with {name}",
+      "undoNote": "Contacts and open deals can be undone for 14 days from the reassignment history. Open conversations are reassigned one by one.",
+      "nothing": "{name} owns no contacts, open deals or open conversations.",
+      "membership": "Their team places are kept, so reactivating {name} puts them back on their teams.",
+      "confirm": "Deactivate",
+      "moved": "Moved {contacts, plural, one {# contact} other {# contacts}}, {deals, plural, one {# deal} other {# deals}} and {chats, plural, one {# conversation} other {# conversations}} to {name}.",
+      "remaining": "{count} more are still waiting. Run the hand-over again to move them."
     }
   }
 }

@@ -235,7 +235,6 @@
       "lockedHint": "Este permiso todavía no está disponible para este espacio de trabajo. Se activa cuando se habilita la función del plan o se instala la app.",
       "scope": {
         "all": "Todos los registros",
-        "team": "Registros del equipo",
         "own": "Registros propios"
       }
     },

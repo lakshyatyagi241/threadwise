@@ -35,12 +35,12 @@ export const userResponseSchema = z.object({
   status: userStatusSchema,
   roles: z.array(userRoleRefSchema),
   /** The teams of an ACTIVE person, primary first. A deactivated person has places that are kept but not shown. */
-  teams: z.array(userTeamRefSchema).default([]),
+  teams: z.array(userTeamRefSchema),
   /**
    * Who manages this person: the manager of their primary team, else the managers of all their teams. Never the person
    * themself; deactivated managers are left out.
    */
-  managers: z.array(userManagerRefSchema).default([]),
+  managers: z.array(userManagerRefSchema),
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),

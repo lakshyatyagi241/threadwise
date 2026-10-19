@@ -235,7 +235,6 @@
       "lockedHint": "Diese Berechtigung ist für diesen Workspace noch nicht verfügbar. Sie wird freigeschaltet, wenn die Tariffunktion aktiv oder die App installiert ist.",
       "scope": {
         "all": "Alle Datensätze",
-        "team": "Team-Datensätze",
         "own": "Eigene Datensätze"
       }
     },

@@ -471,7 +471,10 @@ function ReassignSection({
   const people = (members.data?.pages.flatMap((p) => p.data) ?? []).filter(
     (m) => m.id !== memberId && m.status === 'active',
   );
-  const teamList = teams.data?.pages.flatMap((p) => p.data) ?? [];
+  // Work goes to teams that take records (Teams v2): one switched off for records is not offered.
+  const teamList = (teams.data?.pages.flatMap((p) => p.data) ?? []).filter(
+    (team) => team.receivesRecords,
+  );
   const ready =
     kind === 'delegate' || (kind === 'user' && userId !== '') || (kind === 'team' && teamId !== '');
 

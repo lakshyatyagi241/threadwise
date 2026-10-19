@@ -148,12 +148,10 @@
       "eyebrow": "Không gian làm việc",
       "title": "Nhóm",
       "pageTitle": "Nhóm",
-      "subtitle": "Nhóm nhân viên theo phòng ban. Cuộc trò chuyện có thể được tự động phân công theo nhóm qua quy tắc định tuyến.",
       "create": "Tạo nhóm",
       "edit": "Chỉnh sửa nhóm",
       "loading": "Đang tải nhóm",
       "emptyTitle": "Chưa có nhóm nào",
-      "emptyMessage": "Tạo nhóm, thêm nhân viên vào nhóm và định tuyến cuộc trò chuyện tới nhóm.",
       "emptyAction": "Tạo nhóm",
       "members": "{count, plural, =0 {Không có thành viên} other {# thành viên}}",
       "online": "{count} trực tuyến",
@@ -166,11 +164,7 @@
         "sticky": "Gắn bó"
       },
       "howTitle": "Cách nhóm hoạt động",
-      "how": {
-        "one": "Đặt tên nhóm (ví dụ Kinh doanh), chọn màu và thêm nhân viên vào nhóm.",
-        "two": "Có ba cách dùng: phân công trò chuyện cho nhóm thủ công, định tuyến trò chuyện mới tới nhóm bằng quy tắc, hoặc xem hiệu suất của nhóm trong phân tích.",
-        "three": "Màu nhóm là màu nhãn trong hàng đợi hộp thư, giúp bạn phân biệt cuộc trò chuyện của từng nhóm chỉ bằng một cái nhìn."
-      },
+      "how": {},
       "created": "Đã tạo nhóm.",
       "updated": "Đã cập nhật nhóm.",
       "deleted": "Đã xóa nhóm.",

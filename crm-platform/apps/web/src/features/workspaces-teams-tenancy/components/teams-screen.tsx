@@ -1,10 +1,12 @@
 'use client';
 
-import { Alert, Button, EmptyState, Spinner } from '@crm/ui';
+import { Alert, Button, EmptyState } from '@crm/ui';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { WspTeam } from '@crm/contracts';
-import { useMembersSummary, useTeams } from '../api/hooks';
+import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useAllTeams, useMembersSummary } from '../api/hooks';
+import { treeOrder } from '../lib/team-tree';
 import { PencilIcon, PlusIcon } from './icons';
 import { WspProviders, useErrorText } from './parts';
 import { TeamDialog, type TeamDevice } from './team-dialog';
@@ -16,7 +18,11 @@ import { TeamDialog, type TeamDevice } from './team-dialog';
  */
 const NO_DEVICES: readonly TeamDevice[] = [];
 
-/** `/teams`: the Team Inbox teams list with Create and Edit team (TW-WSP-022). */
+/**
+ * `/teams`: Settings > Team and permissions > Teams (TW-WSP-022, Teams v2). One list for chat, CRM and workspaces that have both:
+ * teams are shown as a tree (a sub-team is indented under its parent), each with its manager, members, the two "can receive"
+ * switches and where it is used.
+ */
 export function TeamsScreen() {
   return (
     <WspProviders>
@@ -29,11 +35,15 @@ function Teams() {
   const t = useTranslations('workspaces-teams-tenancy.teams');
   const tc = useTranslations('workspaces-teams-tenancy.common');
   const errorText = useErrorText();
+  const canRead = [useCan('team.read'), useCan('team.manage'), useCan('inbox.team.manage')].some(
+    Boolean,
+  );
   const summaryQ = useMembersSummary();
-  const teamsQ = useTeams();
+  const teamsQ = useAllTeams(canRead);
   const canManage = summaryQ.data?.me.canManageTeams ?? false;
   const [editing, setEditing] = useState<WspTeam | 'new' | null>(null);
-  const loading = teamsQ.isPending;
+  const rows = useMemo(() => treeOrder(teamsQ.items), [teamsQ.items]);
+  const loading = teamsQ.isPending || teamsQ.hasNextPage;
   // The access summary fails fast (no retries) while the list retries a few times: whichever fails first is shown.
   const failed = summaryQ.isError ? summaryQ.error : teamsQ.isError ? teamsQ.error : null;
 
@@ -45,9 +55,11 @@ function Teams() {
             {t('eyebrow')}
           </div>
           <h1 className="text-3xl font-semibold tracking-tight">{t('title')}</h1>
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('subtitle')}</p>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground" data-testid="teams-subtitle">
+            {t('subtitle')}
+          </p>
         </div>
-        {canManage && (
+        {canRead && canManage && (
           <Button className="shrink-0" onClick={() => setEditing('new')} data-testid="create-team">
             <PlusIcon /> {t('create')}
           </Button>
@@ -62,10 +74,15 @@ function Teams() {
           <li>{t('how.one')}</li>
           <li>{t('how.two')}</li>
           <li>{t('how.three')}</li>
+          <li>{t('how.four')}</li>
         </ol>
       </details>
 
-      {failed !== null ? (
+      {!canRead ? (
+        <Alert tone="warning" data-testid="teams-no-access">
+          {t('noAccess')}
+        </Alert>
+      ) : failed !== null ? (
         <Alert tone="danger" className="flex flex-wrap items-center justify-between gap-3">
           <span>{errorText(failed)}</span>
           <Button
@@ -80,16 +97,12 @@ function Teams() {
           </Button>
         </Alert>
       ) : loading ? (
-        <ul
-          className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3"
-          aria-busy="true"
-          aria-label={t('loading')}
-        >
+        <ul className="space-y-3" aria-busy="true" aria-label={t('loading')}>
           {[0, 1, 2].map((i) => (
-            <li key={i} className="h-24 animate-pulse rounded-md border border-border bg-muted" />
+            <li key={i} className="h-20 animate-pulse rounded-md border border-border bg-muted" />
           ))}
         </ul>
-      ) : teamsQ.items.length === 0 ? (
+      ) : rows.length === 0 ? (
         <EmptyState
           title={t('emptyTitle')}
           message={t('emptyMessage')}
@@ -102,31 +115,17 @@ function Teams() {
           }
         />
       ) : (
-        <>
-          <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            {teamsQ.items.map((team) => (
-              <TeamCard
-                key={team.id}
-                team={team}
-                canEdit={canManage}
-                onEdit={() => setEditing(team)}
-              />
-            ))}
-          </ul>
-          {teamsQ.hasNextPage && (
-            <div className="flex justify-center">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => void teamsQ.fetchNextPage()}
-                disabled={teamsQ.isFetchingNextPage}
-              >
-                {teamsQ.isFetchingNextPage && <Spinner />}
-                {tc(teamsQ.isFetchingNextPage ? 'loadingMore' : 'loadMore')}
-              </Button>
-            </div>
-          )}
-        </>
+        <ul className="space-y-3" data-testid="teams-tree">
+          {rows.map(({ team, level }) => (
+            <TeamRow
+              key={team.id}
+              team={team}
+              level={level}
+              canEdit={canManage}
+              onEdit={() => setEditing(team)}
+            />
+          ))}
+        </ul>
       )}
 
       <TeamDialog
@@ -140,20 +139,40 @@ function Teams() {
   );
 }
 
-function TeamCard({
+function usageLines(
+  team: WspTeam,
+  t: (key: string, values?: Record<string, string | number>) => string,
+): string[] {
+  const u = team.usage;
+  const out: string[] = [];
+  if (u.routingRules > 0) out.push(t('usage.routingRules', { count: u.routingRules }));
+  if (u.assignmentRules > 0) out.push(t('usage.assignmentRules', { count: u.assignmentRules }));
+  if (u.segmentShares > 0) out.push(t('usage.segmentShares', { count: u.segmentShares }));
+  if (u.conversations > 0) out.push(t('usage.conversations', { count: u.conversations }));
+  if (u.childTeams > 0) out.push(t('usage.childTeams', { count: u.childTeams }));
+  return out;
+}
+
+function TeamRow({
   team,
+  level,
   canEdit,
   onEdit,
 }: {
   team: WspTeam;
+  level: number;
   canEdit: boolean;
   onEdit: () => void;
 }) {
   const t = useTranslations('workspaces-teams-tenancy.teams');
   const online = team.members.filter((m) => m.presence === 'online').length;
+  const used = usageLines(team, t);
+  const primaryCount = team.members.filter((m) => m.isPrimary).length;
   return (
     <li
       data-testid={`team-card-${team.name}`}
+      data-level={level}
+      style={{ marginInlineStart: `${Math.min(level, 4) * 1.5}rem` }}
       className="flex items-start gap-3 rounded-md border border-border bg-background p-4"
     >
       <span
@@ -162,26 +181,40 @@ function TeamCard({
         style={{ background: team.color }}
       />
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <h2 className="truncate text-sm font-semibold">{team.name}</h2>
           {team.isDefault && (
             <span className="rounded-full bg-muted px-2 py-0.5 text-[10.5px] text-muted-foreground">
               {t('default')}
             </span>
           )}
+          {team.receivesConversations && (
+            <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10.5px] text-primary">
+              {t('receivesConversations')}
+            </span>
+          )}
+          {team.receivesRecords && (
+            <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10.5px] text-primary">
+              {t('receivesRecords')}
+            </span>
+          )}
         </div>
-        <p className="mt-0.5 text-xs text-muted-foreground">
-          {t(`strategies.${team.assignmentStrategy}`)}
+        {team.description && (
+          <p className="mt-0.5 text-xs text-muted-foreground">{team.description}</p>
+        )}
+        <p className="mt-1 text-xs" data-testid={`team-manager-${team.name}`}>
+          {team.lead ? t('manager', { name: team.lead.fullName }) : t('noManager')}
         </p>
-        <p className="mt-2 text-xs">
+        <p className="mt-1 text-xs">
           {t('members', { count: team.members.length })}
+          {primaryCount > 0 && (
+            <span className="text-muted-foreground"> · {t('primaryCount', { count: primaryCount })}</span>
+          )}
           {online > 0 && <span className="text-success"> · {t('online', { count: online })}</span>}
         </p>
-        {team.deviceIds.length > 0 && (
-          <p className="mt-0.5 text-xs text-muted-foreground">
-            {t('devices', { count: team.deviceIds.length })}
-          </p>
-        )}
+        <p className="mt-0.5 text-xs text-muted-foreground" data-testid={`team-used-${team.name}`}>
+          {used.length > 0 ? `${t('usedBy')}: ${used.join(' · ')}` : t('usedByNone')}
+        </p>
       </div>
       {canEdit && (
         <button

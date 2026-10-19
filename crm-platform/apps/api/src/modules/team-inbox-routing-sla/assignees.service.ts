@@ -90,7 +90,7 @@ export class AssigneesService {
         SELECT t.uuid, t.name, t.color, t.assignment_strategy,
                (SELECT count(*)::int FROM team_members m WHERE m.org_id = t.org_id AND m.team_id = t.id) AS members
         FROM teams t
-        WHERE t.org_id = ${ctx.orgId}
+        WHERE t.org_id = ${ctx.orgId} AND t.receives_conversations
         ORDER BY t.sort, lower(t.name), t.id`);
       const teams: InboxAssigneeTeam[] = (teamRows.rows as Raw[]).map((r) => ({
         id: r.uuid as string,

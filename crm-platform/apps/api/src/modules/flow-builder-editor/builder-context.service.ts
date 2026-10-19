@@ -229,7 +229,7 @@ export class BuilderContextService {
             FROM teams t
             LEFT JOIN team_members tm ON tm.org_id = t.org_id AND tm.team_id = t.id
             LEFT JOIN users u ON u.org_id = tm.org_id AND u.id = tm.user_id
-            WHERE t.org_id = ${o} ORDER BY t.sort, lower(t.name), t.id, lower(u.full_name)`),
+            WHERE t.org_id = ${o} AND t.receives_conversations ORDER BY t.sort, lower(t.name), t.id, lower(u.full_name)`),
         tx.execute(
           sql`SELECT uuid, name, provider, model FROM ai_agents WHERE org_id = ${o} ORDER BY id`,
         ),

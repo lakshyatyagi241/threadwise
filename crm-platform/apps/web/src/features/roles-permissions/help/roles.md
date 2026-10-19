@@ -17,7 +17,7 @@ Roles decide what members can do in the workspace. The list shows the five prese
 1. Open **Settings**, go to **Team and permissions** and select **Roles and permissions**.
 2. To change a role, select its name or **Edit role** from its menu. Its details and the permission matrix open.
 3. Tick a permission to grant it. For a granted permission, choose **Allow** or **Deny**. Deny always wins, even when another role of the member allows the same permission.
-4. Where a permission supports it, choose the record scope: **All records**, **Team records** or **Own records**.
+4. Where a permission supports it, choose the record scope: **All records**, **My team's records** (records owned by you or by anyone who shares a team with you) or **Own records**. [Teams, managers and who sees what](help:teams-managers-access) explains how they fit together.
 5. To start from an existing role, pick it under **Start from role**. Its permissions are copied into the matrix, and you can then change them.
 6. Select **Save changes**, or **Create role** for a new role.
 

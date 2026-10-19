@@ -235,7 +235,6 @@
       "lockedHint": "Questo permesso non è ancora disponibile per questo workspace. Si sblocca quando la funzione del piano è attiva o l’app è installata.",
       "scope": {
         "all": "Tutti i record",
-        "team": "Record del team",
         "own": "Record propri"
       }
     },

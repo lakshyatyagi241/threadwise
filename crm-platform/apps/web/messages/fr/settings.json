@@ -196,9 +196,7 @@
         "keywords": "accès, admin, responsable, agent, rbac, autorisations"
       },
       "teams": {
-        "label": "Équipes",
-        "description": "Regroupez les personnes en équipes pour le routage et les rapports.",
-        "keywords": "groupes, services, attribution, routage"
+        "label": "Équipes"
       },
       "ai-keys": {
         "label": "Clés de fournisseurs d’IA",

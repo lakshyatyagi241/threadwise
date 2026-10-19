@@ -196,9 +196,7 @@
         "keywords": "accesso, admin, manager, agente, rbac, permessi"
       },
       "teams": {
-        "label": "Team",
-        "description": "Raggruppa le persone in team per instradamento e report.",
-        "keywords": "gruppi, reparti, assegnazione, instradamento"
+        "label": "Team"
       },
       "ai-keys": {
         "label": "Chiavi dei provider IA",

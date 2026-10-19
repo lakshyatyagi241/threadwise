@@ -235,7 +235,6 @@
       "lockedHint": "Izin ini belum tersedia untuk workspace ini. Akan aktif saat fitur paket diaktifkan atau aplikasi dipasang.",
       "scope": {
         "all": "Semua data",
-        "team": "Data tim",
         "own": "Data sendiri"
       }
     },
