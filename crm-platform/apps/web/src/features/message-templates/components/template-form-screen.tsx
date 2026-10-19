@@ -38,7 +38,7 @@ import {
 import { applyAiDraft, canDraftCategory, takeAiDraft } from '../lib/ai-draft';
 import { buttonIssues } from '../lib/buttons';
 import { galleryToState } from '../lib/gallery-state';
-import { counter, wrapSelection } from '../lib/format';
+import { counter, toggleSelection } from '../lib/format';
 import {
   BODY_MAX,
   EXPIRY_MAX,
@@ -337,10 +337,10 @@ function TemplateForm({
     }
   }
 
-  function wrap(marker: string) {
+  function toggle(marker: string) {
     const el = bodyRef.current;
     if (!el) return;
-    const r = wrapSelection(
+    const r = toggleSelection(
       current.body,
       el.selectionStart,
       el.selectionEnd,
@@ -596,7 +596,7 @@ function TemplateForm({
               <Section title={t('body.title')} hint={t('body.hint')}>
                 <div role="toolbar" aria-label={t('body.toolbar')} className="flex flex-wrap gap-1">
                   {TOOLBAR.map((b) => (
-                    <Button key={b.id} size="sm" variant="secondary" onClick={() => wrap(b.marker)}>
+                    <Button key={b.id} size="sm" variant="secondary" onClick={() => toggle(b.marker)}>
                       {t(`body.format.${b.id}`)}
                     </Button>
                   ))}
