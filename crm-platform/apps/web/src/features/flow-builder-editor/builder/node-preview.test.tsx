@@ -47,6 +47,27 @@ describe('Condition card', () => {
   });
 });
 
+describe('Update contact field card', () => {
+  const updateCard = (data: Record<string, unknown>) =>
+    renderIntl(
+      <NodePreview
+        node={{ id: 'n', type: 'update_contact', x: 0, y: 0, data } as FlowNode}
+        ctx={{} as FlbBuilderContext}
+      />,
+    );
+
+  it('shows the field key and the value it is set to', () => {
+    const html = updateCard({ field: 'city', value: '{{user_message}}' });
+    expect(html).toContain('city');
+    expect(html).toContain('{{user_message}}');
+  });
+
+  it('shows a dash for a field or value not set yet', () => {
+    const html = updateCard({ field: '', value: '' });
+    expect(html).toContain('—');
+  });
+});
+
 describe('Answer from FAQ card', () => {
   const faqCard = (data: Record<string, unknown>) =>
     renderIntl(
