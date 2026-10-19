@@ -38,7 +38,7 @@ An FAQ is a question, the answer to give, and a list of **phrasings**: other way
 2. Select the **FAQs** tab, beside **Build**. A website chat bot also has **Customize** and **Install**.
 3. Inside the tab, the strip shows **FAQs**, **Test**, **Unanswered** and **Insights**. Each one has its own address (`?tab=faqs&view=...`), so you can reload, share a link or use the browser's back button. Switching between Build and FAQs does not lose changes to the flow.
 
-The Advanced builder has the same **FAQs** tab beside **Build** for a saved flow, with the same screens, so a flow's FAQs are edited from whichever builder you opened it in. The FAQ step's form links to the tab.
+The Advanced canvas has no **FAQs** tab: FAQs belong to simple flows, so the FAQ icon on a flow's card opens the Simple builder's **FAQs** tab. The FAQ step's form links to the tab.
 
 ## Add an FAQ
 

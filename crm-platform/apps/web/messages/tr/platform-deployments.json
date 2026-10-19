@@ -1,6 +1,8 @@
 {
   "platform-deployments": {
-    "nav": { "item": "Dağıtımlar" },
+    "nav": {
+      "item": "Dağıtımlar"
+    },
     "eyebrow": "Operasyon",
     "title": "Dağıtımlar",
     "description": "Geta konsoluna yayımlanan her akış: kuyrukta ne bekliyor, şu an ne çalışıyor, ne başarısız oldu ve nedeni. Birkaç saniyede bir yenilenir.",
@@ -38,7 +40,10 @@
       "failed": "Başarısız",
       "live": "Canlı"
     },
-    "steps": { "configuration_update": "Yapılandırma güncellemesi", "publish_bot": "Botu yayımla" },
+    "steps": {
+      "configuration_update": "Yapılandırma güncellemesi",
+      "publish_bot": "Botu yayımla"
+    },
     "stalledBadge": "Takılı",
     "version": "Sürüm {version}",
     "notStarted": "Başlamadı",
@@ -51,6 +56,29 @@
       "queued": "Kuyrukta bekleyen bir şey yok.",
       "failed": "Başarısız bir yayımlama yok.",
       "live": "Henüz Geta konsolunda canlı bir akış yok."
+    },
+    "tabs": {
+      "label": "Gösterilecekleri seçin",
+      "publishes": "Akış yayımları",
+      "geta": "Geta konsolu"
+    },
+    "publishes": {
+      "description": "Her akış yayımı: işçinin kuyruğa aldıkları, şu an işlediği ve hangi yayımların neden başarısız olduğu. Birkaç saniyede bir yenilenir.",
+      "stalledAlert": "{count} akış yayımı {minutes} dakikadır ilerlemedi. İşçi outbox'ı boşaltmayı durdurmuş olabilir.",
+      "truncated": "İlk {limit} yayım gösteriliyor. Kalanlarını görmek için bir durum seçin.",
+      "notProcessed": "Henüz değil",
+      "cols": {
+        "attempts": "Denemeler",
+        "queued": "Kuyruğa alındı",
+        "finished": "Tamamlandı"
+      },
+      "status": {
+        "done": "Tamamlandı"
+      },
+      "empty": {
+        "all": "Henüz hiçbir akış yayımlanmadı.",
+        "done": "Son 30 günde tamamlanan bir yayım yok."
+      }
     }
   }
 }

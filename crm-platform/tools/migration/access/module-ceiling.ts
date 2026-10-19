@@ -8,10 +8,19 @@
  */
 export const MODULE_CEILING: Record<string, string[]> = {
   companies: ['record.companies.', 'record.company-properties.'],
-  'sales-docs': ['record.sales-docs.', 'record.sales-orders.', 'record.invoices.', 'record.recurring-invoices.', 'record.credit-notes.', 'record.payments.', 'record.tax-rates.'],
+  'sales-docs': [
+    'record.sales-docs.',
+    'record.sales-orders.',
+    'record.invoices.',
+    'record.recurring-invoices.',
+    'record.credit-notes.',
+    'record.payments.',
+    'record.tax-rates.',
+  ],
   deals: ['record.deals.', 'record.pipelines.'],
-  tasks: ['record.tasks.'],
-  appointments: ['record.appointments.', 'record.booking-types.'],
+  // Task outcomes and the Sales Activities page are part of tasks: they close with it
+  tasks: ['record.tasks.', 'settings.task_outcomes.', 'crm.activity_types.'],
+  appointments: ['record.appointments.', 'record.booking-types.', 'appointments.'],
   forms: ['record.forms.', 'record.form-submissions.', 'wfl.', 'exam.'],
   'ai-crm': ['aicrm.', 'lsc.'],
   // AI agents (trained assistants and their knowledge): Waboo had no such area, so a migrated workspace only has it when a Waboo permission maps into it

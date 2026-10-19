@@ -2,15 +2,19 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { publicTrustPageSchema, type PublicTrustPage } from '@crm/contracts';
 import { apiBase } from '@/lib/auth/server';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 /** The workspace's public page, or null when it is not published (the API answers one 404 for every reason). */
 export async function loadTrustPage(slug: string): Promise<PublicTrustPage | null> {
   if (!/^[A-Za-z0-9_-]{1,120}$/.test(slug)) return null;
   try {
-    const res = await fetch(`${apiBase()}/v2/public/compliance/trust/${encodeURIComponent(slug)}`, {
-      cache: 'no-store',
-      headers: { accept: 'application/json' },
-    });
+    const res = await upstreamFetch(
+      `${apiBase()}/v2/public/compliance/trust/${encodeURIComponent(slug)}`,
+      {
+        cache: 'no-store',
+        headers: { accept: 'application/json' },
+      },
+    );
     if (!res.ok) return null;
     const parsed = publicTrustPageSchema.safeParse(await res.json());
     return parsed.success ? parsed.data : null;

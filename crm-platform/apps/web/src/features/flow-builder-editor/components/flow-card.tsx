@@ -8,7 +8,7 @@ import { cn } from '@crm/ui';
 import { purposeOf, relativeTime } from '../lib/list-model';
 import { useFlb, useMsg } from '../lib/msg';
 import { flowTypeLabel } from '../lib/contract-text';
-import { openHref, type BuilderMode } from '../lib/builder-mode';
+import { openHref } from '../lib/builder-mode';
 
 export const STATE_STYLE: Record<FlowState, { pill: string; dot: string }> = {
   live: { pill: 'bg-primary/10 text-brand border-primary/30', dot: 'bg-primary' },
@@ -127,8 +127,6 @@ export interface CardActions {
   onExport: (f: FlowSummary) => void | Promise<void>;
   onDelete: (f: FlowSummary) => void;
   can: { update: boolean; create: boolean; remove: boolean; faqs?: boolean };
-  /** Which builder(s) the platform admin offers; absent means both. */
-  builderMode?: BuilderMode;
 }
 
 export function triggerLabelKey(
@@ -295,15 +293,15 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
 
       <div className="mt-4 flex items-center gap-2">
         <Link
-          href={openHref(actions.builderMode ?? 'advanced', flow.id, flow.flowType)}
+          href={openHref(flow.id, flow.flowType)}
           className="min-w-0 flex-1 rounded-full border border-border px-2 py-1.5 text-center text-[11.5px] font-medium whitespace-nowrap hover:bg-muted"
         >
           {t('openBuilder')}
         </Link>
-        {actions.can.faqs && flow.flowType !== 'call' ? (
-          // A flow's FAQs, its unanswered questions and the message sent when nothing matches are on the FAQs tab of its builder.
+        {actions.can.faqs && (flow.flowType === 'chat' || flow.flowType === 'web') ? (
+          // A simple flow's FAQs, its unanswered questions and the message sent when nothing matches are on the FAQs tab of the Simple builder.
           <Link
-            href={`${openHref(actions.builderMode ?? 'advanced', flow.id, flow.flowType)}?tab=faqs`}
+            href={`/flows/simple/${flow.id}?tab=faqs`}
             data-flow-faqs={flow.id}
             title={t('faqs')}
             aria-label={t('faqs')}
@@ -461,7 +459,7 @@ export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: C
         </p>
         <div className="mt-6 flex items-center gap-2">
           <Link
-            href={openHref(actions.builderMode ?? 'advanced', flow.id, flow.flowType)}
+            href={openHref(flow.id, flow.flowType)}
             className="rounded-full border border-border bg-background px-4 py-2 text-[12px] font-medium hover:bg-muted"
           >
             {t('open')}

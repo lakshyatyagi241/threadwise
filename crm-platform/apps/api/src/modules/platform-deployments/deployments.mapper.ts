@@ -1,8 +1,11 @@
 import {
   DEPLOYMENT_ERROR_MAX_CHARS,
   deploymentRowSchema,
+  publishRowSchema,
   type DeploymentCounts,
   type DeploymentRow,
+  type PublishCounts,
+  type PublishRow,
 } from '@crm/contracts';
 import type { Raw } from './deployments.store';
 
@@ -35,6 +38,32 @@ export function toDeploymentCounts(r: Raw): DeploymentCounts {
     queued: Number(r.queued ?? 0),
     failed: Number(r.failed ?? 0),
     live: Number(r.live ?? 0),
+    stalled: Number(r.stalled ?? 0),
+  };
+}
+
+/** One flow publish (outbox event) to the wire shape. The error is cut here, as for Geta deployments. */
+export function toPublishRow(r: Raw): PublishRow {
+  return publishRowSchema.parse({
+    workspaceId: String(r.workspace_id),
+    workspaceName: String(r.workspace_name),
+    flowId: String(r.flow_id),
+    flowName: String(r.flow_name),
+    status: r.publish_status,
+    attempts: Number(r.attempts ?? 0),
+    lastError: cut(r.last_error),
+    queuedAt: new Date(r.queued_at as string).toISOString(),
+    processedAt: iso(r.processed_at),
+    stalled: r.stalled === true,
+  });
+}
+
+export function toPublishCounts(r: Raw): PublishCounts {
+  return {
+    running: Number(r.running ?? 0),
+    queued: Number(r.queued ?? 0),
+    failed: Number(r.failed ?? 0),
+    done: Number(r.done ?? 0),
     stalled: Number(r.stalled ?? 0),
   };
 }

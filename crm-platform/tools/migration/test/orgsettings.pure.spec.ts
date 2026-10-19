@@ -247,4 +247,11 @@ describe('task outcomes, last logins and chat limits', () => {
       2,
     ]);
   });
+
+  it('knows the outcome list was read, even when empty, so the seeded defaults can go', async () => {
+    const { planSettings } = await import('../load/orgsettings');
+    expect(planSettings({ taskOutcomes: [] }, false).taskOutcomesKnown).toBe(true);
+    expect(planSettings({ pipelines: [] }, false).taskOutcomesKnown).toBe(false);
+    expect(planSettings(undefined, false).taskOutcomesKnown).toBe(false);
+  });
 });

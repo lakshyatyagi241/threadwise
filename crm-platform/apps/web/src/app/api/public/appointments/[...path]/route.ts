@@ -1,6 +1,7 @@
 import { matchPublicPath, slotsQuery } from '@/features/appointments/lib/public-paths';
 import { isSameOrigin, problem } from '@/lib/auth/proxy';
 import { apiBase } from '@/lib/auth/server';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 /**
  * The visitor's calls (`/book/<org>/<service>` and `/b/manage/<token>`): relayed to the API's public appointments routes WITHOUT
@@ -59,7 +60,7 @@ async function handler(req: Request, ctx: { params: Promise<{ path: string[] }> 
   const target = `${apiBase()}/v2/public/${match.path}${query}`;
   let upstream: Response;
   try {
-    upstream = await fetch(target, {
+    upstream = await upstreamFetch(target, {
       method: match.method,
       headers,
       body,

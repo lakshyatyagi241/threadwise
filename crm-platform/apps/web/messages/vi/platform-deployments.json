@@ -1,6 +1,8 @@
 {
   "platform-deployments": {
-    "nav": { "item": "Triển khai" },
+    "nav": {
+      "item": "Triển khai"
+    },
     "eyebrow": "Vận hành",
     "title": "Triển khai",
     "description": "Mọi luồng đã xuất bản lên console Geta: cái gì đang chờ trong hàng đợi, cái gì đang chạy, và cái gì lỗi cùng lý do. Tự làm mới vài giây một lần.",
@@ -38,7 +40,10 @@
       "failed": "Lỗi",
       "live": "Đang hoạt động"
     },
-    "steps": { "configuration_update": "Cập nhật cấu hình", "publish_bot": "Xuất bản bot" },
+    "steps": {
+      "configuration_update": "Cập nhật cấu hình",
+      "publish_bot": "Xuất bản bot"
+    },
     "stalledBadge": "Bị treo",
     "version": "Phiên bản {version}",
     "notStarted": "Chưa bắt đầu",
@@ -51,6 +56,29 @@
       "queued": "Không có gì đang chờ trong hàng đợi.",
       "failed": "Không có lần xuất bản nào bị lỗi.",
       "live": "Chưa có luồng nào đang hoạt động trên console Geta."
+    },
+    "tabs": {
+      "label": "Chọn nội dung hiển thị",
+      "publishes": "Xuất bản luồng",
+      "geta": "Console Geta"
+    },
+    "publishes": {
+      "description": "Mọi lần xuất bản luồng: những gì worker đã đưa vào hàng đợi, đang xử lý gì, và lần xuất bản nào lỗi cùng lý do. Tự làm mới vài giây một lần.",
+      "stalledAlert": "{count} lần xuất bản luồng không tiến triển trong {minutes} phút. Worker có thể đã ngừng xử lý hàng đợi.",
+      "truncated": "Đang hiển thị {limit} lần xuất bản đầu tiên. Chọn trạng thái để xem phần còn lại.",
+      "notProcessed": "Chưa",
+      "cols": {
+        "attempts": "Số lần thử",
+        "queued": "Vào hàng đợi lúc",
+        "finished": "Hoàn tất lúc"
+      },
+      "status": {
+        "done": "Hoàn tất"
+      },
+      "empty": {
+        "all": "Chưa có luồng nào được xuất bản.",
+        "done": "Không có lần xuất bản nào hoàn tất trong 30 ngày qua."
+      }
     }
   }
 }

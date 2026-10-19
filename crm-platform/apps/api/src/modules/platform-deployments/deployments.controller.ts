@@ -2,8 +2,11 @@ import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   deploymentsQuerySchema,
+  publishesQuerySchema,
   type DeploymentsQuery,
   type DeploymentsResponse,
+  type PublishesQuery,
+  type PublishesResponse,
 } from '@crm/contracts';
 import { ActorKinds } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
@@ -29,5 +32,16 @@ export class DeploymentsController {
     @Query(zodPipe(deploymentsQuerySchema)) query: DeploymentsQuery,
   ): Promise<DeploymentsResponse> {
     return this.deployments.list(query);
+  }
+
+  @Get('publishes')
+  @ApiOperation({
+    summary:
+      'Flow publishes: outbox state of each flow.published event (queued, running, failed, done)',
+  })
+  publishes(
+    @Query(zodPipe(publishesQuerySchema)) query: PublishesQuery,
+  ): Promise<PublishesResponse> {
+    return this.deployments.publishes(query);
   }
 }

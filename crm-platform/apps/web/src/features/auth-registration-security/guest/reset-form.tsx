@@ -116,7 +116,9 @@ export function ResetForm({
         schema: neutralAckSchema,
       });
       // The reset ended every session of this account; drop any cookies of this browser so /login shows the success note.
-      await fetch('/api/auth/logout', { method: 'POST' }).catch(() => undefined);
+      await fetch('/api/auth/logout', { signal: AbortSignal.timeout(5000), method: 'POST' }).catch(
+        () => undefined,
+      );
       router.replace(`/login?reset=1&org=${encodeURIComponent(org)}`);
     } catch (err) {
       const mapped = mapAuthError(err);

@@ -66,17 +66,6 @@ export function tabFromParam(
 }
 
 /**
- * The tab to open on. Only a flow that already exists can start on a tab other than Build: a new one has nothing to show there.
- */
-export function useInitialTab(
-  exists: boolean,
-  set: TabSet = { faqs: false, web: true },
-): BuilderTab {
-  const params = useSearchParams();
-  return exists ? tabFromParam(params.get('tab'), set) : 'build';
-}
-
-/**
  * The tab in state, mirrored in the address (`?tab=`, and `view` for the FAQs panel) so a reload, a shared link and the back
  * button land on the same tab. Changing the tab never touches the flow being edited: the Build page stays mounted underneath.
  */

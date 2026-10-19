@@ -1,6 +1,8 @@
 {
   "platform-deployments": {
-    "nav": { "item": "Déploiements" },
+    "nav": {
+      "item": "Déploiements"
+    },
     "eyebrow": "Exploitation",
     "title": "Déploiements",
     "description": "Chaque flux publié sur la console Geta : ce qui est en file d’attente, ce qui tourne maintenant, et ce qui a échoué et pourquoi. Se met à jour toutes les quelques secondes.",
@@ -54,6 +56,29 @@
       "queued": "Rien n’attend dans la file.",
       "failed": "Aucune publication n’a échoué.",
       "live": "Aucun flux n’est encore en ligne sur la console Geta."
+    },
+    "tabs": {
+      "label": "Choisir ce qui s’affiche",
+      "publishes": "Publications de flux",
+      "geta": "Console Geta"
+    },
+    "publishes": {
+      "description": "Chaque publication de flux : ce que le worker a mis en file, ce qu’il traite maintenant, et les publications échouées et pourquoi. Se met à jour toutes les quelques secondes.",
+      "stalledAlert": "{count} publication(s) de flux n’ont pas bougé depuis {minutes} minutes. Le worker a peut-être cessé de vider la file.",
+      "truncated": "Affichage des {limit} premières publications. Choisissez un statut pour voir les autres.",
+      "notProcessed": "Pas encore",
+      "cols": {
+        "attempts": "Tentatives",
+        "queued": "Mis en file le",
+        "finished": "Terminé le"
+      },
+      "status": {
+        "done": "Terminé"
+      },
+      "empty": {
+        "all": "Aucun flux n’a encore été publié.",
+        "done": "Aucune publication n’a été terminée ces 30 derniers jours."
+      }
     }
   }
 }

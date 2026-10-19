@@ -62,7 +62,11 @@ export function DeleteAccountView() {
       await authApi.deleteAccount(body);
       // The session is gone server-side; a full navigation clears every client cache too.
       try {
-        await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' });
+        await fetch('/api/auth/logout', {
+          signal: AbortSignal.timeout(5000),
+          method: 'POST',
+          credentials: 'same-origin',
+        });
       } catch {
         /* the cookies are useless now anyway */
       }
