@@ -30,10 +30,18 @@ export function encodeCursor(cursor: Cursor): string {
   ).toString('base64url');
 }
 
+/** The only timestamp spelling a cursor may carry: it goes into SQL as `::timestamptz`, and `new Date('2026')` accepts text Postgres refuses (a 500). */
+const CURSOR_ISO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,6})?(Z|[+-]\d{2}:\d{2})$/;
+/** A bigint id: digits only, so `1e20` or `99999999999999999999` never reaches a bigint comparison. */
+const CURSOR_ID = /^\d{1,18}$/;
+
+/** Whether a cursor's timestamp text is one Postgres reads as written (for the modules that keep their own cursor format). */
+export const isCursorTimestamp = (s: string): boolean => CURSOR_ISO.test(s);
+
 export function decodeCursor(raw: string): Cursor {
   try {
     const [iso, id] = Buffer.from(raw, 'base64url').toString('utf8').split('|');
-    if (!iso || !id) throw new Error('malformed');
+    if (!iso || !id || !CURSOR_ISO.test(iso) || !CURSOR_ID.test(id)) throw new Error('malformed');
     const createdAt = new Date(iso);
     const parsedId = Number.parseInt(id, 10);
     if (Number.isNaN(createdAt.getTime()) || Number.isNaN(parsedId)) throw new Error('malformed');
