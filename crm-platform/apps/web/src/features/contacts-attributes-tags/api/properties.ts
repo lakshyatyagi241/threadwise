@@ -69,7 +69,7 @@ const optionPage = z.object({ data: z.array(fieldOptionResponseSchema) });
 /** One page of a lazy property's options, filtered by what the person typed. Waits for the property to be chosen. */
 export function useFieldOptionSearch(fieldId: string | null, q: string, enabled = true) {
   const term = q.trim();
-  return useQuery({
+  return useQuery<FieldOptionResponse[]>({
     enabled: enabled && fieldId !== null,
     queryKey: [...OPTION_SEARCH, fieldId, term],
     queryFn: ({ signal }) =>
@@ -77,7 +77,7 @@ export function useFieldOptionSearch(fieldId: string | null, q: string, enabled 
         query: { q: term || undefined, limit: 50 },
         schema: optionPage,
         signal,
-      }).then((r) => r.data),
+      }).then((r): FieldOptionResponse[] => r.data),
     placeholderData: keepPreviousData,
     staleTime: 5 * 60_000,
   });
