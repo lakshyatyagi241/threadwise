@@ -10,6 +10,7 @@ function view(
   return {
     id,
     kind: spec.kind,
+    group: spec.group,
     canArchive: spec.canArchive,
     source: 'default',
     liveDays: spec.defaults.liveDays,

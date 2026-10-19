@@ -21,6 +21,45 @@ describe('rollup rules', () => {
   });
 });
 
+describe('the message feed rule', () => {
+  it('rolls the state events up by status, channel and the packed feed class, entering and leaving', () => {
+    const { sql: text } = render(rollupSelect(rule(METRIC.MSG_FEED), 'hour', 'org', window));
+    // two halves: the state entered (d1 = status, n = +qty) and the state left (d1 = k2, n = -qty, only where k2 is set)
+    expect(text.match(/from an_events e/gi)).toHaveLength(2);
+    expect(text).toMatch(/e\.type in \(7\)/i);
+    expect(text).toMatch(/coalesce\(e\.status, 0\)::bigint as d1/i);
+    expect(text).toMatch(/coalesce\(e\.k2, 0\)::bigint as d1/i);
+    expect(text).toMatch(/e\.k2 IS NOT NULL/);
+    expect(text).toMatch(/-coalesce\(sum\(e\.qty\), 0\)::bigint as n/i);
+    expect(text).toMatch(/coalesce\(sum\(e\.qty\), 0\)::bigint as n/i);
+    expect(text).toMatch(/union all/i);
+    expect(text).toMatch(/coalesce\(e\.channel_id, 0\)::bigint as d2/i);
+    expect(text).toMatch(
+      /\(coalesce\(e\.source_kind, 0\) \* 16 \+ coalesce\(e\.k1, 0\)\)::bigint as d3/i,
+    );
+    expect(text).toMatch(/e\.occurred_at >= an_msg_feed_cutover\(\)/);
+  });
+
+  it('refuses a paired rule that cannot be signed', () => {
+    const bad: RollupRule = { ...rule(METRIC.MSG_FEED), n: 'count' };
+    expect(() => rollupSelect(bad, 'hour', 'org', window)).toThrow(/paired rule needs/);
+    const badDim: RollupRule = {
+      ...rule(METRIC.MSG_FEED),
+      dims: ['direction', 'channel_id', 'feed_class'],
+    };
+    expect(() => rollupSelect(badDim, 'hour', 'org', window)).toThrow(/paired rule needs/);
+  });
+
+  it('rolls first replies up by channel with the reply time as the sum', () => {
+    const { sql: text } = render(
+      rollupSelect(rule(METRIC.CONV_REPLY_BY_CHANNEL), 'day', 'org', window),
+    );
+    expect(text).toMatch(/e\.type in \(42\)/i);
+    expect(text).toMatch(/coalesce\(e\.channel_id, 0\)::bigint as d1/i);
+    expect(text).toMatch(/coalesce\(sum\(e\.duration_ms\), 0\)::bigint as s1/i);
+  });
+});
+
 describe('rollupSelect', () => {
   it('groups org rows by the workspace timezone and lists the event types', () => {
     const { sql: text } = render(rollupSelect(rule(METRIC.MSG_COUNT), 'hour', 'org', window));

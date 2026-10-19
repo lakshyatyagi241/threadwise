@@ -38,6 +38,8 @@ export interface HistoryContext {
   contacts: { scope: RecordScopeLike | null; userId: number; teamIds: number[] };
   /** The caller may read the wallet statement: charges are joined to the rows. */
   cost: boolean;
+  /** Channels whose conversations this caller may not see (others' personal mailboxes); the rollup path subtracts them. Only set when `bulk`. */
+  hiddenChannelIds?: number[];
 }
 
 export interface HistorySelection {
@@ -720,7 +722,11 @@ export function pageSql(
 }
 
 /** The totals of the KPI cards for one window. */
-export function countsSql(ctx: HistoryContext, sel: HistorySelection): SQL {
+export function countsSql(
+  ctx: HistoryContext,
+  sel: HistorySelection,
+  entities?: BranchOptions['entities'],
+): SQL {
   return sql`SELECT
       count(*)::int AS total,
       count(*) FILTER (WHERE r.direction = 'in')::int AS received,
@@ -729,7 +735,7 @@ export function countsSql(ctx: HistoryContext, sel: HistorySelection): SQL {
       count(*) FILTER (WHERE r.direction = 'out' AND r.status = 'delivered')::int AS delivered,
       count(*) FILTER (WHERE r.direction = 'out' AND r.status = 'read')::int AS read,
       count(*) FILTER (WHERE r.direction = 'out' AND r.status = 'failed')::int AS failed
-    FROM (${feedSql(ctx, sel, { level: 'slim', ignoreNarrow: true })}) r`;
+    FROM (${feedSql(ctx, sel, { level: 'slim', ignoreNarrow: true, entities })}) r`;
 }
 
 /** Charged amounts of the rows of the window, by currency. A refunded charge is not counted. */

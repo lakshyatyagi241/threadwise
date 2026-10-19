@@ -23,10 +23,16 @@ export {
   loadPolicy,
   loadRuns,
   partitionSizes,
+  countArchiveDaysOlderThan,
   countOlderThan,
+  dbArchiveStats,
+  liveDaysFor,
+  PREVIEW_COUNT_CAP,
   recordRun,
   savePolicy,
   type RunRecord,
   type StoredPolicy,
   type StoredRun,
 } from './retention-store';
+export { TABLE_ITEMS, type TableItem } from './table-items';
+export { recordSweep } from './sweep-record';

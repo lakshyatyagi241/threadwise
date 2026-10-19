@@ -46,7 +46,9 @@
       "catchUp": "Đồng bộ bổ sung",
       "migrateHint": "Di chuyển bắt đầu bằng một lượt diễn tập đầy đủ và không nạp gì nếu lượt đó không sạch. Chạy thử riêng là tùy chọn.",
       "queued": "Đã xếp hàng lượt chạy.",
-      "scheduled": "Đã lên lịch lượt chạy."
+      "scheduled": "Đã lên lịch lượt chạy.",
+      "skipWhatsapp": "Không di chuyển số WhatsApp (để thử nghiệm)",
+      "skipWhatsappHint": "Không gian làm việc được di chuyển đầy đủ, nhưng số WhatsApp của nó không được nhập hay kết nối."
     },
     "confirm": {
       "title": "Di chuyển {org}",
@@ -76,7 +78,9 @@
       "migrateAll": "Di chuyển tất cả",
       "migrateHint": "Mỗi tổ chức bắt đầu bằng lượt diễn tập đầy đủ riêng và không nạp gì nếu lượt đó không sạch. Chạy thử riêng là tùy chọn.",
       "queued": "Đã xếp hàng lô.",
-      "scheduled": "Đã lên lịch lô."
+      "scheduled": "Đã lên lịch lô.",
+      "skipWhatsapp": "Không di chuyển các số WhatsApp (để thử nghiệm)",
+      "skipWhatsappHint": "Không có không gian làm việc nào trong số này được nhập hay kết nối số WhatsApp."
     },
     "bulkConfirm": {
       "title": "Di chuyển {count} tổ chức",
@@ -174,7 +178,8 @@
     "mode": {
       "dry": "Chạy thử",
       "load": "Di chuyển",
-      "catchup": "Đồng bộ bổ sung"
+      "catchup": "Đồng bộ bổ sung",
+      "skipWhatsapp": "Không có số WhatsApp"
     },
     "status": {
       "queued": "Đang xếp hàng",

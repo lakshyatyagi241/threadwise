@@ -3,6 +3,7 @@ import { Cron } from '@nestjs/schedule';
 import { sql } from 'drizzle-orm';
 import { retentionConfig, type RetentionConfig } from '../../config/domains/notifications.env';
 import { DatabaseService } from '../../infra/db/database.service';
+import { liveDaysFor, recordSweep } from '../data-retention';
 
 export interface RetentionResult {
   /** Another worker held the lock: nothing was done and nothing is wrong. */
@@ -63,6 +64,16 @@ export class NotificationRetentionService {
     config: RetentionConfig = retentionConfig(),
   ): Promise<RetentionResult> {
     const started = Date.now();
+    // Windows saved on the retention dashboard replace the environment's; an unread row is never kept shorter than a read one.
+    const saved = await this.db.privileged(async (tx) => ({
+      readDays: await liveDaysFor(tx, 'notifications_read', config.readDays),
+      unreadDays: await liveDaysFor(tx, 'notifications_unread', config.unreadDays),
+    }));
+    config = {
+      ...config,
+      readDays: saved.readDays,
+      unreadDays: Math.max(saved.unreadDays, saved.readDays),
+    };
     const readCutoff = new Date(now.getTime() - config.readDays * DAY_MS);
     const unreadCutoff = new Date(now.getTime() - config.unreadDays * DAY_MS);
     const result: RetentionResult = {
@@ -101,6 +112,20 @@ export class NotificationRetentionService {
     }
 
     result.durationMs = Date.now() - started;
+    await recordSweep(
+      this.db,
+      this.logger,
+      'notifications_read',
+      { deletedRows: result.readDeleted, outcome: result.moreToDo ? 'partial' : 'ok' },
+      now,
+    );
+    await recordSweep(
+      this.db,
+      this.logger,
+      'notifications_unread',
+      { deletedRows: result.unreadDeleted, outcome: result.moreToDo ? 'partial' : 'ok' },
+      now,
+    );
     this.logger.log(
       {
         readDeleted: result.readDeleted,

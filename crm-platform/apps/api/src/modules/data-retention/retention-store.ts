@@ -1,6 +1,13 @@
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import { type RetentionItemId, type RetentionRun, type RetentionValues } from '@crm/contracts';
+import {
+  retentionProblem,
+  retentionSpecOf,
+  type RetentionItemId,
+  type RetentionRun,
+  type RetentionValues,
+} from '@crm/contracts';
+import { TABLE_ITEMS } from './table-items';
 import { AppError } from '../../common/errors/app-error';
 
 /**
@@ -186,10 +193,11 @@ export async function liveStats(tx: Tx, item: RetentionItemId): Promise<LiveStat
       oldestMonth: oldest ? `${oldest.slice(0, 4)}-${oldest.slice(4)}` : null,
     };
   }
-  if (item === 'security_events') {
+  const t = TABLE_ITEMS[item];
+  if (t) {
     const res = await tx.execute(sql`
       SELECT pg_total_relation_size(c.oid)::text AS bytes, c.reltuples::bigint::text AS rows
-        FROM pg_class c WHERE c.oid = 'public.security_events'::regclass`);
+        FROM pg_class c WHERE c.oid = ${`public.${t.table}`}::regclass`);
     const r = rowsOf(res)[0]!;
     return {
       bytes: Number(r.bytes),
@@ -198,11 +206,42 @@ export async function liveStats(tx: Tx, item: RetentionItemId): Promise<LiveStat
       oldestMonth: null,
     };
   }
+  if (item === 'message_log') {
+    const res = await tx.execute(sql`
+      SELECT pg_total_relation_size(c.oid)::text AS bytes, c.reltuples::bigint::text AS rows
+        FROM pg_class c WHERE c.oid = 'public.message_events'::regclass`);
+    const r = rowsOf(res)[0]!;
+    return {
+      bytes: Number(r.bytes),
+      rows: Number(r.rows) < 0 ? null : Number(r.rows),
+      partitions: null,
+      oldestMonth: null,
+    };
+  }
+  if (item === 'call_recordings') {
+    const res = await tx.execute(
+      sql`SELECT count(*)::text AS rows FROM wa_calls WHERE recording_path IS NOT NULL`,
+    );
+    return { bytes: 0, rows: Number(rowsOf(res)[0]!.rows), partitions: null, oldestMonth: null };
+  }
   const res = await tx.execute(sql`
     SELECT count(*)::text AS rows, COALESCE(sum(file_bytes), 0)::text AS bytes
       FROM audit_log_exports WHERE status = 'ready'`);
   const r = rowsOf(res)[0]!;
   return { bytes: Number(r.bytes), rows: Number(r.rows), partitions: null, oldestMonth: null };
+}
+
+/** Size of the part of an item that sits in the database's own archive (the daily archive of the message log). Null for other items. */
+export async function dbArchiveStats(
+  tx: Tx,
+  item: RetentionItemId,
+): Promise<{ objects: number; bytes: number } | null> {
+  if (item !== 'message_log') return null;
+  const res = await tx.execute(sql`
+    SELECT pg_total_relation_size(c.oid)::text AS bytes, c.reltuples::bigint::text AS rows
+      FROM pg_class c WHERE c.oid = 'public.message_event_archives'::regclass`);
+  const r = rowsOf(res)[0]!;
+  return { objects: Math.max(0, Number(r.rows)), bytes: Number(r.bytes) };
 }
 
 /** Months of a partitioned stream that have a partition, oldest first, with catalog sizes (for the preview). */
@@ -228,19 +267,71 @@ export async function partitionSizes(
   });
 }
 
-/** Rows (security events) or files (audit exports) older than `days` that the next sweep would delete. */
-export async function countOlderThan(
-  tx: Tx,
-  item: 'security_events' | 'audit_log_exports',
-  days: number,
-): Promise<number> {
-  const res =
-    item === 'security_events'
-      ? await tx.execute(
-          sql`SELECT count(*)::text AS n FROM security_events WHERE at < now() - make_interval(days => ${days})`,
-        )
-      : await tx.execute(sql`
-          SELECT count(*)::text AS n FROM audit_log_exports
-           WHERE status = 'ready' AND completed_at < now() - make_interval(days => ${days})`);
+/** Counting stops here, so the preview of a table of billions of rows stays one short query. */
+export const PREVIEW_COUNT_CAP = 1_000_000;
+
+/**
+ * Rows or files older than `days` that the next sweep would delete (the daily archive: live events that would move into it).
+ * Capped at `PREVIEW_COUNT_CAP`.
+ */
+export async function countOlderThan(tx: Tx, item: RetentionItemId, days: number): Promise<number> {
+  const t = TABLE_ITEMS[item];
+  if (t) {
+    const cond = t.where ? sql` AND ${sql.raw(t.where)}` : sql``;
+    const res = await tx.execute(sql`
+      SELECT count(*)::text AS n FROM (
+        SELECT 1 FROM ${sql.raw(t.table)}
+         WHERE ${sql.raw(t.at)} < now() - make_interval(days => ${days})${cond}
+         LIMIT ${PREVIEW_COUNT_CAP}) x`);
+    return Number(rowsOf(res)[0]!.n);
+  }
+  if (item === 'message_log') {
+    const res = await tx.execute(sql`
+      SELECT count(*)::text AS n FROM (
+        SELECT 1 FROM message_events
+         WHERE created_at < date_trunc('day', now() AT TIME ZONE 'UTC') AT TIME ZONE 'UTC' - make_interval(days => ${days})
+         LIMIT ${PREVIEW_COUNT_CAP}) x`);
+    return Number(rowsOf(res)[0]!.n);
+  }
+  if (item === 'call_recordings') {
+    const res = await tx.execute(sql`
+      SELECT count(*)::text AS n FROM (
+        SELECT 1 FROM wa_calls w LEFT JOIN call_recording_settings s ON s.org_id = w.org_id
+         WHERE w.recording_path IS NOT NULL AND NOT w.recording_legal_hold
+           AND w.recording_stored_at < now() - make_interval(days => coalesce(s.retention_days, ${days}))
+         LIMIT ${PREVIEW_COUNT_CAP}) x`);
+    return Number(rowsOf(res)[0]!.n);
+  }
+  const res = await tx.execute(sql`
+    SELECT count(*)::text AS n FROM audit_log_exports
+     WHERE status = 'ready' AND completed_at < now() - make_interval(days => ${days})`);
   return Number(rowsOf(res)[0]!.n);
+}
+
+/** Days of the message log's archive older than `days` that the next sweep would delete. */
+export async function countArchiveDaysOlderThan(tx: Tx, days: number): Promise<number> {
+  const res = await tx.execute(sql`
+    SELECT count(*)::text AS n FROM (
+      SELECT 1 FROM message_event_archives
+       WHERE day < (now() AT TIME ZONE 'UTC')::date - ${days}::int
+       LIMIT ${PREVIEW_COUNT_CAP}) x`);
+  return Number(rowsOf(res)[0]!.n);
+}
+
+/**
+ * The live days a sweep must use for `item`: the policy a super admin saved, else the sweep's own built-in number (by default the item's registry default, so the page and the job cannot disagree). Read at the start of
+ * every run, so a save takes effect at the next run without a restart. A stored number outside the item's range (a row edited by hand)
+ * is ignored in favour of the built-in one, never trusted to delete data.
+ */
+export async function liveDaysFor(
+  tx: Tx,
+  item: RetentionItemId,
+  fallback: number = retentionSpecOf(item).defaults.liveDays,
+): Promise<number> {
+  const saved = await loadPolicy(tx, item);
+  if (!saved) return fallback;
+  return retentionProblem(item, { liveDays: saved.liveDays, archiveDays: saved.archiveDays }) ===
+    null
+    ? saved.liveDays
+    : fallback;
 }

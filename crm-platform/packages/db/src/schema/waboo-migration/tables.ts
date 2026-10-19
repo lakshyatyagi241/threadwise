@@ -56,6 +56,8 @@ export const wabooMigrationRuns = pgTable(
     sourceDb: text('source_db').notNull(),
     orgId: idColumn('org_id').references(() => organizations.id, { onDelete: 'set null' }),
     mode: text('mode').notNull().default('dry'),
+    // migration 20270203090200: leave the WhatsApp number out of this run (testing): the pipeline gets --no-whatsapp
+    skipWhatsapp: boolean('skip_whatsapp').notNull().default(false),
     status: text('status').notNull().default('queued'),
     steps: jsonb('steps').$type<unknown[]>().notNull().default([]),
     report: jsonb('report').$type<Record<string, unknown>>(),

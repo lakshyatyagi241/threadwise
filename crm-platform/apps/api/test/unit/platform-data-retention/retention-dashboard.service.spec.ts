@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { RETENTION_AUDIT_EVENTS } from '@crm/contracts';
+import { RETENTION_AUDIT_EVENTS, RETENTION_GROUPS } from '@crm/contracts';
 import { RetentionDashboardService } from '../../../src/modules/platform-data-retention/retention-dashboard.service';
 
 const store = vi.hoisted(() => ({
@@ -10,6 +10,8 @@ const store = vi.hoisted(() => ({
   deletePolicy: vi.fn(),
   partitionSizes: vi.fn(),
   countOlderThan: vi.fn(),
+  countArchiveDaysOlderThan: vi.fn(),
+  dbArchiveStats: vi.fn(),
 }));
 vi.mock('../../../src/modules/data-retention', async (orig) => ({
   ...(await orig<typeof import('../../../src/modules/data-retention')>()),
@@ -51,6 +53,7 @@ beforeEach(() => {
   store.loadPolicies.mockResolvedValue(new Map());
   store.loadRuns.mockResolvedValue(new Map());
   store.liveStats.mockResolvedValue(LIVE);
+  store.dbArchiveStats.mockResolvedValue(null);
 });
 
 describe('overview', () => {
@@ -62,7 +65,23 @@ describe('overview', () => {
       ['audit_log', 'default', 365, null],
       ['security_events', 'default', 365, null],
       ['audit_log_exports', 'default', 7, null],
+      ['message_log', 'default', 90, 275],
+      ['notifications_read', 'default', 90, null],
+      ['notifications_unread', 'default', 180, null],
+      ['push_devices_revoked', 'default', 30, null],
+      ['faq_match_log', 'default', 90, null],
+      ['assignment_runs', 'default', 90, null],
+      ['form_events', 'default', 90, null],
+      ['lead_sync_runs', 'default', 90, null],
+      ['lead_scoring_runs', 'default', 90, null],
+      ['api_library_logs', 'default', 30, null],
+      ['flow_run_logs', 'default', 30, null],
+      ['webhook_forward_failures', 'default', 14, null],
+      ['click_calls', 'default', 2, null],
+      ['call_recordings', 'default', 90, null],
     ]);
+    // Every item sits in a group the page shows.
+    expect(o.items.every((i) => RETENTION_GROUPS.includes(i.group))).toBe(true);
     expect(o.items.every((i) => i.rowVersion === null && i.applied)).toBe(true);
   });
 
@@ -267,6 +286,80 @@ describe('preview', () => {
     const { svc } = build();
     await expect(
       svc.preview('audit_log_exports', { liveDays: 400, archiveDays: null }),
+    ).rejects.toMatchObject({ code: 'VALIDATION_FAILED' });
+  });
+});
+
+describe('every sweep is covered', () => {
+  it('shows the message log with its archive measured from the database archive', async () => {
+    store.dbArchiveStats.mockImplementation(async (_tx: unknown, id: string) =>
+      id === 'message_log' ? { objects: 12, bytes: 4096 } : null,
+    );
+    const o = await build().svc.overview();
+    const log = o.items.find((i) => i.id === 'message_log')!;
+    expect(log).toMatchObject({ kind: 'daily_archive', canArchive: true, deleteAfterDays: 365 });
+    expect(log.archive).toMatchObject({ objects: 12, bytes: 4096 });
+    expect(o.items.find((i) => i.id === 'faq_match_log')?.archive).toBeNull();
+  });
+
+  it('refuses unread notifications that would go before the read ones, either way round', async () => {
+    const { svc } = build();
+    await expect(
+      svc.save('notifications_unread', { liveDays: 60, archiveDays: null, rowVersion: null }, 9),
+    ).rejects.toMatchObject({ code: 'VALIDATION_FAILED' });
+    // Read days above the unread days saved earlier.
+    store.loadPolicies.mockResolvedValue(
+      new Map([['notifications_unread', stored('notifications_unread', 100, null)]]),
+    );
+    await expect(
+      svc.save('notifications_read', { liveDays: 120, archiveDays: null, rowVersion: null }, 9),
+    ).rejects.toMatchObject({ code: 'VALIDATION_FAILED' });
+    expect(store.savePolicy).not.toHaveBeenCalled();
+  });
+
+  it('accepts equal read and unread days', async () => {
+    store.savePolicy.mockResolvedValue(stored('notifications_unread', 90, null, 1));
+    await build().svc.save(
+      'notifications_unread',
+      { liveDays: 90, archiveDays: null, rowVersion: null },
+      9,
+    );
+    expect(store.savePolicy).toHaveBeenCalled();
+  });
+
+  it('counts events that would move into the archive and archived days that would be deleted for the message log', async () => {
+    store.countOlderThan.mockResolvedValue(500);
+    store.countArchiveDaysOlderThan.mockResolvedValue(8);
+    const p = await build().svc.preview('message_log', { liveDays: 30, archiveDays: 60 });
+    expect(p).toMatchObject({ rowsToArchive: 500, rowsToDelete: 8 });
+    expect(store.countOlderThan).toHaveBeenCalledWith(expect.anything(), 'message_log', 30);
+    expect(store.countArchiveDaysOlderThan).toHaveBeenCalledWith(expect.anything(), 90);
+  });
+
+  it('deletes nothing from an archive that is kept for ever', async () => {
+    store.countOlderThan.mockResolvedValue(5);
+    const p = await build().svc.preview('message_log', { liveDays: 30, archiveDays: null });
+    expect(p.rowsToDelete).toBe(0);
+    expect(store.countArchiveDaysOlderThan).not.toHaveBeenCalled();
+  });
+
+  it('previews any plain table by its id', async () => {
+    store.countOlderThan.mockResolvedValue(77);
+    const p = await build().svc.preview('faq_match_log', { liveDays: 30, archiveDays: null });
+    expect(p.rowsToDelete).toBe(77);
+    expect(store.countOlderThan).toHaveBeenCalledWith(expect.anything(), 'faq_match_log', 30);
+  });
+
+  it('refuses an archive on a plain table and values outside the limits for the new items', async () => {
+    const { svc } = build();
+    await expect(
+      svc.preview('faq_match_log', { liveDays: 30, archiveDays: 10 }),
+    ).rejects.toMatchObject({ code: 'VALIDATION_FAILED' });
+    await expect(
+      svc.save('click_calls', { liveDays: 31, archiveDays: null, rowVersion: null }, 9),
+    ).rejects.toMatchObject({ code: 'VALIDATION_FAILED' });
+    await expect(
+      svc.save('call_recordings', { liveDays: 6, archiveDays: null, rowVersion: null }, 9),
     ).rejects.toMatchObject({ code: 'VALIDATION_FAILED' });
   });
 });

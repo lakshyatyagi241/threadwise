@@ -22,12 +22,13 @@ export const WMIG_RUNNER_MAX_LINE = 8 * 1024;
 export const wabooMigrationRunnerClaimSchema = z.object({ runner: wabooMigrationRunnerNameSchema });
 export type WabooMigrationRunnerClaim = z.infer<typeof wabooMigrationRunnerClaimSchema>;
 
-/** What the agent starts the pipeline with: exactly the three values of the run. */
+/** What the agent starts the pipeline with: the three values of the run and its testing switch (no WhatsApp number). */
 export const wabooMigrationRunnerJobSchema = z.object({
   runId: uuidSchema,
   sourceClient: z.string().regex(WMIG_CLIENT_RE),
   sourceDb: z.string().regex(WMIG_DB_RE),
   mode: z.enum(WMIG_MODES),
+  skipWhatsapp: z.boolean().default(false),
 });
 export type WabooMigrationRunnerJob = z.infer<typeof wabooMigrationRunnerJobSchema>;
 

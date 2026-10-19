@@ -37,6 +37,7 @@ interface RunRow {
   source_client: string;
   source_db: string;
   mode: RunMode;
+  skip_whatsapp: boolean;
   status: RunStatus;
   steps: WabooMigrationStep[];
   report: WabooMigrationReport | null;
@@ -63,7 +64,7 @@ interface BatchRow {
 }
 
 const RUN_SELECT = sql.raw(`
-  SELECT r.id, r.uuid, r.source_client, r.source_db, r.mode, r.status, r.steps, r.report, r.error, r.position, r.run_at,
+  SELECT r.id, r.uuid, r.source_client, r.source_db, r.mode, r.skip_whatsapp, r.status, r.steps, r.report, r.error, r.position, r.run_at,
          r.started_at, r.finished_at, r.created_at, b.uuid AS batch_uuid
   FROM waboo_migration_runs r LEFT JOIN waboo_migration_batches b ON b.id = r.batch_id`);
 const BATCH_SELECT = sql.raw(`
@@ -157,8 +158,8 @@ export class WabooMigrationService {
       let row: RunRow | undefined;
       try {
         const res = await tx.execute(sql`
-          INSERT INTO waboo_migration_runs (source_client, source_db, mode, status, run_at, created_by)
-          VALUES (${client}, ${input.organizationId}, ${input.mode}, 'queued', ${input.runAt ?? null}::timestamptz, ${operatorId})
+          INSERT INTO waboo_migration_runs (source_client, source_db, mode, skip_whatsapp, status, run_at, created_by)
+          VALUES (${client}, ${input.organizationId}, ${input.mode}, ${input.skipWhatsapp}, 'queued', ${input.runAt ?? null}::timestamptz, ${operatorId})
           RETURNING uuid
         `);
         const uuid = (res.rows[0] as { uuid: string }).uuid;
@@ -273,8 +274,8 @@ export class WabooMigrationService {
       try {
         for (const [i, it] of plan.items.entries())
           await tx.execute(sql`
-            INSERT INTO waboo_migration_runs (source_client, source_db, mode, status, run_at, batch_id, position, created_by)
-            VALUES (${it.sourceClient}, ${it.organizationId}, ${input.mode}, 'queued', ${input.runAt ?? null}::timestamptz,
+            INSERT INTO waboo_migration_runs (source_client, source_db, mode, skip_whatsapp, status, run_at, batch_id, position, created_by)
+            VALUES (${it.sourceClient}, ${it.organizationId}, ${input.mode}, ${input.skipWhatsapp}, 'queued', ${input.runAt ?? null}::timestamptz,
                     ${Number(batch.id)}, ${i + 1}, ${operatorId})
           `);
       } catch (err) {
@@ -463,6 +464,7 @@ export class WabooMigrationService {
       sourceClient: r.source_client,
       sourceDb: r.source_db,
       mode: r.mode,
+      skipWhatsapp: r.skip_whatsapp,
       status: r.status,
       verdict,
       steps: r.steps,
