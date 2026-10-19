@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { DEFAULT_BOOKING_THEME, publicBookingThemeSchema } from '@crm/contracts';
 
 /**
  * Wire shapes of the appointments API, as this feature reads them. They follow Reference's data model (appointments, booking
@@ -420,13 +421,21 @@ export const publicTypeSchema = z.object({
 });
 export type PublicType = z.infer<typeof publicTypeSchema>;
 
+/** How the page looks (BL-355): the workspace's theme, or a service's own over it. Missing on a server that predates themes. */
+export const publicThemeSchema = publicBookingThemeSchema.default(DEFAULT_BOOKING_THEME);
+
 export const publicDirectorySchema = z.object({
   org: publicOrgSchema,
   types: z.array(publicTypeSchema),
+  theme: publicThemeSchema,
 });
 export type PublicDirectory = z.infer<typeof publicDirectorySchema>;
 
-export const publicTypePageSchema = z.object({ org: publicOrgSchema, type: publicTypeSchema });
+export const publicTypePageSchema = z.object({
+  org: publicOrgSchema,
+  type: publicTypeSchema,
+  theme: publicThemeSchema,
+});
 export type PublicTypePage = z.infer<typeof publicTypePageSchema>;
 
 export const publicBookingSchema = z.object({
@@ -449,7 +458,11 @@ export const publicBookingSchema = z.object({
 });
 export type PublicBooking = z.infer<typeof publicBookingSchema>;
 
-export const publicManageSchema = z.object({ org: publicOrgSchema, booking: publicBookingSchema });
+export const publicManageSchema = z.object({
+  org: publicOrgSchema,
+  booking: publicBookingSchema,
+  theme: publicThemeSchema,
+});
 export type PublicManage = z.infer<typeof publicManageSchema>;
 
 export const publicBookedSchema = z.object({ org: publicOrgSchema, booking: publicBookingSchema });

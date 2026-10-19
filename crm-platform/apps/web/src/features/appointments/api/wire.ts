@@ -7,6 +7,7 @@ import type {
   PublicBookResponse,
   PublicBookingPage,
   PublicBookingType,
+  PublicBookingTypeView,
   PublicManageView,
   SlotsResponse,
   createBookingTypeSchema,
@@ -435,14 +436,13 @@ export function toPublicType(s: PublicBookingType): PublicType {
 export const toPublicDirectory = (p: PublicBookingPage): PublicDirectory => ({
   org: { name: p.organization.name, slug: p.organization.slug },
   types: p.services.map(toPublicType),
+  theme: p.theme,
 });
 
-export const toPublicTypePage = (p: {
-  organization: { name: string; slug: string };
-  service: PublicBookingType;
-}): PublicTypePage => ({
+export const toPublicTypePage = (p: PublicBookingTypeView): PublicTypePage => ({
   org: { name: p.organization.name, slug: p.organization.slug },
   type: toPublicType(p.service),
+  theme: p.theme,
 });
 
 const manageUrlOf = (token: string): string =>
@@ -451,7 +451,8 @@ const manageUrlOf = (token: string): string =>
 export function toPublicManage(v: PublicManageView, token: string): PublicManage {
   const t = v.bookingType;
   return {
-    org: { name: v.organization.name },
+    org: { name: v.organization.name, slug: v.organization.slug },
+    theme: v.theme,
     booking: {
       status: v.status,
       typeName: t?.name ?? v.title,

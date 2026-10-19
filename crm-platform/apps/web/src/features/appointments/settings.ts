@@ -25,6 +25,20 @@ export const settings = [
     order: 11,
     gates: { permission: 'record.booking-types.read', app: APP },
   }),
+  // How the customer's booking page looks (logo, colours, welcome text, fonts), with a live preview. It reads and writes with the same
+  // keys as the rest of the booking set-up; the wording lives with the screen's own messages.
+  settingsTile({
+    id: 'booking-page-appearance',
+    labelKey: 'appointments.appearance.tile.label',
+    descriptionKey: 'appointments.appearance.tile.description',
+    keywordsKey: 'appointments.appearance.tile.keywords',
+    shortcutFrom: ['/appointments'],
+    section: 'automation',
+    href: '/appointments/settings/appearance',
+    icon: 'brush',
+    order: 13,
+    gates: { permission: 'record.booking-types.read', app: APP },
+  }),
   // The Google Calendar card of the same screen, listed under Integrations so it can be found by its name. Connecting is editing
   // booking configuration, so the tile needs the update key.
   settingsTile({

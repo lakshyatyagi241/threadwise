@@ -36,10 +36,15 @@ export function PreviewFrame({
   device,
   title,
   children,
+  widths,
+  height: frameHeight,
 }: {
   device: PreviewDevice;
   title: string;
   children: ReactNode;
+  /** A page that wants other widths than the guest pages' (the booking page previews at the 375px phone). */
+  widths?: Partial<Record<PreviewDevice, number>>;
+  height?: number;
 }) {
   const t = useTranslations('auth-registration-security.platform.authPages.preview');
   const frameRef = useRef<HTMLIFrameElement>(null);
@@ -91,8 +96,8 @@ export function PreviewFrame({
     return () => ro.disconnect();
   }, []);
 
-  const width = WIDTHS[device];
-  const height = HEIGHTS[device];
+  const width = widths?.[device] ?? WIDTHS[device];
+  const height = frameHeight ?? HEIGHTS[device];
   const scale = boxWidth > 0 ? Math.min(1, boxWidth / width) : 1;
 
   return (
