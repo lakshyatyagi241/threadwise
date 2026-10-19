@@ -300,10 +300,10 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
         >
           {t('openBuilder')}
         </Link>
-        {actions.can.faqs && flow.flowType !== 'call' ? (
-          // A flow's FAQs, its unanswered questions and the message sent when nothing matches are on the FAQs tab of its builder.
+        {actions.can.faqs && (flow.flowType === 'chat' || flow.flowType === 'web') ? (
+          // A simple flow's FAQs, its unanswered questions and the message sent when nothing matches are on the FAQs tab of the Simple builder.
           <Link
-            href={`${openHref(actions.builderMode ?? 'advanced', flow.id, flow.flowType)}?tab=faqs`}
+            href={`/flows/simple/${flow.id}?tab=faqs`}
             data-flow-faqs={flow.id}
             title={t('faqs')}
             aria-label={t('faqs')}

@@ -69,7 +69,7 @@ describe('Settings > Channels > Web', () => {
     expect(out).toContain('href="/flows/simple/f-new?tab=customize"');
   });
 
-  it('opens the Advanced builder when the workspace uses it, and offers a new website bot', () => {
+  it('opens a website bot in the Simple builder even when the workspace uses Advanced, and offers a new one there', () => {
     state.mode = 'advanced';
     state.list = {
       isPending: false,
@@ -77,8 +77,8 @@ describe('Settings > Channels > Web', () => {
       data: { total: 1, data: [bot({ flowId: 'f1' })] },
     };
     const out = renderIntl(<WebBotsScreen />);
-    expect(out).toContain('href="/flows/builder/f1?tab=customize"');
-    expect(out).toContain('href="/flows/builder?type=web"');
+    expect(out).toContain('href="/flows/simple/f1?tab=customize"');
+    expect(out).toContain('href="/flows/simple?type=web"');
   });
 
   it('says so when there are no bots, and when the list is cut', () => {
