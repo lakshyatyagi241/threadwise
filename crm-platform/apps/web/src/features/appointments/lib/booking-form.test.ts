@@ -287,7 +287,13 @@ describe('conversion', () => {
       },
     ]);
     expect(input.templates).toEqual([
-      { event: 'reminder', waTemplateId: null, plainBody: 'See you {{slot}}' },
+      {
+        event: 'reminder',
+        channel: 'whatsapp',
+        waTemplateId: null,
+        libraryTemplateId: null,
+        plainBody: 'See you {{slot}}',
+      },
     ]);
   });
 
