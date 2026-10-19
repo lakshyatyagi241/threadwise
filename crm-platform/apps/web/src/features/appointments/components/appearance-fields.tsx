@@ -128,7 +128,6 @@ export function PictureField({
           )}
         >
           {src ? (
-            // eslint-disable-next-line @next/next/no-img-element
             <img src={src} alt="" className="max-h-full max-w-full object-contain" />
           ) : (
             <span className="px-2 text-center text-xs text-muted-foreground">{t('noPicture')}</span>

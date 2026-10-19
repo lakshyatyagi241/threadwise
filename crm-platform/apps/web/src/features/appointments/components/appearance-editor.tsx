@@ -121,6 +121,8 @@ export function AppearanceEditor({
     const made: { logo?: string; cover?: string } = {};
     if (staged.logo) made.logo = URL.createObjectURL(staged.logo);
     if (staged.cover) made.cover = URL.createObjectURL(staged.cover);
+    // The addresses only exist after mount (and are released in the cleanup), so they cannot be derived while rendering.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setBlobs(made);
     return () => {
       if (made.logo) URL.revokeObjectURL(made.logo);

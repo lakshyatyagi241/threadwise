@@ -79,7 +79,6 @@ export function PublicShell({
             <div className="flex min-w-0 items-center gap-3">
               {logo ? (
                 // The business name is read next to it, so the picture itself carries no text alternative.
-                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={logo}
                   alt=""
@@ -123,7 +122,6 @@ export function PublicShell({
         </header>
         {cover && (
           <div className="mx-auto w-full max-w-[880px] px-4 pt-4 sm:pt-6">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={cover}
               alt=""
