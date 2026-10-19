@@ -44,23 +44,23 @@ const card = (over: Partial<FlowSummary> = {}) =>
   renderToStaticMarkup(<FlowCard flow={flow(over)} actions={actions} />);
 
 describe('flow card (TW-FLB-001)', () => {
-  it('a keyword flow opens the builder and links its analytics to the runtime page of that flow', () => {
+  it('a keyword bot opens in the Simple builder and links its analytics to the runtime page of that flow', () => {
     const html = card();
-    expect(html).toContain('href="/flows/builder/11111111-1111-4111-8111-111111111111"');
+    expect(html).toContain('href="/flows/simple/11111111-1111-4111-8111-111111111111"');
     expect(html).toContain(
       'href="/flow-runtime/analytics?flowId=11111111-1111-4111-8111-111111111111"',
     );
     expect(html).not.toContain('data-flow-enroll');
   });
 
-  it('a manual-enroll flow opens the builder like any other flow, with no enroll button on the card', () => {
+  it('a manual-enroll bot opens like any other bot, with no enroll button on the card', () => {
     const html = card({ triggerKind: 'manual_enroll' });
     expect(html).not.toContain('data-flow-enroll');
-    expect(html).toContain('href="/flows/builder/11111111-1111-4111-8111-111111111111"');
+    expect(html).toContain('href="/flows/simple/11111111-1111-4111-8111-111111111111"');
     expect(html).not.toContain('href="/flow-runtime/flows/');
   });
 
-  it('offers the flow\'s FAQs tab only to a person who can read FAQs, and never on a call flow', () => {
+  it('offers the FAQs link only on a simple (chat or web) flow, and only to a person who can read FAQs', () => {
     const withFaqs = (over: Partial<FlowSummary> = {}, faqs = true) =>
       renderToStaticMarkup(
         <FlowCard
@@ -75,6 +75,9 @@ describe('flow card (TW-FLB-001)', () => {
     expect(withFaqs({}, false)).not.toContain('data-flow-faqs');
     expect(card()).not.toContain('data-flow-faqs');
     expect(withFaqs({ flowType: 'call' })).not.toContain('data-flow-faqs');
+    // An automation (Advanced canvas) flow has no FAQs; those are a simple flow's.
+    expect(withFaqs({ flowType: 'instagram' })).not.toContain('data-flow-faqs');
+    expect(withFaqs({ flowType: 'web' })).toContain('data-flow-faqs');
   });
 
   it('an Instagram flow has no analytics link (it runs remotely) and carries the Instagram badge', () => {
