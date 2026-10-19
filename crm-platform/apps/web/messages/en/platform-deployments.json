@@ -60,7 +60,8 @@
     "tabs": {
       "label": "Choose what to show",
       "publishes": "Flow publishes",
-      "geta": "Geta console"
+      "geta": "Geta console",
+      "releases": "Product releases"
     },
     "publishes": {
       "description": "Every flow publish: what the worker has queued, what it is handling now, and which publishes failed and why. Refreshes every few seconds.",
@@ -78,6 +79,31 @@
       "empty": {
         "all": "No flow has been published yet.",
         "done": "No publish has finished in the last 30 days."
+      }
+    },
+    "releases": {
+      "description": "What is live on desk.wabo.ai: the current release, any release in progress, and each attempt with its steps and errors. Refreshes every few seconds.",
+      "liveLabel": "Live now",
+      "live": "Release {tag}, live since {time}",
+      "noneLive": "No release has gone live yet.",
+      "inProgress": "A release is in progress",
+      "stalledAlert": "{count} release attempt(s) have not moved for {minutes} minutes. The build or the release may have stopped.",
+      "empty": "No release has been recorded yet. Releases appear here from the next deploy on.",
+      "cols": {
+        "tag": "Tag",
+        "state": "State",
+        "step": "Step",
+        "started": "Started",
+        "finished": "Finished",
+        "error": "Error"
+      },
+      "state": {
+        "building": "Building",
+        "shipping": "Shipping",
+        "releasing": "Releasing",
+        "ok": "Live",
+        "failed": "Failed",
+        "rolled_back": "Rolled back"
       }
     }
   }

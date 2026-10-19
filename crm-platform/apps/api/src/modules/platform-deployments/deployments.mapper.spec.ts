@@ -5,6 +5,8 @@ import {
   toDeploymentRow,
   toPublishCounts,
   toPublishRow,
+  toReleaseRow,
+  toReleasesResponse,
 } from './deployments.mapper';
 
 /** The dashboard row: exact status and step from the stored row, the Geta error cut to its limit, timestamps as ISO text. */
@@ -130,5 +132,62 @@ describe('toPublishCounts', () => {
       done: 10,
       stalled: 0,
     });
+  });
+});
+
+/** A product release attempt as platform_releases returns it. */
+const attempt = {
+  attempt: '11111111-2222-4333-8444-555555555555',
+  tag: '29f32b7b6',
+  state: 'releasing',
+  step: 'schema',
+  error: null,
+  started_at: new Date('2026-10-19T11:00:00Z'),
+  updated_at: new Date('2026-10-19T11:02:00Z'),
+  finished_at: null,
+  stalled: false,
+};
+
+describe('toReleaseRow', () => {
+  it('maps an attempt in progress and keeps its step', () => {
+    const row = toReleaseRow(attempt);
+    expect(row).toEqual({
+      id: attempt.attempt,
+      tag: '29f32b7b6',
+      state: 'releasing',
+      step: 'schema',
+      error: null,
+      startedAt: '2026-10-19T11:00:00.000Z',
+      updatedAt: '2026-10-19T11:02:00.000Z',
+      finishedAt: null,
+      stalled: false,
+    });
+  });
+
+  it('cuts a long error and rejects a state the contract does not know', () => {
+    const row = toReleaseRow({ ...attempt, state: 'failed', error: 'x'.repeat(900) });
+    expect(row.error).toHaveLength(DEPLOYMENT_ERROR_MAX_CHARS);
+    expect(() => toReleaseRow({ ...attempt, state: 'queued' })).toThrow();
+  });
+});
+
+describe('toReleasesResponse', () => {
+  it('reports the live tag and whether an attempt is in progress', () => {
+    const res = toReleasesResponse('2026-10-19T11:05:00.000Z', {
+      rows: [attempt],
+      live: { tag: '701ca2c1a', finished_at: new Date('2026-10-19T10:30:00Z') },
+    });
+    expect(res.live).toEqual({ tag: '701ca2c1a', finishedAt: '2026-10-19T10:30:00.000Z' });
+    expect(res.inProgress).toBe(true);
+    expect(res.rows).toHaveLength(1);
+  });
+
+  it('has no live tag and nothing in progress before the first release', () => {
+    const res = toReleasesResponse('2026-10-19T11:05:00.000Z', {
+      rows: [{ ...attempt, state: 'ok', finished_at: new Date('2026-10-19T11:04:00Z') }],
+      live: null,
+    });
+    expect(res.live).toBeNull();
+    expect(res.inProgress).toBe(false);
   });
 });

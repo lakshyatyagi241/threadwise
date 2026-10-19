@@ -60,7 +60,8 @@
     "tabs": {
       "label": "Wybierz, co pokazać",
       "publishes": "Publikacje flow",
-      "geta": "Konsola Geta"
+      "geta": "Konsola Geta",
+      "releases": "Wydania produktu"
     },
     "publishes": {
       "description": "Każda publikacja flow: co worker umieścił w kolejce, co obsługuje teraz i które publikacje się nie powiodły oraz dlaczego. Odświeża się co kilka sekund.",
@@ -78,6 +79,31 @@
       "empty": {
         "all": "Żaden flow nie został jeszcze opublikowany.",
         "done": "W ciągu ostatnich 30 dni żadna publikacja się nie zakończyła."
+      }
+    },
+    "releases": {
+      "description": "Co działa na desk.wabo.ai: bieżące wydanie, wydanie w toku i każda próba wraz z jej krokami i błędami. Odświeża się co kilka sekund.",
+      "liveLabel": "Działa teraz",
+      "live": "Wydanie {tag}, działa od {time}",
+      "noneLive": "Żadne wydanie jeszcze nie weszło do działania.",
+      "inProgress": "Wydanie jest w toku",
+      "stalledAlert": "{count} prób wydania nie zmieniło się od {minutes} minut. Budowanie lub wydanie mogło się zatrzymać.",
+      "empty": "Nie zarejestrowano jeszcze żadnego wydania. Pojawią się tutaj od następnego wdrożenia.",
+      "cols": {
+        "tag": "Tag",
+        "state": "Status",
+        "step": "Krok",
+        "started": "Start",
+        "finished": "Koniec",
+        "error": "Błąd"
+      },
+      "state": {
+        "building": "Budowanie",
+        "shipping": "Wysyłanie",
+        "releasing": "Wydawanie",
+        "ok": "Działa",
+        "failed": "Nieudane",
+        "rolled_back": "Cofnięte"
       }
     }
   }

@@ -6,29 +6,37 @@ import { Button } from '@crm/ui';
 import { PageHeader } from '@/features/auth-registration-security/platform/ui/page-header';
 import { GetaDeploymentsView } from './geta-deployments-view';
 import { PublishesView } from './publishes-view';
+import { ReleasesView } from './releases-view';
 
 const NS = 'platform-deployments';
 
-type Source = 'publishes' | 'geta';
+type Source = 'releases' | 'publishes' | 'geta';
 
 /**
- * Operator console: what the platform is deploying. Two sources: every flow publish (the outbox event the worker handles), which is the
- * default, and the flow publishes pushed to the Geta console. Both are read-only and poll, so a change shows up without a reload.
+ * Operator console: what the platform is deploying. Three views: the product releases (blue-green releases of desk-api and desk-web,
+ * the default), every flow publish (the outbox event the worker handles), and the flow publishes pushed to the Geta console. All are
+ * read-only and poll, so a change shows up without a reload.
  */
 export function DeploymentsPage() {
   const t = useTranslations(NS);
-  const [source, setSource] = useState<Source>('publishes');
+  const [source, setSource] = useState<Source>('releases');
 
   return (
     <div className="space-y-6">
       <PageHeader
         eyebrow={t('eyebrow')}
         title={t('title')}
-        description={t(source === 'publishes' ? 'publishes.description' : 'description')}
+        description={t(
+          source === 'releases'
+            ? 'releases.description'
+            : source === 'publishes'
+              ? 'publishes.description'
+              : 'description',
+        )}
       />
 
       <div role="group" aria-label={t('tabs.label')} className="flex flex-wrap gap-2">
-        {(['publishes', 'geta'] as const).map((id) => (
+        {(['releases', 'publishes', 'geta'] as const).map((id) => (
           <Button
             key={id}
             size="sm"
@@ -41,7 +49,9 @@ export function DeploymentsPage() {
         ))}
       </div>
 
-      {source === 'publishes' ? <PublishesView /> : <GetaDeploymentsView />}
+      {source === 'releases' && <ReleasesView />}
+      {source === 'publishes' && <PublishesView />}
+      {source === 'geta' && <GetaDeploymentsView />}
     </div>
   );
 }

@@ -60,7 +60,8 @@
     "tabs": {
       "label": "选择显示内容",
       "publishes": "流程发布",
-      "geta": "Geta 控制台"
+      "geta": "Geta 控制台",
+      "releases": "产品发布"
     },
     "publishes": {
       "description": "每个流程发布：工作进程已排队的、正在处理的，以及失败的发布及原因。每隔几秒刷新一次。",
@@ -78,6 +79,31 @@
       "empty": {
         "all": "尚未发布任何流程。",
         "done": "最近 30 天内没有完成的发布。"
+      }
+    },
+    "releases": {
+      "description": "desk.wabo.ai 上正在运行的内容：当前发布、正在进行的发布，以及每次尝试的步骤和错误。每隔几秒刷新一次。",
+      "liveLabel": "当前上线",
+      "live": "发布 {tag}，{time} 起上线",
+      "noneLive": "尚无发布上线。",
+      "inProgress": "有一次发布正在进行",
+      "stalledAlert": "{count} 次发布尝试 {minutes} 分钟未发生变化，构建或发布可能已停止。",
+      "empty": "尚未记录任何发布。从下一次部署起，发布会显示在这里。",
+      "cols": {
+        "tag": "标签",
+        "state": "状态",
+        "step": "步骤",
+        "started": "开始",
+        "finished": "结束",
+        "error": "错误"
+      },
+      "state": {
+        "building": "构建中",
+        "shipping": "传输中",
+        "releasing": "发布中",
+        "ok": "已上线",
+        "failed": "失败",
+        "rolled_back": "已回滚"
       }
     }
   }

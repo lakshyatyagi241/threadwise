@@ -7,6 +7,7 @@ import {
   type DeploymentsResponse,
   type PublishesQuery,
   type PublishesResponse,
+  type ReleasesResponse,
 } from '@crm/contracts';
 import { ActorKinds } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
@@ -43,5 +44,14 @@ export class DeploymentsController {
     @Query(zodPipe(publishesQuerySchema)) query: PublishesQuery,
   ): Promise<PublishesResponse> {
     return this.deployments.publishes(query);
+  }
+
+  @Get('releases')
+  @ApiOperation({
+    summary:
+      'Product releases: live tag, the attempt in progress, and the newest attempts with steps and errors',
+  })
+  releases(): Promise<ReleasesResponse> {
+    return this.deployments.releases();
   }
 }

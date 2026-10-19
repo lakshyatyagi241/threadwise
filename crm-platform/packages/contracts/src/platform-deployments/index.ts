@@ -113,3 +113,49 @@ export const publishesResponseSchema = z.object({
   truncated: z.boolean(),
 });
 export type PublishesResponse = z.infer<typeof publishesResponseSchema>;
+
+/**
+ * Product releases: the blue-green releases of desk-api and desk-web, one row per attempt (a build and the release it leads to share the
+ * attempt id). `building`, `shipping` and `releasing` are in progress; `ok` is live; `failed` stopped before traffic moved;
+ * `rolled_back` moved traffic back to the previous slot. `stalled` is set on an attempt in progress with no change for
+ * `RELEASE_STALL_MINUTES`: the build or the release most likely died.
+ */
+export const RELEASE_STATES = [
+  'building',
+  'shipping',
+  'releasing',
+  'ok',
+  'failed',
+  'rolled_back',
+] as const;
+export const releaseStateSchema = z.enum(RELEASE_STATES);
+export type ReleaseState = z.infer<typeof releaseStateSchema>;
+
+export const RELEASE_STALL_MINUTES = 45;
+export const RELEASE_LIST_MAX = 50;
+
+export const releaseRowSchema = z.object({
+  /** The attempt id (uuid), shared by the build's steps and the release's steps. */
+  id: z.string().uuid(),
+  tag: z.string(),
+  state: releaseStateSchema,
+  /** The step in progress or the one that ended the attempt (`build`, `ship`, `start`, `dump`, `schema`, `idle`, `switch`, `worker`, `commit`). */
+  step: z.string().nullable(),
+  error: z.string().nullable(),
+  startedAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+  finishedAt: z.string().datetime().nullable(),
+  stalled: z.boolean(),
+});
+export type ReleaseRow = z.infer<typeof releaseRowSchema>;
+
+export const releasesResponseSchema = z.object({
+  generatedAt: z.string().datetime(),
+  /** The most recent release that is live (state `ok`), or null before the first one. */
+  live: z.object({ tag: z.string(), finishedAt: z.string().datetime() }).nullable(),
+  /** Some attempt is building, shipping or releasing right now. */
+  inProgress: z.boolean(),
+  /** The newest attempts first, at most `RELEASE_LIST_MAX`. */
+  rows: z.array(releaseRowSchema),
+});
+export type ReleasesResponse = z.infer<typeof releasesResponseSchema>;
