@@ -24,6 +24,13 @@ export const FEATURE_FROM_WABOO: Record<string, string[]> = {
   email_channel: ['email_broadcast'],
 };
 
+/**
+ * Features a migrated workspace always has, whatever the Waboo plan lists: Waboo never put a "Sent via ..." line on a customer's messages,
+ * so the plan must not make Desk add one (remove_branding off means the platform footer is forced on every outgoing text; on means the
+ * workspace's own footer, and nothing saved means none).
+ */
+export const ALWAYS_OPEN_FEATURES: readonly string[] = ['remove_branding'];
+
 /** Threadwise limit -> the Waboo plan code whose `limit` it takes. A Waboo limit that is absent or Infinity leaves the limit unlimited. */
 export const LIMIT_FROM_WABOO: Record<string, string> = {
   users: 'user_limit',
