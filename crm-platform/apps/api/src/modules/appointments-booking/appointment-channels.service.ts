@@ -80,7 +80,10 @@ export class AppointmentChannelsService {
   }
 
   async states(tx: Tx, orgId: number): Promise<AppointmentChannelState[]> {
-    const [rows, dir] = await Promise.all([this.repo.settings(tx, orgId), this.repo.senders(tx, orgId)]);
+    const [rows, dir] = await Promise.all([
+      this.repo.settings(tx, orgId),
+      this.repo.senders(tx, orgId),
+    ]);
     return APPOINTMENT_CHANNELS.map((c) =>
       stateOf(
         c,
@@ -135,7 +138,12 @@ export class AppointmentChannelsService {
           channel: { old: before?.channel ?? null, new: channel },
           enabled: { old: before?.enabled ?? null, new: saved.enabled },
           ...(saved.defaultSenderId !== (before?.defaultSenderId ?? null)
-            ? { default_sender_id: { old: before?.defaultSenderId ?? null, new: saved.defaultSenderId } }
+            ? {
+                default_sender_id: {
+                  old: before?.defaultSenderId ?? null,
+                  new: saved.defaultSenderId,
+                },
+              }
             : {}),
         },
       });

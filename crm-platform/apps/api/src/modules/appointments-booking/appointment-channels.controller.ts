@@ -95,7 +95,7 @@ export class AppointmentTemplatesController {
   @ApiOperation({
     summary: 'The workspace library of appointment messages with their live status',
     description:
-      'Filters: kind, channel, usable. A WhatsApp message carries the status of its template (draft, pending, approved, rejected with Meta\'s reason); only an approved one is `usable`.',
+      "Filters: kind, channel, usable. A WhatsApp message carries the status of its template (draft, pending, approved, rejected with Meta's reason); only an approved one is `usable`.",
   })
   list(@Query(zodPipe(listAppointmentTemplatesQuerySchema)) query: ListAppointmentTemplatesQuery) {
     return this.templates.list(query);
@@ -147,7 +147,9 @@ export class AppointmentTemplatesController {
   @HttpCode(HttpStatus.OK)
   @Idempotent()
   @RequirePermission('appointments.templates.manage')
-  @ApiOperation({ summary: 'Send a WhatsApp message to Meta for review (or again after a refusal)' })
+  @ApiOperation({
+    summary: 'Send a WhatsApp message to Meta for review (or again after a refusal)',
+  })
   submit(@Param('id', ParseUUIDPipe) id: string) {
     return this.templates.submit(id);
   }

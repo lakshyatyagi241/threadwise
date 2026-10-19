@@ -122,22 +122,22 @@ export class AppointmentMessageConsumer implements OutboxSubscriber, OnModuleIni
         // A message chosen from the library (BL-351) is read now, so editing it changes what is sent; an inactive one is ignored.
         const lib = tpl?.libraryTemplateId && tpl.libraryActive ? tpl : null;
         return {
-        firstWins: unconfigured,
-        orgId: event.orgId,
-        appointmentId: row.uuid,
-        event: plan.template,
-        channel,
-        to: { name: row.inviteeName, phone: row.inviteePhone, email: row.inviteeEmail },
-        body: messageBody(plan.template, lib?.libraryBody ?? tpl?.plainBody, facts),
-        subject: lib?.librarySubject
-          ? renderTemplate(lib.librarySubject, vars)
-          : `${facts.typeName}: ${SUBJECTS[plan.template]}`,
-        waTemplateId: lib?.libraryWaUuid ?? tpl?.waTemplateUuid ?? null,
-        variableMap: tpl?.variableMap ?? null,
-        idempotencyKey: `${event.id}:${channel}`,
-        contactId: row.contactUuid,
-        variables: vars,
-        purpose: 'service',
+          firstWins: unconfigured,
+          orgId: event.orgId,
+          appointmentId: row.uuid,
+          event: plan.template,
+          channel,
+          to: { name: row.inviteeName, phone: row.inviteePhone, email: row.inviteeEmail },
+          body: messageBody(plan.template, lib?.libraryBody ?? tpl?.plainBody, facts),
+          subject: lib?.librarySubject
+            ? renderTemplate(lib.librarySubject, vars)
+            : `${facts.typeName}: ${SUBJECTS[plan.template]}`,
+          waTemplateId: lib?.libraryWaUuid ?? tpl?.waTemplateUuid ?? null,
+          variableMap: tpl?.variableMap ?? null,
+          idempotencyKey: `${event.id}:${channel}`,
+          contactId: row.contactUuid,
+          variables: vars,
+          purpose: 'service',
         };
       });
     });

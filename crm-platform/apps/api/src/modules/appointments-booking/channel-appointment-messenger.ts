@@ -152,7 +152,13 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
       return { status: 'skipped', reason: 'no_contact_point' };
 
     // Prepare first (it finds the sender and the template), so the quiet hours and the gate are asked about what will really be sent.
-    const prepared = await this.prepare(m, channel, phone, contact?.uuid ?? null, gate.defaultSenderId);
+    const prepared = await this.prepare(
+      m,
+      channel,
+      phone,
+      contact?.uuid ?? null,
+      gate.defaultSenderId,
+    );
     if (prepared.kind === 'refused') return prepared.outcome;
 
     const quiet = await this.quietHours(m, contact?.id ?? null, phone);

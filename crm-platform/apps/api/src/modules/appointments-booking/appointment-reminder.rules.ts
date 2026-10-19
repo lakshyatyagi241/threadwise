@@ -210,7 +210,9 @@ export function settleChannels(
   // Every channel was skipped: the most informative reason is the first channel's that is not "nothing to send to".
   const skips = tried.flatMap((t) => (t.outcome.status === 'skipped' ? [t.outcome.reason] : []));
   const reason =
-    skips.find((r) => r !== 'no_contact_point' && r !== 'no_sender' && r !== 'channel_disabled') ?? skips[0] ?? 'no_channel';
+    skips.find((r) => r !== 'no_contact_point' && r !== 'no_sender' && r !== 'channel_disabled') ??
+    skips[0] ??
+    'no_channel';
   return { status: 'skipped', reason, channel: null };
 }
 

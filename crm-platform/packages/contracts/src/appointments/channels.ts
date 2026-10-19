@@ -37,7 +37,11 @@ export type AppointmentMessageKind = z.infer<typeof appointmentMessageKindSchema
 // --- channel settings ---------------------------------------------------------------------------------------------------------
 
 /** `connected`: a sender is connected. `not_connected`: the owner has to connect one in Settings. `coming_soon`: the channel does not exist yet. */
-export const APPOINTMENT_CHANNEL_CONNECTIONS = ['connected', 'not_connected', 'coming_soon'] as const;
+export const APPOINTMENT_CHANNEL_CONNECTIONS = [
+  'connected',
+  'not_connected',
+  'coming_soon',
+] as const;
 
 export const appointmentChannelSenderSchema = z.object({
   id: uuidSchema,

@@ -6,7 +6,7 @@ import { useId, useRef, useState } from 'react';
 import type { AppointmentChannelState, AppointmentTemplate } from '@crm/contracts';
 import { Alert, Button, Input, Select, Switch, Textarea, cn } from '@crm/ui';
 import type { WaTemplateOption } from '../api/schemas';
-import { CONNECT_HREF, useOfChannel, usableChannels } from '../lib/channel-availability';
+import { CONNECT_HREF, channelUse, usableChannels } from '../lib/channel-availability';
 import { insertAtRange } from '../lib/editor';
 import {
   QUICK_FOLLOW_UPS,
@@ -246,7 +246,9 @@ export function ReminderRulesEditor({
                   <Switch
                     id={`${prefix}-on-${r.id}`}
                     checked={r.enabled}
-                    disabled={disabled || (!r.enabled && !r.channels.some((c) => usableNow.includes(c)))}
+                    disabled={
+                      disabled || (!r.enabled && !r.channels.some((c) => usableNow.includes(c)))
+                    }
                     label={t('enabledOf', { n })}
                     onCheckedChange={(on) =>
                       patch(
@@ -369,7 +371,9 @@ export function ReminderRulesEditor({
                             <span className="flex-1 text-sm">
                               {t(`channels.${c}`)}
                               {channelStates !== undefined && !usableNow.includes(c) && (
-                                <span className="ms-2 text-xs text-warning">{t('channelUnusable')}</span>
+                                <span className="ms-2 text-xs text-warning">
+                                  {t('channelUnusable')}
+                                </span>
                               )}
                             </span>
                             <button
@@ -606,7 +610,7 @@ function AddChannelChip({
 }) {
   const t = useTranslations('appointments.reminders');
   const tc = useTranslations('appointments.channels');
-  const use = useOfChannel(states, channel);
+  const use = channelUse(states, channel);
   const href = CONNECT_HREF[channel];
   if (use === 'usable') {
     return (

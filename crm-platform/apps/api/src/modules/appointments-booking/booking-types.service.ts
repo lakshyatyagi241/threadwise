@@ -426,7 +426,8 @@ export class BookingTypesService {
         if (!r.isActive) return;
         const before = r.id ? existing.find((e) => e.uuid === r.id) : undefined;
         const had = before?.isActive ? new Set<string>(before.channels) : new Set<string>();
-        for (const c of r.channels) if (!had.has(c)) added.push({ channel: c, path: `reminders.${i}.channels` });
+        for (const c of r.channels)
+          if (!had.has(c)) added.push({ channel: c, path: `reminders.${i}.channels` });
       });
       await this.channels.assertEnabled(tx, orgId, added);
       const waIds = await this.repo.resolveWaTemplates(
@@ -485,7 +486,8 @@ export class BookingTypesService {
           return {
             event: t.event,
             channel: t.channel,
-            waTemplateId: chosen.get(i)?.waTemplateId ?? (t.waTemplateId ? wa.get(t.waTemplateId)! : null),
+            waTemplateId:
+              chosen.get(i)?.waTemplateId ?? (t.waTemplateId ? wa.get(t.waTemplateId)! : null),
             plainBody: t.plainBody && t.plainBody.trim() !== '' ? t.plainBody : null,
             variableMap: t.variableMap ?? null,
             libraryTemplateId: chosen.get(i)?.id ?? null,
@@ -555,12 +557,19 @@ export class BookingTypesService {
       existing.find((e) => e.event === event && e.channel === channel);
     const added: Array<{ channel: string; path: string }> = [];
     list.forEach((t, i) => {
-      if (!had(t.event, t.channel)) added.push({ channel: t.channel, path: `templates.${i}.channel` });
+      if (!had(t.event, t.channel))
+        added.push({ channel: t.channel, path: `templates.${i}.channel` });
     });
     await this.channels.assertEnabled(
       tx,
       orgId,
-      added.filter((a) => a.channel === 'whatsapp' || a.channel === 'email' || a.channel === 'sms' || a.channel === 'voice'),
+      added.filter(
+        (a) =>
+          a.channel === 'whatsapp' ||
+          a.channel === 'email' ||
+          a.channel === 'sms' ||
+          a.channel === 'voice',
+      ),
     );
 
     const rows = await this.library.findLibraryMany(
@@ -573,16 +582,22 @@ export class BookingTypesService {
       if (!t.libraryTemplateId) return;
       const path = `templates.${i}.libraryTemplateId`;
       const row = rows.find((r) => r.uuid === t.libraryTemplateId);
-      if (!row) throw AppError.validation('That message is not in the library of this workspace.', [{ path, message: t.libraryTemplateId }]);
-      if (row.kind !== t.event || row.channel !== t.channel) {
-        throw AppError.validation('That message is for another kind of message or another channel.', [
-          { path, message: `${row.kind}/${row.channel}` },
+      if (!row)
+        throw AppError.validation('That message is not in the library of this workspace.', [
+          { path, message: t.libraryTemplateId },
         ]);
+      if (row.kind !== t.event || row.channel !== t.channel) {
+        throw AppError.validation(
+          'That message is for another kind of message or another channel.',
+          [{ path, message: `${row.kind}/${row.channel}` }],
+        );
       }
       const unchanged = had(t.event, t.channel)?.libraryTemplateId === row.id;
       if (!unchanged) {
         if (!row.isActive) {
-          throw AppError.validation('That message is switched off in the library.', [{ path, message: 'inactive' }]);
+          throw AppError.validation('That message is switched off in the library.', [
+            { path, message: 'inactive' },
+          ]);
         }
         if (toApiTemplate(row).status !== 'approved') {
           throw new AppError(

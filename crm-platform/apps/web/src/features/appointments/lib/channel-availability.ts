@@ -16,9 +16,14 @@ export const CONNECT_HREF: Record<AppointmentChannel, string | null> = {
 };
 
 /** The channels in the order the screens list them. */
-export const CHANNEL_ORDER = ['whatsapp', 'email', 'sms', 'voice'] as const satisfies readonly AppointmentChannel[];
+export const CHANNEL_ORDER = [
+  'whatsapp',
+  'email',
+  'sms',
+  'voice',
+] as const satisfies readonly AppointmentChannel[];
 
-export function useOf(state: AppointmentChannelState | undefined): ChannelUse {
+export function channelUseOf(state: AppointmentChannelState | undefined): ChannelUse {
   // Not loaded (yet, or the request failed): do not block the editor on a guess; the API refuses a channel that is not on.
   if (!state) return 'usable';
   if (state.connection === 'coming_soon') return 'coming_soon';
@@ -34,11 +39,11 @@ export function stateOfChannel(
   return states?.find((s) => s.channel === channel);
 }
 
-export function useOfChannel(
+export function channelUse(
   states: readonly AppointmentChannelState[] | undefined,
   channel: AppointmentChannel,
 ): ChannelUse {
-  return states === undefined ? 'usable' : useOf(stateOfChannel(states, channel));
+  return states === undefined ? 'usable' : channelUseOf(stateOfChannel(states, channel));
 }
 
 /** The channels a rule or message may be attached to right now, in the order given. */
@@ -46,5 +51,5 @@ export function usableChannels<T extends AppointmentChannel>(
   states: readonly AppointmentChannelState[] | undefined,
   among: readonly T[],
 ): T[] {
-  return among.filter((c) => useOfChannel(states, c) === 'usable');
+  return among.filter((c) => channelUse(states, c) === 'usable');
 }

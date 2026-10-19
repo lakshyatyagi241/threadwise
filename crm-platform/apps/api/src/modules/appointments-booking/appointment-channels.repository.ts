@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import type { AppointmentChannel, AppointmentMessageKind, AppointmentTemplateChannel } from '@crm/contracts';
+import type {
+  AppointmentChannel,
+  AppointmentMessageKind,
+  AppointmentTemplateChannel,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
 
@@ -173,7 +177,11 @@ export class AppointmentChannelsRepository {
     const pick = (provider: string): SenderRow[] =>
       (configs.rows as Raw[])
         .filter((r) => r.provider === provider)
-        .map((r) => ({ id: Number(r.id), uuid: r.uuid as string, label: (r.label as string | null) ?? '' }));
+        .map((r) => ({
+          id: Number(r.id),
+          uuid: r.uuid as string,
+          label: (r.label as string | null) ?? '',
+        }));
     return {
       whatsapp: pick('waba'),
       sms: pick('sms'),
@@ -202,7 +210,12 @@ export class AppointmentChannelsRepository {
     return (res.rows as Raw[]).map(toLibrary);
   }
 
-  async findLibrary(tx: Tx, orgId: number, uuid: string, lock = false): Promise<LibraryRow | undefined> {
+  async findLibrary(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    lock = false,
+  ): Promise<LibraryRow | undefined> {
     const res = await tx.execute(sql`
       ${LIBRARY_SELECT}
       WHERE m.org_id = ${orgId} AND m.uuid = ${uuid}::uuid ${lock ? sql`FOR UPDATE OF m` : sql``}`);
@@ -271,23 +284,26 @@ export class AppointmentChannelsRepository {
         name = ${v.name ?? sql`name`},
         subject = ${v.subject === undefined ? sql`subject` : v.subject},
         body = ${v.body ?? sql`body`},
-        variables = ${
-          v.variables === undefined
-            ? sql`variables`
-            : textArray(v.variables)
-        },
+        variables = ${v.variables === undefined ? sql`variables` : textArray(v.variables)},
         is_active = ${v.isActive ?? sql`is_active`}
       WHERE org_id = ${orgId} AND id = ${id}`);
   }
 
   async deleteLibrary(tx: Tx, orgId: number, id: number): Promise<void> {
-    await tx.execute(sql`DELETE FROM appointment_message_templates WHERE org_id = ${orgId} AND id = ${id}`);
+    await tx.execute(
+      sql`DELETE FROM appointment_message_templates WHERE org_id = ${orgId} AND id = ${id}`,
+    );
   }
 
   async nameTaken(
     tx: Tx,
     orgId: number,
-    v: { kind: AppointmentMessageKind; channel: AppointmentTemplateChannel; language: string; name: string },
+    v: {
+      kind: AppointmentMessageKind;
+      channel: AppointmentTemplateChannel;
+      language: string;
+      name: string;
+    },
     exceptId?: number,
   ): Promise<boolean> {
     const res = await tx.execute(sql`

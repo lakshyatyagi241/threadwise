@@ -386,7 +386,8 @@ export function validateDraft(d: BookingTypeDraft): ProblemMap {
   // lifecycle messages: a text has to be attached to a channel to be sent (BL-350)
   for (const event of TEMPLATE_EVENTS) {
     const t = d.templates[event];
-    if (t.plainBody.trim() !== '' && t.channels.length === 0) p[`template:${event}`] = 'templateNoChannel';
+    if (t.plainBody.trim() !== '' && t.channels.length === 0)
+      p[`template:${event}`] = 'templateNoChannel';
   }
 
   // questions

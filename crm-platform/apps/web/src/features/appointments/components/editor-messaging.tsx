@@ -23,7 +23,7 @@ import { useAppointmentChannels, useMessageLibrary, useWaTemplates } from '../ap
 import {
   CHANNEL_ORDER,
   CONNECT_HREF,
-  useOfChannel,
+  channelUse,
   usableChannels,
 } from '../lib/channel-availability';
 import { ReminderRulesEditor } from './reminder-rules-editor';
@@ -230,7 +230,7 @@ function ChannelChip({
   states: ChannelStates;
 }) {
   const t = useTranslations('appointments.channels');
-  const use = useOfChannel(states, channel);
+  const use = channelUse(states, channel);
   const href = CONNECT_HREF[channel];
   return (
     <li
@@ -333,7 +333,7 @@ function EventChannelRow({
   t: ReturnType<typeof useTranslations>;
   tl: ReturnType<typeof useTranslations>;
 }) {
-  const use = useOfChannel(states, channel);
+  const use = channelUse(states, channel);
   const checked = draft.channels.includes(channel);
   const href = CONNECT_HREF[channel];
   const options = (library ?? []).filter((m) => m.channel === channel && m.kind === event);

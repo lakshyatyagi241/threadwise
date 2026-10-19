@@ -22,7 +22,13 @@ import { waTemplateValues } from '../../../src/modules/appointments-booking/appo
 
 describe('the built-in set', () => {
   it('has a message for every kind on email and on WhatsApp', () => {
-    for (const kind of ['confirmation', 'reminder', 'reschedule', 'cancellation', 'follow_up'] as const) {
+    for (const kind of [
+      'confirmation',
+      'reminder',
+      'reschedule',
+      'cancellation',
+      'follow_up',
+    ] as const) {
       for (const channel of ['email', 'whatsapp'] as const) {
         expect(findPredefined(kind, channel, 'en'), `${kind}/${channel}`).toBeDefined();
       }
@@ -55,7 +61,9 @@ describe('the built-in set', () => {
         submit: true,
       });
       const prepared = prepareTemplate(input);
-      const errors = lintPrepared(prepared, false, input.name).filter((i) => i.severity === 'error');
+      const errors = lintPrepared(prepared, false, input.name).filter(
+        (i) => i.severity === 'error',
+      );
       expect(errors).toEqual([]);
       // What the sender fills must be as many values as the template has placeholders.
       const values = waTemplateValues(wa.variables.length, {
@@ -78,7 +86,11 @@ describe('the built-in set', () => {
 
 describe('variablesOf and unknownPlaceholders', () => {
   it('lists placeholders once, lower case, in first-use order, across several texts', () => {
-    expect(variablesOf('Hi {{ Name }}', 'on {{date}} {{name}} {{time}}')).toEqual(['name', 'date', 'time']);
+    expect(variablesOf('Hi {{ Name }}', 'on {{date}} {{name}} {{time}}')).toEqual([
+      'name',
+      'date',
+      'time',
+    ]);
     expect(variablesOf(null, undefined)).toEqual([]);
   });
   it('finds a placeholder no booking message fills', () => {
@@ -94,10 +106,15 @@ describe('toWhatsappBody', () => {
       body: 'Hi {{1}}, {{2}} on {{3}} at {{4}}.',
       variables: ['name', 'type', 'date', 'time'],
     });
-    if (r.ok) expect(r.variableMap.body.map((s) => s.key)).toEqual(['name', 'type', 'date', 'time']);
+    if (r.ok)
+      expect(r.variableMap.body.map((s) => s.key)).toEqual(['name', 'type', 'date', 'time']);
   });
   it('accepts a text with no placeholder', () => {
-    expect(toWhatsappBody('We are open.')).toMatchObject({ ok: true, body: 'We are open.', variables: [] });
+    expect(toWhatsappBody('We are open.')).toMatchObject({
+      ok: true,
+      body: 'We are open.',
+      variables: [],
+    });
   });
   it('refuses a placeholder WhatsApp cannot fill', () => {
     const r = toWhatsappBody('Hi {{name}}, see {{slot}}');
@@ -126,13 +143,18 @@ describe('libraryStatusOfWa', () => {
   });
   it('maps the template states', () => {
     expect(libraryStatusOfWa(row({ status: 'draft', metaStatus: null }), now).status).toBe('draft');
-    expect(libraryStatusOfWa(row({ status: 'pending', metaStatus: 'PENDING' }), now).status).toBe('pending');
+    expect(libraryStatusOfWa(row({ status: 'pending', metaStatus: 'PENDING' }), now).status).toBe(
+      'pending',
+    );
     expect(libraryStatusOfWa(row(), now)).toEqual({ status: 'approved', reason: null });
     expect(libraryStatusOfWa(row({ status: 'public' }), now).status).toBe('approved');
   });
-  it('shows Meta\'s reason for a rejection', () => {
+  it("shows Meta's reason for a rejection", () => {
     expect(
-      libraryStatusOfWa(row({ status: 'rejected', metaStatus: 'REJECTED', rejectionReason: 'Invalid format' }), now),
+      libraryStatusOfWa(
+        row({ status: 'rejected', metaStatus: 'REJECTED', rejectionReason: 'Invalid format' }),
+        now,
+      ),
     ).toEqual({ status: 'rejected', reason: 'Invalid format' });
   });
   it('never calls a paused, disabled or out-of-sync template approved', () => {
@@ -143,7 +165,9 @@ describe('libraryStatusOfWa', () => {
     expect(libraryStatusOfWa(row({ status: 'disabled' }), now).reason).toMatch(/disabled/);
     expect(libraryStatusOfWa(row({ metaStatus: 'PAUSED' }), now).status).toBe('rejected');
     // a pause that has ended no longer blocks
-    expect(libraryStatusOfWa(row({ pausedUntil: new Date('2027-01-19T00:00:00Z') }), now).status).toBe('approved');
+    expect(
+      libraryStatusOfWa(row({ pausedUntil: new Date('2027-01-19T00:00:00Z') }), now).status,
+    ).toBe('approved');
   });
 });
 
@@ -177,11 +201,25 @@ describe('toApiTemplate', () => {
     expect(toApiTemplate({ ...base, channel: 'email', isActive: false }).usable).toBe(false);
   });
   it('a WhatsApp message is usable only when its template is approved', () => {
-    const wa = { ...base, channel: 'whatsapp' as const, waTemplateId: 5, waUuid: '33333333-3333-4333-8333-333333333333' };
+    const wa = {
+      ...base,
+      channel: 'whatsapp' as const,
+      waTemplateId: 5,
+      waUuid: '33333333-3333-4333-8333-333333333333',
+    };
     expect(toApiTemplate({ ...wa, waStatus: 'draft' }).usable).toBe(false);
-    expect(toApiTemplate({ ...wa, waStatus: 'pending', waMetaStatus: 'PENDING' }).status).toBe('pending');
-    expect(toApiTemplate({ ...wa, waStatus: 'approved', waMetaStatus: 'APPROVED' }).usable).toBe(true);
-    const rejected = toApiTemplate({ ...wa, waStatus: 'rejected', waMetaStatus: 'REJECTED', waRejectionReason: 'No' });
+    expect(toApiTemplate({ ...wa, waStatus: 'pending', waMetaStatus: 'PENDING' }).status).toBe(
+      'pending',
+    );
+    expect(toApiTemplate({ ...wa, waStatus: 'approved', waMetaStatus: 'APPROVED' }).usable).toBe(
+      true,
+    );
+    const rejected = toApiTemplate({
+      ...wa,
+      waStatus: 'rejected',
+      waMetaStatus: 'REJECTED',
+      waRejectionReason: 'No',
+    });
     expect(rejected).toMatchObject({ status: 'rejected', rejectionReason: 'No', usable: false });
   });
 });
@@ -207,7 +245,13 @@ describe('stateOf (the owner screen and the editor read this)', () => {
 
   it('a new workspace has not decided: nothing is enabled', () => {
     const s = stateOf('email', undefined, dir({ email: [sender] }));
-    expect(s).toMatchObject({ enabled: false, decided: false, source: null, connection: 'connected', usable: false });
+    expect(s).toMatchObject({
+      enabled: false,
+      decided: false,
+      source: null,
+      connection: 'connected',
+      usable: false,
+    });
   });
   it('enabled but not connected is not usable (the editor says Connect it in Settings)', () => {
     expect(stateOf('sms', row('sms', true), dir())).toMatchObject({
@@ -223,19 +267,38 @@ describe('stateOf (the owner screen and the editor read this)', () => {
     });
   });
   it('a connected WhatsApp device alone counts as connected (text only)', () => {
-    expect(stateOf('whatsapp', row('whatsapp', true), dir({ whatsappDevice: true })).usable).toBe(true);
+    expect(stateOf('whatsapp', row('whatsapp', true), dir({ whatsappDevice: true })).usable).toBe(
+      true,
+    );
   });
   it('a kept default sender is shown; one that is gone is not', () => {
-    const kept = stateOf('email', row('email', true, { defaultSenderId: 3 }), dir({ email: [sender] }));
+    const kept = stateOf(
+      'email',
+      row('email', true, { defaultSenderId: 3 }),
+      dir({ email: [sender] }),
+    );
     expect(kept.defaultSenderId).toBe(sender.uuid);
-    const gone = stateOf('email', row('email', true, { defaultSenderId: 99 }), dir({ email: [sender] }));
+    const gone = stateOf(
+      'email',
+      row('email', true, { defaultSenderId: 99 }),
+      dir({ email: [sender] }),
+    );
     expect(gone.defaultSenderId).toBeNull();
   });
   it('voice is listed, coming soon, and never enabled or usable even if a row said so', () => {
-    expect(stateOf('voice', undefined, dir())).toMatchObject({ connection: 'coming_soon', enabled: false, usable: false });
-    expect(stateOf('voice', row('voice', true), dir())).toMatchObject({ enabled: false, usable: false });
+    expect(stateOf('voice', undefined, dir())).toMatchObject({
+      connection: 'coming_soon',
+      enabled: false,
+      usable: false,
+    });
+    expect(stateOf('voice', row('voice', true), dir())).toMatchObject({
+      enabled: false,
+      usable: false,
+    });
   });
   it('the legacy default is reported as such', () => {
-    expect(stateOf('email', row('email', true, { source: 'legacy_default' }), dir()).source).toBe('legacy_default');
+    expect(stateOf('email', row('email', true, { source: 'legacy_default' }), dir()).source).toBe(
+      'legacy_default',
+    );
   });
 });

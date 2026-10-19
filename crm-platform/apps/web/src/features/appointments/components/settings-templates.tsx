@@ -120,7 +120,10 @@ function MessageRow({ message: m, canEdit }: { message: AppointmentTemplate; can
   const [confirmDelete, setConfirmDelete] = useState(false);
   const whatsapp = m.channel === 'whatsapp';
 
-  async function run<T>(kind: 'submit' | 'refresh' | 'delete', fn: () => Promise<T>): Promise<T | undefined> {
+  async function run<T>(
+    kind: 'submit' | 'refresh' | 'delete',
+    fn: () => Promise<T>,
+  ): Promise<T | undefined> {
     if (busy) return undefined;
     setBusy(kind);
     setError(null);
@@ -157,7 +160,11 @@ function MessageRow({ message: m, canEdit }: { message: AppointmentTemplate; can
               disabled={busy !== null}
               onClick={async () => {
                 const r = await run('submit', () => channelsApi.submit(m.id));
-                if (r) toast(r.metaError ? t('metaRefused') : t('submitted'), r.metaError ? 'danger' : 'success');
+                if (r)
+                  toast(
+                    r.metaError ? t('metaRefused') : t('submitted'),
+                    r.metaError ? 'danger' : 'success',
+                  );
               }}
             >
               {busy === 'submit' ? t('submitting') : t('submit')}
@@ -176,7 +183,12 @@ function MessageRow({ message: m, canEdit }: { message: AppointmentTemplate; can
               {busy === 'refresh' ? t('refreshing') : t('refresh')}
             </Button>
           )}
-          <Button variant="secondary" size="sm" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+          >
             {open ? t('close') : canEdit ? t('edit') : t('view')}
           </Button>
           {canEdit && (
@@ -246,7 +258,8 @@ function EditForm({
   const [error, setError] = useState<unknown>(null);
   const [saving, setSaving] = useState(false);
   const { data } = usePredefinedMessages();
-  const dirty = name !== m.name || subject !== (m.subject ?? '') || body !== m.body || active !== m.isActive;
+  const dirty =
+    name !== m.name || subject !== (m.subject ?? '') || body !== m.body || active !== m.isActive;
 
   async function save(submit: boolean) {
     if (saving) return;
@@ -262,7 +275,10 @@ function EditForm({
         rowVersion: m.rowVersion,
       });
       refresh();
-      toast(r.metaError ? t('metaRefused') : submit ? t('submitted') : t('saved'), r.metaError ? 'danger' : 'success');
+      toast(
+        r.metaError ? t('metaRefused') : submit ? t('submitted') : t('saved'),
+        r.metaError ? 'danger' : 'success',
+      );
       onDone();
     } catch (e) {
       setError(e);
@@ -277,12 +293,22 @@ function EditForm({
     <div className="space-y-3 border-t border-border p-3">
       <label className="block space-y-1">
         <span className="text-xs font-medium">{t('nameLabel')}</span>
-        <Input value={name} maxLength={120} disabled={!canEdit || saving} onChange={(e) => setName(e.target.value)} />
+        <Input
+          value={name}
+          maxLength={120}
+          disabled={!canEdit || saving}
+          onChange={(e) => setName(e.target.value)}
+        />
       </label>
       {!whatsapp && (
         <label className="block space-y-1">
           <span className="text-xs font-medium">{t('subjectLabel')}</span>
-          <Input value={subject} maxLength={191} disabled={!canEdit || saving} onChange={(e) => setSubject(e.target.value)} />
+          <Input
+            value={subject}
+            maxLength={191}
+            disabled={!canEdit || saving}
+            onChange={(e) => setSubject(e.target.value)}
+          />
         </label>
       )}
       <label className="block space-y-1">
@@ -408,10 +434,18 @@ function PredefinedRow({
     setBusy(true);
     setError(null);
     try {
-      const r = await channelsApi.adopt({ key: p.key, channel: p.channel as AppointmentTemplateChannel, language: p.language, submit });
+      const r = await channelsApi.adopt({
+        key: p.key,
+        channel: p.channel as AppointmentTemplateChannel,
+        language: p.language,
+        submit,
+      });
       refresh();
       void r;
-      toast(r.metaError ? t('metaRefused') : submit && whatsapp ? t('submitted') : t('adopted'), r.metaError ? 'danger' : 'success');
+      toast(
+        r.metaError ? t('metaRefused') : submit && whatsapp ? t('submitted') : t('adopted'),
+        r.metaError ? 'danger' : 'success',
+      );
     } catch (e) {
       setError(e);
     } finally {
@@ -430,18 +464,30 @@ function PredefinedRow({
             </span>
           )}
         </span>
-        <Button variant="secondary" size="sm" onClick={() => setPreview((v) => !v)} aria-expanded={preview}>
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => setPreview((v) => !v)}
+          aria-expanded={preview}
+        >
           {preview ? t('hidePreview') : t('preview')}
         </Button>
         {adopted ? (
-          <Badge tone={STATUS_TONE[adopted.status]}>{t('inLibrary', { status: t(`status.${adopted.status}`) })}</Badge>
+          <Badge tone={STATUS_TONE[adopted.status]}>
+            {t('inLibrary', { status: t(`status.${adopted.status}`) })}
+          </Badge>
         ) : canEdit ? (
           <>
             <Button size="sm" disabled={busy} onClick={() => void adopt(false)}>
               {busy ? t('adopting') : whatsapp ? t('adoptDraft') : t('adopt')}
             </Button>
             {whatsapp && (
-              <Button size="sm" variant="secondary" disabled={busy} onClick={() => void adopt(true)}>
+              <Button
+                size="sm"
+                variant="secondary"
+                disabled={busy}
+                onClick={() => void adopt(true)}
+              >
                 {t('adoptSubmit')}
               </Button>
             )}
@@ -508,7 +554,12 @@ function NewEmailMessage() {
       </label>
       <label className="block space-y-1">
         <span className="text-xs font-medium">{t('bodyLabel')}</span>
-        <Textarea rows={6} value={body} maxLength={4000} onChange={(e) => setBody(e.target.value)} />
+        <Textarea
+          rows={6}
+          value={body}
+          maxLength={4000}
+          onChange={(e) => setBody(e.target.value)}
+        />
       </label>
       {error !== null && <ErrorLine error={error} />}
       <div className="flex justify-end gap-2">

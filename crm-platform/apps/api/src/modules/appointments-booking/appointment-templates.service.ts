@@ -36,7 +36,11 @@ import {
 
 const MODULE = 'appointment_message_templates';
 
-const invalid = (message: string, path: string, status = HttpStatus.UNPROCESSABLE_ENTITY): AppError =>
+const invalid = (
+  message: string,
+  path: string,
+  status = HttpStatus.UNPROCESSABLE_ENTITY,
+): AppError =>
   new AppError(ERROR_CODES.APPT_TEMPLATE_INVALID, message, status, [{ path, message }]);
 
 /**
@@ -80,7 +84,8 @@ export class AppointmentTemplatesService {
           metaCategory: wa ? p.metaCategory : null,
           adoptedId:
             rows.find(
-              (r) => r.predefinedKey === p.key && r.channel === p.channel && r.language === p.language,
+              (r) =>
+                r.predefinedKey === p.key && r.channel === p.channel && r.language === p.language,
             )?.uuid ?? null,
         };
       }),
@@ -95,7 +100,9 @@ export class AppointmentTemplatesService {
       this.repo.listLibrary(tx, orgId, { kind: query.kind, channel: query.channel }),
     );
     const data = rows.map((r) => toApiTemplate(r));
-    return { data: query.usable === undefined ? data : data.filter((t) => t.usable === query.usable) };
+    return {
+      data: query.usable === undefined ? data : data.filter((t) => t.usable === query.usable),
+    };
   }
 
   async get(uuid: string): Promise<AppointmentTemplate> {
@@ -145,7 +152,9 @@ export class AppointmentTemplatesService {
     const wa = toWhatsappBody(built.body);
     if (!wa.ok) throw invalid(wa.problem, 'body');
     const connectionId = await this.connectionFor(input.connectionId);
-    await this.db.tx((tx) => this.assertFree(tx, ctx.orgId, built.key, built.channel, built.language));
+    await this.db.tx((tx) =>
+      this.assertFree(tx, ctx.orgId, built.key, built.channel, built.language),
+    );
 
     const created = await this.templates.create(
       createTemplateInputSchema.parse({
@@ -178,7 +187,8 @@ export class AppointmentTemplatesService {
       throw invalid(`Unknown placeholder ${stray.map((s) => `{{${s}}}`).join(', ')}.`, 'body');
     }
     const uuid = await this.db.tx(async (tx) => {
-      if (await this.repo.nameTaken(tx, ctx.orgId, { ...input, channel: 'email' })) throw this.nameTaken();
+      if (await this.repo.nameTaken(tx, ctx.orgId, { ...input, channel: 'email' }))
+        throw this.nameTaken();
       const id = await this.repo.insertLibrary(tx, ctx.orgId, {
         kind: input.kind,
         channel: 'email',
@@ -204,7 +214,10 @@ export class AppointmentTemplatesService {
 
   // --- edit, submit, refresh, delete ----------------------------------------------------------------------------------------------
 
-  async update(uuid: string, input: UpdateAppointmentTemplateInput): Promise<AppointmentTemplateResult> {
+  async update(
+    uuid: string,
+    input: UpdateAppointmentTemplateInput,
+  ): Promise<AppointmentTemplateResult> {
     const ctx = RequestContextStore.require();
     const row = await this.require(ctx.orgId, uuid);
     if (row.rowVersion !== input.rowVersion) throw AppError.rowVersionConflict('Message');
@@ -216,7 +229,10 @@ export class AppointmentTemplatesService {
     if (row.channel === 'email') {
       await this.db.tx(async (tx) => {
         const name = input.name ?? row.name;
-        if (name !== row.name && (await this.repo.nameTaken(tx, ctx.orgId, { ...row, name }, row.id)))
+        if (
+          name !== row.name &&
+          (await this.repo.nameTaken(tx, ctx.orgId, { ...row, name }, row.id))
+        )
           throw this.nameTaken();
         const body = input.body ?? row.body;
         const subject = input.subject === undefined ? row.subject : input.subject || null;
@@ -256,13 +272,21 @@ export class AppointmentTemplatesService {
       }
     }
     if (input.submit || input.body !== undefined) this.requireWhatsappRights(input.submit);
-    if (!row.waUuid) throw invalid('This message has no WhatsApp template behind it.', 'waTemplateId', HttpStatus.CONFLICT);
+    if (!row.waUuid)
+      throw invalid(
+        'This message has no WhatsApp template behind it.',
+        'waTemplateId',
+        HttpStatus.CONFLICT,
+      );
     const wa = toWhatsappBody(input.body ?? row.body);
     if (!wa.ok) throw invalid(wa.problem, 'body');
 
     if (input.body !== undefined && input.body !== row.body) {
       const detail = await this.templates.get(row.waUuid);
-      const result = await this.templates.update(row.waUuid, this.waUpdateOf(detail, wa, input.submit));
+      const result = await this.templates.update(
+        row.waUuid,
+        this.waUpdateOf(detail, wa, input.submit),
+      );
       metaError = result.metaError;
     } else if (input.submit) {
       const result = await this.templates.submit(row.waUuid);
@@ -282,7 +306,9 @@ export class AppointmentTemplatesService {
         module: MODULE,
         recordId: row.id,
         action: 'update',
-        delta: { ...(input.body !== undefined ? { body: { old: '(changed)', new: '(changed)' } } : {}) },
+        delta: {
+          ...(input.body !== undefined ? { body: { old: '(changed)', new: '(changed)' } } : {}),
+        },
       });
     });
     return { template: await this.get(uuid), metaError };
@@ -410,7 +436,13 @@ export class AppointmentTemplatesService {
   /** Links the WhatsApp template that was just created to a new library row. */
   private async linkNew(
     template: TemplateDetail,
-    v: { kind: LibraryRow['kind']; language: string; name: string; body: string; predefinedKey: string },
+    v: {
+      kind: LibraryRow['kind'];
+      language: string;
+      name: string;
+      body: string;
+      predefinedKey: string;
+    },
   ): Promise<string> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
@@ -464,4 +496,3 @@ export class AppointmentTemplatesService {
     };
   }
 }
-

@@ -125,7 +125,9 @@ function make(s: Setup = {}) {
       return { rows: [] };
     },
   };
-  const channelGate = vi.fn(async (..._a: unknown[]) => s.channelGate ?? { enabled: true, defaultSenderId: null });
+  const channelGate = vi.fn(
+    async (..._a: unknown[]) => s.channelGate ?? { enabled: true, defaultSenderId: null },
+  );
   const messenger = new ChannelAppointmentMessenger(
     { txAs: async (_c: unknown, fn: (t: unknown) => unknown) => fn(tx) } as never,
     {

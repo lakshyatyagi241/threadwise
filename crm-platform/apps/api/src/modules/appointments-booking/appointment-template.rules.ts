@@ -200,7 +200,10 @@ export function toWhatsappBody(text: string): WhatsappBody {
       problem: `A WhatsApp message must use its placeholders in this order, without skipping one: ${order.join(', ')}.`,
     };
   }
-  const body = text.replace(PLACEHOLDER, (_w, key: string) => `{{${order.indexOf(key.toLowerCase()) + 1}}}`);
+  const body = text.replace(
+    PLACEHOLDER,
+    (_w, key: string) => `{{${order.indexOf(key.toLowerCase()) + 1}}}`,
+  );
   return {
     ok: true,
     body,
@@ -242,10 +245,16 @@ export function libraryStatusOfWa(
   if (status === 'pending') return { status: 'pending', reason: null };
   if (status === 'approved') {
     if (row.metaStatus !== null && row.metaStatus !== 'APPROVED') {
-      return { status: 'rejected', reason: row.rejectionReason ?? 'Meta no longer lists it as approved.' };
+      return {
+        status: 'rejected',
+        reason: row.rejectionReason ?? 'Meta no longer lists it as approved.',
+      };
     }
     if (row.pausedUntil && row.pausedUntil.getTime() > now.getTime()) {
-      return { status: 'rejected', reason: row.rejectionReason ?? 'Meta has paused this template.' };
+      return {
+        status: 'rejected',
+        reason: row.rejectionReason ?? 'Meta has paused this template.',
+      };
     }
     return { status: 'approved', reason: null };
   }

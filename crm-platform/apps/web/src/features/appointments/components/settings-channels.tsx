@@ -9,7 +9,7 @@ import { Alert, Badge, Select, Spinner, Switch, cn, useToast } from '@crm/ui';
 import { KEYS, useAppointmentChannels } from '../api/hooks';
 import { channelsApi } from '../api/channels-service';
 import { errorKind } from '../lib/errors';
-import { CHANNEL_ORDER, CONNECT_HREF, useOf } from '../lib/channel-availability';
+import { CHANNEL_ORDER, CONNECT_HREF, channelUseOf } from '../lib/channel-availability';
 import { ErrorLine, useAppointmentsCan } from './parts';
 import { SettingsCard } from './settings-parts';
 
@@ -23,7 +23,8 @@ export function ChannelsSection() {
   const can = useAppointmentsCan();
   const query = useAppointmentChannels();
   const states = query.data;
-  const undecided = states !== undefined && states.every((s) => !s.decided || s.channel === 'voice');
+  const undecided =
+    states !== undefined && states.every((s) => !s.decided || s.channel === 'voice');
 
   return (
     <SettingsCard id="channels" title={t('title')} description={t('description')}>
@@ -64,7 +65,7 @@ function ChannelRow({ state, canEdit }: { state: AppointmentChannelState; canEdi
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<unknown>(null);
   const channel: AppointmentChannel = state.channel;
-  const use = useOf(state);
+  const use = channelUseOf(state);
   const href = CONNECT_HREF[channel];
   const soon = use === 'coming_soon';
 
@@ -120,14 +121,20 @@ function ChannelRow({ state, canEdit }: { state: AppointmentChannelState; canEdi
           {use === 'not_connected' && href && (
             <p className="text-xs">
               <span className="text-muted-foreground">{t('notConnected')} </span>
-              <Link href={href} className="font-medium text-primary underline-offset-2 hover:underline">
+              <Link
+                href={href}
+                className="font-medium text-primary underline-offset-2 hover:underline"
+              >
                 {t('connect')}
               </Link>
             </p>
           )}
           {state.connection === 'not_connected' && !state.enabled && href && (
             <p className="text-xs">
-              <Link href={href} className="font-medium text-primary underline-offset-2 hover:underline">
+              <Link
+                href={href}
+                className="font-medium text-primary underline-offset-2 hover:underline"
+              >
                 {t('connect')}
               </Link>
             </p>
@@ -170,7 +177,7 @@ function StatusBadge({
   enabled,
   decided,
 }: {
-  use: ReturnType<typeof useOf>;
+  use: ReturnType<typeof channelUseOf>;
   enabled: boolean;
   decided: boolean;
 }) {
@@ -178,5 +185,7 @@ function StatusBadge({
   if (use === 'coming_soon') return <Badge tone="neutral">{t('status.coming_soon')}</Badge>;
   if (use === 'usable') return <Badge tone="success">{t('status.usable')}</Badge>;
   if (use === 'not_connected') return <Badge tone="warning">{t('status.not_connected')}</Badge>;
-  return <Badge tone="neutral">{decided && !enabled ? t('status.off') : t('status.notChosen')}</Badge>;
+  return (
+    <Badge tone="neutral">{decided && !enabled ? t('status.off') : t('status.notChosen')}</Badge>
+  );
 }
