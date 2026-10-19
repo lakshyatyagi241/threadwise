@@ -14,6 +14,7 @@ import {
   text,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { conversations } from '../chat-conversations/tables';
@@ -72,7 +73,12 @@ export const telegramBots = pgTable(
     botUsername: text('bot_username'),
     botName: text('bot_name'),
     botId: text('bot_id'),
-    webhookToken: text('webhook_token').notNull(),
+    /** Legacy plaintext routing token; NULL once the audit backfill has run (encryption audit E3). Read `webhookTokenEnc` first. */
+    webhookToken: text('webhook_token'),
+    /** sha256 (hex) of the routing token: what the public lookup function matches. */
+    webhookTokenHash: text('webhook_token_hash'),
+    /** The routing token sealed with CryptoService, so the webhook URL can be shown again. */
+    webhookTokenEnc: text('webhook_token_enc'),
     /** AES-GCM ciphertext (credential pattern); never plain text. */
     secretToken: text('secret_token'),
     active: boolean('active').notNull().default(true),
@@ -95,6 +101,9 @@ export const telegramBots = pgTable(
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
     unique('uq_telegram_bots_webhook_token').on(t.webhookToken),
+    uniqueIndex('uq_telegram_bots_webhook_token_hash')
+      .on(t.webhookTokenHash)
+      .where(sql`${t.webhookTokenHash} IS NOT NULL`),
     foreignKey({
       name: 'fk_telegram_bots_connected_by',
       columns: [t.orgId, t.connectedBy],

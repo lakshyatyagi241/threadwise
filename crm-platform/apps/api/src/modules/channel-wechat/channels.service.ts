@@ -9,6 +9,7 @@ import {
   type WechatServerConfig,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
+import { tokenColumns, tokenOf } from '../../common/crypto/secret-columns';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
@@ -49,7 +50,10 @@ export class ChannelsService {
   ) {}
 
   private url(row: ChannelRow): string {
-    return webhookUrl(this.config.get('APP_URL', { infer: true }), row.webhookToken);
+    return webhookUrl(
+      this.config.get('APP_URL', { infer: true }),
+      tokenOf(this.crypto, { enc: row.webhookTokenEnc, plain: row.webhookToken }),
+    );
   }
 
   /** What the API shows of a channel: never a secret, only whether an EncodingAESKey is saved. */
@@ -124,7 +128,10 @@ export class ChannelsService {
       };
       const row = existing
         ? await this.repo.reconnect(tx, ctx.orgId, existing.id, values)
-        : await this.repo.insert(tx, ctx.orgId, { ...values, webhookToken: randomToken() });
+        : await this.repo.insert(tx, ctx.orgId, {
+            ...values,
+            webhookToken: tokenColumns(this.crypto, randomToken()),
+          });
       await this.audit.record(tx, {
         module: MODULE_KEY,
         recordId: row.id,

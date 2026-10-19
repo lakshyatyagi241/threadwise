@@ -1,6 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import { DEPLOYMENT_STALL_MINUTES, type DeploymentStatus } from '@crm/contracts';
+import {
+  DEPLOYMENT_STALL_MINUTES,
+  PUBLISH_DONE_WINDOW_DAYS,
+  RELEASE_LIST_MAX,
+  RELEASE_STALL_MINUTES,
+  type DeploymentStatus,
+  type PublishStatus,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { DatabaseService } from '../../infra/db/database.service';
 
@@ -70,6 +77,92 @@ export class DeploymentsStore {
         stalled: first.c_stalled,
       };
       return { rows: all.filter((r) => r.id !== null && r.id !== undefined), counts };
+    });
+  }
+
+  /**
+   * Flow publishes: the `flow.published` outbox events of every workspace. Queued is a pending event (attempts 0) or one that is
+   * waiting for a retry, running a processing one, failed a dead one (it ran out of retries), done a handled one. Done events older
+   * than the window are left out, so the list stays small as history grows; everything still in the queue or failed is always here.
+   */
+  listPublishes(
+    status: PublishStatus | null,
+    limit: number,
+  ): Promise<{ rows: Raw[]; counts: Raw }> {
+    return this.db.privileged(async (tx: Tx) => {
+      const events = sql`
+        WITH e AS (
+          SELECT g.uuid AS workspace_id, g.name AS workspace_name, f.uuid AS flow_id, f.flow_name,
+                 o.created_at AS queued_at, o.processed_at, o.attempts, o.last_error, o.status,
+                 CASE
+                   WHEN o.status = 'processing' THEN 'running'
+                   WHEN o.status = 'pending' THEN 'queued'
+                   WHEN o.status = 'dead' THEN 'failed'
+                   ELSE 'done'
+                 END AS publish_status,
+                 (o.status IN ('pending', 'processing')
+                   AND o.created_at < now() - make_interval(mins => ${DEPLOYMENT_STALL_MINUTES}::int)) AS stalled
+          FROM event_outbox o
+          JOIN organizations g ON g.id = o.org_id
+          JOIN flows f ON f.org_id = o.org_id AND f.id = o.aggregate_id
+          WHERE o.event_type = 'flow.published'
+            AND (o.status <> 'done' OR o.created_at >= now() - make_interval(days => ${PUBLISH_DONE_WINDOW_DAYS}::int))
+        )
+      `;
+      const res = await tx.execute(sql`
+        ${events},
+        c AS (
+          SELECT count(*) FILTER (WHERE publish_status = 'running')::int AS c_running,
+                 count(*) FILTER (WHERE publish_status = 'queued')::int AS c_queued,
+                 count(*) FILTER (WHERE publish_status = 'failed')::int AS c_failed,
+                 count(*) FILTER (WHERE publish_status = 'done')::int AS c_done,
+                 count(*) FILTER (WHERE stalled)::int AS c_stalled
+          FROM e
+        )
+        SELECT c.*, r.* FROM c
+        LEFT JOIN LATERAL (
+          SELECT * FROM e
+          ${status ? sql`WHERE publish_status = ${status}` : sql``}
+          ORDER BY CASE publish_status WHEN 'running' THEN 0 WHEN 'queued' THEN 1 WHEN 'failed' THEN 2 ELSE 3 END,
+                   queued_at DESC
+          LIMIT ${limit + 1}
+        ) r ON true
+      `);
+      const all = res.rows as Raw[];
+      const first = all[0] ?? {};
+      const counts: Raw = {
+        running: first.c_running,
+        queued: first.c_queued,
+        failed: first.c_failed,
+        done: first.c_done,
+        stalled: first.c_stalled,
+      };
+      return {
+        rows: all.filter((r) => r.workspace_id !== null && r.workspace_id !== undefined),
+        counts,
+      };
+    });
+  }
+
+  /**
+   * Product releases: the newest attempts of platform_releases (written by the deploy scripts on the production and build hosts) and the
+   * live tag. Platform data, no tenant; read through the privileged door like the other operator reads.
+   */
+  listReleases(): Promise<{ rows: Raw[]; live: Raw | null }> {
+    return this.db.privileged(async (tx: Tx) => {
+      const rows = await tx.execute(sql`
+        SELECT attempt, tag, state, step, error, started_at, updated_at, finished_at,
+               (state IN ('building', 'shipping', 'releasing')
+                 AND updated_at < now() - make_interval(mins => ${RELEASE_STALL_MINUTES}::int)) AS stalled
+        FROM platform_releases
+        ORDER BY started_at DESC, attempt DESC
+        LIMIT ${RELEASE_LIST_MAX}
+      `);
+      const live = await tx.execute(sql`
+        SELECT tag, finished_at FROM platform_releases
+        WHERE state = 'ok' ORDER BY finished_at DESC NULLS LAST LIMIT 1
+      `);
+      return { rows: rows.rows as Raw[], live: (live.rows[0] as Raw | undefined) ?? null };
     });
   }
 }

@@ -1,5 +1,6 @@
 import { apiBase } from '@/lib/auth/server';
 import { isSameOrigin, problem } from '@/lib/auth/proxy';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 /**
  * The buyer's calls (`/q/<token>`): relayed to the API's public sales-docs routes WITHOUT any session cookie, because the link's
@@ -47,7 +48,7 @@ async function handler(req: Request, ctx: { params: Promise<{ path: string[] }> 
   const target = `${apiBase()}/v2/public/sales-docs/${encodeURIComponent(token)}${action ? `/${action}` : ''}`;
   let upstream: Response;
   try {
-    upstream = await fetch(target, {
+    upstream = await upstreamFetch(target, {
       method: req.method,
       headers,
       body: mutating ? await req.arrayBuffer() : undefined,

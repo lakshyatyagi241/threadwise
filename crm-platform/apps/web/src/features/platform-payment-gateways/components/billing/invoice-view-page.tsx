@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
 import type { InvoiceView } from '@crm/contracts';
 import { Button, cn } from '@crm/ui';
@@ -24,21 +24,21 @@ const PRINT_CSS = `
   .no-print { display: none !important; }
 }`;
 
-const fmtDate = (iso: string, locale: string) =>
+const fmtDate = (iso: string, locale: string, timeZone?: string) =>
   new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
-    timeZone: 'UTC',
+    timeZone,
   }).format(new Date(iso));
-const fmtDateTime = (iso: string, locale: string) =>
+const fmtDateTime = (iso: string, locale: string, timeZone?: string) =>
   new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-    timeZone: 'UTC',
+    timeZone,
   }).format(new Date(iso));
 
 /** Admin > Invoices > one invoice (TW-PAYGW-046): a tax-invoice document that prints to A4 or PDF from the browser. */
@@ -90,6 +90,7 @@ export function InvoiceDocument({
   const t = useTranslations(NS);
   const ti = useTranslations('platform-payment-gateways.billing.invoices');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const m = (a: string) => money(a, v.currency, locale);
   const billTo = v.billTo;
   const hasDiscount = Number(v.discount) > 0;
@@ -177,11 +178,11 @@ export function InvoiceDocument({
                 <dt className="text-muted-foreground">{t('number')}</dt>
                 <dd className="font-mono font-semibold">{v.number}</dd>
                 <dt className="text-muted-foreground">{t('issueDate')}</dt>
-                <dd className="font-mono">{fmtDate(v.issuedAt, locale)}</dd>
+                <dd className="font-mono">{fmtDate(v.issuedAt, locale, timeZone)}</dd>
                 {v.paidAt && (
                   <>
                     <dt className="text-muted-foreground">{t('paidDate')}</dt>
-                    <dd className="font-mono">{fmtDate(v.paidAt, locale)}</dd>
+                    <dd className="font-mono">{fmtDate(v.paidAt, locale, timeZone)}</dd>
                   </>
                 )}
                 <dt className="text-muted-foreground">{t('status')}</dt>
@@ -227,7 +228,7 @@ export function InvoiceDocument({
               {v.payment.paidAt && (
                 <>
                   <dt className="text-muted-foreground">{t('captured')}</dt>
-                  <dd className="font-mono">{fmtDateTime(v.payment.paidAt, locale)}</dd>
+                  <dd className="font-mono">{fmtDateTime(v.payment.paidAt, locale, timeZone)}</dd>
                 </>
               )}
               <dt className="text-muted-foreground">{t('currency')}</dt>

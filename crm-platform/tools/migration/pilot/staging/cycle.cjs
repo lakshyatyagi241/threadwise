@@ -126,7 +126,11 @@ const inMig = (cfg, local) => `/mig/dumps/${cfg.client}/${path.basename(local)}`
 // client config includes them. Applies to the load and to the verifier alike, and only when no explicit --steps list was given.
 const LEAD_STEPS = ['lead_sources', 'lead_events', 'lead_events_leads'];
 const skipWithLeads = (cfg, steps, skipSteps) => {
-  const s = new Set(String(skipSteps || '').split(',').filter(Boolean));
+  const s = new Set(
+    String(skipSteps || '')
+      .split(',')
+      .filter(Boolean),
+  );
   if (!steps && cfg.leads !== 'on') for (const x of LEAD_STEPS) s.add(x);
   return [...s].join(',');
 };
@@ -173,8 +177,16 @@ function containerRun(srv, inner, { mounts = [], env = [], memMb = 0 } = {}) {
   // The worker service is capped at 1 GB in docker-compose.yml. A big client's verifier (Karma: 190,000 charge and 74,000 chat documents)
   // needs more than 768 MB of heap, so memMb gives THIS container a larger cap through an override file written next to the dumps (the
   // deployed stack is not touched), with the heap at 82% of it.
-  const heap = memMb > 0 ? Math.floor(memMb * 0.82) : /^\d{3,4}$/.test(process.env.CYCLE_NODE_HEAP_MB || '') ? process.env.CYCLE_NODE_HEAP_MB : 384;
-  const over = memMb > 0 ? `printf 'services:\\n  worker:\\n    mem_limit: ${memMb}m\\n' > ${shq(`${srv.mig}/mem-override.yml`)} && ` : '';
+  const heap =
+    memMb > 0
+      ? Math.floor(memMb * 0.82)
+      : /^\d{3,4}$/.test(process.env.CYCLE_NODE_HEAP_MB || '')
+        ? process.env.CYCLE_NODE_HEAP_MB
+        : 384;
+  const over =
+    memMb > 0
+      ? `printf 'services:\\n  worker:\\n    mem_limit: ${memMb}m\\n' > ${shq(`${srv.mig}/mem-override.yml`)} && `
+      : '';
   const files = memMb > 0 ? ` -f docker-compose.yml -f ${shq(`${srv.mig}/mem-override.yml`)}` : '';
   return (
     `${over}cd ${shq(srv.app)} && docker compose${files} --env-file .env run --rm --no-deps -T --user 10001:10001 -e NODE_OPTIONS=--max-old-space-size=${heap}` +
@@ -297,17 +309,22 @@ async function cmdBuild() {
 
 async function cmdShip(srv, cfg, { skipBundle } = {}) {
   await assertStaging(srv);
-  const files = skipBundle ? [] : [
-    [path.join(DIST, 'waboo-migrate.cjs'), 'bundle/waboo-migrate.cjs'],
-    [path.join(DIST, 'waboo-preflight.cjs'), 'bundle/waboo-preflight.cjs'],
-    [path.join(DIST, 'BUILD-INFO.json'), 'bundle/BUILD-INFO.json'],
-    [path.join(HERE, 'set-owner-password.cjs'), 'bundle/set-owner-password.cjs'],
-    [path.join(HERE, 'rollback-org.sql'), 'bundle/rollback-org.sql'],
-    // the WhatsApp token import of the wa-credentials step (pilot/credentials); runs in the desk-api image, which has `pg`
-    [path.join(HERE, '..', 'credentials', 'import-whatsapp-credentials.cjs'), 'bundle/import-whatsapp-credentials.cjs'],
-    // the media copy (Waboo urls -> the app's object store, see pilot/files/copy-files.cjs); runs in the desk-api image, which has `pg`
-    [path.join(HERE, '..', 'files', 'copy-files.cjs'), 'files/copy-files.cjs'],
-  ];
+  const files = skipBundle
+    ? []
+    : [
+        [path.join(DIST, 'waboo-migrate.cjs'), 'bundle/waboo-migrate.cjs'],
+        [path.join(DIST, 'waboo-preflight.cjs'), 'bundle/waboo-preflight.cjs'],
+        [path.join(DIST, 'BUILD-INFO.json'), 'bundle/BUILD-INFO.json'],
+        [path.join(HERE, 'set-owner-password.cjs'), 'bundle/set-owner-password.cjs'],
+        [path.join(HERE, 'rollback-org.sql'), 'bundle/rollback-org.sql'],
+        // the WhatsApp token import of the wa-credentials step (pilot/credentials); runs in the desk-api image, which has `pg`
+        [
+          path.join(HERE, '..', 'credentials', 'import-whatsapp-credentials.cjs'),
+          'bundle/import-whatsapp-credentials.cjs',
+        ],
+        // the media copy (Waboo urls -> the app's object store, see pilot/files/copy-files.cjs); runs in the desk-api image, which has `pg`
+        [path.join(HERE, '..', 'files', 'copy-files.cjs'), 'files/copy-files.cjs'],
+      ];
   if (cfg) {
     if (cfg.channelMap)
       files.push([cfg.channelMap, `dumps/${cfg.client}/${path.basename(cfg.channelMap)}`]);
@@ -341,9 +358,17 @@ async function cmdShip(srv, cfg, { skipBundle } = {}) {
   let extra = 0;
   if (cfg) {
     // which hosts the client's media may come from (an allow-list: the copy refuses any other host); Waboo's own asset host by default
-    const conf = Buffer.from(JSON.stringify({ allowedHosts: cfg.mediaHosts || ['assets.getalabs.com'], maxFileMB: 50, timeoutMs: 60000 }) + '\n');
+    const conf = Buffer.from(
+      JSON.stringify({
+        allowedHosts: cfg.mediaHosts || ['assets.getalabs.com'],
+        maxFileMB: 50,
+        timeoutMs: 60000,
+      }) + '\n',
+    );
     const u = await upload(srv, `${srv.mig}/files/files-${cfg.client}.json`, conf);
-    console.log(`  files/files-${cfg.client}.json: ${u.code === 0 ? 'ok' : 'FAILED'} ${conf.length} bytes`);
+    console.log(
+      `  files/files-${cfg.client}.json: ${u.code === 0 ? 'ok' : 'FAILED'} ${conf.length} bytes`,
+    );
     extra = 1;
     if (u.code !== 0) bad++;
   }
@@ -397,9 +422,7 @@ async function cmdDry(srv, cfg, flags = {}) {
     srv,
     containerRun(
       srv,
-      migrateInner(
-        runArgs(cfg, { dry: true, steps: flags.steps, skipSteps: flags['skip-steps'] }),
-      ),
+      migrateInner(runArgs(cfg, { dry: true, steps: flags.steps, skipSteps: flags['skip-steps'] })),
     ),
     'dry run',
     `dry-run-${cfg.client}.txt`,
@@ -472,7 +495,9 @@ async function cmdLoad(srv, cfg, flags, ctx = {}) {
   if (flags['skip-dry-run-check']) {
     // explicit operator override on STAGING only (user decision 2026-10-09): needs both flags; the backup check above still applies
     if (!flags['i-accept-no-dry-run'])
-      refuse('--skip-dry-run-check also needs --i-accept-no-dry-run (you are loading without a clean dry run)');
+      refuse(
+        '--skip-dry-run-check also needs --i-accept-no-dry-run (you are loading without a clean dry run)',
+      );
     console.log(
       `load: backup ${b.name}; NO DRY RUN CHECK (explicit override). If this fails halfway: re-run to resume, or roll the org back with rollback-org.sql`,
     );
@@ -500,7 +525,9 @@ async function cmdLoad(srv, cfg, flags, ctx = {}) {
     srv,
     containerRun(
       srv,
-      migrateInner(runArgs(cfg, { dry: false, steps: flags.steps, skipSteps: flags['skip-steps'] })),
+      migrateInner(
+        runArgs(cfg, { dry: false, steps: flags.steps, skipSteps: flags['skip-steps'] }),
+      ),
     ),
     'load',
     `run-${cfg.client}.txt`,
@@ -514,9 +541,16 @@ async function cmdReconcile(srv, cfg, flags = {}) {
   await assertStaging(srv);
   const r = await runShown(
     srv,
-    containerRun(srv, migrateInner(reconcileArgs(cfg, { steps: flags.steps, skipSteps: flags['skip-steps'] })), {
-      memMb: Number(process.env.CYCLE_VERIFY_MEM_MB) > 0 ? Number(process.env.CYCLE_VERIFY_MEM_MB) : 1500,
-    }),
+    containerRun(
+      srv,
+      migrateInner(reconcileArgs(cfg, { steps: flags.steps, skipSteps: flags['skip-steps'] })),
+      {
+        memMb:
+          Number(process.env.CYCLE_VERIFY_MEM_MB) > 0
+            ? Number(process.env.CYCLE_VERIFY_MEM_MB)
+            : 1500,
+      },
+    ),
     'reconcile',
     `reconcile-${cfg.client}.txt`,
   );
@@ -525,7 +559,9 @@ async function cmdReconcile(srv, cfg, flags = {}) {
     // Anything unaccounted or any integrity error still stops it. pipeline.cjs turns this into an amber verdict.
     const m = /unaccounted (\d+), alarms (\d+), integrity (\d+)/.exec(String(r.stdout || ''));
     if (m && Number(m[1]) === 0 && Number(m[3]) === 0) {
-      console.log(`reconcile: ${m[2]} alarm(s) to review, nothing unaccounted, no integrity error: the chain goes on (amber)`);
+      console.log(
+        `reconcile: ${m[2]} alarm(s) to review, nothing unaccounted, no integrity error: the chain goes on (amber)`,
+      );
       return 0;
     }
   }
@@ -537,18 +573,37 @@ async function cmdFlowState(srv, cfg, flags = {}) {
   await assertStaging(srv);
   const a = ['flow-state', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
   if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
-  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'flow-state (APPLY)' : 'flow-state (dry run)', `flow-state-${cfg.client}.txt`);
+  const r = await runShown(
+    srv,
+    containerRun(srv, migrateInner(a)),
+    flags.apply ? 'flow-state (APPLY)' : 'flow-state (dry run)',
+    `flow-state-${cfg.client}.txt`,
+  );
   return r.code === 0 ? 0 : 1;
 }
 
 /** Update mode (load/update.ts): compare every migrated row of the opted-in steps with the current dump and update what changed. Dry run unless --apply. */
 async function cmdUpdate(srv, cfg, flags = {}) {
   await assertStaging(srv);
-  const a = ['update', '--client', cfg.client, '--org-slug', cfg.orgSlug, '--batch', String(cfg.batch || 250), ...GUARD];
+  const a = [
+    'update',
+    '--client',
+    cfg.client,
+    '--org-slug',
+    cfg.orgSlug,
+    '--batch',
+    String(cfg.batch || 250),
+    ...GUARD,
+  ];
   if (cfg.defaultCc) a.push('--default-cc', String(cfg.defaultCc));
   if (flags.steps) a.push('--steps', String(flags.steps));
   if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
-  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'update (APPLY)' : 'update (dry run)', `update-${cfg.client}.txt`);
+  const r = await runShown(
+    srv,
+    containerRun(srv, migrateInner(a)),
+    flags.apply ? 'update (APPLY)' : 'update (dry run)',
+    `update-${cfg.client}.txt`,
+  );
   return r.code === 0 ? 0 : 1;
 }
 
@@ -557,7 +612,12 @@ async function cmdKbReingest(srv, cfg, flags = {}) {
   await assertStaging(srv);
   const a = ['kb-reingest', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
   if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
-  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'kb-reingest (APPLY)' : 'kb-reingest (dry run)', `kb-reingest-${cfg.client}.txt`);
+  const r = await runShown(
+    srv,
+    containerRun(srv, migrateInner(a)),
+    flags.apply ? 'kb-reingest (APPLY)' : 'kb-reingest (dry run)',
+    `kb-reingest-${cfg.client}.txt`,
+  );
   return r.code === 0 ? 0 : 1;
 }
 
@@ -580,18 +640,39 @@ async function cmdCutover(srv, cfg, flags = {}) {
   await assertStaging(srv);
   const writes = Boolean(flags.apply);
   if (writes && !flags.rollback) {
-    const t = await remote(srv, `cd ${shq(srv.app)} && docker compose --env-file .env exec -T backup desk-backup once pre-cutover-${cfg.client} </dev/null`, { show: true });
-    if (t.code !== 0) refuse('cutover: the backup before the cutover failed; nothing else was done');
+    const t = await remote(
+      srv,
+      `cd ${shq(srv.app)} && docker compose --env-file .env exec -T backup desk-backup once pre-cutover-${cfg.client} </dev/null`,
+      { show: true },
+    );
+    if (t.code !== 0)
+      refuse('cutover: the backup before the cutover failed; nothing else was done');
   }
   const b = await cutoverBackup(srv, cfg.client);
-  const a = ['cutover', '--client', cfg.client, '--org-slug', cfg.orgSlug, '--out', '/mig/out', ...GUARD];
+  const a = [
+    'cutover',
+    '--client',
+    cfg.client,
+    '--org-slug',
+    cfg.orgSlug,
+    '--out',
+    '/mig/out',
+    ...GUARD,
+  ];
   if (b) a.push('--backup-file', b.name, '--backup-epoch', String(b.epoch));
   if (flags.rollback) a.push('--rollback');
   if (writes) a.push('--apply');
-  for (const f of ['confirm-org-slug', 'confirm-cutover', 'webhook-base']) if (flags[f] !== undefined) a.push(`--${f}`, String(flags[f]));
-  for (const f of ['check-meta', 'i-switched-waboo-off', 'replace-existing-override']) if (flags[f]) a.push(`--${f}`);
+  for (const f of ['confirm-org-slug', 'confirm-cutover', 'webhook-base'])
+    if (flags[f] !== undefined) a.push(`--${f}`, String(flags[f]));
+  for (const f of ['check-meta', 'i-switched-waboo-off', 'replace-existing-override'])
+    if (flags[f]) a.push(`--${f}`);
   const label = `cutover${flags.rollback ? ' rollback' : ''} (${writes ? 'APPLY' : 'dry run'})`;
-  const r = await runShown(srv, containerRun(srv, migrateInner(a)), label, `cutover-${cfg.client}.txt`);
+  const r = await runShown(
+    srv,
+    containerRun(srv, migrateInner(a)),
+    label,
+    `cutover-${cfg.client}.txt`,
+  );
   return r.code === 0 ? 0 : 1;
 }
 
@@ -607,13 +688,17 @@ function channelMapIsPlaceholder(cfg) {
 /** the exporter's arguments for the ONE collection that holds the WhatsApp token (denylisted: the override and a reason are the owner's approval) */
 function waExportArgs(client, db) {
   return [
-    '--db', db,
-    '--client', client,
+    '--db',
+    db,
+    '--client',
+    client,
     '--to-ssh',
     '--i-confirm-server-is-staging',
-    '--collections', 'chatbot_misc_config',
+    '--collections',
+    'chatbot_misc_config',
     '--i-know-what-i-am-doing',
-    '--reason', `WhatsApp credential import for ${client}, migration of the WABA number approved by the project owner, ${new Date().toISOString().slice(0, 10)}`,
+    '--reason',
+    `WhatsApp credential import for ${client}, migration of the WABA number approved by the project owner, ${new Date().toISOString().slice(0, 10)}`,
     '--force',
     '--no-manifest', // the manifest of the real export must stay the one of the whole dump
   ];
@@ -628,33 +713,82 @@ function waExportArgs(client, db) {
 async function cmdWaCredentials(srv, cfg, db) {
   await assertStaging(srv);
   if (channelMapIsPlaceholder(cfg)) {
-    console.log('wa-credentials: skipped, the channel map holds no real WhatsApp number (placeholder), so there is nothing to import');
+    console.log(
+      'wa-credentials: skipped, the channel map holds no real WhatsApp number (placeholder), so there is nothing to import',
+    );
     return 'skipped';
   }
-  if (!db) refuse('wa-credentials: no Mongo database name (pass --db <waboo db> or set "mongoDb" in the client config)');
+  if (!db)
+    refuse(
+      'wa-credentials: no Mongo database name (pass --db <waboo db> or set "mongoDb" in the client config)',
+    );
   const bin = process.env.MONGO_EXPORT_BIN || KIT_EXPORT;
   if (!fs.existsSync(bin)) refuse(`the exporter ${bin} does not exist (set MONGO_EXPORT_BIN)`);
   const file = `${srv.mig}/dumps/${cfg.client}/chatbot_misc_config.ndjson`;
   const wipe = () => remote(srv, `rm -f ${shq(file)}`);
+  // the export holds the bot credentials in plaintext until the import has read it: a leftover of an earlier killed run goes first, and a
+  // stop signal (the runner's timeout, the panel's cancel, Ctrl+C) wipes it before the process ends (a `finally` does not run on SIGTERM)
+  await wipe();
+  const onStop = (sig) => {
+    wipe().finally(() => process.exit(sig === 'SIGINT' ? 130 : 143));
+  };
+  process.once('SIGTERM', onStop);
+  process.once('SIGINT', onStop);
   try {
     const ex = await new Promise((res) => {
-      const c = spawn(process.execPath, [bin, ...waExportArgs(cfg.client, db)], { stdio: ['ignore', 'pipe', 'pipe'] });
-      for (const st of [c.stdout, c.stderr]) st.on('data', (d) => d.toString('utf8').split('\n').filter(Boolean).forEach((l) => console.log('  wa-export: ' + maskPII(l))));
+      const c = spawn(process.execPath, [bin, ...waExportArgs(cfg.client, db)], {
+        stdio: ['ignore', 'pipe', 'pipe'],
+      });
+      for (const st of [c.stdout, c.stderr])
+        st.on('data', (d) =>
+          d
+            .toString('utf8')
+            .split('\n')
+            .filter(Boolean)
+            .forEach((l) => console.log('  wa-export: ' + maskPII(l))),
+        );
       c.on('error', () => res(1));
       c.on('close', (code) => res(code));
     });
     summary('wa-export', ex);
     if (ex !== 0) return 1;
-    const base = ['--client', cfg.client, '--org-slug', cfg.orgSlug, '--confirm-db-name', 'crm', '--allow-docker-host', 'postgres', '--dumps-dir', '/mig/dumps', ...(cfg.channelMap ? ['--channel-map', inMig(cfg, cfg.channelMap)] : [])];
-    const inner = (extra) => `TARGET_DATABASE_URL="$DATABASE_URL" exec node /app/import-whatsapp-credentials.cjs ${[...base, ...extra].map(shq).join(' ')}`;
-    const mounts = [`${srv.mig}/bundle/import-whatsapp-credentials.cjs:/app/import-whatsapp-credentials.cjs:ro`];
-    const imp = await runShown(srv, containerRun(srv, inner(['--apply', '--confirm-org-slug', cfg.orgSlug]), { mounts }), 'wa-credentials import (APPLY)');
+    const base = [
+      '--client',
+      cfg.client,
+      '--org-slug',
+      cfg.orgSlug,
+      '--confirm-db-name',
+      'crm',
+      '--allow-docker-host',
+      'postgres',
+      '--dumps-dir',
+      '/mig/dumps',
+      ...(cfg.channelMap ? ['--channel-map', inMig(cfg, cfg.channelMap)] : []),
+    ];
+    const inner = (extra) =>
+      `TARGET_DATABASE_URL="$DATABASE_URL" exec node /app/import-whatsapp-credentials.cjs ${[...base, ...extra].map(shq).join(' ')}`;
+    const mounts = [
+      `${srv.mig}/bundle/import-whatsapp-credentials.cjs:/app/import-whatsapp-credentials.cjs:ro`,
+    ];
+    const imp = await runShown(
+      srv,
+      containerRun(srv, inner(['--apply', '--confirm-org-slug', cfg.orgSlug]), { mounts }),
+      'wa-credentials import (APPLY)',
+    );
     if (imp.code !== 0) return 1;
-    const ver = await runShown(srv, containerRun(srv, inner(['--verify']), { mounts }), 'wa-credentials verify');
+    const ver = await runShown(
+      srv,
+      containerRun(srv, inner(['--verify']), { mounts }),
+      'wa-credentials verify',
+    );
     return ver.code === 0 ? 0 : 1;
   } finally {
+    process.removeListener('SIGTERM', onStop);
+    process.removeListener('SIGINT', onStop);
     const w = await wipe();
-    console.log(`wa-credentials: the exported chatbot_misc_config ${w.code === 0 ? 'was deleted from the server' : 'COULD NOT be deleted: remove ' + file + ' by hand'}`);
+    console.log(
+      `wa-credentials: the exported chatbot_misc_config ${w.code === 0 ? 'was deleted from the server' : 'COULD NOT be deleted: remove ' + file + ' by hand'}`,
+    );
   }
 }
 
@@ -668,7 +802,9 @@ async function cmdWaCutover(srv, cfg, flags = {}) {
     console.log('wa-cutover: skipped, the channel map holds no real WhatsApp number (placeholder)');
     return 'skipped';
   }
-  console.log(`wa-cutover: automatic activation requested (--activate-whatsapp): confirming "${cfg.orgSlug}" and that Waboo is switched off on the operator's behalf`);
+  console.log(
+    `wa-cutover: automatic activation requested (--activate-whatsapp): confirming "${cfg.orgSlug}" and that Waboo is switched off on the operator's behalf`,
+  );
   const r = await cmdCutover(srv, cfg, {
     apply: true,
     'confirm-org-slug': cfg.orgSlug,
@@ -684,7 +820,12 @@ async function cmdChatReparse(srv, cfg, flags = {}) {
   await assertStaging(srv);
   const a = ['chat-reparse', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
   if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
-  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'chat-reparse (APPLY)' : 'chat-reparse (dry run)', `chat-reparse-${cfg.client}.txt`);
+  const r = await runShown(
+    srv,
+    containerRun(srv, migrateInner(a)),
+    flags.apply ? 'chat-reparse (APPLY)' : 'chat-reparse (dry run)',
+    `chat-reparse-${cfg.client}.txt`,
+  );
   return r.code === 0 ? 0 : 1;
 }
 
@@ -694,7 +835,12 @@ async function cmdChatRelink(srv, cfg, flags = {}) {
   const a = ['chat-relink', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
   if (cfg.channelMap) a.push('--channel-map', inMig(cfg, cfg.channelMap));
   if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
-  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'chat-relink (APPLY)' : 'chat-relink (dry run)', `chat-relink-${cfg.client}.txt`);
+  const r = await runShown(
+    srv,
+    containerRun(srv, migrateInner(a)),
+    flags.apply ? 'chat-relink (APPLY)' : 'chat-relink (dry run)',
+    `chat-relink-${cfg.client}.txt`,
+  );
   return r.code === 0 ? 0 : 1;
 }
 
@@ -704,7 +850,12 @@ async function cmdChatStatus(srv, cfg, flags = {}) {
   const a = ['chat-status', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
   if (cfg.channelMap) a.push('--channel-map', inMig(cfg, cfg.channelMap));
   if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
-  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'chat-status (APPLY)' : 'chat-status (dry run)', `chat-status-${cfg.client}.txt`);
+  const r = await runShown(
+    srv,
+    containerRun(srv, migrateInner(a)),
+    flags.apply ? 'chat-status (APPLY)' : 'chat-status (dry run)',
+    `chat-status-${cfg.client}.txt`,
+  );
   return r.code === 0 ? 0 : 1;
 }
 
@@ -713,7 +864,12 @@ async function cmdWalletHistory(srv, cfg, flags = {}) {
   await assertStaging(srv);
   const a = ['wallet-history', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
   if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
-  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'wallet-history (APPLY)' : 'wallet-history (dry run)', `wallet-history-${cfg.client}.txt`);
+  const r = await runShown(
+    srv,
+    containerRun(srv, migrateInner(a)),
+    flags.apply ? 'wallet-history (APPLY)' : 'wallet-history (dry run)',
+    `wallet-history-${cfg.client}.txt`,
+  );
   return r.code === 0 ? 0 : 1;
 }
 
@@ -727,7 +883,12 @@ async function cmdChatDelivery(srv, cfg, flags = {}) {
   await assertStaging(srv);
   const a = ['chat-delivery', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
   if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
-  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'chat-delivery (APPLY)' : 'chat-delivery (dry run)', `chat-delivery-${cfg.client}.txt`);
+  const r = await runShown(
+    srv,
+    containerRun(srv, migrateInner(a)),
+    flags.apply ? 'chat-delivery (APPLY)' : 'chat-delivery (dry run)',
+    `chat-delivery-${cfg.client}.txt`,
+  );
   return r.code === 0 ? 0 : 1;
 }
 
@@ -735,7 +896,12 @@ async function cmdChatButtons(srv, cfg, flags = {}) {
   await assertStaging(srv);
   const a = ['chat-buttons', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
   if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
-  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'chat-buttons (APPLY)' : 'chat-buttons (dry run)', `chat-buttons-${cfg.client}.txt`);
+  const r = await runShown(
+    srv,
+    containerRun(srv, migrateInner(a)),
+    flags.apply ? 'chat-buttons (APPLY)' : 'chat-buttons (dry run)',
+    `chat-buttons-${cfg.client}.txt`,
+  );
   return r.code === 0 ? 0 : 1;
 }
 
@@ -744,7 +910,12 @@ async function cmdCampaignLink(srv, cfg, flags = {}) {
   await assertStaging(srv);
   const a = ['campaign-link', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
   if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
-  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'campaign-link (APPLY)' : 'campaign-link (dry run)', `campaign-link-${cfg.client}.txt`);
+  const r = await runShown(
+    srv,
+    containerRun(srv, migrateInner(a)),
+    flags.apply ? 'campaign-link (APPLY)' : 'campaign-link (dry run)',
+    `campaign-link-${cfg.client}.txt`,
+  );
   return r.code === 0 ? 0 : 1;
 }
 
@@ -753,7 +924,12 @@ async function cmdWalletSync(srv, cfg, flags = {}) {
   await assertStaging(srv);
   const a = ['wallet-sync', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
   if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
-  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'wallet-sync (APPLY)' : 'wallet-sync (dry run)', `wallet-sync-${cfg.client}.txt`);
+  const r = await runShown(
+    srv,
+    containerRun(srv, migrateInner(a)),
+    flags.apply ? 'wallet-sync (APPLY)' : 'wallet-sync (dry run)',
+    `wallet-sync-${cfg.client}.txt`,
+  );
   return r.code === 0 ? 0 : 1;
 }
 
@@ -765,7 +941,12 @@ async function cmdUsageAppend(srv, cfg, flags = {}) {
   await assertStaging(srv);
   const a = ['usage-charges-append', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
   if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
-  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'usage-charges-append (APPLY)' : 'usage-charges-append (dry run)', `usage-charges-append-${cfg.client}.txt`);
+  const r = await runShown(
+    srv,
+    containerRun(srv, migrateInner(a)),
+    flags.apply ? 'usage-charges-append (APPLY)' : 'usage-charges-append (dry run)',
+    `usage-charges-append-${cfg.client}.txt`,
+  );
   return r.code === 0 ? 0 : 1;
 }
 
@@ -776,11 +957,37 @@ async function cmdUsageAppend(srv, cfg, flags = {}) {
  */
 async function cmdFiles(srv, cfg, sub, flags = {}) {
   await assertStaging(srv);
-  const a = [sub, '--org-slug', cfg.orgSlug, '--confirm-db-name', 'crm', '--allow-docker-host', 'postgres', '--config', `/mig/files/files-${cfg.client}.json`, '--state', `/mig/out/files-${cfg.client}.state.jsonl`];
-  if (sub === 'copy') a.push('--max-files', '5000', '--max-gb', '10', '--concurrency', '3', ...(flags.apply ? ['--apply', '--confirm-org-slug', cfg.orgSlug] : []));
+  const a = [
+    sub,
+    '--org-slug',
+    cfg.orgSlug,
+    '--confirm-db-name',
+    'crm',
+    '--allow-docker-host',
+    'postgres',
+    '--config',
+    `/mig/files/files-${cfg.client}.json`,
+    '--state',
+    `/mig/out/files-${cfg.client}.state.jsonl`,
+  ];
+  if (sub === 'copy')
+    a.push(
+      '--max-files',
+      '5000',
+      '--max-gb',
+      '10',
+      '--concurrency',
+      '3',
+      ...(flags.apply ? ['--apply', '--confirm-org-slug', cfg.orgSlug] : []),
+    );
   const inner = `NODE_PATH=/app/node_modules TARGET_DATABASE_URL="$DATABASE_URL" exec node /mig/files/copy-files.cjs ${a.map(shq).join(' ')}`;
   const label = `files ${sub}${sub === 'copy' ? (flags.apply ? ' (APPLY)' : ' (dry run)') : ''}`;
-  const r = await runShown(srv, containerRun(srv, inner, { mounts: [`${srv.mig}/files:/mig/files:ro`] }), label, `files-${sub}-${cfg.client}.txt`);
+  const r = await runShown(
+    srv,
+    containerRun(srv, inner, { mounts: [`${srv.mig}/files:/mig/files:ro`] }),
+    label,
+    `files-${sub}-${cfg.client}.txt`,
+  );
   return r.code === 0 ? 0 : 1;
 }
 
@@ -805,13 +1012,30 @@ async function cmdCoreLoad(srv, cfg, flags = {}) {
  */
 async function cmdPricingSeed(srv, flags = {}) {
   await assertStaging(srv);
-  const base = ['pricing-seed', '--client', 'geta_core', ...GUARD, '--factor', '1', '--with-margin', '--skip-conflicts'];
-  const dry = await runShown(srv, containerRun(srv, migrateInner(base)), 'pricing-seed (dry run)', 'pricing-seed-geta_core.txt');
+  const base = [
+    'pricing-seed',
+    '--client',
+    'geta_core',
+    ...GUARD,
+    '--factor',
+    '1',
+    '--with-margin',
+    '--skip-conflicts',
+  ];
+  const dry = await runShown(
+    srv,
+    containerRun(srv, migrateInner(base)),
+    'pricing-seed (dry run)',
+    'pricing-seed-geta_core.txt',
+  );
   if (dry.code !== 0 || !flags.apply) return dry.code === 0 ? 0 : 1;
   const m = /(\d+) new,/.exec(dry.stdout);
   if (!m) refuse('pricing-seed: could not read the number of new rows from the dry run');
   const phrase = `SEED ${m[1]} message_rates geta_core`;
-  const cmd = containerRun(srv, migrateInner([...base, '--apply'])).replace(/ <\/dev\/null$/, ` <<< ${shq(phrase)}`);
+  const cmd = containerRun(srv, migrateInner([...base, '--apply'])).replace(
+    / <\/dev\/null$/,
+    ` <<< ${shq(phrase)}`,
+  );
   const r = await runShown(srv, cmd, 'pricing-seed (APPLY)', 'pricing-seed-geta_core-apply.txt');
   return r.code === 0 ? 0 : 1;
 }
@@ -872,16 +1096,22 @@ async function cmdLoadedCheck(srv, client) {
   await assertStaging(srv);
   const js =
     "const {Client}=require('pg');(async()=>{const c=new Client({connectionString:process.env.DATABASE_URL});await c.connect();" +
-    "const r=await c.query(\"SELECT CASE WHEN to_regclass('migration.run_log') IS NULL THEN 0 ELSE (SELECT count(*) FROM migration.run_log WHERE source_client=$1) END AS n\",[process.argv[1]]);" +
+    'const r=await c.query("SELECT CASE WHEN to_regclass(\'migration.run_log\') IS NULL THEN 0 ELSE (SELECT count(*) FROM migration.run_log WHERE source_client=$1) END AS n",[process.argv[1]]);' +
     "console.log('LOADED_ROWS '+r.rows[0].n);await c.end()})().catch(e=>{console.error(e.message);process.exit(1)})";
-  const r = await remote(srv, containerRun(srv, `NODE_PATH=/app/node_modules exec node -e ${shq(js)} ${shq(client)}`));
+  const r = await remote(
+    srv,
+    containerRun(srv, `NODE_PATH=/app/node_modules exec node -e ${shq(js)} ${shq(client)}`),
+  );
   const m = r.stdout.match(/LOADED_ROWS (\d+)/);
   if (r.code !== 0 || !m) {
     console.log('loaded-check: could not read the staging database');
     return 1;
   }
   console.log(`loaded-check: ${client}: ${m[1]} migration.run_log row(s)`);
-  if (Number(m[1]) > 0) refuse(`${client} is already loaded on staging: its channel map is part of its conversation keys and must not change`);
+  if (Number(m[1]) > 0)
+    refuse(
+      `${client} is already loaded on staging: its channel map is part of its conversation keys and must not change`,
+    );
   return 0;
 }
 
@@ -889,7 +1119,8 @@ async function cmdOwnerPassword(srv, cfg) {
   const pw = process.env.OWNER_NEW_PASSWORD;
   if (!pw)
     refuse('set OWNER_NEW_PASSWORD in your shell (it is sent over stdin, never on a command line)');
-  if (!cfg.ownerEmail) refuse('this client has no owner e-mail in its config: nobody to set a password for');
+  if (!cfg.ownerEmail)
+    refuse('this client has no owner e-mail in its config: nobody to set a password for');
   await assertStaging(srv);
   const inner = `TARGET_DATABASE_URL="$DATABASE_URL" exec node /app/set-owner-password.cjs ${['--org-slug', cfg.orgSlug, '--email', cfg.ownerEmail, '--confirm-db-name', 'crm', '--allow-docker-host', 'postgres'].map(shq).join(' ')}`;
   const cmd = `IFS= read -r OWNER_NEW_PASSWORD; export OWNER_NEW_PASSWORD; ${containerRun(srv, inner, { mounts: [`${srv.mig}/bundle/set-owner-password.cjs:/app/set-owner-password.cjs:ro`], env: ['OWNER_NEW_PASSWORD'] })}`;
@@ -966,7 +1197,29 @@ function printStepStats(steps) {
 
 // ---------- orchestration: migrate / batch / new-client -------------------------------------------------------------------------------
 // core-load (plan, subscription, role grants from geta_core) and flow-state (publish what is live in Waboo) run after the load and before the verifier
-const MIG_STEPS = ['export', 'ship', 'preflight', 'dry', 'backup', 'load', 'update', 'chat-status', 'chat-buttons', 'chat-delivery', 'files', 'core-load', 'wallet-sync', 'wallet-history', 'usage-append', 'flow-state', 'reconcile', 'report', 'complete', 'wa-credentials', 'wa-cutover'];
+const MIG_STEPS = [
+  'export',
+  'ship',
+  'preflight',
+  'dry',
+  'backup',
+  'load',
+  'update',
+  'chat-status',
+  'chat-buttons',
+  'chat-delivery',
+  'files',
+  'core-load',
+  'wallet-sync',
+  'wallet-history',
+  'usage-append',
+  'flow-state',
+  'reconcile',
+  'report',
+  'complete',
+  'wa-credentials',
+  'wa-cutover',
+];
 /** steps that only make sense for a client that is ALREADY loaded: --catch-up adds them; a fresh load never runs them (a fresh load reads everything once) */
 const CATCHUP_ONLY = new Set(['update', 'chat-status', 'chat-buttons', 'usage-append']);
 /** steps a catch-up refuses: flow-state would publish flows again (the flows are already live) */
@@ -975,8 +1228,7 @@ const CATCHUP_SKIPPED = new Set(['flow-state', 'wa-credentials', 'wa-cutover']);
 const MIN_FREE_MB = { 1: 700, 2: 1200 };
 const MAX_CONCURRENCY = 2;
 const MAX_DUMP_AGE_H = 24; // an export on the server younger than this is reused by migrate
-const KIT_EXPORT =
-  'D:\\wadesk-vedant\\db-migration\\geta-mongodb-read-replica-prod\\geta-mongodb-read-replica-prod\\bin\\mongo-export.cjs';
+const KIT_EXPORT = path.resolve(HERE, '..', '..', 'exporter', 'bin', 'mongo-export.cjs');
 const memCmd = () =>
   process.env.CYCLE_MEM_CMD || `awk '/^MemAvailable:/{printf "%d\\n", $2/1024}' /proc/meminfo`;
 
@@ -984,12 +1236,15 @@ async function requireFreeMem(srv, conc) {
   const need = MIN_FREE_MB[conc];
   const r = await remote(srv, memCmd());
   const mb = parseInt(r.stdout.trim(), 10);
-  if (r.code !== 0 || !Number.isFinite(mb)) refuse('could not read the free memory of the server (/proc/meminfo)');
+  if (r.code !== 0 || !Number.isFinite(mb))
+    refuse('could not read the free memory of the server (/proc/meminfo)');
   if (mb < need)
     refuse(
       `only ${mb} MB of memory available on the server, ${need} MB needed for ${conc} migrate container(s) (Postgres is capped at 1 GB): free memory first (see "Memory" in the runbook)`,
     );
-  console.log(`memory: ${mb} MB available on the server (minimum ${need} MB for ${conc} at a time)`);
+  console.log(
+    `memory: ${mb} MB available on the server (minimum ${need} MB for ${conc} at a time)`,
+  );
 }
 
 /** a fresh, complete export already on the server: manifest.json younger than MAX_DUMP_AGE_H and every file at the size it lists */
@@ -1016,10 +1271,14 @@ async function manifestFresh(srv, client) {
   const cols = Array.isArray(m.collections) ? m.collections : [];
   if (!cols.length) return { ok: false, msg: 'the manifest on the server lists no collections' };
   const bad = cols.filter((c) => sizes.get(`${c.collection}.ndjson`) !== c.bytes);
-  if (bad.length) return { ok: false, msg: `${bad.length} file(s) on the server differ from the manifest` };
+  if (bad.length)
+    return { ok: false, msg: `${bad.length} file(s) on the server differ from the manifest` };
   const ageH = (Date.now() - Date.parse(m.generatedAt)) / 36e5;
   if (!(ageH < MAX_DUMP_AGE_H))
-    return { ok: false, msg: `the manifest is older than ${MAX_DUMP_AGE_H} h (the Waboo data may have moved on)` };
+    return {
+      ok: false,
+      msg: `the manifest is older than ${MAX_DUMP_AGE_H} h (the Waboo data may have moved on)`,
+    };
   const docs = cols.reduce((s, c) => s + (c.docs || 0), 0);
   return {
     ok: true,
@@ -1044,7 +1303,10 @@ function runExport(client, db, force = false) {
   // A network or VPN drop can freeze the stream of a big collection for good (Karma: the upload of a 163 MB collection stopped 1.4 MB
   // short and nothing noticed for over two hours). So an attempt that prints nothing for IDLE minutes is stopped and the export is
   // resumed: a collection whose server file and record already match is skipped, the unfinished one starts again.
-  const idleMs = (Number(process.env.CYCLE_EXPORT_IDLE_MIN) > 0 ? Number(process.env.CYCLE_EXPORT_IDLE_MIN) : 10) * 60_000;
+  const idleMs =
+    (Number(process.env.CYCLE_EXPORT_IDLE_MIN) > 0
+      ? Number(process.env.CYCLE_EXPORT_IDLE_MIN)
+      : 10) * 60_000;
   const attempt = () =>
     new Promise((res) => {
       const c = spawn(process.execPath, [bin, ...exportArgs(client, db, force)], {
@@ -1055,7 +1317,9 @@ function runExport(client, db, force = false) {
       const dog = setInterval(() => {
         if (Date.now() - last > idleMs) {
           stalled = true;
-          console.log(`  export: no progress for ${Math.round(idleMs / 60000)} minutes, stopping this attempt`);
+          console.log(
+            `  export: no progress for ${Math.round(idleMs / 60000)} minutes, stopping this attempt`,
+          );
           c.kill();
         }
       }, 15_000);
@@ -1094,14 +1358,16 @@ function runExport(client, db, force = false) {
 }
 
 function runComplete(client) {
-  const bin = process.env.CYCLE_COMPLETE_BIN || path.join(TOOL, 'pilot', 'report', 'migration-complete.cjs');
+  const bin =
+    process.env.CYCLE_COMPLETE_BIN || path.join(TOOL, 'pilot', 'report', 'migration-complete.cjs');
   return new Promise((res) => {
     const c = spawn(
       process.execPath,
       [bin, '--runs', runsRoot(), '--out', path.dirname(runsRoot()), '--clients', client],
       { stdio: ['ignore', 'pipe', 'pipe'] },
     );
-    for (const s of [c.stdout, c.stderr]) s.on('data', (d) => process.stdout.write('  complete: ' + d));
+    for (const s of [c.stdout, c.stderr])
+      s.on('data', (d) => process.stdout.write('  complete: ' + d));
     c.on('error', () => res(1));
     c.on('close', (code) => {
       summary('migration-complete', code);
@@ -1115,7 +1381,9 @@ async function preflightWithInit(srv, cfg) {
   const c = {};
   let code = await cmdPreflight(srv, cfg, {}, c);
   if (code === 0 && /absent: needs `init`/.test(c.out || '')) {
-    console.log('preflight: the migration schema is absent: running init, then preflight --after-init');
+    console.log(
+      'preflight: the migration schema is absent: running init, then preflight --after-init',
+    );
     code = await cmdInit(srv);
     if (code === 0) code = await cmdPreflight(srv, cfg, { 'after-init': true });
   }
@@ -1127,7 +1395,13 @@ const plain = (v) => (/^[\w.,=:/-]+$/.test(v) ? v : shq(v));
 function resumeCmd(flags, from) {
   const p = ['node pilot/staging/cycle.cjs migrate', '--client', flags.client];
   for (const k of ['db', 'steps', 'skip-steps']) if (flags[k]) p.push(`--${k}`, plain(flags[k]));
-  for (const k of ['yes-load-into-staging', 'skip-dry-run-check', 'i-accept-no-dry-run', 'with-dry-run', 'catch-up'])
+  for (const k of [
+    'yes-load-into-staging',
+    'skip-dry-run-check',
+    'i-accept-no-dry-run',
+    'with-dry-run',
+    'catch-up',
+  ])
     if (flags[k]) p.push(`--${k}`);
   p.push('--from', from);
   return p.join(' ');
@@ -1142,7 +1416,9 @@ const totalsOf = (rec) => ({
 });
 function renderSummary(rec) {
   const L = [`summary ${rec.client}: ${rec.ok ? 'OK' : `STOPPED at ${rec.stoppedAt}`}`];
-  L.push(`  ${'step'.padEnd(20)} ${'seconds'.padStart(9)} ${'rows'.padStart(9)} ${'quarantined'.padStart(12)} ${'excluded'.padStart(9)}`);
+  L.push(
+    `  ${'step'.padEnd(20)} ${'seconds'.padStart(9)} ${'rows'.padStart(9)} ${'quarantined'.padStart(12)} ${'excluded'.padStart(9)}`,
+  );
   for (const s of rec.steps) {
     const isLoad = s.step === 'load';
     const t = isLoad ? totalsOf({ steps: [], loadSteps: rec.loadSteps }) : null;
@@ -1161,9 +1437,14 @@ function renderSummary(rec) {
 }
 /** timings.json next to the fetched reports when `report` ran; otherwise (a run that stopped earlier) under runs/_timings so the newest-run lookup of migration-complete is not fooled */
 function writeTimings(rec, dir) {
-  const file = dir && fs.existsSync(path.join(dir, 'reconcile.json'))
-    ? path.join(dir, 'timings.json')
-    : path.join(runsRoot(), '_timings', `${rec.client}-${new Date().toISOString().replace(/[:.]/g, '-')}.json`);
+  const file =
+    dir && fs.existsSync(path.join(dir, 'reconcile.json'))
+      ? path.join(dir, 'timings.json')
+      : path.join(
+          runsRoot(),
+          '_timings',
+          `${rec.client}-${new Date().toISOString().replace(/[:.]/g, '-')}.json`,
+        );
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, JSON.stringify({ ...rec, totals: totalsOf(rec) }, null, 2));
   return file;
@@ -1195,18 +1476,32 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
     if (!flags['yes-load-into-staging'])
       refuse('migrate loads into the staging database: pass --yes-load-into-staging');
     if (flags['skip-dry-run-check'] && !flags['i-accept-no-dry-run'])
-      refuse('--skip-dry-run-check also needs --i-accept-no-dry-run (you are loading without a clean dry run)');
+      refuse(
+        '--skip-dry-run-check also needs --i-accept-no-dry-run (you are loading without a clean dry run)',
+      );
     if (!MIG_STEPS.includes(rec.from)) refuse(`--from must be one of ${MIG_STEPS.join(', ')}`);
     if (flags['stop-after'] && !MIG_STEPS.includes(flags['stop-after']))
       refuse(`--stop-after must be one of ${MIG_STEPS.join(', ')}`);
-    if (rec.db && !/^[A-Za-z0-9_+-]{1,128}$/.test(rec.db)) refuse('--db is not a plausible database name');
+    if (rec.db && !/^[A-Za-z0-9_+-]{1,128}$/.test(rec.db))
+      refuse('--db is not a plausible database name');
     if (flags['catch-up']) {
-      if (flags.steps) refuse('--catch-up runs the fixed catch-up chain: do not combine it with --steps');
-      if (flags['skip-export']) refuse('--catch-up needs a fresh export (that is its point): drop --skip-export');
+      if (flags.steps)
+        refuse('--catch-up runs the fixed catch-up chain: do not combine it with --steps');
+      if (flags['skip-export'])
+        refuse('--catch-up needs a fresh export (that is its point): drop --skip-export');
       // the credits group holds the wallet OPENING (a second opening would be a second balance); wallet-sync brings the balance up to date instead
-      const skip = [...new Set(['credits', ...String(flags['skip-steps'] || '').split(',').filter(Boolean)])].join(',');
+      const skip = [
+        ...new Set([
+          'credits',
+          ...String(flags['skip-steps'] || '')
+            .split(',')
+            .filter(Boolean),
+        ]),
+      ].join(',');
       flags = { ...flags, 'force-export': true, 'with-dry-run': true, 'skip-steps': skip };
-      console.log('migrate: CATCH-UP of an already-loaded client: forced export, load (new rows; credits skipped), update, chat-status, files, core-load, wallet-sync, usage-append');
+      console.log(
+        'migrate: CATCH-UP of an already-loaded client: forced export, load (new rows; credits skipped), update, chat-status, files, core-load, wallet-sync, usage-append',
+      );
     }
     if (!shared.memChecked) {
       await assertStaging(srv);
@@ -1228,7 +1523,8 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
       (s !== 'wallet-history' || cfg.coreFile) && // the live balance, top-ups and purchases come from the same snapshot
       (s !== 'flow-state' || cfg.flowState !== 'inactive') && // "flowState": "inactive" in the client config keeps every flow a draft
       // the WhatsApp number (the last steps, so a failure there never costs the reports of the data migration): only on request (--activate-whatsapp, the panel's load passes it), never for a catch-up, and "whatsapp": "off" in the client config skips it
-      ((s !== 'wa-credentials' && s !== 'wa-cutover') || (flags['activate-whatsapp'] && cfg.whatsapp !== 'off')),
+      ((s !== 'wa-credentials' && s !== 'wa-cutover') ||
+        (flags['activate-whatsapp'] && cfg.whatsapp !== 'off')),
   );
   const ctxL = {};
   dir = rec.from === 'complete' ? newestReportDir(cfg.client) : null;
@@ -1246,7 +1542,10 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
         }
         console.log(`export: needed (${m.msg})`);
       }
-      if (!rec.db) refuse('no Mongo database name: pass --db <waboo db> or set "mongoDb" in the client config');
+      if (!rec.db)
+        refuse(
+          'no Mongo database name: pass --db <waboo db> or set "mongoDb" in the client config',
+        );
       return runExport(cfg.client, rec.db, !!flags['force-export']);
     },
     ship: async () => {
@@ -1261,7 +1560,8 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
     backup: () => cmdBackup(srv, cfg),
     update: () => cmdUpdate(srv, cfg, { apply: true }), // every opted-in step; the load's --steps/--skip-steps do not apply to update mode
     'core-load': () => cmdCoreLoad(srv, cfg, { ...flags, apply: true }),
-    files: async () => (await cmdFiles(srv, cfg, 'copy', { apply: true })) || cmdFiles(srv, cfg, 'verify'),
+    files: async () =>
+      (await cmdFiles(srv, cfg, 'copy', { apply: true })) || cmdFiles(srv, cfg, 'verify'),
     'wallet-sync': () => cmdWalletSync(srv, cfg, { ...flags, apply: true }),
     'wallet-history': () => cmdWalletHistory(srv, cfg, { ...flags, apply: true }),
     'chat-status': () => cmdChatStatus(srv, cfg, { ...flags, apply: true }),
@@ -1324,7 +1624,8 @@ async function cmdBatch(srv, flags) {
     .map((x) => x.trim())
     .filter(Boolean);
   if (!keys.length) refuse('batch needs --clients a,b,c');
-  if (flags.db) refuse('batch takes the Mongo database from each client config ("mongoDb"), not --db');
+  if (flags.db)
+    refuse('batch takes the Mongo database from each client config ("mongoDb"), not --db');
   if (new Set(keys).size !== keys.length) refuse('--clients lists a client twice');
   const conc = flags.concurrency === undefined ? 1 : Number(flags.concurrency);
   if (!Number.isInteger(conc) || conc < 1 || conc > MAX_CONCURRENCY)
@@ -1358,7 +1659,12 @@ async function cmdBatch(srv, flags) {
         while (queue.length) {
           const cfg = queue.shift();
           const rec = await als.run(cfg.client, () =>
-            migrateRun(srv, cfg, { ...flags, client: cfg.client }, { memChecked: true, bundleShipped: true }),
+            migrateRun(
+              srv,
+              cfg,
+              { ...flags, client: cfg.client },
+              { memChecked: true, bundleShipped: true },
+            ),
           );
           results.push(rec);
         }
@@ -1368,8 +1674,12 @@ async function cmdBatch(srv, flags) {
     console.log = orig;
   }
   results.sort((a, b) => keys.indexOf(a.client) - keys.indexOf(b.client));
-  console.log(`batch summary (${keys.length} client(s), concurrency ${conc}, ${secs(Date.now() - t0)}s wall)`);
-  console.log(`  ${'client'.padEnd(14)} ${'result'.padEnd(18)} ${'seconds'.padStart(8)} ${'rows'.padStart(9)} ${'quarantined'.padStart(12)} ${'excluded'.padStart(9)}`);
+  console.log(
+    `batch summary (${keys.length} client(s), concurrency ${conc}, ${secs(Date.now() - t0)}s wall)`,
+  );
+  console.log(
+    `  ${'client'.padEnd(14)} ${'result'.padEnd(18)} ${'seconds'.padStart(8)} ${'rows'.padStart(9)} ${'quarantined'.padStart(12)} ${'excluded'.padStart(9)}`,
+  );
   const tot = { seconds: 0, rows: 0, quarantined: 0, excluded: 0 };
   for (const r of results) {
     const t = totalsOf(r);
@@ -1379,10 +1689,23 @@ async function cmdBatch(srv, flags) {
     );
     if (!r.ok) console.log(`    resume: ${r.resume}`);
   }
-  console.log(`  ${'total'.padEnd(14)} ${''.padEnd(18)} ${String(secs(tot.seconds * 1000)).padStart(8)} ${String(tot.rows).padStart(9)} ${String(tot.quarantined).padStart(12)} ${String(tot.excluded).padStart(9)}`);
-  const f = path.join(runsRoot(), '_batch', `${new Date().toISOString().replace(/[:.]/g, '-')}.json`);
+  console.log(
+    `  ${'total'.padEnd(14)} ${''.padEnd(18)} ${String(secs(tot.seconds * 1000)).padStart(8)} ${String(tot.rows).padStart(9)} ${String(tot.quarantined).padStart(12)} ${String(tot.excluded).padStart(9)}`,
+  );
+  const f = path.join(
+    runsRoot(),
+    '_batch',
+    `${new Date().toISOString().replace(/[:.]/g, '-')}.json`,
+  );
   fs.mkdirSync(path.dirname(f), { recursive: true });
-  fs.writeFileSync(f, JSON.stringify({ concurrency: conc, wallSeconds: secs(Date.now() - t0), totals: tot, clients: results }, null, 2));
+  fs.writeFileSync(
+    f,
+    JSON.stringify(
+      { concurrency: conc, wallSeconds: secs(Date.now() - t0), totals: tot, clients: results },
+      null,
+      2,
+    ),
+  );
   console.log(`batch: summary written to ${f}`);
   return results.every((r) => r.ok) ? 0 : 1;
 }
@@ -1394,27 +1717,34 @@ const LONGBLOB = /[A-Za-z0-9+/_=-]{32,}/;
 function cleanText(label, v, max = 100) {
   if (typeof v !== 'string' || !v.trim()) refuse(`--${label} is required`);
   if (v.length > max) refuse(`--${label} is too long`);
-  if (SECRETISH.test(v) || LONGBLOB.test(v)) refuse(`--${label} looks like a secret or a URL: configs hold no secrets`);
+  if (SECRETISH.test(v) || LONGBLOB.test(v))
+    refuse(`--${label} looks like a secret or a URL: configs hold no secrets`);
   return v.trim();
 }
 function cmdNewClient(flags) {
   const key = flags.client;
-  if (!/^[a-z0-9][a-z0-9_-]{0,40}$/.test(key || '')) refuse('--client must be a short lowercase key');
+  if (!/^[a-z0-9][a-z0-9_-]{0,40}$/.test(key || ''))
+    refuse('--client must be a short lowercase key');
   const orgName = cleanText('name', flags.name);
   // the owner is optional: no --owner-email means no owner user is made for the customer (the additional owner is the workspace's Owner)
   const ownerName = flags['owner-email'] ? cleanText('owner-name', flags['owner-name']) : null;
   const slug = flags.slug;
-  if (!/^[a-z0-9][a-z0-9-]{1,60}$/.test(slug || '')) refuse('--slug must be lowercase letters, digits, dashes (2-61 chars)');
+  if (!/^[a-z0-9][a-z0-9-]{1,60}$/.test(slug || ''))
+    refuse('--slug must be lowercase letters, digits, dashes (2-61 chars)');
   const email = flags['owner-email'] ? cleanText('owner-email', flags['owner-email'], 120) : null;
-  if (email !== null && !/^[^\s@<>"']+@[^\s@<>"']+\.[^\s@<>"']{2,}$/.test(email)) refuse('--owner-email is not an e-mail address');
+  if (email !== null && !/^[^\s@<>"']+@[^\s@<>"']+\.[^\s@<>"']{2,}$/.test(email))
+    refuse('--owner-email is not an e-mail address');
   const plan = flags.plan || 'enterprise';
-  if (!/^[a-z][a-z0-9_-]{1,30}$/.test(plan)) refuse('--plan must be a plan slug such as enterprise');
+  if (!/^[a-z][a-z0-9_-]{1,30}$/.test(plan))
+    refuse('--plan must be a plan slug such as enterprise');
   const db = flags.db;
-  if (db !== undefined && !/^[A-Za-z0-9_+-]{1,128}$/.test(db)) refuse('--db is not a plausible database name');
+  if (db !== undefined && !/^[A-Za-z0-9_+-]{1,128}$/.test(db))
+    refuse('--db is not a plausible database name');
   const dir = clientsDir();
   fs.mkdirSync(dir, { recursive: true });
   const file = path.join(dir, `${key}.json`);
-  if (fs.existsSync(file)) refuse(`${file} already exists (edit it by hand, new-client never overwrites)`);
+  if (fs.existsSync(file))
+    refuse(`${file} already exists (edit it by hand, new-client never overwrites)`);
   for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.json'))) {
     let o = null;
     try {
@@ -1428,7 +1758,10 @@ function cmdNewClient(flags) {
   const pairs = flags['channel-id'] ? String(flags['channel-id']).split(',') : [];
   pairs.forEach((p, i) => {
     const m = p.match(/^([A-Za-z0-9_-]{1,80})=(\d{5,20})$/);
-    if (!m) refuse('--channel-id must be <botid>=<phone number id>[,<botid>=<phone number id>] (digits only)');
+    if (!m)
+      refuse(
+        '--channel-id must be <botid>=<phone number id>[,<botid>=<phone number id>] (digits only)',
+      );
     map[m[1]] = {
       kind: 'whatsapp_cloud',
       externalId: m[2],
@@ -1446,11 +1779,25 @@ function cmdNewClient(flags) {
       refuse('--channel-map-file cannot be read as JSON');
     }
     for (const [bot, e] of Object.entries(o || {})) {
-      if (!/^[A-Za-z0-9_-]{1,80}$/.test(bot) || !e || e.kind !== 'whatsapp_cloud' || !/^\d{5,32}$/.test(String(e.externalId)))
-        refuse(`--channel-map-file: entry "${String(bot).slice(0, 40)}" needs kind whatsapp_cloud and a numeric externalId (phone number id)`);
+      if (
+        !/^[A-Za-z0-9_-]{1,80}$/.test(bot) ||
+        !e ||
+        e.kind !== 'whatsapp_cloud' ||
+        !/^\d{5,32}$/.test(String(e.externalId))
+      )
+        refuse(
+          `--channel-map-file: entry "${String(bot).slice(0, 40)}" needs kind whatsapp_cloud and a numeric externalId (phone number id)`,
+        );
       if (e.displayAddress !== undefined && !/^\+[0-9]{5,20}$/.test(String(e.displayAddress)))
-        refuse(`--channel-map-file: entry "${String(bot).slice(0, 40)}" displayAddress must look like +6562502280`);
-      map[bot] = { kind: 'whatsapp_cloud', externalId: String(e.externalId), name: cleanText('channel name', e.name, 120), ...(e.displayAddress ? { displayAddress: String(e.displayAddress) } : {}) };
+        refuse(
+          `--channel-map-file: entry "${String(bot).slice(0, 40)}" displayAddress must look like +6562502280`,
+        );
+      map[bot] = {
+        kind: 'whatsapp_cloud',
+        externalId: String(e.externalId),
+        name: cleanText('channel name', e.name, 120),
+        ...(e.displayAddress ? { displayAddress: String(e.displayAddress) } : {}),
+      };
     }
     if (!Object.keys(map).length) refuse('--channel-map-file holds no entries');
   }
@@ -1462,7 +1809,8 @@ function cmdNewClient(flags) {
       displayAddress: '+1 000 000 0001',
       name: `${orgName} WhatsApp (PLACEHOLDER: replace the key with the Waboo bot id and externalId with the real phone number id before cutover)`,
     };
-  const cfgDir = process.env.CYCLE_CONFIG_DIR || 'D:\\wadesk-vedant\\_work\\migration\\runs\\config';
+  const cfgDir =
+    process.env.CYCLE_CONFIG_DIR || 'D:\\wadesk-vedant\\_work\\migration\\runs\\config';
   fs.mkdirSync(cfgDir, { recursive: true });
   const mapFile = path.join(cfgDir, `${key}-channel-map.json`);
   if (fs.existsSync(mapFile)) refuse(`${mapFile} already exists`);
@@ -1480,14 +1828,20 @@ function cmdNewClient(flags) {
     roleMapApprovals: [],
     extraFlags: [],
   };
-  if (!Number.isInteger(cfg.batch) || cfg.batch < 1 || cfg.batch > 5000) refuse('--batch must be a whole number between 1 and 5000');
-  if (!/^\d{1,4}$/.test(cfg.defaultCc)) refuse('--default-cc must be a country calling code such as 91');
+  if (!Number.isInteger(cfg.batch) || cfg.batch < 1 || cfg.batch > 5000)
+    refuse('--batch must be a whole number between 1 and 5000');
+  if (!/^\d{1,4}$/.test(cfg.defaultCc))
+    refuse('--default-cc must be a country calling code such as 91');
   if (db) cfg.mongoDb = db;
   fs.writeFileSync(mapFile, JSON.stringify(map, null, 2) + '\n');
   fs.writeFileSync(file, JSON.stringify(cfg, null, 2) + '\n');
   console.log(`new-client: wrote ${file}`);
-  console.log(`new-client: wrote ${mapFile}${placeholderMap ? ' (PLACEHOLDER entry: needs the bot id and the real phone number id)' : ''}`);
-  console.log('new-client: still needs a person: the real WhatsApp phone number id, the opening credit balance (creditOpening), the real plan and owner e-mail if these are placeholders');
+  console.log(
+    `new-client: wrote ${mapFile}${placeholderMap ? ' (PLACEHOLDER entry: needs the bot id and the real phone number id)' : ''}`,
+  );
+  console.log(
+    'new-client: still needs a person: the real WhatsApp phone number id, the opening credit balance (creditOpening), the real plan and owner e-mail if these are placeholders',
+  );
   return 0;
 }
 
@@ -1591,7 +1945,8 @@ async function main(argv) {
   if (cmd === 'build') return timed('build', cmdBuild);
   if (cmd === 'new-client') return cmdNewClient(flags);
   if (cmd === 'loaded-check') return cmdLoadedCheck(loadServer(), flags.client);
-  if (cmd === 'pricing-seed') return timed('pricing-seed', () => cmdPricingSeed(loadServer(), flags));
+  if (cmd === 'pricing-seed')
+    return timed('pricing-seed', () => cmdPricingSeed(loadServer(), flags));
   if (cmd === 'batch') return timed('batch', () => cmdBatch(loadServer(), flags));
   const cfg = loadClient(flags.client);
   const srv = loadServer();

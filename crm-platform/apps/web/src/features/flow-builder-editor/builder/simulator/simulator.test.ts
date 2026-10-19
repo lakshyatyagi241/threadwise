@@ -802,11 +802,11 @@ describe('Ask for file / image and Ask for location in the test runner (TW-FLB-0
   });
 });
 
-describe('simulator: Answer from FAQ', () => {
-  const run = async (faqData: Record<string, unknown>, handles: string[]) => {
+describe('simulator: retired Answer from FAQ', () => {
+  const run = async (handles: string[]) => {
     const nodes = [
       node('t', 'trigger'),
-      node('f', 'faq', faqData),
+      node('f', 'faq', { query: '{{user_message}}', save: 'kb' }),
       node('yes', 'message', { text: 'ANSWERED PATH' }),
       node('no', 'message', { text: 'NO MATCH PATH' }),
     ];
@@ -822,30 +822,16 @@ describe('simulator: Answer from FAQ', () => {
     return h;
   };
 
-  it('does not look anything up, sends nothing, says it is simulated and takes the answered exit', async () => {
-    const h = await run({ query: '{{user_message}}', save: 'kb' }, ['matched', 'no_match']);
+  it('always takes the no match exit, even when the answered exit is connected, and says it is retired', async () => {
+    const h = await run(['matched', 'no_match']);
     const texts = h.texts();
-    const line = texts.find((t) => t.startsWith('(simulated) Answer from FAQ'))!;
-    expect(line).toContain('does not look up your FAQs');
-    expect(line).toContain('nothing is sent');
-    expect(line).toContain('{{kb}} stays empty');
-    expect(line).toContain('"answered" exit');
-    expect(texts).toContain('ANSWERED PATH');
-    expect(texts).not.toContain('NO MATCH PATH');
-    // No FAQ answer is made up: the only bot text is the flow's own next message.
-    expect(h.log.filter((e) => e.kind === 'bot').map((e) => e.text)).toEqual(['ANSWERED PATH']);
+    expect(texts.find((t) => t.startsWith('(simulated) Answer from FAQ'))).toContain('retired');
+    expect(texts).toContain('NO MATCH PATH');
+    expect(texts).not.toContain('ANSWERED PATH');
   });
 
-  it('takes no match when only that exit is connected, and says why', async () => {
-    const h = await run({}, ['no_match']);
-    const line = h.texts().find((t) => t.startsWith('(simulated) Answer from FAQ'))!;
-    expect(line).toContain('not connected, so taking "no match"');
-    expect(line).toContain('{{faq}} stays empty');
-    expect(h.texts()).toContain('NO MATCH PATH');
-  });
-
-  it('stops with the usual note when neither exit is connected', async () => {
-    const h = await run({}, []);
-    expect(h.texts().some((t) => t.includes('No path forward (port "matched")'))).toBe(true);
+  it('stops with the usual note when the no match exit is not connected', async () => {
+    const h = await run(['matched']);
+    expect(h.texts().some((t) => t.includes('No path forward (port "no_match")'))).toBe(true);
   });
 });

@@ -38,6 +38,58 @@
       "audit_log_exports": {
         "title": "Pliki eksportu audytu",
         "description": "Plik CSV, o który przestrzeń robocza prosi z dziennika audytu. Osoba zgłaszająca dostaje e-mail z linkiem do zalogowania się i pobrania pliku; plik jest usuwany po dniach live."
+      },
+      "message_log": {
+        "title": "Dziennik dostarczania wiadomości",
+        "description": "Dziennik dostarczania każdej wiadomości: wysłana, dostarczona, nieudana, ponowiona. Zdarzenia opuszczają aktywną tabelę po upływie aktywnych dni i trafiają w skompresowanej formie do archiwum; dni archiwum liczą się od tego momentu. Dziennik wiadomości i eksporty dzienników nadal mogą odczytywać archiwum."
+      },
+      "notifications_read": {
+        "title": "Powiadomienia (przeczytane)",
+        "description": "Powiadomienia z dzwonka, które użytkownik już przeczytał. Są usuwane, gdy osiągną tyle dni. Wbudowana wartość pochodzi z ustawień serwera (NOTIFY_RETENTION_READ_DAYS)."
+      },
+      "notifications_unread": {
+        "title": "Powiadomienia (nigdy nieprzeczytane)",
+        "description": "Powiadomienia z dzwonka, których nikt nie otworzył. Są usuwane, gdy osiągną tyle dni, i nigdy wcześniej niż przeczytane (zapis zostanie odrzucony, jeśli by tak było). Wbudowana wartość pochodzi z ustawień serwera (NOTIFY_RETENTION_UNREAD_DAYS)."
+      },
+      "push_devices_revoked": {
+        "title": "Odwołane urządzenia push",
+        "description": "Przeglądarki i telefony, które przestały przyjmować powiadomienia push. Są krótko przechowywane, aby wracające urządzenie mogło ponownie włączyć powiadomienia, a następnie usuwane."
+      },
+      "assignment_runs": {
+        "title": "Dziennik uruchomień przypisywania",
+        "description": "Zapis każdego uruchomienia automatycznego przypisywania kontaktów: kto co otrzymał i dlaczego. Usuwany po upływie aktywnych dni."
+      },
+      "form_events": {
+        "title": "Zdarzenia analityki formularzy",
+        "description": "Wyświetlenia, rozpoczęcia i wysłania formularzy internetowych, używane w wykresach konwersji formularzy. Nie zawierają odpowiedzi. Usuwane po upływie aktywnych dni. Same odpowiedzi podlegają własnemu okresowi przechowywania każdego formularza."
+      },
+      "lead_sync_runs": {
+        "title": "Uruchomienia synchronizacji leadów",
+        "description": "Zapis każdej synchronizacji lub uzupełnienia leadów z platformy reklamowej: kto co pobrał i kiedy. Usuwany po upływie aktywnych dni. Surowe dane leadów podlegają okresowi przechowywania każdego źródła."
+      },
+      "lead_scoring_runs": {
+        "title": "Dziennik oceny leadów przez AI",
+        "description": "Każda ocena leada przez AI wraz z powodami oraz odczyty rozmów i sugestie etapów, na których się opiera. Dopóki nie zapiszesz tutaj wartości, używana jest liczba z ustawień oceny leadów przez AI. Osoba objęta blokadą prawną zachowuje swoje rekordy."
+      },
+      "api_library_logs": {
+        "title": "Dziennik wywołań API Library",
+        "description": "Dziennik żądań i odpowiedzi każdego wywołania API Library. Usuwany po upływie aktywnych dni."
+      },
+      "flow_run_logs": {
+        "title": "Dziennik uruchomień automatyzacji",
+        "description": "Każde zakończone uruchomienie przepływu automatyzacji wraz z jego krokami oraz wersje przepływów, na które nie wskazuje już żadne uruchomienie. Uruchomienia w toku nigdy nie są ruszane."
+      },
+      "webhook_forward_failures": {
+        "title": "Nieudane dostarczenia webhooków",
+        "description": "Dostarczenia webhooków, które się nie powiodły i można je jeszcze ponowić. Po upływie aktywnych dni nie można ich już ponowić i są usuwane."
+      },
+      "click_calls": {
+        "title": "Niepotwierdzone połączenia click-to-call",
+        "description": "Click-to-call, którego zakończone połączenie nigdy nie wróciło od dostawcy. Zapominane po upływie aktywnych dni."
+      },
+      "call_recordings": {
+        "title": "Nagrania rozmów",
+        "description": "Domyślna liczba dni przechowywania nagrania rozmowy, dla obszarów roboczych, które nie wybrały własnego okresu; własny okres obszaru roboczego ma pierwszeństwo. Po jego upływie plik nagrania jest usuwany, a rozmowa zostaje. Nagranie objęte blokadą prawną jest zachowywane."
       }
     },
     "fields": {
@@ -45,7 +97,8 @@
       "liveDaysHint": "Liczba dni, przez które dane pozostają w bazie danych. Dozwolone: od {min} do {max}.",
       "keepForever": "Przechowuj archiwum bezterminowo",
       "archiveDays": "Dni w archiwum",
-      "archiveDaysHint": "Liczba dodatkowych dni, przez które archiwum je przechowuje, po czym są usuwane. Dozwolone: od {min} do {max}."
+      "archiveDaysHint": "Liczba dodatkowych dni, przez które archiwum je przechowuje, po czym są usuwane. Dozwolone: od {min} do {max}.",
+      "keepForeverShort": "Zachowaj bezterminowo"
     },
     "summary": {
       "noArchive": "Trwale usuwane po upływie {live, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}} od zapisania.",
@@ -73,7 +126,9 @@
       "neverRun": "Jeszcze się nie odbyło",
       "runLive": "{when}: zarchiwizowano {months, plural, one {# miesiąc} few {# miesiące} many {# miesięcy} other {# miesiąca}} ({rows} wierszy, {size}), usunięto z archiwum {expired}, usunięto wierszy lub plików: {deleted}",
       "runDry": "{when}: dry-run, nic nie zmieniono",
-      "runFailed": "Ostatnie uruchomienie zakończyło się problemem: {error}"
+      "runFailed": "Ostatnie uruchomienie zakończyło się problemem: {error}",
+      "runDeleted": "{when}: usunięto {deleted, plural, one {# wiersz lub plik} few {# wiersze lub pliki} many {# wierszy lub plików} other {# wiersza lub pliku}}",
+      "runDaily": "{when}: przeniesiono do archiwum zdarzeń: {rows}, usunięto dni archiwum: {expired}"
     },
     "actions": {
       "save": "Zapisz",
@@ -85,7 +140,8 @@
       "confirmSave": "Zapisz i zastosuj",
       "resetTitle": "Przywrócić dotychczasowe działanie dla: {item}?",
       "resetBody": "Zapisane wartości zostaną usunięte. Nocne zadania wrócą do wbudowanych reguł dla tego elementu. Dane już zarchiwizowane pozostaną w archiwum.",
-      "confirmReset": "Przywróć dotychczasowe działanie"
+      "confirmReset": "Przywróć dotychczasowe działanie",
+      "resetShort": "Resetuj"
     },
     "preview": {
       "title": "Zapisać retencję dla: {item}?",
@@ -94,7 +150,8 @@
       "toDeleteFromArchive": "{count, plural, one {# zarchiwizowany miesiąc zostanie} few {# zarchiwizowane miesiące zostaną} many {# zarchiwizowanych miesięcy zostanie} other {# zarchiwizowanego miesiąca zostanie}} trwale usunięte z archiwum.",
       "rowsToDelete": "{count, plural, one {# wiersz lub plik zostanie} few {# wiersze lub pliki zostaną} many {# wierszy lub plików zostanie} other {# wiersza lub pliku zostanie}} trwale usunięte.",
       "notApplied": "Zadanie archiwizacji nie realizuje jeszcze zapisanych wartości, więc nic z tego nie nastąpi, dopóki nie zostanie włączone.",
-      "permanent": "Usunięcie jest trwałe i nie można go cofnąć."
+      "permanent": "Usunięcie jest trwałe i nie można go cofnąć.",
+      "rowsToArchive": "{count, plural, one {# zdarzenie zostanie przeniesione} few {# zdarzenia zostaną przeniesione} many {# zdarzeń zostanie przeniesionych} other {# zdarzenia zostanie przeniesione}} z aktywnej tabeli do archiwum."
     },
     "saved": "Zapisano retencję.",
     "resetDone": "Przywrócono dotychczasowe działanie.",
@@ -103,7 +160,8 @@
       "archive_out_of_range": "Dni w archiwum muszą być liczbą całkowitą od {min} do {max}.",
       "archive_not_supported": "Ten element nie może być archiwizowany.",
       "delete_before_archive": "Danych nie można usunąć przed zarchiwizowaniem.",
-      "not_a_number": "Wpisz całkowitą liczbę dni."
+      "not_a_number": "Wpisz całkowitą liczbę dni.",
+      "unread_before_read": "Nieprzeczytanych powiadomień nie można usunąć przed przeczytanymi. Ustaw dla nieprzeczytanych co najmniej tyle dni, ile dla przeczytanych."
     },
     "errors": {
       "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
@@ -112,6 +170,36 @@
       "request": "Żądanie zostało odrzucone.",
       "unexpected": "Wystąpił błąd na serwerze. Spróbuj ponownie.",
       "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie."
+    },
+    "groups": {
+      "analytics": "Analityka",
+      "security": "Bezpieczeństwo i audyt",
+      "messaging": "Wiadomości i powiadomienia",
+      "crm": "CRM i leady",
+      "automation": "Automatyzacja i integracje",
+      "calling": "Połączenia"
+    },
+    "table": {
+      "title": "Retencja w skrócie",
+      "description": "Co przechowuje każdy rodzaj danych i jak długo. Wybierz element, aby zmienić jego wartości poniżej.",
+      "item": "Dane",
+      "storedIn": "Przechowywane w",
+      "live": "Aktywne (baza danych)",
+      "archive": "Archiwum",
+      "deleted": "Usuwane na stałe po",
+      "setting": "Ustawienie",
+      "days": "{count, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}",
+      "noArchive": "Bez archiwum",
+      "forever": "Bezterminowo",
+      "never": "Nigdy",
+      "where": {
+        "partitioned": "Baza danych, potem archiwum {driver}",
+        "daily_archive": "Baza danych, potem archiwum w bazie danych",
+        "table": "Tylko baza danych",
+        "file": "Pliki"
+      },
+      "actions": "Akcje",
+      "about": "Co to jest?"
     }
   }
 }

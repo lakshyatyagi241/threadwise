@@ -1,6 +1,8 @@
 {
   "platform-deployments": {
-    "nav": { "item": "Deployment" },
+    "nav": {
+      "item": "Deployment"
+    },
     "eyebrow": "Operazioni",
     "title": "Deployment",
     "description": "Ogni flusso pubblicato sulla console Geta: cosa è in coda, cosa è in esecuzione ora e cosa è fallito e perché. Si aggiorna ogni pochi secondi.",
@@ -54,6 +56,55 @@
       "queued": "Nulla è in attesa in coda.",
       "failed": "Nessuna pubblicazione è fallita.",
       "live": "Nessun flusso è ancora attivo sulla console Geta."
+    },
+    "tabs": {
+      "label": "Scegli cosa mostrare",
+      "publishes": "Pubblicazioni dei flussi",
+      "geta": "Console Geta",
+      "releases": "Release del prodotto"
+    },
+    "publishes": {
+      "description": "Ogni pubblicazione di un flusso: cosa il worker ha messo in coda, cosa sta gestendo ora e quali pubblicazioni sono fallite e perché. Si aggiorna ogni pochi secondi.",
+      "stalledAlert": "{count} pubblicazione/i di flussi non avanza/no da {minutes} minuti. Il worker potrebbe aver smesso di svuotare la coda.",
+      "truncated": "Vengono mostrate le prime {limit} pubblicazioni. Scegli uno stato per vedere le altre.",
+      "notProcessed": "Non ancora",
+      "cols": {
+        "attempts": "Tentativi",
+        "queued": "In coda dal",
+        "finished": "Completato il"
+      },
+      "status": {
+        "done": "Completato"
+      },
+      "empty": {
+        "all": "Nessun flusso è stato ancora pubblicato.",
+        "done": "Nessuna pubblicazione è stata completata negli ultimi 30 giorni."
+      }
+    },
+    "releases": {
+      "description": "Cosa è attivo su desk.wabo.ai: la release corrente, qualsiasi release in corso e ogni tentativo con i suoi passi ed errori. Si aggiorna ogni pochi secondi.",
+      "liveLabel": "Attiva ora",
+      "live": "Release {tag}, attiva dalle {time}",
+      "noneLive": "Nessuna release è ancora andata in linea.",
+      "inProgress": "Una release è in corso",
+      "stalledAlert": "{count} tentativo/i di release non avanzano da {minutes} minuti. La build o la release potrebbero essersi fermate.",
+      "empty": "Nessuna release registrata finora. Le release compariranno qui dal prossimo deploy.",
+      "cols": {
+        "tag": "Tag",
+        "state": "Stato",
+        "step": "Passo",
+        "started": "Avvio",
+        "finished": "Fine",
+        "error": "Errore"
+      },
+      "state": {
+        "building": "In build",
+        "shipping": "In invio",
+        "releasing": "In rilascio",
+        "ok": "Attiva",
+        "failed": "Fallita",
+        "rolled_back": "Ripristinata"
+      }
     }
   }
 }

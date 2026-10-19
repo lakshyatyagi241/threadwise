@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
+import { liveDaysFor, recordSweep } from '../data-retention';
 
 const BATCH = 1000;
 const MAX_BATCHES = 50;
@@ -66,6 +67,9 @@ export class FormRetentionSweepService {
 
   /** Deletes analytics events older than their retention, a batch at a time; returns how many. */
   async sweepEvents(): Promise<number> {
+    const days = await this.db.privileged((tx) =>
+      liveDaysFor(tx, 'form_events', FORM_EVENT_RETENTION_DAYS),
+    );
     let total = 0;
     for (let i = 0; i < MAX_BATCHES; i++) {
       const n = await this.db.privileged(async (tx) => {
@@ -73,13 +77,14 @@ export class FormRetentionSweepService {
           DELETE FROM web_form_events
           WHERE (id, created_at) IN (
             SELECT id, created_at FROM web_form_events
-            WHERE created_at < now() - make_interval(days => ${FORM_EVENT_RETENTION_DAYS}) LIMIT ${BATCH})
+            WHERE created_at < now() - make_interval(days => ${days}) LIMIT ${BATCH})
           RETURNING 1`);
         return res.rows.length;
       });
       total += n;
       if (n < BATCH) break;
     }
+    await recordSweep(this.db, this.logger, 'form_events', { deletedRows: total });
     return total;
   }
 }

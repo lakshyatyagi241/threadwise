@@ -148,7 +148,7 @@ describe('schema parser', () => {
 
 describe('injection classifier', () => {
   it('separates literals, constants, request data and the rest', async () => {
-    const { classify } = await import('./tasks/30-injection.mjs');
+    const { classify } = await import('./lib/sql-template.mjs');
     const consts = new Set(['COLS']);
     assert.equal(classify("'a.id'", consts), 'safe');
     assert.equal(classify('COLS', consts), 'safe');

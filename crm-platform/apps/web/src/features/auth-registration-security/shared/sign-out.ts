@@ -5,7 +5,11 @@
  */
 export async function signOut(to = '/login'): Promise<void> {
   try {
-    await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' });
+    await fetch('/api/auth/logout', {
+      signal: AbortSignal.timeout(5000),
+      method: 'POST',
+      credentials: 'same-origin',
+    });
   } catch {
     /* the cookies may still be set; the next request will be refused and land on /login */
   }

@@ -46,7 +46,9 @@
       "catchUp": "Dogoń zmiany",
       "migrateHint": "Migracja zaczyna się od pełnej próby i niczego nie ładuje, jeśli nie jest czysta. Osobny próbny przebieg jest opcjonalny.",
       "queued": "Uruchomienie dodane do kolejki.",
-      "scheduled": "Uruchomienie zaplanowane."
+      "scheduled": "Uruchomienie zaplanowane.",
+      "skipWhatsapp": "Nie migruj numeru WhatsApp (do testów)",
+      "skipWhatsappHint": "Obszar roboczy zostanie zmigrowany w całości, ale jego numer WhatsApp nie zostanie zaimportowany ani połączony."
     },
     "confirm": {
       "title": "Migruj {org}",
@@ -76,7 +78,9 @@
       "migrateAll": "Migruj wszystkie",
       "migrateHint": "Każda organizacja zaczyna się od własnej pełnej próby i niczego nie ładuje, jeśli nie jest czysta. Osobny próbny przebieg jest opcjonalny.",
       "queued": "Partia dodana do kolejki.",
-      "scheduled": "Partia zaplanowana."
+      "scheduled": "Partia zaplanowana.",
+      "skipWhatsapp": "Nie migruj numerów WhatsApp (do testów)",
+      "skipWhatsappHint": "Żaden z tych obszarów roboczych nie będzie miał zaimportowanego ani połączonego numeru WhatsApp."
     },
     "bulkConfirm": {
       "title": "Migruj organizacje: {count}",
@@ -174,7 +178,8 @@
     "mode": {
       "dry": "Próbny przebieg",
       "load": "Migracja",
-      "catchup": "Dogonienie zmian"
+      "catchup": "Dogonienie zmian",
+      "skipWhatsapp": "Bez numeru WhatsApp"
     },
     "status": {
       "queued": "W kolejce",

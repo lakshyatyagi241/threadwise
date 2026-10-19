@@ -85,7 +85,6 @@ export function FlowsScreen() {
   const orgName = useSession().org.name;
   const canRead = useCan('flb.flows.read');
   const canCreate = useCan('flb.flows.create');
-  const canFaqs = useCan('faq.entries.read');
   const canUpdate = useCan('flb.flows.update');
   const canDelete = useCan('flb.flows.delete');
 
@@ -133,8 +132,7 @@ export function FlowsScreen() {
   const fail = (e: unknown) => toast(t('actionFailed', { message: reason(e) }), 'danger');
 
   const actions: CardActions = {
-    can: { update: canUpdate, create: canCreate, remove: canDelete, faqs: canFaqs },
-    builderMode,
+    can: { update: canUpdate, create: canCreate, remove: canDelete },
     onToggle: async (f) => {
       try {
         const r = await flowsApi.toggle(f.id);
@@ -152,7 +150,7 @@ export function FlowsScreen() {
       try {
         const copy = await flowsApi.duplicate(f.id);
         flash(tt('duplicated'));
-        router.push(openHref(builderMode, copy.id, copy.flowType));
+        router.push(openHref(copy.id, copy.flowType));
       } catch (e) {
         duplicating.current.delete(f.id);
         fail(e);
@@ -223,7 +221,7 @@ export function FlowsScreen() {
           : {},
       );
       flash(tt('imported'));
-      router.push(openHref(builderMode, created.id, created.flowType));
+      router.push(openHref(created.id, created.flowType));
     } catch (e) {
       setImportError(e instanceof ApiError ? e.message : t('importFailed'));
     } finally {
@@ -841,15 +839,6 @@ function CreateSheet({ open, onClose }: { open: boolean; onClose: () => void }) 
           'bg-[var(--flb-mint)]',
           'messaging-advanced',
         )}
-        {canWeb &&
-          row(
-            '/flows/builder?type=web',
-            `${t('web')} (${tb('advanced')})`,
-            t('webNote'),
-            'M2 8a6 6 0 1 0 12 0A6 6 0 0 0 2 8Zm0 0h12M8 2c1.7 1.7 2.5 3.7 2.5 6S9.7 12.3 8 14C6.3 12.3 5.5 10.3 5.5 8S6.3 3.7 8 2Z',
-            'bg-muted',
-            'web-advanced',
-          )}
         {canCall &&
           row(
             '/flows/builder?type=call',

@@ -4,10 +4,11 @@ import { runClient, type RunOptions } from '../load/run';
 import { reconcile } from '../reconcile';
 import { asOwner, cloneDb, customDumps, runOpts, type Dumps, type TestDb } from './helpers';
 import { acmeFlows, globexFlows } from './flows-fixtures';
+import { O } from './fixtures';
 
 /**
- * The FAQ feature step (faq_knowledge). Needs the database of test/global-setup.ts built from a schema that HAS the FAQ migrations
- * (faq_core, faq_permissions, faq_flow_node_verify, faq_per_flow: they are on main; an older checkout does not have them).
+ * The FAQ step (faq_knowledge): legacy FAQs become ONE text entry labelled "FAQ" per AI agent in the knowledge base (ai_training_sources),
+ * in the format of the knowledge-base merge migration (20270205090000). Needs the database of test/global-setup.ts.
  */
 const OWNER = 'owner@example.test';
 const opts = (d: Dumps, db: TestDb, client: 'acme' | 'globex', extra: Partial<RunOptions> = {}): RunOptions =>
@@ -26,9 +27,25 @@ let dumps: Dumps;
 let base: TestDb;
 const dbs: TestDb[] = [];
 const dumpOf = (g: ReturnType<typeof acmeFlows>) => ({ contact_list: [], ...g });
+// one FAQ that answers inline (the fixtures' FAQs all start a journey), with a second phrasing
+const inlineFaq = (g: ReturnType<typeof acmeFlows>) => {
+  const botid = (g.bot_workspace[0] as { botid: string }).botid;
+  g.bot_workspace.push({
+    _id: O(9_900_001),
+    botid,
+    qid: 'FAQ-PAY',
+    type: 'FAQ',
+    question: 'How do I pay?',
+    response: [{ type: 'text', value: '<p>Pay by card.</p>' }],
+    createdAt: { $date: '2026-03-01T00:00:00Z' },
+    updatedAt: { $date: '2026-03-02T00:00:00Z' },
+  } as never);
+  g.faq_variations.push({ _id: O(9_900_002), botid, qid: 'FAQ-PAY', phrases: ['ways to pay'] } as never);
+  return g;
+};
 
 beforeAll(async () => {
-  dumps = await customDumps({ acme: dumpOf(acmeFlows()), globex: dumpOf(globexFlows()) });
+  dumps = await customDumps({ acme: dumpOf(inlineFaq(acmeFlows())), globex: dumpOf(globexFlows()) });
   base = await cloneDb('faq-base');
   dbs.push(base);
   await runClient(opts(dumps, base, 'acme'));
@@ -43,86 +60,44 @@ afterAll(async () => {
 const ACME = `(SELECT id FROM organizations WHERE slug = 'acme')`;
 
 describe('faq_knowledge', () => {
-  it('writes PAUSED FAQs owned by the flow of the bot, a flow answer where the record has no text', async () => {
-    const f = await rows(
+  it('writes one text entry "FAQ" on one agent, in Q / Also asked as / A blocks, ready, no passages, no event', async () => {
+    const e = await rows(
       base,
-      `SELECT q.*, fl.flow_name FROM faqs q JOIN flows fl ON fl.org_id = q.org_id AND fl.id = q.owner_flow_id WHERE q.org_id = ${ACME} ORDER BY q.question`,
+      `SELECT s.*, a.status AS agent_status FROM ai_training_sources s JOIN ai_chat_assistants a ON a.org_id = s.org_id AND a.id = s.assistant_id
+       WHERE s.org_id = ${ACME} AND s.label = 'FAQ'`,
     );
-    expect(f.length).toBeGreaterThanOrEqual(2);
-    for (const r of f)
-      expect(r).toMatchObject({
-        status: 'paused',
-        flow_name: 'Support Bot',
-        answer_type: 'flow',
-        answer_text: null,
-        flow_node_id: null,
-        category: null,
-        threshold_override: null,
-        created_by: null,
-      });
-    for (const r of f) expect(Number(r.flow_id)).toBe(Number(r.owner_flow_id));
-    expect(await one(base, `SELECT count(*)::int AS n FROM faqs WHERE status <> 'paused'`)).toBe(0);
-  });
-
-  it('variations: the question as source question, the phrases as import, all pending, no vector, no event', async () => {
-    const v = await rows(
-      base,
-      `SELECT v.*, q.question FROM faq_variations v JOIN faqs q ON q.org_id = v.org_id AND q.id = v.faq_id WHERE v.org_id = ${ACME}`,
-    );
-    expect(v.length).toBeGreaterThan(0);
-    for (const r of v)
-      expect(r).toMatchObject({
-        embed_state: 'pending',
-        embedding: null,
-        embedding_model: null,
-        embedded_at: null,
-        embed_attempts: 0,
-        embed_error: null,
-        row_version: 1,
-      });
-    for (const q of new Set(v.map((r) => r.faq_id))) {
-      const mine = v.filter((r) => r.faq_id === q);
-      expect(mine.filter((r) => r.source === 'question')).toHaveLength(1);
-      expect(mine.find((r) => r.source === 'question')!.text).toBe(mine[0]!.question);
-      expect(mine.length).toBeLessThanOrEqual(60);
-      expect(mine.filter((r) => r.source !== 'question').every((r) => r.source === 'import')).toBe(true);
-    }
-    // the 300-character phrase is no keyword (255 limit) but is a legal variation (500)
-    expect(v.some((r) => String(r.text).startsWith('zzzz'))).toBe(true);
+    expect(e).toHaveLength(1);
+    expect(e[0]).toMatchObject({
+      kind: 'text',
+      status: 'ready',
+      content: 'Q: How do I pay?\nAlso asked as: ways to pay\nA: Pay by card.',
+      agent_status: 'paused', // nothing answers a customer until a person enables the agent
+    });
+    expect(await one(base, `SELECT count(*)::int AS n FROM ai_training_chunks WHERE org_id = ${ACME}`)).toBe(0);
     expect(await one(base, `SELECT count(*)::int AS n FROM event_outbox WHERE org_id = ${ACME}`)).toBe(0);
-    expect(await one(base, `SELECT count(*)::int AS n FROM faq_match_logs WHERE org_id = ${ACME}`)).toBe(0);
   });
 
-  it('one settings row per flow that owns an FAQ, switched OFF; the keyword replies are still written', async () => {
-    const s = await rows(base, `SELECT * FROM faq_settings WHERE org_id = ${ACME}`);
-    const owners = await rows(base, `SELECT DISTINCT owner_flow_id FROM faqs WHERE org_id = ${ACME}`);
-    expect(s.map((r) => Number(r.flow_id)).sort()).toEqual(owners.map((r) => Number(r.owner_flow_id)).sort());
-    expect(s.every((r) => r.enabled === false)).toBe(true);
+  it('the retired FAQ tables are gone, and the keyword replies are still written', async () => {
+    const t = await rows(base, `SELECT to_regclass('faqs') AS a, to_regclass('faq_settings') AS b, to_regclass('faq_variations') AS c`);
+    expect(t[0]).toEqual({ a: null, b: null, c: null });
     expect(await one(base, `SELECT count(*)::int AS n FROM keyword_replies WHERE org_id = ${ACME}`)).toBeGreaterThan(0);
   });
 
-  it('a record with no answer is quarantined, with a counted soft issue for the journey', async () => {
+  it('a question that answers by starting a flow, or has no answer, is quarantined with its reason', async () => {
     const q = await rows(
       base,
       `SELECT reason_code FROM migration.quarantine WHERE source_client = 'acme' AND collection = 'faq_knowledge' ORDER BY reason_code`,
     );
     const codes = q.map((r) => r.reason_code);
+    expect(codes).toContain('FLOW_ANSWER_NOT_CARRIED');
     expect(codes).toContain('NO_ANSWER'); // the Intent without a journey
-    expect(codes).toContain('QID_NOT_ADDRESSABLE');
   });
 
   it('is idempotent and verifies clean', async () => {
-    const before = await rows(
-      base,
-      `SELECT (SELECT count(*) FROM faqs)::int AS a, (SELECT count(*) FROM faq_variations)::int AS b, (SELECT count(*) FROM faq_settings)::int AS c`,
-    );
+    const q = `SELECT count(*)::int AS a FROM ai_training_sources WHERE label = 'FAQ'`;
+    const before = await rows(base, q);
     await runClient(opts(dumps, base, 'acme'));
-    expect(
-      await rows(
-        base,
-        `SELECT (SELECT count(*) FROM faqs)::int AS a, (SELECT count(*) FROM faq_variations)::int AS b, (SELECT count(*) FROM faq_settings)::int AS c`,
-      ),
-    ).toEqual(before);
+    expect(await rows(base, q)).toEqual(before);
     expect((await check(dumps, base, 'acme')).alarms).toEqual([]);
     expect((await check(dumps, base, 'globex')).alarms).toEqual([]);
   });

@@ -1,6 +1,7 @@
 import 'server-only';
 import { clientIpFrom } from '@/lib/auth/client-ip';
 import { apiBase } from '@/lib/auth/server';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 /** Request headers the chat widget's pages and calls need to reach the API unchanged. */
 const FORWARD = [
@@ -43,7 +44,7 @@ export async function proxyWidget(req: Request, segments: string[]): Promise<Res
   const hasBody = req.method !== 'GET' && req.method !== 'HEAD';
   let upstream: Response;
   try {
-    upstream = await fetch(target, {
+    upstream = await upstreamFetch(target, {
       method: req.method,
       headers,
       body: hasBody ? await req.arrayBuffer() : undefined,

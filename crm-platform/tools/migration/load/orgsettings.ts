@@ -172,6 +172,8 @@ export function outcomesOf(list: WabooSettings['taskOutcomes']): OutcomeRow[] {
 
 export interface SettingsPlan {
   taskOutcomes: OutcomeRow[];
+  /** the source's task-outcome list was read (it may be empty): only then are the defaults a new workspace is seeded with removed */
+  taskOutcomesKnown: boolean;
   lastLogins: Array<{ userId: string; at: string }>;
   pipelines: Array<{ name: string; stages: StageRow[] }>;
   lostReasons: string[];
@@ -205,6 +207,7 @@ export function planSettings(
     consent: consentOf(settings?.consent),
     autoAssign: autoAssignment === true,
     taskOutcomes: outcomesOf(settings?.taskOutcomes),
+    taskOutcomesKnown: Array.isArray(settings?.taskOutcomes),
     lastLogins,
   };
 }
@@ -297,7 +300,7 @@ export async function applySettings(
       res.lostReasons += r.rows.length;
     }
 
-    if (plan.taskOutcomes.length > 0) {
+    if (plan.taskOutcomesKnown) {
       // a new workspace is seeded with default outcomes (Interested ... Not interested ...): the Waboo list replaces them, but an outcome a task uses stays
       await tx.execute(sql`
         DELETE FROM task_outcomes o
@@ -308,7 +311,7 @@ export async function applySettings(
     for (const o of plan.taskOutcomes) {
       const r = await tx.execute(sql`
         INSERT INTO task_outcomes (org_id, name, sort_order, is_active) VALUES (${orgId}, ${o.name}, ${o.sortOrder}, ${o.isActive})
-        ON CONFLICT (org_id, lower(btrim(name))) DO UPDATE SET sort_order = EXCLUDED.sort_order, is_active = EXCLUDED.is_active
+        ON CONFLICT (org_id, lower(btrim(name))) DO UPDATE SET name = EXCLUDED.name, sort_order = EXCLUDED.sort_order, is_active = EXCLUDED.is_active
         RETURNING 1`);
       res.taskOutcomes += r.rows.length;
     }

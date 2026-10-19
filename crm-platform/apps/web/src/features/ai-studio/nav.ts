@@ -9,6 +9,7 @@ export const nav: NavItem[] = [
     href: '/ai-studio',
     order: -1,
     icon: 'bot',
-    gates: { permission: 'flb.flows.read', planFeature: 'automation' },
+    // its own key (a migrated Waboo workspace never had this page and is denied it); Flows keeps `flb.flows.read`
+    gates: { permission: 'flb.ai_studio.read', planFeature: 'automation' },
   },
 ];

@@ -10,6 +10,12 @@ export const ANALYTICS_EVENT = {
   MSG_READ: 4,
   MSG_FAILED: 5,
   MSG_RECEIVED: 6,
+  /**
+   * A message entered a status (or was created in one): `status` = the new status code, `k2` = the status it left (null at creation), `occurred_at` =
+   * the message's CREATION time, so a rollup by `occurred_at` counts messages by when they were created and the status they have now.
+   * Written by the trigger on `messages` (migration 20270201090000); feeds the MSG_FEED metric. Not a delivery-time event: MSG_QUEUED..MSG_RECEIVED are.
+   */
+  MSG_STATE: 7,
   CLICK_TRACKED: 20,
   CHATLINK_CLICK: 21,
   STOREFRONT_VIEW: 22,
@@ -73,6 +79,18 @@ export const CHANNEL_KIND = {
   other: 99,
 } as const;
 
+/** The six statuses a message can have (`chk_messages_status`) as the codes stored in `an_events.status` and `.k2`. Append only. */
+export const MESSAGE_STATUS_CODE = {
+  queued: 1,
+  sent: 2,
+  delivered: 3,
+  read: 4,
+  failed: 5,
+  received: 6,
+} as const;
+
+export type MessageStatusName = keyof typeof MESSAGE_STATUS_CODE;
+
 export const DIRECTION = { in: 1, out: 2 } as const;
 
 export const SOURCE_KIND = {
@@ -83,6 +101,10 @@ export const SOURCE_KIND = {
   flow: 5,
   api: 6,
   system: 7,
+  // The Message History's sources that SOURCE_KIND did not have yet (appended: these numbers are stored).
+  auto_reply: 8,
+  ai: 9,
+  other: 10,
 } as const;
 
 export type AnalyticsProps = Record<string, string | number | boolean | null>;

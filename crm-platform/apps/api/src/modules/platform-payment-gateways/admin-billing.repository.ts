@@ -684,11 +684,11 @@ export class AdminBillingRepository {
     const res = await tx.execute(sql`
       INSERT INTO orders (org_id, user_id, order_number, kind, plan_slug, billing_period, auto_renew, gateway_slug, currency, amount,
         discount_amount, tax_rate, tax_amount, total_amount, customer_name, customer_email, status, paid_at, description,
-        gateway_payload, created_at)
+        gateway_payload, created_at, return_token)
       VALUES (${o.orgId}, ${o.userId}, ${o.orderNumber}, 'manual', NULL, 'monthly', false, 'manual', ${o.currency}, ${o.amount},
         0, 0, 0, ${o.amount}, ${o.customerName}, ${o.customerEmail}, ${o.status},
         ${paid ? iso(o.issuedAt) : null}::timestamptz, ${o.description},
-        ${JSON.stringify({ manual: true, issuedBy: o.issuedBy })}::jsonb, ${iso(o.issuedAt)}::timestamptz)
+        ${JSON.stringify({ manual: true, issuedBy: o.issuedBy })}::jsonb, ${iso(o.issuedAt)}::timestamptz, NULL)
       RETURNING id, uuid`);
     const r = res.rows[0] as Raw;
     return { id: Number(r.id), uuid: s(r.uuid) };

@@ -6,6 +6,8 @@ import { RollupService } from './rollup.service';
 
 /** How long the hour rollups are kept; the day rollups are kept forever. */
 export const HOUR_ROLLUP_RETENTION_DAYS = 120;
+/** How many recent days of the base message rollups the nightly job rebuilds. */
+export const BASE_REBUILD_DAYS = 7;
 /** A watermark older than this means the worker is stalled or the database is behind. */
 const STALE_AFTER_SECONDS = 300;
 
@@ -50,6 +52,8 @@ export class RollupWorker {
       if (fixedRows > 0) {
         this.logger.warn({ day: yesterday, fixedRows }, 'analytics rollup drift repaired');
       }
+      const failedBases = await this.rollup.rebuildMessageBase(BASE_REBUILD_DAYS);
+      if (failedBases > 0) this.logger.warn({ failedBases }, 'message base rebuild had failures');
       const trimmed = await this.rollup.trimHourRows(HOUR_ROLLUP_RETENTION_DAYS);
       if (trimmed > 0) this.logger.log({ trimmed }, 'analytics hour rollups trimmed');
     } catch (err) {

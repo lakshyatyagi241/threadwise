@@ -12,6 +12,8 @@ import { AppError } from '../errors/app-error';
 import { RequestContextStore } from '../context/request-context';
 import { maskSecretUrl } from '../logging/mask-secret-url';
 import { reportServerError } from '../../modules/platform-infrastructure';
+import { isDependencyOutage } from '../errors/dependency-outage';
+import { isDataExceptionDbError } from '../errors/data-exception.error';
 import { LEGAL_HOLD_BLOCKED_MESSAGE, isLegalHoldDbError } from '../errors/legal-hold.error';
 
 /**
@@ -66,6 +68,8 @@ export class ProblemExceptionFilter implements ExceptionFilter {
         problem.title,
       );
     }
+
+    if (problem.code === ERROR_CODES.SERVICE_UNAVAILABLE) response.setHeader('Retry-After', '5');
 
     const path = request.path ?? request.url;
     for (const { prefix, render } of problemRenderers) {
@@ -122,6 +126,24 @@ export class ProblemExceptionFilter implements ExceptionFilter {
       };
     }
 
+    // A value the caller sent that Postgres cannot store (a NUL in a path parameter, a malformed id or timestamp, a number out of
+    // range) is the caller's request. Kept visible at warn: a 22xxx from our own SQL would otherwise hide as a 4xx.
+    if (isDataExceptionDbError(exception)) {
+      this.logger.warn(
+        { path: maskSecretUrl(path), requestId },
+        'Database data exception answered as 422',
+      );
+      return {
+        type: `https://errors.crm.platform/${ERROR_CODES.VALIDATION_FAILED.toLowerCase()}`,
+        title: this.titleFor(HttpStatus.UNPROCESSABLE_ENTITY),
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        detail: 'A value in the request cannot be stored.',
+        instance: path,
+        code: ERROR_CODES.VALIDATION_FAILED,
+        requestId,
+      };
+    }
+
     // Errors raised by the body parser before Nest routes the request (http-errors shape: a 4xx
     // `status`, `expose: true` and a `type`): an oversized body is a 413 and unreadable JSON a 400,
     // not an internal error.
@@ -135,6 +157,21 @@ export class ProblemExceptionFilter implements ExceptionFilter {
         instance: path,
         code: this.codeForStatus(parsed.status),
         requestId,
+      };
+    }
+
+    // The database, Redis or the queue is down or silent: not a bug in this request, so 503 and a retry hint instead of a 500.
+    if (isDependencyOutage(exception)) {
+      return {
+        type: `https://errors.crm.platform/${ERROR_CODES.SERVICE_UNAVAILABLE.toLowerCase()}`,
+        title: this.titleFor(HttpStatus.SERVICE_UNAVAILABLE),
+        status: HttpStatus.SERVICE_UNAVAILABLE,
+        detail:
+          'A service this request depends on is temporarily unavailable. Try again in a moment.',
+        instance: path,
+        code: ERROR_CODES.SERVICE_UNAVAILABLE,
+        requestId,
+        errors: [{ path: 'retryAfterSeconds', message: '5' }],
       };
     }
 
@@ -153,7 +190,12 @@ export class ProblemExceptionFilter implements ExceptionFilter {
 
   private bodyParserError(exception: unknown): { status: number; detail: string } | null {
     if (typeof exception !== 'object' || exception === null) return null;
-    const e = exception as { type?: unknown; status?: unknown; statusCode?: unknown };
+    const e = exception as {
+      type?: unknown;
+      status?: unknown;
+      statusCode?: unknown;
+      expose?: unknown;
+    };
     const status = typeof e.status === 'number' ? e.status : e.statusCode;
     if (e.type === 'entity.too.large' && status === HttpStatus.PAYLOAD_TOO_LARGE) {
       return { status, detail: 'The request body is too large.' };
@@ -163,6 +205,23 @@ export class ProblemExceptionFilter implements ExceptionFilter {
       status === HttpStatus.BAD_REQUEST
     ) {
       return { status, detail: 'The request body could not be read.' };
+    }
+    // Any other client error the parsers raise (`too many parameters`, `The input exceeded the depth`, an aborted upload): http-errors marks
+    // it `expose` and gives it a `type`; it is the caller's request, so a 4xx, never a 500.
+    if (
+      typeof e.type === 'string' &&
+      e.expose === true &&
+      typeof status === 'number' &&
+      status >= 400 &&
+      status < 500
+    ) {
+      return {
+        status,
+        detail:
+          status === HttpStatus.PAYLOAD_TOO_LARGE
+            ? 'The request body is too large.'
+            : 'The request body could not be read.',
+      };
     }
     return null;
   }

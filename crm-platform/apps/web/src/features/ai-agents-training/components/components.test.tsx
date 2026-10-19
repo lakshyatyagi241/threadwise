@@ -132,10 +132,11 @@ describe('knowledge step (TW-AIAG-005..010)', () => {
 
   it('a saved assistant offers the four kinds, each a labelled toggle', () => {
     const out = html(<KnowledgeStep assistantId="a1" canEdit />);
-    for (const k of ['Live URL', 'Free text', 'Q&amp;A pair', 'PDF, DOCX, TXT &amp; more'])
+    for (const k of ['Live URL', 'Free text', 'Add FAQ', 'PDF, DOCX, TXT &amp; more'])
       expect(out).toContain(k);
     expect(out.match(/aria-pressed="false"/g)).toHaveLength(4);
     expect(out).toContain('Loading entries');
+    expect(out).toContain('belongs to this agent only');
   });
 
   it('a person who cannot edit sees the list but not the add buttons', () => {

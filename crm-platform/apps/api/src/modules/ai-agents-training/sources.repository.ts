@@ -74,13 +74,13 @@ const toFull = (r: Raw): SourceFull => ({
   answer: text(r.answer),
 });
 
-/** `ai_training_sources`. The assistant's own entries plus the workspace-wide ones (no assistant), as Reference lists them. */
+/** `ai_training_sources`. An assistant reads only its own entries: a knowledge base belongs to one agent. */
 @Injectable()
 export class SourcesRepository {
   async listFor(tx: Tx, orgId: number, assistantId: number): Promise<SourceRow[]> {
     const res = await tx.execute(sql`
       SELECT ${COLUMNS} FROM ${FROM}
-      WHERE s.org_id = ${orgId} AND (s.assistant_id = ${assistantId} OR s.assistant_id IS NULL)
+      WHERE s.org_id = ${orgId} AND s.assistant_id = ${assistantId}
       ORDER BY s.id DESC`);
     return (res.rows as Raw[]).map(toRow);
   }

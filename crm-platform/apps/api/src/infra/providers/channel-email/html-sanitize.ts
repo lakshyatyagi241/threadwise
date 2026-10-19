@@ -1,5 +1,6 @@
 import sanitizeHtml from 'sanitize-html';
 import { EMAIL_HTML_MAX } from '@crm/contracts';
+import { cutAtTag } from '../../../common/html-limits';
 
 export interface SanitizeOptions {
   /** Remote `<img>` sources are not loaded: the address moves to `data-remote-src` (the agent can ask to load them). */
@@ -139,6 +140,11 @@ export function sanitizeEmailHtml(raw: string, opts: SanitizeOptions): Sanitized
     input = input.slice(0, opts.inputMaxChars);
     truncated = true;
   }
+  const cut = cutAtTag(input);
+  if (cut !== input) {
+    input = cut;
+    truncated = true;
+  }
   let html = run(input, opts);
   if (html.length <= EMAIL_HTML_MAX) return { html, truncated };
   truncated = true;
@@ -168,9 +174,18 @@ export function htmlToText(html: string): string {
     nonTextTags: DISCARD_TAGS,
   });
   return decodeEntities(text)
-    .replace(/[ \t]+\n/g, '\n')
+    .split('\n')
+    .map(stripTrailingBlanks)
+    .join('\n')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
+}
+
+/** A line without the spaces and tabs at its end. Not `/[ \t]+\n/`: that is quadratic on a long run of tabs that is not followed by a line break. */
+function stripTrailingBlanks(line: string): string {
+  let end = line.length;
+  while (end > 0 && (line.charCodeAt(end - 1) === 32 || line.charCodeAt(end - 1) === 9)) end -= 1;
+  return end === line.length ? line : line.slice(0, end);
 }
 
 const NAMED: Record<string, string> = {

@@ -53,7 +53,9 @@ export function scanRawWrites(root: string = TOOL): RawWrites {
       for (const m of src.matchAll(/INSERT INTO ([a-z_][a-z0-9_.]*)\s*\(/g)) {
         add(m[1]!, columnsOf(balanced(src, m.index! + m[0].length - 1), src));
       }
-      for (const m of src.matchAll(/\bUPDATE ([a-z_][a-z0-9_.]*) SET\b([^`]*?)(?:WHERE|`)/gs)) {
+      for (const m of src.matchAll(
+        /\bUPDATE ([a-z_][a-z0-9_.]*)(?:\s+[a-z][a-z0-9_]*)?\s+SET\b([^`]*?)(?:WHERE|`)/gs,
+      )) {
         add(
           m[1]!,
           [...m[2]!.matchAll(/(?:^|,)\s*([a-z_][a-z0-9_]*)\s*=/g)].map((x) => x[1]!),

@@ -303,12 +303,12 @@ describe('TW-CAMP-020: export', () => {
     );
     const lines = res.text.trim().split('\r\n');
     expect(lines[0]).toBe(
-      'Recipient,Phone,Variant,Status,Clicked,Queued,Sent,Delivered,Read,Responded,Last event,Error',
+      'Recipient,Phone,Version,Status,Clicked,Queued,Sent,Delivered,Read,Responded,Last event,Error',
     );
     expect(lines).toHaveLength(3);
     // Newest first: the failed recipient, then the read one with its formula name quoted away.
     expect(lines[1]).toContain(',Failed,No,');
-    expect(lines[1]!.endsWith(',Queued,boom')).toBe(true);
+    expect(lines[1]!.endsWith(',Failed,boom')).toBe(true);
     expect(lines[2]).toContain(`"'=HYPERLINK(""x"")"`);
     expect(lines[2]).toContain(',A,Read,Yes,');
     expect(lines[2]).toContain(',Button tap,');

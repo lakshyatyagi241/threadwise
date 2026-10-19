@@ -1,7 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import type { DeploymentsQuery, DeploymentsResponse } from '@crm/contracts';
+import type {
+  DeploymentsQuery,
+  DeploymentsResponse,
+  PublishesQuery,
+  PublishesResponse,
+  ReleasesResponse,
+} from '@crm/contracts';
 import { DeploymentsStore } from './deployments.store';
-import { toDeploymentCounts, toDeploymentRow } from './deployments.mapper';
+import {
+  toDeploymentCounts,
+  toDeploymentRow,
+  toPublishCounts,
+  toPublishRow,
+  toReleasesResponse,
+} from './deployments.mapper';
 
 /** The operator's view of every Geta publish: what is queued, what runs now, what failed and why. Read-only. */
 @Injectable()
@@ -17,5 +29,23 @@ export class DeploymentsService {
       rows: rows.slice(0, query.limit).map(toDeploymentRow),
       truncated: rows.length > query.limit,
     };
+  }
+
+  /** Flow publishes: what the worker has queued, is running, failed on, and finished. Read-only. */
+  async publishes(query: PublishesQuery): Promise<PublishesResponse> {
+    const generatedAt = new Date().toISOString();
+    const { rows, counts } = await this.store.listPublishes(query.status ?? null, query.limit);
+    return {
+      generatedAt,
+      counts: toPublishCounts(counts),
+      rows: rows.slice(0, query.limit).map(toPublishRow),
+      truncated: rows.length > query.limit,
+    };
+  }
+
+  /** Product releases: the live tag, whether one is in progress, and the newest attempts with their steps and errors. Read-only. */
+  async releases(): Promise<ReleasesResponse> {
+    const generatedAt = new Date().toISOString();
+    return toReleasesResponse(generatedAt, await this.store.listReleases());
   }
 }

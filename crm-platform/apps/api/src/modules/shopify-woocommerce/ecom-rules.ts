@@ -61,12 +61,18 @@ export const phpUrlencode = (s: string): string =>
  */
 export function verifyOAuthHmac(query: Readonly<Record<string, string>>, secret: string): boolean {
   const given = query.hmac ?? '';
-  if (given === '' || secret === '') return false;
-  const message = Object.keys(query)
-    .filter((k) => k !== 'hmac' && k !== 'signature')
-    .sort()
-    .map((k) => `${phpUrlencode(k)}=${phpUrlencode(query[k]!)}`)
-    .join('&');
+  // The query is parsed by Express, so at run time a value can be an array or an object (`?hmac[a]=b`) or hold a lone surrogate.
+  if (typeof given !== 'string' || given === '' || secret === '') return false;
+  let message: string;
+  try {
+    message = Object.keys(query)
+      .filter((k) => k !== 'hmac' && k !== 'signature')
+      .sort()
+      .map((k) => `${phpUrlencode(k)}=${phpUrlencode(query[k]!)}`)
+      .join('&');
+  } catch {
+    return false;
+  }
   const expected = createHmac('sha256', secret).update(message).digest('hex');
   const a = Buffer.from(expected);
   const b = Buffer.from(given);

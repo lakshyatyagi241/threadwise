@@ -13,6 +13,8 @@ export interface ReplyInput {
   orgId: number;
   assistant: AssistantProfile;
   knowledge: readonly KnowledgeSource[];
+  /** The knowledge is the best matches for the message, not the whole base. */
+  grounded?: boolean;
   /** The last turns of the thread, oldest first, without the message being answered. */
   history: readonly InboxLine[];
   visitorMessage: string;
@@ -45,7 +47,7 @@ export class WidgetAiReplyService {
         provider: assistant.aiProvider,
         model: assistant.aiModel,
         orgId: input.orgId,
-        systemPrompt: fullSystemPrompt(assistant, input.knowledge, hint),
+        systemPrompt: fullSystemPrompt(assistant, input.knowledge, hint, input.grounded === true),
         userPrompt: userPrompt(input.history, input.visitorMessage),
         maxTokens: assistant.replyMaxTokens || 400,
         temperature: assistant.temperature ?? 0.7,

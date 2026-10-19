@@ -17,12 +17,14 @@ const tile = (
   href: string,
   icon: string,
   order: number,
-): SettingsTile => settingsTile({ id, section, href, icon, order });
+  gates?: SettingsTile['gates'],
+): SettingsTile => settingsTile({ id, section, href, icon, order, ...(gates ? { gates } : {}) });
 
 export const PLANNED_SETTINGS: readonly SettingsTile[] = [
   // Channels (these were the menu's Channels group)
   tile('channels', 'channels', '/channels', 'channels', 0),
-  tile('channels', 'tiktok', '/channels/tiktok', 'tiktok', 50),
+  // its own key so a workspace can be configured without the placeholder (the Waboo migration denies it); every role holds it by default
+  tile('channels', 'tiktok', '/channels/tiktok', 'tiktok', 50, { permission: 'chn.tiktok.read' }),
 
   // Automation and AI
   tile('automation', 'auto-reply', '/auto-reply', 'reply', 20),

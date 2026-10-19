@@ -2,12 +2,9 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useQuery } from '@tanstack/react-query';
 import type { WebBotItem, WebBotState } from '@crm/contracts';
 import { EmptyState, Spinner, cn } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { flowsApi } from '@/features/flow-builder-editor/api/flows';
-import { FLB_KEYS } from '@/features/flow-builder-editor/api/hooks';
 import { newHref, openHref } from '@/features/flow-builder-editor/lib/builder-mode';
 import { useWebBots } from '../api/widgets';
 
@@ -29,14 +26,9 @@ export function WebBotsScreen() {
   const t = useTranslations('chatbotWidget.webBots');
   const canCreate = useCan('flb.flows.create');
   const list = useWebBots();
-  const overview = useQuery({
-    queryKey: FLB_KEYS.overview,
-    queryFn: ({ signal }) => flowsApi.overview(signal),
-  });
-  const mode = overview.data?.builderMode ?? 'advanced';
 
   const open = (bot: WebBotItem, tab?: 'customize' | 'deploy') =>
-    `${openHref(mode, bot.flowId, 'web')}${tab ? `?tab=${tab}` : ''}`;
+    `${openHref(bot.flowId, 'web')}${tab ? `?tab=${tab}` : ''}`;
 
   return (
     <main className="mx-auto max-w-4xl p-4 sm:p-8">
@@ -47,7 +39,7 @@ export function WebBotsScreen() {
         </div>
         {canCreate ? (
           <Link
-            href={newHref(mode, 'web')}
+            href={newHref('web')}
             className="rounded-full bg-brand px-4 py-2 text-[12px] font-semibold text-brand-foreground hover:opacity-90"
           >
             {t('create')}
@@ -70,7 +62,7 @@ export function WebBotsScreen() {
           actions={
             canCreate ? (
               <Link
-                href={newHref(mode, 'web')}
+                href={newHref('web')}
                 className="inline-flex h-10 items-center rounded-md bg-brand px-4 text-sm font-medium text-brand-foreground"
               >
                 {t('create')}

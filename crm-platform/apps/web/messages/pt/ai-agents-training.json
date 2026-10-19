@@ -224,20 +224,20 @@
           "title": "Texto livre",
           "body": "Cole um trecho de ajuda ou uma política."
         },
-        "qa": {
-          "title": "Par de P&R",
-          "body": "Uma pergunta com a resposta oficial."
-        },
         "file": {
           "title": "PDF, DOCX, TXT e mais",
           "body": "Envie um arquivo. O texto é extraído para você."
+        },
+        "faq": {
+          "title": "Adicionar perguntas frequentes",
+          "body": "Perguntas e as respostas que você quer que sejam dadas."
         }
       },
       "panel": {
         "url": "Buscar uma URL pública",
         "text": "Colar texto simples",
-        "qa": "P&R individual",
-        "file": "Enviar um arquivo de conhecimento"
+        "file": "Enviar um arquivo de conhecimento",
+        "faq": "Adicione perguntas e respostas"
       },
       "label": "Rótulo",
       "url": "URL",
@@ -249,21 +249,20 @@
         "label": {
           "url": "Rótulo (ex.: Página de preços)",
           "text": "Rótulo (ex.: Resumo da política de reembolso)",
-          "qa": "Rótulo (ex.: Prazo de reembolso)",
           "file": "Rótulo (ex.: Manual do produto)"
         },
         "content": "Cole qualquer texto que o agente deva conhecer…",
         "question": "Pergunta, ex.: Quanto tempo levam os reembolsos?",
         "answer": "Resposta, ex.: Os reembolsos são concluídos em 3 a 5 dias úteis."
       },
-      "urlHint": "Somente páginas públicas http e https são lidas. A página é buscada em segundo plano, então a entrada mostra Processando por um instante.",
+      "urlHint": "Somente páginas públicas http e https são lidas. A página é lida em segundo plano, então pode levar um momento.",
       "fileHint": "PDF, DOCX, TXT, Markdown, CSV ou HTML, até 10 MB. O texto é extraído automaticamente.",
       "uploading": "Progresso do envio",
       "submit": {
         "url": "Buscar e treinar",
         "text": "Salvar texto",
-        "qa": "Salvar par",
-        "file": "Enviar"
+        "file": "Enviar",
+        "faq": "Salvar perguntas frequentes"
       },
       "cancel": "Cancelar",
       "added": "Conhecimento adicionado.",
@@ -281,25 +280,6 @@
         "file_empty": "Esse arquivo está vazio.",
         "tooLarge": "Texto demais para uma única colagem. Envie-o como arquivo."
       },
-      "col": {
-        "kind": "Tipo",
-        "label": "Rótulo",
-        "state": "Estado",
-        "actions": "Ações"
-      },
-      "kind": {
-        "url": "url",
-        "text": "texto",
-        "qa": "p&r",
-        "file": "arquivo"
-      },
-      "state": {
-        "ready": "pronto",
-        "processing": "processando",
-        "failed": "falhou"
-      },
-      "tokens": "cerca de {count} tokens",
-      "workspaceWide": "em todo o espaço de trabalho",
       "loading": "Carregando entradas",
       "loadError": "Não foi possível carregar as entradas.",
       "retry": "Tentar novamente",
@@ -310,7 +290,14 @@
       "removeBody": "O agente deixará de usá-la em novas respostas. As conversas mais antigas permanecem inalteradas.",
       "keep": "Manter",
       "removed": "Removido.",
-      "removeFailed": "Falha ao remover."
+      "removeFailed": "Falha ao remover.",
+      "ownedNote": "Este conhecimento pertence apenas a este agente. Nenhum outro agente pode usá-lo.",
+      "faq": {
+        "addAnother": "Adicionar outra pergunta",
+        "removeRow": "Remover esta pergunta"
+      },
+      "reading": "Lendo…",
+      "failed": "Não foi possível ler isto."
     }
   }
 }
