@@ -334,6 +334,41 @@ The book response is `{ status, startsAt, endsAt, timezone, requiresApproval, pa
 token is rejected before any query. `GET` never changes anything. A booking that is cancelled, declined, completed or no-show is `410
 APPT_LINK_UNAVAILABLE` for slots, reschedule and cancel (the page itself still shows the outcome); after its start `409 APPT_ALREADY_STARTED`.
 
+## Booking page appearance (BL-355..BL-358)
+
+How the customer's booking page and manage page look. Three levels, most specific first: a service's override, the workspace booking page theme, the
+workspace brand kit (Settings, Branding: primary, accent, background, logo), the product look. Every appearance field is nullable and null means inherit.
+Contracts: `packages/contracts/src/appointments/booking-page.ts`. Tables `booking_page_themes`, `booking_page_assets` (forced RLS, `touch_row`).
+
+Staff routes (plan `appointment_booking`; read = `record.booking-types.read`, change = `record.booking-types.update`):
+
+| Method and path                                             | What                                                                                                                                      |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /v2/booking-page/theme`                                | `{ scope, workspaceSlug, typeSlug, theme (saved), resolved (what visitors see), inherited, brand, canRemovePoweredBy, limits }`           |
+| `PUT /v2/booking-page/theme`                                | Replaces the saved theme. Needs `rowVersion` (null for the first save) else 409 `ROW_VERSION_CONFLICT`. 422 on a bad colour or text.      |
+| `PUT /v2/booking-page/theme/assets/:slot` (`logo`, `cover`) | Multipart `file`: PNG, JPG, WebP, GIF, never SVG; logo 1 MB, cover 3 MB; type checked from the bytes. Returns the theme with the new ref. |
+| `DELETE /v2/booking-page/theme/assets/:slot`                | Removes the picture.                                                                                                                      |
+| `GET/PUT/DELETE /v2/booking-types/:id/page-theme`           | The service's override (primary and button colour, background style, welcome text, button label). DELETE returns to the workspace look.   |
+| `PUT/DELETE /v2/booking-types/:id/page-theme/assets/:slot`  | The service's own logo or cover.                                                                                                          |
+
+Rules: colours are `#RRGGBB` (stored lower case; a CHECK enforces it); fonts, corners, light / dark / auto and background styles are fixed lists; text is plain
+text (page title 120, welcome text 600, button label 40 characters) and is never interpreted as markup. Hiding "Powered by" needs the plan feature
+`remove_branding` (422 `showPoweredBy` otherwise; a plan that later loses it shows the line again without any save). A cover background with no cover
+resolves to solid.
+
+Public: `GET /v2/public/booking/:org`, `/:org/:type` and `GET /v2/public/booking-manage/:token` carry `theme` (the resolved look: colours, wording, switches and
+picture refs `{ id, v }`, nothing else; no workspace ids, no staff or customer data). `GET /v2/public/booking-assets/:org/:assetId` serves a picture (`assetId`
+is the uuid or `brand-logo`): fixed raster content type, `nosniff`, `Content-Security-Policy: default-src 'none'; sandbox`, ETag, one-year immutable cache
+(the `?v=` of the address changes with the file), throttled like any browse of the page. The web relay (`/api/public/appointments/assets/...`) is the only
+place the address is built, from the workspace slug and the ref.
+
+Caching: the public pages read a per-workspace bundle from Redis (`appt:page-theme:v1:<orgId>`, 120 s), dropped after every save, upload, removal and reset.
+Brand kit and plan changes are made elsewhere, so they show within two minutes (or at the next theme save).
+
+Events: audit module `booking_page_themes` (insert / update / delete, delta of the changed fields) and outbox `booking_page_theme.updated`
+`{ scope, bookingTypeId }`. Storage: `booking_page_assets` is a bounded, replace-in-place table classified `system_asset` (not counted) in the storage quota
+coverage test, like `workspace_brand_assets`.
+
 ## Events (outbox) and what consumes them
 
 Written in the same transaction as the change, with an audit row (module `appointments` / `booking_types`). Payloads carry identifiers and

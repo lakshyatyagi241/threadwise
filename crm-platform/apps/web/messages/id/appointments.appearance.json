@@ -1,0 +1,191 @@
+{
+  "appointments": {
+    "appearance": {
+      "title": "Tampilan halaman pemesanan",
+      "subtitle": "Buat halaman yang dipakai pelanggan untuk membuat janji terlihat seperti bisnis Anda.",
+      "backToSettings": "Pengaturan janji temu",
+      "loading": "Memuat tema halaman pemesanan",
+      "forbidden": "Anda tidak memiliki izin untuk melihat tampilan halaman pemesanan.",
+      "notAvailable": "Tampilan halaman pemesanan belum tersedia di server ini.",
+      "readOnly": "Anda dapat melihat tampilan ini tetapi tidak dapat mengubahnya. Untuk mengubahnya diperlukan izin mengedit jenis pemesanan.",
+      "fixFirst": "Perbaiki kolom yang disorot terlebih dahulu.",
+      "issues": "{count, plural, other {# kolom perlu diperbaiki sebelum Anda dapat menyimpan.}}",
+      "saved": "Tampilan halaman pemesanan disimpan",
+      "saving": "Menyimpan...",
+      "unsaved": "Perubahan belum disimpan",
+      "allSaved": "Semua perubahan disimpan",
+      "discard": "Buang perubahan",
+      "save": "Simpan tampilan",
+      "conflict": {
+        "message": "Tampilan diubah oleh orang lain saat Anda mengedit.",
+        "reload": "Muat versi terbaru"
+      },
+      "leave": {
+        "title": "Keluar tanpa menyimpan?",
+        "message": "Perubahan Anda pada tampilan halaman pemesanan belum disimpan.",
+        "leave": "Keluar",
+        "stay": "Lanjut mengedit"
+      },
+      "tile": {
+        "label": "Tampilan halaman pemesanan",
+        "description": "Logo, warna, font, dan teks sambutan pada halaman pemesanan pelanggan",
+        "keywords": "branding, logo, warna, tema, halaman pemesanan, tampilan, font, white label"
+      },
+      "card": {
+        "title": "Tampilan halaman pemesanan",
+        "description": "Tambahkan logo dan warna, tulis pesan sambutan, lalu pilih font dan sudut untuk halaman pemesanan pelanggan. Anda melihat pratinjau langsung saat mengedit.",
+        "open": "Buka tampilan halaman pemesanan"
+      },
+      "editorLink": {
+        "link": "Tampilan halaman",
+        "saveFirst": "Simpan jenis pemesanan terlebih dahulu, lalu buka tampilan halamannya."
+      },
+      "typesList": {
+        "menu": "Tampilan halaman"
+      },
+      "pictures": {
+        "title": "Logo dan gambar sampul",
+        "description": "Ditampilkan di bagian atas halaman. Kosongkan untuk memakai pengaturan di tingkat atas.",
+        "logo": "Logo",
+        "logoHint": "PNG, JPG, WebP, atau GIF, maksimal {mb} MB. Logo lebar dengan latar transparan paling cocok.",
+        "cover": "Gambar sampul",
+        "coverHint": "PNG, JPG, WebP, atau GIF, maksimal {mb} MB. Ditampilkan sebagai banner saat latar diatur ke gambar sampul.",
+        "useBrand": "Gunakan logo dan warna Branding saya jika kosong",
+        "useBrandHint": "Apa pun yang Anda kosongkan di sini diambil dari Pengaturan, Branding, sehingga halaman pemesanan sesuai dengan merek Anda yang lain."
+      },
+      "fields": {
+        "picker": "{name}: pilih warna",
+        "clear": "Hapus",
+        "noPicture": "Tidak ada gambar",
+        "upload": "Unggah",
+        "replace": "Ganti",
+        "remove": "Hapus",
+        "inheritedPicture": "Memakai pengaturan di tingkat atas.",
+        "inheritedColour": "Jika kosong memakai {colour}.",
+        "productColour": "Jika kosong memakai warna default.",
+        "pictureType": "Gunakan gambar PNG, JPG, WebP, atau GIF.",
+        "pictureSize": "Gambar terlalu besar. Batasnya {mb} MB.",
+        "pictureRejected": "Gambar itu tidak diterima. Gunakan gambar PNG, JPG, WebP, atau GIF sesuai batas ukuran."
+      },
+      "colours": {
+        "title": "Warna dan latar",
+        "description": "Warna teks dipilihkan otomatis agar semuanya tetap mudah dibaca.",
+        "primary": "Warna utama",
+        "typeHint": "Jika kosong memakai warna ruang kerja.",
+        "button": "Warna tombol",
+        "buttonHint": "Warna tombol dan waktu yang dipilih. Jika kosong memakai warna utama.",
+        "background": "Latar halaman",
+        "backgroundHint": "Warna solid, nuansa lembut dari warna utama Anda, atau gambar sampul sebagai banner.",
+        "sameAsWorkspace": "Sama seperti ruang kerja",
+        "backgrounds": {
+          "solid": "Warna solid",
+          "tint": "Nuansa lembut",
+          "image": "Gambar sampul"
+        },
+        "backgroundColour": "Warna latar",
+        "needCover": "Unggah gambar sampul untuk memakai latar ini.",
+        "invalid": "Gunakan warna seperti #1a73e8."
+      },
+      "checks": {
+        "title": "Pemeriksaan keterbacaan",
+        "autoText": "Teks pada tombol Anda berwarna hitam atau putih, mana yang lebih mudah dibaca, dan warna utama Anda digelapkan atau dicerahkan saat dipakai sebagai teks.",
+        "primaryText": "Warna utama Anda memiliki kontras {ratio}:1 pada halaman, di bawah {min}:1, sehingga disesuaikan saat dipakai sebagai teks.",
+        "button": "Teks tombol memiliki kontras {ratio}:1 pada warna tombol Anda, di bawah {min}:1.",
+        "buttonEdge": "Warna tombol Anda memiliki kontras {ratio}:1 terhadap halaman, di bawah {min}:1, sehingga tombol mungkin sulit terlihat.",
+        "backdropText": "Teks pada latar halaman memiliki kontras {ratio}:1, di bawah {min}:1.",
+        "inDark": "(mode gelap)"
+      },
+      "wording": {
+        "title": "Teks",
+        "description": "Hanya teks biasa. Pelanggan melihatnya dalam bahasa yang Anda tulis.",
+        "pageTitle": "Judul halaman",
+        "pageTitleHint": "Ditampilkan di bagian atas halaman dan di tab browser. Jika kosong memakai nama bisnis Anda.",
+        "welcome": "Pesan sambutan",
+        "welcomeHint": "{count} dari {max} karakter. Ditampilkan di atas formulir pemesanan.",
+        "button": "Label tombol konfirmasi",
+        "buttonHint": "Teks pada tombol terakhir, misalnya Pesan tempat saya. Permintaan yang perlu persetujuan tetap memakai labelnya sendiri.",
+        "buttonDefault": "Konfirmasi pemesanan",
+        "tooLong": "Gunakan paling banyak {max} karakter."
+      },
+      "style": {
+        "title": "Font dan sudut",
+        "description": "Beberapa pilihan aman yang berfungsi di semua perangkat.",
+        "font": "Font",
+        "fontHint": "Memakai font yang sudah ada di perangkat pelanggan, sehingga halaman dimuat dengan cepat.",
+        "fonts": {
+          "default": "Default produk",
+          "system": "Sistem",
+          "serif": "Serif",
+          "rounded": "Membulat",
+          "humanist": "Humanis"
+        },
+        "corners": "Sudut",
+        "cornerStyles": {
+          "square": "Persegi",
+          "rounded": "Membulat",
+          "pill": "Kapsul"
+        },
+        "mode": "Terang atau gelap",
+        "modes": {
+          "light": "Terang",
+          "dark": "Gelap",
+          "auto": "Ikuti perangkat"
+        }
+      },
+      "options": {
+        "title": "Opsi halaman",
+        "description": "Apa lagi yang tampil di sekitar formulir pemesanan.",
+        "language": "Tampilkan pengalih bahasa",
+        "languageHint": "Memungkinkan pelanggan mengganti bahasa halaman.",
+        "poweredBy": "Tampilkan \"Powered by\" di bagian bawah",
+        "poweredByHint": "Matikan agar hanya merek Anda sendiri yang tampil.",
+        "poweredByLocked": "Menghapus \"Powered by\" merupakan bagian dari branding white-label, yang tidak termasuk dalam paket Anda."
+      },
+      "links": {
+        "title": "Alamat halaman",
+        "description": "Tempat pelanggan membuka halaman. Perubahan langsung tampil di sana setelah Anda menyimpan.",
+        "page": "Alamat halaman pemesanan",
+        "open": "Buka halaman",
+        "copy": "Salin",
+        "copied": "Tersalin",
+        "later": "Memakai domain sendiri dan menempatkan halaman di dalam situs web lain belum tersedia."
+      },
+      "type": {
+        "title": "Tampilan halaman: {name}",
+        "subtitle": "Beri jenis pemesanan ini logo, warna, atau pesan sambutan sendiri. Apa pun yang Anda kosongkan memakai tampilan ruang kerja.",
+        "back": "Kembali ke jenis pemesanan",
+        "notFoundTitle": "Jenis pemesanan tidak ditemukan",
+        "notFound": "Jenis pemesanan ini sudah tidak ada.",
+        "resetTitle": "Gunakan tampilan ruang kerja",
+        "resetDescription": "Menghapus semua yang diatur untuk jenis pemesanan ini, termasuk gambarnya.",
+        "reset": "Gunakan tampilan ruang kerja",
+        "resetConfirmTitle": "Gunakan tampilan ruang kerja?",
+        "resetConfirmMessage": "Logo, gambar sampul, warna, dan teks yang diatur untuk jenis pemesanan ini akan dihapus.",
+        "resetDone": "Jenis pemesanan ini sekarang memakai tampilan ruang kerja"
+      },
+      "preview": {
+        "title": "Pratinjau langsung",
+        "device": "Perangkat",
+        "desktop": "Desktop",
+        "mobile": "Seluler",
+        "page": "Halaman",
+        "servicePage": "Halaman pemesanan",
+        "serviceList": "Daftar layanan",
+        "scheme": "Mode warna",
+        "asSet": "Sesuai pengaturan",
+        "light": "Terang",
+        "dark": "Gelap",
+        "direction": "Arah",
+        "ltr": "Kiri ke kanan",
+        "rtl": "Kanan ke kiri",
+        "frameTitle": "Pratinjau halaman pemesanan",
+        "note": "Ini adalah halaman asli dengan waktu contoh. Tidak ada yang Anda lakukan di sini yang akan dipesan.",
+        "sampleName": "Panggilan perkenalan",
+        "sampleName2": "Sesi lengkap",
+        "sampleDescription": "Panggilan singkat untuk memahami kebutuhan Anda dan menjawab pertanyaan Anda.",
+        "sampleIntro": "Mohon datang beberapa menit lebih awal.",
+        "sampleQuestion": "Adakah hal yang perlu kami ketahui sebelumnya?"
+      }
+    }
+  }
+}

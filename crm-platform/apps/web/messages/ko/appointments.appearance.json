@@ -1,0 +1,191 @@
+{
+  "appointments": {
+    "appearance": {
+      "title": "예약 페이지 디자인",
+      "subtitle": "고객이 예약할 때 사용하는 페이지를 내 비즈니스에 어울리게 꾸며 보세요.",
+      "backToSettings": "예약 설정",
+      "loading": "예약 페이지 테마를 불러오는 중",
+      "forbidden": "예약 페이지 디자인을 볼 수 있는 권한이 없습니다.",
+      "notAvailable": "예약 페이지 디자인은 아직 이 서버에서 사용할 수 없습니다.",
+      "readOnly": "디자인을 볼 수만 있고 변경할 수는 없습니다. 변경하려면 예약 유형을 수정할 권한이 필요합니다.",
+      "fixFirst": "표시된 항목을 먼저 수정해 주세요.",
+      "issues": "{count, plural, other {저장하기 전에 확인이 필요한 항목이 #개 있습니다.}}",
+      "saved": "예약 페이지 디자인이 저장되었습니다",
+      "saving": "저장 중...",
+      "unsaved": "저장되지 않은 변경 사항",
+      "allSaved": "모든 변경 사항이 저장되었습니다",
+      "discard": "변경 사항 취소",
+      "save": "디자인 저장",
+      "conflict": {
+        "message": "편집하는 동안 다른 사용자가 디자인을 변경했습니다.",
+        "reload": "최신 내용 불러오기"
+      },
+      "leave": {
+        "title": "저장하지 않고 나갈까요?",
+        "message": "예약 페이지 디자인의 변경 사항이 저장되지 않았습니다.",
+        "leave": "나가기",
+        "stay": "계속 편집"
+      },
+      "tile": {
+        "label": "예약 페이지 디자인",
+        "description": "고객이 예약하는 페이지의 로고, 색상, 글꼴, 환영 문구",
+        "keywords": "브랜딩, 로고, 색상, 테마, 예약 페이지, 디자인, 글꼴, 화이트 라벨"
+      },
+      "card": {
+        "title": "예약 페이지 디자인",
+        "description": "로고와 색상을 추가하고, 환영 메시지를 작성하고, 고객이 예약하는 페이지의 글꼴과 모서리 모양을 선택하세요. 편집하는 동안 실시간 미리보기가 표시됩니다.",
+        "open": "예약 페이지 디자인 열기"
+      },
+      "editorLink": {
+        "link": "페이지 디자인",
+        "saveFirst": "먼저 예약 유형을 저장한 다음 페이지 디자인을 열어 주세요."
+      },
+      "typesList": {
+        "menu": "페이지 디자인"
+      },
+      "pictures": {
+        "title": "로고와 커버 이미지",
+        "description": "페이지 상단에 표시됩니다. 비워 두면 상위 설정이 사용됩니다.",
+        "logo": "로고",
+        "logoHint": "PNG, JPG, WebP 또는 GIF, 최대 {mb}MB. 투명 배경의 가로로 긴 로고가 가장 좋습니다.",
+        "cover": "커버 이미지",
+        "coverHint": "PNG, JPG, WebP 또는 GIF, 최대 {mb}MB. 배경이 커버 이미지로 설정되면 배너로 표시됩니다.",
+        "useBrand": "비어 있으면 브랜딩의 로고와 색상 사용",
+        "useBrandHint": "여기서 비워 둔 항목은 설정의 브랜딩에서 가져오므로 예약 페이지가 나머지 브랜드와 일관되게 보입니다."
+      },
+      "fields": {
+        "picker": "{name}: 색상 선택",
+        "clear": "지우기",
+        "noPicture": "이미지 없음",
+        "upload": "업로드",
+        "replace": "바꾸기",
+        "remove": "삭제",
+        "inheritedPicture": "상위에서 설정한 항목을 사용 중입니다.",
+        "inheritedColour": "비워 두면 {colour}을(를) 사용합니다.",
+        "productColour": "비워 두면 기본 색상을 사용합니다.",
+        "pictureType": "PNG, JPG, WebP 또는 GIF 이미지를 사용해 주세요.",
+        "pictureSize": "이미지가 너무 큽니다. 최대 크기는 {mb}MB입니다.",
+        "pictureRejected": "이 이미지는 사용할 수 없습니다. 크기 제한 이내의 PNG, JPG, WebP 또는 GIF 이미지를 사용해 주세요."
+      },
+      "colours": {
+        "title": "색상과 배경",
+        "description": "모든 내용이 읽기 쉽도록 글자 색상은 자동으로 선택됩니다.",
+        "primary": "기본 색상",
+        "typeHint": "비워 두면 워크스페이스 색상을 사용합니다.",
+        "button": "버튼 색상",
+        "buttonHint": "버튼과 선택한 시간의 색상입니다. 비워 두면 기본 색상을 사용합니다.",
+        "background": "페이지 배경",
+        "backgroundHint": "단색, 기본 색상의 연한 색조, 또는 커버 이미지를 배너로 사용할 수 있습니다.",
+        "sameAsWorkspace": "워크스페이스와 동일",
+        "backgrounds": {
+          "solid": "단색",
+          "tint": "연한 색조",
+          "image": "커버 이미지"
+        },
+        "backgroundColour": "배경 색상",
+        "needCover": "이 배경을 사용하려면 커버 이미지를 업로드하세요.",
+        "invalid": "#1a73e8 같은 색상을 사용해 주세요."
+      },
+      "checks": {
+        "title": "가독성 검사",
+        "autoText": "버튼의 글자는 더 잘 읽히는 검은색 또는 흰색이 되며, 기본 색상을 글자에 사용하는 곳에서는 더 어둡게 또는 밝게 조정됩니다.",
+        "primaryText": "기본 색상의 페이지 대비는 {ratio}:1로 {min}:1보다 낮으므로, 글자로 사용하는 곳에서 조정됩니다.",
+        "button": "버튼 색상 위의 버튼 글자 대비는 {ratio}:1로 {min}:1보다 낮습니다.",
+        "buttonEdge": "버튼 색상과 페이지의 대비는 {ratio}:1로 {min}:1보다 낮아서 버튼이 잘 보이지 않을 수 있습니다.",
+        "backdropText": "페이지 배경 위의 글자 대비는 {ratio}:1로 {min}:1보다 낮습니다.",
+        "inDark": "(다크 모드)"
+      },
+      "wording": {
+        "title": "문구",
+        "description": "일반 텍스트만 사용할 수 있습니다. 고객에게는 작성한 언어 그대로 표시됩니다.",
+        "pageTitle": "페이지 제목",
+        "pageTitleHint": "페이지 상단과 브라우저 탭에 표시됩니다. 비워 두면 사업체 이름을 사용합니다.",
+        "welcome": "환영 메시지",
+        "welcomeHint": "{max}자 중 {count}자. 예약 양식 위에 표시됩니다.",
+        "button": "확인 버튼 문구",
+        "buttonHint": "마지막 버튼에 표시되는 문구입니다. 예: 자리 예약하기. 승인이 필요한 요청은 고유한 문구를 유지합니다.",
+        "buttonDefault": "예약 확정",
+        "tooLong": "{max}자 이내로 입력해 주세요."
+      },
+      "style": {
+        "title": "글꼴과 모서리",
+        "description": "모든 기기에서 잘 작동하는 안전한 선택지입니다.",
+        "font": "글꼴",
+        "fontHint": "고객의 기기에 이미 있는 글꼴을 사용하므로 페이지가 빠르게 로드됩니다.",
+        "fonts": {
+          "default": "제품 기본값",
+          "system": "시스템",
+          "serif": "세리프",
+          "rounded": "둥근 글꼴",
+          "humanist": "휴머니스트"
+        },
+        "corners": "모서리",
+        "cornerStyles": {
+          "square": "각진 모서리",
+          "rounded": "둥근 모서리",
+          "pill": "알약형"
+        },
+        "mode": "라이트 또는 다크",
+        "modes": {
+          "light": "라이트",
+          "dark": "다크",
+          "auto": "기기 설정에 따르기"
+        }
+      },
+      "options": {
+        "title": "페이지 옵션",
+        "description": "예약 양식 주변에 표시할 그 밖의 요소입니다.",
+        "language": "언어 전환 표시",
+        "languageHint": "고객이 페이지 언어를 바꿀 수 있습니다.",
+        "poweredBy": "하단에 \"Powered by\" 표시",
+        "poweredByHint": "끄면 내 브랜드만 표시됩니다.",
+        "poweredByLocked": "\"Powered by\" 제거는 화이트 라벨 브랜딩에 포함되며, 현재 요금제에는 포함되어 있지 않습니다."
+      },
+      "links": {
+        "title": "페이지 주소",
+        "description": "고객이 페이지를 여는 주소입니다. 변경 사항은 저장하는 즉시 반영됩니다.",
+        "page": "예약 페이지 주소",
+        "open": "페이지 열기",
+        "copy": "복사",
+        "copied": "복사됨",
+        "later": "사용자 도메인 사용과 다른 웹사이트에 페이지 삽입은 아직 지원되지 않습니다."
+      },
+      "type": {
+        "title": "페이지 디자인: {name}",
+        "subtitle": "이 예약 유형만의 로고, 색상, 환영 메시지를 설정할 수 있습니다. 비워 둔 항목은 워크스페이스 디자인을 사용합니다.",
+        "back": "예약 유형으로 돌아가기",
+        "notFoundTitle": "예약 유형을 찾을 수 없습니다",
+        "notFound": "이 예약 유형은 더 이상 존재하지 않습니다.",
+        "resetTitle": "워크스페이스 디자인 사용",
+        "resetDescription": "이미지를 포함해 이 예약 유형에 설정한 모든 항목을 삭제합니다.",
+        "reset": "워크스페이스 디자인 사용",
+        "resetConfirmTitle": "워크스페이스 디자인을 사용할까요?",
+        "resetConfirmMessage": "이 예약 유형에 설정한 로고, 커버 이미지, 색상, 문구가 삭제됩니다.",
+        "resetDone": "이 예약 유형은 이제 워크스페이스 디자인을 사용합니다"
+      },
+      "preview": {
+        "title": "실시간 미리보기",
+        "device": "기기",
+        "desktop": "데스크톱",
+        "mobile": "모바일",
+        "page": "페이지",
+        "servicePage": "예약 페이지",
+        "serviceList": "서비스 목록",
+        "scheme": "색상 모드",
+        "asSet": "설정대로",
+        "light": "라이트",
+        "dark": "다크",
+        "direction": "방향",
+        "ltr": "왼쪽에서 오른쪽",
+        "rtl": "오른쪽에서 왼쪽",
+        "frameTitle": "예약 페이지 미리보기",
+        "note": "샘플 시간이 표시되는 실제 페이지입니다. 여기서 하는 어떤 동작도 예약되지 않습니다.",
+        "sampleName": "첫 상담 통화",
+        "sampleName2": "전체 세션",
+        "sampleDescription": "필요한 내용을 파악하고 질문에 답변해 드리는 짧은 통화입니다.",
+        "sampleIntro": "몇 분 일찍 도착해 주세요.",
+        "sampleQuestion": "미리 알아야 할 사항이 있나요?"
+      }
+    }
+  }
+}

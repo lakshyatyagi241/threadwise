@@ -1,0 +1,191 @@
+{
+  "appointments": {
+    "appearance": {
+      "title": "Apparence de la page de réservation",
+      "subtitle": "Personnalisez la page que vos clients utilisent pour prendre rendez-vous afin qu'elle ressemble à votre entreprise.",
+      "backToSettings": "Paramètres des rendez-vous",
+      "loading": "Chargement du thème de la page de réservation",
+      "forbidden": "Vous n'avez pas l'autorisation d'afficher l'apparence de la page de réservation.",
+      "notAvailable": "L'apparence de la page de réservation n'est pas encore disponible sur ce serveur.",
+      "readOnly": "Vous pouvez consulter l'apparence mais pas la modifier. Il faut l'autorisation de modifier les types de réservation.",
+      "fixFirst": "Corrigez d'abord les champs signalés.",
+      "issues": "{count, plural, one {# champ doit être corrigé avant de pouvoir enregistrer.} many {# de champs doivent être corrigés avant de pouvoir enregistrer.} other {# champs doivent être corrigés avant de pouvoir enregistrer.}}",
+      "saved": "Apparence de la page de réservation enregistrée",
+      "saving": "Enregistrement...",
+      "unsaved": "Modifications non enregistrées",
+      "allSaved": "Toutes les modifications sont enregistrées",
+      "discard": "Annuler les modifications",
+      "save": "Enregistrer l'apparence",
+      "conflict": {
+        "message": "L'apparence a été modifiée par quelqu'un d'autre pendant que vous la modifiiez.",
+        "reload": "Recharger la dernière version"
+      },
+      "leave": {
+        "title": "Quitter sans enregistrer ?",
+        "message": "Vos modifications de l'apparence de la page de réservation n'ont pas été enregistrées.",
+        "leave": "Quitter",
+        "stay": "Continuer la modification"
+      },
+      "tile": {
+        "label": "Apparence de la page de réservation",
+        "description": "Logo, couleurs, polices et texte de bienvenue de la page de réservation de vos clients",
+        "keywords": "image de marque, logo, couleurs, thème, page de réservation, apparence, polices, marque blanche"
+      },
+      "card": {
+        "title": "Apparence de la page de réservation",
+        "description": "Ajoutez votre logo et vos couleurs, rédigez un message de bienvenue et choisissez les polices et les coins de la page de réservation de vos clients. Un aperçu en direct s'affiche pendant la modification.",
+        "open": "Ouvrir l'apparence de la page de réservation"
+      },
+      "editorLink": {
+        "link": "Apparence de la page",
+        "saveFirst": "Enregistrez d'abord le type de réservation, puis ouvrez l'apparence de sa page."
+      },
+      "typesList": {
+        "menu": "Apparence de la page"
+      },
+      "pictures": {
+        "title": "Logo et image de couverture",
+        "description": "Affichés en haut de la page. Laissez vide pour utiliser le réglage de niveau supérieur.",
+        "logo": "Logo",
+        "logoHint": "PNG, JPG, WebP ou GIF, jusqu'à {mb} Mo. Un logo large sur fond transparent donne le meilleur résultat.",
+        "cover": "Image de couverture",
+        "coverHint": "PNG, JPG, WebP ou GIF, jusqu'à {mb} Mo. Affichée comme bannière lorsque l'arrière-plan est réglé sur image de couverture.",
+        "useBrand": "Utiliser mon logo et mes couleurs de Image de marque si vide",
+        "useBrandHint": "Tout ce que vous laissez vide ici provient de Paramètres, Image de marque, afin que la page de réservation corresponde au reste de votre marque."
+      },
+      "fields": {
+        "picker": "{name} : choisir une couleur",
+        "clear": "Effacer",
+        "noPicture": "Aucune image",
+        "upload": "Téléverser",
+        "replace": "Remplacer",
+        "remove": "Supprimer",
+        "inheritedPicture": "Utilise celle définie au niveau supérieur.",
+        "inheritedColour": "Si vide, utilise {colour}.",
+        "productColour": "Si vide, utilise la couleur par défaut.",
+        "pictureType": "Utilisez une image PNG, JPG, WebP ou GIF.",
+        "pictureSize": "L'image est trop volumineuse. La limite est de {mb} Mo.",
+        "pictureRejected": "Cette image n'a pas été acceptée. Utilisez une image PNG, JPG, WebP ou GIF respectant la limite de taille."
+      },
+      "colours": {
+        "title": "Couleurs et arrière-plan",
+        "description": "Les couleurs du texte sont choisies pour vous afin que tout reste lisible.",
+        "primary": "Couleur principale",
+        "typeHint": "Si vide, utilise la couleur de l'espace de travail.",
+        "button": "Couleur des boutons",
+        "buttonHint": "La couleur des boutons et des horaires sélectionnés. Si vide, utilise la couleur principale.",
+        "background": "Arrière-plan de la page",
+        "backgroundHint": "Couleur unie, teinte douce de votre couleur principale, ou votre image de couverture en bannière.",
+        "sameAsWorkspace": "Identique à l'espace de travail",
+        "backgrounds": {
+          "solid": "Couleur unie",
+          "tint": "Teinte douce",
+          "image": "Image de couverture"
+        },
+        "backgroundColour": "Couleur d'arrière-plan",
+        "needCover": "Téléversez une image de couverture pour utiliser cet arrière-plan.",
+        "invalid": "Utilisez une couleur comme #1a73e8."
+      },
+      "checks": {
+        "title": "Vérifications de lisibilité",
+        "autoText": "Le texte de vos boutons est noir ou blanc, selon ce qui se lit le mieux, et votre couleur principale est assombrie ou éclaircie lorsqu'elle sert de couleur de texte.",
+        "primaryText": "Votre couleur principale a un contraste de {ratio}:1 sur la page, inférieur à {min}:1, elle est donc ajustée lorsqu'elle sert de couleur de texte.",
+        "button": "Le texte du bouton a un contraste de {ratio}:1 sur la couleur de votre bouton, inférieur à {min}:1.",
+        "buttonEdge": "La couleur de votre bouton a un contraste de {ratio}:1 avec la page, inférieur à {min}:1, les boutons peuvent donc être difficiles à voir.",
+        "backdropText": "Le texte sur l'arrière-plan de la page a un contraste de {ratio}:1, inférieur à {min}:1.",
+        "inDark": "(mode sombre)"
+      },
+      "wording": {
+        "title": "Textes",
+        "description": "Texte brut uniquement. Vos clients le voient dans la langue dans laquelle vous l'écrivez.",
+        "pageTitle": "Titre de la page",
+        "pageTitleHint": "Affiché en haut de la page et dans l'onglet du navigateur. Si vide, utilise le nom de votre entreprise.",
+        "welcome": "Message de bienvenue",
+        "welcomeHint": "{count} caractères sur {max}. Affiché au-dessus du formulaire de réservation.",
+        "button": "Libellé du bouton de confirmation",
+        "buttonHint": "Le texte du bouton final, par exemple Réserver ma place. Les demandes soumises à approbation gardent leur propre libellé.",
+        "buttonDefault": "Confirmer la réservation",
+        "tooLong": "Utilisez au maximum {max} caractères."
+      },
+      "style": {
+        "title": "Polices et coins",
+        "description": "Un petit choix d'options sûres qui fonctionnent sur tous les appareils.",
+        "font": "Police",
+        "fontHint": "Ces polices sont déjà présentes sur l'appareil du client, la page se charge donc rapidement.",
+        "fonts": {
+          "default": "Valeur par défaut du produit",
+          "system": "Système",
+          "serif": "Serif",
+          "rounded": "Arrondie",
+          "humanist": "Humaniste"
+        },
+        "corners": "Coins",
+        "cornerStyles": {
+          "square": "Carrés",
+          "rounded": "Arrondis",
+          "pill": "En pilule"
+        },
+        "mode": "Clair ou sombre",
+        "modes": {
+          "light": "Clair",
+          "dark": "Sombre",
+          "auto": "Suivre l'appareil"
+        }
+      },
+      "options": {
+        "title": "Options de la page",
+        "description": "Ce qui apparaît d'autre autour du formulaire de réservation.",
+        "language": "Afficher le sélecteur de langue",
+        "languageHint": "Permet aux clients de changer la langue de la page.",
+        "poweredBy": "Afficher \"Powered by\" en bas",
+        "poweredByHint": "Désactivez-le pour n'afficher que votre propre marque.",
+        "poweredByLocked": "Retirer \"Powered by\" fait partie de l'image de marque en marque blanche, qui n'est pas incluse dans votre offre."
+      },
+      "links": {
+        "title": "Adresse de la page",
+        "description": "L'endroit où vos clients ouvrent la page. Les modifications y apparaissent dès que vous enregistrez.",
+        "page": "Adresse de la page de réservation",
+        "open": "Ouvrir la page",
+        "copy": "Copier",
+        "copied": "Copié",
+        "later": "L'utilisation de votre propre domaine et l'intégration de la page dans un autre site web ne sont pas encore disponibles."
+      },
+      "type": {
+        "title": "Apparence de la page : {name}",
+        "subtitle": "Donnez à ce type de réservation son propre logo, ses couleurs ou son message de bienvenue. Tout ce que vous laissez vide utilise l'apparence de l'espace de travail.",
+        "back": "Retour au type de réservation",
+        "notFoundTitle": "Type de réservation introuvable",
+        "notFound": "Ce type de réservation n'existe plus.",
+        "resetTitle": "Utiliser l'apparence de l'espace de travail",
+        "resetDescription": "Supprime tout ce qui est défini pour ce type de réservation, y compris ses images.",
+        "reset": "Utiliser l'apparence de l'espace de travail",
+        "resetConfirmTitle": "Utiliser l'apparence de l'espace de travail ?",
+        "resetConfirmMessage": "Le logo, l'image de couverture, les couleurs et les textes définis pour ce type de réservation seront supprimés.",
+        "resetDone": "Ce type de réservation utilise désormais l'apparence de l'espace de travail"
+      },
+      "preview": {
+        "title": "Aperçu en direct",
+        "device": "Appareil",
+        "desktop": "Ordinateur",
+        "mobile": "Mobile",
+        "page": "Page",
+        "servicePage": "Page de réservation",
+        "serviceList": "Liste des services",
+        "scheme": "Mode de couleur",
+        "asSet": "Selon le réglage",
+        "light": "Clair",
+        "dark": "Sombre",
+        "direction": "Direction",
+        "ltr": "De gauche à droite",
+        "rtl": "De droite à gauche",
+        "frameTitle": "Aperçu de la page de réservation",
+        "note": "Il s'agit de la vraie page avec des horaires d'exemple. Rien de ce que vous faites ici n'est réservé.",
+        "sampleName": "Appel de présentation",
+        "sampleName2": "Séance complète",
+        "sampleDescription": "Un court appel pour comprendre vos besoins et répondre à vos questions.",
+        "sampleIntro": "Merci d'arriver quelques minutes en avance.",
+        "sampleQuestion": "Y a-t-il quelque chose que nous devrions savoir à l'avance ?"
+      }
+    }
+  }
+}
