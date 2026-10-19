@@ -60,21 +60,9 @@ describe('flow card (TW-FLB-001)', () => {
     expect(html).not.toContain('href="/flow-runtime/flows/');
   });
 
-  it('offers the FAQs link only on a simple (chat or web) flow, and only to a person who can read FAQs', () => {
-    const withFaqs = (over: Partial<FlowSummary> = {}, faqs = true) =>
-      renderToStaticMarkup(
-        <FlowCard flow={flow(over)} actions={{ ...actions, can: { ...actions.can, faqs } }} />,
-      );
-    expect(withFaqs()).toContain(
-      'href="/flows/simple/11111111-1111-4111-8111-111111111111?tab=faqs"',
-    );
-    expect(withFaqs({ state: 'draft', isPublished: false })).toContain('data-flow-faqs');
-    expect(withFaqs({}, false)).not.toContain('data-flow-faqs');
+  it('has no FAQs link: FAQs are entries in an AI agent now', () => {
     expect(card()).not.toContain('data-flow-faqs');
-    expect(withFaqs({ flowType: 'call' })).not.toContain('data-flow-faqs');
-    // An automation (Advanced canvas) flow has no FAQs; those are a simple flow's.
-    expect(withFaqs({ flowType: 'instagram' })).not.toContain('data-flow-faqs');
-    expect(withFaqs({ flowType: 'web' })).toContain('data-flow-faqs');
+    expect(card({ flowType: 'web' })).not.toContain('tab=faqs');
   });
 
   it('an Instagram flow has no analytics link (it runs remotely) and carries the Instagram badge', () => {

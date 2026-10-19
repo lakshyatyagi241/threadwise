@@ -180,7 +180,6 @@ describe('source guards', () => {
       'modules/forms-builder/form-public.service.ts', // ETag
       'modules/platform-infrastructure/offsite-backup/sync.ts', // S3 Content-MD5
       'modules/localization-translation/translation-policy.ts', // cache key of a text
-      'modules/faq-knowledge/faq.rules.ts', // deterministic demo id
       'modules/storefront-builder/cli/demo-seeder.ts', // deterministic demo id
       'infra/providers/channel-email/graph-normalise.ts', // synthetic message id
       'infra/providers/channel-email/mime-parse.ts', // synthetic message id

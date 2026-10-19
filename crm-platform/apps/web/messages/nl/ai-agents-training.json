@@ -224,20 +224,20 @@
           "title": "Vrije tekst",
           "body": "Plak een helpfragment of een beleidstekst."
         },
-        "qa": {
-          "title": "Vraag-antwoordpaar",
-          "body": "Eén vraag met het bijbehorende standaardantwoord."
-        },
         "file": {
           "title": "PDF, DOCX, TXT en meer",
           "body": "Upload een bestand. De tekst wordt voor je uitgelezen."
+        },
+        "faq": {
+          "title": "Veelgestelde vraag toevoegen",
+          "body": "Vragen en de antwoorden die je wilt laten geven."
         }
       },
       "panel": {
         "url": "Een openbare URL ophalen",
         "text": "Platte tekst plakken",
-        "qa": "Enkel vraag-antwoordpaar",
-        "file": "Een kennisbestand uploaden"
+        "file": "Een kennisbestand uploaden",
+        "faq": "Vragen en antwoorden toevoegen"
       },
       "label": "Label",
       "url": "URL",
@@ -249,21 +249,20 @@
         "label": {
           "url": "Label (bijv. Prijzenpagina)",
           "text": "Label (bijv. Samenvatting terugbetalingsbeleid)",
-          "qa": "Label (bijv. Termijn terugbetaling)",
           "file": "Label (bijv. Producthandboek)"
         },
         "content": "Plak alle tekst die de agent moet kennen…",
         "question": "Vraag, bijv. Hoe lang duren terugbetalingen?",
         "answer": "Antwoord, bijv. Terugbetalingen worden binnen 3 tot 5 werkdagen verwerkt."
       },
-      "urlHint": "Alleen openbare http- en https-pagina's worden gelezen. De pagina wordt op de achtergrond opgehaald, dus het item toont even Verwerken.",
+      "urlHint": "Alleen openbare http- en https-pagina's worden gelezen. De pagina wordt op de achtergrond gelezen, dus het kan even duren.",
       "fileHint": "PDF, DOCX, TXT, Markdown, CSV of HTML, tot 10 MB. De tekst wordt automatisch uitgelezen.",
       "uploading": "Uploadvoortgang",
       "submit": {
         "url": "Ophalen en trainen",
         "text": "Tekst opslaan",
-        "qa": "Paar opslaan",
-        "file": "Uploaden"
+        "file": "Uploaden",
+        "faq": "Veelgestelde vragen opslaan"
       },
       "cancel": "Annuleren",
       "added": "Kennis toegevoegd.",
@@ -281,25 +280,6 @@
         "file_empty": "Dat bestand is leeg.",
         "tooLarge": "Dat is te veel tekst voor één keer plakken. Upload het in plaats daarvan als bestand."
       },
-      "col": {
-        "kind": "Soort",
-        "label": "Label",
-        "state": "Status",
-        "actions": "Acties"
-      },
-      "kind": {
-        "url": "url",
-        "text": "tekst",
-        "qa": "v&a",
-        "file": "bestand"
-      },
-      "state": {
-        "ready": "gereed",
-        "processing": "verwerken",
-        "failed": "mislukt"
-      },
-      "tokens": "ongeveer {count} tokens",
-      "workspaceWide": "workspacebreed",
       "loading": "Items laden",
       "loadError": "De items konden niet worden geladen.",
       "retry": "Opnieuw proberen",
@@ -310,7 +290,14 @@
       "removeBody": "De agent stopt met het gebruiken ervan voor nieuwe antwoorden. Oudere gesprekken blijven ongewijzigd.",
       "keep": "Behouden",
       "removed": "Verwijderd.",
-      "removeFailed": "Verwijderen mislukt."
+      "removeFailed": "Verwijderen mislukt.",
+      "ownedNote": "Deze kennis hoort alleen bij deze agent. Geen enkele andere agent kan haar gebruiken.",
+      "faq": {
+        "addAnother": "Nog een vraag toevoegen",
+        "removeRow": "Deze vraag verwijderen"
+      },
+      "reading": "Bezig met lezen…",
+      "failed": "Dit kon niet worden gelezen."
     }
   }
 }

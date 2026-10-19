@@ -34,11 +34,9 @@ export function SimpleRoute({ flowId }: { flowId?: string }) {
     retry: false,
   });
   const isBot = flowId ? flow.data?.flowType === 'chat' || flow.data?.flowType === 'web' : true;
-  // The FAQs of a flow are edited here only: a link to them opens this screen even where the workspace builds in Advanced.
-  const wantsFaqs = !!flowId && params.get('tab') === 'faqs';
   // Until the workspace mode and a saved flow's type are known, wait rather than mount the Simple screen for a flow that may belong on the canvas.
   const deciding = !!flowId && (overview.isPending || (mode === 'advanced' && flow.isPending));
-  const redirectToAdvanced = mode === 'advanced' && !wantsFaqs && !isBot && !deciding;
+  const redirectToAdvanced = mode === 'advanced' && !isBot && !deciding;
   useEffect(() => {
     if (!allowed) router.replace('/inbox');
     else if (redirectToAdvanced && flowId) router.replace(`/flows/builder/${flowId}`);

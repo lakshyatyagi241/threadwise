@@ -57,6 +57,7 @@ export class RemoteRunner implements Runner {
       sourceClient: args.sourceClient,
       sourceDb: args.sourceDb,
       mode: args.mode,
+      skipWhatsapp: args.skipWhatsapp === true,
     });
     const started = this.now();
     let delivered = 0;

@@ -24,4 +24,4 @@ node --test tools/api-inventory/*.test.mjs
 One machine, the API, Postgres and Redis together, one user at a time, 7 timed calls per route after one warm-up (p95 of 7 is close to the slowest call).
 Only GET routes are called; a write needs a valid body and changes data, so the 1,160 writes are listed as not run, never guessed. The organisation has
 100,000 contacts and 1,000,000 messages: far larger than a new workspace, so the message-history and inbox figures are a worst case, not a typical one.
-A 404 for a path parameter means the seeded data had no such record; it is not a fast route. A latency figure here is a trend and a ranking, not a production number.
+A 404 for a path parameter means the seeded data had no such record; it is not a fast route. A latency figure here is a trend and a ranking, not a production number. Run it on a quiet machine: another process using a core (a headless browser, a build) moved the same route's p95 from 284 ms to 1,707 ms between two back-to-back runs. For a change to one statement, compare the old and the new statement back to back (psql `\timing`, same session) instead of the route.

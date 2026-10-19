@@ -224,20 +224,20 @@
           "title": "Texte libre",
           "body": "Collez un extrait d’aide ou une politique."
         },
-        "qa": {
-          "title": "Paire question-réponse",
-          "body": "Une question avec sa réponse de référence."
-        },
         "file": {
           "title": "PDF, DOCX, TXT et plus",
           "body": "Importez un fichier. Le texte est extrait pour vous."
+        },
+        "faq": {
+          "title": "Ajouter une FAQ",
+          "body": "Des questions et les réponses que vous voulez voir données."
         }
       },
       "panel": {
         "url": "Récupérer une URL publique",
         "text": "Coller du texte brut",
-        "qa": "Question-réponse unique",
-        "file": "Importer un fichier de connaissances"
+        "file": "Importer un fichier de connaissances",
+        "faq": "Ajoutez des questions et des réponses"
       },
       "label": "Libellé",
       "url": "URL",
@@ -249,21 +249,20 @@
         "label": {
           "url": "Libellé (ex. Page des tarifs)",
           "text": "Libellé (ex. Résumé de la politique de remboursement)",
-          "qa": "Libellé (ex. Délai de remboursement)",
           "file": "Libellé (ex. Manuel produit)"
         },
         "content": "Collez tout texte que l’agent doit connaître…",
         "question": "Question, ex. Combien de temps prennent les remboursements ?",
         "answer": "Réponse, ex. Les remboursements sont réglés sous 3 à 5 jours ouvrés."
       },
-      "urlHint": "Seules les pages publiques http et https sont lues. La page est récupérée en arrière-plan, l’entrée affiche donc Traitement un instant.",
+      "urlHint": "Seules les pages publiques http et https sont lues. La page est lue en arrière-plan, cela peut donc prendre un instant.",
       "fileHint": "PDF, DOCX, TXT, Markdown, CSV ou HTML, jusqu’à 10 Mo. Le texte est extrait automatiquement.",
       "uploading": "Progression de l’importation",
       "submit": {
         "url": "Récupérer et entraîner",
         "text": "Enregistrer le texte",
-        "qa": "Enregistrer la paire",
-        "file": "Importer"
+        "file": "Importer",
+        "faq": "Enregistrer la FAQ"
       },
       "cancel": "Annuler",
       "added": "Connaissances ajoutées.",
@@ -281,25 +280,6 @@
         "file_empty": "Ce fichier est vide.",
         "tooLarge": "Ce texte est trop long pour un seul collage. Importez-le plutôt comme fichier."
       },
-      "col": {
-        "kind": "Type",
-        "label": "Libellé",
-        "state": "État",
-        "actions": "Actions"
-      },
-      "kind": {
-        "url": "url",
-        "text": "texte",
-        "qa": "q&r",
-        "file": "fichier"
-      },
-      "state": {
-        "ready": "prêt",
-        "processing": "en cours de traitement",
-        "failed": "échec"
-      },
-      "tokens": "environ {count} jetons",
-      "workspaceWide": "à l’échelle de l’espace de travail",
       "loading": "Chargement des entrées",
       "loadError": "Impossible de charger les entrées.",
       "retry": "Réessayer",
@@ -310,7 +290,14 @@
       "removeBody": "L’agent cessera de l’utiliser pour les nouvelles réponses. Les conversations plus anciennes restent inchangées.",
       "keep": "Conserver",
       "removed": "Retirée.",
-      "removeFailed": "Échec du retrait."
+      "removeFailed": "Échec du retrait.",
+      "ownedNote": "Ces connaissances appartiennent uniquement à cet agent. Aucun autre agent ne peut les utiliser.",
+      "faq": {
+        "addAnother": "Ajouter une autre question",
+        "removeRow": "Supprimer cette question"
+      },
+      "reading": "Lecture en cours…",
+      "failed": "Impossible de lire cela."
     }
   }
 }

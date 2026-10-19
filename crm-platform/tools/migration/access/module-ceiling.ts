@@ -39,6 +39,10 @@ export const MODULE_CEILING: Record<string, string[]> = {
   warmer: ['sched.'],
   'team-chat': ['tchat.'],
   'website-chat': ['wgt.'],
+  // the unofficial engine (QR / pairing code numbers, their groups): Waboo never had it, so a migrated workspace never gets it
+  'unofficial-whatsapp': ['wa.devices.', 'wa.groups.'],
+  // the TikTok channel (a "coming soon" tile today): not part of what a Waboo workspace had
+  tiktok: ['chn.tiktok.'],
   // the AI Studio start page: a Desk page that Waboo never had (always closed for a migrated workspace, see NEVER_KEPT)
   'ai-studio': ['flb.ai_studio.'],
 };

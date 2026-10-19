@@ -18,6 +18,7 @@ import {
 } from '../../infra/providers/ai-agents-training/training-file-store.port';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { KbIndexService } from '../knowledge-base';
 import { AssistantsRepository } from './assistants.repository';
 import { extractFileText } from './file-extract';
 import { SOURCE_REQUESTED } from './source-events';
@@ -35,7 +36,7 @@ export interface UploadedFile {
 }
 
 /**
- * The knowledge entries of an assistant: add (URL, text, Q&A), upload a file, list, delete (TW-AIAG-005..010).
+ * The knowledge entries of one assistant (its own knowledge base): add (URL, text, Q&A), upload a file, list, delete (TW-AIAG-005..010).
  *
  * Text and Q&A are ready at once. A file is read while the request waits (every type but a scanned PDF is quick), and its
  * stored copy is kept only so deleting the entry can delete it. A URL is read by the worker: the entry starts `processing` and the
@@ -51,6 +52,7 @@ export class SourcesService {
     private readonly repo: SourcesRepository,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly kb: KbIndexService,
     @Inject(TRAINING_FILE_STORE) private readonly files: TrainingFileStore,
   ) {}
 
@@ -106,6 +108,8 @@ export class SourcesService {
       }
       const created = (await this.repo.findById(tx, ctx.orgId, id))!;
       await this.record(tx, created, 'insert', 'ai_training_source.created', a.uuid);
+      // A ready entry is cut into searchable passages in the same commit; a URL entry is indexed once the worker has read the page.
+      await this.kb.indexSource(tx, ctx.orgId, id);
       return created;
     });
     return toSource(row);
@@ -167,6 +171,7 @@ export class SourcesService {
         });
         const created = (await this.repo.findById(tx, ctx.orgId, id))!;
         await this.record(tx, created, 'insert', 'ai_training_source.created', a.uuid);
+        await this.kb.indexSource(tx, ctx.orgId, id);
         return created;
       });
       return toSource(row);

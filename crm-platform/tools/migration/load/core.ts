@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { loadAccessConfig } from '../access/config';
-import { FEATURE_FROM_WABOO, LIMIT_FROM_WABOO, LIMITS_KEPT_FROM_BASE } from '../access/plan-map';
+import { ALWAYS_OPEN_FEATURES, FEATURE_FROM_WABOO, LIMIT_FROM_WABOO, LIMITS_KEPT_FROM_BASE } from '../access/plan-map';
 import { closedKeys, loadModuleCeiling, oldWorkspaceKeys } from '../access/ceiling';
 import { permissionCatalogue } from '../extract/catalogue';
 import { mapPermissions, type KeyDef } from '../access/policy';
@@ -131,6 +131,7 @@ export function derivePlan(
   for (const k of Object.keys(base.features)) features[k] = false;
   for (const [feature, codes] of Object.entries(FEATURE_FROM_WABOO))
     features[feature] = codes.some(on);
+  for (const feature of ALWAYS_OPEN_FEATURES) if (feature in features) features[feature] = true;
   const limits: Record<string, number> = {};
   for (const [k, v] of Object.entries(base.limits))
     limits[k] = LIMITS_KEPT_FROM_BASE.has(k) ? v : 0;

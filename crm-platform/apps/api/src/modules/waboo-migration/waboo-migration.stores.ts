@@ -18,6 +18,7 @@ type HeadRow = {
   source_client: string;
   source_db: string;
   mode: RunMode;
+  skip_whatsapp: boolean;
   status: string;
 };
 const head = (r: HeadRow): RunHead => ({
@@ -26,6 +27,7 @@ const head = (r: HeadRow): RunHead => ({
   sourceClient: r.source_client,
   sourceDb: r.source_db,
   mode: r.mode,
+  skipWhatsapp: r.skip_whatsapp === true,
   status: r.status,
 });
 const pgCode = (err: unknown): string | undefined => {
@@ -72,7 +74,7 @@ export class WabooMigrationStores {
     peek: async (uuid) => {
       const res = await this.store.tx((tx) =>
         tx.execute(sql`
-          SELECT id, uuid, source_client, source_db, mode, status FROM waboo_migration_runs WHERE uuid = ${uuid}::uuid
+          SELECT id, uuid, source_client, source_db, mode, skip_whatsapp, status FROM waboo_migration_runs WHERE uuid = ${uuid}::uuid
         `),
       );
       const r = res.rows[0] as unknown as HeadRow | undefined;
@@ -107,7 +109,7 @@ export class WabooMigrationStores {
             UPDATE waboo_migration_runs SET status = 'running', started_at = now()
             WHERE uuid = ${uuid}::uuid AND status = 'queued'
               AND NOT EXISTS (SELECT 1 FROM waboo_migration_runs WHERE status = 'running')
-            RETURNING id, uuid, source_client, source_db, mode, status
+            RETURNING id, uuid, source_client, source_db, mode, skip_whatsapp, status
           `),
         );
         const r = res.rows[0] as unknown as HeadRow | undefined;

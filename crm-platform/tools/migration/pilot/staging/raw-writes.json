@@ -1,5 +1,6 @@
 {
   "sql": {
+    "ai_chat_assistants": ["greeting", "name", "org_id", "slug"],
     "ai_token_usage": ["org_id"],
     "ai_training_sources": ["error", "status"],
     "channels": [
@@ -37,8 +38,6 @@
     ],
     "deal_lost_reasons": ["name", "org_id", "sort_order"],
     "event_outbox": ["aggregate_id", "aggregate_module", "event_type", "org_id", "payload"],
-    "faq_settings": ["enabled", "fallback_message", "flow_id", "org_id"],
-    "faqs": ["status"],
     "flows": ["is_active", "is_published", "published_at", "row_version"],
     "message_ledger": [
       "channel_id",

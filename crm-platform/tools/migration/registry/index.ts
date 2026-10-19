@@ -208,8 +208,8 @@ export const REGISTRY: RegistryEntry[] = [
   ),
   m(
     'faq_variations',
-    ['keyword_replies', 'faqs', 'faq_variations', 'faq_settings'],
-    'extra FAQ phrases of a journey -> keyword_replies (reply_type flow, status FALSE, no contents, matching exact), one row per 255 characters of comma-joined phrases. A journey inside a flow cannot be addressed: the reply starts the whole flow (QID_NOT_ADDRESSABLE). SECOND CONSUMER of the same collection: the derived step faq_knowledge (own id_map collection, virtual, like flow_bots) builds the FAQ-feature rows from these phrases plus the question and answer in the Intent / FAQ records -> faqs (PAUSED) + faq_variations (source import, embedding pending) + faq_settings (enabled false). The registry model has one handler per collection, so only faq_replies is named here',
+    ['keyword_replies', 'ai_training_sources'],
+    'extra FAQ phrases of a journey -> keyword_replies (reply_type flow, status FALSE, no contents, matching exact), one row per 255 characters of comma-joined phrases. A journey inside a flow cannot be addressed: the reply starts the whole flow (QID_NOT_ADDRESSABLE). SECOND CONSUMER of the same collection: the derived step faq_knowledge (own id_map collection, virtual, like flow_bots) builds the knowledge-base entry from these phrases plus the question and answer in the Intent / FAQ records -> ONE text entry labelled FAQ per AI agent in ai_training_sources (ADR-0021 addendum 3; the faq_* tables are retired), a flow answer is not carried (FLOW_ANSWER_NOT_CARRIED). The registry model has one handler per collection, so only faq_replies is named here',
     'faq_replies',
   ),
   m(

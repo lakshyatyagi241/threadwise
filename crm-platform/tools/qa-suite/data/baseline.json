@@ -507,10 +507,6 @@
       "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
     },
     {
-      "key": "apps/api/src/modules/faq-knowledge/faq-embed.worker.ts await this.repo.markReady(",
-      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
-    },
-    {
       "key": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/ai/ordering.service.ts await tx.execute",
       "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
     },
@@ -1143,10 +1139,6 @@
     {
       "key": "waboo_migration_runs(org_id) -> organizations [packages/db/migrations/20261113100000_wmig_waboo_migration_runs.sql]",
       "reason": "platform_setup holds exactly one row and waboo_migration_runs is a handful of runs per workspace; an organization is deleted only by workspace erasure; reviewed 2026-10-18"
-    },
-    {
-      "key": "faqs(org_id,created_by) -> users [packages/db/migrations/20261114090000_faq_core.sql]",
-      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
     },
     {
       "key": "message_log_exports(org_id,requested_by) -> users [packages/db/migrations/20261116100000_message_log_archive.sql]",

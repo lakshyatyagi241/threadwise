@@ -32,6 +32,7 @@ case "$*" in
   *"run --rm migrate"*) echo "migrate-image-tag=${IMAGE_TAG:-unset}" >> "$STUB_LOG"; [ "${STUB_MIGRATE_FAIL:-0}" = 1 ] && exit 1; exit 0 ;;
   *"up -d --no-deps worker"*) [ "${STUB_WORKER_UP_FAIL:-0}" = 1 ] && exit 1; exit 0 ;;
   *"up -d --no-deps api-"*) [ "${STUB_SLOT_UP_FAIL:-0}" = 1 ] && exit 1; exit 0 ;;
+  *"exec -T postgres"*) cat > /dev/null; [ "${STUB_RECORD_FAIL:-0}" = 1 ] && exit 1; exit 0 ;;
   *"ps -q worker"*) echo workerid; exit 0 ;;
   "inspect --format"*workerid*) echo "${STUB_WORKER_HEALTH:-healthy}"; exit 0 ;;
   "inspect --format"*) echo "${STUB_SLOT_HEALTH:-healthy}"; exit 0 ;;
@@ -52,7 +53,7 @@ new_dir() {
   : > "$STUB_LOG"
   if [ -n "${1:-}" ]; then sed -e "s/__DOMAIN__/desk.example.test/g" -e "s/__SLOT__/$1/g" "$TEMPLATE" > "$TRAEFIK_DYN"; fi
 }
-release() { SSH_ORIGINAL_COMMAND="release $1" PATH="$BIN:$PATH" bash "$ENTRY" > "$WORK/out.txt" 2>&1; echo $? > "$WORK/code"; }
+release() { SSH_ORIGINAL_COMMAND="release $1${2:+ $2}" PATH="$BIN:$PATH" bash "$ENTRY" > "$WORK/out.txt" 2>&1; echo $? > "$WORK/code"; }
 code() { cat "$WORK/code"; }
 tag() { grep '^IMAGE_TAG=' "$WORK/.env" | cut -d= -f2; }
 slot() { cat "$WORK/.slot" 2>/dev/null || echo none; }
@@ -64,7 +65,10 @@ check() { # check "name" cmd...
   local name=$1; shift
   if "$@"; then pass=$((pass + 1)); echo "  ok   $name"; else fail=$((fail + 1)); echo "  FAIL $name"; fi
 }
-unset_stubs() { unset STUB_BACKUP_RUNNING STUB_BACKUP_SCRIPT STUB_DUMP_FAIL STUB_MIGRATE_FAIL STUB_WORKER_UP_FAIL STUB_SLOT_UP_FAIL STUB_PUBLIC_FAIL STUB_WORKER_HEALTH STUB_SLOT_HEALTH; }
+unset_stubs() { unset STUB_BACKUP_RUNNING STUB_BACKUP_SCRIPT STUB_DUMP_FAIL STUB_MIGRATE_FAIL STUB_WORKER_UP_FAIL STUB_SLOT_UP_FAIL STUB_PUBLIC_FAIL STUB_WORKER_HEALTH STUB_SLOT_HEALTH STUB_RECORD_FAIL; }
+# event <stdin text> <command words...>: the build side's event command, with the message on stdin.
+event() { local msg=$1; shift; printf '%s' "$msg" | SSH_ORIGINAL_COMMAND="event $*" PATH="$BIN:$PATH" bash "$ENTRY" > "$WORK/out.txt" 2>&1; echo $? > "$WORK/code"; }
+A1=11111111-2222-4333-8444-555555555555
 
 echo "release: first blue-green release (the old labelled containers are live)"
 unset_stubs; new_dir "" aaaaaaa; release bbbbbbb
@@ -198,6 +202,58 @@ tar -C "$S" -c ci-entry.sh docker-compose.yml | SSH_ORIGINAL_COMMAND="sync" PATH
 check "ci-entry.sh is untouched" grep -q '^original$' "$WORK/ci-entry.sh"
 check "allow-listed files are still installed" grep -q 'services' "$WORK/docker-compose.yml"
 rm -rf "$S"
+
+echo "release history: every step is recorded, under the attempt the caller gave"
+unset_stubs; new_dir blue bbbbbbb; release ccccccc $A1
+check "exits 0" test "$(code)" = 0
+check "the release starts and each step is recorded under the attempt" has "$A1 ccccccc releasing start"
+check "the migration step is recorded" has "$A1 ccccccc releasing schema"
+check "the switch step is recorded" has "$A1 ccccccc releasing switch"
+check "the outcome ok is recorded" has "$A1 ccccccc ok commit"
+check "the outcome is written after the switch" test "$(line_of 'ok commit')" -gt "$(line_of 'desk-api-green')"
+
+echo "release history: a failed migration is recorded as failed, and the release says why"
+unset_stubs; new_dir blue bbbbbbb; STUB_MIGRATE_FAIL=1 release ccccccc $A1
+check "exits 1" test "$(code)" = 1
+check "the outcome failed is recorded at the schema step" has "$A1 ccccccc failed schema"
+check "no ok outcome is recorded" hasnt " ok commit"
+
+echo "release history: a failed public check after the switch is recorded as rolled back"
+unset_stubs; new_dir blue bbbbbbb; STUB_PUBLIC_FAIL=1 release ccccccc $A1
+check "exits 1" test "$(code)" = 1
+check "the outcome rolled_back is recorded at the switch step" has "$A1 ccccccc rolled_back switch"
+
+echo "release history: a failed database write never fails the release"
+unset_stubs; new_dir blue bbbbbbb; STUB_RECORD_FAIL=1 release ccccccc $A1
+check "exits 0" test "$(code)" = 0
+check "traffic moved to the new slot" grep -q "desk-api-green:3000" "$TRAEFIK_DYN"
+
+echo "release history: a release without an attempt id gets one; a bad one is refused"
+unset_stubs; new_dir blue bbbbbbb; release ccccccc
+check "exits 0 and still records" has " ok commit"
+unset_stubs; new_dir blue bbbbbbb; SSH_ORIGINAL_COMMAND="release ccccccc not-a-uuid" PATH="$BIN:$PATH" bash "$ENTRY" > "$WORK/out.txt" 2>&1; echo $? > "$WORK/code"
+check "exits 2" test "$(code)" = 2
+check "nothing is run" test ! -s "$STUB_LOG"
+
+echo "event: a build-side step is recorded with its message"
+unset_stubs; new_dir blue bbbbbbb; event "docker build failed" "$A1" aaaaaaa failed building
+check "exits 0" test "$(code)" = 0
+check "the state, step and message are recorded" has "$A1 aaaaaaa failed building docker build failed"
+
+echo "event: a bad state, tag or attempt is refused and nothing is recorded"
+unset_stubs; new_dir blue bbbbbbb; event "" "$A1" aaaaaaa bogus building
+check "exits 2 for a bad state" test "$(code)" = 2
+event "" "not-a-uuid" aaaaaaa failed building
+check "exits 2 for a bad attempt" test "$(code)" = 2
+event "" "$A1" "not a tag" failed building
+check "exits 2 for a bad tag" test "$(code)" = 2
+check "nothing is recorded" test ! -s "$STUB_LOG"
+
+echo "event: control characters and long messages are cut before recording"
+unset_stubs; new_dir blue bbbbbbb; event "$(printf 'bad\001thing %0600d' 1)" "$A1" aaaaaaa failed shipping
+check "exits 0" test "$(code)" = 0
+check "no control character reaches the record" test "$(grep -c "$(printf '\001')" "$STUB_LOG")" = 0
+check "the message is cut to 500 characters" test "$(grep 'failed shipping' "$STUB_LOG" | head -1 | sed 's/.*failed shipping //' | tr -d '\n' | wc -c)" -le 500
 
 echo
 echo "$pass passed, $fail failed"

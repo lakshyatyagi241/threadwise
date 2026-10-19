@@ -60,7 +60,8 @@
     "tabs": {
       "label": "Kies wat er getoond wordt",
       "publishes": "Flow-publicaties",
-      "geta": "Geta-console"
+      "geta": "Geta-console",
+      "releases": "Productreleases"
     },
     "publishes": {
       "description": "Elke flow-publicatie: wat de worker in de wachtrij heeft gezet, wat hij nu verwerkt en welke publicaties waarom zijn mislukt. Ververst elke paar seconden.",
@@ -78,6 +79,31 @@
       "empty": {
         "all": "Er is nog geen flow gepubliceerd.",
         "done": "Er is in de afgelopen 30 dagen geen publicatie afgerond."
+      }
+    },
+    "releases": {
+      "description": "Wat er live staat op desk.wabo.ai: de huidige release, een release die bezig is, en elke poging met zijn stappen en fouten. Ververst elke paar seconden.",
+      "liveLabel": "Nu live",
+      "live": "Release {tag}, live sinds {time}",
+      "noneLive": "Nog geen release is live gegaan.",
+      "inProgress": "Een release is bezig",
+      "stalledAlert": "{count} releasepoging(en) zijn {minutes} minuten niet veranderd. De build of de release is mogelijk gestopt.",
+      "empty": "Nog geen release vastgelegd. Releases verschijnen hier vanaf de volgende deployment.",
+      "cols": {
+        "tag": "Tag",
+        "state": "Status",
+        "step": "Stap",
+        "started": "Gestart",
+        "finished": "Klaar",
+        "error": "Fout"
+      },
+      "state": {
+        "building": "Bouwen",
+        "shipping": "Verzenden",
+        "releasing": "Vrijgeven",
+        "ok": "Live",
+        "failed": "Mislukt",
+        "rolled_back": "Teruggedraaid"
       }
     }
   }

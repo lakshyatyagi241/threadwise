@@ -21,11 +21,14 @@ export const noticeSha256 = (text: string): string =>
   createHash('sha256').update(text, 'utf8').digest('hex');
 
 /** The saved row merged over the defaults. Recording is OFF until a workspace turns it on (decision D7). */
-export function mergeRecordingSettings(row: RecordingSettingsRow | null): CallRecordingSettings {
+export function mergeRecordingSettings(
+  row: RecordingSettingsRow | null,
+  defaultDays: number = CALL_RECORDING_RETENTION_DEFAULT_DAYS,
+): CallRecordingSettings {
   return {
     enabled: row?.enabled ?? false,
     consentMode: row?.consentMode ?? 'confirmed',
-    retentionDays: row?.retentionDays ?? CALL_RECORDING_RETENTION_DEFAULT_DAYS,
+    retentionDays: row?.retentionDays ?? defaultDays,
     noticeText: row?.noticeText ?? null,
     noticeVersion: row?.noticeVersion ?? 0,
     rowVersion: row?.rowVersion ?? null,
@@ -56,10 +59,12 @@ export class CallRecordingSettingsService {
 
   /** For the gate and the sweep: no request context, no plan check. */
   async read(orgId: number): Promise<CallRecordingSettings> {
-    const row = await this.db.txAs({ orgId, userId: null }, (tx) =>
-      this.repo.getSettings(tx, orgId),
-    );
-    return mergeRecordingSettings(row);
+    const { row, defaultDays } = await this.db.txAs({ orgId, userId: null }, async (tx) => ({
+      row: await this.repo.getSettings(tx, orgId),
+      // The platform default window (retention dashboard) for a workspace that never chose its own.
+      defaultDays: await this.repo.platformDefaultDays(tx),
+    }));
+    return mergeRecordingSettings(row, defaultDays);
   }
 
   async update(input: UpdateCallRecordingSettingsInput): Promise<CallRecordingSettings> {
@@ -100,7 +105,7 @@ export class CallRecordingSettingsService {
         input.rowVersion,
       );
       if (!ok) throw AppError.rowVersionConflict('Call recording settings');
-      const was = mergeRecordingSettings(before);
+      const was = mergeRecordingSettings(before, await this.repo.platformDefaultDays(tx));
       await this.audit.record(tx, {
         module: MODULE,
         recordId: orgId,

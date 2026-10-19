@@ -15,7 +15,7 @@ import {
   widgets,
 } from '../transform/flows';
 import { faqKnowledge } from '../transform/faq';
-import { writeFaqFallbacks, writeFaqSettings } from './faq';
+import { assignKbFaqAgent } from './faq';
 import { uuidv5 } from '../util';
 import { sql, withTenant, type Database } from './db';
 import type { Env } from './engine';
@@ -152,27 +152,12 @@ export function installFlowsLoader(): void {
     spec.prepare = prepareFlows;
     spec.fingerprint = (env) => env.flows?.fingerprint ?? '';
   }
-  // one settings row (switch OFF) per flow that owns a migrated FAQ, in the batch's transaction; a row that exists is never touched
-  faqKnowledge.afterInsert = async (tx, ctx, table, rows) => {
-    if (table !== 'faqs') return;
-    await writeFaqSettings(tx, ctx.orgId, [
-      ...new Set(rows.map((r) => Number(r.row.owner_flow_id))),
-    ]);
+  // the shared "FAQ" entry (a bot without an assistant of its own) goes to the workspace's first active agent
+  faqKnowledge.beforeInsert = async (tx, ctx, table, rows) => {
+    if (table !== 'ai_training_sources') return;
+    await assignKbFaqAgent(tx, ctx.orgId, rows);
   };
   // the token is made at insert time, inside the batch's transaction, and only for rows that do not exist yet
-  // the bot's fallback message goes to the settings of its flow (the widget row carries flow_id; the text lives in the plan)
-  widgets.afterInsert = async (tx, ctx, table, rows) => {
-    if (table !== 'chatbot_widgets' || !ctx.flows) return;
-    const byUuid = new Map<string, string>();
-    for (const [botId, w] of ctx.flows.widgets)
-      if (w.fallback !== null) byUuid.set(uuidv5(`${ctx.client}|widgets|${botId}`), w.fallback);
-    const items = rows.flatMap((r) => {
-      const message = byUuid.get(r.uuid);
-      const flowId = Number(r.row.flow_id);
-      return message !== undefined && Number.isFinite(flowId) ? [{ flowId, message }] : [];
-    });
-    await writeFaqFallbacks(tx, ctx.orgId, items);
-  };
   widgets.beforeInsert = async (_tx, _ctx, table, rows) => {
     if (table !== 'chatbot_widgets') return;
     for (const r of rows) r.embed_token = freshEmbedToken();

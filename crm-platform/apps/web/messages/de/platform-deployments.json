@@ -60,7 +60,8 @@
     "tabs": {
       "label": "Auswahl der Anzeige",
       "publishes": "Flow-Veröffentlichungen",
-      "geta": "Geta-Konsole"
+      "geta": "Geta-Konsole",
+      "releases": "Produktversionen"
     },
     "publishes": {
       "description": "Jede Flow-Veröffentlichung: was der Worker in die Warteschlange gestellt hat, was er gerade abarbeitet und welche Veröffentlichungen aus welchem Grund fehlgeschlagen sind. Aktualisiert sich alle paar Sekunden.",
@@ -78,6 +79,31 @@
       "empty": {
         "all": "Noch kein Flow wurde veröffentlicht.",
         "done": "In den letzten 30 Tagen wurde keine Veröffentlichung abgeschlossen."
+      }
+    },
+    "releases": {
+      "description": "Was auf desk.wabo.ai live ist: die aktuelle Version, eine laufende Version und jeder Versuch mit Schritten und Fehlern. Aktualisiert sich alle paar Sekunden.",
+      "liveLabel": "Jetzt live",
+      "live": "Version {tag}, live seit {time}",
+      "noneLive": "Noch keine Version ist live gegangen.",
+      "inProgress": "Eine Version läuft",
+      "stalledAlert": "{count} Versionsversuch/e haben sich seit {minutes} Minuten nicht verändert. Der Build oder die Veröffentlichung ist womöglich gestoppt.",
+      "empty": "Noch keine Version erfasst. Versionen erscheinen hier ab dem nächsten Deployment.",
+      "cols": {
+        "tag": "Tag",
+        "state": "Status",
+        "step": "Schritt",
+        "started": "Gestartet",
+        "finished": "Beendet",
+        "error": "Fehler"
+      },
+      "state": {
+        "building": "Wird gebaut",
+        "shipping": "Wird übertragen",
+        "releasing": "Wird veröffentlicht",
+        "ok": "Live",
+        "failed": "Fehlgeschlagen",
+        "rolled_back": "Zurückgerollt"
       }
     }
   }

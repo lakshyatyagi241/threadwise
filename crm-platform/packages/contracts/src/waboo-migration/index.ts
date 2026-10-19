@@ -92,6 +92,8 @@ export const wabooMigrationRunSchema = z.object({
   sourceClient: z.string(),
   sourceDb: z.string(),
   mode: z.enum(WMIG_MODES),
+  /** true = this run leaves the WhatsApp number out (no credential import, no cutover). */
+  skipWhatsapp: z.boolean(),
   status: z.enum(WMIG_STATUSES),
   /** Null until the run has a report or has failed; a failed run is red. */
   verdict: z.enum(WMIG_VERDICTS).nullable(),
@@ -141,6 +143,8 @@ export const createWabooMigrationRunSchema = z.preprocess(
       .optional(),
     /** Defaults to a dry run. */
     mode: z.enum(WMIG_MODES).default('dry'),
+    /** Testing switch: do not migrate the WhatsApp number (no credential import, no cutover). Default false. */
+    skipWhatsapp: z.boolean().default(false),
     /** Required for mode "load": the organization id typed again. */
     confirm: z.string().optional(),
     /** ISO timestamp, in the future and at most 90 days ahead. Omit to start now. */
@@ -152,6 +156,8 @@ export type CreateWabooMigrationRunInput = z.infer<typeof createWabooMigrationRu
 export const createWabooMigrationBatchSchema = z.object({
   organizationIds: z.array(organizationIdSchema).min(1).max(WMIG_MAX_BATCH),
   mode: z.enum(WMIG_MODES).default('dry'),
+  /** Testing switch: no organization of the batch migrates its WhatsApp number. Default false. */
+  skipWhatsapp: z.boolean().default(false),
   /** Required for mode "load": the NUMBER of organizations, typed. */
   confirmCount: z.coerce.number().int().optional(),
   runAt: runAtSchema.optional(),

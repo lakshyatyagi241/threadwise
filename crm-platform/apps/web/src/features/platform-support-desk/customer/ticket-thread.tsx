@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState, type FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { customerTicketDetailSchema } from '@crm/contracts';
@@ -19,6 +19,7 @@ export function TicketThread({ id }: { id: string }) {
   const te = useTranslations(`${NS}.errors`);
   const ts = useTranslations(`${NS}.status`);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const key = [...TICKETS_KEY, id] as const;
   const [body, setBody] = useState('');
@@ -91,7 +92,7 @@ export function TicketThread({ id }: { id: string }) {
               {m.role === 'support' ? t('support') : t('you')}
               {m.role === 'initial'
                 ? ` · ${t('initial')}`
-                : ` · ${formatWhen(m.createdAt, locale)}`}
+                : ` · ${formatWhen(m.createdAt, locale, timeZone)}`}
             </p>
             <p className="whitespace-pre-wrap text-sm">{m.body}</p>
           </li>

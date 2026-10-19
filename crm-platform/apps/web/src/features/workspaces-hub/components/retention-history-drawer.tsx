@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
 import type { OrgLifecycleLogEntry, OrgLifecycleResponse } from '@crm/contracts';
 import { Drawer, EmptyState } from '@crm/ui';
@@ -37,6 +37,7 @@ function HistoryBody({ id }: { id: string }) {
   const t = useTranslations('workspaces-hub.retention.history');
   const te = useTranslations('workspaces-hub.retention.event');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const q = useQuery({
     queryKey: lifecycleKeys.log(id),
     queryFn: ({ signal }) => fetchLifecycleLog(id, signal),
@@ -46,7 +47,11 @@ function HistoryBody({ id }: { id: string }) {
   if (q.isError) return <ErrorBlock error={q.error} onRetry={() => void q.refetch()} />;
   if (q.data.length === 0)
     return <EmptyState title={t('emptyTitle')} message={t('emptyMessage')} />;
-  const when = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' });
+  const when = new Intl.DateTimeFormat(locale, {
+    timeZone,
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
   return (
     <ol className="space-y-3" data-testid="retention-log">
       {q.data.map((e, i) => {

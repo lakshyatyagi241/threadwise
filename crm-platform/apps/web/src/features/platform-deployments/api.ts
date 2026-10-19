@@ -1,6 +1,7 @@
 import {
   deploymentsResponseSchema,
   publishesResponseSchema,
+  releasesResponseSchema,
   type DeploymentStatus,
   type PublishStatus,
 } from '@crm/contracts';
@@ -39,3 +40,10 @@ export const fetchPublishes = (status: PublishStatus | null, signal?: AbortSigna
     schema: publishesResponseSchema,
     signal,
   });
+
+export const releasesKeys = {
+  all: ['operator', 'deployments', 'releases'] as const,
+};
+
+export const fetchReleases = (signal?: AbortSignal) =>
+  operatorFetch(`${ROOT}/releases`, { schema: releasesResponseSchema, signal });

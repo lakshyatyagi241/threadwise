@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { SubscriptionItem } from '@crm/contracts';
@@ -87,6 +87,7 @@ export function SubscriptionsPage() {
 function SubscriptionCard({ item: s, canManage }: { item: SubscriptionItem; canManage: boolean }) {
   const t = useTranslations(NS);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const [showCharges, setShowCharges] = useState(false);
   const [confirm, setConfirm] = useState(false);
@@ -94,7 +95,7 @@ function SubscriptionCard({ item: s, canManage }: { item: SubscriptionItem; canM
     null,
   );
   const date = (iso: string) =>
-    new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(iso));
+    new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'long' }).format(new Date(iso));
 
   const refresh = () => qc.invalidateQueries({ queryKey: SUBSCRIPTIONS_KEY });
   const sync = useMutation({
@@ -214,6 +215,7 @@ function SubscriptionCard({ item: s, canManage }: { item: SubscriptionItem; canM
 function Charges({ id }: { id: string }) {
   const t = useTranslations(NS);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const q = useQuery({
     queryKey: subscriptionChargesKey(id),
     queryFn: ({ signal }) => fetchSubscriptionCharges(id, signal),
@@ -256,7 +258,7 @@ function Charges({ id }: { id: string }) {
                   <tr key={c.id} className="border-t border-border" data-testid="charge-row">
                     <td className="px-3 py-2">
                       {when
-                        ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(
+                        ? new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium' }).format(
                             new Date(when),
                           )
                         : '—'}

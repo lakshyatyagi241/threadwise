@@ -35,7 +35,7 @@ export const STEP_DEPS: Record<string, string[]> = {
   flow_nodes: ['flow_bots'],
   flow_workspace: ['flow_bots'],
   faq_replies: ['flow_bots'],
-  faq_knowledge: ['flow_bots'],
+  faq_knowledge: ['flow_bots', 'widget_assistants'], // widget_assistants: the agent that holds a bot's FAQ entry
   widget_assistants: [],
   widgets: ['widget_assistants', 'flow_bots'], // flow_bots: the widget row carries the id of the flow its bot became (flow_id)
   flow_chatbots: ['flow_bots', 'widgets'],
@@ -85,8 +85,8 @@ export const STEP_GROUPS: Record<string, string[]> = {
     'flow_nodes',
     'flow_workspace',
     'faq_replies',
-    'faq_knowledge',
     'widget_assistants',
+    'faq_knowledge',
     'widgets',
     'flow_chatbots',
     'widget_config',
@@ -226,7 +226,7 @@ const REASON: Record<string, string> = {
   flow_nodes: 'steps of the latest version (adopted / excluded)',
   flow_workspace: 'draft copy, Intent / FAQ records',
   faq_replies: 'FAQ phrases -> inactive keyword replies',
-  faq_knowledge: 'FAQ feature: paused FAQs + pending variations + disabled per-flow settings',
+  faq_knowledge: 'FAQs -> one text entry "FAQ" per AI agent in the knowledge base',
   widget_assistants: 'paused AI assistants of the widgets',
   widgets: 'paused chatbot widgets',
   flow_chatbots: 'bot documents (adopted into flow / widget)',

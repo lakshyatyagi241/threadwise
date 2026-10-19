@@ -552,20 +552,10 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         );
         return advance('success');
       }
-      case 'faq': {
-        // The match needs the workspace's FAQs and its embedding model: the test chat does not run it, so nothing is sent and no
-        // `<save>.*` variable is set. The step takes the "answered" exit when it is wired, else "no match", so either branch can be walked.
-        const wired = (handle: string) =>
-          edges.some((x) => x.source === node.id && x.sourceHandle === handle);
-        const port = wired('matched') || !wired('no_match') ? 'matched' : 'no_match';
-        sys(
-          tx(port === 'matched' ? 'faqAnswered' : 'faqNoMatch', {
-            query: str(d.query) || '{{user_message}}',
-            ref: `{{${str(d.save) || 'faq'}}}`,
-          }),
-        );
-        return advance(port);
-      }
+      case 'faq':
+        // Retired: FAQs are entries in an AI agent's knowledge now. A flow that still has the step leaves by "no match".
+        sys(tx('faqRetired'));
+        return advance('no_match');
       case 'end':
         sys(tx('flowEnded'));
         stop();

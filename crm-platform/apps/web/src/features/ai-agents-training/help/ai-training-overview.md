@@ -1,7 +1,7 @@
 ---
 id: ai-training-overview
 title: AI Training
-summary: Build smart agents and teach them from your own pages, files, text and question-and-answer pairs. Flows and the website chat answer from them.
+summary: Build smart agents and teach them from your own pages, files, text and FAQs. Flows and the website chat answer from them.
 area: settings
 order: 5
 documents: [tile:ai-training]
@@ -36,12 +36,14 @@ Select **Finish & close** when you are done, or **Save draft** at any point.
 
 ## Adding knowledge
 
-- **Live URL.** Give a public page address. The page is read in the background, so the entry shows **processing** for a moment and then **ready**, or **failed** with the reason, for example a page that needs a sign-in or a private address.
+Each agent has **one knowledge base of its own**. What you add here belongs to this agent only: no other agent can use it, and a copy of the agent gets its own copy of the entries.
+
+- **Live URL.** Give a public page address. The page is read in the background, so the entry shows **Reading…** for a moment. If a page cannot be read (for example it needs a sign-in or is private) the entry says so with the reason; remove it and paste the text instead.
 - **Free text.** Paste a help snippet or a policy.
-- **Q&A pair.** One question with its answer, the quickest way to cover a common question.
+- **Add FAQ.** Type a question and its answer. Select **Add another question** to add several in one go; each pair is saved as its own entry. FAQs are just entries in the knowledge base, not a separate feature: there is no FAQ tab, score or setting to manage.
 - **File.** Upload a PDF, DOCX, TXT, Markdown, CSV or HTML file of up to 10 MB. The text is extracted for you. A scanned PDF with no text layer cannot be read: paste its text instead.
 
-Only entries that are **ready** are used. Removing an entry stops the agent using it for new replies. A few well-chosen pages or one Q&A per common question usually does more than loading a whole site.
+When a customer asks something, the agent looks through its knowledge by meaning and answers from the few most relevant parts. If the answer is not there, it says it does not know instead of guessing, or hands over to a person if you set a handoff phrase. Removing an entry stops the agent using it for new replies. A few well-chosen pages or one FAQ per common question usually does more than loading a whole site.
 
 ## Using an agent
 
@@ -65,8 +67,9 @@ The screen needs the **AI assistants** plan feature; without it an upgrade sheet
 
 ## If something looks wrong
 
-- **An entry shows failed.** The reason is under the state. A page that needs a sign-in, points to a private address or has no text cannot be read. Remove the entry and add the text yourself.
+- **An entry says it could not be read.** The reason is under its name. A page that needs a sign-in, points to a private address or has no text cannot be read. Remove the entry and add the text yourself.
 - **A file is refused.** Check the type and size, and that old Word `.doc` files are saved as `.docx` first.
-- **The agent does not use a new entry.** Entries still processing or failed are skipped, and an agent that is paused is hidden from pickers.
+- **The agent does not use a new entry.** An entry that is still being read or could not be read is skipped, and an agent that is paused is hidden from pickers.
+- **The agent says it does not know.** The answer is not in its knowledge. Add an FAQ or a text entry that covers it.
 - **No models in the Brain step.** Ask your admin to enable a model, or add your own key under Settings, AI keys, where your plan allows it.
 - **The page says it was changed elsewhere.** Reload it to get the latest version, then save again.

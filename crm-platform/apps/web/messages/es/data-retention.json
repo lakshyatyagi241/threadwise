@@ -38,6 +38,58 @@
       "audit_log_exports": {
         "title": "Archivos de exportación de auditoría",
         "description": "El CSV que un espacio de trabajo solicita de su registro de auditoría. Quien lo solicita recibe un correo con un enlace para iniciar sesión y descargarlo; el archivo se elimina pasados los días activos."
+      },
+      "message_log": {
+        "title": "Registro de entrega de mensajes",
+        "description": "El registro de entrega de cada mensaje: enviado, entregado, fallido, reintentado. Los eventos salen de la tabla activa tras los días activos y pasan, comprimidos, al archivo; los días de archivo cuentan desde ese día. El registro de un mensaje y las exportaciones del registro aún pueden leer el archivo."
+      },
+      "notifications_read": {
+        "title": "Notificaciones (leídas)",
+        "description": "Notificaciones de la campana que un usuario ya ha leído. Se eliminan cuando tienen esta cantidad de días. El valor integrado procede de la configuración del servidor (NOTIFY_RETENTION_READ_DAYS)."
+      },
+      "notifications_unread": {
+        "title": "Notificaciones (nunca leídas)",
+        "description": "Notificaciones de la campana que nadie ha abierto. Se eliminan cuando tienen esta cantidad de días, y nunca antes que las leídas (se rechaza el guardado si fuera así). El valor integrado procede de la configuración del servidor (NOTIFY_RETENTION_UNREAD_DAYS)."
+      },
+      "push_devices_revoked": {
+        "title": "Dispositivos push revocados",
+        "description": "Navegadores y teléfonos que dejaron de aceptar notificaciones push. Se conservan brevemente para que un dispositivo que vuelva pueda reactivar las notificaciones y después se eliminan."
+      },
+      "assignment_runs": {
+        "title": "Registro de ejecuciones de asignación",
+        "description": "El registro de cada ejecución de asignación automática de contactos, con quién recibió qué y por qué. Se elimina tras los días activos."
+      },
+      "form_events": {
+        "title": "Eventos de analítica de formularios",
+        "description": "Vistas, inicios y envíos de los formularios web, usados para los gráficos de conversión de formularios. No contienen respuestas. Se eliminan tras los días activos. Las respuestas siguen la retención propia de cada formulario."
+      },
+      "lead_sync_runs": {
+        "title": "Ejecuciones de sincronización de leads",
+        "description": "El registro de cada sincronización o recuperación de leads desde una plataforma de anuncios: quién obtuvo qué y cuándo. Se elimina tras los días activos. Los datos brutos de los leads siguen la retención propia de cada fuente."
+      },
+      "lead_scoring_runs": {
+        "title": "Registro de puntuación de leads con IA",
+        "description": "Cada puntuación de lead con IA con sus motivos, y las lecturas de conversación y sugerencias de etapa que la respaldan. Hasta que guarde un valor aquí, se usa el número definido en la configuración de puntuación de leads con IA. Una persona bajo retención legal conserva sus registros."
+      },
+      "api_library_logs": {
+        "title": "Registro de ejecuciones de la Biblioteca de API",
+        "description": "El registro de solicitud y respuesta de cada llamada a la Biblioteca de API. Se elimina tras los días activos."
+      },
+      "flow_run_logs": {
+        "title": "Registro de ejecuciones de automatización",
+        "description": "Cada ejecución terminada de un flujo de automatización con sus pasos, y las versiones de flujo a las que ya no apunta ninguna ejecución. Las ejecuciones en curso nunca se tocan."
+      },
+      "webhook_forward_failures": {
+        "title": "Entregas de webhook fallidas",
+        "description": "Entregas de webhook que fallaron y aún pueden reenviarse. Tras los días activos ya no pueden reenviarse y se eliminan."
+      },
+      "click_calls": {
+        "title": "Llamadas con clic para llamar sin reportar",
+        "description": "Una llamada con clic para llamar cuya llamada finalizada nunca regresó del proveedor. Se olvida tras los días activos."
+      },
+      "call_recordings": {
+        "title": "Grabaciones de llamadas",
+        "description": "El número de días predeterminado que se conserva una grabación de llamada, para los espacios de trabajo que nunca eligieron su propio plazo; el plazo propio de un espacio de trabajo sigue prevaleciendo. Pasado ese plazo se elimina el archivo de la grabación y la llamada permanece. Una grabación bajo retención legal se conserva."
       }
     },
     "fields": {
@@ -45,7 +97,8 @@
       "liveDaysHint": "Días que los datos permanecen en la base de datos. Permitido: de {min} a {max}.",
       "keepForever": "Conservar el archivo para siempre",
       "archiveDays": "Días de archivo",
-      "archiveDaysHint": "Días adicionales que el archivo lo conserva antes de eliminarlo. Permitido: de {min} a {max}."
+      "archiveDaysHint": "Días adicionales que el archivo lo conserva antes de eliminarlo. Permitido: de {min} a {max}.",
+      "keepForeverShort": "Conservar siempre"
     },
     "summary": {
       "noArchive": "Se elimina definitivamente {live, plural, one {# día} many {# de días} other {# días}} después de escribirse.",
@@ -73,7 +126,9 @@
       "neverRun": "Aún no se ha ejecutado",
       "runLive": "{when}: {months, plural, one {# mes archivado} many {# de meses archivados} other {# meses archivados}} ({rows} filas, {size}), {expired} eliminados del archivo, {deleted} filas o archivos eliminados",
       "runDry": "{when}: simulación, no se cambió nada",
-      "runFailed": "La última ejecución tuvo un problema: {error}"
+      "runFailed": "La última ejecución tuvo un problema: {error}",
+      "runDeleted": "{when}: {deleted, plural, one {# fila o archivo eliminado} other {# filas o archivos eliminados}}",
+      "runDaily": "{when}: {rows} eventos movidos al archivo, {expired} días archivados eliminados"
     },
     "actions": {
       "save": "Guardar",
@@ -85,7 +140,8 @@
       "confirmSave": "Guardar y aplicar",
       "resetTitle": "¿Devolver {item} a su comportamiento actual?",
       "resetBody": "Se eliminan los valores guardados. Los trabajos nocturnos vuelven a las reglas integradas para este elemento. Los datos ya archivados permanecen en el archivo.",
-      "confirmReset": "Volver al comportamiento actual"
+      "confirmReset": "Volver al comportamiento actual",
+      "resetShort": "Restablecer"
     },
     "preview": {
       "title": "¿Guardar la retención de {item}?",
@@ -94,7 +150,8 @@
       "toDeleteFromArchive": "{count, plural, one {# mes archivado} many {# de meses archivados} other {# meses archivados}} se eliminarán definitivamente del archivo.",
       "rowsToDelete": "{count, plural, one {# fila o archivo} many {# de filas o archivos} other {# filas o archivos}} se eliminarán definitivamente.",
       "notApplied": "El trabajo de archivado aún no aplica los valores guardados, así que nada de esto ocurre hasta que se active.",
-      "permanent": "La eliminación es permanente y no se puede deshacer."
+      "permanent": "La eliminación es permanente y no se puede deshacer.",
+      "rowsToArchive": "{count, plural, one {# evento pasará} other {# eventos pasarán}} de la tabla activa al archivo."
     },
     "saved": "Retención guardada.",
     "resetDone": "Se ha vuelto al comportamiento actual.",
@@ -103,7 +160,8 @@
       "archive_out_of_range": "Los días de archivo deben ser un número entero de {min} a {max}.",
       "archive_not_supported": "Este elemento no se puede archivar.",
       "delete_before_archive": "Los datos no se pueden eliminar antes de archivarse.",
-      "not_a_number": "Introduce un número entero de días."
+      "not_a_number": "Introduce un número entero de días.",
+      "unread_before_read": "Las notificaciones no leídas no pueden eliminarse antes que las leídas. Establezca los días de no leídas en al menos los días de leídas."
     },
     "errors": {
       "forbidden": "No tienes permiso para hacer eso.",
@@ -112,6 +170,36 @@
       "request": "Se rechazó la solicitud.",
       "unexpected": "Algo salió mal en el servidor. Inténtalo de nuevo.",
       "network": "No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo."
+    },
+    "groups": {
+      "analytics": "Analítica",
+      "security": "Seguridad y auditoría",
+      "messaging": "Mensajería y notificaciones",
+      "crm": "CRM y leads",
+      "automation": "Automatización e integraciones",
+      "calling": "Llamadas"
+    },
+    "table": {
+      "title": "Retención de un vistazo",
+      "description": "Qué conserva cada tipo de dato y durante cuánto tiempo. Seleccione un elemento para cambiar sus cifras más abajo.",
+      "item": "Datos",
+      "storedIn": "Almacenado en",
+      "live": "Activo (base de datos)",
+      "archive": "Archivo",
+      "deleted": "Eliminado definitivamente tras",
+      "setting": "Ajuste",
+      "days": "{count, plural, one {# día} other {# días}}",
+      "noArchive": "Sin archivo",
+      "forever": "Para siempre",
+      "never": "Nunca",
+      "where": {
+        "partitioned": "Base de datos y luego archivo {driver}",
+        "daily_archive": "Base de datos y luego archivo en base de datos",
+        "table": "Solo base de datos",
+        "file": "Archivos"
+      },
+      "actions": "Acciones",
+      "about": "¿Qué es esto?"
     }
   }
 }

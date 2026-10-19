@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { filterPalette } from './palette';
 import { translator } from '../test-utils/intl';
-import { nodeDescription, nodeLabel } from '../lib/contract-text';
 
 const tf = translator('flb');
 
@@ -11,7 +10,7 @@ const ids = (mode: Parameters<typeof filterPalette>[0], q = '') =>
 describe('palette (TW-FLB-016)', () => {
   it('a WhatsApp flow lists the 35 Reference nodes plus Ask for file / location and the workflow additions, in Reference group order, Template / List / Sequence / MySQL / Google included', () => {
     const groups = filterPalette('chat', '', tf);
-    expect(groups.reduce((a, [, items]) => a + items.length, 0)).toBe(46); // 44 + API (from library) + Answer from FAQ, the owner-requested nodes
+    expect(groups.reduce((a, [, items]) => a + items.length, 0)).toBe(45); // 44 + API (from library); "Answer from FAQ" is retired and not offered
     expect(groups.map(([g]) => g)).toEqual([
       'Start',
       'Send',
@@ -83,17 +82,12 @@ describe('palette (TW-FLB-016)', () => {
     expect(all).not.toContain('list');
   });
 
-  it('"Answer from FAQ" is in the AI group, with its name and description, on chat and every social flow type but not on calls', () => {
-    const ai = filterPalette('chat', '', tf).find(([g]) => g === 'AI')![1];
-    const faq = ai.find((d) => d.id === 'faq')!;
-    expect(faq).toBeDefined();
-    expect(nodeLabel(tf, 'faq')).toBe('Answer from FAQ');
-    expect(nodeDescription(tf, 'faq')).toBe('Match a message to your FAQs');
-    for (const mode of ['chat', 'instagram', 'facebook'] as const)
-      expect(ids(mode)).toContain('faq');
-    expect(ids('call')).not.toContain('faq');
-    expect(ids('chat', 'your FAQs')).toEqual(['faq']);
-    expect(ids('chat', 'answer from faq')).toEqual(['faq']);
+  it('"Answer from FAQ" is retired: it is never offered, whatever the flow type or the search', () => {
+    for (const mode of ['chat', 'instagram', 'facebook', 'web'] as const) {
+      expect(ids(mode)).not.toContain('faq');
+      expect(ids(mode, 'faq')).not.toContain('faq');
+    }
+    expect(ids('chat', 'answer from faq')).toEqual([]);
   });
 
   it('legacy (hidden) Instagram nodes are never offered', () => {
@@ -119,6 +113,6 @@ describe('palette (TW-FLB-016)', () => {
   it('QUIRK: the query is not trimmed, a padded query matches nothing', () => {
     expect(ids('chat', 'sheet')).toEqual(['google_sheets', 'sheet_check', 'sheet_contact']);
     expect(ids('chat', '  sheet  ')).toEqual([]);
-    expect(ids('chat', ' ').length).toBe(46); // every description holds a space
+    expect(ids('chat', ' ').length).toBe(45); // every description holds a space
   });
 });

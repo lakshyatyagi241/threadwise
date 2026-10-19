@@ -66,8 +66,8 @@ export const STEPS: HandlerSpec[] = [
   flowNodes,
   flowWorkspace,
   faqReplies, // needs the flow ids
-  faqKnowledge, // the FAQ feature (faqs, variations, settings): derived from the Intent / FAQ records and faq_variations; needs the flow ids
-  widgetAssistants, // the assistant row first: the widget row points at it
+  widgetAssistants, // the assistant row first: the widget row points at it, and so does the FAQ entry of a bot
+  faqKnowledge, // the FAQs as one "FAQ" text entry per AI agent: derived from the Intent / FAQ records and faq_variations; needs the flow ids and the assistants
   widgets,
   flowChatbots, // after the widgets: a website bot's document is adopted into its widget
   widgetConfig,
