@@ -13,6 +13,7 @@ import { IS_PUBLIC_KEY } from '../../common/decorators';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { PlanEntitlementService } from './plan-entitlement.service';
+import { setCapped } from '../../common/cache/capped-map';
 
 export const ALLOW_WHEN_TRIAL_EXPIRED_KEY = 'plan:allow-when-trial-expired';
 
@@ -57,6 +58,8 @@ const GATED_ACTORS = new Set(['user', 'api_key']);
  * its very next request.
  */
 const OPEN_VERDICT_TTL_MS = 5_000;
+/** At most this many workspaces' "not expired" verdicts are remembered per process; the oldest goes first. */
+export const TRIAL_VERDICT_CACHE_MAX = 5_000;
 
 /**
  * The trial hard gate (TW-PLAN-015): once a free trial has run out every feature route answers 402 until a plan is bought, while
@@ -112,7 +115,7 @@ export class TrialGateGuard implements CanActivate {
       const e = await this.entitlements.forOrg(orgId);
       // Organizations the platform owns are never limited; a missing organization has nothing to gate.
       const expired = !!e && !e.platformOwned && e.state === 'free_trial_expired';
-      if (!expired) this.openUntil.set(orgId, now + OPEN_VERDICT_TTL_MS);
+      if (!expired) setCapped(this.openUntil, orgId, now + OPEN_VERDICT_TTL_MS, TRIAL_VERDICT_CACHE_MAX);
       return expired;
     } catch (err) {
       this.logger.warn(

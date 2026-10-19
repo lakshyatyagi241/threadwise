@@ -22,6 +22,7 @@ import {
   type InboundSink,
 } from '../runtime/routers';
 import { INBOUND_MEDIA_TTL_S, inboxKeys, SENT_MARKER_TTL_S } from './inbox-keys';
+import { CappedMap } from '../../../common/cache/capped-map';
 
 interface DeviceRow {
   uuid: string;
@@ -63,7 +64,7 @@ const KIND_LABEL: Record<string, string> = {
 @Injectable()
 export class InboxBridge implements InboundSink, OnModuleInit {
   private readonly logger = new Logger(InboxBridge.name);
-  private readonly channels = new Map<string, { uuid: string; at: number }>();
+  private readonly channels = new CappedMap<string, { uuid: string; at: number }>(5000);
   private readonly subjects = new Map<string, { subject: string; at: number }>();
 
   constructor(
