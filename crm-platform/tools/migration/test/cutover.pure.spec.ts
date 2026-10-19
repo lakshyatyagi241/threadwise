@@ -124,6 +124,8 @@ describe('the checklist', () => {
     expect(statusOf(n({ ext: 'map-id' }), 'number-id')).toBe('FAIL');
     expect(statusOf(n({ tokenOpens: 'the stored credential does not open with this key' }), 'token')).toBe('FAIL');
     expect(statusOf(n({ cfg: { ...g.numbers[0]!.cfg!, providerKey: 'interakt' } }), 'route')).toBe('FAIL');
+    // a number the Pinnacle partner program already onboarded goes live through the Meta subscription and the database alone
+    expect(statusOf(n({ cfg: { ...g.numbers[0]!.cfg!, providerKey: 'pinnacle' } }), 'route')).toBe('PASS');
     expect(statusOf({ ...g, flows: { live: 3, armed: 2, stray: 1 } }, 'flows')).toBe('FAIL');
     expect(statusOf({ ...g, backup: null }, 'backup')).toBe('FAIL');
     expect(statusOf({ ...g, backup: { name: 'x', atMs: Date.parse('2026-10-10T00:00:00Z') } }, 'backup')).toBe('FAIL');

@@ -636,6 +636,14 @@ async function cmdWaCredentials(srv, cfg, db) {
   if (!fs.existsSync(bin)) refuse(`the exporter ${bin} does not exist (set MONGO_EXPORT_BIN)`);
   const file = `${srv.mig}/dumps/${cfg.client}/chatbot_misc_config.ndjson`;
   const wipe = () => remote(srv, `rm -f ${shq(file)}`);
+  // the export holds the bot credentials in plaintext until the import has read it: a leftover of an earlier killed run goes first, and a
+  // stop signal (the runner's timeout, the panel's cancel, Ctrl+C) wipes it before the process ends (a `finally` does not run on SIGTERM)
+  await wipe();
+  const onStop = (sig) => {
+    wipe().finally(() => process.exit(sig === 'SIGINT' ? 130 : 143));
+  };
+  process.once('SIGTERM', onStop);
+  process.once('SIGINT', onStop);
   try {
     const ex = await new Promise((res) => {
       const c = spawn(process.execPath, [bin, ...waExportArgs(cfg.client, db)], { stdio: ['ignore', 'pipe', 'pipe'] });
@@ -653,6 +661,8 @@ async function cmdWaCredentials(srv, cfg, db) {
     const ver = await runShown(srv, containerRun(srv, inner(['--verify']), { mounts }), 'wa-credentials verify');
     return ver.code === 0 ? 0 : 1;
   } finally {
+    process.removeListener('SIGTERM', onStop);
+    process.removeListener('SIGINT', onStop);
     const w = await wipe();
     console.log(`wa-credentials: the exported chatbot_misc_config ${w.code === 0 ? 'was deleted from the server' : 'COULD NOT be deleted: remove ' + file + ' by hand'}`);
   }
@@ -975,8 +985,7 @@ const CATCHUP_SKIPPED = new Set(['flow-state', 'wa-credentials', 'wa-cutover']);
 const MIN_FREE_MB = { 1: 700, 2: 1200 };
 const MAX_CONCURRENCY = 2;
 const MAX_DUMP_AGE_H = 24; // an export on the server younger than this is reused by migrate
-const KIT_EXPORT =
-  'D:\\wadesk-vedant\\db-migration\\geta-mongodb-read-replica-prod\\geta-mongodb-read-replica-prod\\bin\\mongo-export.cjs';
+const KIT_EXPORT = path.resolve(HERE, '..', '..', 'exporter', 'bin', 'mongo-export.cjs');
 const memCmd = () =>
   process.env.CYCLE_MEM_CMD || `awk '/^MemAvailable:/{printf "%d\\n", $2/1024}' /proc/meminfo`;
 

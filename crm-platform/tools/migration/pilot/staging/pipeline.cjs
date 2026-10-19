@@ -233,6 +233,8 @@ child.stdout.on('data', (d) => {
     let m;
     if ((m = line.match(/^migrate: (\S+) (ok|failed|skipped) [\d.]+s/))) {
       const step = EVENT_OF[m[1]] || m[1];
+      // a step the panel does not announce (update, files, wallet-sync ...) that FAILS must still name the failed step in the summary
+      if (m[2] === 'failed' && !wanted.includes(step) && !st.failedStep) st.failedStep = m[1];
       if (!wanted.includes(step)) continue;
       const status = m[2] === 'ok' ? 'done' : m[2];
       if (m[1] === 'ship' && status === 'done') continue; // ship and preflight are one step for the panel
