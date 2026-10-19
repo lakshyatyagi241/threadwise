@@ -104,6 +104,7 @@
       "failed": "fehlgeschlagen",
       "edited": "Bearbeitet {when}",
       "openBuilder": "Editor öffnen",
+      "faqs": "Häufige Fragen",
       "pause": "Pausieren",
       "resume": "Fortsetzen",
       "rename": "Umbenennen",
@@ -565,7 +566,7 @@
           "startPinned": "Dies ist der Startpunkt (zum Lösen anklicken)",
           "startMake": "Als Startpunkt festlegen",
           "startPoint": "Startpunkt",
-          "editTitle": "Bearbeiten (Inspektor öffnen)",
+          "editTitle": "Bearbeiten (Inspektor öffnen, oder Doppelklick auf den Knoten, oder Eingabetaste)",
           "edit": "Bearbeiten",
           "duplicateTitle": "Duplizieren (Strg+D)",
           "duplicate": "Duplizieren",
@@ -581,7 +582,9 @@
           "nothingHint": "Klicken Sie auf einen Knoten im Arbeitsbereich, um seine Eigenschaften zu bearbeiten,<br/>oder ziehen Sie links eine Karte, um einen neuen Knoten hinzuzufügen.",
           "nodeFallback": "Knoten",
           "id": "ID",
-          "noSettings": "Dieser Knoten hat keine Einstellungen."
+          "noSettings": "Dieser Knoten hat keine Einstellungen.",
+          "confirmDeleteTitle": "Diesen Knoten löschen?",
+          "confirmDeleteMessage": "Der Knoten und seine Verbindungen werden entfernt. Mit Strg+Z lässt sich das rückgängig machen, solange Sie den Builder nicht verlassen."
         },
         "palette": {
           "modeCall": "Anruf",

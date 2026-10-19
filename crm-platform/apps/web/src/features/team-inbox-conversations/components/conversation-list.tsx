@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import {
   useEffect,
   useId,
+  useMemo,
   useRef,
   useState,
   type KeyboardEvent,
@@ -78,6 +79,12 @@ export function ConversationList(props: ConversationListProps) {
   const tabsId = useId();
   const listId = useId();
   const showChannel = (channels?.length ?? 0) > 1;
+  // Channels that carry a reply-window rule: the row chip follows the same rule as the thread header.
+  const windowChannels = useMemo(
+    () =>
+      new Set((channels ?? []).filter((c) => c.capabilities.windowHours !== null).map((c) => c.id)),
+    [channels],
+  );
   const [filtersOpen, setFiltersOpen] = useState(false);
   const active = windowFilterCount(filters);
 
@@ -305,6 +312,7 @@ export function ConversationList(props: ConversationListProps) {
                 active={row.id === props.activeId}
                 nowMs={props.nowMs}
                 showChannel={showChannel}
+                hasWindowRule={windowChannels.has(row.channel.id)}
                 onOpen={props.onOpen}
                 selecting={props.bulk?.selecting ?? false}
                 selected={props.bulk?.selection.has(row.id) ?? false}

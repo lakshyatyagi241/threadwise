@@ -104,6 +104,7 @@
       "failed": "gagal",
       "edited": "Diedit {when}",
       "openBuilder": "Buka pembuat",
+      "faqs": "Pertanyaan umum",
       "pause": "Jeda",
       "resume": "Lanjutkan",
       "rename": "Ganti nama",
@@ -565,7 +566,7 @@
           "startPinned": "Ini adalah titik awal (klik untuk lepas pin)",
           "startMake": "Jadikan titik awal",
           "startPoint": "Titik awal",
-          "editTitle": "Edit (buka inspektor)",
+          "editTitle": "Edit (buka inspektur, atau klik dua kali pada simpul, atau tekan Enter)",
           "edit": "Edit",
           "duplicateTitle": "Duplikat (Ctrl+D)",
           "duplicate": "Duplikat",
@@ -581,7 +582,9 @@
           "nothingHint": "Klik node di kanvas untuk mengedit propertinya,<br/>atau seret kartu dari kiri untuk menambahkan node baru.",
           "nodeFallback": "Node",
           "id": "id",
-          "noSettings": "Node ini tidak memiliki pengaturan."
+          "noSettings": "Node ini tidak memiliki pengaturan.",
+          "confirmDeleteTitle": "Hapus simpul ini?",
+          "confirmDeleteMessage": "Simpul dan koneksinya akan dihapus. Tekan Ctrl+Z untuk membatalkan selama Anda belum meninggalkan builder."
         },
         "palette": {
           "modeCall": "Call",

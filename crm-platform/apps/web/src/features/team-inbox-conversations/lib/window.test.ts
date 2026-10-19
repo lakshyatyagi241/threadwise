@@ -60,4 +60,11 @@ describe('rowWindowChip', () => {
     expect(rowWindowChip(at(-1), NOW)).toEqual({ state: 'closed', msLeft: null });
     expect(rowWindowChip(null, NOW)).toBeNull();
   });
+
+  it('is closed for a customer who never wrote on a channel with a window rule, as the header says', () => {
+    expect(rowWindowChip(null, NOW, true)).toEqual({ state: 'closed', msLeft: null });
+    expect(rowWindowChip(null, NOW, false)).toBeNull();
+    // A live window is not touched by the rule.
+    expect(rowWindowChip(at(10 * H), NOW, true)).toBeNull();
+  });
 });

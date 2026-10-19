@@ -439,7 +439,10 @@
       "ownerOutOfScope": "내 접근 권한으로는 이 연락처를 해당 사람에게 배정할 수 없습니다.",
       "company": "회사",
       "companyHint": "이 연락처를 조직에 묶습니다.",
-      "companyRefused": "해당 회사는 사용할 수 없습니다. 다른 회사를 선택하거나 입력란을 비우세요."
+      "companyRefused": "해당 회사는 사용할 수 없습니다. 다른 회사를 선택하거나 입력란을 비우세요.",
+      "searchOptions": "옵션 검색",
+      "searchOptionsFor": "{field} 옵션 검색",
+      "noOptionsFound": "검색과 일치하는 옵션이 없습니다."
     },
     "tags": {
       "title": "태그",
@@ -1225,7 +1228,8 @@
             "duplicate": "이름이 같은 옵션이 두 개 있습니다."
           },
           "condition": "모든 조건에 대해 속성과 값을 선택하세요."
-        }
+        },
+        "optionsLazy": "이 속성에는 {count, plural, other {#개의 옵션}}이 있어 여기서 편집하기에는 너무 많습니다. 옵션은 그대로 유지되며 다른 설정은 변경할 수 있습니다."
       },
       "builtinCard": {
         "title": "기본 제공 속성",

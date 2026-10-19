@@ -3,3 +3,4 @@
  * See docs/threadwise-port/inventory/tasks.md and docs/api/tasks.md.
  */
 export * from './task';
+export * from './task-outcome';

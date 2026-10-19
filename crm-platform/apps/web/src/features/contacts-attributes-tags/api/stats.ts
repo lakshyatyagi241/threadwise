@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { callLogListSchema, taskPageResponseSchema } from '@crm/contracts';
+import { callLogListSchema, contactMessageStatsSchema, taskPageResponseSchema } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 import { callSearchTerm, callsOfContact, dayBefore } from '../lib/contact-data';
 
@@ -15,6 +15,8 @@ export const contactCallsKey = (contact: {
   phone: string | null;
   name: string | null;
 }) => ['cat', 'contact-calls', contact.id, callSearchTerm(contact)] as const;
+export const contactMessageStatsKey = (contactId: string) =>
+  ['cat', 'contact-message-stats', contactId] as const;
 export const contactOpenTasksKey = (contactId: string) =>
   ['cat', 'contact-open-tasks', contactId] as const;
 
@@ -86,5 +88,30 @@ export function useContactOpenTaskCount(contactId: string, enabled: boolean) {
     isError: q.isError,
     error: q.error,
     isSuccess: q.isSuccess,
+  };
+}
+
+/**
+ * The WhatsApp summary of one contact (`GET /contacts/:id/message-stats/whatsapp`): sent, delivered, seen, received, failed and
+ * replied, counted by the API from the contact's WhatsApp conversations. Needs `inbox.conversation.read`; a refusal or an error just
+ * leaves the card out.
+ */
+export function useContactMessageStats(contactId: string, enabled: boolean) {
+  const q = useQuery({
+    queryKey: contactMessageStatsKey(contactId),
+    enabled,
+    retry: false,
+    queryFn: ({ signal }) =>
+      apiFetch(`/contacts/${contactId}/message-stats/whatsapp`, {
+        schema: contactMessageStatsSchema,
+        signal,
+      }),
+    staleTime: 30_000,
+  });
+  return {
+    stats: q.data ?? null,
+    isPending: enabled && q.isPending,
+    isSuccess: q.isSuccess,
+    isError: q.isError,
   };
 }

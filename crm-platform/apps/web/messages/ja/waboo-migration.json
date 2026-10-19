@@ -196,7 +196,8 @@
       "core-load": "コアロード",
       "flow-state": "フロー状態",
       "reconcile": "照合",
-      "report": "レポート"
+      "report": "レポート",
+      "whatsapp": "WhatsApp 番号"
     },
     "stepStatus": {
       "running": "実行中",

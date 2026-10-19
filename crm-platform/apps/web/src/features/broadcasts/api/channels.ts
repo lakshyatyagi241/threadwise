@@ -10,6 +10,7 @@ import {
   smsSenderListResponseSchema,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
+import { usePlanFeature } from '@/lib/plan-features';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 
 /**
@@ -29,21 +30,25 @@ export function useBroadcastChannels(): {
   sms: string | null;
   email: string | null;
 } {
-  const canBots = useCan('tg.bots.read');
-  const canPagesRead = useCan('fb.pages.read');
+  // A channel the plan lacks is not asked about: the API would answer PLAN_FEATURE_LOCKED and the console would fill with errors.
+  const extraChannels = usePlanFeature('extra_channels');
+  const emailChannel = usePlanFeature('email_channel');
+  const smsPlan = usePlanFeature('sms');
+  const canBots = useCan('tg.bots.read') && extraChannels;
+  const canPagesRead = useCan('fb.pages.read') && extraChannels;
   const canFbBroadcasts = useCan('fb.broadcasts.read');
   const canPages = canPagesRead && canFbBroadcasts;
-  const canAccounts = useCan('ig.accounts.read');
-  const canLineChannels = useCan('line.channels.read');
+  const canAccounts = useCan('ig.accounts.read') && extraChannels;
+  const canLineChannels = useCan('line.channels.read') && extraChannels;
   const canLineBroadcasts = useCan('line.broadcasts.read');
   const canLine = canLineChannels && canLineBroadcasts;
-  const canViberChannels = useCan('viber.channels.read');
+  const canViberChannels = useCan('viber.channels.read') && extraChannels;
   const canViberBroadcasts = useCan('viber.broadcasts.read');
   const canViber = canViberChannels && canViberBroadcasts;
-  const canWechatChannels = useCan('wechat.channels.read');
+  const canWechatChannels = useCan('wechat.channels.read') && extraChannels;
   const canWechatBroadcasts = useCan('wechat.broadcasts.read');
   const canWechat = canWechatChannels && canWechatBroadcasts;
-  const canSms = useCan('sms.senders.read');
+  const canSms = useCan('sms.senders.read') && smsPlan;
   const bots = useQuery({
     queryKey: ['broadcasts', 'chooser', 'telegram'],
     enabled: canBots,
@@ -67,7 +72,7 @@ export function useBroadcastChannels(): {
     queryFn: ({ signal }) =>
       apiFetch('/instagram/accounts', { schema: igAccountListSchema, signal }),
   });
-  const canMailboxes = useCan('mail.mailboxes.read');
+  const canMailboxes = useCan('mail.mailboxes.read') && emailChannel;
   const userId = useSession().user.id;
   const mailboxes = useQuery({
     queryKey: ['broadcasts', 'chooser', 'email'],

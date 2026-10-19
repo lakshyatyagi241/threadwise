@@ -62,6 +62,8 @@ export interface MessageStreamProps {
   conversationId: string;
   /** The conversation's channel kind: the "template sent" line says which WhatsApp engine carried the template. */
   channelKind?: string;
+  /** The customer's name, shown above their bubbles. */
+  customerName?: string;
   state: ThreadState;
   notes: ConversationNote[];
   progress: Record<string, number>;
@@ -326,6 +328,7 @@ export function MessageStream(props: MessageStreamProps) {
                       onRetry={props.onRetryMessage}
                       canManageChannel={props.canManageChannel}
                       onOpenLog={setLogMessageId}
+                      customerName={props.customerName}
                       stageUndone={
                         item.message.systemEvent?.event === 'stage_change' &&
                         undoneStages.has(item.message.systemEvent.suggestionId)

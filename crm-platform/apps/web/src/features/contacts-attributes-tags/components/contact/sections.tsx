@@ -6,9 +6,13 @@ import { LinkedAppointments } from '@/features/appointments';
 import { LinkedInvoices } from '@/features/invoicing';
 import { LinkedSalesDocs } from '@/features/sales-docs';
 import { LinkedTasks } from '@/features/tasks';
+import { useStatusOptions } from '../../api/attributes';
+import { useOwnerNames } from '../../api/owners';
 import { displayName } from '../../lib/contact-model';
+import { stageLabel } from '../../lib/option-sets';
 import type { AddTarget, FocusRequest, SectionId } from '../../lib/sections';
 import { GroupChip } from '../chips';
+import { useShowLeadScore } from './lead-score-chip';
 import { ConversationsSection } from './conversations-section';
 import { DealsSection } from './deals-section';
 import { FieldHistoryPanel } from './field-history';
@@ -28,8 +32,18 @@ function DetailsSection({ contact }: SectionProps) {
   const td = useTranslations('contacts-attributes-tags.detail');
   const format = useFormatter();
   const rows = useInfoRows(contact, { full: true });
+  const statusOptions = useStatusOptions();
+  const { nameOf } = useOwnerNames();
+  const showScore = useShowLeadScore(contact);
   const when = (iso: string | null) =>
     iso ? format.dateTime(new Date(iso), { dateStyle: 'medium', timeStyle: 'short' }) : '';
+  // The stage as the workspace names it ("Customer"), never the stored word. A stage the list does not know reads as it was written.
+  const stageName = (v: string | null | undefined) => (v ? stageLabel(statusOptions.data, v) : '');
+  // Who created or last changed the contact: a name when the import kept one, else a member's id resolved to the member's name.
+  const personName = (key: string) => {
+    const v = contact.customFields[key];
+    return typeof v === 'string' && v !== '' ? (nameOf(v) ?? v) : '';
+  };
   const custom = useCustomGroups(contact);
   const groups = contact.groups ?? [];
   const all = [
@@ -37,11 +51,28 @@ function DetailsSection({ contact }: SectionProps) {
     {
       key: 'stage',
       label: t('stage'),
-      value: contact.lifecycleStage ?? '',
+      value: stageName(contact.lifecycleStage),
     },
+    // 0 is a score like any other: only "no score" is left out
+    {
+      key: 'lead-score',
+      label: t('leadScore'),
+      value: showScore && contact.leadScore !== null ? format.number(contact.leadScore) : '',
+    },
+    {
+      key: 'stage-original',
+      label: t('originalStage'),
+      value: stageName(
+        typeof contact.customFields.original_lifecycle_stage === 'string'
+          ? contact.customFields.original_lifecycle_stage
+          : '',
+      ),
+    },
+    { key: 'created-by', label: t('createdBy'), value: personName('created_by') },
+    { key: 'updated-by', label: t('updatedBy'), value: personName('updated_by') },
     // the stage history a migrated or edited contact carries: since when, and the stage before
     { key: 'stage-since', label: t('stageSince'), value: when(contact.lifecycleStageDate) },
-    { key: 'stage-prev', label: t('previousStage'), value: contact.previousLifecycleStage ?? '' },
+    { key: 'stage-prev', label: t('previousStage'), value: stageName(contact.previousLifecycleStage) },
     {
       key: 'stage-prev-since',
       label: t('previousStageSince'),

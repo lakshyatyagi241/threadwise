@@ -6,9 +6,11 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState, useTransition, type ReactNode } from 'react';
 import { Popover, cn } from '@crm/ui';
 import type { ResolvedNavItem } from '@/features/_registry/types';
+import { useBrandName } from './brand';
 import { useOptionalShellData } from './shell-data';
 import { NavIcon } from './nav-icons';
 import { setTheme } from './actions';
+import { AvailabilityRow } from '@/features/workspaces-teams-tenancy/components/availability-row';
 import { TOUR_START_EVENT } from '@/features/admin-console-shell/tour/tour-model';
 
 export interface ShellUser {
@@ -150,7 +152,7 @@ export function UserMenu({
 }) {
   const t = useTranslations('shell');
   const tm = useTranslations('admin-console-shell.profileMenu');
-  const tAll = useTranslations();
+  const brand = useBrandName();
   const shellData = useOptionalShellData();
   const profile = profileProp ?? shellData?.profile;
   const router = useRouter();
@@ -230,6 +232,8 @@ export function UserMenu({
           >
             {tm('wallet')}
           </Row>
+          {/* Only inside the real shell: it needs the app's query client and a workspace session. */}
+          {shellData && <AvailabilityRow className={ROW} />}
           <ThemeRow theme={theme} />
           <Row icon="cart" href="/billing/orders" onClick={close}>
             {tm('orders')}
@@ -267,7 +271,7 @@ export function UserMenu({
           </Row>
         </div>
         <div className="border-t border-border bg-muted/50 px-4 py-2 font-mono text-[10.5px] text-muted-foreground">
-          {tAll('common.appName')}
+          {brand}
           {process.env.NEXT_PUBLIC_APP_VERSION ? ` · v${process.env.NEXT_PUBLIC_APP_VERSION}` : ''}
         </div>
       </Popover>

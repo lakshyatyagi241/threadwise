@@ -383,6 +383,7 @@ export function TasksScreen() {
                             contact: '',
                             deal: '',
                             company: '',
+                            outcome: '',
                           });
                         }}
                       >

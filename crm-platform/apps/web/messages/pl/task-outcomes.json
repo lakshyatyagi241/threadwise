@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "tiles": {
+      "task-outcomes": {
+        "label": "Wyniki zadań",
+        "description": "Wyniki wybierane podczas kończenia lub rejestrowania zadania.",
+        "keywords": "wynik zadania, wynik rozmowy, rezultat, zainteresowany, zostawiono wiadomość, brak odpowiedzi"
+      }
+    }
+  }
+}

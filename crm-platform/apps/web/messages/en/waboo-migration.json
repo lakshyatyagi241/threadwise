@@ -196,7 +196,8 @@
       "core-load": "Core load",
       "flow-state": "Flow state",
       "reconcile": "Reconcile",
-      "report": "Report"
+      "report": "Report",
+      "whatsapp": "WhatsApp number"
     },
     "stepStatus": {
       "running": "Running",

@@ -47,6 +47,9 @@ import { CONTACT_RESOLVER } from './contact-resolver.port';
 import { ContactActivitiesController } from './contact-activities/contact-activities.controller';
 import { ContactActivitiesRepository } from './contact-activities/contact-activities.repository';
 import { ContactActivitiesService } from './contact-activities/contact-activities.service';
+import { ContactMessageStatsController } from './contact-message-stats/contact-message-stats.controller';
+import { ContactMessageStatsRepository } from './contact-message-stats/contact-message-stats.repository';
+import { ContactMessageStatsService } from './contact-message-stats/contact-message-stats.service';
 import { ContactFilesController } from './contact-files/contact-files.controller';
 import { ContactFilesRepository } from './contact-files/contact-files.repository';
 import { ContactFilesService } from './contact-files/contact-files.service';
@@ -162,6 +165,9 @@ import { PaymentsService } from './invoicing/payments.service';
 import { TaxRatesController } from './invoicing/tax-rates.controller';
 import { TaxRatesRepository } from './invoicing/tax-rates.repository';
 import { TaxRatesService } from './invoicing/tax-rates.service';
+import { TaskOutcomesController } from './tasks/task-outcomes.controller';
+import { TaskOutcomesRepository } from './tasks/task-outcomes.repository';
+import { TaskOutcomesService } from './tasks/task-outcomes.service';
 import { TasksRepository } from './tasks/tasks.repository';
 import { TasksService } from './tasks/tasks.service';
 import { StatusOptionsController } from './status-options/status-options.controller';
@@ -229,6 +235,7 @@ import { TagsService } from './tags/tags.service';
     ContactNotesController,
     ContactFilesController,
     ContactActivitiesController,
+    ContactMessageStatsController,
     ContactMeetingsController,
     // Companies: `companies/stats`, `industries`, `select-data` and `bulk/delete` are literal paths declared before `companies/:id`
     // inside the controller.
@@ -248,6 +255,8 @@ import { TagsService } from './tags/tags.service';
     ContactTasksController,
     DealTasksController,
     CompanyTasksController,
+    // Task outcomes: the workspace's list of results a task is completed with (not plan-gated).
+    TaskOutcomesController,
     // Proposals and estimates: `sales-docs/settings`, `sales-docs/templates` (settings controller, registered first) and
     // `sales-docs/counts` are literal paths declared before `sales-docs/:id`. The public controller is unauthenticated (token).
     SalesDocSettingsController,
@@ -319,6 +328,8 @@ import { TagsService } from './tags/tags.service';
     ContactFilesRepository,
     ContactActivitiesService,
     ContactActivitiesRepository,
+    ContactMessageStatsService,
+    ContactMessageStatsRepository,
     ContactMeetingsService,
     ContactMeetingsRepository,
     CompaniesRepository,
@@ -346,6 +357,8 @@ import { TagsService } from './tags/tags.service';
     LostReasonsService,
     TasksRepository,
     TasksService,
+    TaskOutcomesRepository,
+    TaskOutcomesService,
     SalesDocsRepository,
     SalesDocsSupport,
     SalesDocsService,

@@ -147,9 +147,9 @@ describe('formatDmy', () => {
 
 describe('formatDateTime in a zone', () => {
   it('shows the clock of the zone, in English and in another language', () => {
-    expect(formatDateTime('2026-10-01T20:30:00Z', 'en', 'UTC')).toBe('01 Oct 2026, 08:30 PM');
-    expect(formatDateTime('2026-10-01T20:30:00Z', 'en', 'Asia/Kolkata')).toBe(
-      '02 Oct 2026, 02:00 AM',
+    expect(formatDateTime('2026-10-01T20:30:00Z', 'en', 'UTC')).toMatch(/^Oct 1, 2026,\s8:30\sPM$/);
+    expect(formatDateTime('2026-10-01T20:30:00Z', 'en', 'Asia/Kolkata')).toMatch(
+      /^Oct 2, 2026,\s2:00\sAM$/,
     );
     expect(formatDateTime('2026-10-01T20:30:00Z', 'de', 'Asia/Kolkata')).toMatch(/02\.10\.2026/);
   });

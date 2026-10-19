@@ -1,7 +1,8 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query';
-import type { SaveShopInput, UpdateStorefrontInput } from '@crm/contracts';
+import { ERROR_CODES, type SaveShopInput, type UpdateStorefrontInput } from '@crm/contracts';
+import { ApiError } from '@/lib/api/errors';
 import { storeApi } from './service';
 
 export const KEYS = {
@@ -10,11 +11,36 @@ export const KEYS = {
   wizard: ['store', 'wizard'] as const,
 };
 
+/** How long the shop list that decides "no shop yet" is reused, so the sidebar and the page do not each ask for it. */
+const SHOP_LIST_STALE_MS = 30_000;
+
+/**
+ * The dashboard of one shop. A workspace without a shop used to ask `GET /store/overview` and get a 404 (a console error on every Store
+ * page); the shop list answers 200 even when empty, so it is read first and "no shop yet" is raised from it with the code the screens
+ * already handle (`STORE_NO_SHOP`), without the failing call.
+ */
+export async function overviewOrNoShop(
+  qc: QueryClient,
+  shopId: string | undefined,
+  signal?: AbortSignal,
+) {
+  const list = await qc.fetchQuery({
+    queryKey: KEYS.wizard,
+    queryFn: ({ signal: s }) => storeApi.wizard(s),
+    staleTime: SHOP_LIST_STALE_MS,
+  });
+  if (list.shops.length === 0) {
+    throw new ApiError(404, ERROR_CODES.STORE_NO_SHOP, 'No shop yet');
+  }
+  return storeApi.overview(shopId, signal);
+}
+
 /** The dashboard data. It also feeds the sidebar and the settings page (the shop, the switcher list, the product count). */
 export function useOverview(shopId: string | undefined) {
+  const qc = useQueryClient();
   return useQuery({
     queryKey: KEYS.overview(shopId),
-    queryFn: ({ signal }) => storeApi.overview(shopId, signal),
+    queryFn: ({ signal }) => overviewOrNoShop(qc, shopId, signal),
     retry: false,
     staleTime: 15_000,
   });

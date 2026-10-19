@@ -136,7 +136,11 @@
         "previousStage": "पिछला चरण",
         "previousStageSince": "पिछला चरण कब से",
         "lostReason": "हार का कारण",
-        "updatedAt": "अंतिम अपडेट"
+        "updatedAt": "अंतिम अपडेट",
+        "leadScore": "लीड स्कोर",
+        "originalStage": "मूल लाइफसाइकिल चरण",
+        "createdBy": "बनाने वाला",
+        "updatedBy": "अपडेट करने वाला"
       },
       "company": {
         "title": "कंपनी",

@@ -9,6 +9,7 @@
  *             [--dry-run] [--batch N] [--force] [--skip-hash] [--default-cc 91]
  *             [--allow-target-host H[,H]] [--allow-docker-host N[,N]] [--confirm-db-name=<exact db name>]
  *             [--owner-verified] [--timezone Asia/Kolkata] [--trial-days N] [--lock-wait-seconds N]
+ *             [--additional-owner-email E|none]   (a second Owner added to the workspace; default lakshya.tyagi@geta.ai)
  *             [--allow-no-owner]   (load users into an organization with no Owner; refused by default)
  *             [--channel-map FILE] [--keep-deleted-contact-chats] [--thread-status waboo|closed] [--no-assign-agents] [--window-hours 24]
  *                                  (chat history = inbox; the channel map is required when the dump has chathistory)
@@ -242,6 +243,12 @@ async function main(): Promise<number> {
           ownerEmail: flags.get('owner-email') ? String(flags.get('owner-email')) : null,
           ownerName: flags.get('owner-name') ? String(flags.get('owner-name')) : null,
           ownerVerified: flags.has('owner-verified'),
+          // default: lakshya.tyagi@geta.ai is added as a second Owner; `--additional-owner-email none` adds nobody
+          additionalOwnerEmail: flags.has('additional-owner-email')
+            ? String(flags.get('additional-owner-email')) === 'none'
+              ? null
+              : String(flags.get('additional-owner-email'))
+            : undefined,
           timezone: flags.get('timezone') ? String(flags.get('timezone')) : null,
           trialDays: flags.get('trial-days') ? Number(flags.get('trial-days')) : null,
         },

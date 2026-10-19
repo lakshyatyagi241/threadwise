@@ -3,14 +3,13 @@
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { WalletTransaction } from '@crm/contracts';
 import { cn } from '@crm/ui';
+import { formatDateTime } from '@/lib/format-datetime';
 import { humanizeSource } from '../../lib/billing-variant';
-import { TONE_CLASS, directionTone, formatMinor, formatMovement } from '../../lib/money';
+import { TONE_CLASS, directionTone, formatAmount, formatMovement } from '../../lib/money';
 import { TypePill } from './type-pill';
 
 export const formatWhen = (iso: string, locale: string, timeZone?: string): string =>
-  new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone }).format(
-    new Date(iso),
-  );
+  formatDateTime(iso, locale, timeZone);
 
 /** Wallet activity rows: description (with the operator's reason for an adjustment), type, date, signed amount, balance. */
 export function ActivityTable({
@@ -70,10 +69,10 @@ export function ActivityTable({
                   TONE_CLASS[directionTone(r.direction)],
                 )}
               >
-                {formatMovement(r.amountMinor, r.direction, currency, locale)}
+                {formatMovement(r.amountMinor, r.direction, currency, locale, r.amountExact)}
               </td>
               <td className="whitespace-nowrap px-2 py-2 text-end tabular-nums">
-                {formatMinor(r.balanceAfterMinor, currency, locale)}
+                {formatAmount(r.balanceAfterMinor, r.balanceAfterExact, currency, locale)}
               </td>
             </tr>
           ))}

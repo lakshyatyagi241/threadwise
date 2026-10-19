@@ -12,6 +12,7 @@ export function toAttributeResponse(row: AttributeRow): AttributeResponse {
     defaultValue: str(row.config?.defaultValue),
     description: str(row.config?.description),
     isActive: row.isActive,
+    isHidden: row.isHidden,
     rowVersion: row.rowVersion,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),

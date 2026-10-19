@@ -3,6 +3,8 @@
  * (Arabic included) without a message key each.
  */
 
+import { formatDate, formatDateTime } from '@/lib/format-datetime';
+
 const MIN = 60_000;
 const HOUR = 60 * MIN;
 const DAY = 24 * HOUR;
@@ -85,18 +87,13 @@ export function daysAgo(iso: string, nowMs: number, timeZone?: string): number {
   return Math.round((Date.UTC(a.y, a.m - 1, a.d) - Date.UTC(b.y, b.m - 1, b.d)) / DAY);
 }
 
-/** "Today", "Yesterday", or "5 Jul 2026": the label of a day separator. */
+/** "Today", "Yesterday", or the date ("Jul 5, 2026"): the label of a day separator. */
 export function dayLabel(iso: string, nowMs: number, locale: string, timeZone?: string): string {
   const n = daysAgo(iso, nowMs, timeZone);
   if (n === 0 || n === 1) {
     return new Intl.RelativeTimeFormat(locale, { numeric: 'auto' }).format(-n, 'day');
   }
-  return new Date(iso).toLocaleDateString(locale, {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-    timeZone,
-  });
+  return formatDate(iso, locale, timeZone);
 }
 
 /** The clock time of a bubble ("14:05"). */
@@ -126,10 +123,10 @@ export function listTime(
   if (days === 0) return clockTime(iso, locale, timeZone);
   if (days === 1) return rtf.format(-1, 'day');
   if (days < 7) return new Date(at).toLocaleDateString(locale, { weekday: 'short', timeZone });
-  return new Date(at).toLocaleDateString(locale, { day: 'numeric', month: 'short', timeZone });
+  return formatDate(at, locale, timeZone);
 }
 
-/** The full stamp in a tooltip ("5 Jul 2026, 14:05"). */
+/** The full stamp in a tooltip (the app's one date-time format). */
 /**
  * How long a snooze still has, for the row and the header ("Snoozed · 2 hours"). `due` when the time has come (the wake-up sweep runs
  * every 30 seconds, so a thread can sit at due for a moment).
@@ -155,14 +152,7 @@ export function snoozeLeftMessage(left: SnoozeLeft): { key: string; values: { co
 
 export function fullStamp(iso: string | null, locale: string, timeZone?: string): string {
   if (!iso) return '';
-  return new Date(iso).toLocaleString(locale, {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    timeZone,
-  });
+  return formatDateTime(iso, locale, timeZone);
 }
 
 /** `B`, `KB`, `MB`. */
@@ -172,19 +162,8 @@ export function humanSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-/** Two letters for an avatar. */
-export function initials(name: string): string {
-  // Words are cleaned of marks first, so "+91 98765" gives "91" and not "+9".
-  const words = name
-    .trim()
-    .split(/\s+/)
-    .map((w) => w.replace(/[^\p{L}\p{N}]/gu, ''))
-    .filter(Boolean);
-  if (words.length === 0) return '?';
-  const first = [...words[0]!][0] ?? '?';
-  const last = words.length > 1 ? ([...words[words.length - 1]!][0] ?? '') : '';
-  return (first + last).toUpperCase();
-}
+/** The avatar letters and the phone-number check are the app-wide rule (`@/lib/initials`); the Inbox re-exports them. */
+export { initials, isPhoneLike } from '@/lib/initials';
 
 const AVATAR_COLORS = [
   'bg-emerald-600',

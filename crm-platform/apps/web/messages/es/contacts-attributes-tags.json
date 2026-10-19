@@ -439,7 +439,10 @@
       "ownerOutOfScope": "Tu acceso no te permite asignar este contacto a esa persona.",
       "company": "Empresa",
       "companyHint": "Agrupa este contacto bajo una organización.",
-      "companyRefused": "No puedes usar esa empresa. Elige otra o vacía el campo."
+      "companyRefused": "No puedes usar esa empresa. Elige otra o vacía el campo.",
+      "searchOptions": "Buscar opciones",
+      "searchOptionsFor": "Buscar entre las opciones de {field}",
+      "noOptionsFound": "Ninguna opción coincide con la búsqueda."
     },
     "tags": {
       "title": "Etiquetas",
@@ -1225,7 +1228,8 @@
             "duplicate": "Dos opciones tienen el mismo nombre."
           },
           "condition": "Elige la propiedad y el valor de cada condición."
-        }
+        },
+        "optionsLazy": "Esta propiedad tiene {count, plural, one {# opción} other {# opciones}}, demasiadas para editarlas aquí. Se conservan tal cual; el resto de ajustes se puede cambiar."
       },
       "builtinCard": {
         "title": "Propiedades integradas",

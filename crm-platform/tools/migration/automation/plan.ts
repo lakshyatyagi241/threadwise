@@ -131,15 +131,7 @@ export async function buildAutomationPlan(a: PlanInput): Promise<AutomationPlan>
       );
       continue;
     }
-    const nodes = obj(d.nodes);
-    if (Object.keys(nodes).length === 0) {
-      stop(
-        'exclude',
-        'NO_NODES',
-        'the automation has no nodes (an empty draft): nothing to convert',
-      );
-      continue;
-    }
+    const nodes = obj(d.nodes); // an empty draft is loaded as an empty flow (convertAutomation adds the manual_enroll trigger)
     const cells = new Map<string, { x: number; y: number }>();
     for (const c of arr(obj(d.uiObject).cells)) {
       const o = obj(c);

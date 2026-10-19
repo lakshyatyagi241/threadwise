@@ -185,7 +185,7 @@ export class BillingService {
     const visibleAddons = await this.db.txAs({ orgId, userId: null }, (tx) =>
       visibleAddonsForApps(tx, orgId, e.visibleApps),
     );
-    return { ...res, visibleAddons };
+    return { ...res, visibleAddons, subscription: await this.subscriptions.current(orgId) };
   }
 
   // --- change --------------------------------------------------------------------------------------------------------------------

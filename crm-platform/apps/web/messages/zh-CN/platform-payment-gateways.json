@@ -164,7 +164,12 @@
       "change": "更改",
       "terms": "付款即表示你同意我们的 <terms>服务条款</terms> 和 <privacy>隐私政策</privacy>。",
       "refundNote": "不满意？请在前 {days} 天内给我们发邮件，我们将全额退款，无需理由，无需填写表格。",
-      "autoRenewTitle": "自动续订此套餐"
+      "autoRenewTitle": "自动续订此套餐",
+      "amountSubtitle": "请输入要充值的金额。接下来您将看到最终价格和支付方式。",
+      "amountLabel": "充值金额",
+      "amountHint": "仅限数字，例如 1000 或 250.50。",
+      "amountInvalid": "请输入大于零的金额，例如 500 或 250.50。",
+      "amountContinue": "继续"
     },
     "orders": {
       "title": "订单记录",

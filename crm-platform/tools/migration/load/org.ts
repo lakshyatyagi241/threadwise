@@ -22,6 +22,31 @@ export interface OrgInputs {
    * workspace without one evaluates them in the server zone. Validated; null leaves it unset.
    */
   timezone?: string | null;
+  /**
+   * A second Owner every migrated workspace gets: the operator who runs the migration, so they can sign in and support it. undefined uses
+   * ADDITIONAL_OWNER_EMAIL; null (or an empty string) adds none. Ignored when it is the same address as ownerEmail.
+   */
+  additionalOwnerEmail?: string | null;
+}
+
+/** The Owner added to every migrated workspace besides the customer's own owner (see OrgInputs.additionalOwnerEmail). */
+export const ADDITIONAL_OWNER_EMAIL = 'lakshya.tyagi@geta.ai';
+
+/** The lower-cased address of the additional Owner for these inputs, or null when none is wanted. */
+export function resolveAdditionalOwner(o: Pick<OrgInputs, 'additionalOwnerEmail' | 'ownerEmail'>): string | null {
+  const email = (o.additionalOwnerEmail === undefined ? ADDITIONAL_OWNER_EMAIL : o.additionalOwnerEmail)
+    ?.trim()
+    .toLowerCase();
+  if (!email) return null;
+  return email === o.ownerEmail?.trim().toLowerCase() ? null : email;
+}
+
+/** The additional Owner this client's organization was given (recorded by ensureOrg), for the verifier. Null when none. */
+export async function recordedAdditionalOwner(db: Database, client: string): Promise<string | null> {
+  const r = await db.execute(
+    sql`SELECT counts->>'additionalOwnerEmail' AS e FROM migration.run_log WHERE source_client = ${client} AND collection = ${ORG_COLLECTION} AND step = 'org'`,
+  );
+  return (r.rows[0] as { e: string | null } | undefined)?.e ?? null;
 }
 
 /** The login schema is 2..40 characters of [A-Za-z0-9_-] starting alphanumeric. */
@@ -85,6 +110,7 @@ export async function ensureOrg(env: OrgEnv): Promise<{ orgId: number; warnings:
   const slugWanted = normalizeSlug(o.slug);
   const orgUuid = uuidv5(`${env.client}|${ORG_COLLECTION}`);
   const warnings: string[] = [];
+  const additionalOwner = resolveAdditionalOwner(o);
 
   const orgId = await withPrivileged(env.ownerDb, async (tx) => {
     // a dry run lives inside one long outer transaction: it must not hold the global lock that real runs queue on
@@ -98,6 +124,7 @@ export async function ensureOrg(env: OrgEnv): Promise<{ orgId: number; warnings:
     let planSlug: string | null = null;
     let billingCycle: string | null = null;
     let ownerMade = false;
+    let extraMade = false;
     if (found.rows[0]) {
       id = Number((found.rows[0] as { id: number | string }).id);
       slugUsed = String((found.rows[0] as { slug: string }).slug);
@@ -188,12 +215,64 @@ export async function ensureOrg(env: OrgEnv): Promise<{ orgId: number; warnings:
         );
       }
     } else {
+      // the additional owner counts: with no --owner-email it is the workspace's Owner (no placeholder owner is made)
       const owners = await tx.execute(
         sql`SELECT 1 FROM user_roles ur JOIN roles r ON r.org_id = ur.org_id AND r.id = ur.role_id WHERE ur.org_id = ${id} AND r.name = 'Owner' LIMIT 1`,
       );
       if (owners.rows.length === 0) {
         warnings.push(
           'THE ORGANIZATION HAS NO OWNER. Nobody can sign in to it until a user with the Owner role exists (re-run with --owner-email / --owner-name).',
+        );
+      }
+    }
+
+    if (additionalOwner) {
+      const have = await tx.execute(
+        sql`SELECT id FROM users WHERE org_id = ${id} AND email = ${additionalOwner}`,
+      );
+      if (!have.rows[0]) {
+        const role = await tx.execute(
+          sql`SELECT id FROM roles WHERE org_id = ${id} AND name = 'Owner' ORDER BY id LIMIT 1`,
+        );
+        const roleId = Number((role.rows[0] as { id: number | string } | undefined)?.id);
+        if (!Number.isInteger(roleId))
+          throw new Error('the Owner preset role does not exist; cannot create the additional owner');
+        // the same person may already have an account in another workspace: this workspace is added against that identity (name,
+        // password and sign-in link are carried over, so one login opens every workspace). Otherwise an invited user, as the owner above.
+        const known = (
+          await tx.execute(sql`
+            SELECT full_name, password_hash, auth_subject FROM users
+            WHERE email = ${additionalOwner} AND org_id <> ${id} AND status = 'active'
+            ORDER BY (auth_subject IS NOT NULL) DESC, (password_hash IS NOT NULL) DESC, id LIMIT 1`)
+        ).rows[0] as
+          | { full_name: string | null; password_hash: string | null; auth_subject: string | null }
+          | undefined;
+        const u = await tx.execute(sql`
+          INSERT INTO users (org_id, email, full_name, password_hash, auth_subject, status, invited_at, joined_at)
+          VALUES (${id}, ${additionalOwner}, ${known?.full_name || additionalOwner}, ${known?.password_hash ?? null},
+                  ${known?.auth_subject ?? null}, 'active', now(), ${known ? sql`now()` : sql`NULL`})
+          RETURNING id, uuid::text AS uuid`);
+        const user = u.rows[0] as { id: number | string; uuid: string };
+        await tx.execute(
+          sql`INSERT INTO user_roles (org_id, user_id, role_id) VALUES (${id}, ${Number(user.id)}, ${roleId})`,
+        );
+        // verified, because orgsForVerifiedEmail only lists workspaces where the address is verified: this is what puts the
+        // workspace on the person's switcher
+        await tx.execute(sql`
+          INSERT INTO user_security (org_id, user_id, email_verified_at)
+          VALUES (${id}, ${Number(user.id)}, now())
+          ON CONFLICT (org_id, user_id) DO NOTHING`);
+        await tx.execute(
+          sql`INSERT INTO user_profiles (org_id, user_id) VALUES (${id}, ${Number(user.id)}) ON CONFLICT DO NOTHING`,
+        );
+        // with no customer owner given, this user is the one the workspace points at until the customer's owner is added
+        if (!o.ownerEmail)
+          await tx.execute(sql`
+            UPDATE organizations SET settings = settings || ${JSON.stringify({ ownerUserId: user.uuid })}::jsonb
+            WHERE id = ${id} AND NOT jsonb_exists(settings, 'ownerUserId')`);
+        extraMade = true;
+        env.log(
+          `  org                added additional owner ${additionalOwner} (${known ? 'existing account in another workspace linked' : 'invited, no password, no email sent'})`,
         );
       }
     }
@@ -225,6 +304,7 @@ export async function ensureOrg(env: OrgEnv): Promise<{ orgId: number; warnings:
       billingCycle: String(was.billingCycle ?? billingCycle ?? state?.billing_cycle ?? 'monthly'),
       trial: Boolean(was.trial ?? state?.has_trial ?? false),
       ownerEmail: o.ownerEmail ? o.ownerEmail.trim().toLowerCase() : (was.ownerEmail ?? null),
+      additionalOwnerEmail: additionalOwner ?? (was.additionalOwnerEmail ?? null),
       ownerVerified: ownerMade
         ? Boolean(o.ownerVerified)
         : Boolean(was.ownerVerified ?? o.ownerVerified ?? false),
@@ -235,7 +315,7 @@ export async function ensureOrg(env: OrgEnv): Promise<{ orgId: number; warnings:
     );
     const had = ((old.rows[0] as { counts?: Baseline } | undefined)?.counts ??
       null) as Baseline | null;
-    if (!had || ownerMade) {
+    if (!had || ownerMade || extraMade) {
       const touched = ['users', 'user_roles', 'user_security', 'user_profiles'];
       const names = had ? touched : await orgTables(tx);
       const fresh = await digest(tx, id, names);

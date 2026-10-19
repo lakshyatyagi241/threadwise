@@ -196,7 +196,8 @@
       "core-load": "โหลดข้อมูลหลัก",
       "flow-state": "สถานะโฟลว์",
       "reconcile": "กระทบยอด",
-      "report": "รายงาน"
+      "report": "รายงาน",
+      "whatsapp": "หมายเลข WhatsApp"
     },
     "stepStatus": {
       "running": "กำลังรัน",

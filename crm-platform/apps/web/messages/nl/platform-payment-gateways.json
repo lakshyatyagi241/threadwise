@@ -164,7 +164,12 @@
       "change": "Wijzigen",
       "terms": "Door te betalen ga je akkoord met onze <terms>Voorwaarden</terms> en <privacy>Privacyverklaring</privacy>.",
       "refundNote": "Niet tevreden? Mail ons binnen de eerste {days} dagen en we betalen het volledige bedrag terug — zonder vragen, zonder formulieren.",
-      "autoRenewTitle": "Dit abonnement automatisch verlengen"
+      "autoRenewTitle": "Dit abonnement automatisch verlengen",
+      "amountSubtitle": "Voer in hoeveel je wilt toevoegen. Daarna zie je de eindprijs en de betaalmethoden.",
+      "amountLabel": "Bedrag om toe te voegen",
+      "amountHint": "Alleen cijfers, bijvoorbeeld 1000 of 250,50.",
+      "amountInvalid": "Voer een bedrag hoger dan nul in, bijvoorbeeld 500 of 250,50.",
+      "amountContinue": "Doorgaan"
     },
     "orders": {
       "title": "Bestelgeschiedenis",

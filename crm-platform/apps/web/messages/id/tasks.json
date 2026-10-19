@@ -92,7 +92,8 @@
         "contact": "Kontak",
         "deal": "Deal",
         "created": "Dibuat",
-        "completed": "Selesai pada"
+        "completed": "Selesai pada",
+        "outcome": "Hasil"
       },
       "refresh": "Segarkan",
       "shortcuts": "Pintasan keyboard",
@@ -101,7 +102,9 @@
         "list": "Daftar",
         "board": "Board menurut tenggat"
       },
-      "linkCompany": "Sebuah perusahaan"
+      "linkCompany": "Sebuah perusahaan",
+      "outcome": "Hasil",
+      "allOutcomes": "Semua hasil"
     },
     "table": {
       "scrollArea": "Tabel tugas",
@@ -115,7 +118,8 @@
         "contact": "Kontak",
         "deal": "Deal",
         "created": "Dibuat",
-        "completed": "Selesai pada"
+        "completed": "Selesai pada",
+        "outcome": "Hasil"
       }
     },
     "row": {
@@ -205,9 +209,11 @@
         "titleTooLong": "Tugas terlalu panjang (maksimal 255 karakter).",
         "notesTooLong": "Catatan terlalu panjang (maksimal 5000 karakter).",
         "dueInvalid": "Tanggal tersebut tidak valid.",
-        "assigneeInvalid": "Orang tersebut bukan anggota aktif workspace ini."
+        "assigneeInvalid": "Orang tersebut bukan anggota aktif workspace ini.",
+        "outcomeInvalid": "Hasil itu tidak tersedia. Pilih salah satu dari daftar."
       },
-      "company": "Perusahaan"
+      "company": "Perusahaan",
+      "outcome": "Hasil"
     },
     "drawer": {
       "loading": "Memuat tugas",
@@ -236,7 +242,8 @@
       },
       "deleteTitle": "Hapus tugas ini?",
       "deleteMessage": "“{title}” akan dihapus untuk semua orang. Tindakan ini tidak dapat dibatalkan.",
-      "cancel": "Pertahankan"
+      "cancel": "Pertahankan",
+      "outcomeChip": "Hasil: {name}"
     },
     "board": {
       "buckets": {
@@ -286,7 +293,10 @@
       "planDisabled": "Paket Anda tidak mencakup tugas. Tingkatkan paket untuk membukanya.",
       "assigneeInvalid": "Orang tersebut bukan anggota aktif workspace ini.",
       "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi.",
-      "retry": "Coba lagi"
+      "retry": "Coba lagi",
+      "outcomeInvalid": "Hasil itu tidak tersedia. Pilih salah satu dari daftar.",
+      "outcomeNameTaken": "Hasil lain sudah memakai nama ini.",
+      "outcomeInUse": "Masih ada tugas yang memakai hasil ini, jadi tidak dapat dihapus. Sembunyikan saja."
     },
     "toast": {
       "completed": "Tugas selesai.",
@@ -342,6 +352,43 @@
       "save": "Tambah tugas",
       "cancel": "Batal",
       "failed": "Tugas tidak dapat disimpan. Teks Anda dikembalikan ke kotak input."
+    },
+    "outcomes": {
+      "title": "Hasil tugas",
+      "subtitle": "Hasil yang dipilih seseorang saat menyelesaikan atau mencatat tugas, seperti Tertarik atau Meninggalkan pesan.",
+      "listTitle": "Hasil",
+      "listHint": "Hasil yang disembunyikan tidak lagi ditawarkan, tetapi tugas yang sudah memilikinya tetap menyimpannya. Hasil yang dipakai tugas tidak dapat dihapus.",
+      "loading": "Memuat hasil",
+      "empty": "Belum ada hasil. Tambahkan yang pertama di bawah.",
+      "newName": "Hasil baru",
+      "newNamePlaceholder": "mis. Meninggalkan pesan",
+      "add": "Tambah hasil",
+      "readOnly": "Anda dapat melihat daftar ini, tetapi memerlukan izin untuk mengubahnya.",
+      "failed": "Itu tidak berhasil.",
+      "conflict": "Orang lain mengubah hasil ini. Daftar dimuat ulang. Coba lagi.",
+      "added": "Hasil ditambahkan.",
+      "saved": "Hasil disimpan.",
+      "deleted": "Hasil dihapus.",
+      "moveUp": "Pindahkan {name} ke atas",
+      "moveDown": "Pindahkan {name} ke bawah",
+      "nameLabel": "Nama hasil",
+      "taskCount": "{count, plural, other {# tugas}}",
+      "shownLabel": "Tawarkan {name} saat menyelesaikan tugas",
+      "shown": "Ditampilkan",
+      "hidden": "Disembunyikan",
+      "deleteNamed": "Hapus {name}",
+      "deleteInUse": "Masih ada tugas yang memakai hasil ini, jadi tidak dapat dihapus. Sembunyikan saja.",
+      "deleteTitle": "Hapus {name}?",
+      "deleteMessage": "Hasil ini dihapus dari daftar. Tidak ada tugas yang memakainya.",
+      "delete": "Hapus",
+      "cancel": "Simpan",
+      "problems": {
+        "nameRequired": "Ketik nama untuk hasil ini.",
+        "nameTooLong": "Nama terlalu panjang (maksimal 191 karakter)."
+      },
+      "none": "Tanpa hasil",
+      "hiddenName": "{name} (disembunyikan)",
+      "completeWith": "Selesaikan dengan hasil"
     }
   }
 }

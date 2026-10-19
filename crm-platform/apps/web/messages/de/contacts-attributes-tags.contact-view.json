@@ -136,7 +136,11 @@
         "previousStage": "Vorherige Phase",
         "previousStageSince": "Vorherige Phase seit",
         "lostReason": "Verlustgrund",
-        "updatedAt": "Zuletzt aktualisiert"
+        "updatedAt": "Zuletzt aktualisiert",
+        "leadScore": "Lead-Score",
+        "originalStage": "Ursprüngliche Lebenszyklusphase",
+        "createdBy": "Erstellt von",
+        "updatedBy": "Aktualisiert von"
       },
       "company": {
         "title": "Unternehmen",

@@ -36,7 +36,7 @@ The Plans page shows what your workspace is on today, what it has used against e
 ## How to use it
 
 1. Open **Settings**, then **Business and billing**, then **Plans**. You can also choose **Plans** from the list on the Account page.
-2. Start with **Your plan and usage**. The **Current plan** card shows the state in a badge: Free trial, Active, Lapsed, Free, Custom or Trial ended. Under it you see when the monthly allowances reset and, when there is one, the date the plan is valid until. A banner says whether a trial is running or has ended, or whether the plan has expired and paid features are paused.
+2. Start with **Your plan and usage**. The **Current plan** card shows the state in a badge: Free trial, Active, Lapsed, Free, Custom or Trial ended. Under it you see when the monthly allowances reset and, when there is one, the date the plan is valid until. When the plan renews through a subscription, the card also shows the date it was activated, the previous billing date and the subscription ID. A banner says whether a trial is running or has ended, or whether the plan has expired and paid features are paused.
 3. Under **Usage and limits**, limits are grouped: Messaging, Workspace, Content, Sales, Integrations and AI. Groups with a maximum start open; the others are collapsed, and you can open or close any group by selecting its name.
 4. Each bar shows how much of a limit you have used. It changes colour as it fills: a warning colour from 80% and red when the limit is full. Some limits count this month only; others count in total.
 5. Limits with no maximum are hidden to keep the page short. Select **Show N unlimited limits** to list them as well, and **Hide unlimited limits** to tuck them away again.
@@ -57,7 +57,7 @@ The address `/account/plans#usage` opens the page at the usage section. The old 
 
 Each bar counts what the workspace holds now, so deleting something frees its place. Two things are not given back: campaigns created in the plan period, and the invoices created this month. Monthly bars (messages, appointments, invoices, AI tokens) reset on the date shown. Broadcast recipients is the largest audience one broadcast may be sent to, not a running total.
 
-When a limit is full, creating one more is refused with a message that names the limit and links to this page. A limit with no maximum is unlimited on your plan. The one exception is API requests per minute: with no maximum set it shows **Platform default**, meaning the platform's standard rate applies, and it is not unlimited. If a limit shows **No usage tracked**, the page has no counter for it yet.
+When a limit is full, creating one more is refused with a message that names the limit and links to this page. A limit with no maximum is unlimited on your plan, and so is a limit set to a very large stand-in value such as 1,000,000 or more: both read **Unlimited**. The one exception is API requests per minute: with no maximum set it shows **Platform default**, meaning the platform's standard rate applies, and it is not unlimited. If a limit shows **No usage tracked**, the page has no counter for it yet.
 
 The bars show the limits that apply to your workspace, which can include values the platform team set for you specifically. **Compare plans** lists the same limits, features and add-ons side by side. The first column stays in place while you scroll sideways, your plan is tinted, and **Only show differences** hides the rows every plan shares.
 

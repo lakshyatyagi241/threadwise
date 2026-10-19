@@ -58,7 +58,10 @@
         "role": "Rola",
         "status": "Status",
         "joined": "Dołączył",
-        "actions": "Działania"
+        "actions": "Działania",
+        "phone": "Telefon",
+        "chatLimit": "Jednoczesne czaty",
+        "lastLogin": "Ostatnie logowanie"
       },
       "pending": "oczekuje",
       "you": "Ty",
@@ -100,7 +103,10 @@
       "onLeaveUntil": "Na urlopie do {date}",
       "onLeaveOpen": "Na urlopie",
       "leaveFrom": "Urlop od {date}",
-      "leaveAction": "Urlop i zastępstwo"
+      "leaveAction": "Urlop i zastępstwo",
+      "noLimit": "Bez limitu",
+      "neverSignedIn": "Nigdy",
+      "editAction": "Zmień telefon i limit czatów"
     },
     "invite": {
       "eyebrow": "Przestrzeń robocza",
@@ -129,7 +135,14 @@
       "nameTooLong": "Imię może mieć maksymalnie {max} znaków.",
       "emailInvalid": "Wpisz prawidłowy adres e-mail.",
       "upgrade": "Ulepsz plan",
-      "emailRequired": "Wpisz adres e-mail."
+      "emailRequired": "Wpisz adres e-mail.",
+      "phone": "Numer telefonu (opcjonalnie)",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Z numerem kierunkowym kraju.",
+      "phoneInvalid": "Wpisz numer z numerem kierunkowym kraju, na przykład +91 98765 43210.",
+      "chatLimit": "Jednoczesne czaty",
+      "chatLimitHint": "Maksymalna liczba otwartych czatów przydzielanych tej osobie jednocześnie. Zostaw puste, aby nie ustalać limitu.",
+      "chatLimitInvalid": "Wpisz liczbę całkowitą od 1 do {max} albo zostaw puste, aby nie ustalać limitu."
     },
     "teams": {
       "eyebrow": "Przestrzeń robocza",
@@ -320,6 +333,31 @@
       "undoTitle": "Cofnąć to ponowne przypisanie?",
       "undoMessage": "Kontakty i transakcje, których od tego czasu nikt nie zmienił, wrócą do poprzedniego właściciela. Pozostałe zostaną tam, gdzie są.",
       "restored": "Przywrócono: {count}, pozostawiono: {skipped}."
+    },
+    "details": {
+      "eyebrow": "Przestrzeń robocza",
+      "title": "Zmień członka",
+      "intro": "Telefon i limit czatów: {name}.",
+      "phone": "Numer telefonu",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Z numerem kierunkowym kraju. Zostaw puste, aby usunąć.",
+      "phoneInvalid": "Wpisz numer z numerem kierunkowym kraju, na przykład +91 98765 43210.",
+      "chatLimit": "Jednoczesne czaty",
+      "chatLimitHint": "Automatyczne przydzielanie przestaje dawać tej osobie czaty, gdy ma już tyle otwartych. Zostaw puste, aby nie ustalać limitu.",
+      "chatLimitPlaceholder": "Bez limitu",
+      "chatLimitInvalid": "Wpisz liczbę całkowitą od 1 do {max} albo zostaw puste, aby nie ustalać limitu.",
+      "lastLogin": "Ostatnie logowanie",
+      "lastLoginNever": "Jeszcze się nie logował(a)",
+      "submit": "Zapisz",
+      "saving": "Zapisywanie…",
+      "saved": "Członek zaktualizowany."
+    },
+    "availability": {
+      "label": "Dostępność",
+      "available": "Dostępny",
+      "offline": "Offline",
+      "hint": "Gdy jesteś offline, nowe czaty nie są Ci przydzielane automatycznie. Czaty, które już masz, zostają Twoje.",
+      "failed": "Nie udało się zmienić"
     }
   }
 }

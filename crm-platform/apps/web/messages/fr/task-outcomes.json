@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "tiles": {
+      "task-outcomes": {
+        "label": "Résultats des tâches",
+        "description": "Les résultats qu'une personne choisit en terminant ou en consignant une tâche.",
+        "keywords": "résultat de tâche, résultat d'appel, issue, intéressé, message laissé, sans réponse"
+      }
+    }
+  }
+}

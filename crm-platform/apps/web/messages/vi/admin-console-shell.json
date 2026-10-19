@@ -513,7 +513,8 @@
         "profileHint": "Tên, ảnh và thông tin liên hệ của bạn",
         "password": "Mật khẩu và bảo mật",
         "passwordHint": "Mật khẩu, đăng nhập hai bước và phiên đang hoạt động"
-      }
+      },
+      "searchPage": "Tìm \"{query}\" trong trang này"
     },
     "strip": {
       "jump": "Tìm kiếm hoặc chuyển đến...",
@@ -1181,6 +1182,11 @@
       "eyebrow": "Hộp thư",
       "clearAll": "Xóa tất cả",
       "viewAll": "Xem tất cả →"
+    },
+    "notFound": {
+      "title": "Không tìm thấy trang",
+      "body": "Trang này không tồn tại hoặc đã được chuyển đi. Hãy kiểm tra địa chỉ hoặc quay lại bảng điều khiển.",
+      "home": "Đi tới bảng điều khiển"
     }
   }
 }

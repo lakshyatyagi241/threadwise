@@ -196,7 +196,8 @@
       "core-load": "Kernlading",
       "flow-state": "Flowstatus",
       "reconcile": "Afstemmen",
-      "report": "Rapport"
+      "report": "Rapport",
+      "whatsapp": "WhatsApp-nummer"
     },
     "stepStatus": {
       "running": "Bezig",

@@ -25,7 +25,7 @@ import { KEYS, customerApi, downloadStatementCsv } from '../../api';
 import { humanizeSource } from '../../lib/billing-variant';
 import { saveBlob } from '../../lib/download';
 import { errorKind } from '../../lib/errors';
-import { formatMinor, formatNet } from '../../lib/money';
+import { formatAmount, formatNet } from '../../lib/money';
 import {
   EMPTY_FILTERS,
   hasFilters,
@@ -71,7 +71,6 @@ function StatementBody() {
   const params = useSearchParams();
   const canRead = useCan('wallet.statement.read');
   const applied = parseFilters(params);
-  const appliedKey = toSearch(applied);
 
   const go = (f: StatementFilters) => router.push(`/billing/wallet/statement${toSearch(f)}`);
 
@@ -95,13 +94,8 @@ function StatementBody() {
         <PermissionDenied permission="wallet.statement.read" />
       ) : (
         <>
-          <FilterBar
-            key={appliedKey}
-            applied={applied}
-            onApply={go}
-            onReset={() => go(EMPTY_FILTERS)}
-          />
-          <StatementList key={appliedKey} filters={applied} />
+          <FilterBar applied={applied} onApply={go} onReset={() => go(EMPTY_FILTERS)} />
+          <StatementList filters={applied} />
         </>
       )}
     </>
@@ -142,6 +136,13 @@ function FilterBar({
   const t = useTranslations('wallet-message-billing.statement.filters');
   const tt = useTranslations('wallet-message-billing.statement.typeFilter');
   const [draft, setDraft] = useState<StatementFilters>(applied);
+  // The address changed (Apply, Reset, back/forward): the form follows it in place. It is never remounted, so there is one form.
+  const appliedKey = toSearch(applied);
+  const [seenKey, setSeenKey] = useState(appliedKey);
+  if (seenKey !== appliedKey) {
+    setSeenKey(appliedKey);
+    setDraft(applied);
+  }
   const inverted = rangeInverted(draft);
   const set = <K extends keyof StatementFilters>(k: K, v: StatementFilters[K]) =>
     setDraft((d) => ({ ...d, [k]: v }));
@@ -219,6 +220,13 @@ function FilterBar({
 function StatementList({ filters }: { filters: StatementFilters }) {
   const t = useTranslations('wallet-message-billing.statement');
   const pager = usePager();
+  // A new filter set starts again at the first page.
+  const filtersKey = toSearch(filters);
+  const [seenFilters, setSeenFilters] = useState(filtersKey);
+  if (seenFilters !== filtersKey) {
+    setSeenFilters(filtersKey);
+    pager.reset();
+  }
   const q = useQuery({
     queryKey: KEYS.statement(filters, pager.cursor),
     queryFn: ({ signal }) => customerApi.statement(filters, pager.cursor, STATEMENT_PAGE, signal),
@@ -262,19 +270,34 @@ export function SummaryCards({ data }: { data: Pick<StatementResponse, 'summary'
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       <StatTile
         label={t('balance')}
-        value={formatMinor(summary.currentBalanceMinor, currency, locale)}
+        value={formatAmount(
+          summary.currentBalanceMinor,
+          summary.currentBalanceExact,
+          currency,
+          locale,
+        )}
         tone="accent"
       />
-      <StatTile label={t('in')} value={formatMinor(summary.moneyInMinor, currency, locale)} />
-      <StatTile label={t('out')} value={formatMinor(summary.moneyOutMinor, currency, locale)} />
+      <StatTile
+        label={t('in')}
+        value={formatAmount(summary.moneyInMinor, summary.moneyInExact, currency, locale)}
+      />
+      <StatTile
+        label={t('out')}
+        value={formatAmount(summary.moneyOutMinor, summary.moneyOutExact, currency, locale)}
+      />
       <StatTile
         label={t('net')}
-        value={formatNet(summary.netMinor, currency, locale)}
+        value={formatNet(summary.netMinor, currency, locale, summary.netExact)}
         hint={t('count', { count: summary.count })}
       />
     </div>
   );
 }
+
+/** A column holds money when the exact figure has a non-zero digit (a charge under one cent still counts). */
+const hasMoney = (minor: number, exact: string | undefined): boolean =>
+  exact ? /[1-9]/.test(exact) : minor > 0;
 
 export function StatementTable({
   rows,
@@ -286,7 +309,7 @@ export function StatementTable({
   const t = useTranslations('wallet-message-billing.statement.columns');
   const locale = useLocale();
   const timeZone = useTimeZone();
-  const money = (minor: number) => formatMinor(minor, currency, locale);
+  const money = (minor: number, exact?: string) => formatAmount(minor, exact, currency, locale);
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-[48rem] text-sm" aria-label={t('label')}>
@@ -328,25 +351,29 @@ export function StatementTable({
               <td
                 className={cn(
                   'whitespace-nowrap px-2 py-2 text-end tabular-nums',
-                  r.moneyInMinor > 0 && 'font-medium text-success',
+                  hasMoney(r.moneyInMinor, r.moneyInExact) && 'font-medium text-success',
                 )}
               >
-                {r.moneyInMinor > 0 ? money(r.moneyInMinor) : <span aria-label={t('none')}>-</span>}
+                {hasMoney(r.moneyInMinor, r.moneyInExact) ? (
+                  money(r.moneyInMinor, r.moneyInExact)
+                ) : (
+                  <span aria-label={t('none')}>-</span>
+                )}
               </td>
               <td
                 className={cn(
                   'whitespace-nowrap px-2 py-2 text-end tabular-nums',
-                  r.moneyOutMinor > 0 && 'font-medium text-danger',
+                  hasMoney(r.moneyOutMinor, r.moneyOutExact) && 'font-medium text-danger',
                 )}
               >
-                {r.moneyOutMinor > 0 ? (
-                  money(r.moneyOutMinor)
+                {hasMoney(r.moneyOutMinor, r.moneyOutExact) ? (
+                  money(r.moneyOutMinor, r.moneyOutExact)
                 ) : (
                   <span aria-label={t('none')}>-</span>
                 )}
               </td>
               <td className="whitespace-nowrap px-2 py-2 text-end tabular-nums">
-                {money(r.balanceAfterMinor)}
+                {money(r.balanceAfterMinor, r.balanceAfterExact)}
               </td>
             </tr>
           ))}

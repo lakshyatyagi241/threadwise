@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import type { DashWidgets } from '@crm/contracts';
 import { Card, cn } from '@crm/ui';
 import { compact, followersLabel } from '../lib/format';
+import { useBrandName } from '@/components/shell/brand';
 
 const BASE = 'dashboards-analytics-charts.dashboard';
 const IG_GRADIENT = 'linear-gradient(135deg,#833AB4,#E1306C,#F77737)';
@@ -138,7 +139,7 @@ export const COPILOT_EXAMPLE =
 /** "{brand} Copilot" promo card with the flow counters (TW-DASH-017). */
 export function CopilotCard({ data }: { data: DashWidgets['flows'] }) {
   const t = useTranslations(`${BASE}.copilot`);
-  const brand = useTranslations('common')('appName');
+  const brand = useBrandName();
   const stats = [
     ['flows', data.total],
     ['active', data.active],

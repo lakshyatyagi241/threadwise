@@ -164,7 +164,12 @@
       "change": "変更",
       "terms": "お支払いにより、<terms>利用規約</terms>および<privacy>プライバシーポリシー</privacy>に同意したものとみなされます。",
       "refundNote": "ご満足いただけない場合は、最初の{days}日以内にメールでご連絡ください。全額返金いたします。理由の確認や申請書類は不要です。",
-      "autoRenewTitle": "このプランを自動更新"
+      "autoRenewTitle": "このプランを自動更新",
+      "amountSubtitle": "追加したい金額を入力してください。次の画面で最終的な価格と支払い方法が表示されます。",
+      "amountLabel": "追加する金額",
+      "amountHint": "数字のみ。例: 1000 または 250.50。",
+      "amountInvalid": "0 より大きい金額を入力してください。例: 500 または 250.50。",
+      "amountContinue": "続行"
     },
     "orders": {
       "title": "注文履歴",

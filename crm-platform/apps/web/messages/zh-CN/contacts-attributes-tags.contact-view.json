@@ -136,7 +136,11 @@
         "previousStage": "上一阶段",
         "previousStageSince": "上一阶段的开始时间",
         "lostReason": "丢单原因",
-        "updatedAt": "最后更新"
+        "updatedAt": "最后更新",
+        "leadScore": "潜在客户评分",
+        "originalStage": "原始生命周期阶段",
+        "createdBy": "创建人",
+        "updatedBy": "更新人"
       },
       "company": {
         "title": "公司",

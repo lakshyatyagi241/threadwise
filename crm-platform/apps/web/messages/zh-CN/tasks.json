@@ -92,7 +92,8 @@
         "contact": "联系人",
         "deal": "交易",
         "created": "创建时间",
-        "completed": "完成于"
+        "completed": "完成于",
+        "outcome": "结果"
       },
       "refresh": "刷新",
       "shortcuts": "键盘快捷键",
@@ -101,7 +102,9 @@
         "list": "列表",
         "board": "按截止日期看板"
       },
-      "linkCompany": "某个公司"
+      "linkCompany": "某个公司",
+      "outcome": "结果",
+      "allOutcomes": "所有结果"
     },
     "table": {
       "scrollArea": "任务表格",
@@ -115,7 +118,8 @@
         "contact": "联系人",
         "deal": "交易",
         "created": "创建时间",
-        "completed": "完成于"
+        "completed": "完成于",
+        "outcome": "结果"
       }
     },
     "row": {
@@ -205,9 +209,11 @@
         "titleTooLong": "任务内容过长（最多 255 个字符）。",
         "notesTooLong": "备注过长（最多 5000 个字符）。",
         "dueInvalid": "该日期无效。",
-        "assigneeInvalid": "该成员不是此工作区的有效成员。"
+        "assigneeInvalid": "该成员不是此工作区的有效成员。",
+        "outcomeInvalid": "该结果不可用。请从列表中选择。"
       },
-      "company": "公司"
+      "company": "公司",
+      "outcome": "结果"
     },
     "drawer": {
       "loading": "正在加载任务",
@@ -236,7 +242,8 @@
       },
       "deleteTitle": "删除此任务？",
       "deleteMessage": "“{title}”将为所有人删除，且无法恢复。",
-      "cancel": "保留"
+      "cancel": "保留",
+      "outcomeChip": "结果：{name}"
     },
     "board": {
       "buckets": {
@@ -286,7 +293,10 @@
       "planDisabled": "您的套餐不包含任务功能。升级后即可使用。",
       "assigneeInvalid": "该用户不是此工作区的活跃成员。",
       "unexpected": "出错了，请稍后重试。",
-      "retry": "重试"
+      "retry": "重试",
+      "outcomeInvalid": "该结果不可用。请从列表中选择。",
+      "outcomeNameTaken": "已有另一个结果使用此名称。",
+      "outcomeInUse": "仍有任务在使用此结果，因此无法删除。请改为隐藏。"
     },
     "toast": {
       "completed": "任务已完成。",
@@ -342,6 +352,43 @@
       "save": "添加任务",
       "cancel": "取消",
       "failed": "无法保存任务。您输入的内容已放回输入框。"
+    },
+    "outcomes": {
+      "title": "任务结果",
+      "subtitle": "完成或记录任务时选择的结果，例如“有兴趣”或“已留言”。",
+      "listTitle": "结果",
+      "listHint": "隐藏的结果不再供选择，但已使用它的任务会保留。仍被任务使用的结果无法删除。",
+      "loading": "正在加载结果",
+      "empty": "还没有结果。请在下方添加第一个。",
+      "newName": "新结果",
+      "newNamePlaceholder": "例如：已留言",
+      "add": "添加结果",
+      "readOnly": "你可以查看此列表，但需要权限才能修改。",
+      "failed": "操作未成功。",
+      "conflict": "其他人修改了此结果。列表已重新加载，请重试。",
+      "added": "已添加结果。",
+      "saved": "已保存结果。",
+      "deleted": "已删除结果。",
+      "moveUp": "将 {name} 上移",
+      "moveDown": "将 {name} 下移",
+      "nameLabel": "结果名称",
+      "taskCount": "{count, plural, other {# 个任务}}",
+      "shownLabel": "完成任务时提供 {name}",
+      "shown": "显示",
+      "hidden": "已隐藏",
+      "deleteNamed": "删除 {name}",
+      "deleteInUse": "仍有任务在使用此结果，因此无法删除。请改为隐藏。",
+      "deleteTitle": "删除 {name}？",
+      "deleteMessage": "该结果将从列表中移除。没有任务在使用它。",
+      "delete": "删除",
+      "cancel": "保留",
+      "problems": {
+        "nameRequired": "请输入结果名称。",
+        "nameTooLong": "名称过长（最多 191 个字符）。"
+      },
+      "none": "无结果",
+      "hiddenName": "{name}（已隐藏）",
+      "completeWith": "带结果完成"
     }
   }
 }

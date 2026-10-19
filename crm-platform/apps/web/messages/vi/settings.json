@@ -245,6 +245,11 @@
         "description": "Khóa và tài liệu để phát triển trên sản phẩm.",
         "keywords": "khóa api, nhà phát triển, token, tài liệu, openapi"
       },
+      "api-keys": {
+        "label": "Khóa API",
+        "description": "Tạo và quản lý các khóa mà hệ thống khác dùng để gọi API.",
+        "keywords": "khóa api, token, bí mật, nhà phát triển, truy cập, tích hợp"
+      },
       "webhooks": {
         "label": "Webhook",
         "description": "Gửi sự kiện đến hệ thống của bạn ngay khi chúng xảy ra.",

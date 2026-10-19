@@ -136,7 +136,11 @@
         "previousStage": "ขั้นก่อนหน้า",
         "previousStageSince": "ขั้นก่อนหน้าตั้งแต่",
         "lostReason": "เหตุผลที่แพ้",
-        "updatedAt": "อัปเดตล่าสุด"
+        "updatedAt": "อัปเดตล่าสุด",
+        "leadScore": "คะแนนลีด",
+        "originalStage": "ขั้นตอนวงจรชีวิตเดิม",
+        "createdBy": "สร้างโดย",
+        "updatedBy": "อัปเดตโดย"
       },
       "company": {
         "title": "บริษัท",

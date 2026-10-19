@@ -92,7 +92,8 @@
         "contact": "연락처",
         "deal": "거래",
         "created": "생성일",
-        "completed": "완료일"
+        "completed": "완료일",
+        "outcome": "결과"
       },
       "refresh": "새로고침",
       "shortcuts": "키보드 단축키",
@@ -101,7 +102,9 @@
         "list": "목록",
         "board": "마감일별 보드"
       },
-      "linkCompany": "회사"
+      "linkCompany": "회사",
+      "outcome": "결과",
+      "allOutcomes": "모든 결과"
     },
     "table": {
       "scrollArea": "작업 표",
@@ -115,7 +118,8 @@
         "contact": "연락처",
         "deal": "거래",
         "created": "생성일",
-        "completed": "완료일"
+        "completed": "완료일",
+        "outcome": "결과"
       }
     },
     "row": {
@@ -205,9 +209,11 @@
         "titleTooLong": "작업 내용이 너무 깁니다(최대 255자).",
         "notesTooLong": "메모가 너무 깁니다(최대 5000자).",
         "dueInvalid": "유효하지 않은 날짜입니다.",
-        "assigneeInvalid": "이 워크스페이스의 활성 구성원이 아닙니다."
+        "assigneeInvalid": "이 워크스페이스의 활성 구성원이 아닙니다.",
+        "outcomeInvalid": "사용할 수 없는 결과입니다. 목록에서 선택하세요."
       },
-      "company": "회사"
+      "company": "회사",
+      "outcome": "결과"
     },
     "drawer": {
       "loading": "작업을 불러오는 중",
@@ -236,7 +242,8 @@
       },
       "deleteTitle": "이 작업을 삭제하시겠습니까?",
       "deleteMessage": "“{title}” 작업이 모든 사용자에게서 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
-      "cancel": "유지"
+      "cancel": "유지",
+      "outcomeChip": "결과: {name}"
     },
     "board": {
       "buckets": {
@@ -286,7 +293,10 @@
       "planDisabled": "현재 요금제에는 작업 기능이 포함되어 있지 않습니다. 업그레이드하여 사용하세요.",
       "assigneeInvalid": "해당 사용자는 이 워크스페이스의 활성 멤버가 아닙니다.",
       "unexpected": "문제가 발생했습니다. 잠시 후 다시 시도하세요.",
-      "retry": "다시 시도"
+      "retry": "다시 시도",
+      "outcomeInvalid": "사용할 수 없는 결과입니다. 목록에서 선택하세요.",
+      "outcomeNameTaken": "같은 이름의 결과가 이미 있습니다.",
+      "outcomeInUse": "아직 작업이 이 결과를 사용 중이므로 삭제할 수 없습니다. 대신 숨기세요."
     },
     "toast": {
       "completed": "작업이 완료되었습니다.",
@@ -342,6 +352,43 @@
       "save": "작업 추가",
       "cancel": "취소",
       "failed": "작업을 저장하지 못했습니다. 입력한 내용은 입력란에 그대로 있습니다."
+    },
+    "outcomes": {
+      "title": "작업 결과",
+      "subtitle": "작업을 완료하거나 기록할 때 선택하는 결과입니다. 예: 관심 있음, 메시지 남김.",
+      "listTitle": "결과",
+      "listHint": "숨긴 결과는 더 이상 선택지에 나오지 않지만, 이미 그 결과를 가진 작업에는 그대로 남습니다. 작업이 사용 중인 결과는 삭제할 수 없습니다.",
+      "loading": "결과 불러오는 중",
+      "empty": "아직 결과가 없습니다. 아래에서 첫 결과를 추가하세요.",
+      "newName": "새 결과",
+      "newNamePlaceholder": "예: 메시지 남김",
+      "add": "결과 추가",
+      "readOnly": "이 목록은 볼 수 있지만 변경하려면 권한이 필요합니다.",
+      "failed": "처리하지 못했습니다.",
+      "conflict": "다른 사람이 이 결과를 변경했습니다. 목록을 다시 불러왔습니다. 다시 시도하세요.",
+      "added": "결과를 추가했습니다.",
+      "saved": "결과를 저장했습니다.",
+      "deleted": "결과를 삭제했습니다.",
+      "moveUp": "{name} 위로 이동",
+      "moveDown": "{name} 아래로 이동",
+      "nameLabel": "결과 이름",
+      "taskCount": "{count, plural, other {작업 #개}}",
+      "shownLabel": "작업을 완료할 때 {name} 표시",
+      "shown": "표시됨",
+      "hidden": "숨김",
+      "deleteNamed": "{name} 삭제",
+      "deleteInUse": "아직 작업이 이 결과를 사용 중이므로 삭제할 수 없습니다. 대신 숨기세요.",
+      "deleteTitle": "{name}을(를) 삭제할까요?",
+      "deleteMessage": "이 결과가 목록에서 제거됩니다. 이 결과를 사용하는 작업은 없습니다.",
+      "delete": "삭제",
+      "cancel": "유지",
+      "problems": {
+        "nameRequired": "결과 이름을 입력하세요.",
+        "nameTooLong": "이름이 너무 깁니다(최대 191자)."
+      },
+      "none": "결과 없음",
+      "hiddenName": "{name}(숨김)",
+      "completeWith": "결과와 함께 완료"
     }
   }
 }

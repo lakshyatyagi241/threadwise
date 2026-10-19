@@ -129,6 +129,13 @@ describe('the real menu', () => {
       'devices',
       'devices-groups',
       'email',
+      // The channel root screens (`inMenu: false`, plan-gated with `closeWhenLocked`); with the Settings tiles passed the shell hides them.
+      'line',
+      'telegram',
+      'viber',
+      'wechat',
+      'facebook',
+      'instagram',
     ]);
     expect(ids('audience')).toEqual([
       'contacts',
@@ -216,8 +223,9 @@ describe('the sidebar as the workspace layout builds it', () => {
 
 describe('the menu after the Settings move', () => {
   const resolved = resolveNav(NAV, CAPABILITIES_UNKNOWN, { planned: PLANNED_NAV });
-  const menuIds = new Set(resolved.map((i) => i.id));
   const tiles = resolveSettings(SETTINGS, CAPABILITIES_UNKNOWN, { planned: PLANNED_SETTINGS });
+  // What the sidebar draws: an `inMenu: false` entry (a channel's root screen, registered for its plan gate) is hidden when a tile reaches it.
+  const menuIds = new Set(menuItems(resolved, tiles).map((i) => i.id));
 
   it('pins only Help and Settings in the settings group, Help directly above Settings', () => {
     expect(resolved.filter((i) => i.group === 'settings').map((i) => i.id)).toEqual([

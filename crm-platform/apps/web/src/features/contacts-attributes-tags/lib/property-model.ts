@@ -10,7 +10,7 @@ import {
   type UpdateFieldInput,
 } from '@crm/contracts';
 import { ATTRIBUTE_KEY, ATTRIBUTE_KEY_MAX } from './attribute-model';
-import { displayValue } from './field-values';
+import { displayValue, type DisplayContext } from './field-values';
 import { moveItem, valueFromLabel } from './stage-model';
 
 /**
@@ -69,7 +69,7 @@ export const BUILT_IN_PROPERTIES: readonly BuiltInProperty[] = [
 ];
 
 /** A property the contact form and detail page can show: a registry row that is a custom property and not hidden. */
-export const isUsable = (f: FieldResponse): boolean => f.isActive && !f.isSystem;
+export const isUsable = (f: FieldResponse): boolean => f.isActive && !f.isSystem && !f.isHidden;
 
 export interface SectionGroup {
   /** `null` = properties that have no section. */
@@ -196,7 +196,7 @@ export interface DraftProblems {
 /** Checks a draft before it is sent. `takenKeys` are the keys of every property that already exists (any state). */
 export function checkDraft(
   d: PropertyDraft,
-  opts: { editing: boolean; takenKeys: ReadonlySet<string> },
+  opts: { editing: boolean; takenKeys: ReadonlySet<string>; lazyOptions?: boolean },
 ): DraftProblems {
   const out: DraftProblems = {};
   const label = d.label.trim();
@@ -213,7 +213,8 @@ export function checkDraft(
   }
   if (!d.sectionId) out.section = 'required';
 
-  if (isOptionType(d.type)) {
+  // A list too long to edit here (every City) is left as it is: its options are not in the draft.
+  if (isOptionType(d.type) && !opts.lazyOptions) {
     const labels = d.options.map((o) => o.label.trim().toLocaleLowerCase());
     if (d.options.length === 0) out.options = 'required';
     else if (labels.some((l) => l === '')) out.options = 'emptyLabel';
@@ -385,6 +386,8 @@ export function detailGroups(
   skipKeys: ReadonlySet<string>,
   words: { yes: string; no: string },
   keyLabel: (key: string) => string,
+  /** Dates in the workspace zone and the labels of lazy option lists, by property key. */
+  ctx: { dateTime?: DisplayContext['dateTime']; optionLabels?: ReadonlyMap<string, ReadonlyMap<string, string>> } = {},
 ): DetailGroup[] {
   const groups: DetailGroup[] = [];
   for (const g of groupBySection(
@@ -392,7 +395,10 @@ export function detailGroups(
     fields.filter((f) => isUsable(f) && !f.isHidden),
   )) {
     const rows = g.fields.flatMap((f) => {
-      const value = displayValue(f, customFields[f.key], words);
+      const value = displayValue(f, customFields[f.key], words, {
+        dateTime: ctx.dateTime,
+        optionLabels: ctx.optionLabels?.get(f.key),
+      });
       return value ? [{ key: f.key, label: f.label, value }] : [];
     });
     if (rows.length) groups.push({ title: g.section?.name ?? null, rows });

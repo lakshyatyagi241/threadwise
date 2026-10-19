@@ -61,3 +61,14 @@ export function decodeTaskCursor(raw: string, sort: TaskSort): { key: string; id
     throw new AppError(ERROR_CODES.VALIDATION_FAILED, 'Invalid pagination cursor', 400);
   }
 }
+
+/**
+ * May a task be given this outcome? Only an outcome of the workspace that is active, or the one the task already carries (a hidden
+ * outcome stays on its tasks, and saving the task unchanged must not fail because of it).
+ */
+export function outcomeUsable(
+  outcome: { id: number; isActive: boolean } | undefined,
+  currentId: number | null,
+): boolean {
+  return outcome !== undefined && (outcome.isActive || outcome.id === currentId);
+}

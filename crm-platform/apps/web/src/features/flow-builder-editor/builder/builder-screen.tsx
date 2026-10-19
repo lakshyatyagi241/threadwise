@@ -13,9 +13,12 @@ import {
   type FlowType,
   type FlbPortContext,
 } from '@crm/contracts';
+import { ConfirmDialog } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useFlowWidget } from '@/features/chatbot-widget/api/widgets';
+import { FaqLeaveConfirm } from '@/features/faq-knowledge/components/faq-leave-confirm';
+import { FaqPanel } from '@/features/faq-knowledge/components/faq-panel';
 import { flowsApi } from '../api/flows';
 import { useFlb, useMsg, type Msg } from '../lib/msg';
 import { nodeLabel } from '../lib/contract-text';
@@ -26,7 +29,7 @@ import { GetaPublishStatus } from '../geta-publish/sync-status';
 import {
   BuilderTabs,
   WebBotPanels,
-  useInitialTab,
+  useBuilderTab,
   whatsappDefaultsFrom,
   type BuilderTab,
 } from './web-bot-tabs';
@@ -61,6 +64,7 @@ import { InspectorPanel, Minimap, NodeActionBar, ValidationPopup } from './overl
 import type { FormEnv } from './inspector/types';
 import { AIGenModal, SaveConfirmModal } from './modals';
 import { Icon } from './node-card';
+import { opensNodeOnEnter } from './node-open';
 import { Palette } from './palette';
 import { QuickAddMenu } from './quick-add';
 import { uploadFlowMedia } from '../lib/upload-media';
@@ -169,6 +173,8 @@ function BuilderInner({
 }: InnerProps) {
   const tb = useTranslations('flb.builder.shell.screen');
   const tw = useTranslations('flb.builder.webBot');
+  const to = useTranslations('flb.builder.shell.overlays');
+  const tcm = useTranslations('flb.common');
   const tf = useFlb();
   const seed = useMemo<CanvasState>(
     () => ({
@@ -260,10 +266,23 @@ function BuilderInner({
   // A website chat or WhatsApp bot has Customize and Deploy beside the canvas; the other channels only build.
   const widgetChannel: 'web' | 'chat' | null =
     mode === 'web' ? 'web' : mode === 'chat' ? 'chat' : null;
-  const initialTab = useInitialTab(!!initial);
-  const [tab, setTab] = useState<BuilderTab>(initialTab);
-  // Another channel has no tabs, whatever the link asked for.
-  const shownTab: BuilderTab = widgetChannel ? tab : 'build';
+  // Every saved flow has FAQs beside Build (for a person who may read them); only a website chat or WhatsApp bot also has Customize and Deploy.
+  const canFaqs = useCan('faq.entries.read');
+  const tabSet = useMemo(() => ({ faqs: canFaqs, web: !!widgetChannel }), [canFaqs, widgetChannel]);
+  const [tab, setTab] = useBuilderTab(!!flowId, tabSet);
+  // A tab this flow does not offer (FAQs before the first save, Customize on another channel) is never shown, whatever the link asked for.
+  const shownTab: BuilderTab =
+    tab === 'faqs' ? (flowId && canFaqs ? 'faqs' : 'build') : widgetChannel ? tab : 'build';
+  // The FAQs panel tells us when one of its screens holds unsaved edits: leaving the tab asks first.
+  const faqDirty = useRef(false);
+  const [leaveTo, setLeaveTo] = useState<BuilderTab | null>(null);
+  const onFaqDirty = useCallback((d: boolean) => {
+    faqDirty.current = d;
+  }, []);
+  const requestTab = (next: BuilderTab) => {
+    if (shownTab === 'faqs' && next !== 'faqs' && faqDirty.current) setLeaveTo(next);
+    else setTab(next);
+  };
   const canEditFlow = useCan('flb.flows.update');
   const widgetQuery = useFlowWidget(widgetChannel ? flowId : null);
   const needsCustomizing = !!widgetChannel && !!flowId && widgetQuery.data?.widget === null;
@@ -342,6 +361,8 @@ function BuilderInner({
     },
     [doAdd, pan, zoom],
   );
+  // The toolbar's trash button asks first; the Delete key is undoable and stays direct.
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const doDelete = useCallback(
     (id: string) => {
       commit(deleteNode(state, id));
@@ -370,6 +391,8 @@ function BuilderInner({
         t.isContentEditable
       )
         return;
+      // The canvas shortcuts belong to the Build tab, and to no dialog above it (a Delete under the FAQs tab must not remove a node).
+      if (shownTab !== 'build' || confirmDeleteId !== null) return;
       const k = e.key.toLowerCase();
       const mod = e.ctrlKey || e.metaKey;
       if (mod && k === 'z' && !e.shiftKey) {
@@ -384,13 +407,17 @@ function BuilderInner({
       } else if ((e.key === 'Backspace' || e.key === 'Delete') && selectedId) {
         e.preventDefault();
         doDelete(selectedId);
+      } else if (e.key === 'Enter' && selectedId && !mod && opensNodeOnEnter(t)) {
+        // Enter on a selected node opens it in the inspector (a double-click does the same); a focused button keeps its own Enter.
+        e.preventDefault();
+        setInsOpen(true);
       } else if (e.key === 'Escape') {
         setSelectedId(null);
       }
     };
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
-  }, [doUndo, doRedo, doDuplicate, doDelete, selectedId]);
+  }, [doUndo, doRedo, doDuplicate, doDelete, selectedId, shownTab, confirmDeleteId]);
 
   // --- save / publish -----------------------------------------------------------------------------------------------------
   const senderAvailable = useMemo(() => {
@@ -615,17 +642,14 @@ function BuilderInner({
           }
         />
 
-        {widgetChannel ? (
-          // The Advanced builder has no FAQs tab: a flow's FAQs are edited in the Simple builder.
-          <BuilderTabs
-            tab={shownTab}
-            onTab={setTab}
-            saved={!!flowId}
-            needsCustomizing={needsCustomizing}
-            faqs={false}
-            web
-          />
-        ) : null}
+        <BuilderTabs
+          tab={shownTab}
+          onTab={requestTab}
+          saved={!!flowId}
+          needsCustomizing={needsCustomizing}
+          faqs={canFaqs}
+          web={!!widgetChannel}
+        />
 
         <div className={`relative flex min-h-0 flex-1 ${shownTab === 'build' ? '' : 'hidden'}`}>
           {sidebarOpen ? (
@@ -682,7 +706,7 @@ function BuilderInner({
                 pan={pan}
                 zoom={zoom}
                 onEdit={() => setInsOpen(true)}
-                onDelete={() => doDelete(selectedNode.id)}
+                onDelete={() => setConfirmDeleteId(selectedNode.id)}
                 onDuplicate={() => doDuplicate(selectedNode.id)}
                 onPin={() => commit(pinStart(state, selectedNode.id))}
               />
@@ -803,6 +827,49 @@ function BuilderInner({
             onRemoveOption={(i) => selectedNode && commit(removeOption(state, selectedNode.id, i))}
           />
         </div>
+
+        {flowId && canFaqs ? (
+          <div
+            role="tabpanel"
+            id="web-bot-panel-faqs"
+            aria-labelledby="web-bot-tab-faqs"
+            className={`min-h-0 flex-1 overflow-y-auto bg-background ${shownTab === 'faqs' ? '' : 'hidden'}`}
+          >
+            {shownTab === 'faqs' ? (
+              <div className="mx-auto w-full max-w-6xl p-4 sm:p-6">
+                <FaqPanel
+                  flowId={flowId}
+                  flowName={name}
+                  onDirtyChange={onFaqDirty}
+                  builder="advanced"
+                />
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+        <ConfirmDialog
+          open={confirmDeleteId !== null}
+          title={to('confirmDeleteTitle')}
+          message={to('confirmDeleteMessage')}
+          confirmLabel={to('deleteNode')}
+          cancelLabel={tcm('cancel')}
+          tone="danger"
+          onClose={() => setConfirmDeleteId(null)}
+          onConfirm={() => {
+            if (confirmDeleteId) doDelete(confirmDeleteId);
+            setConfirmDeleteId(null);
+          }}
+        />
+        <FaqLeaveConfirm
+          open={leaveTo !== null}
+          onStay={() => setLeaveTo(null)}
+          onLeave={() => {
+            const next = leaveTo;
+            setLeaveTo(null);
+            faqDirty.current = false;
+            if (next) setTab(next);
+          }}
+        />
 
         {widgetChannel && flowId ? (
           <WebBotPanels

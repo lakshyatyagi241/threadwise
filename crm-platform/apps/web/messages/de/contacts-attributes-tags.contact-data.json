@@ -91,7 +91,14 @@
         "none": "Noch keine",
         "atLeast": "{count}+",
         "footnote": "Die Nachrichtenzahlen beziehen sich auf die Gespräche, die für diesen Kontakt gefunden wurden (nach Telefonnummer, E-Mail-Adresse oder Name). Die Anrufzahlen beziehen sich auf das letzte Jahr und werden nach Telefonnummer oder Name zugeordnet.",
-        "callsPartial": "Es wurden mehr Anrufe gefunden, als gelesen werden konnten, daher können die Anrufzahlen zu niedrig sein."
+        "callsPartial": "Es wurden mehr Anrufe gefunden, als gelesen werden konnten, daher können die Anrufzahlen zu niedrig sein.",
+        "waSent": "WhatsApp gesendet",
+        "waDelivered": "WhatsApp zugestellt",
+        "waSeen": "WhatsApp gelesen",
+        "waReceived": "WhatsApp empfangen",
+        "waFailed": "WhatsApp fehlgeschlagen",
+        "waReplied": "WhatsApp beantwortet",
+        "waFootnote": "Die WhatsApp-Zahlen zählen jede Nachricht in den WhatsApp-Unterhaltungen dieses Kontakts. Eine gesendete Nachricht gilt als beantwortet, wenn als Nächstes eine Nachricht des Kontakts folgt."
       }
     }
   }

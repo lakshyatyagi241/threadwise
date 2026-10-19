@@ -44,6 +44,7 @@ export async function resolveContactFilter(
     tagMode: input.tagMode ?? 'any',
     imported: input.imported,
     unsubscribed: input.unsubscribed,
+    subscribed: input.subscribed,
     minor: input.minor,
     uncontacted: input.uncontacted,
     source: input.source,

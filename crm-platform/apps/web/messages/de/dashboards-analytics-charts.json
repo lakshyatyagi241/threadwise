@@ -317,7 +317,13 @@
         "delivered": "Zugestellt",
         "queued": "In Warteschlange",
         "failed": "Fehlgeschlagen",
-        "replyRate": "Antwortrate"
+        "replyRate": "Antwortrate",
+        "received": "Empfangene Nachrichten",
+        "conversationsOpen": "Offene Unterhaltungen",
+        "conversationsClosed": "Geschlossene Unterhaltungen",
+        "conversationsAssigned": "Zugewiesen",
+        "conversationsUnassigned": "Nicht zugewiesen",
+        "conversationsTotal": "{count, plural, one {# Unterhaltung} other {# Unterhaltungen}}"
       },
       "series": {
         "sent": "Gesendet",
@@ -443,7 +449,8 @@
             "unknown": "Unbekannt"
           }
         }
-      }
+      },
+      "moreKpis": "Nachrichten und Unterhaltungen"
     },
     "health": {
       "nav": "Systemzustand",

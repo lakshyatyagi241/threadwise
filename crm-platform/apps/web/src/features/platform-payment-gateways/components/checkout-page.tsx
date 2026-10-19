@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState, type FormEvent } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -24,6 +24,10 @@ import { BraintreeWidget, HyperpayWidget } from './card-widgets';
 import { OfflineInstructions } from './offline-instructions';
 
 const NS = 'platform-payment-gateways.checkout';
+
+/** A top-up amount the quote endpoint accepts: digits with up to three decimals, above zero. */
+export const isWalletAmount = (v: string): boolean =>
+  /^\d{1,10}(\.\d{1,3})?$/.test(v) && Number(v) > 0;
 
 export type CheckoutTarget = { kind: 'plan'; planSlug: string } | { kind: 'wallet' };
 
@@ -73,7 +77,11 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
   // One key per distinct submission: a retry of the same form replays the order instead of creating a second one.
   const attempt = useRef<{ sig: string; key: string } | null>(null);
 
+  // A wallet top-up is priced from the amount: with none (or an unreadable one) the amount form comes first and nothing is quoted.
+  const needsAmount = target.kind === 'wallet' && !isWalletAmount(amount);
+
   const quote = useQuery<PaygwQuote>({
+    enabled: !needsAmount,
     queryKey: checkoutKey(
       target.kind,
       target.kind === 'plan' ? target.planSlug : amount,
@@ -197,6 +205,18 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
   const money = (v: string) => (q ? formatMoney(v, q.currency, locale) : v);
   const title = target.kind === 'plan' ? t('title') : t('walletTitle');
 
+  if (needsAmount) {
+    return (
+      <WalletAmountForm
+        initial={amount}
+        onSubmit={(value) => {
+          const next = new URLSearchParams(params.toString());
+          next.set('amount', value);
+          router.replace(`?${next.toString()}`);
+        }}
+      />
+    );
+  }
   if (quote.isError && !q) {
     return <Alert tone="danger">{explain(quote.error)}</Alert>;
   }
@@ -614,6 +634,55 @@ function StepHeading({ n, title }: { n: number; title: string }) {
         {t('step', { n })}
       </p>
       <h2 className="font-medium">{title}</h2>
+    </div>
+  );
+}
+
+/** The first step of a wallet top-up opened without an amount (the Settings tile, a bookmark): ask for it, then price it. */
+function WalletAmountForm({
+  initial,
+  onSubmit,
+}: {
+  initial: string;
+  onSubmit: (amount: string) => void;
+}) {
+  const t = useTranslations(NS);
+  const [value, setValue] = useState(initial);
+  const [touched, setTouched] = useState(false);
+  const trimmed = value.trim();
+  const invalid = touched && !isWalletAmount(trimmed);
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    setTouched(true);
+    if (isWalletAmount(trimmed)) onSubmit(trimmed);
+  };
+  return (
+    <div className="mx-auto max-w-lg p-4">
+      <Card className="space-y-4 p-4">
+        <header className="space-y-1">
+          <h1 className="text-2xl font-semibold tracking-tight">{t('walletTitle')}</h1>
+          <p className="text-sm text-muted-foreground">{t('amountSubtitle')}</p>
+        </header>
+        <form onSubmit={submit} className="space-y-3" noValidate>
+          <Field
+            label={t('amountLabel')}
+            htmlFor="co-amount"
+            hint={t('amountHint')}
+            error={invalid ? t('amountInvalid') : undefined}
+          >
+            <Input
+              id="co-amount"
+              inputMode="decimal"
+              autoComplete="off"
+              placeholder="1000"
+              value={value}
+              invalid={invalid}
+              onChange={(e) => setValue(e.target.value)}
+            />
+          </Field>
+          <Button type="submit">{t('amountContinue')}</Button>
+        </form>
+      </Card>
     </div>
   );
 }

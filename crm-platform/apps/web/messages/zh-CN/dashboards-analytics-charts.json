@@ -317,7 +317,13 @@
         "delivered": "已送达",
         "queued": "排队中",
         "failed": "失败",
-        "replyRate": "回复率"
+        "replyRate": "回复率",
+        "received": "收到的消息",
+        "conversationsOpen": "进行中的对话",
+        "conversationsClosed": "已关闭的对话",
+        "conversationsAssigned": "已分配",
+        "conversationsUnassigned": "未分配",
+        "conversationsTotal": "{count, plural, other {# 个对话}}"
       },
       "series": {
         "sent": "已发送",
@@ -443,7 +449,8 @@
             "unknown": "未知"
           }
         }
-      }
+      },
+      "moreKpis": "消息与对话"
     },
     "health": {
       "nav": "系统健康",

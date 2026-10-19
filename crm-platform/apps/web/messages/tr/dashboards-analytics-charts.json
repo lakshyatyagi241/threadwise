@@ -317,7 +317,13 @@
         "delivered": "İletildi",
         "queued": "Sırada",
         "failed": "Başarısız",
-        "replyRate": "Yanıt oranı"
+        "replyRate": "Yanıt oranı",
+        "received": "Alınan mesajlar",
+        "conversationsOpen": "Açık görüşmeler",
+        "conversationsClosed": "Kapatılan görüşmeler",
+        "conversationsAssigned": "Atanmış",
+        "conversationsUnassigned": "Atanmamış",
+        "conversationsTotal": "{count, plural, one {# görüşme} other {# görüşme}}"
       },
       "series": {
         "sent": "Gönderildi",
@@ -443,7 +449,8 @@
             "unknown": "Bilinmiyor"
           }
         }
-      }
+      },
+      "moreKpis": "Mesajlar ve görüşmeler"
     },
     "health": {
       "nav": "Sistem durumu",

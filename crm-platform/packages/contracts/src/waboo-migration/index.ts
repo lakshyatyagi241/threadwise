@@ -41,6 +41,7 @@ export const WMIG_STEP_NAMES = [
   'flow-state',
   'reconcile',
   'report',
+  'whatsapp',
 ] as const;
 export const WMIG_STEP_STATUSES = ['running', 'done', 'failed', 'skipped'] as const;
 export const WMIG_VERDICTS = ['green', 'amber', 'red'] as const;

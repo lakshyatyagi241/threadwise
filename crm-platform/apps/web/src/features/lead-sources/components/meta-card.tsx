@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { Badge, Button, Card } from '@crm/ui';
 import { useMetaOverview } from '../meta-api';
 import { metaSummary } from '../lib/meta-view';
-import { META_PANEL_ID } from './meta-panel';
+import { META_PANEL_ID, useMetaPlanOn } from './meta-panel';
 
 /**
  * The "Meta lead forms" card of the Ads tab. It is a real provider (unlike LinkedIn, TikTok and Google Ads, which are still coming
@@ -12,11 +12,13 @@ import { META_PANEL_ID } from './meta-panel';
  */
 export function MetaCard({ open, onToggle }: { open: boolean; onToggle: () => void }) {
   const t = useTranslations('lead-sources');
-  const overview = useMetaOverview(true);
+  const planOn = useMetaPlanOn();
+  const overview = useMetaOverview(planOn);
   const s = overview.data ? metaSummary(overview.data) : null;
 
   let status: string;
-  if (overview.isPending) status = t('meta.card.checking');
+  if (!planOn) status = t('meta.planLocked');
+  else if (overview.isPending) status = t('meta.card.checking');
   else if (overview.isError || !s) status = t('meta.card.unavailable');
   else if (!s.configured) status = t('meta.card.notConfigured');
   else if (s.pages === 0) status = t('meta.card.noPages');

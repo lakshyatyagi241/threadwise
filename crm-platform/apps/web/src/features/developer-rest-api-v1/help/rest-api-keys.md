@@ -4,7 +4,7 @@ title: REST API keys
 summary: Create the key your own apps use to call the REST API, choose what it may do, copy it once, and revoke it when it is no longer needed.
 area: settings
 order: 100
-documents: [tile:rest-api]
+documents: [tile:rest-api, tile:api-keys]
 keywords:
   [
     api key,
@@ -24,7 +24,7 @@ keywords:
 
 ## What it is for
 
-A REST API key lets your own software, such as a website, a CRM or an automation, call the product's REST API: send messages, manage contacts, templates, broadcasts and more. Open **Marketplace**, select the **Add-ons** tab and open **REST API**, to manage it.
+A REST API key lets your own software, such as a website, a CRM or an automation, call the product's REST API: send messages, manage contacts, templates, broadcasts and more. Open **Settings**, then **Data and security**, and select **API keys**, or open **Marketplace**, select the **Add-ons** tab and open **REST API**, to manage it.
 
 ## Create a key
 

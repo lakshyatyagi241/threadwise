@@ -254,9 +254,9 @@ describe('plan limit (TW-CON-026)', () => {
 });
 
 describe('formatDate', () => {
-  it("is the day only, in the fixed English form, and the language's own medium date otherwise", async () => {
+  it("is the day only, in the app's one date format", async () => {
     const { formatDate } = await import('./format');
-    expect(formatDate('2026-10-17T04:08:00.000Z', 'en', 'UTC')).toBe('17 Oct 2026');
+    expect(formatDate('2026-10-17T04:08:00.000Z', 'en', 'UTC')).toBe('Oct 17, 2026');
     expect(formatDate('2026-10-17T23:30:00.000Z', 'en-GB', 'Asia/Kolkata')).toBe('18 Oct 2026');
     expect(formatDate('', 'en')).toBe('');
     expect(formatDate('nope', 'en')).toBe('');

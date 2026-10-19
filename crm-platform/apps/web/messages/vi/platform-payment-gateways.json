@@ -164,7 +164,12 @@
       "change": "Đổi",
       "terms": "Khi thanh toán, bạn đồng ý với <terms>Điều khoản</terms> và <privacy>Chính sách quyền riêng tư</privacy> của chúng tôi.",
       "refundNote": "Không hài lòng? Hãy gửi email cho chúng tôi trong {days} ngày đầu và chúng tôi sẽ hoàn lại toàn bộ số tiền — không hỏi han, không biểu mẫu.",
-      "autoRenewTitle": "Tự động gia hạn gói này"
+      "autoRenewTitle": "Tự động gia hạn gói này",
+      "amountSubtitle": "Nhập số tiền bạn muốn nạp. Sau đó bạn sẽ thấy giá cuối cùng và các phương thức thanh toán.",
+      "amountLabel": "Số tiền cần nạp",
+      "amountHint": "Chỉ nhập chữ số, ví dụ 1000 hoặc 250,50.",
+      "amountInvalid": "Nhập số tiền lớn hơn 0, ví dụ 500 hoặc 250,50.",
+      "amountContinue": "Tiếp tục"
     },
     "orders": {
       "title": "Lịch sử đơn hàng",

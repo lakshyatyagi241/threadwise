@@ -317,7 +317,13 @@
         "delivered": "Bezorgd",
         "queued": "In wachtrij",
         "failed": "Mislukt",
-        "replyRate": "Antwoordpercentage"
+        "replyRate": "Antwoordpercentage",
+        "received": "Ontvangen berichten",
+        "conversationsOpen": "Open gesprekken",
+        "conversationsClosed": "Gesloten gesprekken",
+        "conversationsAssigned": "Toegewezen",
+        "conversationsUnassigned": "Niet toegewezen",
+        "conversationsTotal": "{count, plural, one {# gesprek} other {# gesprekken}}"
       },
       "series": {
         "sent": "Verzonden",
@@ -443,7 +449,8 @@
             "unknown": "Onbekend"
           }
         }
-      }
+      },
+      "moreKpis": "Berichten en gesprekken"
     },
     "health": {
       "nav": "Systeemstatus",

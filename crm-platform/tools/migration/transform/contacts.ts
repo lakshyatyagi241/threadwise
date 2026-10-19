@@ -50,7 +50,8 @@ export function sortForDisplayId<T extends { legacy_id?: unknown }>(rows: T[]): 
   });
 }
 
-export const REJECT_MARKER = /^__.+__(error_reason|unverified_value)$/;
+// also the literal key `undefined` (a front-end bug of the old product writes it on some contacts: it is not a property anyone defined)
+export const REJECT_MARKER = /^(__.+__(error_reason|unverified_value)|undefined)$/;
 
 /** Source keys that have a column (or a derived table) of their own. Every other key becomes a custom property in contacts.data. */
 export const CONTACT_FIELDS: FieldMap = {
@@ -80,20 +81,63 @@ export const CONTACT_FIELDS: FieldMap = {
 
 const NATIVE = new Set(Object.keys(CONTACT_FIELDS));
 
+/**
+ * Waboo properties the app has under another name as a BUILT-IN property (Title, Language, Address): the value is stored in contacts.data
+ * under the built-in key, which the built-in property reads, and no property is created for the Waboo name. `contact_owner` is the
+ * built-in Owner (the owner_id column).
+ */
+export const BUILT_IN_ALIAS: Readonly<Record<string, string>> = {
+  salutation: 'title',
+  preferred_language: 'language',
+  street_address: 'address',
+};
+
 /** Test seam: the verifier's independent oracle must catch a bug injected here. */
 export const transformHooks = {
   phoneOf: (raw: string, cc: string | null, def: string | null) => phoneOf(raw, cc, def),
 };
 
-/** A subscription value (option id or label) as the app's lowercase status word. */
-export function subscriptionStatus(raw: unknown, idx: SourceIndex): string | null {
+/**
+ * A subscription value (option id or label) as the app's lowercase status word. "subscribed" only when the source says yes (an
+ * affirmative label); a "no" is "unsubscribed"; nothing recorded stays null, which the app shows as "No". `field` is the property the value
+ * belongs to, so an option id is read in its own property first.
+ */
+export function subscriptionStatus(raw: unknown, idx: SourceIndex, field?: string): string | null {
   const v = str(raw);
   if (!v) return null;
-  const label = (idx.optionLabel.get(v) ?? v).trim().toLowerCase();
+  const label = (idx.optionLabelByField?.get(field ?? '')?.get(v) ?? idx.optionLabel.get(v) ?? v)
+    .trim()
+    .toLowerCase();
   if (['yes', 'subscribed', 'opt-in', 'opted in', 'opt in'].includes(label)) return 'subscribed';
   if (['no', 'unsubscribed', 'opt-out', 'opted out', 'opt out'].includes(label))
     return 'unsubscribed';
   return slug(label) || null;
+}
+
+/**
+ * A dropdown / radio / multiselect / checkbox property holds the option ID in the Waboo contact; the app holds the option VALUE (the label
+ * when the option has none), a checkbox a boolean. An id that is not one of the property's options (already a value or a label, free text)
+ * is kept as it is.
+ */
+export function optionValueOf(field: string, raw: unknown, idx: SourceIndex): unknown {
+  // Created By / Updated By hold a Waboo user id: Desk shows the person's name; Original Lifecycle Stage holds a stage id: Desk shows its label
+  if ((field === 'created_by' || field === 'updated_by') && typeof raw === 'string') return idx.userNames?.get(raw) ?? raw;
+  if (field === 'original_lifecycle_stage' && typeof raw === 'string') return idx.stageByKey.get(raw)?.label ?? raw;
+  const opts = idx.optionsByField?.get(field);
+  if (!opts || raw === null || raw === undefined) return raw;
+  const one = (v: unknown): unknown => {
+    const o = typeof v === 'string' ? opts.get(v) : undefined;
+    return o ? o.value : v;
+  };
+  if (Array.isArray(raw)) return raw.map(one);
+  const type = str(idx.fieldsByName.get(field)?.type)?.toLowerCase();
+  const o = typeof raw === 'string' ? opts.get(raw) : undefined;
+  if (type === 'checkbox' && o) {
+    const t = `${o.value} ${o.label}`.toLowerCase();
+    if (/\b(yes|true|1|checked)\b/.test(t)) return true;
+    if (/\b(no|false|0|unchecked)\b/.test(t)) return false;
+  }
+  return one(raw);
 }
 
 /** The status_options value for a stage/status given as a legacy id, a label or an already-converted value. */
@@ -179,6 +223,9 @@ export function phoneOf(
   if (lens) {
     if (lens.includes(digits.length)) return e164(cc + digits);
     if (digits.startsWith(cc) && lens.includes(digits.length - cc.length)) return e164(digits);
+    // Waboo stores numbers as full international digits without a plus ("5521...", "4478..."): a number that does not fit the default
+    // country but reads as another country's full number is that number
+    if (!countryCode) return e164(digits);
     return null;
   }
   return e164(digits.startsWith(cc) && digits.length >= cc.length + 6 ? digits : cc + digits);
@@ -217,6 +264,8 @@ export const contacts: HandlerSpec = {
         c('owner_id', 'bigint'),
         c('source', 'text'),
         c('status', 'text'),
+        c('email_confirmed', 'boolean'),
+        c('fax_number', 'text'),
         ...TS_COLS,
       ],
       fp: [],
@@ -228,7 +277,6 @@ export const contacts: HandlerSpec = {
         won_at: null,
         lost_at: null,
         lifecycle_state: 'active',
-        email_confirmed: false,
         lead_score: null,
         other_lost_reason: null,
         import_job_id: null,
@@ -238,7 +286,6 @@ export const contacts: HandlerSpec = {
         channel: null,
         channel_uid: null,
         unsubscribed_at: null,
-        fax_number: null,
         last_activity_at: null,
         title: null,
         middle_name: null,
@@ -369,7 +416,7 @@ export const contacts: HandlerSpec = {
       source = cutText(source, 128);
     }
 
-    const wa = subscriptionStatus(doc.whatsapp_subscription_status, ctx.idx);
+    const wa = subscriptionStatus(doc.whatsapp_subscription_status, ctx.idx, 'whatsapp_subscription_status');
     const data: Record<string, unknown> = {};
     const dropped: string[] = [];
     for (const [k, v] of Object.entries(doc)) {
@@ -380,7 +427,10 @@ export const contacts: HandlerSpec = {
       }
       const s = scrub(plain(v));
       dropped.push(...s.redacted.map((p) => `${k}.${p}`));
-      setOwn(data, k, s.value);
+      const alias = BUILT_IN_ALIAS[k];
+      // an explicit value under the built-in key itself wins over the Waboo alias
+      if (alias && doc[alias] !== undefined && doc[alias] !== null && doc[alias] !== '') continue;
+      setOwn(data, alias ?? k, optionValueOf(k, s.value, ctx.idx));
     }
     // Waboo lists Created Time and Modified Time as contact fields; WaDesk keeps them in created_at / updated_at. The same instants are also
     // kept in data (ISO text) so the two read-only field rows of the contact page have a value to show (README, "Contact properties").
@@ -401,8 +451,10 @@ export const contacts: HandlerSpec = {
     const ownerRaw = str(doc.contact_owner);
     if (ctx.idx.hasUsers && ownerRaw) {
       const ref = ctx.ref('user', ownerRaw);
-      if (ref && ref.table === 'users') ownerId = ref.id;
-      else
+      if (ref && ref.table === 'users') {
+        ownerId = ref.id;
+        delete data.contact_owner; // the built-in Owner holds it now
+      } else
         soft.push({
           code: 'OWNER_UNRESOLVED',
           reason:
@@ -433,13 +485,16 @@ export const contacts: HandlerSpec = {
             previous_lifecycle_stage_date: previousAt,
             lost_reason: str(doc.lost_reason),
             whatsapp_subscription_status: wa,
-            sms_subscription_status: subscriptionStatus(doc.sms_subscription_status, ctx.idx),
-            email_subscription_status: subscriptionStatus(doc.email_subscription_status, ctx.idx),
+            sms_subscription_status: subscriptionStatus(doc.sms_subscription_status, ctx.idx, 'sms_subscription_status'),
+            email_subscription_status: subscriptionStatus(doc.email_subscription_status, ctx.idx, 'email_subscription_status'),
             country_code: cc,
             is_unsubscribed: wa === 'unsubscribed',
             owner_id: ownerId,
             source,
             status,
+            // the app keeps these two in columns of their own (the API reads them there); Waboo stores the checkbox as an option id
+            email_confirmed: optionValueOf('email_confirmed', doc.email_confirmed, ctx.idx) === true,
+            fax_number: str(doc.fax_number),
             created_at: t.created,
             updated_at: t.updated,
           },

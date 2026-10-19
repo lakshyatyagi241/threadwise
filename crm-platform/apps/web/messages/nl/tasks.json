@@ -92,7 +92,8 @@
         "contact": "Contact",
         "deal": "Deal",
         "created": "Aangemaakt",
-        "completed": "Afgerond op"
+        "completed": "Afgerond op",
+        "outcome": "Resultaat"
       },
       "refresh": "Vernieuwen",
       "shortcuts": "Sneltoetsen",
@@ -101,7 +102,9 @@
         "list": "Lijst",
         "board": "Bord op vervaldatum"
       },
-      "linkCompany": "Een bedrijf"
+      "linkCompany": "Een bedrijf",
+      "outcome": "Resultaat",
+      "allOutcomes": "Alle resultaten"
     },
     "table": {
       "scrollArea": "Takentabel",
@@ -115,7 +118,8 @@
         "contact": "Contact",
         "deal": "Deal",
         "created": "Aangemaakt",
-        "completed": "Afgerond op"
+        "completed": "Afgerond op",
+        "outcome": "Resultaat"
       }
     },
     "row": {
@@ -205,9 +209,11 @@
         "titleTooLong": "De taak is te lang (maximaal 255 tekens).",
         "notesTooLong": "De notities zijn te lang (maximaal 5000 tekens).",
         "dueInvalid": "Die datum is niet geldig.",
-        "assigneeInvalid": "Die persoon is geen actief lid van deze workspace."
+        "assigneeInvalid": "Die persoon is geen actief lid van deze workspace.",
+        "outcomeInvalid": "Dat resultaat is niet beschikbaar. Kies er een uit de lijst."
       },
-      "company": "Bedrijf"
+      "company": "Bedrijf",
+      "outcome": "Resultaat"
     },
     "drawer": {
       "loading": "Taak laden",
@@ -236,7 +242,8 @@
       },
       "deleteTitle": "Deze taak verwijderen?",
       "deleteMessage": "\"{title}\" wordt voor iedereen verwijderd. Dit kan niet ongedaan worden gemaakt.",
-      "cancel": "Behouden"
+      "cancel": "Behouden",
+      "outcomeChip": "Resultaat: {name}"
     },
     "board": {
       "buckets": {
@@ -286,7 +293,10 @@
       "planDisabled": "Je abonnement bevat geen taken. Upgrade om ze te ontgrendelen.",
       "assigneeInvalid": "Deze persoon is geen actief lid van deze workspace.",
       "unexpected": "Er ging iets mis. Probeer het zo meteen opnieuw.",
-      "retry": "Opnieuw proberen"
+      "retry": "Opnieuw proberen",
+      "outcomeInvalid": "Dat resultaat is niet beschikbaar. Kies er een uit de lijst.",
+      "outcomeNameTaken": "Een ander resultaat heeft al deze naam.",
+      "outcomeInUse": "Taken gebruiken dit resultaat nog, dus het kan niet worden verwijderd. Verberg het in plaats daarvan."
     },
     "toast": {
       "completed": "Taak voltooid.",
@@ -342,6 +352,43 @@
       "save": "Taak toevoegen",
       "cancel": "Annuleren",
       "failed": "De taak kon niet worden opgeslagen. Je tekst staat weer in het veld."
+    },
+    "outcomes": {
+      "title": "Taakresultaten",
+      "subtitle": "De resultaten die iemand kiest bij het afronden of vastleggen van een taak, zoals Geïnteresseerd of Bericht achtergelaten.",
+      "listTitle": "Resultaten",
+      "listHint": "Verborgen resultaten worden niet meer aangeboden, maar taken die er al een hebben, houden het. Een resultaat dat door taken wordt gebruikt, kan niet worden verwijderd.",
+      "loading": "Resultaten laden",
+      "empty": "Nog geen resultaten. Voeg hieronder het eerste toe.",
+      "newName": "Nieuw resultaat",
+      "newNamePlaceholder": "bijv. Bericht achtergelaten",
+      "add": "Resultaat toevoegen",
+      "readOnly": "Je kunt deze lijst zien, maar hebt toestemming nodig om hem te wijzigen.",
+      "failed": "Dat is niet gelukt.",
+      "conflict": "Iemand anders heeft dit resultaat gewijzigd. De lijst is opnieuw geladen. Probeer het opnieuw.",
+      "added": "Resultaat toegevoegd.",
+      "saved": "Resultaat opgeslagen.",
+      "deleted": "Resultaat verwijderd.",
+      "moveUp": "{name} omhoog verplaatsen",
+      "moveDown": "{name} omlaag verplaatsen",
+      "nameLabel": "Naam van het resultaat",
+      "taskCount": "{count, plural, one {# taak} other {# taken}}",
+      "shownLabel": "{name} aanbieden bij het afronden van een taak",
+      "shown": "Zichtbaar",
+      "hidden": "Verborgen",
+      "deleteNamed": "{name} verwijderen",
+      "deleteInUse": "Taken gebruiken dit resultaat nog, dus het kan niet worden verwijderd. Verberg het in plaats daarvan.",
+      "deleteTitle": "{name} verwijderen?",
+      "deleteMessage": "Het resultaat wordt uit de lijst verwijderd. Geen enkele taak gebruikt het.",
+      "delete": "Verwijderen",
+      "cancel": "Behouden",
+      "problems": {
+        "nameRequired": "Typ een naam voor het resultaat.",
+        "nameTooLong": "De naam is te lang (maximaal 191 tekens)."
+      },
+      "none": "Geen resultaat",
+      "hiddenName": "{name} (verborgen)",
+      "completeWith": "Afronden met resultaat"
     }
   }
 }

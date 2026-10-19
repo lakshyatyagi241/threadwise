@@ -136,7 +136,11 @@
         "previousStage": "Tahap sebelumnya",
         "previousStageSince": "Tahap sebelumnya sejak",
         "lostReason": "Alasan kalah",
-        "updatedAt": "Terakhir diperbarui"
+        "updatedAt": "Terakhir diperbarui",
+        "leadScore": "Skor prospek",
+        "originalStage": "Tahap siklus hidup awal",
+        "createdBy": "Dibuat oleh",
+        "updatedBy": "Diperbarui oleh"
       },
       "company": {
         "title": "Perusahaan",

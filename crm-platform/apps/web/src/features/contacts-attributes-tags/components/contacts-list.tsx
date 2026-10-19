@@ -135,12 +135,13 @@ const CHIPS_SHOWN = 2;
 /** Column widths in px; the table is fixed-layout and scrolls sideways inside its card when they do not fit. */
 const WIDTH: Record<string, number> = {
   name: 270,
-  phone: 160,
+  // wide enough for a full international number, an ordinary address and "Sales Qualified Lead" (the title still holds the whole text)
+  phone: 190,
   attr: 150,
-  email: 210,
+  email: 260,
   tags: 240,
   groups: 220,
-  stage: 130,
+  stage: 190,
   owner: 150,
   leadScore: 130,
   language: 130,

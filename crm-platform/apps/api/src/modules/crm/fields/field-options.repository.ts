@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { and, asc, eq, inArray, sql } from 'drizzle-orm';
+import { and, asc, eq, inArray, or, sql, type SQL } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
+import { ERROR_CODES } from '@crm/contracts';
+import { AppError } from '../../../common/errors/app-error';
+import { escapeLike } from '../contacts/contact-predicates';
 
 const { fieldOptions, fields } = schema;
 
@@ -71,6 +74,60 @@ export class FieldOptionsRepository {
       byField.set(row.fieldId, list);
     }
     return byField;
+  }
+
+  /** How many options each of the fields has (a field with none is absent): one grouped query for a whole field list. */
+  async countByFieldIds(tx: Tx, orgId: number, fieldIds: number[]): Promise<Map<number, number>> {
+    if (fieldIds.length === 0) return new Map();
+    const rows = await tx
+      .select({ fieldId: fieldOptions.fieldId, n: sql<number>`count(*)::int` })
+      .from(fieldOptions)
+      .where(and(eq(fieldOptions.orgId, orgId), inArray(fieldOptions.fieldId, fieldIds)))
+      .groupBy(fieldOptions.fieldId);
+    return new Map(rows.map((r) => [r.fieldId, Number(r.n)]));
+  }
+
+  /**
+   * One page of a field's options for a search box, in the field's own order (position, then id; keyset, so a page never repeats or
+   * skips under a concurrent edit). `values` reads exactly those stored values, hidden options included; otherwise hidden options
+   * are left out and `q` keeps the ones whose label or value contains it.
+   */
+  async search(
+    tx: Tx,
+    orgId: number,
+    fieldId: number,
+    p: { q?: string; values?: string[]; limit: number; cursor?: string },
+  ): Promise<{ rows: FieldOptionRow[]; nextCursor: string | null }> {
+    const conditions: SQL[] = [eq(fieldOptions.orgId, orgId), eq(fieldOptions.fieldId, fieldId)];
+    if (p.values && p.values.length > 0) {
+      conditions.push(inArray(fieldOptions.value, p.values));
+    } else {
+      conditions.push(eq(fieldOptions.isHidden, false));
+      const q = p.q?.trim();
+      if (q) {
+        const like = `%${escapeLike(q)}%`;
+        conditions.push(or(sql`${fieldOptions.label} ILIKE ${like}`, sql`${fieldOptions.value} ILIKE ${like}`)!);
+      }
+    }
+    if (p.cursor) {
+      const after = decodeOptionCursor(p.cursor);
+      conditions.push(
+        sql`(${fieldOptions.position}, ${fieldOptions.id}) > (${after.position}, ${after.id})`,
+      );
+    }
+    const rows = await this.baseQuery(tx)
+      .where(and(...conditions))
+      .orderBy(asc(fieldOptions.position), asc(fieldOptions.id))
+      .limit(p.limit + 1);
+    const page = rows.slice(0, p.limit);
+    const last = page[page.length - 1];
+    return {
+      rows: page,
+      nextCursor:
+        rows.length > p.limit && last
+          ? Buffer.from(`${last.position}|${last.id}`, 'utf8').toString('base64url')
+          : null,
+    };
   }
 
   async findById(tx: Tx, orgId: number, id: number): Promise<FieldOptionRow | undefined> {
@@ -153,4 +210,13 @@ export class FieldOptionsRepository {
       .returning({ id: fieldOptions.id });
     return result.length > 0;
   }
+}
+
+function decodeOptionCursor(raw: string): { position: number; id: number } {
+  const [position, id] = Buffer.from(raw, 'base64url').toString('utf8').split('|');
+  const parsed = { position: Number(position), id: Number(id) };
+  if (!Number.isSafeInteger(parsed.position) || !Number.isSafeInteger(parsed.id)) {
+    throw new AppError(ERROR_CODES.VALIDATION_FAILED, 'Invalid pagination cursor', 400);
+  }
+  return parsed;
 }

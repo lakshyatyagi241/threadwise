@@ -304,7 +304,10 @@
       "showUnlimited": "{count, plural, one {Show # unlimited limit} other {Show # unlimited limits}}",
       "hideUnlimited": "Hide unlimited limits",
       "groupCount": "{count, plural, one {# limit} other {# limits}}",
-      "groupHidden": "{count, plural, one {# more limit is unlimited and hidden.} other {# more limits are unlimited and hidden.}}"
+      "groupHidden": "{count, plural, one {# more limit is unlimited and hidden.} other {# more limits are unlimited and hidden.}}",
+      "activatedOn": "Activated on {date}",
+      "previousBilling": "Previous billing date: {date}",
+      "subscriptionId": "Subscription ID: {id}"
     },
     "operator": {
       "title": "Workspace plans",
