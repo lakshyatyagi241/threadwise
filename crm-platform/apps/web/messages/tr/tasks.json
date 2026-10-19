@@ -286,7 +286,8 @@
       "planDisabled": "Planınız görevleri içermiyor. Açmak için planınızı yükseltin.",
       "assigneeInvalid": "Bu kişi bu çalışma alanının aktif bir üyesi değil.",
       "unexpected": "Bir sorun oluştu. Biraz sonra yeniden deneyin.",
-      "retry": "Yeniden dene"
+      "retry": "Yeniden dene",
+      "completionDisabled": "Görevleri tamamlama, Satış Etkinlikleri’nde kapalı."
     },
     "toast": {
       "completed": "Görev tamamlandı.",

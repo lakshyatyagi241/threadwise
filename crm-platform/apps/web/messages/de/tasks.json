@@ -286,7 +286,8 @@
       "planDisabled": "Ihr Tarif umfasst keine Aufgaben. Upgraden Sie, um sie freizuschalten.",
       "assigneeInvalid": "Diese Person ist kein aktives Mitglied dieses Workspace.",
       "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal.",
-      "retry": "Erneut versuchen"
+      "retry": "Erneut versuchen",
+      "completionDisabled": "Das Abschließen von Aufgaben ist in den Vertriebsaktivitäten ausgeschaltet."
     },
     "toast": {
       "completed": "Aufgabe abgeschlossen.",

@@ -389,6 +389,11 @@
         "label": "Khách hàng tiềm năng trùng lặp",
         "description": "Chọn việc khách hàng tiềm năng mới khớp với một liên hệ sẽ được gộp vào đó hay trở thành liên hệ mới.",
         "keywords": "trùng lặp, gộp, khách hàng tiềm năng, cùng số điện thoại, cùng e-mail, liên hệ mới, nguồn"
+      },
+      "sales-activities": {
+        "label": "Hoạt động bán hàng",
+        "description": "Quản lý công việc, cuộc họp, cuộc gọi và hoạt động riêng của bạn: mỗi hoạt động làm được gì, các loại công việc và kết quả.",
+        "keywords": "hoạt động, loại công việc, kết quả, kết quả cuộc họp, kết quả cuộc gọi, theo dõi, check-in, hoạt động tùy chỉnh, lịch, hoàn thành"
       }
     },
     "backToMarketplace": "Quay lại Marketplace"

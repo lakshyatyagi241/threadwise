@@ -286,7 +286,8 @@
       "planDisabled": "Twój plan nie obejmuje zadań. Ulepsz plan, aby je odblokować.",
       "assigneeInvalid": "Ta osoba nie jest aktywnym członkiem tej przestrzeni roboczej.",
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
-      "retry": "Spróbuj ponownie"
+      "retry": "Spróbuj ponownie",
+      "completionDisabled": "Kończenie zadań jest wyłączone w Aktywnościach sprzedażowych."
     },
     "toast": {
       "completed": "Zadanie ukończone.",

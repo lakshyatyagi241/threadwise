@@ -389,6 +389,11 @@
         "label": "Leads duplicados",
         "description": "Elige si un lead nuevo que coincide con un contacto se fusiona con él o se convierte en un contacto nuevo.",
         "keywords": "duplicado, fusionar, lead, mismo teléfono, mismo correo, contacto nuevo, fuente de leads"
+      },
+      "sales-activities": {
+        "label": "Actividades de ventas",
+        "description": "Gestione tareas, reuniones, llamadas y actividades propias: qué puede hacer cada una, sus tipos de tarea y sus resultados.",
+        "keywords": "actividades, tipos de tarea, resultados, resultado de reunión, resultado de llamada, seguimiento, registro de entrada, actividad personalizada, calendario, completar"
       }
     },
     "backToMarketplace": "Volver al Marketplace"

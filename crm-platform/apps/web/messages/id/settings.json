@@ -389,6 +389,11 @@
         "label": "Lead duplikat",
         "description": "Pilih apakah lead baru yang cocok dengan kontak digabungkan ke kontak itu atau menjadi kontak baru.",
         "keywords": "duplikat, gabung, lead, telepon sama, e-mail sama, kontak baru, sumber lead"
+      },
+      "sales-activities": {
+        "label": "Aktivitas Penjualan",
+        "description": "Kelola tugas, pertemuan, panggilan, dan aktivitas Anda sendiri: apa yang bisa dilakukan tiap aktivitas, jenis tugas, dan hasilnya.",
+        "keywords": "aktivitas, jenis tugas, hasil, hasil pertemuan, hasil panggilan, tindak lanjut, check-in, aktivitas kustom, kalender, selesaikan"
       }
     },
     "backToMarketplace": "Kembali ke Marketplace"

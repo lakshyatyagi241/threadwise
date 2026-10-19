@@ -242,6 +242,7 @@ export interface TaskPatch {
   deal_id?: number | null;
   company_id?: number | null;
   task_type_id?: number | null;
+  outcome_id?: number | null;
   /** The completed time of a done task (only when the Task activity allows editing it). */
   done_at?: Date;
   /** Set when the due date moves: the reminder arms again. */
@@ -399,6 +400,7 @@ export class TasksRepository {
     if (patch.deal_id !== undefined) add('deal_id', patch.deal_id);
     if (patch.company_id !== undefined) add('company_id', patch.company_id);
     if (patch.task_type_id !== undefined) add('task_type_id', patch.task_type_id);
+    if (patch.outcome_id !== undefined) add('outcome_id', patch.outcome_id);
     if (patch.done_at !== undefined) add('done_at', patch.done_at);
     if (patch.clearReminder) sets.push(sql`reminded_at = NULL`);
     if (sets.length === 0) sets.push(sql`updated_at = now()`);

@@ -286,7 +286,8 @@
       "planDisabled": "Paket Anda tidak mencakup tugas. Tingkatkan paket untuk membukanya.",
       "assigneeInvalid": "Orang tersebut bukan anggota aktif workspace ini.",
       "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi.",
-      "retry": "Coba lagi"
+      "retry": "Coba lagi",
+      "completionDisabled": "Menyelesaikan tugas dimatikan di Aktivitas Penjualan."
     },
     "toast": {
       "completed": "Tugas selesai.",

@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Button, Field, Input, Modal, Select, Spinner, Textarea, useToast } from '@crm/ui';
 import { TASK_NOTES_MAX, TASK_TITLE_MAX, type TaskResponse } from '@crm/contracts';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
+import { OptionSelect } from '@/features/sales-activities';
 import { useMembers } from '../api/hooks';
 import { PRIORITIES, type RecordRef } from '../api/schemas';
 import { tasksApi } from '../api/service';
@@ -39,6 +40,7 @@ type FormField = 'title' | 'notes' | 'due' | 'assignee' | 'priority' | 'form';
 export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: TaskFormModalProps) {
   const t = useTranslations('tasks.form');
   const toastText = useTranslations('tasks.toast');
+  const tp = useTranslations('sales-activities.picker');
   const { toast } = useToast();
   const session = useSession();
   const members = useMembers();
@@ -204,6 +206,28 @@ export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: Ta
             ))}
           </Select>
         </Field>
+        <OptionSelect
+          activity="task"
+          kind="type"
+          id="task-type"
+          label={tp('taskType')}
+          emptyLabel={tp('taskTypeNone')}
+          value={draft.taskTypeId}
+          current={task?.taskType}
+          onChange={(id) => set('taskTypeId', id)}
+        />
+        {task?.status === 'done' && (
+          <OptionSelect
+            activity="task"
+            kind="outcome"
+            id="task-outcome"
+            label={tp('outcome')}
+            emptyLabel={tp('outcomeNone')}
+            value={draft.outcomeId}
+            current={task.outcome}
+            onChange={(id) => set('outcomeId', id)}
+          />
+        )}
         <Field
           label={`${t('due')} *`}
           htmlFor="task-due"

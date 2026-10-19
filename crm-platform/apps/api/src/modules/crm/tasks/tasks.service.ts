@@ -311,6 +311,18 @@ export class TasksService {
           delta.taskType = { old: row.taskType?.key ?? null, new: next === null ? null : input.taskTypeId };
         }
       }
+      if (input.outcomeId !== undefined) {
+        if (row.status !== 'done') {
+          throw AppError.validation('Only a completed task has an outcome.', [{ path: 'outcomeId', message: 'Task is not done' }]);
+        }
+        const next = input.outcomeId
+          ? (await this.activities.resolveOption(tx, ctx.orgId, input.outcomeId, 'outcome', 'task')).id
+          : null;
+        if (next !== row.outcomeId) {
+          patch.outcome_id = next;
+          delta.outcome = { old: row.outcome?.key ?? null, new: next === null ? null : input.outcomeId };
+        }
+      }
       if (input.doneAt !== undefined) {
         const next = new Date(input.doneAt);
         if (row.status !== 'done') {

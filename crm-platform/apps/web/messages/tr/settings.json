@@ -389,6 +389,11 @@
         "label": "Yinelenen potansiyel müşteriler",
         "description": "Bir kişiyle eşleşen yeni kaydın ona birleştirilmesini mi yoksa yeni kişi olmasını mı istediğinizi seçin.",
         "keywords": "yinelenen, birleştir, potansiyel müşteri, aynı telefon, aynı e-posta, yeni kişi, kaynak"
+      },
+      "sales-activities": {
+        "label": "Satış Etkinlikleri",
+        "description": "Görevleri, toplantıları, aramaları ve kendi etkinliklerinizi yönetin: her birinin neler yapabileceği, görev türleri ve sonuçları.",
+        "keywords": "etkinlikler, görev türleri, sonuçlar, toplantı sonucu, arama sonucu, takip, giriş yapma, özel etkinlik, takvim, tamamla"
       }
     },
     "backToMarketplace": "Marketplace'e dön"

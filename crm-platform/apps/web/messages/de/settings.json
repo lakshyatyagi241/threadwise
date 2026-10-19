@@ -389,6 +389,11 @@
         "label": "Doppelte Leads",
         "description": "Wählen Sie, ob ein neuer Lead, der zu einem Kontakt passt, dort zusammengeführt oder als neuer Kontakt angelegt wird.",
         "keywords": "Duplikat, zusammenführen, Lead, gleiche Telefonnummer, gleiche E-Mail, neuer Kontakt, Lead-Quelle"
+      },
+      "sales-activities": {
+        "label": "Vertriebsaktivitäten",
+        "description": "Verwalten Sie Aufgaben, Termine, Anrufe und eigene Aktivitäten: was jede kann, welche Aufgabentypen und Ergebnisse sie hat.",
+        "keywords": "Aktivitäten, Aufgabentypen, Ergebnisse, Terminergebnis, Anrufergebnis, Nachfassen, Einchecken, eigene Aktivität, Kalender, abschließen"
       }
     },
     "backToMarketplace": "Zurück zum Marketplace"

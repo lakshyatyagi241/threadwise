@@ -389,6 +389,11 @@
         "label": "Leads duplicados",
         "description": "Escolha se um novo lead que coincide com um contato é mesclado a ele ou vira um novo contato.",
         "keywords": "duplicado, mesclar, lead, mesmo telefone, mesmo e-mail, novo contato, fonte de leads"
+      },
+      "sales-activities": {
+        "label": "Atividades de vendas",
+        "description": "Gerencie tarefas, reuniões, ligações e atividades próprias: o que cada uma pode fazer, seus tipos de tarefa e seus resultados.",
+        "keywords": "atividades, tipos de tarefa, resultados, resultado da reunião, resultado da ligação, acompanhamento, check-in, atividade personalizada, calendário, concluir"
       }
     },
     "backToMarketplace": "Voltar ao Marketplace"

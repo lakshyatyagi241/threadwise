@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { Button, ConfirmDialog, Input, Select, Spinner, useToast } from '@crm/ui';
 import { AppointmentStatusChip } from '@/features/appointments';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { MeetingOutcome } from '@/features/sales-activities';
 import {
   MEETING_KEYS,
   addPendingMeeting,
@@ -434,6 +435,7 @@ export function MeetingsPanel({
             </div>
           )}
         </div>
+        {!waiting && <MeetingOutcome contactId={contact.id} meetingId={m.id} title={m.title} canUpdate={canUpdate} />}
       </li>
     );
   };

@@ -21,6 +21,10 @@ export interface TaskDraft {
   dealId: string;
   /** The company a new task was started from (the company page's tasks card); not editable in the form. */
   companyId: string;
+  /** A current task type of the Task activity (Settings > Sales Activities) or empty. */
+  taskTypeId: string;
+  /** The outcome of a done task or empty. */
+  outcomeId: string;
 }
 
 export const emptyDraft = (assigneeId: string): TaskDraft => ({
@@ -32,6 +36,8 @@ export const emptyDraft = (assigneeId: string): TaskDraft => ({
   contactId: '',
   dealId: '',
   companyId: '',
+  taskTypeId: '',
+  outcomeId: '',
 });
 
 export const draftOf = (t: TaskResponse): TaskDraft => ({
@@ -43,6 +49,8 @@ export const draftOf = (t: TaskResponse): TaskDraft => ({
   contactId: t.contact?.id ?? '',
   dealId: t.deal?.id ?? '',
   companyId: t.company?.id ?? '',
+  taskTypeId: t.taskType?.id ?? '',
+  outcomeId: t.outcome?.id ?? '',
 });
 
 export type DraftProblem =
@@ -80,10 +88,11 @@ export function createBody(d: TaskDraft): CreateTaskInput {
     contactId: d.contactId || null,
     dealId: d.dealId || null,
     ...(d.companyId ? { companyId: d.companyId } : {}),
+    ...(d.taskTypeId ? { taskTypeId: d.taskTypeId } : {}),
   };
 }
 
-export type TaskPatch = Partial<Omit<CreateTaskInput, 'companyId'>>;
+export type TaskPatch = Partial<Omit<CreateTaskInput, 'companyId'>> & { outcomeId?: string | null };
 
 /** Only what changed against the task as it was read: an untouched form sends nothing. */
 export function patchBody(task: TaskResponse, d: TaskDraft): TaskPatch {
@@ -97,5 +106,7 @@ export function patchBody(task: TaskResponse, d: TaskDraft): TaskPatch {
   if (d.assigneeId !== was.assigneeId) out.assigneeId = next.assigneeId;
   if (d.contactId !== was.contactId) out.contactId = next.contactId;
   if (d.dealId !== was.dealId) out.dealId = next.dealId;
+  if (d.taskTypeId !== was.taskTypeId) out.taskTypeId = d.taskTypeId || null;
+  if (task.status === 'done' && d.outcomeId !== was.outcomeId) out.outcomeId = d.outcomeId || null;
   return out;
 }

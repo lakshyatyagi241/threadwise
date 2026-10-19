@@ -1,0 +1,194 @@
+{
+  "sales-activities": {
+    "defaults": {
+      "activity": {
+        "task": "Zadanie",
+        "meeting": "Spotkanie",
+        "phone": "Telefon",
+        "email": "E-mail",
+        "reminder": "Przypomnienie",
+        "sms": "SMS",
+        "chat": "Czat"
+      },
+      "option": {
+        "task": {
+          "follow_up": "Kontakt kontrolny",
+          "call_reminder": "Przypomnienie o telefonie",
+          "interested": "Zainteresowany",
+          "left_message": "Zostawiono wiadomość",
+          "no_response": "Brak odpowiedzi",
+          "not_interested": "Niezainteresowany",
+          "not_reachable": "Nie udało się skontaktować"
+        },
+        "meeting": {
+          "interested": "Zainteresowany",
+          "not_interested": "Niezainteresowany",
+          "needs_follow_up": "Wymaga kontaktu kontrolnego",
+          "rescheduled": "Przełożone",
+          "no_show": "Nieobecność"
+        },
+        "phone": {
+          "connected": "Połączono",
+          "no_answer": "Brak odpowiedzi",
+          "busy": "Zajęte",
+          "left_voicemail": "Zostawiono wiadomość głosową",
+          "wrong_number": "Zły numer",
+          "declined": "Odrzucone",
+          "failed": "Nieudane"
+        }
+      }
+    },
+    "list": {
+      "back": "Dane",
+      "title": "Aktywności sprzedażowe",
+      "intro": "Zarządzaj aktywnościami zespołu w jednym miejscu: zadaniami, spotkaniami, rozmowami i własnymi aktywnościami. Wybierz, co może każda z nich, jakie ma typy zadań i wyniki.",
+      "create": "Utwórz aktywność",
+      "loading": "Wczytywanie aktywności…",
+      "loadFailed": "Nie udało się wczytać aktywności.",
+      "retry": "Spróbuj ponownie",
+      "listLabel": "Aktywności",
+      "default": "Domyślna",
+      "custom": "Własna",
+      "noEditor": "Aktywność domyślna, w której nie ma nic do ustawienia.",
+      "edit": "Edytuj aktywność",
+      "editNamed": "Edytuj aktywność {name}",
+      "chip": {
+        "completable": "Można ją zakończyć",
+        "notCompletable": "Nie można jej zakończyć",
+        "calendar": "W kalendarzu",
+        "taskTypes": "{count, plural, one {# typ zadania} few {# typy zadań} many {# typów zadań} other {# typu zadań}}",
+        "outcomes": "{count, plural, one {# wynik} few {# wyniki} many {# wyników} other {# wyniku}}"
+      }
+    },
+    "drawer": {
+      "title": "Edytuj aktywność: {name}",
+      "close": "Zamknij",
+      "done": "Gotowe",
+      "cancel": "Anuluj",
+      "saved": "Zapisano.",
+      "autosave": "Zmiany zapisują się na bieżąco.",
+      "readOnly": "Możesz zobaczyć te ustawienia, ale nie możesz ich zmieniać.",
+      "name": "Nazwa aktywności",
+      "nameLocked": "Nazwy aktywności domyślnej nie można zmienić.",
+      "mobileCheckIn": "Zezwalaj użytkownikom na zameldowanie i wymeldowanie w aplikacji mobilnej",
+      "mobileCheckInPending": "Zapisano, ale na razie bez skutku: aplikacja mobilna nie obsługuje jeszcze meldowania się na spotkaniach. Zacznie działać, gdy aplikacja to wprowadzi.",
+      "showInCalendar": "Pokazuj tę aktywność w Moim kalendarzu na pulpicie aktywności",
+      "showInCalendarHint": "Zapisano, ale nie ma jeszcze kalendarza aktywności. Zacznie działać po jego dodaniu.",
+      "allowComplete": "Zezwalaj użytkownikom na oznaczanie tej aktywności jako zakończonej",
+      "allowEditCompleted": "Zezwalaj użytkownikom na edycję daty i godziny zakończenia tej aktywności",
+      "taskTypes": "Typy zadań",
+      "taskTypesHint": "Wybierz jeden przy tworzeniu zadania, na przykład Kontakt kontrolny lub Przypomnienie o telefonie.",
+      "addTaskType": "Dodaj typ zadania",
+      "taskTypePlaceholder": "Nowy typ zadania",
+      "predictOutcomes": "Przewiduj wyniki tej aktywności",
+      "predictOutcomesHint": "Proponuj wynik po zakończeniu aktywności.",
+      "outcomes": "Wyniki",
+      "outcomesHint": "Usunięty wynik pozostaje przy rekordach, które już go mają.",
+      "phoneOutcomesHint": "Wybierz, jak każdy wynik jest liczony w raportach rozmów. Usunięty wynik pozostaje przy rozmowach, które już go mają.",
+      "addOutcome": "Dodaj wynik",
+      "outcomePlaceholder": "Nowy wynik",
+      "listEmpty": "Na razie nic tu nie ma.",
+      "moveUp": "Przesuń {name} w górę",
+      "moveDown": "Przesuń {name} w dół",
+      "remove": "Usuń {name}",
+      "countsAsShort": "liczy się jako {as}",
+      "countsAsLabel": "Liczy się jako",
+      "countsAsOption": "Liczy się jako {as}",
+      "countsAs": {
+        "connected": "połączono",
+        "no_answer": "brak odpowiedzi",
+        "busy": "zajęte",
+        "left_voicemail": "zostawiono wiadomość głosową",
+        "wrong_number": "zły numer",
+        "declined": "odrzucone",
+        "failed": "nieudane"
+      },
+      "removeActivity": "Usuń aktywność",
+      "removeConfirmTitle": "Usunąć {name}?",
+      "removeConfirmBody": "Znika z listy. Rekordy, które jej używały, zachowują swoje wyniki.",
+      "removed": "Aktywność usunięta.",
+      "noSettings": "Ta aktywność nie ma nic do ustawienia.",
+      "errors": {
+        "nameRequired": "Nadaj aktywności nazwę.",
+        "nameTaken": "Ta nazwa jest już tu używana.",
+        "limit": "Osiągnięto limit tej listy.",
+        "conflict": "Ktoś inny zmienił tę aktywność. Wczytano ją ponownie, spróbuj jeszcze raz.",
+        "forbidden": "Nie masz uprawnień do zmiany tego.",
+        "failed": "Nie udało się zapisać. Spróbuj ponownie."
+      }
+    },
+    "create": {
+      "title": "Utwórz aktywność",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "create": "Utwórz",
+      "intro": "Dodaj aktywność typową dla Twojej firmy. Zaczyna od ustawień wybranego rodzaju.",
+      "name": "Nazwa",
+      "namePlaceholder": "Na przykład Wizyta na miejscu",
+      "behavesAs": "Działa jak",
+      "behavesAsHint": {
+        "task": "Coś do zrobienia do określonej daty, co można zakończyć.",
+        "meeting": "Coś, co dzieje się o określonej godzinie i co można zakończyć.",
+        "phone": "Rozmowa z wynikami rozmowy."
+      },
+      "behaves": {
+        "task": "Zadanie",
+        "meeting": "Spotkanie",
+        "phone": "Rozmowa telefoniczna"
+      },
+      "icon": "Ikona",
+      "icons": {
+        "task": "Zadanie",
+        "meeting": "Kalendarz",
+        "phone": "Telefon",
+        "email": "E-mail",
+        "reminder": "Dzwonek",
+        "sms": "Wiadomość",
+        "chat": "Czat",
+        "visit": "Miejsce",
+        "video": "Wideo",
+        "document": "Dokument",
+        "flag": "Flaga",
+        "star": "Gwiazdka"
+      },
+      "errors": {
+        "nameRequired": "Nadaj aktywności nazwę.",
+        "nameTaken": "Aktywność o tej nazwie już istnieje.",
+        "limit": "Osiągnięto limit aktywności własnych.",
+        "failed": "Nie udało się utworzyć aktywności. Spróbuj ponownie."
+      }
+    },
+    "picker": {
+      "removedSuffix": "(usunięty)",
+      "taskType": "Typ zadania",
+      "taskTypeNone": "Bez typu",
+      "outcome": "Wynik",
+      "outcomeNone": "Bez wyniku",
+      "completeOff": "Kończenie zadań jest wyłączone w Aktywnościach sprzedażowych."
+    },
+    "meeting": {
+      "saved": "Spotkanie zaktualizowane.",
+      "reopened": "Spotkanie otwarte ponownie.",
+      "errors": {
+        "disabled": "Kończenie spotkań jest wyłączone w Aktywnościach sprzedażowych.",
+        "optionGone": "Ten wynik został usunięty. Wybierz inny.",
+        "failed": "Nie udało się zapisać. Spróbuj ponownie."
+      },
+      "outcome": "Wynik",
+      "noOutcome": "Bez wyniku",
+      "removedSuffix": "(usunięty)",
+      "notes": "Notatki",
+      "cancel": "Anuluj",
+      "save": "Zapisz",
+      "outcomeChip": "Wynik: {name}",
+      "completed": "Zakończone",
+      "editAria": "Edytuj wynik: {title}",
+      "edit": "Edytuj",
+      "reopenAria": "Otwórz ponownie: {title}",
+      "reopen": "Otwórz ponownie",
+      "addAria": "Dodaj wynik do: {title}",
+      "add": "Dodaj wynik",
+      "markCompleted": "Oznacz jako zakończone"
+    }
+  }
+}

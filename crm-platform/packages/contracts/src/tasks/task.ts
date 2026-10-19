@@ -107,6 +107,8 @@ export const updateTaskSchema = z.object({
   taskTypeId: uuidSchema.nullish(),
   /** The completed date and time of a done task; only when the Task activity allows editing it. */
   doneAt: dueAt.optional(),
+  /** The outcome of a done task (a current outcome of the Task activity); `null` clears it. */
+  outcomeId: uuidSchema.nullish(),
   rowVersion: z.number().int().positive(),
 });
 export type UpdateTaskInput = z.infer<typeof updateTaskSchema>;

@@ -286,7 +286,8 @@
       "planDisabled": "Seu plano não inclui tarefas. Faça upgrade para desbloqueá-las.",
       "assigneeInvalid": "Esta pessoa não é um membro ativo deste espaço de trabalho.",
       "unexpected": "Algo deu errado. Tente novamente em instantes.",
-      "retry": "Tentar novamente"
+      "retry": "Tentar novamente",
+      "completionDisabled": "Concluir tarefas está desativado em Atividades de vendas."
     },
     "toast": {
       "completed": "Tarefa concluída.",

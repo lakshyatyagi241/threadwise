@@ -1,0 +1,194 @@
+{
+  "sales-activities": {
+    "defaults": {
+      "activity": {
+        "task": "משימה",
+        "meeting": "פגישה",
+        "phone": "טלפון",
+        "email": "אימייל",
+        "reminder": "תזכורת",
+        "sms": "SMS",
+        "chat": "צ׳אט"
+      },
+      "option": {
+        "task": {
+          "follow_up": "מעקב",
+          "call_reminder": "תזכורת להתקשר",
+          "interested": "מעוניין",
+          "left_message": "הושארה הודעה",
+          "no_response": "אין מענה",
+          "not_interested": "לא מעוניין",
+          "not_reachable": "לא ניתן ליצור קשר"
+        },
+        "meeting": {
+          "interested": "מעוניין",
+          "not_interested": "לא מעוניין",
+          "needs_follow_up": "נדרש מעקב",
+          "rescheduled": "נדחתה",
+          "no_show": "לא הגיע"
+        },
+        "phone": {
+          "connected": "מחובר",
+          "no_answer": "אין מענה",
+          "busy": "תפוס",
+          "left_voicemail": "הושארה הודעה קולית",
+          "wrong_number": "מספר שגוי",
+          "declined": "נדחתה",
+          "failed": "נכשלה"
+        }
+      }
+    },
+    "list": {
+      "back": "נתונים",
+      "title": "פעילויות מכירה",
+      "intro": "נהלו את פעילויות הצוות במקום אחד: משימות, פגישות, שיחות ופעילויות משלכם. בחרו מה כל פעילות יכולה לעשות, מהם סוגי המשימות והתוצאות שלה.",
+      "create": "יצירת פעילות",
+      "loading": "טוען פעילויות…",
+      "loadFailed": "לא ניתן לטעון את הפעילויות.",
+      "retry": "נסו שוב",
+      "listLabel": "פעילויות",
+      "default": "ברירת מחדל",
+      "custom": "מותאמת אישית",
+      "noEditor": "פעילות ברירת מחדל שאין בה מה להגדיר.",
+      "edit": "עריכת פעילות",
+      "editNamed": "עריכת הפעילות {name}",
+      "chip": {
+        "completable": "ניתן להשלים",
+        "notCompletable": "לא ניתן להשלים",
+        "calendar": "ביומן",
+        "taskTypes": "{count, plural, one {סוג משימה #} two {# סוגי משימות} other {# סוגי משימות}}",
+        "outcomes": "{count, plural, one {תוצאה #} two {# תוצאות} other {# תוצאות}}"
+      }
+    },
+    "drawer": {
+      "title": "עריכת פעילות: {name}",
+      "close": "סגירה",
+      "done": "סיום",
+      "cancel": "ביטול",
+      "saved": "נשמר.",
+      "autosave": "שינויים נשמרים מיד.",
+      "readOnly": "אפשר לראות את ההגדרות האלה אך לא לשנות אותן.",
+      "name": "שם הפעילות",
+      "nameLocked": "אי אפשר לשנות את השם של פעילות ברירת מחדל.",
+      "mobileCheckIn": "לאפשר למשתמשים לבצע צ׳ק-אין וצ׳ק-אאוט מהאפליקציה לנייד",
+      "mobileCheckInPending": "נשמר, אך עדיין ללא השפעה: האפליקציה לנייד עדיין לא תומכת בצ׳ק-אין לפגישות. זה יפעל כשהאפליקציה תתמוך בכך.",
+      "showInCalendar": "להציג פעילות זו ב״היומן שלי״ בלוח הפעילויות",
+      "showInCalendarHint": "נשמר, אך אין עדיין יומן פעילויות. זה ייכנס לתוקף כשיתווסף.",
+      "allowComplete": "לאפשר למשתמשים לסמן פעילות זו כהושלמה",
+      "allowEditCompleted": "לאפשר למשתמשים לערוך את תאריך ושעת ההשלמה של פעילות זו",
+      "taskTypes": "סוגי משימות",
+      "taskTypesHint": "בחרו אחד בעת יצירת משימה, לדוגמה מעקב או תזכורת להתקשר.",
+      "addTaskType": "הוספת סוג משימה",
+      "taskTypePlaceholder": "סוג משימה חדש",
+      "predictOutcomes": "חיזוי תוצאות לפעילות זו",
+      "predictOutcomesHint": "להציע תוצאה כשהפעילות מושלמת.",
+      "outcomes": "תוצאות",
+      "outcomesHint": "הסרת תוצאה משאירה אותה ברשומות שכבר כוללות אותה.",
+      "phoneOutcomesHint": "בחרו איך כל תוצאה נספרת בדוחות שיחות. הסרת תוצאה משאירה אותה בשיחות שכבר כוללות אותה.",
+      "addOutcome": "הוספת תוצאה",
+      "outcomePlaceholder": "תוצאה חדשה",
+      "listEmpty": "עדיין אין כאן כלום.",
+      "moveUp": "העברת {name} למעלה",
+      "moveDown": "העברת {name} למטה",
+      "remove": "הסרת {name}",
+      "countsAsShort": "נספר כ{as}",
+      "countsAsLabel": "נספר כ",
+      "countsAsOption": "נספר כ{as}",
+      "countsAs": {
+        "connected": "מחובר",
+        "no_answer": "אין מענה",
+        "busy": "תפוס",
+        "left_voicemail": "הושארה הודעה קולית",
+        "wrong_number": "מספר שגוי",
+        "declined": "נדחתה",
+        "failed": "נכשלה"
+      },
+      "removeActivity": "הסרת פעילות",
+      "removeConfirmTitle": "להסיר את {name}?",
+      "removeConfirmBody": "היא תוסר מהרשימה. רשומות שהשתמשו בה ישמרו את התוצאות שלהן.",
+      "removed": "הפעילות הוסרה.",
+      "noSettings": "אין מה להגדיר בפעילות זו.",
+      "errors": {
+        "nameRequired": "תנו שם לפעילות.",
+        "nameTaken": "השם הזה כבר בשימוש כאן.",
+        "limit": "הגעתם למגבלה של רשימה זו.",
+        "conflict": "מישהו אחר שינה את הפעילות הזו. היא נטענה מחדש, נסו שוב.",
+        "forbidden": "אין לכם הרשאה לשנות זאת.",
+        "failed": "לא ניתן היה לשמור. נסו שוב."
+      }
+    },
+    "create": {
+      "title": "יצירת פעילות",
+      "close": "סגירה",
+      "cancel": "ביטול",
+      "create": "יצירה",
+      "intro": "הוסיפו פעילות ייחודית לעסק שלכם. היא מתחילה בהגדרות של הסוג שבחרתם.",
+      "name": "שם",
+      "namePlaceholder": "לדוגמה: ביקור באתר",
+      "behavesAs": "פועלת כמו",
+      "behavesAsHint": {
+        "task": "משהו לביצוע עד תאריך, שאפשר להשלים.",
+        "meeting": "משהו שמתרחש בשעה מסוימת, שאפשר להשלים.",
+        "phone": "שיחה, עם תוצאות של שיחה."
+      },
+      "behaves": {
+        "task": "משימה",
+        "meeting": "פגישה",
+        "phone": "שיחת טלפון"
+      },
+      "icon": "סמל",
+      "icons": {
+        "task": "משימה",
+        "meeting": "יומן",
+        "phone": "טלפון",
+        "email": "אימייל",
+        "reminder": "פעמון",
+        "sms": "הודעה",
+        "chat": "צ׳אט",
+        "visit": "מקום",
+        "video": "וידאו",
+        "document": "מסמך",
+        "flag": "דגל",
+        "star": "כוכב"
+      },
+      "errors": {
+        "nameRequired": "תנו שם לפעילות.",
+        "nameTaken": "כבר קיימת פעילות בשם הזה.",
+        "limit": "הגעתם למגבלת הפעילויות המותאמות אישית.",
+        "failed": "לא ניתן היה ליצור את הפעילות. נסו שוב."
+      }
+    },
+    "picker": {
+      "removedSuffix": "(הוסר)",
+      "taskType": "סוג משימה",
+      "taskTypeNone": "ללא סוג",
+      "outcome": "תוצאה",
+      "outcomeNone": "ללא תוצאה",
+      "completeOff": "השלמת משימות כבויה ב״פעילויות מכירה״."
+    },
+    "meeting": {
+      "saved": "הפגישה עודכנה.",
+      "reopened": "הפגישה נפתחה מחדש.",
+      "errors": {
+        "disabled": "השלמת פגישות כבויה ב״פעילויות מכירה״.",
+        "optionGone": "התוצאה הזו הוסרה. בחרו אחרת.",
+        "failed": "לא ניתן היה לשמור. נסו שוב."
+      },
+      "outcome": "תוצאה",
+      "noOutcome": "ללא תוצאה",
+      "removedSuffix": "(הוסר)",
+      "notes": "הערות",
+      "cancel": "ביטול",
+      "save": "שמירה",
+      "outcomeChip": "תוצאה: {name}",
+      "completed": "הושלמה",
+      "editAria": "עריכת התוצאה של {title}",
+      "edit": "עריכה",
+      "reopenAria": "פתיחה מחדש של {title}",
+      "reopen": "פתיחה מחדש",
+      "addAria": "הוספת תוצאה ל{title}",
+      "add": "הוספת תוצאה",
+      "markCompleted": "סימון כהושלמה"
+    }
+  }
+}

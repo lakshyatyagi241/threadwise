@@ -1,0 +1,194 @@
+{
+  "sales-activities": {
+    "defaults": {
+      "activity": {
+        "task": "Công việc",
+        "meeting": "Cuộc họp",
+        "phone": "Điện thoại",
+        "email": "Email",
+        "reminder": "Nhắc nhở",
+        "sms": "SMS",
+        "chat": "Trò chuyện"
+      },
+      "option": {
+        "task": {
+          "follow_up": "Theo dõi",
+          "call_reminder": "Nhắc gọi lại",
+          "interested": "Quan tâm",
+          "left_message": "Đã để lại tin nhắn",
+          "no_response": "Không phản hồi",
+          "not_interested": "Không quan tâm",
+          "not_reachable": "Không liên lạc được"
+        },
+        "meeting": {
+          "interested": "Quan tâm",
+          "not_interested": "Không quan tâm",
+          "needs_follow_up": "Cần theo dõi",
+          "rescheduled": "Đã dời lịch",
+          "no_show": "Vắng mặt"
+        },
+        "phone": {
+          "connected": "Đã kết nối",
+          "no_answer": "Không trả lời",
+          "busy": "Máy bận",
+          "left_voicemail": "Đã để lại thư thoại",
+          "wrong_number": "Sai số",
+          "declined": "Bị từ chối",
+          "failed": "Thất bại"
+        }
+      }
+    },
+    "list": {
+      "back": "Dữ liệu",
+      "title": "Hoạt động bán hàng",
+      "intro": "Quản lý các hoạt động của nhóm bạn ở một nơi: công việc, cuộc họp, cuộc gọi và hoạt động riêng của bạn. Chọn mỗi hoạt động làm được gì, các loại công việc và kết quả của nó.",
+      "create": "Tạo hoạt động",
+      "loading": "Đang tải hoạt động…",
+      "loadFailed": "Không thể tải các hoạt động.",
+      "retry": "Thử lại",
+      "listLabel": "Hoạt động",
+      "default": "Mặc định",
+      "custom": "Tùy chỉnh",
+      "noEditor": "Hoạt động mặc định không có gì để thiết lập.",
+      "edit": "Sửa hoạt động",
+      "editNamed": "Sửa hoạt động {name}",
+      "chip": {
+        "completable": "Có thể hoàn thành",
+        "notCompletable": "Không thể hoàn thành",
+        "calendar": "Trong lịch",
+        "taskTypes": "{count, plural, other {# loại công việc}}",
+        "outcomes": "{count, plural, other {# kết quả}}"
+      }
+    },
+    "drawer": {
+      "title": "Sửa hoạt động: {name}",
+      "close": "Đóng",
+      "done": "Xong",
+      "cancel": "Hủy",
+      "saved": "Đã lưu.",
+      "autosave": "Thay đổi được lưu ngay khi bạn thực hiện.",
+      "readOnly": "Bạn có thể xem các cài đặt này nhưng không thể thay đổi.",
+      "name": "Tên hoạt động",
+      "nameLocked": "Không thể đổi tên của hoạt động mặc định.",
+      "mobileCheckIn": "Cho phép người dùng check-in và check-out từ ứng dụng di động",
+      "mobileCheckInPending": "Đã lưu nhưng chưa có tác dụng: ứng dụng di động chưa hỗ trợ check-in cuộc họp. Sẽ hoạt động khi ứng dụng hỗ trợ.",
+      "showInCalendar": "Hiển thị hoạt động này trong Lịch của tôi trên Bảng điều khiển hoạt động",
+      "showInCalendarHint": "Đã lưu nhưng chưa có lịch hoạt động. Sẽ có tác dụng khi lịch được thêm vào.",
+      "allowComplete": "Cho phép người dùng đánh dấu hoạt động này là đã hoàn thành",
+      "allowEditCompleted": "Cho phép người dùng sửa ngày và giờ hoàn thành của hoạt động này",
+      "taskTypes": "Loại công việc",
+      "taskTypesHint": "Chọn một loại khi tạo công việc, ví dụ Theo dõi hoặc Nhắc gọi lại.",
+      "addTaskType": "Thêm loại công việc",
+      "taskTypePlaceholder": "Loại công việc mới",
+      "predictOutcomes": "Dự đoán kết quả cho hoạt động này",
+      "predictOutcomesHint": "Đề xuất một kết quả khi hoàn thành hoạt động.",
+      "outcomes": "Kết quả",
+      "outcomesHint": "Xóa một kết quả vẫn giữ nó trên các bản ghi đã có.",
+      "phoneOutcomesHint": "Chọn cách mỗi kết quả được tính trong báo cáo cuộc gọi. Xóa một kết quả vẫn giữ nó trên các cuộc gọi đã có.",
+      "addOutcome": "Thêm kết quả",
+      "outcomePlaceholder": "Kết quả mới",
+      "listEmpty": "Chưa có gì.",
+      "moveUp": "Chuyển {name} lên",
+      "moveDown": "Chuyển {name} xuống",
+      "remove": "Xóa {name}",
+      "countsAsShort": "tính là {as}",
+      "countsAsLabel": "Tính là",
+      "countsAsOption": "Tính là {as}",
+      "countsAs": {
+        "connected": "đã kết nối",
+        "no_answer": "không trả lời",
+        "busy": "máy bận",
+        "left_voicemail": "đã để lại thư thoại",
+        "wrong_number": "sai số",
+        "declined": "bị từ chối",
+        "failed": "thất bại"
+      },
+      "removeActivity": "Xóa hoạt động",
+      "removeConfirmTitle": "Xóa {name}?",
+      "removeConfirmBody": "Hoạt động rời khỏi danh sách. Các bản ghi đã dùng nó vẫn giữ kết quả.",
+      "removed": "Đã xóa hoạt động.",
+      "noSettings": "Hoạt động này không có gì để thiết lập.",
+      "errors": {
+        "nameRequired": "Hãy đặt tên cho hoạt động.",
+        "nameTaken": "Tên này đã được dùng ở đây.",
+        "limit": "Bạn đã đạt giới hạn của danh sách này.",
+        "conflict": "Người khác đã thay đổi hoạt động này. Đã tải lại, hãy thử lại.",
+        "forbidden": "Bạn không có quyền thay đổi mục này.",
+        "failed": "Không thể lưu. Hãy thử lại."
+      }
+    },
+    "create": {
+      "title": "Tạo hoạt động",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "create": "Tạo",
+      "intro": "Thêm một hoạt động riêng cho doanh nghiệp của bạn. Nó bắt đầu với cài đặt của loại bạn chọn.",
+      "name": "Tên",
+      "namePlaceholder": "Ví dụ: Thăm địa điểm",
+      "behavesAs": "Hoạt động như",
+      "behavesAsHint": {
+        "task": "Việc cần làm trước một ngày và có thể hoàn thành.",
+        "meeting": "Việc diễn ra vào một thời điểm và có thể hoàn thành.",
+        "phone": "Một cuộc gọi, với các kết quả của cuộc gọi."
+      },
+      "behaves": {
+        "task": "Một công việc",
+        "meeting": "Một cuộc họp",
+        "phone": "Một cuộc gọi điện thoại"
+      },
+      "icon": "Biểu tượng",
+      "icons": {
+        "task": "Công việc",
+        "meeting": "Lịch",
+        "phone": "Điện thoại",
+        "email": "Email",
+        "reminder": "Chuông",
+        "sms": "Tin nhắn",
+        "chat": "Trò chuyện",
+        "visit": "Địa điểm",
+        "video": "Video",
+        "document": "Tài liệu",
+        "flag": "Cờ",
+        "star": "Ngôi sao"
+      },
+      "errors": {
+        "nameRequired": "Hãy đặt tên cho hoạt động.",
+        "nameTaken": "Đã có hoạt động với tên này.",
+        "limit": "Bạn đã đạt giới hạn hoạt động tùy chỉnh.",
+        "failed": "Không thể tạo hoạt động. Hãy thử lại."
+      }
+    },
+    "picker": {
+      "removedSuffix": "(đã xóa)",
+      "taskType": "Loại công việc",
+      "taskTypeNone": "Không có loại",
+      "outcome": "Kết quả",
+      "outcomeNone": "Không có kết quả",
+      "completeOff": "Việc hoàn thành công việc đang tắt trong Hoạt động bán hàng."
+    },
+    "meeting": {
+      "saved": "Đã cập nhật cuộc họp.",
+      "reopened": "Đã mở lại cuộc họp.",
+      "errors": {
+        "disabled": "Việc hoàn thành cuộc họp đang tắt trong Hoạt động bán hàng.",
+        "optionGone": "Kết quả đó đã bị xóa. Hãy chọn kết quả khác.",
+        "failed": "Không thể lưu. Hãy thử lại."
+      },
+      "outcome": "Kết quả",
+      "noOutcome": "Không có kết quả",
+      "removedSuffix": "(đã xóa)",
+      "notes": "Ghi chú",
+      "cancel": "Hủy",
+      "save": "Lưu",
+      "outcomeChip": "Kết quả: {name}",
+      "completed": "Đã hoàn thành",
+      "editAria": "Sửa kết quả của {title}",
+      "edit": "Sửa",
+      "reopenAria": "Mở lại {title}",
+      "reopen": "Mở lại",
+      "addAria": "Thêm kết quả cho {title}",
+      "add": "Thêm kết quả",
+      "markCompleted": "Đánh dấu hoàn thành"
+    }
+  }
+}

@@ -389,6 +389,11 @@
         "label": "Leads en double",
         "description": "Choisissez si un nouveau lead qui correspond à un contact est fusionné avec lui ou devient un nouveau contact.",
         "keywords": "doublon, fusionner, lead, même téléphone, même e-mail, nouveau contact, source de leads"
+      },
+      "sales-activities": {
+        "label": "Activités commerciales",
+        "description": "Gérez les tâches, rendez-vous, appels et vos propres activités : ce que chacune peut faire, ses types de tâche et ses résultats.",
+        "keywords": "activités, types de tâche, résultats, résultat de rendez-vous, résultat d’appel, relance, pointage, activité personnalisée, calendrier, terminer"
       }
     },
     "backToMarketplace": "Retour au Marketplace"

@@ -286,7 +286,8 @@
       "planDisabled": "Gói của bạn không bao gồm tác vụ. Nâng cấp để mở khóa.",
       "assigneeInvalid": "Người này không phải thành viên đang hoạt động của không gian làm việc này.",
       "unexpected": "Đã xảy ra lỗi. Thử lại sau ít phút.",
-      "retry": "Thử lại"
+      "retry": "Thử lại",
+      "completionDisabled": "Việc hoàn thành công việc đang tắt trong Hoạt động bán hàng."
     },
     "toast": {
       "completed": "Đã hoàn thành tác vụ.",
