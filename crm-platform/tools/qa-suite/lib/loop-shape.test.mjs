@@ -23,6 +23,12 @@ test('a bounded retry is not a per-item write', () => {
     'retry',
   );
   assert.equal(batchedLoop('for (let draw = 0; draw < MAX_DRAWS; draw++) {', ''), 'retry');
+  assert.equal(
+    batchedLoop('for (const wait of CAPTURE_RETRIES) {', 'await this.recorder.record()'),
+    'retry',
+  );
+  // a name that merely contains the letters is not a retry
+  assert.equal(batchedLoop('for (const r of battempts) {', ''), null);
 });
 
 test('a LIMIT-bounded drain without element iteration is batched', () => {

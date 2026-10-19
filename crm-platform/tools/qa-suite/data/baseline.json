@@ -749,6 +749,22 @@
     {
       "key": "apps/api/src/modules/chat-conversations/message-log-archive.service.ts await this.repo.deleteArchived(",
       "reason": "nightly archive: the loop is over the workspaces that had events on one UTC day (archiveDay); each workspace's archive write and its delete of the same rows run in one transaction so the archive and the live table cannot disagree (the code throws if deleted != archived), so the delete is per workspace by design; the events inside it are read in BATCH-sized pages; reviewed 2026-10-19"
+    },
+    {
+      "key": "apps/api/src/modules/failed-operations/failure-capture.service.ts await this.recorder.record(",
+      "reason": "a sweep over the jobs in a queue's failed set (bounded by what BullMQ still holds); each job is its own durable record with its own identity and sealed payload, inside a per-job try so one bad job cannot stop the rest; the capture retry loop is a bounded retry; reviewed 2026-10-19"
+    },
+    {
+      "key": "apps/api/src/modules/platform-async-ops/async-ops.service.ts await this.recorder.record(",
+      "reason": "operator-run replay of at most `limit` failed jobs; each job is recorded and replayed on its own inside a per-job try; platform staff action, not tenant traffic; reviewed 2026-10-19"
+    },
+    {
+      "key": "apps/api/src/modules/privacy/requests/erasure-executor.ts await this.audit.record(",
+      "reason": "one audit row and one outbox event per erased contact, exactly as the CRM delete writes them (those APIs take one record); the loop is over the contacts erased by ONE privacy request, in the request's own transaction; a multi-row audit/outbox insert is a possible later optimisation for very large erasures, with no user-facing latency; reviewed 2026-10-19"
+    },
+    {
+      "key": "apps/api/src/modules/storage-quota/storage-quota.repository.ts await tx.execute",
+      "reason": "one upsert per storage category of ONE workspace's recount (the rows come from a GROUP BY category, a fixed handful of categories); an operator/cron recount, not request traffic; reviewed 2026-10-19"
     }
   ],
   "36": [
@@ -1757,6 +1773,14 @@
     {
       "key": "user_settings.state is free text with no CHECK",
       "reason": "deferred, not reviewed as safe: nothing writes user_settings.state yet (no INSERT or UPDATE sets it), so there is no value set to constrain; add the CHECK when the feature that uses it ships (owner decision 2026-10-19); reviewed 2026-10-19"
+    },
+    {
+      "key": "failed_operations pk(id)",
+      "reason": "platform DLQ table, not tenant data (20261229090000_failed_operations.sql header: same shape as waboo_migration_runs and org_lifecycle_log); every policy is privileged-only, so org_id is only a pointer to the owning workspace; reviewed 2026-10-19"
+    },
+    {
+      "key": "failed_operations",
+      "reason": "platform DLQ table: org_id is a plain nullable pointer (unknown when a webhook is captured, e.g. a WhatsApp payload routed by phone number later) with no FK so the record outlives the workspace; privileged-only policies (20261229090000_failed_operations.sql header); reviewed 2026-10-19"
     }
   ],
   "48": [
@@ -1769,36 +1793,36 @@
       "reason": "verified: api-library-logs.repository.ts builds every query from this.where(orgId, filters) and api-library-retention.service.ts deletes by (id, created_at); no query looks a row up by uuid. A unique constraint on a partitioned table must include the partition key, so it would not be global anyway; reviewed 2026-10-18"
     },
     {
-      "key": "20261229090100_con_enum_checks_closed_sets.sql: chk_cart_recoveries_status is NOT VALID and no later migration validates it",
-      "reason": "added NOT VALID on purpose (20261229090100_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+      "key": "20270131090000_con_enum_checks_closed_sets.sql: chk_cart_recoveries_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20270131090000_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
     },
     {
-      "key": "20261229090100_con_enum_checks_closed_sets.sql: chk_shopify_waitlist_status is NOT VALID and no later migration validates it",
-      "reason": "added NOT VALID on purpose (20261229090100_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+      "key": "20270131090000_con_enum_checks_closed_sets.sql: chk_shopify_waitlist_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20270131090000_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
     },
     {
-      "key": "20261229090100_con_enum_checks_closed_sets.sql: chk_woocommerce_waitlist_status is NOT VALID and no later migration validates it",
-      "reason": "added NOT VALID on purpose (20261229090100_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+      "key": "20270131090000_con_enum_checks_closed_sets.sql: chk_woocommerce_waitlist_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20270131090000_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
     },
     {
-      "key": "20261229090100_con_enum_checks_closed_sets.sql: chk_wa_pending_orders_status is NOT VALID and no later migration validates it",
-      "reason": "added NOT VALID on purpose (20261229090100_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+      "key": "20270131090000_con_enum_checks_closed_sets.sql: chk_wa_pending_orders_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20270131090000_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
     },
     {
-      "key": "20261229090100_con_enum_checks_closed_sets.sql: chk_ai_training_sources_kind is NOT VALID and no later migration validates it",
-      "reason": "added NOT VALID on purpose (20261229090100_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+      "key": "20270131090000_con_enum_checks_closed_sets.sql: chk_ai_training_sources_kind is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20270131090000_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
     },
     {
-      "key": "20261229090100_con_enum_checks_closed_sets.sql: chk_ai_training_sources_status is NOT VALID and no later migration validates it",
-      "reason": "added NOT VALID on purpose (20261229090100_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+      "key": "20270131090000_con_enum_checks_closed_sets.sql: chk_ai_training_sources_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20270131090000_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
     },
     {
-      "key": "20261229090100_con_enum_checks_closed_sets.sql: chk_users_status is NOT VALID and no later migration validates it",
-      "reason": "added NOT VALID on purpose (20261229090100_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+      "key": "20270131090000_con_enum_checks_closed_sets.sql: chk_users_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20270131090000_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
     },
     {
-      "key": "20261229090100_con_enum_checks_closed_sets.sql: chk_event_outbox_status is NOT VALID and no later migration validates it",
-      "reason": "added NOT VALID on purpose (20261229090100_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+      "key": "20270131090000_con_enum_checks_closed_sets.sql: chk_event_outbox_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20270131090000_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
     }
   ],
   "49": [
@@ -1841,6 +1865,10 @@
     {
       "key": "translation_usage",
       "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "failed_operation_events",
+      "reason": "deferred, not reviewed as safe: the DLQ is new and its retention window for the append-only event history is not decided (docs/quality/dlq-strategy.md covers the Redis side); decide the window when the DLQ is in use (owner decision 2026-10-19: features still under construction)"
     }
   ]
 }

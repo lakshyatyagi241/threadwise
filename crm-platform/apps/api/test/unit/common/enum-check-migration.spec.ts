@@ -4,14 +4,14 @@ import { describe, expect, it } from 'vitest';
 import { AIAG_SOURCE_KINDS, AIAG_SOURCE_STATUSES } from '@crm/contracts';
 
 /**
- * The CHECK constraints of 20261229090100_con_enum_checks_closed_sets.sql repeat value sets that live in code. For the one set that has a
+ * The CHECK constraints of 20270131090000_con_enum_checks_closed_sets.sql repeat value sets that live in code. For the one set that has a
  * shared contract (AI training sources) the two must not drift: a new kind added to the contract without the migration would be rejected
  * by Postgres on insert. Rerun: pnpm --filter @crm/api exec vitest run test/unit/common/enum-check-migration.spec.ts
  */
 const sql = readFileSync(
   resolve(
     __dirname,
-    '../../../../../packages/db/migrations/20261229090100_con_enum_checks_closed_sets.sql',
+    '../../../../../packages/db/migrations/20270131090000_con_enum_checks_closed_sets.sql',
   ),
   'utf8',
 );
