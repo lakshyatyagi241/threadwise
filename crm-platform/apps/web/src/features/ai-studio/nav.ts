@@ -9,6 +9,7 @@ export const nav: NavItem[] = [
     href: '/ai-studio',
     order: -1,
     icon: 'bot',
-    gates: { permission: 'flb.flows.read', planFeature: 'automation' },
+    // the hub starts AI agents, chatbots and workflows; it shows only on a plan with AI assistants (a WhatsApp-only plan keeps Flows)
+    gates: { permission: 'flb.flows.read', planFeature: 'ai_assistants' },
   },
 ];

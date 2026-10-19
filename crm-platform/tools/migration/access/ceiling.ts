@@ -41,6 +41,12 @@ export function oldWorkspaceKeys(rows: CatalogueRow[], map: AccessConfig['permis
  * The target keys to close: every key of a module in which the old workspace held no key at all. `targetKeys` is the permission_defs of
  * the target. Pure. Returns the closed module names too, for the log.
  */
+/**
+ * Modules a Waboo workspace never gets, whatever its roles held: Waboo sells WhatsApp, not the website chat, so a migrated workspace has no
+ * website-chat permission even when a Waboo bot permission maps across the website part too.
+ */
+export const NEVER_KEPT: readonly string[] = ['website-chat'];
+
 export function closedKeys(
   ceiling: ModuleCeiling,
   oldKeys: ReadonlySet<string>,
@@ -50,7 +56,7 @@ export function closedKeys(
   const closed: string[] = [];
   const kept: string[] = [];
   for (const [name, prefixes] of Object.entries(ceiling.modules)) {
-    const had = [...oldKeys].some((k) => prefixes.some((p) => k.startsWith(p)));
+    const had = !NEVER_KEPT.includes(name) && [...oldKeys].some((k) => prefixes.some((p) => k.startsWith(p)));
     if (had) {
       kept.push(name);
       continue;
