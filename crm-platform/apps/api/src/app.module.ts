@@ -9,6 +9,7 @@ import type { Env } from './config/env.schema';
 import { CryptoService } from './common/crypto/crypto.service';
 import { maskSecretUrl } from './common/logging/mask-secret-url';
 import { ProblemExceptionFilter } from './common/filters/problem-exception.filter';
+import { SlowRequestInterceptor } from './common/interceptors/slow-request.interceptor';
 import { IdempotencyInterceptor } from './common/interceptors/idempotency.interceptor';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
 import { RequestContextStore } from './common/context/request-context';
@@ -310,6 +311,8 @@ import { HealthModule } from './health/health.module';
     { provide: APP_GUARD, useClass: PermissionsGuard },
     // Route-level plan gate (TW-PLAN-019): after permissions, so a request that is not allowed at all is refused for that first.
     { provide: APP_GUARD, useExisting: PlanFeatureGuard },
+    // Outermost, so its clock covers the guards-after interceptors too and the log line carries the whole handler time.
+    { provide: APP_INTERCEPTOR, useClass: SlowRequestInterceptor },
     { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
     { provide: APP_INTERCEPTOR, useClass: ImpersonationMaskInterceptor },
   ],
