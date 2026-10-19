@@ -764,49 +764,56 @@
  },
  {
   "shape": "SELECT *",
-  "line": 715,
+  "line": 719,
   "text": "SELECT * FROM (${feedSql(ctx, sel, { level, page: { cursor, limit } })}) f ORDER BY f.at DESC, f.rank DESC, f.id DESC LIMIT ${limit + 1}",
   "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
   "module": "chat-conversations"
  },
  {
   "shape": "count(*) FILTER aggregate",
-  "line": 720,
+  "line": 724,
   "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE r.direction = 'in')::int AS received, count(*) FILTER (WHERE r.direction = 'out' AND r",
   "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
   "module": "chat-conversations"
  },
  {
   "shape": "DISTINCT over a join",
-  "line": 733,
+  "line": 737,
   "text": "SELECT u.currency AS currency, sum(u.credits)::bigint AS minor, count(*)::int AS messages FROM (SELECT DISTINCT r.provider_id FROM (${feedSq",
   "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
   "module": "chat-conversations"
  },
  {
   "shape": "correlated subquery in SELECT list",
-  "line": 733,
+  "line": 737,
   "text": "SELECT u.currency AS currency, sum(u.credits)::bigint AS minor, count(*)::int AS messages FROM (SELECT DISTINCT r.provider_id FROM (${feedSq",
   "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
   "module": "chat-conversations"
  },
  {
   "shape": "correlated subquery in SELECT list",
-  "line": 757,
+  "line": 761,
   "text": "WITH per_conversation AS ( SELECT m.conversation_id, min(m.created_at) FILTER (WHERE m.direction = 'in') AS at, min(m.created_at) FILTER (WH",
   "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
   "module": "chat-conversations"
  },
  {
   "shape": "count(*) FILTER aggregate",
-  "line": 793,
-  "text": "WITH r AS (${feedSql(ctx, { ...sel, window: { from: seriesFrom, to: sel.window.to } }, { level: 'slim' })}), agg AS ( SELECT date_trunc(${u}",
+  "line": 798,
+  "text": "WITH r AS (${feedSql(ctx, { ...sel, window: { from: seriesFrom, to: sel.window.to } }, { level: 'slim', entities })}), agg AS ( SELECT date_",
+  "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
+  "module": "chat-conversations"
+ },
+ {
+  "shape": "count(*) FILTER aggregate",
+  "line": 930,
+  "text": "WITH g AS ( SELECT GROUPING(x.b, x.t, x.conv) AS g, x.b, x.t, x.conv, count(*) FILTER (WHERE x.direction = 'out' AND x.status <> 'failed')::",
   "file": "apps/api/src/modules/chat-conversations/message-history.query.ts",
   "module": "chat-conversations"
  },
  {
   "shape": "SELECT *",
-  "line": 149,
+  "line": 152,
   "text": "SELECT * FROM (${feedSql(ctx, sel, { level: 'detail', noWindow: true, only: uuid, ignoreNarrow: true, entities: [kind], })}) d LIMIT 1",
   "file": "apps/api/src/modules/chat-conversations/message-history.repository.ts",
   "module": "chat-conversations"
