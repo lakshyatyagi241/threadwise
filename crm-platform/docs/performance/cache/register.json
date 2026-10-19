@@ -1,0 +1,3325 @@
+{
+ "version": 1,
+ "item": "Sheet3 #64 cache strategy audit",
+ "generated": "2026-10-19",
+ "legend": {
+  "priority": "P0 = decides access, permissions, session, plan/entitlement, money, or holds credentials. P1 = everything else.",
+  "tenant": "org / org+user = the key contains the organisation id (and user id where the value is per user); global = same value for everyone, with a written reason; id-unique = the key is a random globally unique id; per-session = browser memory of one person.",
+  "layers": "redis, process (in-process memory), request (per request), next (Next.js caches), http (Cache-Control / ETag), client (TanStack Query), browser (storage), database (cache table)."
+ },
+ "caches": [
+  {
+   "id": "R01",
+   "name": "RBAC grant set per user",
+   "layer": "redis",
+   "priority": "P0",
+   "location": "apps/api/src/kernel/rbac/rbac.service.ts",
+   "what": "The merged permission grants (allow/deny and record scope) of one user in one workspace, as JSON.",
+   "key": "rbac:${orgId}:v${version}:u${userId}",
+   "tenant": {
+    "mode": "org+user",
+    "org": true,
+    "user": true,
+    "anchor": "rbac:${orgId}:v${version}:u${userId}"
+   },
+   "ttl": "600 s (SETEX)",
+   "bound": {
+    "kind": "ttl",
+    "note": "One key per user per roles version; old versions expire on their own."
+   },
+   "invalidation": {
+    "trigger": "Any role, grant or membership change: roles.service.ts (2 sites), users.service.ts, members.service.ts (2 sites).",
+    "mechanism": "RbacService.bumpRolesVersion() raises organizations.roles_version and rewrites rbac:version:${orgId}; the grant key name contains the version, so every old grant set is simply never read again."
+   },
+   "stampede": "none: N parallel misses each load the grants from Postgres (measured in stampede.spec.ts for the sibling gate cache).",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "Redis error = miss: version read falls back to Postgres, grants are loaded from Postgres. A cache-write error is logged and ignored. No stale grant is ever served because Redis was down."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "Every process, at once, after a successful bump. If both the DELETE and the SET of the version key fail (Redis down while an admin saves), bumpRolesVersion throws and the old version stays cached until its TTL: at most 600 s.",
+    "documentedSeconds": 600,
+    "note": "Measured against a real Redis in rbac-real-redis.spec.ts."
+   },
+   "hitMissPoint": "rbac.service.ts grantsForUser: the `if (cached)` branch is a hit; falling through to loadGrants is a miss.",
+   "status": "ok",
+   "tests": [
+    "rbac-real-redis.spec.ts",
+    "tenant-leak.spec.ts",
+    "redis-failure.spec.ts"
+   ]
+  },
+  {
+   "id": "R02",
+   "name": "RBAC roles version per workspace",
+   "layer": "redis",
+   "priority": "P0",
+   "location": "apps/api/src/kernel/rbac/rbac.service.ts",
+   "what": "The integer organizations.roles_version, used to name the grant keys (R01).",
+   "key": "rbac:version:${orgId}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "rbac:version:${orgId}"
+   },
+   "ttl": "600 s (Lua SET ... EX, never moves the version backwards)",
+   "bound": {
+    "kind": "ttl",
+    "note": "One key per workspace."
+   },
+   "invalidation": {
+    "trigger": "Same as R01.",
+    "mechanism": "bumpRolesVersion(): DEL with 3 retries, then Lua RAISE_VERSION (only raises)."
+   },
+   "stampede": "none (a miss reads one row from Postgres).",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "Redis error = miss = Postgres read."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "See R01.",
+    "documentedSeconds": 600,
+    "note": null
+   },
+   "hitMissPoint": "rbac.service.ts rolesVersion / readCached (Lua returns false for a missing version).",
+   "status": "ok",
+   "tests": [
+    "rbac-real-redis.spec.ts"
+   ]
+  },
+  {
+   "id": "R03",
+   "name": "Platform operator permission names",
+   "layer": "redis",
+   "priority": "P0",
+   "location": "apps/api/src/modules/roles-permissions/platform-rbac.service.ts",
+   "what": "The permission names of one platform operator (staff of the product company, not a workspace user).",
+   "key": "prbac:v${version}:op${operatorId}  and  prbac:version",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Platform operators belong to no workspace; the operator id is globally unique.",
+    "anchor": "prbac:v${version}:op${operatorId}"
+   },
+   "ttl": "600 s",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "Operator role or permission change in platform-roles / platform-permissions services.",
+    "mechanism": "Version key `prbac:version` is raised; old names stop being read."
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "Redis read error = miss = Postgres."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "Platform operators.",
+    "documentedSeconds": 600,
+    "note": null
+   },
+   "hitMissPoint": "platform-rbac.service.ts: `cached` after redis.get(key).",
+   "status": "ok",
+   "tests": [
+    "redis-failure.spec.ts"
+   ]
+  },
+  {
+   "id": "R04",
+   "name": "Account gate state per user",
+   "layer": "redis",
+   "priority": "P0",
+   "location": "apps/api/src/modules/auth/security/account-gate.service.ts",
+   "what": "Whether a signed-in user is suspended, must verify email, enrol MFA or change password; plus is_admin / is_owner.",
+   "key": "auth:gate:${orgId}:${userId}",
+   "tenant": {
+    "mode": "org+user",
+    "org": true,
+    "user": true,
+    "anchor": "auth:gate:${orgId}:${userId}"
+   },
+   "ttl": "30 s (Ttl.gateSeconds)",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "Email verified, MFA enabled/disabled, password changed, user suspended or removed, invitation accepted (login, recovery, account, mfa, invitations, users, members services call gates.invalidate).",
+    "mechanism": "AccountGateService.invalidate(orgId, userId) = DEL; invalidateAll() = SCAN auth:gate:* + UNLINK on a policy change."
+   },
+   "stampede": "none: parallel misses each run the SQL (stampede.spec.ts).",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "Redis read error = miss = compute from Postgres. Write error logged and ignored."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 30,
+    "whoReadsStale": "The user themself and every process, if the writer did not call invalidate (e.g. a direct SQL change).",
+    "documentedSeconds": 30,
+    "note": null
+   },
+   "hitMissPoint": "account-gate.service.ts userState: `if (cached)` is a hit.",
+   "status": "ok",
+   "tests": [
+    "tenant-leak.spec.ts",
+    "redis-failure.spec.ts",
+    "stale-windows.spec.ts",
+    "stampede.spec.ts"
+   ]
+  },
+  {
+   "id": "R05",
+   "name": "Workspace suspended verdict",
+   "layer": "redis",
+   "priority": "P0",
+   "location": "apps/api/src/modules/auth/security/org-suspension.service.ts",
+   "what": "true/false: is this workspace suspended by the platform.",
+   "key": "auth:org-susp:${orgId}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "auth:org-susp:${orgId}"
+   },
+   "ttl": "5 s (Ttl.orgSuspendedSeconds)",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "Platform inbox suspends / unsuspends a workspace.",
+    "mechanism": "OrgSuspensionService.invalidate(orgId): DEL now and again 1.5 s later (closes the race with a request that re-cached the old value)."
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "open",
+    "behaviour": "Redis error = miss = Postgres read. If Postgres also fails the request is LET THROUGH (documented fail-open, ADR-0019): the suspension is durable and the next successful read enforces it."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 5,
+    "whoReadsStale": "Every process; 1.5 s extra for the recheck.",
+    "documentedSeconds": 5,
+    "note": null
+   },
+   "hitMissPoint": "org-suspension.service.ts isSuspended: `cached !== null` is a hit.",
+   "status": "ok",
+   "tests": [
+    "tenant-leak.spec.ts",
+    "redis-failure.spec.ts",
+    "stale-windows.spec.ts"
+   ]
+  },
+  {
+   "id": "R06",
+   "name": "Partner agent active flag",
+   "layer": "redis",
+   "priority": "P0",
+   "location": "apps/api/src/modules/auth/sessions/partner-agent-status.service.ts",
+   "what": "1/0: is this partner agent still active (partner tokens have no session row, so this is their revocation).",
+   "key": "auth:partner:${orgId}:${agentId}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "auth:partner:${orgId}:${agentId}"
+   },
+   "ttl": "30 s (Ttl.partnerStatusSeconds)",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "An agent is deactivated. PartnerAgentStatusService.invalidate() exists but has NO caller in apps/api (no code path in this API changes partner_agents.status), so today only the TTL applies.",
+    "mechanism": "DEL by invalidate(); otherwise expiry."
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "closed",
+    "behaviour": "Closed mode (production default): Redis error = 503. Open mode: read Postgres, which is authoritative."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 30,
+    "whoReadsStale": "The deactivated agent, on every instance.",
+    "documentedSeconds": 30,
+    "note": "invalidate() is unused: recorded as open risk R-64-02."
+   },
+   "hitMissPoint": "partner-agent-status.service.ts isActive: `cached === \"1\" / \"0\"`.",
+   "status": "ok",
+   "tests": [
+    "tenant-leak.spec.ts",
+    "redis-failure.spec.ts",
+    "stale-windows.spec.ts"
+   ]
+  },
+  {
+   "id": "R07",
+   "name": "Platform token epoch (mirror)",
+   "layer": "redis",
+   "priority": "P0",
+   "location": "apps/api/src/modules/auth/sessions/epoch.service.ts",
+   "what": "The platform-wide token epoch; bumping it signs everybody out. Postgres (platform_settings) is the truth, Redis is a mirror.",
+   "key": "auth:epoch",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "One number for the whole platform; not tenant data.",
+    "anchor": "AuthKeys.epoch"
+   },
+   "ttl": "none on purpose (durable mirror: a flushed Redis is refilled from Postgres, never reset to 0)",
+   "bound": {
+    "kind": "singleton",
+    "note": "One key."
+   },
+   "invalidation": {
+    "trigger": "EpochService.bump() (admin \"revoke all sessions\").",
+    "mechanism": "SET after the Postgres write; the bumping process also refreshes its own in-process copy."
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "Redis error = Postgres value; Redis miss refills with SET NX."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 5,
+    "whoReadsStale": "Other processes read the epoch through a 5 s in-process copy (M02).",
+    "documentedSeconds": 5,
+    "note": null
+   },
+   "hitMissPoint": "epoch.service.ts current(): `raw !== null`.",
+   "status": "ok",
+   "tests": [
+    "redis-failure.spec.ts",
+    "stale-windows.spec.ts"
+   ],
+   "ttlException": "Deliberately has no TTL: it is the mirror of a durable setting."
+  },
+  {
+   "id": "R08",
+   "name": "Emergency send-halt mirror",
+   "layer": "redis",
+   "priority": "P0",
+   "location": "apps/api/src/modules/auth/security/emergency-halt.service.ts",
+   "what": "1/0: has an operator halted all outbound sending.",
+   "key": "auth:send-halt",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "One platform-wide switch, not tenant data: it halts sending for every workspace.",
+    "anchor": "AuthKeys.halt"
+   },
+   "ttl": "30 s (HALT_MIRROR_TTL_SECONDS)",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "Operator sets / clears the halt.",
+    "mechanism": "SET of the mirror; Postgres setting is the truth."
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "Redis error = Postgres."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 30,
+    "whoReadsStale": "Other processes.",
+    "documentedSeconds": 30,
+    "note": null
+   },
+   "hitMissPoint": "emergency-halt.service.ts read path.",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "R09",
+   "name": "Session revocation and activity state",
+   "layer": "redis",
+   "priority": "P0",
+   "location": "apps/api/src/modules/auth/sessions/session.service.ts",
+   "what": "Tombstone of a revoked session, last-activity time (idle timeout), session-cap marker. Authoritative for \"is this access token still allowed\".",
+   "key": "auth:rev:${sid}  auth:act:${sid}  auth:cap:${sid}",
+   "tenant": {
+    "mode": "id-unique",
+    "org": false,
+    "user": false,
+    "reason": "sid is a random uuid, globally unique; the value holds no tenant data.",
+    "anchor": "AuthKeys.revoked(sid)"
+   },
+   "ttl": "revoked: 16 min (access-token life + 60 s); activity 7 d (staff) / 24 h (operators); cap marker 31 d / 24 h",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "Sign-out, revoke, password reset, concurrent-session eviction, idle expiry.",
+    "mechanism": "SessionService.tombstone(sid) = SET NX EX; if the SET fails the sid stays in an in-process pending list (M07) and the guard refuses it."
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "closed",
+    "behaviour": "Closed mode (production default): a Redis error on the session check = 503. Open mode: the 15-minute access token bounds the exposure. Covered by test/unit/auth-registration-security/jwt-guard-partner-and-redis.spec.ts and item #18."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "No staleness: a tombstone is written before the revoke call returns.",
+    "documentedSeconds": 0,
+    "note": null
+   },
+   "hitMissPoint": "jwt-guard checkSession: `revoked` truthy.",
+   "status": "ok",
+   "tests": [
+    "(existing) jwt-guard-partner-and-redis.spec.ts"
+   ]
+  },
+  {
+   "id": "R10",
+   "name": "Impersonation ended tombstone",
+   "layer": "redis",
+   "priority": "P0",
+   "location": "apps/api/src/modules/auth/platform/impersonation.service.ts",
+   "what": "An operator act-as session was ended; its token must fail on every instance.",
+   "key": "auth:imp-end:${sessionUuid}",
+   "tenant": {
+    "mode": "id-unique",
+    "org": false,
+    "user": false,
+    "reason": "The key is a random impersonation session uuid, globally unique; the value is the flag 1.",
+    "anchor": "AuthKeys.impersonationEnded"
+   },
+   "ttl": "(IMPERSONATION_MAX_MINUTES + 5) min",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "End of an impersonation session.",
+    "mechanism": "SET EX at end()."
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "closed",
+    "behaviour": "Follows the platform failure mode."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 5,
+    "whoReadsStale": "Other instances, through the 5 s open-check copy (M05).",
+    "documentedSeconds": 5,
+    "note": null
+   },
+   "hitMissPoint": "impersonation.service.ts tombstoned().",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "R11",
+   "name": "Analytics series result",
+   "layer": "redis",
+   "priority": "P1",
+   "location": "apps/api/src/modules/analytics/query/analytics-query.service.ts",
+   "what": "Rows of a dashboard metric series for one workspace and one query.",
+   "key": "an:v1:${q.orgId}:${metric}:${grain}:sha256(query)",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "an:v1:${q.orgId}"
+   },
+   "ttl": "Caller supplies ttlSeconds (<= 0 disables the cache)",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "None: results are time-based only.",
+    "mechanism": "Expiry."
+   },
+   "stampede": "in-process single-flight: parallel identical calls share one run (stampede.spec.ts).",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "Read/write errors are logged and ignored; the answer is computed."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "Dashboards may be as old as the caller-chosen TTL.",
+    "documentedSeconds": null,
+    "note": "TTL is chosen per call site, not documented in one place."
+   },
+   "hitMissPoint": "analytics-query.service.ts cacheGet().",
+   "status": "ok",
+   "tests": [
+    "tenant-leak.spec.ts",
+    "stampede.spec.ts"
+   ]
+  },
+  {
+   "id": "R12",
+   "name": "Campaign / broadcast summary",
+   "layer": "redis",
+   "priority": "P1",
+   "location": "apps/api/src/modules/campaigns/summary/campaign-summary.service.ts",
+   "what": "Computed delivery summary of one campaign or broadcast.",
+   "key": "camp-summary:${orgId}:${kind}:${id}:${days}:${forms}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "camp-summary:${orgId}:"
+   },
+   "ttl": "60 s (SUMMARY_CACHE_SECONDS)",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "None: expiry only.",
+    "mechanism": "Expiry."
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "Errors ignored; summary computed."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 60,
+    "whoReadsStale": "Anyone viewing the summary.",
+    "documentedSeconds": 60,
+    "note": null
+   },
+   "hitMissPoint": "campaign-summary.service.ts around redis.get(key).",
+   "status": "ok",
+   "tests": [
+    "tenant-leak.spec.ts"
+   ]
+  },
+  {
+   "id": "R13",
+   "name": "SMS number lookup verdict",
+   "layer": "redis",
+   "priority": "P1",
+   "location": "apps/api/src/modules/channel-sms/sms-senders.service.ts",
+   "what": "Carrier lookup of a phone number (\"check a number before you text it\"); only successful verdicts are kept.",
+   "key": "sms:lookup:${orgId}:${digits}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "sms:lookup:${orgId}:${digits}"
+   },
+   "ttl": "90 days (LOOKUP_TTL_SECONDS)",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "None: expiry only.",
+    "mechanism": "Expiry."
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "Read error = miss; write error ignored."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 7776000,
+    "whoReadsStale": "Staff using the lookup tool: a number that changed carrier shows the old carrier for up to 90 days.",
+    "documentedSeconds": null,
+    "note": "No documented window; informational tool only."
+   },
+   "hitMissPoint": "sms-senders.service.ts lookup(): `cached` parse.",
+   "status": "ok",
+   "tests": [
+    "tenant-leak.spec.ts"
+   ]
+  },
+  {
+   "id": "R14",
+   "name": "FAQ query embedding",
+   "layer": "redis",
+   "priority": "P1",
+   "location": "apps/api/src/modules/faq-knowledge/faq-embedding.service.ts",
+   "what": "The vector for a search question (binary).",
+   "key": "faq:q:${model}:sha256(lower(query))",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Content-addressed: the value is a pure function of (model, question text), so a reader of another workspace can only fetch the vector of a question it typed itself. Tenant isolation does not apply; the cost is shared, which is intended.",
+    "anchor": "faq:q:${model}:"
+   },
+   "ttl": "6 h (QUERY_CACHE_TTL_S)",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "None.",
+    "mechanism": "Expiry."
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "Errors ignored; the embedding is requested again."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 21600,
+    "whoReadsStale": "Nobody: the value never changes for the same input.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "faq-embedding.service.ts getBuffer(key).",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "R15",
+   "name": "Translation result",
+   "layer": "redis",
+   "priority": "P1",
+   "location": "apps/api/src/modules/localization-translation/translation.service.ts",
+   "what": "A translated text (and, for 60 s, a failed attempt).",
+   "key": "translate:${kind}:${lang}:${scope}:md5(text)",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Content-addressed on (language, routing policy, md5 of the text); a reader can only fetch the translation of a text it submitted. Recommendation: use sha256 instead of md5.",
+    "anchor": "translate:${kind}:${lang}:${scope}:${digest}"
+   },
+   "ttl": "24 h success, 60 s failure",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "None.",
+    "mechanism": "Expiry. A residency / lockdown change changes `scope`, so the old answers are not read."
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "RedisTranslationCache swallows errors; the provider is called."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 86400,
+    "whoReadsStale": "Nobody (same input, same output).",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "translation.service.ts: cache.get(key).",
+   "status": "open:R-64-03",
+   "tests": []
+  },
+  {
+   "id": "R16",
+   "name": "Active UI languages",
+   "layer": "redis",
+   "priority": "P1",
+   "location": "apps/api/src/modules/localization-translation/languages.service.ts",
+   "what": "List of enabled interface languages.",
+   "key": "locale:active_languages",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "The list of interface languages is the same for every workspace (a platform setting).",
+    "anchor": "locale:active_languages"
+   },
+   "ttl": "600 s",
+   "bound": {
+    "kind": "singleton"
+   },
+   "invalidation": {
+    "trigger": "Admin enables / disables a language.",
+    "mechanism": "DEL of the key."
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "Errors ignored; read Postgres."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 600,
+    "whoReadsStale": "Everyone; 0 s if the admin path deleted the key.",
+    "documentedSeconds": 600,
+    "note": null
+   },
+   "hitMissPoint": "languages.service.ts around redis.get.",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "R17",
+   "name": "Booking page theme",
+   "layer": "redis",
+   "priority": "P1",
+   "location": "apps/api/src/modules/appointments-booking/booking-page-themes.cache.ts",
+   "what": "The look of a public booking page.",
+   "key": "appt:page-theme:v1:${orgId}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "appt:page-theme:v1:${orgId}"
+   },
+   "ttl": "120 s",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "Theme saved, picture uploaded/removed, theme chosen (booking-page-themes.service.ts, 4 sites).",
+    "mechanism": "BookingPageThemesCache.drop(orgId)."
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "Read error = miss; write/drop errors logged."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 120,
+    "whoReadsStale": "Visitors of the booking page.",
+    "documentedSeconds": 120,
+    "note": null
+   },
+   "hitMissPoint": "booking-page-themes.cache.ts get().",
+   "status": "ok",
+   "tests": [
+    "tenant-leak.spec.ts",
+    "redis-failure.spec.ts",
+    "stale-windows.spec.ts"
+   ]
+  },
+  {
+   "id": "R18",
+   "name": "WABA groups eligibility",
+   "layer": "redis",
+   "priority": "P1",
+   "location": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-groups-admin.service.ts",
+   "what": "Whether a WhatsApp Cloud number may use groups (1/0).",
+   "key": "waba:groups:eligible:${orgId}:${configId}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "waba:groups:eligible:${orgId}:${configId}"
+   },
+   "ttl": "3600 s",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "None except overwrite on a refusal.",
+    "mechanism": "SET \"0\" when Meta refuses."
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "Errors ignored; Meta is asked."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 3600,
+    "whoReadsStale": "Staff of that workspace.",
+    "documentedSeconds": 3600,
+    "note": null
+   },
+   "hitMissPoint": "waba-groups-admin.service.ts around line 107.",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "R19",
+   "name": "WhatsApp uploaded media id",
+   "layer": "redis",
+   "priority": "P1",
+   "location": "apps/api/src/infra/providers/whatsapp/media/upload-cache.ts",
+   "what": "The id Meta gave an uploaded file, so the same file is not uploaded again.",
+   "key": "wa:media-id:${p.orgId}:${p.channelUuid}:${p.phoneNumberId}:${p.sha256}:${p.mime}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "wa:media-id:${p.orgId}:"
+   },
+   "ttl": "6 h by default (WHATSAPP_MEDIA_UPLOAD_CACHE_TTL_SECONDS, 0 to 7 d)",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "None.",
+    "mechanism": "Expiry; Meta ids expire on their side."
+   },
+   "stampede": "in-process single-flight (inFlight map, M28).",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "\"A cache that is down never fails a send\": read error = miss, write error ignored."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": null,
+    "whoReadsStale": "None.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "upload-cache.ts get().",
+   "status": "ok",
+   "tests": [
+    "tenant-leak.spec.ts",
+    "redis-failure.spec.ts"
+   ]
+  },
+  {
+   "id": "R20",
+   "name": "Idempotent response replay",
+   "layer": "redis",
+   "priority": "P0",
+   "location": "apps/api/src/common/interceptors/idempotency.interceptor.ts",
+   "what": "The first response to a request that carried an Idempotency-Key, replayed on a retry.",
+   "key": "idem:${ctx.orgId}:${providedKey}[:sha256(actor|method path)]",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "idem:${ctx.orgId}:${providedKey}"
+   },
+   "ttl": "24 h (done) / 300 s (in flight)",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "None: the point is that it does not change.",
+    "mechanism": "A different actor with the same key gets its own entry (suffix); a different body on the same slot is a 409."
+   },
+   "stampede": "SET NX reserves the key: parallel identical requests get a 409 instead of running twice.",
+   "backingStoreFailure": {
+    "mode": "closed",
+    "behaviour": "Redis error on the reservation: the request is not executed (error propagates). A write error after success is logged."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "Nobody.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "idempotency.interceptor.ts run(): redis.get(cacheKey) branch.",
+   "status": "ok",
+   "tests": [
+    "tenant-leak.spec.ts",
+    "redis-failure.spec.ts"
+   ]
+  },
+  {
+   "id": "R21",
+   "name": "Storefront checkout idempotency",
+   "layer": "redis",
+   "priority": "P0",
+   "location": "apps/api/src/modules/storefront-builder/public/checkout.service.ts",
+   "what": "First response to a public checkout with an Idempotency-Key.",
+   "key": "store_idem:${handle.orgId}:${handle.storefrontId}:${idempotencyKey}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "store_idem:${handle.orgId}:${handle.storefrontId}:${idempotencyKey}"
+   },
+   "ttl": "24 h",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "Order failure frees the key.",
+    "mechanism": "DEL on failure."
+   },
+   "stampede": "SET NX reserve",
+   "backingStoreFailure": {
+    "mode": "closed",
+    "behaviour": "Reservation error = request fails (never a double order)."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "Nobody.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "checkout.service.ts reserve().",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "R22",
+   "name": "Channel dispatch result",
+   "layer": "redis",
+   "priority": "P1",
+   "location": "apps/api/src/modules/chat-conversations/channel-dispatcher.service.ts",
+   "what": "Result of sending one message, so a retry with the same client reference does not send twice.",
+   "key": "chat:dispatch:${orgId}:${channelUuid}:${clientReference}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "chat:dispatch:${req.channel.orgId}:"
+   },
+   "ttl": "24 h (+ 60 s lock)",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "None.",
+    "mechanism": "Expiry."
+   },
+   "stampede": "SET NX lock",
+   "backingStoreFailure": {
+    "mode": "closed",
+    "behaviour": "Lock error = send refused."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "Nobody.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "channel-dispatcher.service.ts readStored().",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "R23",
+   "name": "Conversation \"seen\" marker",
+   "layer": "redis",
+   "priority": "P1",
+   "location": "apps/api/src/modules/notifications/conversation-read-state.ts",
+   "what": "Which users looked at a conversation in the last minute (suppresses duplicate notifications).",
+   "key": "seen key(orgId, userId, conversationUuid)",
+   "tenant": {
+    "mode": "org+user",
+    "org": true,
+    "user": true,
+    "anchor": "const key = (orgId: number, userId: number, conversationUuid: string)"
+   },
+   "ttl": "60 s",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "None.",
+    "mechanism": "Expiry."
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "ignored",
+    "behaviour": "Best effort: errors swallowed."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 60,
+    "whoReadsStale": "Notification suppression only.",
+    "documentedSeconds": 60,
+    "note": null
+   },
+   "hitMissPoint": "conversation-read-state.ts seenSince().",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "R24",
+   "name": "Notification and AI copilot short state",
+   "layer": "redis",
+   "priority": "P1",
+   "location": "apps/api/src/modules/ai-copilot-lead-finder/ai-crm-copilot.service.ts",
+   "what": "Chat history (2 h) and a pending confirmation (10 min) of the AI copilot for one user.",
+   "key": "historyKey(orgId, userId) / pendingKey(orgId, userId)",
+   "tenant": {
+    "mode": "org+user",
+    "org": true,
+    "user": true,
+    "anchor": "private historyKey(orgId: number, userId: number | null)"
+   },
+   "ttl": "2 h / 10 min",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "User clears the chat (DEL).",
+    "mechanism": "DEL"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "Errors propagate for history writes (user sees an error)."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "Nobody.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "ai-crm-copilot.service.ts around line 290.",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "R25",
+   "name": "Mail bounced-address flag",
+   "layer": "redis",
+   "priority": "P1",
+   "location": "apps/api/src/modules/channel-email/mail-limits.ts",
+   "what": "This address bounced; do not mail it.",
+   "key": "bouncedKey(orgId, address)",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "this.bouncedKey(orgId, address)"
+   },
+   "ttl": "MAIL_BOUNCE_BLOCK_DAYS x 86400 s (days, set by the bounce handler)",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "clearBounced(orgId, address) when the address recovers.",
+    "mechanism": "DEL"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "open",
+    "behaviour": "\"mail limits failed open\": a Redis error lets the mail through."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": null,
+    "whoReadsStale": "Sending staff.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "mail-limits.ts mget.",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "R26",
+   "name": "Active-worker and platform health probes",
+   "layer": "redis",
+   "priority": "P1",
+   "location": "apps/api/src/modules/dashboards-analytics-charts/health.service.ts",
+   "what": "A probe key and the outbox sample for the operator health page.",
+   "key": "health:probe, outbox sample key",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Platform plumbing, no tenant data.",
+    "anchor": "health:probe"
+   },
+   "ttl": "10 s / 2x window",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "None.",
+    "mechanism": "Expiry."
+   },
+   "stampede": "in-process single-flight (inflight) + 3 s result copy (M23).",
+   "backingStoreFailure": {
+    "mode": "ignored",
+    "behaviour": "A failing probe is the health signal."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 3,
+    "whoReadsStale": "Operators.",
+    "documentedSeconds": 3,
+    "note": null
+   },
+   "hitMissPoint": "health.service.ts snapshot().",
+   "status": "ok",
+   "tests": [
+    "stampede.spec.ts"
+   ]
+  },
+  {
+   "id": "D01",
+   "name": "Payment-gateway plan cache table",
+   "layer": "database",
+   "priority": "P0",
+   "location": "apps/api/src/modules/platform-payment-gateways/gateway.service.ts",
+   "what": "The plan id a payment gateway created for an (account, currency, amount, interval): created once, reused.",
+   "key": "gateway_plan_cache (gateway, account_hash, currency, amount_minor, interval_unit, interval_count)",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Platform billing (the product company's own gateways); account_hash separates gateway accounts.",
+    "anchor": "gateway_plan_cache"
+   },
+   "ttl": "none (immutable mapping)",
+   "bound": {
+    "kind": "table",
+    "note": "One row per distinct price/cadence."
+   },
+   "invalidation": {
+    "trigger": "None: a gateway plan id does not change; a deleted plan at the provider would need manual repair.",
+    "mechanism": "UPSERT."
+   },
+   "stampede": "unique constraint uq_gateway_plan_cache",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "Database error propagates."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": null,
+    "whoReadsStale": "Billing.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "gateway.service.ts planCache.find().",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "M01",
+   "name": "Realtime audience (who may receive an event)",
+   "layer": "process",
+   "priority": "P0",
+   "location": "apps/api/src/realtime/audience/member-directory.service.ts",
+   "what": "Users of a workspace who hold a permission, used to address realtime events.",
+   "key": "${orgId}:${permission}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "`${orgId}:${permission}`"
+   },
+   "ttl": "30 s",
+   "bound": {
+    "kind": "size-cap",
+    "max": 500,
+    "evicts": "oldest"
+   },
+   "invalidation": {
+    "trigger": "Role or team change this process knows about (invalidate(orgId)); other processes by TTL.",
+    "mechanism": "Map delete by `${orgId}:` prefix"
+   },
+   "stampede": "a failed load is not remembered; parallel misses share nothing",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "No Redis. A person who must lose a room at once is evicted explicitly; joining a room always re-reads live grants (room-access.service.ts)."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 30,
+    "whoReadsStale": "Staff receiving events for conversations they lost access to; the REST fetch re-checks.",
+    "documentedSeconds": 30,
+    "note": null
+   },
+   "hitMissPoint": "member-directory.service.ts cachedViewers().",
+   "status": "ok",
+   "tests": [
+    "tenant-leak.spec.ts",
+    "stale-windows.spec.ts",
+    "bounded-caches.spec.ts"
+   ]
+  },
+  {
+   "id": "M02",
+   "name": "Platform epoch local copy",
+   "layer": "process",
+   "priority": "P0",
+   "location": "apps/api/src/modules/auth/sessions/epoch.service.ts",
+   "what": "The token epoch number.",
+   "key": "single value",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "One number for the whole platform (the token epoch); not tenant data.",
+    "anchor": null
+   },
+   "ttl": "5 s",
+   "bound": {
+    "kind": "singleton"
+   },
+   "invalidation": {
+    "trigger": "bump() refreshes the bumping process.",
+    "mechanism": "assign"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "See R07."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 5,
+    "whoReadsStale": "Other processes.",
+    "documentedSeconds": 5,
+    "note": null
+   },
+   "hitMissPoint": "epoch.service.ts current().",
+   "status": "ok",
+   "tests": [
+    "stale-windows.spec.ts"
+   ]
+  },
+  {
+   "id": "M03",
+   "name": "Platform settings snapshot",
+   "layer": "process",
+   "priority": "P0",
+   "location": "apps/api/src/modules/auth/platform/platform-settings.service.ts",
+   "what": "All platform_settings rows (auth policy, limits, switches).",
+   "key": "single snapshot",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Platform settings (auth policy, limits, switches); the same for every workspace.",
+    "anchor": null
+   },
+   "ttl": "5 s",
+   "bound": {
+    "kind": "singleton"
+   },
+   "invalidation": {
+    "trigger": "Any write through the service (7 sites) calls invalidate().",
+    "mechanism": "snapshot = null"
+   },
+   "stampede": "in-process single-flight (inflight)",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "Database error propagates."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 5,
+    "whoReadsStale": "Other processes.",
+    "documentedSeconds": 5,
+    "note": null
+   },
+   "hitMissPoint": "platform-settings.service.ts snapshot read.",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "M04",
+   "name": "Plan grace days",
+   "layer": "process",
+   "priority": "P0",
+   "location": "apps/api/src/modules/plans-subscriptions-trials/plan-store.ts",
+   "what": "billing.grace_days.",
+   "key": "single value",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "billing.grace_days is one platform setting, not per workspace.",
+    "anchor": null
+   },
+   "ttl": "30 s",
+   "bound": {
+    "kind": "singleton"
+   },
+   "invalidation": {
+    "trigger": "forgetGrace() (tests).",
+    "mechanism": "assign"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "Database error propagates."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 30,
+    "whoReadsStale": "Billing state.",
+    "documentedSeconds": 30,
+    "note": null
+   },
+   "hitMissPoint": "plan-store.ts graceDays().",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "M05",
+   "name": "Impersonation \"still open\" check",
+   "layer": "process",
+   "priority": "P0",
+   "location": "apps/api/src/modules/auth/platform/impersonation.service.ts",
+   "what": "Whether an operator act-as session is still open.",
+   "key": "session uuid",
+   "tenant": {
+    "mode": "id-unique",
+    "org": false,
+    "user": false,
+    "reason": "Keyed by a random impersonation session uuid, globally unique; holds the operator session facts, not workspace records.",
+    "anchor": null
+   },
+   "ttl": "5 s (OPEN_CACHE_MS)",
+   "bound": {
+    "kind": "size-cap",
+    "max": 1000,
+    "evicts": "oldest"
+   },
+   "invalidation": {
+    "trigger": "end() / forget(uuid).",
+    "mechanism": "Map delete"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "Plus Redis tombstone R10."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 5,
+    "whoReadsStale": "Other processes.",
+    "documentedSeconds": 5,
+    "note": null
+   },
+   "hitMissPoint": "impersonation.service.ts assertOpen().",
+   "status": "fixed:D-64-02",
+   "tests": [
+    "bounded-caches.spec.ts"
+   ]
+  },
+  {
+   "id": "M06",
+   "name": "Trial gate \"not expired\" verdict",
+   "layer": "process",
+   "priority": "P0",
+   "location": "apps/api/src/modules/plans-subscriptions-trials/trial-gate.guard.ts",
+   "what": "A workspace's trial has not run out (so every route is allowed).",
+   "key": "${orgId}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "openUntil.get(orgId)"
+   },
+   "ttl": "5 s (OPEN_VERDICT_TTL_MS)",
+   "bound": {
+    "kind": "size-cap",
+    "max": 5000,
+    "evicts": "oldest"
+   },
+   "invalidation": {
+    "trigger": "None: expiry only. A trial that ends is noticed within 5 s.",
+    "mechanism": "n/a"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "open",
+    "behaviour": "An error resolving the plan lets the request through (documented)."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 5,
+    "whoReadsStale": "Workspace staff whose trial just expired.",
+    "documentedSeconds": 5,
+    "note": null
+   },
+   "hitMissPoint": "trial-gate.guard.ts trialExpired().",
+   "status": "fixed:D-64-02",
+   "tests": [
+    "bounded-caches.spec.ts"
+   ]
+  },
+  {
+   "id": "M07",
+   "name": "Pending session revocations",
+   "layer": "process",
+   "priority": "P0",
+   "location": "apps/api/src/modules/auth/sessions/session.service.ts",
+   "what": "Sessions revoked while the Redis tombstone could not be written.",
+   "key": "sid",
+   "tenant": {
+    "mode": "id-unique",
+    "org": false,
+    "user": false,
+    "reason": "Keyed by a random session uuid (sid), globally unique; the value is an expiry time.",
+    "anchor": null
+   },
+   "ttl": "16 min",
+   "bound": {
+    "kind": "ttl-sweep",
+    "note": "Entries expire and are removed when Redis confirms. NOT capped on purpose: dropping an entry would un-revoke a session."
+   },
+   "invalidation": {
+    "trigger": "Redis confirms the tombstone.",
+    "mechanism": "Map delete"
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "closed",
+    "behaviour": "This map is the fail-closed fallback itself."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "Nobody.",
+    "documentedSeconds": 0,
+    "note": null
+   },
+   "hitMissPoint": "session.service.ts isRevocationPending().",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "M08",
+   "name": "Consent settings per workspace",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/modules/contact-consent/consent-settings.service.ts",
+   "what": "Compiled opt-in / opt-out keywords and the consent switches.",
+   "key": "${orgId}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "this.cache.get(orgId)"
+   },
+   "ttl": "60 s (CONSENT_CACHE_MS)",
+   "bound": {
+    "kind": "size-cap",
+    "max": 2000,
+    "evicts": "oldest"
+   },
+   "invalidation": {
+    "trigger": "Save in the saving process; other processes by TTL.",
+    "mechanism": "invalidate(orgId)"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "Database error propagates."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 60,
+    "whoReadsStale": "Other processes.",
+    "documentedSeconds": 60,
+    "note": null
+   },
+   "hitMissPoint": "consent-settings.service.ts effective().",
+   "status": "fixed:D-64-02",
+   "tests": [
+    "bounded-caches.spec.ts",
+    "tenant-leak.spec.ts",
+    "stampede.spec.ts"
+   ]
+  },
+  {
+   "id": "M09",
+   "name": "Minor-contact rule per workspace",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/modules/contact-consent/consent-policy.service.ts",
+   "what": "What marketing may do with contacts flagged as minors.",
+   "key": "${orgId}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "this.minorRules.get(orgId)"
+   },
+   "ttl": "60 s (MINOR_RULE_CACHE_MS)",
+   "bound": {
+    "kind": "size-cap",
+    "max": 2000,
+    "evicts": "oldest"
+   },
+   "invalidation": {
+    "trigger": "invalidateMinorRule(orgId) in the saving process.",
+    "mechanism": "Map delete"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "Database error propagates."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 60,
+    "whoReadsStale": "Other processes.",
+    "documentedSeconds": 60,
+    "note": null
+   },
+   "hitMissPoint": "consent-policy.service.ts minorRule().",
+   "status": "fixed:D-64-02",
+   "tests": [
+    "bounded-caches.spec.ts"
+   ]
+  },
+  {
+   "id": "M10",
+   "name": "Notification preferences per workspace",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/modules/notifications/notification-prefs.resolver.ts",
+   "what": "Owner toggles for notification types.",
+   "key": "${orgId}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "this.cache.get(orgId)"
+   },
+   "ttl": "5 s (ttlMs)",
+   "bound": {
+    "kind": "size-cap",
+    "max": 500,
+    "evicts": "clear all"
+   },
+   "invalidation": {
+    "trigger": "forget(orgId) / clear() after a save.",
+    "mechanism": "Map delete"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "Database error propagates."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 5,
+    "whoReadsStale": "Other processes.",
+    "documentedSeconds": 5,
+    "note": null
+   },
+   "hitMissPoint": "notification-prefs.resolver.ts stored().",
+   "status": "ok",
+   "tests": [
+    "tenant-leak.spec.ts",
+    "stale-windows.spec.ts"
+   ]
+  },
+  {
+   "id": "M11",
+   "name": "Mail branding footer",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/modules/auth/security/branding-footer.service.ts",
+   "what": "The footer appended to mails, per workspace.",
+   "key": "${orgId}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "this.cache.get(orgId)"
+   },
+   "ttl": "60 s (CACHE_MS)",
+   "bound": {
+    "kind": "size-cap",
+    "max": 5000,
+    "evicts": "clear all"
+   },
+   "invalidation": {
+    "trigger": "bustFooterCache() bumps Redis version counters (per workspace or platform); each process compares the version.",
+    "mechanism": "INCR of FooterKeys.* (durable counter, no TTL by design)"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "Version read error = recompute."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 60,
+    "whoReadsStale": "Other processes if the version bump failed.",
+    "documentedSeconds": 60,
+    "note": null
+   },
+   "hitMissPoint": "branding-footer.service.ts resolve().",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "M12",
+   "name": "Persona view and definition",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/modules/persona/persona.service.ts",
+   "what": "Resolved UI persona for a workspace and the persona definitions.",
+   "key": "${orgId}:${epoch}:${rev}:${personaKey}@${version}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "const viewKey = `${orgId}:${row.epoch}:${row.rev}:${row.personaKey}@${version}`"
+   },
+   "ttl": "30 s views / definitions until changed, missing 5 s",
+   "bound": {
+    "kind": "size-cap",
+    "max": 5000,
+    "evicts": "oldest",
+    "note": "definitions: 200"
+   },
+   "invalidation": {
+    "trigger": "The key contains the row revision, so a change is a new key.",
+    "mechanism": "n/a"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "Database error propagates."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 30,
+    "whoReadsStale": "Staff.",
+    "documentedSeconds": 30,
+    "note": null
+   },
+   "hitMissPoint": "persona.service.ts view().",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "M13",
+   "name": "Calendar connection row (Google, Microsoft)",
+   "layer": "process",
+   "priority": "P0",
+   "location": "apps/api/src/modules/appointments-booking/google-calendar-tokens.service.ts",
+   "what": "The workspace's calendar connection including encrypted tokens (Microsoft: same, in microsoft-calendar-tokens.service.ts).",
+   "key": "${orgId}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "this.rows.get(orgId)"
+   },
+   "ttl": "15 s (CONNECTION_TTL_MS)",
+   "bound": {
+    "kind": "size-cap",
+    "max": 1000,
+    "evicts": "oldest"
+   },
+   "invalidation": {
+    "trigger": "invalidate(orgId) on connect / disconnect / refresh failure.",
+    "mechanism": "Map delete"
+   },
+   "stampede": "refresh single-flight per workspace (refreshing map)",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "Database error propagates."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 15,
+    "whoReadsStale": "Other processes (after a disconnect).",
+    "documentedSeconds": 15,
+    "note": null
+   },
+   "hitMissPoint": "google-calendar-tokens.service.ts connection().",
+   "status": "fixed:D-64-02",
+   "tests": [
+    "bounded-caches.spec.ts"
+   ]
+  },
+  {
+   "id": "M14",
+   "name": "Calendar free/busy answer",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/modules/appointments-booking/google-calendar.adapter.ts",
+   "what": "Busy intervals of the workspace calendar (Microsoft: same file pattern).",
+   "key": "${orgId}|...",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "key.startsWith(`${orgId}|`)"
+   },
+   "ttl": "short (BUSY_CACHE ttl)",
+   "bound": {
+    "kind": "size-cap",
+    "max": 300,
+    "evicts": "oldest"
+   },
+   "invalidation": {
+    "trigger": "forget(orgId) after our own write.",
+    "mechanism": "Map delete by prefix"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "ignored",
+    "behaviour": "A failed read marks the workspace failedAt and the booking is not blocked."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 60,
+    "whoReadsStale": "Visitors booking.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "google-calendar.adapter.ts busyCache.get().",
+   "status": "ok",
+   "tests": [
+    "bounded-caches.spec.ts"
+   ]
+  },
+  {
+   "id": "M15",
+   "name": "Calendar provider preference",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/modules/appointments-booking/calendar-providers.service.ts",
+   "what": "Which calendar provider the workspace uses.",
+   "key": "${orgId}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "this.preferences.get(orgId)"
+   },
+   "ttl": "10 s (PREFERENCE_TTL_MS)",
+   "bound": {
+    "kind": "size-cap",
+    "max": 2000,
+    "evicts": "oldest"
+   },
+   "invalidation": {
+    "trigger": "Map delete on change.",
+    "mechanism": "Map delete"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "Database error propagates."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 10,
+    "whoReadsStale": "Other processes.",
+    "documentedSeconds": 10,
+    "note": null
+   },
+   "hitMissPoint": "calendar-providers.service.ts preference().",
+   "status": "fixed:D-64-02",
+   "tests": [
+    "bounded-caches.spec.ts"
+   ]
+  },
+  {
+   "id": "M16",
+   "name": "Webhook-forward target",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/modules/webhook-fanout/webhook-targets.repository.ts",
+   "what": "Delivery settings of one platform webhook-forward target (includes the encrypted auth header).",
+   "key": "target id",
+   "tenant": {
+    "mode": "id-unique",
+    "org": false,
+    "user": false,
+    "reason": "Row id of a platform-level table (webhook_forward_targets); not tenant data.",
+    "anchor": "this.cache.get(id)"
+   },
+   "ttl": "10 s (ttlMs)",
+   "bound": {
+    "kind": "size-cap",
+    "max": 500,
+    "evicts": "oldest"
+   },
+   "invalidation": {
+    "trigger": "invalidate(id?) after edit in the editing process.",
+    "mechanism": "Map delete"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "Database error propagates."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 10,
+    "whoReadsStale": "Other processes: a deleted/switched-off target may still get a delivery.",
+    "documentedSeconds": 10,
+    "note": null
+   },
+   "hitMissPoint": "webhook-targets.repository.ts deliveryTarget().",
+   "status": "fixed:D-64-02",
+   "tests": [
+    "bounded-caches.spec.ts"
+   ]
+  },
+  {
+   "id": "M17",
+   "name": "Wallet \"send ok\" short-cut",
+   "layer": "process",
+   "priority": "P0",
+   "location": "apps/api/src/modules/wallet-message-billing/wallet-gate.service.ts",
+   "what": "This workspace could afford a send a moment ago.",
+   "key": "${orgId}:...",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "const key = `${req.orgId}|"
+   },
+   "ttl": "3 s (SEND_OK_TTL_MS)",
+   "bound": {
+    "kind": "size-cap",
+    "max": 500,
+    "evicts": "clear all"
+   },
+   "invalidation": {
+    "trigger": "None.",
+    "mechanism": "expiry"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "Database error propagates."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 3,
+    "whoReadsStale": "A drained wallet can still send for 3 s.",
+    "documentedSeconds": 3,
+    "note": null
+   },
+   "hitMissPoint": "wallet-gate.service.ts sendOk.get().",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "M18",
+   "name": "Message price cards",
+   "layer": "process",
+   "priority": "P0",
+   "location": "apps/api/src/modules/wallet-message-billing/meta-rate-card.service.ts",
+   "what": "Meta price per market and category, and the platform rate card.",
+   "key": "currency / single rows",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Platform price list, same for every workspace.",
+    "anchor": null
+   },
+   "ttl": "30 s (CACHE_MS)",
+   "bound": {
+    "kind": "finite-domain",
+    "note": "One entry per currency; cleared on import."
+   },
+   "invalidation": {
+    "trigger": "invalidate() after an import.",
+    "mechanism": "Map clear"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "Database error propagates."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 30,
+    "whoReadsStale": "Other processes after a price import.",
+    "documentedSeconds": 30,
+    "note": null
+   },
+   "hitMissPoint": "meta-rate-card.service.ts costs.get(); rate-card.service.ts cache.",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "M19",
+   "name": "Currency table",
+   "layer": "process",
+   "priority": "P0",
+   "location": "apps/api/src/modules/platform-settings-branding-storage/currency.service.ts",
+   "what": "Currencies and exchange data.",
+   "key": "single snapshot",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "The currency table is platform-wide and the same for every workspace.",
+    "anchor": null
+   },
+   "ttl": "60 s (CACHE_MS)",
+   "bound": {
+    "kind": "singleton"
+   },
+   "invalidation": {
+    "trigger": "Admin write sets cache = null.",
+    "mechanism": "assign"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "Database error propagates."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 60,
+    "whoReadsStale": "Other processes.",
+    "documentedSeconds": 60,
+    "note": null
+   },
+   "hitMissPoint": "currency.service.ts.",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "M20",
+   "name": "Module registry snapshot",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/modules/addons-extension-registry/module-registry.service.ts",
+   "what": "Which modules / add-ons are on.",
+   "key": "single snapshot",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "The module registry (which add-ons are on) is platform-wide, not per workspace.",
+    "anchor": null
+   },
+   "ttl": "ADDONS_REGISTRY_TTL_MS (default 30 s)",
+   "bound": {
+    "kind": "singleton"
+   },
+   "invalidation": {
+    "trigger": "invalidate().",
+    "mechanism": "assign null"
+   },
+   "stampede": "in-process single-flight (inflight)",
+   "backingStoreFailure": {
+    "mode": "ignored",
+    "behaviour": "Failure yields \"no contributions\" and the next call retries."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 30,
+    "whoReadsStale": "Other processes.",
+    "documentedSeconds": 30,
+    "note": null
+   },
+   "hitMissPoint": "module-registry.service.ts snapshot().",
+   "status": "ok",
+   "tests": [
+    "stampede.spec.ts"
+   ]
+  },
+  {
+   "id": "M21",
+   "name": "Provider router and WhatsApp provider resolver snapshots",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/modules/localization-translation/provider-router.service.ts",
+   "what": "Routing rows for translation providers (5 s) and WhatsApp provider list (15 s).",
+   "key": "single snapshot",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Routing configuration of translation and WhatsApp providers; platform-wide.",
+    "anchor": null
+   },
+   "ttl": "5 s / 15 s",
+   "bound": {
+    "kind": "singleton"
+   },
+   "invalidation": {
+    "trigger": "invalidate()",
+    "mechanism": "assign null"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "DB error propagates."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 15,
+    "whoReadsStale": "Other processes.",
+    "documentedSeconds": 15,
+    "note": null
+   },
+   "hitMissPoint": "provider-router.service.ts, whatsapp-provider-resolver.ts.",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "M22",
+   "name": "API docs and health snapshots",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/modules/developer-rest-api-v1/docs/api-v1-docs.service.ts",
+   "what": "Generated OpenAPI document (60 s) and platform health (3 s).",
+   "key": "single value",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Platform data, no tenant content.",
+    "anchor": null
+   },
+   "ttl": "60 s / 3 s",
+   "bound": {
+    "kind": "singleton"
+   },
+   "invalidation": {
+    "trigger": "None.",
+    "mechanism": "expiry"
+   },
+   "stampede": "health: single-flight",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "n/a"
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 60,
+    "whoReadsStale": "Developers / operators.",
+    "documentedSeconds": 60,
+    "note": null
+   },
+   "hitMissPoint": "api-v1-docs.service.ts, health.service.ts snapshot().",
+   "status": "ok",
+   "tests": [
+    "stampede.spec.ts"
+   ]
+  },
+  {
+   "id": "M23",
+   "name": "Inbox channel and subject lookups",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/modules/node-bridge-runtime/inbox/inbox-bridge.service.ts",
+   "what": "uuid of the inbox channel of a device and thread subjects (also history-import.sink.ts channels).",
+   "key": "${orgId}:${deviceId}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "`${ctx.orgId}:${ctx.deviceId}`"
+   },
+   "ttl": "60 s",
+   "bound": {
+    "kind": "size-cap",
+    "max": 5000,
+    "evicts": "oldest",
+    "note": "subjects: clear above 2000"
+   },
+   "invalidation": {
+    "trigger": "expiry",
+    "mechanism": "n/a"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "Database error propagates."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 60,
+    "whoReadsStale": "Message routing.",
+    "documentedSeconds": 60,
+    "note": null
+   },
+   "hitMissPoint": "inbox-bridge.service.ts channelOf().",
+   "status": "fixed:D-64-02",
+   "tests": [
+    "bounded-caches.spec.ts"
+   ]
+  },
+  {
+   "id": "M24",
+   "name": "Display-id reservations",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/kernel/identifiers/display-id.service.ts",
+   "what": "A block of 100 reserved display numbers per workspace and module.",
+   "key": "${orgId}:${moduleKey}",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "`${orgId}:${moduleKey}`"
+   },
+   "ttl": "until used up",
+   "bound": {
+    "kind": "size-cap",
+    "max": 5000,
+    "evicts": "oldest",
+    "note": "an evicted block leaves a gap in the numbers, which is accepted by design"
+   },
+   "invalidation": {
+    "trigger": "reset() (tests).",
+    "mechanism": "Map clear"
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "Database error propagates."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": null,
+    "whoReadsStale": "Nobody.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "display-id.service.ts next().",
+   "status": "fixed:D-64-02",
+   "tests": [
+    "bounded-caches.spec.ts"
+   ]
+  },
+  {
+   "id": "M25",
+   "name": "Time-zone helpers",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/modules/appointments-booking/tz.ts",
+   "what": "Intl.DateTimeFormat objects and valid-zone answers (also ics-feed-parser.ts validZones, sla-calculator.ts formatters).",
+   "key": "time-zone name",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Pure function of the zone name.",
+    "anchor": null
+   },
+   "ttl": "none (pure)",
+   "bound": {
+    "kind": "size-cap",
+    "max": 500,
+    "evicts": "oldest",
+    "note": "validZones 1000; the zone name in a calendar feed is attacker-controlled"
+   },
+   "invalidation": {
+    "trigger": "n/a",
+    "mechanism": "n/a"
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "n/a"
+   },
+   "staleWindow": {
+    "worstCaseSeconds": null,
+    "whoReadsStale": "Nobody.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "n/a",
+   "status": "fixed:D-64-02",
+   "tests": [
+    "bounded-caches.spec.ts"
+   ]
+  },
+  {
+   "id": "M26",
+   "name": "Throttle markers",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/kernel/activity/activity.service.ts",
+   "what": "Last \"touch\" per workspace (activity.service), last realtime wallet publish (wallet-realtime.publisher), recent PQL calls per user (pql.service).",
+   "key": "id",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "this.lastTouch.delete(orgId)"
+   },
+   "ttl": "10 min / 1.5 s / 60 s",
+   "bound": {
+    "kind": "size-cap",
+    "max": 50000,
+    "evicts": "clear all",
+    "note": "wallet-realtime 5000, pql 1000 with sweep"
+   },
+   "invalidation": {
+    "trigger": "n/a",
+    "mechanism": "n/a"
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "n/a"
+   },
+   "staleWindow": {
+    "worstCaseSeconds": null,
+    "whoReadsStale": "Nobody.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "n/a",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "M27",
+   "name": "In-flight sharing and token refresh",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/modules/analytics/query/analytics-query.service.ts",
+   "what": "Maps of promises for calls in progress: analytics inFlight, uploader inFlight, token refreshing (google, microsoft, mail, conferencing), meeting running. Each entry is removed in a `finally` when the call ends.",
+   "key": "same as the call",
+   "tenant": {
+    "mode": "mixed",
+    "org": false,
+    "user": false,
+    "reason": "The analytics key carries the workspace id (an:v1:${q.orgId}); token-refresh maps are keyed by workspace id; the media uploader key carries the content hash and orgId.",
+    "anchor": null
+   },
+   "ttl": "duration of one call",
+   "bound": {
+    "kind": "in-flight",
+    "note": "bounded by concurrency, not by history"
+   },
+   "invalidation": {
+    "trigger": "finally { delete }",
+    "mechanism": "Map delete"
+   },
+   "stampede": "this IS the stampede protection",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "n/a"
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "Nobody.",
+    "documentedSeconds": 0,
+    "note": null
+   },
+   "hitMissPoint": "n/a",
+   "status": "ok",
+   "tests": [
+    "stampede.spec.ts"
+   ]
+  },
+  {
+   "id": "M28",
+   "name": "Memory fallbacks of Redis caches",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/api/src/infra/providers/whatsapp/media/upload-cache.ts",
+   "what": "MemoryUploadedMediaCache and MemoryTranslationStores: used in tests or when no Redis is bound.",
+   "key": "same as R15 / R19",
+   "tenant": {
+    "mode": "org",
+    "org": true,
+    "user": false,
+    "anchor": "wa:media-id:${p.orgId}"
+   },
+   "ttl": "per entry",
+   "bound": {
+    "kind": "size-cap",
+    "max": 10000,
+    "evicts": "oldest"
+   },
+   "invalidation": {
+    "trigger": "expiry on read",
+    "mechanism": "Map delete"
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "n/a"
+   },
+   "staleWindow": {
+    "worstCaseSeconds": null,
+    "whoReadsStale": "Nobody.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "n/a",
+   "status": "fixed:D-64-02",
+   "tests": [
+    "bounded-caches.spec.ts"
+   ]
+  },
+  {
+   "id": "M29",
+   "name": "Google OIDC signing keys",
+   "layer": "process",
+   "priority": "P0",
+   "location": "apps/api/src/infra/providers/channel-email/google-oidc.verifier.ts",
+   "what": "Google's published JWKS used to verify Pub/Sub push tokens.",
+   "key": "kid",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Google public signing keys; the same for everyone and not secret.",
+    "anchor": null
+   },
+   "ttl": "Cache-Control max-age from Google; unknown kid re-read at most every 2 s",
+   "bound": {
+    "kind": "finite-domain",
+    "note": "replaced as a whole on each fetch"
+   },
+   "invalidation": {
+    "trigger": "unknown kid forces a re-read.",
+    "mechanism": "replace map"
+   },
+   "stampede": "rate-limited re-read",
+   "backingStoreFailure": {
+    "mode": "closed",
+    "behaviour": "\"Fails closed: with no keys available nothing verifies.\""
+   },
+   "staleWindow": {
+    "worstCaseSeconds": null,
+    "whoReadsStale": "Nobody.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "google-oidc.verifier.ts.",
+   "status": "ok",
+   "tests": []
+  },
+  {
+   "id": "Q01",
+   "name": "Auth prefetch",
+   "layer": "request",
+   "priority": "P0",
+   "location": "apps/api/src/common/context/auth-prefetch.ts",
+   "what": "The Redis reads of the gate, suspension and RBAC checks, started together by JwtAuthGuard and handed to each check once. Not a cache of decisions.",
+   "key": "AsyncLocalStorage of the request",
+   "tenant": {
+    "mode": "id-unique",
+    "org": false,
+    "user": false,
+    "reason": "Lives in the request context of one request; also checked for the same org and user.",
+    "anchor": null
+   },
+   "ttl": "one request",
+   "bound": {
+    "kind": "request-scoped"
+   },
+   "invalidation": {
+    "trigger": "n/a",
+    "mechanism": "taken once, then removed"
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "to-source",
+    "behaviour": "A failed read is replaced by the consumer's own fresh read."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "Nobody.",
+    "documentedSeconds": 0,
+    "note": null
+   },
+   "hitMissPoint": "n/a",
+   "status": "ok",
+   "tests": [
+    "(existing) auth-prefetch.spec.ts"
+   ]
+  },
+  {
+   "id": "Q02",
+   "name": "React cache() in the web app",
+   "layer": "request",
+   "priority": "P0",
+   "location": "apps/web/src/features/auth-registration-security/shared/session.server.ts",
+   "what": "getRequestSession = cache(getSession), loadRegistrationConfig, loadPasswordPolicy: React's per-request memo for server rendering.",
+   "key": "per request",
+   "tenant": {
+    "mode": "id-unique",
+    "org": false,
+    "user": false,
+    "reason": "React cache() lives for one server request only.",
+    "anchor": null
+   },
+   "ttl": "one request",
+   "bound": {
+    "kind": "request-scoped"
+   },
+   "invalidation": {
+    "trigger": "n/a",
+    "mechanism": "n/a"
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "n/a"
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "Nobody.",
+    "documentedSeconds": 0,
+    "note": null
+   },
+   "hitMissPoint": "n/a",
+   "status": "ok",
+   "tests": [
+    "web cache-audit.test.ts"
+   ]
+  },
+  {
+   "id": "N01",
+   "name": "Next.js data cache for platform pages",
+   "layer": "next",
+   "priority": "P1",
+   "location": "apps/web/src/app/manifest.webmanifest/route.ts",
+   "what": "fetch(..., { next: { revalidate: 300 } }) for manifest.webmanifest, team-inbox-manifest, sitemap.xml, robots.txt (300 s) the public API reference page (60 s) and the public site settings (30 s): public platform pages, the same for everybody; none forwards a cookie or Authorization.",
+   "key": "URL",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Public platform pages; no tenant or user data; no credentials forwarded.",
+    "anchor": null
+   },
+   "ttl": "300 s",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "None.",
+    "mechanism": "revalidate"
+   },
+   "stampede": "Next.js request coalescing",
+   "backingStoreFailure": {
+    "mode": "ignored",
+    "behaviour": "A failed fetch answers 404 / default."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 300,
+    "whoReadsStale": "Anyone.",
+    "documentedSeconds": 300,
+    "note": null
+   },
+   "hitMissPoint": "n/a",
+   "status": "ok",
+   "tests": [
+    "web cache-audit.test.ts"
+   ]
+  },
+  {
+   "id": "N02",
+   "name": "Next.js response headers",
+   "layer": "next",
+   "priority": "P0",
+   "location": "apps/web/next.config.ts",
+   "what": "headers(): every page `no-store, no-cache, must-revalidate, private, max-age=0` where listed (NO_STORE_PAGES, /q/*, /book/*); /sw.js always revalidated; the rest follow Next defaults (dynamic pages are not cached).",
+   "key": "path",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "These are response headers, not stored data; nothing is cached on the server.",
+    "anchor": null
+   },
+   "ttl": "n/a",
+   "bound": {
+    "kind": "headers"
+   },
+   "invalidation": {
+    "trigger": "n/a",
+    "mechanism": "n/a"
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "n/a"
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "Nobody.",
+    "documentedSeconds": 0,
+    "note": null
+   },
+   "hitMissPoint": "n/a",
+   "status": "ok",
+   "tests": [
+    "web cache-audit.test.ts"
+   ]
+  },
+  {
+   "id": "N03",
+   "name": "Web frame-policy memo",
+   "layer": "process",
+   "priority": "P1",
+   "location": "apps/web/src/features/web-forms/lib/frame-headers.ts",
+   "what": "Frame-ancestors policy of a published form, per form key, in the Next server process.",
+   "key": "form key",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Public form definition; key is the public form route.",
+    "anchor": null
+   },
+   "ttl": "30 s",
+   "bound": {
+    "kind": "size-cap",
+    "max": 500,
+    "evicts": "clear all"
+   },
+   "invalidation": {
+    "trigger": "resetFrameCache() (tests).",
+    "mechanism": "clear"
+   },
+   "stampede": "none",
+   "backingStoreFailure": {
+    "mode": "ignored",
+    "behaviour": "A failed fetch memoises null for 30 s."
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 30,
+    "whoReadsStale": "Visitors of a form.",
+    "documentedSeconds": 30,
+    "note": null
+   },
+   "hitMissPoint": "frame-headers.ts frameAncestorsFor().",
+   "status": "ok",
+   "tests": [
+    "web cache-audit.test.ts"
+   ]
+  },
+  {
+   "id": "H01",
+   "name": "Default response cache header for credentialed requests",
+   "layer": "http",
+   "priority": "P0",
+   "location": "apps/api/src/modules/auth/middleware-security-headers.ts",
+   "what": "Any API request that carries Authorization or a cookie gets `Cache-Control: private, no-store`; paths in NO_STORE get `no-store, no-cache, must-revalidate, private, max-age=0`. A controller may override.",
+   "key": "every request",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "This is a response header, not stored data; nothing is cached on the server.",
+    "anchor": null
+   },
+   "ttl": "n/a",
+   "bound": {
+    "kind": "headers"
+   },
+   "invalidation": {
+    "trigger": "n/a",
+    "mechanism": "n/a"
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "n/a"
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "Nobody.",
+    "documentedSeconds": 0,
+    "note": null
+   },
+   "hitMissPoint": "n/a",
+   "status": "ok",
+   "tests": [
+    "ratchet.spec.ts"
+   ]
+  },
+  {
+   "id": "H02",
+   "name": "Private browser cache for media",
+   "layer": "http",
+   "priority": "P1",
+   "location": "apps/api/src/infra/providers/chat-conversations/media/media.controller.ts",
+   "what": "`private, max-age=300` on chat media, email attachments, developer-API media, widget cover (private), team-chat file (private, 3600).",
+   "key": "URL (authenticated)",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Header; the response is for the authenticated caller and is `private`.",
+    "anchor": null
+   },
+   "ttl": "300 s (3600 s team chat)",
+   "bound": {
+    "kind": "headers"
+   },
+   "invalidation": {
+    "trigger": "n/a",
+    "mechanism": "n/a"
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "n/a"
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 300,
+    "whoReadsStale": "The same browser.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "n/a",
+   "status": "ok",
+   "tests": [
+    "ratchet.spec.ts"
+   ]
+  },
+  {
+   "id": "H03",
+   "name": "Private immutable images with a version in the URL",
+   "layer": "http",
+   "priority": "P1",
+   "location": "apps/api/src/modules/auth/controllers/account.controller.ts",
+   "what": "`private, max-age=31536000, immutable` + ETag on the avatar, workspace brand assets and the invoice logo. The URL carries `?v=<etag>`, so a new file is a new URL.",
+   "key": "URL with ?v=etag",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "`private`; per authenticated user or workspace, and the version is in the URL.",
+    "anchor": null
+   },
+   "ttl": "1 year (immutable)",
+   "bound": {
+    "kind": "headers"
+   },
+   "invalidation": {
+    "trigger": "A new upload changes the etag and therefore the URL.",
+    "mechanism": "URL change"
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "n/a"
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "Nobody (new URL).",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "n/a",
+   "status": "ok",
+   "tests": [
+    "ratchet.spec.ts"
+   ]
+  },
+  {
+   "id": "H04",
+   "name": "Public immutable assets (capability URLs)",
+   "layer": "http",
+   "priority": "P1",
+   "location": "apps/api/src/modules/flow-builder-editor/flow-media.controller.ts",
+   "what": "`public, max-age=31536000, immutable` on flow media (org uuid + random stored name), chatbot widget assets (flowId/slot?v=etag) and public booking pictures (uuid or brand-logo). Public on purpose: embedded on third-party pages.",
+   "key": "URL",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Public by design: the address is the credential (random uuid / stored name) and the content is meant for the public page.",
+    "anchor": null
+   },
+   "ttl": "1 year",
+   "bound": {
+    "kind": "headers"
+   },
+   "invalidation": {
+    "trigger": "New upload = new name / etag in the URL.",
+    "mechanism": "URL change"
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "n/a"
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 0,
+    "whoReadsStale": "Nobody.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "n/a",
+   "status": "ok",
+   "tests": [
+    "ratchet.spec.ts"
+   ]
+  },
+  {
+   "id": "H05",
+   "name": "Public short-lived JSON and ETag",
+   "layer": "http",
+   "priority": "P1",
+   "location": "apps/api/src/modules/forms-builder/public-forms.controller.ts",
+   "what": "`public, max-age=30` on the public form definition (+ ETag / 304), `public, max-age=60` on the workspace trust page and API docs, `public, max-age=30|300` on platform public settings, `no-cache, must-revalidate` on the chat widget script.",
+   "key": "URL (route key / slug)",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Public pages of a published form / trust page; the URL names the workspace, content is intended to be public.",
+    "anchor": null
+   },
+   "ttl": "30 s to 300 s",
+   "bound": {
+    "kind": "headers"
+   },
+   "invalidation": {
+    "trigger": "n/a",
+    "mechanism": "n/a"
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "n/a"
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 300,
+    "whoReadsStale": "Public visitors / shared caches.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "n/a",
+   "status": "ok",
+   "tests": [
+    "ratchet.spec.ts"
+   ]
+  },
+  {
+   "id": "C01",
+   "name": "TanStack Query defaults (staff web app)",
+   "layer": "client",
+   "priority": "P0",
+   "location": "apps/web/src/app/providers.tsx",
+   "what": "One QueryClient for the whole app: staleTime 30 s, gcTime = library default 5 min, retry on 5xx. Cached lists, settings, permissions of the signed-in user in browser memory.",
+   "key": "queryKey (mostly NOT containing the workspace or user)",
+   "tenant": {
+    "mode": "per-session",
+    "org": false,
+    "user": false,
+    "reason": "The cache is one per browser tab and is cleared on workspace switch (workspace-switcher.tsx) and, after fix D-64-05, on every sign-out (full page navigation). Keys do not carry org or user ids, so clearing on identity change is what makes it safe.",
+    "anchor": "staleTime: 30_000"
+   },
+   "ttl": "30 s fresh, 5 min kept",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "Mutations call invalidateQueries; workspace switch clear(); sign-out full navigation.",
+    "mechanism": "QueryClient"
+   },
+   "stampede": "TanStack deduplicates parallel identical queries",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "n/a"
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 30,
+    "whoReadsStale": "The same person in the same tab (fresh for 30 s, then refetched; shown stale up to 5 min while refetching).",
+    "documentedSeconds": 30,
+    "note": null
+   },
+   "hitMissPoint": "n/a",
+   "status": "fixed:D-64-05",
+   "tests": [
+    "user-menu.logout-cache.render.test.tsx",
+    "web cache-audit.test.ts"
+   ]
+  },
+  {
+   "id": "C02",
+   "name": "Per-screen staleTime / gcTime overrides",
+   "layer": "client",
+   "priority": "P1",
+   "location": "apps/web/src/features",
+   "what": "`staleTime: Infinity` for static reference data, `staleTime: 0` + `gcTime: 0` for secrets (QR, MFA setup), 5 s to 5 min for lists. Counts are in the report.",
+   "key": "queryKey",
+   "tenant": {
+    "mode": "per-session",
+    "org": false,
+    "user": false,
+    "reason": "Same as C01: one cache per browser tab, cleared on workspace switch and sign-out."
+   },
+   "ttl": "see C01",
+   "bound": {
+    "kind": "ttl"
+   },
+   "invalidation": {
+    "trigger": "as C01",
+    "mechanism": "QueryClient"
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "n/a"
+   },
+   "staleWindow": {
+    "worstCaseSeconds": 300,
+    "whoReadsStale": "Same person.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "n/a",
+   "status": "ok",
+   "tests": [
+    "web cache-audit.test.ts"
+   ]
+  },
+  {
+   "id": "C03",
+   "name": "Browser storage preferences",
+   "layer": "browser",
+   "priority": "P1",
+   "location": "apps/web/src/lib/use-stored-value.ts",
+   "what": "localStorage / sessionStorage: UI preferences (columns, tabs, cookie consent) and sign-up form stage (non-secret). No tokens, no tenant records.",
+   "key": "fixed keys",
+   "tenant": {
+    "mode": "per-session",
+    "org": false,
+    "user": false,
+    "reason": "Per browser; holds no tenant data or credentials."
+   },
+   "ttl": "until cleared",
+   "bound": {
+    "kind": "none"
+   },
+   "invalidation": {
+    "trigger": "n/a",
+    "mechanism": "n/a"
+   },
+   "stampede": "n/a",
+   "backingStoreFailure": {
+    "mode": "n/a",
+    "behaviour": "n/a"
+   },
+   "staleWindow": {
+    "worstCaseSeconds": null,
+    "whoReadsStale": "Same browser.",
+    "documentedSeconds": null,
+    "note": null
+   },
+   "hitMissPoint": "n/a",
+   "status": "ok",
+   "tests": [
+    "web cache-audit.test.ts"
+   ]
+  }
+ ],
+ "redisFamilies": [
+  {
+   "id": "S01",
+   "name": "Sign-in, sign-up and MFA challenges",
+   "priority": "P0",
+   "kind": "challenge",
+   "files": [
+    "modules/auth/flows/login.service.ts",
+    "modules/auth/flows/signup.service.ts",
+    "modules/auth/flows/social-auth.service.ts",
+    "modules/auth/security/mfa.service.ts",
+    "modules/auth/security/webauthn.service.ts",
+    "modules/auth/platform/operator-auth.service.ts",
+    "modules/auth/flows/login-alert.service.ts",
+    "modules/auth/maintenance/otp-template-refresh.service.ts"
+   ],
+   "keys": "auth:mfa:*, auth:wschoice:*, auth:mfa-try:*, auth:signup*, auth:social:*, auth:mfa-setup:${orgId}:*, auth:wa-reg:*, auth:wa-login:*, auth:alert:${orgId}:*",
+   "tenant": {
+    "mode": "mixed",
+    "org": false,
+    "user": false,
+    "reason": "Keyed by the hash of a random one-time token (no tenant data in the key); where a person is named the key carries orgId (mfa-setup, alert)."
+   },
+   "ttl": "5 to 30 min; sign-up stage up to 7 d",
+   "failure": "Closed (503) in production: a challenge that cannot be stored cannot be answered."
+  },
+  {
+   "id": "S02",
+   "name": "Login lockouts and OTP / mail send counters",
+   "priority": "P0",
+   "kind": "counter",
+   "files": [
+    "modules/auth/security/account-attack.service.ts",
+    "modules/auth/security/rate-limit.service.ts",
+    "modules/auth/security/send-policy.service.ts"
+   ],
+   "keys": "auth:lock:${orgId}:*, auth:ipfail:*, auth:acct-fail:${pool}:${orgId}:*, auth:known-nets:${pool}:${orgId}:*, auth:mfa-fail:*:${orgId}:*, auth:otp-phone:*, auth:send-min:${orgId}:*, auth:send-day:${orgId}:*",
+   "tenant": {
+    "mode": "mixed",
+    "org": false,
+    "user": false,
+    "reason": "Per-person keys carry orgId; per-address and per-phone counters are global by design (an attacker is not a tenant) and hold only numbers."
+   },
+   "ttl": "window length (60 s to 90 d for known networks)",
+   "failure": "Closed in production (503), open elsewhere (platform failure mode)."
+  },
+  {
+   "id": "S03",
+   "name": "Public endpoint and API-key throttles",
+   "priority": "P1",
+   "kind": "counter",
+   "files": [
+    "modules/public-api/api-key-access.service.ts",
+    "modules/appointments-booking/public-throttle.ts",
+    "modules/broadcasts/tracking/link-redirect.service.ts",
+    "modules/crm/sales-docs/public-link-throttle.ts",
+    "modules/crm/segments/segment-throttle.ts",
+    "modules/forms-builder/form-throttle.ts",
+    "modules/forms-links-groups/wa-link-redirect-throttle.ts",
+    "modules/leads/lead-throttle.ts",
+    "modules/marketplace/hook-throttle.ts",
+    "modules/platform-infrastructure/rate-limit/rate-limiter.ts",
+    "modules/whatsapp-devices-baileys/device-limits.service.ts",
+    "modules/faq-knowledge/faq-match.service.ts",
+    "modules/faq-knowledge/faq-verify.service.ts",
+    "modules/broadcasts/send-safety.ts",
+    "modules/notifications/notification.publisher.ts",
+    "modules/notifications/push-subscriptions.service.ts",
+    "modules/catalog-products/catalog-concierge.service.ts",
+    "modules/shopify-woocommerce/concierge.service.ts",
+    "modules/node-bridge-runtime/runtime/group-limiter.ts",
+    "modules/whatsapp-devices-baileys/device-groups.service.ts",
+    "modules/whatsapp-devices-baileys/device-groups-sweep.service.ts",
+    "infra/redis/incr-with-ttl.ts"
+   ],
+   "keys": "per IP / per public token / per workspace counters with a time bucket or an EXPIRE (apikey:authfail:*, ratelimit:apikey:*, link_hits:*, faq:rate:${orgId}:*, store_rl:*, ...)",
+   "tenant": {
+    "mode": "mixed",
+    "org": false,
+    "user": false,
+    "reason": "Public throttles are keyed by client address or public token (no tenant data); workspace-level ones carry orgId. Values are counters."
+   },
+   "ttl": "60 s to 2 d (all set atomically since D-64-01)",
+   "failure": "Open: a throttle protects against abuse; a Redis outage must not become an API outage (RateLimiter.degraded flag, logged)."
+  },
+  {
+   "id": "S04",
+   "name": "Public channel inbound throttles",
+   "priority": "P1",
+   "kind": "counter",
+   "files": [
+    "modules/channel-line/inbound.service.ts",
+    "modules/channel-telegram/inbound.service.ts",
+    "modules/channel-viber/inbound.service.ts",
+    "modules/channel-wechat/inbound.service.ts",
+    "modules/chatbot-widget/widget-throttle.service.ts",
+    "modules/crm/invoicing/invoice-public.service.ts",
+    "modules/storefront-builder/public/public-rate-limiter.ts"
+   ],
+   "keys": "line_hits:*, tg_hits:*, viber_hits:*, wechat_hits:*, wgt:hits:*, invoicing:rl:*, store_rl:*",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Keyed by the public webhook token or client address plus a one-minute bucket; the value is a counter."
+   },
+   "ttl": "120 s (set with the first hit in one transaction since D-64-01)",
+   "failure": "Open (counter reads 0)."
+  },
+  {
+   "id": "S05",
+   "name": "Locks and leases",
+   "priority": "P1",
+   "kind": "lock",
+   "files": [
+    "modules/platform-infrastructure/coordination/redis-lock.service.ts",
+    "modules/node-bridge-runtime/runtime/wa-redis.ts",
+    "modules/appointments-booking/calendar-backfill.jobs.ts",
+    "modules/appointments-booking/calendar-reconcile.jobs.ts",
+    "modules/appointments-booking/ics-feeds.jobs.ts",
+    "modules/calling-voice/calling-readiness.service.ts",
+    "modules/channel-wechat/broadcast-sender.service.ts",
+    "modules/channel-wechat/wechat-token.service.ts",
+    "modules/faq-knowledge/faq-embed.worker.ts"
+   ],
+   "keys": "lock:* with a random owner token and PX / EX",
+   "tenant": {
+    "mode": "mixed",
+    "org": false,
+    "user": false,
+    "reason": "Names of jobs and per-device leases; the value is a random owner token."
+   },
+   "ttl": "seconds to minutes",
+   "failure": "A lock that cannot be taken means the job does not run (safe)."
+  },
+  {
+   "id": "S06",
+   "name": "Replay and duplicate markers",
+   "priority": "P1",
+   "kind": "dedupe",
+   "files": [
+    "modules/whatsapp-cloud-api-waba/waba-ingest.service.ts",
+    "modules/shopify-woocommerce/webhook.service.ts",
+    "modules/shopify-woocommerce/webhook-pipeline.service.ts",
+    "modules/forms-builder/form-notification.consumer.ts",
+    "modules/marketplace/subscription-notifications.consumer.ts",
+    "modules/platform-payment-gateways/subscription-notifications.consumer.ts",
+    "modules/workspaces-teams-tenancy/lifecycle/lifecycle-notification.consumer.ts",
+    "modules/flow-runtime-engine/runtime/nodes/integrations/google-form-poll.service.ts",
+    "modules/node-bridge-runtime/runtime/routers.ts"
+   ],
+   "keys": "SET NX with an id from the provider (message id, order id, form submission id)",
+   "tenant": {
+    "mode": "mixed",
+    "org": false,
+    "user": false,
+    "reason": "Provider message ids are globally unique; where a tenant could collide the key carries orgId (wa:in:${orgId}:..., flr:gform:${orgId}:...)."
+   },
+   "ttl": "hours to 14 d",
+   "failure": "Open for dedupe (a duplicate may be processed once more)."
+  },
+  {
+   "id": "S07",
+   "name": "Device runtime, inbox bridge and pairing state",
+   "priority": "P1",
+   "kind": "state",
+   "files": [
+    "modules/node-bridge-runtime/runtime/device-runtime.service.ts",
+    "modules/node-bridge-runtime/runtime/device-control.service.ts",
+    "modules/node-bridge-runtime/inbox/inbox-bridge.service.ts",
+    "modules/node-bridge-runtime/inbox/qr-channel.adapter.ts",
+    "modules/whatsapp-devices-baileys/device-pairing.service.ts",
+    "modules/whatsapp-devices-baileys/history-import.sink.ts",
+    "modules/platform-infrastructure/observability/worker-heartbeat.service.ts"
+   ],
+   "keys": "wa:qr|code|status:${orgId}:${deviceId}, wa:cmd:*, inbox sent/inbound-media keys, history tallies, worker heartbeat",
+   "tenant": {
+    "mode": "mixed",
+    "org": false,
+    "user": false,
+    "reason": "Device state carries orgId + deviceId; command results and heartbeats are keyed by a random id."
+   },
+   "ttl": "60 s to 3 d",
+   "failure": "Pairing and sending degrade; no authorisation decision depends on them."
+  },
+  {
+   "id": "S08",
+   "name": "Realtime tickets and presence",
+   "priority": "P0",
+   "kind": "state",
+   "files": [
+    "realtime/ticket/realtime-ticket.service.ts",
+    "realtime/visibility-presence.service.ts",
+    "modules/team-chat/presence.service.ts"
+   ],
+   "keys": "single-use realtime ticket (random), presence keys with orgId and userId",
+   "tenant": {
+    "mode": "mixed",
+    "org": false,
+    "user": false,
+    "reason": "A realtime ticket is a random single-use token whose value holds the claims; presence keys carry orgId and userId."
+   },
+   "ttl": "seconds to 2 min",
+   "failure": "No ticket = no socket (closed)."
+  },
+  {
+   "id": "S09",
+   "name": "WhatsApp Cloud throughput governor",
+   "priority": "P1",
+   "kind": "counter",
+   "files": [
+    "infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts"
+   ],
+   "keys": "per phone-number-id second / minute counters and config hashes",
+   "tenant": {
+    "mode": "global",
+    "org": false,
+    "user": false,
+    "reason": "Meta phone-number-id is globally unique; values are counters and platform config. One hash (govKeys.global) is durable by design."
+   },
+   "ttl": "seconds to hours",
+   "failure": "Open: the governor is advisory."
+  },
+  {
+   "id": "S10",
+   "name": "Cache-version counters (durable)",
+   "priority": "P1",
+   "kind": "version",
+   "files": [
+    "modules/auth/security/branding-footer.service.ts"
+   ],
+   "keys": "FooterKeys.platform, FooterKeys.org(orgId)",
+   "tenant": {
+    "mode": "mixed",
+    "org": false,
+    "user": false,
+    "reason": "A counter per workspace and one for the platform."
+   },
+   "ttl": "none on purpose: a version counter must not reset (INCR only goes up)",
+   "failure": "A failed bump is not an error: the cache also expires on its own."
+  }
+ ],
+ "redisWriters": {
+  "common/interceptors/idempotency.interceptor.ts": "R20",
+  "infra/providers/localization-translation/redis-stores.ts": "R15",
+  "infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts": "S09",
+  "infra/providers/whatsapp/media/upload-cache.ts": "R19",
+  "infra/redis/incr-with-ttl.ts": "S03",
+  "kernel/rbac/rbac.service.ts": "R01",
+  "modules/ai-copilot-lead-finder/ai-crm-copilot.service.ts": "R24",
+  "modules/analytics/query/analytics-query.service.ts": "R11",
+  "modules/appointments-booking/booking-page-themes.cache.ts": "R17",
+  "modules/appointments-booking/calendar-backfill.jobs.ts": "S05",
+  "modules/appointments-booking/calendar-reconcile.jobs.ts": "S05",
+  "modules/appointments-booking/ics-feeds.jobs.ts": "S05",
+  "modules/appointments-booking/public-throttle.ts": "S03",
+  "modules/auth/flows/login-alert.service.ts": "S01",
+  "modules/auth/flows/login.service.ts": "S01",
+  "modules/auth/flows/signup.service.ts": "S01",
+  "modules/auth/flows/social-auth.service.ts": "S01",
+  "modules/auth/maintenance/otp-template-refresh.service.ts": "S01",
+  "modules/auth/platform/impersonation.service.ts": "R10",
+  "modules/auth/platform/operator-auth.service.ts": "S01",
+  "modules/auth/security/account-attack.service.ts": "S02",
+  "modules/auth/security/account-gate.service.ts": "R04",
+  "modules/auth/security/branding-footer.service.ts": "S10",
+  "modules/auth/security/emergency-halt.service.ts": "R08",
+  "modules/auth/security/mfa.service.ts": "S01",
+  "modules/auth/security/org-suspension.service.ts": "R05",
+  "modules/auth/security/rate-limit.service.ts": "S02",
+  "modules/auth/security/send-policy.service.ts": "S02",
+  "modules/auth/security/webauthn.service.ts": "S01",
+  "modules/auth/sessions/epoch.service.ts": "R07",
+  "modules/auth/sessions/partner-agent-status.service.ts": "R06",
+  "modules/auth/sessions/session.service.ts": "R09",
+  "modules/broadcasts/send-safety.ts": "S03",
+  "modules/broadcasts/tracking/link-redirect.service.ts": "S03",
+  "modules/calling-voice/calling-readiness.service.ts": "S05",
+  "modules/campaigns/summary/campaign-summary.service.ts": "R12",
+  "modules/catalog-products/catalog-concierge.service.ts": "S03",
+  "modules/channel-email/mail-limits.ts": "R25",
+  "modules/channel-line/inbound.service.ts": "S04",
+  "modules/channel-sms/sms-senders.service.ts": "R13",
+  "modules/channel-telegram/inbound.service.ts": "S04",
+  "modules/channel-viber/inbound.service.ts": "S04",
+  "modules/channel-wechat/broadcast-sender.service.ts": "S05",
+  "modules/channel-wechat/inbound.service.ts": "S04",
+  "modules/channel-wechat/wechat-token.service.ts": "S05",
+  "modules/chat-conversations/channel-dispatcher.service.ts": "R22",
+  "modules/chatbot-widget/widget-throttle.service.ts": "S04",
+  "modules/crm/invoicing/invoice-public.service.ts": "S04",
+  "modules/crm/sales-docs/public-link-throttle.ts": "S03",
+  "modules/crm/segments/segment-throttle.ts": "S03",
+  "modules/dashboards-analytics-charts/health.service.ts": "R26",
+  "modules/faq-knowledge/faq-embed.worker.ts": "S05",
+  "modules/faq-knowledge/faq-embedding.service.ts": "R14",
+  "modules/faq-knowledge/faq-match.service.ts": "S03",
+  "modules/faq-knowledge/faq-verify.service.ts": "S03",
+  "modules/flow-runtime-engine/runtime/nodes/integrations/google-form-poll.service.ts": "S06",
+  "modules/forms-builder/form-notification.consumer.ts": "S06",
+  "modules/forms-builder/form-throttle.ts": "S03",
+  "modules/forms-links-groups/wa-link-redirect-throttle.ts": "S03",
+  "modules/leads/lead-throttle.ts": "S03",
+  "modules/localization-translation/languages.service.ts": "R16",
+  "modules/marketplace/hook-throttle.ts": "S03",
+  "modules/marketplace/subscription-notifications.consumer.ts": "S06",
+  "modules/node-bridge-runtime/inbox/inbox-bridge.service.ts": "S07",
+  "modules/node-bridge-runtime/inbox/qr-channel.adapter.ts": "S07",
+  "modules/node-bridge-runtime/runtime/device-control.service.ts": "S07",
+  "modules/node-bridge-runtime/runtime/device-runtime.service.ts": "S07",
+  "modules/node-bridge-runtime/runtime/group-limiter.ts": "S03",
+  "modules/node-bridge-runtime/runtime/routers.ts": "S06",
+  "modules/node-bridge-runtime/runtime/wa-redis.ts": "S05",
+  "modules/notifications/conversation-read-state.ts": "R23",
+  "modules/notifications/notification.publisher.ts": "S03",
+  "modules/notifications/push-subscriptions.service.ts": "S03",
+  "modules/platform-infrastructure/coordination/redis-lock.service.ts": "S05",
+  "modules/platform-infrastructure/observability/worker-heartbeat.service.ts": "S07",
+  "modules/platform-infrastructure/rate-limit/rate-limiter.ts": "S03",
+  "modules/platform-payment-gateways/subscription-notifications.consumer.ts": "S06",
+  "modules/public-api/api-key-access.service.ts": "S03",
+  "modules/roles-permissions/platform-rbac.service.ts": "R03",
+  "modules/shopify-woocommerce/concierge.service.ts": "S03",
+  "modules/shopify-woocommerce/webhook-pipeline.service.ts": "S06",
+  "modules/shopify-woocommerce/webhook.service.ts": "S06",
+  "modules/storefront-builder/public/checkout.service.ts": "R21",
+  "modules/storefront-builder/public/public-rate-limiter.ts": "S04",
+  "modules/team-chat/presence.service.ts": "S08",
+  "modules/whatsapp-cloud-api-waba/waba-groups-admin.service.ts": "R18",
+  "modules/whatsapp-cloud-api-waba/waba-ingest.service.ts": "S06",
+  "modules/whatsapp-devices-baileys/device-groups-sweep.service.ts": "S03",
+  "modules/whatsapp-devices-baileys/device-groups.service.ts": "S03",
+  "modules/whatsapp-devices-baileys/device-limits.service.ts": "S03",
+  "modules/whatsapp-devices-baileys/device-pairing.service.ts": "S07",
+  "modules/whatsapp-devices-baileys/history-import.sink.ts": "S07",
+  "modules/workspaces-teams-tenancy/lifecycle/lifecycle-notification.consumer.ts": "S06",
+  "realtime/ticket/realtime-ticket.service.ts": "S08",
+  "realtime/visibility-presence.service.ts": "S08"
+ },
+ "redisNoTtlAllowed": {
+  "modules/auth/sessions/epoch.service.ts": "Durable mirror of a Postgres setting (R07): a flushed Redis is refilled from Postgres; an expiring epoch would silently re-validate revoked tokens.",
+  "modules/auth/security/branding-footer.service.ts": "Version counter (S10): INCR only; a counter that expires would reset to 1 and make old cached footers look current.",
+  "infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts": "govKeys.global hash is the governor's durable platform config; every other key in the file expires.",
+  "modules/node-bridge-runtime/runtime/group-limiter.ts": "DECR undoes an INCR on a key that was created with an expiry in the same MULTI.",
+  "modules/platform-infrastructure/observability/worker-heartbeat.service.ts": "Sorted set of live workers; members older than the window are removed on every write and the set holds one member per worker.",
+  "realtime/visibility-presence.service.ts": "Sorted set; EXPIRE is set in the same MULTI.",
+  "modules/whatsapp-devices-baileys/history-import.sink.ts": "Tallies are given EXPIRE once the import ends (TALLY_TTL_S); during a run they must not expire.",
+  "modules/auth/security/account-attack.service.ts": "SADD followed by EXPIRE in the same try block; the set is trimmed by SPOP above MAX_KNOWN_NETWORKS."
+ },
+ "inProcessFields": {
+  "infra/providers/catalog-products/fixture.catalog.provider.ts#metaProducts": {
+   "allow": "Test double (fixture / fake adapter) that is only bound when the provider is set to the fixture; it never runs against real tenants."
+  },
+  "infra/providers/catalog-products/fixture.catalog.provider.ts#pushed": {
+   "allow": "Test double (fixture / fake adapter) that is only bound when the provider is set to the fixture; it never runs against real tenants."
+  },
+  "infra/providers/catalog-products/fixture.catalog.provider.ts#erroredHandles": {
+   "allow": "Test double (fixture / fake adapter) that is only bound when the provider is set to the fixture; it never runs against real tenants."
+  },
+  "infra/providers/catalog-products/fixture.catalog.provider.ts#inProgressHandles": {
+   "allow": "Test double (fixture / fake adapter) that is only bound when the provider is set to the fixture; it never runs against real tenants."
+  },
+  "infra/providers/catalog-products/fixture.catalog.provider.ts#rejectRecipients": {
+   "allow": "Test double (fixture / fake adapter) that is only bound when the provider is set to the fixture; it never runs against real tenants."
+  },
+  "infra/providers/catalog-products/fixture.catalog.provider.ts#failNext": {
+   "allow": "Test double (fixture / fake adapter) that is only bound when the provider is set to the fixture; it never runs against real tenants."
+  },
+  "infra/providers/catalog-products/fixture.catalog.provider.ts#wabaCatalogs": {
+   "allow": "Test double (fixture / fake adapter) that is only bound when the provider is set to the fixture; it never runs against real tenants."
+  },
+  "infra/providers/catalog-products/fixture.catalog.provider.ts#productSets": {
+   "allow": "Test double (fixture / fake adapter) that is only bound when the provider is set to the fixture; it never runs against real tenants."
+  },
+  "infra/providers/flow-builder-editor/fixture-bot-publisher.ts#failedOnce": {
+   "allow": "Test double (fixture / fake adapter) that is only bound when the provider is set to the fixture; it never runs against real tenants."
+  },
+  "infra/providers/meeting-conferencing/fake-video.adapter.ts#rooms": {
+   "allow": "Test double (fixture / fake adapter) that is only bound when the provider is set to the fixture; it never runs against real tenants."
+  },
+  "infra/providers/meeting-conferencing/fake-video.adapter.ts#accounts": {
+   "allow": "Test double (fixture / fake adapter) that is only bound when the provider is set to the fixture; it never runs against real tenants."
+  },
+  "infra/providers/meeting-conferencing/fake-video.adapter.ts#expiredTokens": {
+   "allow": "Test double (fixture / fake adapter) that is only bound when the provider is set to the fixture; it never runs against real tenants."
+  },
+  "infra/providers/storefront-builder/dns-resolver.adapters.ts#fixtureCnames": {
+   "allow": "Test double (fixture / fake adapter) that is only bound when the provider is set to the fixture; it never runs against real tenants."
+  },
+  "infra/providers/platform-payment-gateways/asia.drivers.ts#verified": {
+   "allow": "The payment driver is created fresh for every call by GatewayService.driverFor(), so this map lives for one request and is thrown away with the driver."
+  },
+  "infra/providers/platform-payment-gateways/europe.drivers.ts#verified": {
+   "allow": "The payment driver is created fresh for every call by GatewayService.driverFor(), so this map lives for one request and is thrown away with the driver."
+  },
+  "infra/providers/platform-payment-gateways/francophone.drivers.ts#verified": {
+   "allow": "The payment driver is created fresh for every call by GatewayService.driverFor(), so this map lives for one request and is thrown away with the driver."
+  },
+  "infra/providers/platform-payment-gateways/saas.drivers.ts#verified": {
+   "allow": "The payment driver is created fresh for every call by GatewayService.driverFor(), so this map lives for one request and is thrown away with the driver."
+  },
+  "infra/providers/platform-payment-gateways/us.drivers.ts#seen": {
+   "allow": "The payment driver is created fresh for every call by GatewayService.driverFor(), so this map lives for one request and is thrown away with the driver."
+  },
+  "infra/providers/telephony/telephony.registry.ts#byKey": {
+   "allow": "Provider registry filled once at module start from the injected providers; its size is the number of providers, not a function of traffic."
+  },
+  "infra/providers/whatsapp-cloud-api-waba/waba-registry-routes.ts#byKey": {
+   "allow": "Provider registry filled once at module start from the injected providers; its size is the number of providers, not a function of traffic."
+  },
+  "modules/auth/security/webhook-secret-registry.ts#rotators": {
+   "allow": "Provider registry filled once at module start from the injected providers; its size is the number of providers, not a function of traffic."
+  },
+  "modules/broadcasts/engine-senders.ts#senders": {
+   "allow": "Provider registry filled once at module start from the injected providers; its size is the number of providers, not a function of traffic."
+  },
+  "modules/channel-email/drivers/mail-driver.registry.ts#drivers": {
+   "allow": "Provider registry filled once at module start from the injected providers; its size is the number of providers, not a function of traffic."
+  },
+  "modules/checkout-orders-merchant-payments/gateways/gateway-payment.registry.ts#settlers": {
+   "allow": "Provider registry filled once at module start from the injected providers; its size is the number of providers, not a function of traffic."
+  },
+  "modules/node-bridge-runtime/outbound/outbound-registry.service.ts#transports": {
+   "allow": "Provider registry filled once at module start from the injected providers; its size is the number of providers, not a function of traffic."
+  },
+  "modules/webhook-retry/webhook-retry.service.ts#handlers": {
+   "allow": "Provider registry filled once at module start from the injected providers; its size is the number of providers, not a function of traffic."
+  },
+  "infra/providers/whatsapp/media/whatsapp-outbound-media.uploader.ts#inFlight": {
+   "cache": "M27"
+  },
+  "modules/analytics/query/analytics-query.service.ts#inFlight": {
+   "cache": "M27"
+  },
+  "modules/appointments-booking/google-calendar-tokens.service.ts#refreshing": {
+   "cache": "M27"
+  },
+  "modules/appointments-booking/microsoft-calendar-tokens.service.ts#refreshing": {
+   "cache": "M27"
+  },
+  "modules/channel-email/mail-tokens.service.ts#refreshing": {
+   "cache": "M27"
+  },
+  "modules/meeting-conferencing/conferencing-tokens.service.ts#refreshing": {
+   "cache": "M27"
+  },
+  "modules/meeting-conferencing/meeting-conferencing.service.ts#running": {
+   "cache": "M27"
+  },
+  "modules/auth/sessions/session.service.ts#unconfirmedTombstones": {
+   "cache": "M07"
+  },
+  "modules/node-bridge-runtime/runtime/device-runtime.service.ts#owned": {
+   "allow": "Devices this worker currently holds a lease on; removed on release or lost lease, so the size is the number of devices assigned to the worker, not history."
+  },
+  "modules/node-bridge-runtime/runtime/device-runtime.service.ts#orgOffLogged": {
+   "allow": "Log de-duplication marker (one number per workspace with unofficial WhatsApp switched off); removed when the workspace is allowed again. About 8 bytes per workspace; accepted."
+  },
+  "modules/plans-subscriptions-trials/plan-entitlement.service.ts#warned": {
+   "allow": "One entry per plan slug that is missing from the catalogue (a log-once marker); finite and tiny."
+  },
+  "modules/platform-settings-branding-storage/media-storage.service.ts#ensured": {
+   "allow": "Bucket names this process has already created; the set of buckets is configuration, not traffic."
+  },
+  "modules/wallet-message-billing/meta-rate-card.service.ts#costs": {
+   "cache": "M18"
+  },
+  "infra/providers/channel-email/google-oidc.verifier.ts#keys": {
+   "cache": "M29"
+  },
+  "kernel/activity/activity.service.ts#lastTouch": {
+   "cache": "M26"
+  },
+  "modules/appointments-booking/google-calendar.adapter.ts#busyCache": {
+   "cache": "M14"
+  },
+  "modules/appointments-booking/microsoft-calendar.adapter.ts#busyCache": {
+   "cache": "M14"
+  },
+  "modules/auth/security/branding-footer.service.ts#cache": {
+   "cache": "M11"
+  },
+  "modules/contacts-pql/pql.service.ts#recent": {
+   "cache": "M26"
+  },
+  "modules/node-bridge-runtime/inbox/inbox-bridge.service.ts#subjects": {
+   "cache": "M23"
+  },
+  "modules/notifications/notification-prefs.resolver.ts#cache": {
+   "cache": "M10"
+  },
+  "modules/persona/persona.service.ts#views": {
+   "cache": "M12"
+  },
+  "modules/persona/persona.service.ts#definitions": {
+   "cache": "M12"
+  },
+  "modules/wallet-message-billing/wallet-gate.service.ts#sendOk": {
+   "cache": "M17"
+  },
+  "modules/wallet-message-billing/wallet-realtime.publisher.ts#last": {
+   "cache": "M26"
+  },
+  "modules/webhook-fanout/webhook-forward.processor.ts#tallies": {
+   "allow": "Counters accumulated between flushes; flushed and replaced with an empty map on a timer (webhook-forward.processor.ts flush), and capped."
+  },
+  "realtime/audience/member-directory.service.ts#cache": {
+   "cache": "M01"
+  },
+  "modules/appointments-booking/calendar-providers.service.ts#preferences": {
+   "cache": "M15"
+  },
+  "modules/appointments-booking/google-calendar-tokens.service.ts#rows": {
+   "cache": "M13"
+  },
+  "modules/appointments-booking/microsoft-calendar-tokens.service.ts#rows": {
+   "cache": "M13"
+  },
+  "modules/contact-consent/consent-policy.service.ts#minorRules": {
+   "cache": "M09"
+  },
+  "modules/contact-consent/consent-settings.service.ts#cache": {
+   "cache": "M08"
+  },
+  "modules/plans-subscriptions-trials/trial-gate.guard.ts#openUntil": {
+   "cache": "M06"
+  },
+  "modules/webhook-fanout/webhook-targets.repository.ts#cache": {
+   "cache": "M16"
+  }
+ },
+ "httpPublicAllowed": {
+  "apps/api/src/modules/compliance-center/public-trust.controller.ts": "Public trust page of a workspace (no sign-in); the slug in the URL names the workspace and the content is meant to be public. 60 s.",
+  "apps/api/src/modules/flow-builder-editor/flow-media.controller.ts": "Flow media served by capability URL (workspace uuid + random stored name), embedded on public pages; content-security-policy sandbox; immutable because the name never gets new content.",
+  "apps/api/src/modules/forms-builder/public-forms.controller.ts": "Public form definition and assets of a published form (no sign-in), 30 s with ETag; assets 300 s.",
+  "apps/api/src/modules/chatbot-widget/widget-public.controller.ts": "Chat widget assets addressed by flow uuid + slot with ?v=etag in the URL; embedded on third-party sites.",
+  "apps/api/src/modules/appointments-booking/public-booking.controller.ts": "Booking page pictures addressed by workspace slug + uuid; public page content.",
+  "apps/api/src/modules/developer-rest-api-v1/docs/api-v1-docs.controller.ts": "Generated OpenAPI document; contains no tenant data.",
+  "apps/api/src/modules/platform-settings-branding-storage/public.controller.ts": "Platform public settings, logos and favicon (branding of the product itself).",
+  "apps/web/src/app/manifest.webmanifest/route.ts": "Platform web manifest; same for everyone.",
+  "apps/web/src/app/team-inbox-manifest.webmanifest/route.ts": "Platform Team Inbox manifest; same for everyone.",
+  "apps/web/src/app/sitemap.xml/route.ts": "Platform sitemap; same for everyone.",
+  "apps/web/src/app/robots.txt/route.ts": "Platform robots.txt; same for everyone."
+ },
+ "rbacWriters": {
+  "apps/api/src/modules/admin/roles/roles.repository.ts": "roles.service.ts calls RbacService.bumpRolesVersion after create-grants/update/delete (2 sites).",
+  "apps/api/src/modules/admin/users/users.repository.ts": "users.service.ts bumps when roles changed (rolesChanged).",
+  "apps/api/src/modules/workspaces-teams-tenancy/members.repository.ts": "members.service.ts bumps after a role change and after removing a member (2 sites).",
+  "apps/api/src/modules/auth/platform/tenant-directory.ts": "Creates the first admin of a brand-new workspace: no grant set can be cached for it yet.",
+  "apps/api/src/modules/auth/cli/seed-auth.ts": "Offline seeding command; a running API would see new grants after the cached version expires (600 s). Recorded as risk R-64-04.",
+  "apps/api/src/modules/team-chat/cli/demo-members.ts": "Offline demo-data command; same as seed-auth."
+ },
+ "webNextCacheUsers": {
+  "apps/web/src/app/manifest.webmanifest/route.ts": "Platform web manifest, 300 s; the fetch sends no cookie and no Authorization header and the answer is the same for everyone.",
+  "apps/web/src/app/team-inbox-manifest.webmanifest/route.ts": "Platform Team Inbox manifest, 300 s; no credentials, same for everyone.",
+  "apps/web/src/app/sitemap.xml/route.ts": "Platform sitemap, 300 s; no credentials, same for everyone.",
+  "apps/web/src/app/robots.txt/route.ts": "Platform robots.txt, 300 s; no credentials, same for everyone.",
+  "apps/web/src/features/platform-settings-branding-storage/site/site-config.ts": "Public site settings (brand, SEO, theme, banner), 30 s, plus React cache() per request; the fetch sends only an Accept header, same for everyone.",
+  "apps/web/src/features/developer-rest-api-v1/docs/lib/load-spec.ts": "Public API reference page (GET /docs/api.json, no key), 60 s; the fetch sends only an Accept header, same for everyone."
+ }
+}
