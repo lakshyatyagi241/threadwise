@@ -55,10 +55,6 @@
         "title": "Thiết bị đẩy đã thu hồi",
         "description": "Trình duyệt và điện thoại đã ngừng nhận thông báo đẩy. Được giữ trong thời gian ngắn để thiết bị quay lại có thể bật lại thông báo, sau đó bị xóa."
       },
-      "faq_match_log": {
-        "title": "Nhật ký khớp FAQ",
-        "description": "FAQ nào đã trả lời tin nhắn nào của khách hàng, được giữ để cho mỗi luồng thấy câu trả lời hiệu quả ra sao. Bị xóa sau số ngày trực tiếp."
-      },
       "assignment_runs": {
         "title": "Nhật ký lượt phân công",
         "description": "Bản ghi của mỗi lượt tự động phân công liên hệ, gồm ai nhận gì và vì sao. Bị xóa sau số ngày trực tiếp."

@@ -55,10 +55,6 @@
         "title": "Revoked push devices",
         "description": "Browsers and phones that stopped accepting push notifications. Kept briefly so a device that comes back can switch notifications on again, then deleted."
       },
-      "faq_match_log": {
-        "title": "FAQ match log",
-        "description": "Which FAQ answered which customer message, kept to show each flow how its answers perform. Deleted after the live days."
-      },
       "assignment_runs": {
         "title": "Assignment run log",
         "description": "The record of each automatic contact assignment run, with who got what and why. Deleted after the live days."

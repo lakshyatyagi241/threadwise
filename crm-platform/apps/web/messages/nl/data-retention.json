@@ -55,10 +55,6 @@
         "title": "Ingetrokken pushapparaten",
         "description": "Browsers en telefoons die geen pushmeldingen meer accepteren. Ze worden kort bewaard zodat een apparaat dat terugkomt meldingen weer kan inschakelen, en daarna verwijderd."
       },
-      "faq_match_log": {
-        "title": "FAQ-matchlogboek",
-        "description": "Welke FAQ welk klantbericht heeft beantwoord, bewaard om elke flow te laten zien hoe zijn antwoorden presteren. Verwijderd na de live dagen."
-      },
       "assignment_runs": {
         "title": "Logboek van toewijzingsruns",
         "description": "Het verslag van elke automatische contacttoewijzing: wie wat kreeg en waarom. Verwijderd na de live dagen."

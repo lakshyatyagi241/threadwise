@@ -3,7 +3,6 @@ import { ApiLibraryRetentionService } from '../../../src/modules/api-library/api
 import { CallLogRetentionService } from '../../../src/modules/calling-voice/logging/call-log-retention.service';
 import { CallRecordingRetentionService } from '../../../src/modules/calling-voice/call-recording-retention.service';
 import { AssignmentRunSweepService } from '../../../src/modules/crm/contact-assignment/assignment-run-sweep.service';
-import { FaqRetentionService } from '../../../src/modules/knowledge-base/faq-retention.service';
 import { FlowRunRetentionService } from '../../../src/modules/flow-runtime-engine/runtime/flow-run-retention.service';
 import { FormRetentionSweepService } from '../../../src/modules/forms-builder/form-retention-sweep.service';
 import { LeadRetentionSweepService } from '../../../src/modules/leads/lead-retention-sweep.service';
@@ -78,15 +77,6 @@ type Case = {
 };
 
 const cases: Case[] = [
-  {
-    item: 'faq_match_log',
-    builtIn: 90,
-    run: async (saved) => {
-      const logs = { purgeOlderThan: vi.fn(async () => 0) };
-      await new FaqRetentionService(database(saved).db as never, logs as never).sweep();
-      return (logs.purgeOlderThan.mock.calls[0] as unknown[])[1] as number;
-    },
-  },
   {
     item: 'assignment_runs',
     builtIn: 90,

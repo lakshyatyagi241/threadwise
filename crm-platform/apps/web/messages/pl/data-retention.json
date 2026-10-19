@@ -55,10 +55,6 @@
         "title": "Odwołane urządzenia push",
         "description": "Przeglądarki i telefony, które przestały przyjmować powiadomienia push. Są krótko przechowywane, aby wracające urządzenie mogło ponownie włączyć powiadomienia, a następnie usuwane."
       },
-      "faq_match_log": {
-        "title": "Dziennik dopasowań FAQ",
-        "description": "Które FAQ odpowiedziało na którą wiadomość klienta; służy do pokazania każdemu przepływowi, jak sprawdzają się jego odpowiedzi. Usuwany po upływie aktywnych dni."
-      },
       "assignment_runs": {
         "title": "Dziennik uruchomień przypisywania",
         "description": "Zapis każdego uruchomienia automatycznego przypisywania kontaktów: kto co otrzymał i dlaczego. Usuwany po upływie aktywnych dni."

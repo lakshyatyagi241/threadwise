@@ -45,10 +45,6 @@ export const BULK_TABLES = new Set([
   'keyword_reply_contents',
   'chatbot_widgets',
   'ai_chat_assistants',
-  // the FAQ feature (step faq_knowledge): verified by reconcile/faq.ts; faq_match_logs stays in the baseline (empty)
-  'faqs',
-  'faq_variations',
-  'faq_settings',
   // stage 2 lead data: verified by reconcile/leads.ts against the independent oracle (reconcile/oracle-leads.ts); the outbox and notifications stay in the baseline (empty)
   'lead_sources',
   'lead_events',

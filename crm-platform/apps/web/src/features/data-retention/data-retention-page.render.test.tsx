@@ -92,7 +92,6 @@ describe.each(['en', 'ar'] as const)('Data retention page (%s)', (locale) => {
       'notifications_read',
       'notifications_unread',
       'push_devices_revoked',
-      'faq_match_log',
       'assignment_runs',
       'form_events',
       'lead_sync_runs',
@@ -114,7 +113,7 @@ describe.each(['en', 'ar'] as const)('Data retention page (%s)', (locale) => {
     const html = page(
       overview({}, [
         item('an_events', { source: 'custom', liveDays: 30, archiveDays: 120, rowVersion: 1 }),
-        item('faq_match_log'),
+        item('assignment_runs'),
         item('audit_log', { liveDays: 365, archiveDays: null }),
       ]),
       locale,
@@ -123,10 +122,10 @@ describe.each(['en', 'ar'] as const)('Data retention page (%s)', (locale) => {
     expect(html).toContain('data-testid="retention-input-live-an_events"');
     expect(html).toContain('data-testid="retention-input-archive-an_events"');
     // A table that cannot be archived has no archive field.
-    expect(html).not.toContain('data-testid="retention-input-archive-faq_match_log"');
+    expect(html).not.toContain('data-testid="retention-input-archive-assignment_runs"');
     // 30 days live + 120 archived = deleted for good after 150 days; a database-only item is deleted after its live days.
     expect(html).toMatch(/retention-deleted-an_events"[^>]*>[^<]*150/);
-    expect(html).toMatch(/retention-deleted-faq_match_log"[^>]*>[^<]*90/);
+    expect(html).toMatch(/retention-deleted-assignment_runs"[^>]*>[^<]*90/);
     // An archive kept for ever is never deleted.
     expect(html).toMatch(/retention-deleted-audit_log"[^>]*>(?!\s*\d)/);
   });

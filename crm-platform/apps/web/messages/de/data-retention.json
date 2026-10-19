@@ -55,10 +55,6 @@
         "title": "Widerrufene Push-Geräte",
         "description": "Browser und Handys, die keine Push-Benachrichtigungen mehr annehmen. Sie werden kurz aufbewahrt, damit ein Gerät, das zurückkehrt, Benachrichtigungen wieder aktivieren kann, und dann gelöscht."
       },
-      "faq_match_log": {
-        "title": "FAQ-Trefferprotokoll",
-        "description": "Welche FAQ welche Kundennachricht beantwortet hat, aufbewahrt, um jedem Flow zu zeigen, wie seine Antworten abschneiden. Wird nach den Live-Tagen gelöscht."
-      },
       "assignment_runs": {
         "title": "Zuweisungslauf-Protokoll",
         "description": "Die Aufzeichnung jedes automatischen Kontaktzuweisungslaufs, mit Angabe, wer was bekam und warum. Wird nach den Live-Tagen gelöscht."

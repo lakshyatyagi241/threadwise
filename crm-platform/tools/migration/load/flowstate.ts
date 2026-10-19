@@ -1,7 +1,6 @@
 import { NdjsonDirSource } from '../extract/source';
 import { docKeys, toDate, type Doc } from '../util';
 import { connect, sql, withPrivileged, withTenant } from './db';
-import { armFaqs } from './faq';
 
 /**
  * flow-state: the loader imports every flow unpublished and inactive (so a load can never arm anything). This separate, explicit step
@@ -13,7 +12,6 @@ import { armFaqs } from './faq';
  * write of this tool). REFUSED while a WhatsApp channel of the organization is connected: a live trigger plus a connected number
  * would answer customers. What it armed is recorded in migration.run_log (collection _flows, step flow_state) so the verifier
  * expects exactly that. Dry run by default; idempotent.
- * The FAQs of a flow it arms are switched on with it (load/faq.ts armFaqs): a Waboo FAQ answers whenever its bot is live.
  */
 export interface FlowStateOptions {
   dumpsDir: string;
@@ -143,8 +141,6 @@ export async function flowState(o: FlowStateOptions): Promise<void> {
     const todo = plan.filter((p) => p.live && !(p.row.is_published && p.row.is_active));
     o.log(`  flow  ${plan.filter((p) => p.live).length} live at the source, ${todo.length} to change, ${plan.filter((p) => !p.live).length} stay draft`);
     const liveIds = plan.filter((p) => p.live).map((p) => Number(p.row.id));
-    const faqPlan = await withTenant(worker.db, { orgId }, (tx) => armFaqs(tx, { orgId, client: o.client, flowIds: liveIds, apply: false }));
-    o.log(`  faq   ${faqPlan.faqs} paused FAQ(s) and ${faqPlan.settings} off switch(es) of live flows would be switched on`);
     if (!o.apply) {
       o.log('  flow  DRY RUN: nothing was written (add --apply --confirm-org-slug <slug>)');
       return;
@@ -168,14 +164,12 @@ export async function flowState(o: FlowStateOptions): Promise<void> {
           UPDATE flows SET is_published = true, is_active = true, published_at = coalesce(${p.at}::timestamptz, now()), row_version = row_version + 1
           WHERE org_id = ${orgId} AND id = ${Number(p.row.id)}`),
       );
-    const faqDone = await withTenant(worker.db, { orgId }, (tx) => armFaqs(tx, { orgId, client: o.client, flowIds: liveIds, apply: true }));
     const armed = plan.filter((p) => p.live).map((p) => p.row.uuid);
     await worker.db.execute(sql`
       INSERT INTO migration.run_log (source_client, collection, step, run_id, last_key, state, counts)
       VALUES (${o.client}, ${FLOW_STATE_COLLECTION}, ${FLOW_STATE_STEP}, 'flow-state', 0, 'done', ${JSON.stringify({ armed, at: new Date().toISOString() })}::jsonb)
       ON CONFLICT (source_client, collection, step) DO UPDATE SET counts = EXCLUDED.counts, updated_at = now()`);
     o.log(`  flow  done: ${todo.length} flow(s) published and active as at the source; ${armed.length} recorded for the verifier`);
-    o.log(`  faq   done: ${faqDone.faqs} FAQ(s) active, ${faqDone.settings} FAQ switch(es) on`);
   } finally {
     await worker.close();
     await owner.close();

@@ -55,10 +55,6 @@
         "title": "Perangkat push yang dicabut",
         "description": "Peramban dan ponsel yang berhenti menerima notifikasi push. Disimpan sebentar agar perangkat yang kembali dapat mengaktifkan notifikasi lagi, lalu dihapus."
       },
-      "faq_match_log": {
-        "title": "Log kecocokan FAQ",
-        "description": "FAQ mana yang menjawab pesan pelanggan mana, disimpan untuk menunjukkan kepada setiap alur seberapa baik jawabannya. Dihapus setelah hari aktif."
-      },
       "assignment_runs": {
         "title": "Log eksekusi penugasan",
         "description": "Catatan setiap eksekusi penugasan kontak otomatis: siapa mendapat apa dan mengapa. Dihapus setelah hari aktif."

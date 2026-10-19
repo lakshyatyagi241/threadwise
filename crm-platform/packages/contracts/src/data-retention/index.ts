@@ -21,7 +21,6 @@ export const RETENTION_ITEM_IDS = [
   'notifications_read',
   'notifications_unread',
   'push_devices_revoked',
-  'faq_match_log',
   'assignment_runs',
   'form_events',
   'lead_sync_runs',
@@ -147,15 +146,6 @@ export const RETENTION_ITEMS: readonly RetentionItemSpec[] = [
     canArchive: false,
     defaults: { liveDays: 30, archiveDays: null },
     live: { min: 1, max: 365 },
-    archive: { min: 1, max: 1 },
-  },
-  {
-    id: 'faq_match_log',
-    group: 'messaging',
-    kind: 'table',
-    canArchive: false,
-    defaults: { liveDays: 90, archiveDays: null },
-    live: { min: 7, max: 730 },
     archive: { min: 1, max: 1 },
   },
   {
