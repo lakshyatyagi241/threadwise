@@ -41,7 +41,7 @@
   .card { border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin:12px 0; break-inside:avoid; }
   .card h3 { margin-top:0; } .card dl { margin:6px 0 0; display:grid; grid-template-columns:150px 1fr; gap:4px 12px; font-size:14px; }
   .card dt { color:var(--muted); font-weight:600; } .card dd { margin:0; }
-  @media (max-width:600px) { .card dl { grid-template-columns:1fr; } h1 { font-size:23px; } }
+  @media (max-width:600px) { figure { overflow-x:auto; } figure svg { min-width:640px; } figure svg.wide { min-width:820px; } .scroll table { min-width:640px; } .card dl { grid-template-columns:1fr; } h1 { font-size:23px; } }
   @media print { @page { size:A4; margin:14mm; } body { font-size:11pt; } main { max-width:none; padding:0; } h2 { break-after:avoid; } a { color:inherit; } }
 </style>
 </head>
@@ -113,7 +113,7 @@
   <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--muted)"/></marker></defs>
   <rect x="10" y="115" width="150" height="100" rx="10" fill="var(--card)" stroke="var(--c1)" stroke-width="2"/>
   <text x="85" y="145" text-anchor="middle" font-weight="700" font-size="15">Seeded generator</text>
-  <text x="85" y="167" text-anchor="middle" font-size="12" class="m">same seed = same inputs</text>
+  <text x="85" y="167" text-anchor="middle" font-size="11" class="m">same seed, same inputs</text>
   <text x="85" y="185" text-anchor="middle" font-size="11" class="m">hostile text, JSON</text>
   <g font-size="13">
     <rect x="215" y="10" width="270" height="40" rx="8" fill="var(--card)" stroke="var(--line)"/><text x="350" y="35" text-anchor="middle">3,330 Zod schemas (every export)</text>
@@ -129,11 +129,11 @@
   <g font-size="12" class="m"><text x="635" y="155" text-anchor="middle">no crash / 5xx</text><text x="635" y="172" text-anchor="middle">no hang or slow input</text><text x="635" y="189" text-anchor="middle">no forged signature accepted</text><text x="635" y="206" text-anchor="middle">no blocked address accepted</text></g>
   <path d="M485,165 L537,165" stroke="var(--muted)" stroke-width="2" marker-end="url(#ar)"/>
   <rect x="785" y="30" width="205" height="70" rx="10" fill="var(--card)" stroke="var(--c6)" stroke-width="2"/>
-  <text x="887" y="58" text-anchor="middle" font-weight="700" font-size="15">Shrinker</text><text x="887" y="78" text-anchor="middle" font-size="12" class="m">cut the input to the smallest failure</text>
+  <text x="887" y="58" text-anchor="middle" font-weight="700" font-size="15">Shrinker</text><text x="887" y="78" text-anchor="middle" font-size="12" class="m">smallest failing input</text>
   <rect x="785" y="190" width="205" height="90" rx="10" fill="var(--card)" stroke="var(--c4)" stroke-width="2"/>
   <text x="887" y="218" text-anchor="middle" font-weight="700" font-size="15">Minimal repro</text><text x="887" y="238" text-anchor="middle" font-size="12" class="m">+ replay command:</text><text x="887" y="256" text-anchor="middle" font-size="11" class="m">--seed S --target T --iter I</text>
   <path d="M730,150 L782,75" stroke="var(--muted)" stroke-width="2" marker-end="url(#ar)"/>
-  <text x="700" y="110" font-size="11" class="m">on failure</text>
+  <text x="762" y="152" font-size="11" class="m">on failure</text>
   <path d="M887,100 L887,187" stroke="var(--muted)" stroke-width="2" marker-end="url(#ar)"/>
 </svg>
 <figcaption>A watchdog kills a shard that stops making progress for 120 s and names the target and iteration. That is how two real hangs (F-15) were caught instead of freezing the run.</figcaption>
@@ -156,7 +156,7 @@
 
 <figure>
 <h4>1,302,743 pure inputs ran; 985,680 of them (76%) hit the 3,330 schemas</h4>
-<svg viewBox="0 0 760 250" role="img" aria-labelledby="g1t g1d">
+<svg viewBox="-90 0 850 250" role="img" aria-labelledby="g1t g1d">
   <title id="g1t">Inputs by target group in the final full run</title>
   <desc id="g1d">Schemas 985,680; contract helpers 107,471; text parsers and sanitisers 101,844; net guards 75,276; signatures 32,472.</desc>
   <g font-size="13">
@@ -176,12 +176,12 @@
   <title id="g2t">Fixed defects by severity</title>
   <desc id="g2d">High 2, Medium 6, Low 9.</desc>
   <g font-size="13">
-    <text x="90" y="38" text-anchor="end">High</text><rect x="100" y="20" width="102" height="30" fill="var(--hi)"/><text x="208" y="40">2  (F-09, F-15)</text>
-    <text x="90" y="88" text-anchor="end">Medium</text><rect x="100" y="70" width="306" height="30" fill="var(--med)"/><text x="412" y="90">6  (F-01, 02, 03, 06, 12, 17)</text>
-    <text x="90" y="138" text-anchor="end">Low</text><rect x="100" y="120" width="459" height="30" fill="var(--low)"/><text x="565" y="140">9  (F-04, 05, 07, 08, 10, 11, 13, 14, 16)</text>
+    <text x="90" y="38" text-anchor="end">High</text><rect x="100" y="20" width="102" height="30" fill="var(--hi)"/><text x="208" y="40">2</text>
+    <text x="90" y="88" text-anchor="end">Medium</text><rect x="100" y="70" width="306" height="30" fill="var(--med)"/><text x="412" y="90">6</text>
+    <text x="90" y="138" text-anchor="end">Low</text><rect x="100" y="120" width="459" height="30" fill="var(--low)"/><text x="565" y="140">9</text>
   </g>
 </svg>
-<figcaption>Severity is written next to each bar, not only coloured. Open items are in the next chart.</figcaption>
+<figcaption>High: F-09, F-15. Medium: F-01, F-02, F-03, F-06, F-12, F-17. Low: F-04, F-05, F-07, F-08, F-10, F-11, F-13, F-14, F-16. Severity is written next to each bar, not only coloured. Open items are in the next chart.</figcaption>
 </figure>
 
 <figure>
@@ -198,7 +198,7 @@
 
 <figure>
 <h4>Which seed found what: one passing run is not proof</h4>
-<svg viewBox="0 0 900 330" role="img" aria-labelledby="g4t g4d">
+<svg class="wide" viewBox="0 0 900 330" role="img" aria-labelledby="g4t g4d">
   <title id="g4t">Full-run seeds and what each found</title>
   <desc id="g4d">Five full-run seeds failed before the fixes; the sixth, seed 425750154, failed only on slow inputs caused by machine load. The final seed 3463713766 passed.</desc>
   <g font-size="13">
@@ -215,7 +215,7 @@
     <text x="650" y="70" text-anchor="middle" class="m" font-size="12">F-17 htmlToText</text>
     <circle cx="790" cy="40" r="9" fill="var(--bad)"/><text x="790" y="22" text-anchor="middle" font-weight="700">1562592106</text>
     <text x="790" y="70" text-anchor="middle" class="m" font-size="12">F-15 again</text><text x="790" y="86" text-anchor="middle" class="m" font-size="12">(trimLikePhp)</text>
-    <circle cx="850" cy="150" r="9" fill="var(--ok)"/><text x="840" y="154" text-anchor="end" font-weight="700">3463713766 - PASSED after the fixes</text>
+    <circle cx="850" cy="150" r="9" fill="var(--ok)"/><text x="830" y="154" text-anchor="end" font-weight="700">3463713766 - PASSED after the fixes</text>
   </g>
   <g font-size="12">
     <circle cx="40" cy="230" r="7" fill="var(--bad)"/><text x="55" y="234">failed on a real defect</text>
@@ -230,7 +230,7 @@
 
 <figure>
 <h4>71 new tests: 58 are regression tests, one per fixed defect</h4>
-<svg viewBox="0 0 760 210" role="img" aria-labelledby="g5t g5d">
+<svg viewBox="-60 0 820 210" role="img" aria-labelledby="g5t g5d">
   <title id="g5t">New tests by file</title>
   <desc id="g5d">fuzz-regressions 58, fuzz-engine 9, problem-exception-filter 3 added, fuzz-ci 1.</desc>
   <g font-size="13">
