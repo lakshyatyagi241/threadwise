@@ -1,4 +1,5 @@
-import type { ContactMeetingResponse } from '@crm/contracts';
+import type { ContactMeetingResponse, MeetingConferencingInput } from '@crm/contracts';
+import { inputOf as conferencingInputOf } from '@/features/meeting-conferencing/lib/form-model';
 import { isClosedBooking } from './meeting-booking';
 import { EMPTY_MEETING, isoToZonedLocal, type MeetingFormValues } from './meeting-time';
 
@@ -23,6 +24,8 @@ export interface InlineMeetingDraft {
   endsAt: string;
   /** A video-call link or a place; sent as the meeting's location. */
   location: string;
+  /** The video link and calendar entry asked for (BL-360); undefined = nothing asked. */
+  conferencing?: MeetingConferencingInput;
 }
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -73,7 +76,14 @@ export function draftOf(m: ContactMeetingResponse, timeZone?: string): InlineMee
       ? (String(minutes) as DurationChoice)
       : 'custom';
   }
-  return { title: m.title, startsAt, duration, endsAt, location: m.location ?? '' };
+  return {
+    title: m.title,
+    startsAt,
+    duration,
+    endsAt,
+    location: m.location ?? '',
+    conferencing: conferencingInputOf(m),
+  };
 }
 
 /** The values the existing meeting validation and request builders take. */
@@ -86,7 +96,14 @@ export function valuesOf(d: InlineMeetingDraft): MeetingFormValues {
         : d.startsAt
           ? addMinutes(d.startsAt, Number(d.duration))
           : '';
-  return { ...EMPTY_MEETING, title: d.title, startsAt: d.startsAt, endsAt, location: d.location };
+  return {
+    ...EMPTY_MEETING,
+    title: d.title,
+    startsAt: d.startsAt,
+    endsAt,
+    location: d.location,
+    conferencing: d.conferencing,
+  };
 }
 
 export type MeetingGroup = 'upcoming' | 'past' | 'undated';

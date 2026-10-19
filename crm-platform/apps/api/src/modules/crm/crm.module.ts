@@ -61,6 +61,7 @@ import { ActivityTypesRepository } from './activity-types/activity-types.reposit
 import { ActivityTypesService } from './activity-types/activity-types.service';
 import { MeetingResultsService } from './activity-types/meeting-results.service';
 import { ContactMeetingsController } from './contact-meetings/contact-meetings.controller';
+import { ContactMeetingConferencingRepository } from './contact-meetings/contact-meeting-conferencing.repository';
 import { ContactMeetingsRepository } from './contact-meetings/contact-meetings.repository';
 import { ContactMeetingsService } from './contact-meetings/contact-meetings.service';
 import { ContactNotesController } from './contact-notes/contact-notes.controller';
@@ -345,6 +346,7 @@ import { TagsService } from './tags/tags.service';
     ActivityTypesService,
     ActivityTypesRepository,
     MeetingResultsService,
+    ContactMeetingConferencingRepository,
     CompaniesRepository,
     CompaniesService,
     CompaniesCsvService,
@@ -447,6 +449,7 @@ import { TagsService } from './tags/tags.service';
     ContactMeetingsService,
     // The appointments module mirrors every booking into the contact's Meetings (AppointmentMeetingMirror), in the booking's transaction.
     ContactMeetingsRepository,
+    ContactMeetingConferencingRepository,
     CompaniesService,
     CompaniesRepository,
     DealsService,

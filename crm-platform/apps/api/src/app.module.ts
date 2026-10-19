@@ -36,6 +36,7 @@ import { RolesPermissionsModule } from './modules/roles-permissions';
 import { BspBillingEngineModule } from './modules/bsp-billing-engine';
 import { WalletMessageBillingModule } from './modules/wallet-message-billing';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
+import { MeetingConferencingModule } from './modules/meeting-conferencing';
 import { GoogleAccountModule } from './modules/google-account';
 import { BroadcastsModule } from './modules/broadcasts';
 import { CallingVoiceModule } from './modules/calling-voice';
@@ -232,6 +233,7 @@ import { HealthModule } from './health/health.module';
     CrmModule,
     DashboardsAnalyticsChartsModule,
     AppointmentsBookingModule,
+    MeetingConferencingModule,
     GoogleAccountModule,
     NotificationsModule,
     BroadcastsModule,

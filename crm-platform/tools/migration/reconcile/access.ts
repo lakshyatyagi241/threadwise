@@ -53,6 +53,22 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
   const q = async (text: string): Promise<Row[]> =>
     (await withTenant(db, { orgId }, (tx) => tx.execute(sql.raw(text)))).rows as Row[];
 
+  const loginRow = (
+    await withTenant(db, { orgId }, (tx) =>
+      tx.execute(
+        sql`SELECT counts FROM migration.run_log WHERE source_client = ${client} AND collection = '_org' AND step = 'settings'`,
+      ),
+    )
+  ).rows[0] as
+    { counts?: { plan?: { lastLogins?: Array<{ userId: string; at: string }> } } } | undefined;
+  const loginBy = new Map((loginRow?.counts?.plan?.lastLogins ?? []).map((l) => [l.userId, l.at]));
+  const recordedLogin = (settings: Record<string, unknown>): string | null => {
+    const id = (settings as { legacy?: { waboo?: { sourceUserId?: string } } }).legacy?.waboo
+      ?.sourceUserId;
+    const at = id ? loginBy.get(String(id)) : undefined;
+    return at ? us(new Date(at).toISOString()) : null;
+  };
+
   const oracle = new AccessOracle({
     client,
     roleDocs: a.roleDocs,
@@ -79,7 +95,7 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
             ${TS('invited_at')}, ${TS('joined_at')}, ${TS('created_at')}, ${TS('updated_at')} FROM users WHERE org_id = ${orgId}`,
   );
   const profileRows = await q(
-    `SELECT user_id, display_name, phone_e164, ${TS('phone_verified_at')}, locale, theme, row_version, ${TS('created_at')}, ${TS('updated_at')} FROM user_profiles WHERE org_id = ${orgId}`,
+    `SELECT user_id, display_name, phone_e164, ${TS('phone_verified_at')}, chat_limit, locale, theme, row_version, ${TS('created_at')}, ${TS('updated_at')} FROM user_profiles WHERE org_id = ${orgId}`,
   );
   const securityRows = await q(
     `SELECT user_id, ${TS('email_verified_at')}, ${TS('password_changed_at')}, force_password_change, ${TS('last_login_at')}, mfa_enabled,
@@ -219,6 +235,8 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
       if (p.display_name !== null) pb.push('display_name');
       if (p.phone_e164 !== u.phone) pb.push('phone_e164');
       if (p.phone_verified_at !== us(u.phoneVerified)) pb.push('phone_verified_at');
+      if ((p.chat_limit === null ? null : Number(p.chat_limit)) !== u.chatLimit)
+        pb.push('chat_limit');
       if (p.locale !== null) pb.push('locale');
       if (p.theme !== 'paper') pb.push('theme');
       if (Number(p.row_version) !== 1) pb.push('row_version');
@@ -233,12 +251,14 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
       if (s.email_verified_at !== us(u.emailVerified)) sb.push('email_verified_at');
       for (const c of [
         'password_changed_at',
-        'last_login_at',
         'mfa_confirmed_at',
         'mfa_last_step',
         'mfa_secret_enc',
       ])
         if (s[c] !== undefined && s[c] !== null) sb.push(c);
+      // last_login_at is written by core-load from the Waboo sign-in log (the log itself is not dumped): it must equal what core-load recorded
+      const wantLogin = recordedLogin(u.settings);
+      if ((s.last_login_at ?? null) !== wantLogin) sb.push('last_login_at');
       if (s.force_password_change !== false) sb.push('force_password_change');
       if (s.mfa_enabled !== false) sb.push('mfa_enabled');
       if (s.has_mfa_secret !== false) sb.push('mfa_secret_enc');
@@ -264,10 +284,14 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
 
   // --- the owner: exactly the --owner-email user holds Owner; an adopted Waboo user is that row, untouched -------------------------------
   const ownerRole = presetRole('admin');
-  const additionalIds = new Set(userRows.filter((t) => isAdditional(t.email)).map((t) => Number(t.id)));
+  const additionalIds = new Set(
+    userRows.filter((t) => isAdditional(t.email)).map((t) => Number(t.id)),
+  );
   const holders = userRoleRows.filter(
     (r) =>
-      ownerRole && Number(r.role_id) === Number(ownerRole.id) && !additionalIds.has(Number(r.user_id)),
+      ownerRole &&
+      Number(r.role_id) === Number(ownerRole.id) &&
+      !additionalIds.has(Number(r.user_id)),
   );
   const ownerRow = ownerUuid ? userByUuid.get(ownerUuid) : undefined;
   if (a.access.ownerEmail) {
@@ -434,7 +458,11 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
     );
     // the loader's bump must still be in effect. The app may bump it again later (a role edit after the run), so a higher value is
     // fine; only a value below the loader's own bump means the cache key went back.
-    if (!marker?.counts || !(marker.counts.after > marker.counts.before) || cur < marker.counts.after)
+    if (
+      !marker?.counts ||
+      !(marker.counts.after > marker.counts.before) ||
+      cur < marker.counts.after
+    )
       alarm(
         'ROLES_VERSION: organizations.roles_version was not increased after roles and users were written (RBAC could serve a stale grant set)',
       );

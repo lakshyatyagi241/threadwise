@@ -1,0 +1,132 @@
+{
+  "settings": {
+    "tiles": {
+      "video-meetings": {
+        "label": "ビデオミーティング",
+        "description": "ご自身の Zoom または Microsoft Teams アカウントを接続すると、ミーティングにビデオリンクを追加できます。",
+        "keywords": "zoom, teams, microsoft teams, ビデオ, ビデオ通話, ミーティングリンク, 参加リンク, ビデオ会議, google meet"
+      }
+    }
+  },
+  "meeting-conferencing": {
+    "common": {
+      "dismiss": "閉じる"
+    },
+    "form": {
+      "label": "ビデオ会議",
+      "add": {
+        "zoom": "Zoom リンクを追加",
+        "teams": "Teams リンクを追加",
+        "meet": "Google Meet リンクを追加"
+      },
+      "chosen": {
+        "zoom": "Zoom リンク",
+        "teams": "Teams リンク",
+        "meet": "Google Meet リンク"
+      },
+      "remove": "ビデオリンクを削除",
+      "needsStart": "ビデオリンクまたはカレンダーの予定を追加するには、開始時刻を設定してください。",
+      "meetNote": "Google Meet リンクはカレンダーの予定に含まれるため、このミーティングはカレンダーにも追加されます。",
+      "teamsViaCalendar": "この Teams リンクは Microsoft 365 カレンダーで作成されるため、このミーティングはそちらにも追加されます。",
+      "calendar": "自分のカレンダーに追加（{account}）",
+      "calendarNamed": "自分のカレンダーに追加（{account}、{calendar}）",
+      "invite": "連絡先にカレンダーの招待を送信",
+      "inviteHint": "カレンダーが連絡先のメールアドレスに招待を送ります。当サービス独自のメール招待には影響しません。",
+      "connectLink": "ビデオ会議を接続"
+    },
+    "row": {
+      "join": "参加",
+      "joinAria": "{provider} のミーティング {title} に参加",
+      "provider": {
+        "zoom": "Zoom",
+        "teams": "Microsoft Teams",
+        "meet": "Google Meet"
+      },
+      "pending": "ビデオリンクを追加しています...",
+      "onCalendar": "カレンダーに追加済み",
+      "invited": "カレンダーが連絡先に招待を送信しました",
+      "retry": "再試行",
+      "retrying": "再試行しています...",
+      "retried": "ビデオリンクとカレンダーの予定を再確認しました。",
+      "retryFailed": "うまくいきませんでした。ミーティングは保存されています。もう一度お試しください。",
+      "problem": {
+        "not_installed": "このワークスペースには {provider} 連携がインストールされていません。",
+        "not_connected": "{provider} アカウントが接続されていません。設定のビデオミーティングで接続してください。",
+        "needs_reconnect": "{provider} の接続を更新する必要があります。設定のビデオミーティングで再接続してください。",
+        "not_configured": "{provider} はこのプラットフォームでまだ設定されていません。プラットフォーム管理者にお問い合わせください。",
+        "calendar_not_connected": "カレンダーが接続されていないため、ミーティングを追加できませんでした。",
+        "provider_failed": "{provider} から応答がありませんでした。ミーティングは保存されています。もう一度お試しください。",
+        "no_start_time": "ビデオリンクにはミーティングの開始時刻が必要です。"
+      },
+      "calendarProblem": {
+        "calendar_not_connected": "カレンダーが接続されていないため、ミーティングをカレンダーに追加できませんでした。",
+        "provider_failed": "カレンダーから応答がなかったため、ミーティングはまだ追加されていません。ミーティングは保存されています。もう一度お試しください。",
+        "other": "ミーティングをカレンダーに追加できませんでした。"
+      }
+    },
+    "page": {
+      "eyebrow": "設定",
+      "title": "ビデオミーティング",
+      "subtitle": "ご自身の Zoom または Microsoft Teams アカウントを接続してください。ミーティング追加フォームにビデオリンクが表示され、アカウント内で作成されて、ミーティングに参加ボタンとともに表示されます。",
+      "loading": "ビデオ接続を読み込んでいます...",
+      "forbidden": {
+        "title": "このページは利用できません",
+        "body": "連絡先を編集する権限をご自身のロールに付与するよう、ワークスペース管理者に依頼してください。"
+      },
+      "failure": {
+        "generic": "ビデオ接続を読み込めませんでした。"
+      },
+      "retry": "再試行",
+      "providers": {
+        "zoom": {
+          "name": "Zoom",
+          "about": "スケジュールしたミーティングごとに Zoom アカウントで Zoom ミーティングを作成し、ミーティングを移動すると一緒に移動し、ミーティングを削除すると一緒に削除します。"
+        },
+        "teams": {
+          "name": "Microsoft Teams",
+          "about": "スケジュールしたミーティングごとに Microsoft の職場または学校アカウントで Teams ミーティングを作成し、ミーティングに合わせて更新または削除します。"
+        }
+      },
+      "status": {
+        "connected": "接続済み",
+        "needs_reconnect": "再接続が必要",
+        "disconnected": "未接続",
+        "not_installed": "未インストール",
+        "unavailable": "利用できません"
+      },
+      "account": "アカウント: {account}",
+      "connectedOn": "接続日時: {when}",
+      "lastError": {
+        "forbidden": "プロバイダーが直前のリクエストを拒否しました。アカウントにミーティングを作成する権限がない可能性があります。",
+        "rate_limited": "プロバイダーが現在リクエストを制限しています。",
+        "unavailable": "プロバイダーが直前のリクエストに応答しませんでした。"
+      },
+      "actions": {
+        "connect": "接続",
+        "reconnect": "再接続",
+        "disconnect": "切断",
+        "install": "マーケットプレイスでインストール"
+      },
+      "notInstalled": {
+        "canInstall": "ワークスペースには {provider} がまだインストールされていません。マーケットプレイスからインストールしてから、ここでアカウントを接続してください。",
+        "cannotInstall": "ワークスペースには {provider} がまだインストールされていません。ワークスペース管理者にマーケットプレイスからのインストールを依頼してください。"
+      },
+      "unavailable": "{provider} はこのプラットフォームでまだ設定されていません。プラットフォーム管理者にお問い合わせください。",
+      "outcome": {
+        "connected": "{provider} を接続しました。",
+        "denied": "サインインがキャンセルされたため、{provider} は接続されませんでした。",
+        "failed": "{provider} を接続できませんでした。もう一度お試しください。",
+        "expired": "サインインに時間がかかりすぎました。もう一度「接続」を押してください。",
+        "not_configured": "{provider} はこのプラットフォームでまだ設定されていません。",
+        "notYours": "そのサインインは別のユーザーが開始したため、何も接続されませんでした。"
+      },
+      "confirming": "接続を完了しています...",
+      "disconnected": "{provider} を切断しました。",
+      "disconnectTitle": "{provider} を切断しますか？",
+      "disconnectBody": "すでに {provider} リンクがあるミーティングはリンクを保持しますが、それらのミーティングを移動または削除しても、ルームは変更されなくなります。いつでも再接続できます。",
+      "disconnectConfirm": "切断",
+      "keep": "接続したままにする",
+      "calendarNote": "カレンダー経由で作成される Google Meet と Teams のリンクは、ここでの接続は不要です。ワークスペースがすでに接続しているカレンダーを使用します。"
+    }
+  }
+}

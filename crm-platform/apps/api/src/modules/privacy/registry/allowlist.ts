@@ -65,6 +65,9 @@ export const PRIVACY_ALLOWLIST: Readonly<Record<string, AllowEntry>> = {
   appointment_microsoft_connections: staff(
     'The Microsoft calendar account an admin connected for the workspace (account email), not a booking invitee. Same as appointment_calendar_connections.',
   ),
+  conferencing_connections: staff(
+    'The Zoom or Teams account a staff member connected to host their own meetings (account email, sealed tokens), not a contact.',
+  ),
   orders: staff(
     "The workspace's own billing orders to the platform (the billing contact's name and email); financial record kept by the platform (ADR-0028).",
   ),

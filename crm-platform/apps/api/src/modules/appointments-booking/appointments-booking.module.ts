@@ -26,6 +26,7 @@ import { AppointmentsRepository } from './appointments.repository';
 import { AppointmentsService } from './appointments.service';
 import { AppointmentCalendarSyncService } from './appointment-calendar-sync.service';
 import { AppointmentCalendarWriter } from './appointment-calendar-writer.service';
+import { MeetingCalendarGateway } from './meeting-calendar.gateway';
 import { AppointmentMeetingMirror } from './appointment-meeting-mirror.service';
 import { AppointmentsSupport } from './appointments.support';
 import { AppointmentBookingGuard, AppointmentPlan } from './booking-plan';
@@ -176,6 +177,7 @@ import { SlotsService } from './slots.service';
     MicrosoftCalendarAdapter,
     MicrosoftCalendarConnectService,
     CalendarProviders,
+    MeetingCalendarGateway,
     CalendarBackfillService,
     CalendarBackfillQueue,
     CalendarOverviewService,
@@ -208,6 +210,8 @@ import { SlotsService } from './slots.service';
     GoogleCalendarTokens,
     GoogleCalendarConnectionRepository,
     CalendarProviders,
+    // A contact's meeting uses the workspace's connected calendar through this seam (BL-362).
+    MeetingCalendarGateway,
     CalendarBackfillQueue,
     // The worker's back-fill job runs it.
     CalendarBackfillService,

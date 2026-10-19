@@ -42,9 +42,11 @@ import { PQL_ERROR_CODES } from '../contacts-attributes-tags/pql-errors';
 import { WFL_ERROR_CODES } from '../forms-links-groups/errors';
 import { AICRM_ERROR_CODES } from '../ai-copilot-lead-finder/errors';
 import { STORAGE_ERROR_CODES } from '../storage-quota/errors';
+import { CONF_ERROR_CODES } from '../meeting-conferencing/errors';
 
 export const ERROR_CODES = {
   ...STORAGE_ERROR_CODES,
+  ...CONF_ERROR_CODES,
   ...FAQ_ERROR_CODES,
   ...LSC_ERROR_CODES,
   ...GROWTH_ERROR_CODES,

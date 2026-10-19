@@ -79,9 +79,21 @@ export type { ContactActivityRow } from './contact-activities';
 export {
   ContactMeetingsService,
   ContactMeetingsRepository,
+  ContactMeetingConferencingRepository,
+  CONFERENCING_RELEASE_EVENT,
+  MEETING_CONFERENCING,
+  releaseAll,
   toContactMeetingResponse,
 } from './contact-meetings';
-export type { BackfillBatch, BookedMeetingValues, ContactMeetingRow } from './contact-meetings';
+export type {
+  BackfillBatch,
+  BookedMeetingValues,
+  ContactMeetingRow,
+  MeetingConferencingPort,
+  MeetingConferencingRow,
+  MeetingConferencingValues,
+  ReleaseSnapshot,
+} from './contact-meetings';
 export {
   ContactGroupsService,
   ContactGroupsRepository,
