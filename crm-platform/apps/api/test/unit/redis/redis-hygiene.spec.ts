@@ -194,8 +194,6 @@ describe('Redis hygiene: every key has a lifetime or a reason', () => {
     'apps/api/src/modules/channel-wechat/inbound.service.ts': 1,
     'apps/api/src/modules/chatbot-widget/widget-throttle.service.ts': 1,
     'apps/api/src/modules/crm/invoicing/invoice-public.service.ts': 1,
-    'apps/api/src/modules/faq-knowledge/faq-match.service.ts': 1,
-    'apps/api/src/modules/faq-knowledge/faq-verify.service.ts': 1,
     'apps/api/src/modules/storefront-builder/public/public-rate-limiter.ts': 1,
   };
   it('does not add a counter that is INCR-ed and given its lifetime by a separate command', () => {
@@ -317,11 +315,7 @@ describe('Redis hygiene: BullMQ queues and jobs are bounded', () => {
 
 describe('Redis hygiene: connections have deadlines', () => {
   // Each client the application constructs must set `commandTimeout`, or be listed with the reason.
-  const NO_COMMAND_TIMEOUT_ALLOWED: Record<string, { why: string; pendingPr?: string }> = {
-    'apps/api/src/infra/redis/redis.module.ts': {
-      why: 'the shared client: PR #663 (item 18 part 2) adds commandTimeout (2 s) and a capped retry back-off',
-      pendingPr: '#663',
-    },
+  const NO_COMMAND_TIMEOUT_ALLOWED: Record<string, { why: string }> = {
     'apps/api/src/realtime/redis-io.adapter.ts': {
       why: 'socket.io adapter publisher/subscriber: maxRetriesPerRequest null keeps the subscription across an outage. A deadline on the publisher is recommended (report, open item); the subscriber must not have one',
     },
@@ -338,7 +332,6 @@ describe('Redis hygiene: connections have deadlines', () => {
       'A silent Redis (dropped route, frozen host) raises no error; without commandTimeout the command waits for ever.',
     ).toEqual([]);
     for (const [f, a] of Object.entries(NO_COMMAND_TIMEOUT_ALLOWED)) {
-      if (a.pendingPr) continue; // goes stale when the pull request merges; remove the entry then
       expect(
         missing,
         `${short(f)} sets commandTimeout now: remove it from NO_COMMAND_TIMEOUT_ALLOWED`,
@@ -346,16 +339,9 @@ describe('Redis hygiene: connections have deadlines', () => {
     }
   });
 
-  it('sets commandTimeout on the BullMQ producer connection (PR #663 adds it; remove this allowance then)', () => {
+  it('sets commandTimeout on the BullMQ producer connection', () => {
     const src = inv.files.find((f) => f.path.endsWith('infra/queue/queue.module.ts'))!.src;
-    const has = /PRODUCER_CONNECTION_OPTIONS\s*=\s*\{[^}]*commandTimeout/.test(src);
-    // Until #663 merges the producer has no deadline; the test records that instead of failing a branch that cannot fix it (the file is
-    // being rewritten by that pull request).
-    if (!has)
-      console.warn(
-        'queue.module.ts: BullMQ producer connection has no commandTimeout yet (PR #663)',
-      );
-    expect(true).toBe(true);
+    expect(src).toMatch(/PRODUCER_CONNECTION_OPTIONS\s*=\s*\{[^}]*commandTimeout/);
   });
 });
 

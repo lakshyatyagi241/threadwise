@@ -1,93 +1,8 @@
 {
-  "connections": {
-    "queueCount": 51,
-    "producerConnections": 51,
-    "connectionsPerQueue": 1
-  },
-  "connectionsWorker": {
-    "perWorker": 2
-  },
-  "connectionsAdapter": {
-    "adapter": 2
-  },
-  "retentionCompleted": {
-    "queue": "campaign (default options)",
-    "jobsRun": 1400,
-    "completedKept": 1000,
-    "configuredCount": 1000,
-    "bytesPerRetainedJob": 2520
-  },
-  "retentionFailed": {
-    "queue": "campaign (default options, attempts 1)",
-    "jobsRun": 2300,
-    "failedKept": 2000,
-    "configuredCount": 2000,
-    "bytesPerRetainedFailedJob": 3904
-  },
-  "retentionBudget": {
-    "queues": 51,
-    "retainedJobsPerQueueMax": 3000,
-    "retainedJobsAllQueuesMax": 153000,
-    "productionMaxmemoryMb": 192
-  },
-  "keyHygieneUnderLoad": {
-    "distinctCallersPerFamily": 2000,
-    "families": 12,
-    "keysCreated": 26000,
-    "keysWithoutTtl": 0,
-    "maxTtlSecondsByFamily": {
-      "wfl:link:redirect:": 59,
-      "wa:media-id:": 3600,
-      "mkt:hook:ip:": 59,
-      "segments:rl:": 60,
-      "lock:": 60,
-      "lead:hook:ip:": 59,
-      "test:rl:": 120,
-      "salesdoc:pub:": 60,
-      "rl67:": 120,
-      "form:pub:ip:": 59,
-      "store_rl:": 119,
-      "wgt:hits:": 119
-    },
-    "bytesPerKeyByFamily": {
-      "form:pub:ip:": 69,
-      "lead:hook:ip:": 72,
-      "store_rl:": 88,
-      "wgt:hits:": 72,
-      "wfl:link:redirect:": 72,
-      "mkt:hook:ip:": 69,
-      "salesdoc:pub:": 87,
-      "segments:rl:": 72,
-      "rl67:": 56,
-      "test:rl:": 72,
-      "lock:": 103,
-      "wa:media-id:": 92
-    },
-    "keysByFamily": {
-      "form:pub:ip:": 2000,
-      "lead:hook:ip:": 2000,
-      "store_rl:": 2000,
-      "wgt:hits:": 2000,
-      "wfl:link:redirect:": 2000,
-      "mkt:hook:ip:": 2000,
-      "salesdoc:pub:": 4000,
-      "segments:rl:": 2000,
-      "rl67:": 2000,
-      "test:rl:": 2000,
-      "lock:": 2000,
-      "wa:media-id:": 2000
-    },
-    "memoryBaselineBytes": 2380440,
-    "memoryAfterLoadBytes": 5227672,
-    "memoryAfterExpiryBytes": 2405000,
-    "keysLeftAfterExpiry": 0,
-    "averageBytesPerCallerKey": 119,
-    "note": "expiry brought forward to 1 ms by the test; lifetimes were asserted before that"
-  },
   "oom": {
     "maxmemoryBytes": 12582912,
-    "usedMemoryAtRefusalBytes": 12582472,
-    "keysStoredBeforeRefusal": 8419,
+    "usedMemoryAtRefusalBytes": 12582800,
+    "keysStoredBeforeRefusal": 8468,
     "evictedKeys": 0,
     "refusedCommands": [
       "SET",
@@ -114,47 +29,21 @@
     "error": "OOM command not allowed when used memory > 'maxmemory'. script: a2746c9c49a80628d790a3fea39ee283270f25bc, on @user_scrip",
     "keysLeftBehind": 0
   },
-  "oomWorker": {
-    "jobsQueuedBeforeFull": 5,
-    "stateWhileFull": {
-      "active": 0,
-      "completed": 0,
-      "failed": 0,
-      "waiting": 5,
-      "delayed": 0
-    },
-    "handlerRuns": 5,
-    "workerErrorEventsWhileFull": 14938,
-    "workerErrorSample": [
-      "OOM command not allowed when used memory > 'maxmemory'. script: 1e9bb7deb6219644"
-    ]
-  },
-  "restart": {
-    "persistence": "appendonly yes, appendfsync everysec",
-    "queuedBeforeGracefulRestart": 500,
-    "waitingAfterGracefulRestart": 500,
-    "dockerRestartCommandMs": 526,
-    "ttlAfterRestartSeconds": 3597,
-    "addedImmediatelyBeforeSigkill": 300,
-    "waitingAfterSigkill": 800,
-    "jobsLostToSigkill": 0
-  },
-  "restartResume": {
-    "jobsDoneAfterResume": 100,
-    "jobsAdded": 100,
-    "addBlockedForMs": 1034
-  },
-  "slowRedis": {
-    "serverStallSeconds": 3,
-    "requestWaitedMs": 2901,
-    "result": "answered normally"
-  },
   "oomWorkerSpin": {
     "seconds": 3,
-    "errorLinesPrinted": 5268,
-    "processCpuMs": 2184,
+    "errorLinesPrinted": 5435,
+    "processCpuMs": 2084,
     "jobsCompleted": 0,
     "jobsWaiting": 5
+  },
+  "oomWorkerGuarded": {
+    "seconds": 3,
+    "errorLinesPrinted": 0,
+    "pauseWarningsLogged": 3,
+    "processCpuMs": 13,
+    "jobsCompletedWhileFull": 0,
+    "jobsCompletedAfterMemoryReturned": 5,
+    "msFromMemoryReturnedToAllJobsDone": 1009
   },
   "oomRunningJob": {
     "stateWhileFull": {
@@ -164,5 +53,111 @@
       "failed": 0
     },
     "handlerRuns": 1
+  },
+  "slowRedis": {
+    "serverStallSeconds": 3,
+    "commandDeadlineMs": 2000,
+    "requestWaitedMs": 2003,
+    "result": "degraded (failed open)"
+  },
+  "restart": {
+    "persistence": "appendonly yes, appendfsync everysec",
+    "queuedBeforeGracefulRestart": 500,
+    "waitingAfterGracefulRestart": 500,
+    "dockerRestartCommandMs": 678,
+    "ttlAfterRestartSeconds": 3597,
+    "addedImmediatelyBeforeSigkill": 300,
+    "waitingAfterSigkill": 800,
+    "jobsLostToSigkill": 0
+  },
+  "restartResume": {
+    "jobsDoneAfterResume": 100,
+    "jobsAdded": 100,
+    "addBlockedForMs": 1037
+  },
+  "keyHygieneUnderLoad": {
+    "distinctCallersPerFamily": 2000,
+    "families": 12,
+    "keysCreated": 26000,
+    "keysWithoutTtl": 0,
+    "maxTtlSecondsByFamily": {
+      "store_rl:": 118,
+      "form:pub:ip:": 58,
+      "wa:media-id:": 3600,
+      "mkt:hook:ip:": 59,
+      "lock:": 60,
+      "rl67:": 120,
+      "wfl:link:redirect:": 59,
+      "lead:hook:ip:": 58,
+      "test:rl:": 120,
+      "salesdoc:pub:": 59,
+      "segments:rl:": 59,
+      "wgt:hits:": 119
+    },
+    "bytesPerKeyByFamily": {
+      "form:pub:ip:": 68,
+      "lead:hook:ip:": 72,
+      "store_rl:": 88,
+      "wgt:hits:": 72,
+      "wfl:link:redirect:": 72,
+      "mkt:hook:ip:": 69,
+      "salesdoc:pub:": 87,
+      "segments:rl:": 72,
+      "rl67:": 56,
+      "test:rl:": 72,
+      "lock:": 104,
+      "wa:media-id:": 92
+    },
+    "keysByFamily": {
+      "form:pub:ip:": 2000,
+      "lead:hook:ip:": 2000,
+      "store_rl:": 2000,
+      "wgt:hits:": 2000,
+      "wfl:link:redirect:": 2000,
+      "mkt:hook:ip:": 2000,
+      "salesdoc:pub:": 4000,
+      "segments:rl:": 2000,
+      "rl67:": 2000,
+      "test:rl:": 2000,
+      "lock:": 2000,
+      "wa:media-id:": 2000
+    },
+    "memoryBaselineBytes": 1061784,
+    "memoryAfterLoadBytes": 4180616,
+    "memoryAfterExpiryBytes": 1359992,
+    "keysLeftAfterExpiry": 0,
+    "averageBytesPerCallerKey": 130,
+    "note": "expiry brought forward to 1 ms by the test; lifetimes were asserted before that"
+  },
+  "retentionCompleted": {
+    "queue": "campaign (default options)",
+    "jobsRun": 1400,
+    "completedKept": 1000,
+    "configuredCount": 1000,
+    "bytesPerRetainedJob": 2973
+  },
+  "retentionFailed": {
+    "queue": "campaign (default options, attempts 1)",
+    "jobsRun": 800,
+    "failedKept": 500,
+    "configuredCount": 500,
+    "bytesPerRetainedFailedJob": 4264
+  },
+  "retentionBudget": {
+    "queues": 51,
+    "retainedJobsPerQueueMax": 1500,
+    "retainedJobsAllQueuesMax": 76500,
+    "productionMaxmemoryMb": 192
+  },
+  "connections": {
+    "queueCount": 51,
+    "producerConnections": 51,
+    "connectionsPerQueue": 1
+  },
+  "connectionsWorker": {
+    "perWorker": 2
+  },
+  "connectionsAdapter": {
+    "adapter": 2
   }
 }

@@ -13,6 +13,7 @@ import { RateLimitService } from '../../../src/modules/auth/security/rate-limit.
 import { FormThrottle } from '../../../src/modules/forms-builder/form-throttle';
 import { RateLimiter, guardWorkerAgainstOom } from '../../../src/modules/platform-infrastructure';
 import { RedisLockService } from '../../../src/modules/platform-infrastructure/coordination/redis-lock.service';
+import { REDIS_COMMAND_TIMEOUT_MS } from '../../../src/infra/redis/redis.module';
 import { info, record, sleep, startOwnRedis, usedMemory, type OwnRedis } from './own-redis';
 
 /**
@@ -269,10 +270,12 @@ describe('Redis slow (a stall of the server itself)', () => {
     await own.stop();
   });
 
-  it('the request path waits out the whole stall: the shared client has no command deadline on main', async () => {
-    // the shared client's options on main (infra/redis/redis.module.ts, before PR #663)
+  it('a 3 s server stall: the shared client gives up at its 2 s command deadline and the limiter fails open', async () => {
+    // the shared client exactly as infra/redis/redis.module.ts builds it (deadline and capped back-off from PR #663)
     const shared = new Redis(own.url, {
       maxRetriesPerRequest: 3,
+      commandTimeout: REDIS_COMMAND_TIMEOUT_MS,
+      retryStrategy: (times: number) => Math.min(times * 50, 500),
       enableReadyCheck: true,
       lazyConnect: false,
     });
@@ -286,11 +289,13 @@ describe('Redis slow (a stall of the server itself)', () => {
     await stall;
     record('slowRedis', {
       serverStallSeconds: 3,
+      commandDeadlineMs: REDIS_COMMAND_TIMEOUT_MS,
       requestWaitedMs: waited,
       result: out.degraded ? 'degraded (failed open)' : 'answered normally',
     });
-    expect(out.degraded).toBe(false);
-    expect(waited).toBeGreaterThan(2_000); // no deadline: the caller was held for the stall
+    expect(out.degraded).toBe(true);
+    expect(waited).toBeGreaterThanOrEqual(REDIS_COMMAND_TIMEOUT_MS - 200);
+    expect(waited).toBeLessThan(2_900); // released by the deadline, not by the end of the stall
     shared.disconnect();
   }, 60_000);
 });

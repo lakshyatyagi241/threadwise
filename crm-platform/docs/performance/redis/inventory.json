@@ -3,12 +3,12 @@
   "generatedFrom": "apps/api/src (static scan; see the header of tools/redis-audit/inventory.mjs for what is exact)",
   "totals": {
     "sourceFilesUsingRedis": 112,
-    "commandCallSites": 398,
-    "keyFamilies": 151,
-    "familiesInFilesWhereEveryWriteHasATtl": 141,
+    "commandCallSites": 394,
+    "keyFamilies": 149,
+    "familiesInFilesWhereEveryWriteHasATtl": 139,
     "familiesInFilesToReview": 1,
     "familiesInReadOnlyFiles": 4,
-    "orgScopedFamilies": 72,
+    "orgScopedFamilies": 70,
     "queues": 51,
     "luaScripts": 13,
     "clientConstructionSites": 5,
@@ -18,9 +18,9 @@
   "clients": [
     {
       "file": "apps/api/src/infra/redis/redis.module.ts",
-      "line": 23,
+      "line": 30,
       "kind": "new",
-      "options": "config.get('REDIS_URL', { infer: true }), { maxRetriesPerRequest: 3, enableReadyCheck: true, lazyConnect: false, }"
+      "options": "config.get('REDIS_URL', { infer: true }), { maxRetriesPerRequest: 3, commandTimeout: REDIS_COMMAND_TIMEOUT_MS, // The default back-off grows to 2 s a try, and `maxRetriesPerRequest` counts tries, so during a long outage every command waited // 3 x 2 s before failing. Capped, a command on a dead connection fails in about a second and a half at most. retryStrategy: (times: number) => Math.min(times * 50, 500), enableReadyCheck: true, lazyConnect: false, }"
     },
     {
       "file": "apps/api/src/modules/node-bridge-runtime/runtime/device-runtime.service.ts",
@@ -76,7 +76,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -96,7 +96,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -116,7 +116,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -136,7 +136,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 10,
@@ -156,7 +156,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -176,7 +176,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -196,7 +196,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -216,7 +216,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -236,7 +236,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -256,7 +256,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -276,7 +276,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -293,7 +293,7 @@
       "constant": "WABA_INGEST",
       "removeOnComplete": true,
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 10,
@@ -313,7 +313,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -330,7 +330,7 @@
       "constant": "WEBHOOK_FORWARD",
       "removeOnComplete": true,
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -350,7 +350,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -370,7 +370,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -390,7 +390,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -410,7 +410,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -430,7 +430,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -450,7 +450,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -470,7 +470,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -490,7 +490,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -510,7 +510,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -530,7 +530,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -550,7 +550,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -570,7 +570,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -590,7 +590,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -610,7 +610,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -630,7 +630,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -650,7 +650,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -670,7 +670,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -690,7 +690,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -710,7 +710,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -730,7 +730,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -750,7 +750,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -770,7 +770,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -790,7 +790,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -810,7 +810,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -830,7 +830,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -850,7 +850,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -870,7 +870,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -890,7 +890,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -910,7 +910,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -930,7 +930,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -950,7 +950,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -970,7 +970,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -990,7 +990,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -1010,7 +1010,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -1030,7 +1030,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -1047,7 +1047,7 @@
       "constant": "WEBHOOK_RETRY",
       "removeOnComplete": true,
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 10,
@@ -1067,7 +1067,7 @@
         "age": 3600
       },
       "removeOnFail": {
-        "count": 2000,
+        "count": 500,
         "age": 259200
       },
       "attempts": 5,
@@ -1531,38 +1531,6 @@
       "ttlStatus": "ttl"
     },
     {
-      "template": "faq:embed:lock:*",
-      "files": [
-        "apps/api/src/modules/faq-knowledge/faq-embed.worker.ts"
-      ],
-      "scope": "org",
-      "ttlStatus": "ttl"
-    },
-    {
-      "template": "faq:q:*:*",
-      "files": [
-        "apps/api/src/modules/faq-knowledge/faq-embedding.service.ts"
-      ],
-      "scope": "other",
-      "ttlStatus": "ttl"
-    },
-    {
-      "template": "faq:rate:*:*",
-      "files": [
-        "apps/api/src/modules/faq-knowledge/faq-match.service.ts"
-      ],
-      "scope": "org",
-      "ttlStatus": "ttl"
-    },
-    {
-      "template": "faq:verify:*:*",
-      "files": [
-        "apps/api/src/modules/faq-knowledge/faq-verify.service.ts"
-      ],
-      "scope": "org",
-      "ttlStatus": "ttl"
-    },
-    {
       "template": "flr:gform:*:*:*",
       "files": [
         "apps/api/src/modules/flow-runtime-engine/runtime/nodes/integrations/google-form-poll.service.ts"
@@ -1678,6 +1646,22 @@
       "template": "invoicing:rl:*:*:*",
       "files": [
         "apps/api/src/modules/crm/invoicing/invoice-public.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "kb:embed:lock:*",
+      "files": [
+        "apps/api/src/modules/knowledge-base/kb-embed.worker.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "kb:q:*:*",
+      "files": [
+        "apps/api/src/modules/knowledge-base/kb-embedding.service.ts"
       ],
       "scope": "other",
       "ttlStatus": "ttl"
@@ -2496,6 +2480,12 @@
         }
       ],
       "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/infra/queue/queue-guard.service.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/infra/redis/counter.ts",
@@ -3513,76 +3503,6 @@
       "ttlStatus": "read-only"
     },
     {
-      "file": "apps/api/src/modules/faq-knowledge/faq-embed.worker.ts",
-      "commands": [
-        "del",
-        "set"
-      ],
-      "writes": [
-        {
-          "line": 77,
-          "cmd": "set",
-          "ttl": "EX LOCK_S"
-        }
-      ],
-      "ttlStatus": "ttl"
-    },
-    {
-      "file": "apps/api/src/modules/faq-knowledge/faq-embedding.service.ts",
-      "commands": [
-        "getbuffer",
-        "set"
-      ],
-      "writes": [
-        {
-          "line": 80,
-          "cmd": "set",
-          "ttl": "EX QUERY_CACHE_TTL_S"
-        }
-      ],
-      "ttlStatus": "ttl"
-    },
-    {
-      "file": "apps/api/src/modules/faq-knowledge/faq-match.service.ts",
-      "commands": [
-        "expire",
-        "incr"
-      ],
-      "writes": [
-        {
-          "line": 213,
-          "cmd": "incr",
-          "ttl": null
-        },
-        {
-          "line": 214,
-          "cmd": "expire",
-          "ttl": "EXPIRE 3700"
-        }
-      ],
-      "ttlStatus": "ttl"
-    },
-    {
-      "file": "apps/api/src/modules/faq-knowledge/faq-verify.service.ts",
-      "commands": [
-        "expire",
-        "incr"
-      ],
-      "writes": [
-        {
-          "line": 129,
-          "cmd": "incr",
-          "ttl": null
-        },
-        {
-          "line": 130,
-          "cmd": "expire",
-          "ttl": "EXPIRE 3700"
-        }
-      ],
-      "ttlStatus": "ttl"
-    },
-    {
       "file": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/integrations/google-form-poll.service.ts",
       "commands": [
         "set"
@@ -3671,6 +3591,36 @@
       ],
       "writes": [],
       "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/knowledge-base/kb-embed.worker.ts",
+      "commands": [
+        "del",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 92,
+          "cmd": "set",
+          "ttl": "EX LOCK_S"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/knowledge-base/kb-embedding.service.ts",
+      "commands": [
+        "getbuffer",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 80,
+          "cmd": "set",
+          "ttl": "EX QUERY_CACHE_TTL_S"
+        }
+      ],
+      "ttlStatus": "ttl"
     },
     {
       "file": "apps/api/src/modules/leads/lead-throttle.ts",
@@ -3964,7 +3914,7 @@
       ],
       "writes": [
         {
-          "line": 121,
+          "line": 129,
           "cmd": "set",
           "ttl": "PX TEST_COOLDOWN_MS"
         }
@@ -3990,6 +3940,12 @@
         }
       ],
       "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/platform-infrastructure/observability/event-loop/redis-pressure.module.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/platform-infrastructure/observability/worker-heartbeat.service.ts",
@@ -4126,7 +4082,7 @@
       ],
       "writes": [
         {
-          "line": 87,
+          "line": 92,
           "cmd": "set",
           "ttl": "EX REPLAY_SECONDS"
         }
@@ -4694,16 +4650,6 @@
       {
         "file": "apps/api/src/modules/crm/invoicing/invoice-public.service.ts",
         "line": 60,
-        "cmd": "incr"
-      },
-      {
-        "file": "apps/api/src/modules/faq-knowledge/faq-match.service.ts",
-        "line": 213,
-        "cmd": "incr"
-      },
-      {
-        "file": "apps/api/src/modules/faq-knowledge/faq-verify.service.ts",
-        "line": 129,
         "cmd": "incr"
       },
       {
