@@ -60,7 +60,8 @@
     "tabs": {
       "label": "Chọn nội dung hiển thị",
       "publishes": "Xuất bản luồng",
-      "geta": "Console Geta"
+      "geta": "Console Geta",
+      "releases": "Bản phát hành sản phẩm"
     },
     "publishes": {
       "description": "Mọi lần xuất bản luồng: những gì worker đã đưa vào hàng đợi, đang xử lý gì, và lần xuất bản nào lỗi cùng lý do. Tự làm mới vài giây một lần.",
@@ -78,6 +79,31 @@
       "empty": {
         "all": "Chưa có luồng nào được xuất bản.",
         "done": "Không có lần xuất bản nào hoàn tất trong 30 ngày qua."
+      }
+    },
+    "releases": {
+      "description": "Những gì đang chạy trên desk.wabo.ai: bản phát hành hiện tại, bản đang triển khai và từng lần thử cùng các bước và lỗi. Tự làm mới vài giây một lần.",
+      "liveLabel": "Đang chạy",
+      "live": "Bản {tag}, chạy từ {time}",
+      "noneLive": "Chưa có bản phát hành nào đưa vào chạy.",
+      "inProgress": "Đang có một bản phát hành",
+      "stalledAlert": "{count} lần thử phát hành không thay đổi trong {minutes} phút. Bước build hoặc phát hành có thể đã dừng.",
+      "empty": "Chưa có bản phát hành nào được ghi lại. Các bản sẽ hiện ở đây từ lần triển khai tiếp theo.",
+      "cols": {
+        "tag": "Thẻ",
+        "state": "Trạng thái",
+        "step": "Bước",
+        "started": "Bắt đầu",
+        "finished": "Kết thúc",
+        "error": "Lỗi"
+      },
+      "state": {
+        "building": "Đang build",
+        "shipping": "Đang gửi",
+        "releasing": "Đang phát hành",
+        "ok": "Đang chạy",
+        "failed": "Lỗi",
+        "rolled_back": "Đã hoàn lại"
       }
     }
   }

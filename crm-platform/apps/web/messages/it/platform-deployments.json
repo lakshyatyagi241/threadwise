@@ -60,7 +60,8 @@
     "tabs": {
       "label": "Scegli cosa mostrare",
       "publishes": "Pubblicazioni dei flussi",
-      "geta": "Console Geta"
+      "geta": "Console Geta",
+      "releases": "Release del prodotto"
     },
     "publishes": {
       "description": "Ogni pubblicazione di un flusso: cosa il worker ha messo in coda, cosa sta gestendo ora e quali pubblicazioni sono fallite e perché. Si aggiorna ogni pochi secondi.",
@@ -78,6 +79,31 @@
       "empty": {
         "all": "Nessun flusso è stato ancora pubblicato.",
         "done": "Nessuna pubblicazione è stata completata negli ultimi 30 giorni."
+      }
+    },
+    "releases": {
+      "description": "Cosa è attivo su desk.wabo.ai: la release corrente, qualsiasi release in corso e ogni tentativo con i suoi passi ed errori. Si aggiorna ogni pochi secondi.",
+      "liveLabel": "Attiva ora",
+      "live": "Release {tag}, attiva dalle {time}",
+      "noneLive": "Nessuna release è ancora andata in linea.",
+      "inProgress": "Una release è in corso",
+      "stalledAlert": "{count} tentativo/i di release non avanzano da {minutes} minuti. La build o la release potrebbero essersi fermate.",
+      "empty": "Nessuna release registrata finora. Le release compariranno qui dal prossimo deploy.",
+      "cols": {
+        "tag": "Tag",
+        "state": "Stato",
+        "step": "Passo",
+        "started": "Avvio",
+        "finished": "Fine",
+        "error": "Errore"
+      },
+      "state": {
+        "building": "In build",
+        "shipping": "In invio",
+        "releasing": "In rilascio",
+        "ok": "Attiva",
+        "failed": "Fallita",
+        "rolled_back": "Ripristinata"
       }
     }
   }

@@ -60,7 +60,8 @@
     "tabs": {
       "label": "Choisir ce qui s’affiche",
       "publishes": "Publications de flux",
-      "geta": "Console Geta"
+      "geta": "Console Geta",
+      "releases": "Versions du produit"
     },
     "publishes": {
       "description": "Chaque publication de flux : ce que le worker a mis en file, ce qu’il traite maintenant, et les publications échouées et pourquoi. Se met à jour toutes les quelques secondes.",
@@ -78,6 +79,31 @@
       "empty": {
         "all": "Aucun flux n’a encore été publié.",
         "done": "Aucune publication n’a été terminée ces 30 derniers jours."
+      }
+    },
+    "releases": {
+      "description": "Ce qui est en ligne sur desk.wabo.ai : la version actuelle, toute version en cours, et chaque tentative avec ses étapes et ses erreurs. Se met à jour toutes les quelques secondes.",
+      "liveLabel": "En ligne maintenant",
+      "live": "Version {tag}, en ligne depuis {time}",
+      "noneLive": "Aucune version n’est encore passée en ligne.",
+      "inProgress": "Une version est en cours",
+      "stalledAlert": "{count} tentative(s) de version n’ont pas bougé depuis {minutes} minutes. La compilation ou la mise en ligne s’est peut-être arrêtée.",
+      "empty": "Aucune version enregistrée pour l’instant. Les versions apparaîtront ici à partir du prochain déploiement.",
+      "cols": {
+        "tag": "Étiquette",
+        "state": "Statut",
+        "step": "Étape",
+        "started": "Début",
+        "finished": "Fin",
+        "error": "Erreur"
+      },
+      "state": {
+        "building": "Compilation",
+        "shipping": "Envoi",
+        "releasing": "Mise en ligne",
+        "ok": "En ligne",
+        "failed": "Échouée",
+        "rolled_back": "Annulée"
       }
     }
   }

@@ -12,7 +12,18 @@ keywords: [deployment, deploy, publish, geta, queue, running, failed, error, sta
 
 ## What it is for
 
-This page is for platform operators. It shows what the platform is deploying across all workspaces, in two views. Open it from the **System** group in the operator console menu, then **Deployments**.
+This page is for platform operators. It shows what the platform is deploying: the product releases first, then the flow publishes. Open it from the **System** group in the operator console menu, then **Deployments**.
+
+## Product releases
+
+The first view, **Product releases**, is the release history of the product itself, desk.wabo.ai.
+
+- **Live now** names the release that is serving customers and when it went live.
+- **In progress** means an attempt is building, shipping or releasing right now.
+- Each attempt shows its **State** (Building, Shipping, Releasing, Live, Failed, Rolled back), the **Step** it reached, and the **Error** if it stopped.
+- **Failed** means the release stopped before traffic moved. **Rolled back** means traffic was moved to the new release and then moved back, so the previous release is still serving.
+
+A **Stalled** badge means an attempt has not changed for 45 minutes. The build or the release most likely stopped; check the build server before doing anything else.
 
 ## Flow publishes
 

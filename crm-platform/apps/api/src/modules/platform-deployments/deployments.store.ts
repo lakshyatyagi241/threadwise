@@ -3,6 +3,8 @@ import { sql } from 'drizzle-orm';
 import {
   DEPLOYMENT_STALL_MINUTES,
   PUBLISH_DONE_WINDOW_DAYS,
+  RELEASE_LIST_MAX,
+  RELEASE_STALL_MINUTES,
   type DeploymentStatus,
   type PublishStatus,
 } from '@crm/contracts';
@@ -139,6 +141,28 @@ export class DeploymentsStore {
         rows: all.filter((r) => r.workspace_id !== null && r.workspace_id !== undefined),
         counts,
       };
+    });
+  }
+
+  /**
+   * Product releases: the newest attempts of platform_releases (written by the deploy scripts on the production and build hosts) and the
+   * live tag. Platform data, no tenant; read through the privileged door like the other operator reads.
+   */
+  listReleases(): Promise<{ rows: Raw[]; live: Raw | null }> {
+    return this.db.privileged(async (tx: Tx) => {
+      const rows = await tx.execute(sql`
+        SELECT attempt, tag, state, step, error, started_at, updated_at, finished_at,
+               (state IN ('building', 'shipping', 'releasing')
+                 AND updated_at < now() - make_interval(mins => ${RELEASE_STALL_MINUTES}::int)) AS stalled
+        FROM platform_releases
+        ORDER BY started_at DESC, attempt DESC
+        LIMIT ${RELEASE_LIST_MAX}
+      `);
+      const live = await tx.execute(sql`
+        SELECT tag, finished_at FROM platform_releases
+        WHERE state = 'ok' ORDER BY finished_at DESC NULLS LAST LIMIT 1
+      `);
+      return { rows: rows.rows as Raw[], live: (live.rows[0] as Raw | undefined) ?? null };
     });
   }
 }
