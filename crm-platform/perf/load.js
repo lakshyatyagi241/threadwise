@@ -50,6 +50,7 @@ for (const n of USERS) {
   }
 }
 export const options = {
+  setupTimeout: '900s',
   scenarios,
   thresholds,
   summaryTrendStats: ['avg', 'med', 'p(95)', 'p(99)', 'max', 'count'],
@@ -60,18 +61,17 @@ const ipOf = (i) => `10.${(i >> 16) & 255}.${(i >> 8) & 255}.${i & 255 || 1}`;
 export function setup() {
   // One session per user, made outside the measured stages (a sign-in storm is not what this test measures; hashing a password is deliberately slow).
   const tokens = [];
-  for (let i = 1; i <= MAX; i++) {
-    const r = http.post(
-      `${BASE}/v2/auth/login`,
-      JSON.stringify({ email: EMAIL, password: PASSWORD }),
-      {
-        headers: { 'content-type': 'application/json', 'x-forwarded-for': ipOf(i) },
-        tags: { setup: 'true' },
-      },
-    );
-    const t = r.status === 200 || r.status === 201 ? r.json('tokens.accessToken') : null;
-    if (!t) throw new Error(`sign-in ${i} failed: ${r.status} ${String(r.body).slice(0, 120)}`);
-    tokens.push(t);
+  const BATCH = 20; // a few sign-ins at a time: hashing a password is slow on purpose and one machine has few cores
+  for (let from = 1; from <= MAX; from += BATCH) {
+    const reqs = [];
+    for (let i = from; i < Math.min(from + BATCH, MAX + 1); i++) {
+      reqs.push(['POST', `${BASE}/v2/auth/login`, JSON.stringify({ email: EMAIL, password: PASSWORD }), { headers: { 'content-type': 'application/json', 'x-forwarded-for': ipOf(i) }, tags: { setup: 'true' } }]);
+    }
+    for (const r of http.batch(reqs)) {
+      const t = r.status === 200 || r.status === 201 ? r.json('tokens.accessToken') : null;
+      if (!t) throw new Error(`sign-in failed: ${r.status} ${String(r.body).slice(0, 120)}`);
+      tokens.push(t);
+    }
   }
   return { tokens, ids: discover(tokens[0]) };
 }
