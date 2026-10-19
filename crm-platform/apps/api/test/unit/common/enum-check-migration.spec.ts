@@ -32,7 +32,7 @@ describe('con-enum migration matches the contracts', () => {
   });
   it('every constraint is NOT VALID, so old rows cannot fail the migration', () => {
     const adds = sql.split('\n').filter((l) => l.startsWith('ALTER TABLE'));
-    expect(adds).toHaveLength(6);
+    expect(adds).toHaveLength(8);
     for (const l of adds) expect(l).toMatch(/NOT VALID;$/);
   });
 });

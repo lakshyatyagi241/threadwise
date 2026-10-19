@@ -6,6 +6,8 @@
 --   shopify_/woocommerce_stock_waitlist.status  waiting -> notified               (shopify-woocommerce/stock.repository.ts)
 --   wa_pending_orders.status           pending -> confirmed | cancelled           (flow-runtime-engine/.../ai/ordering.service.ts)
 --   ai_training_sources.kind / status  AIAG_SOURCE_KINDS / AIAG_SOURCE_STATUSES   (packages/contracts/src/ai-agents-training/sources.ts)
+--   users.status                       active | inactive (userStatusSchema; members.repository.ts is the only writer of 'inactive')
+--   event_outbox.status                pending -> processing -> done | dead         (workers/outbox-drain.service.ts, platform-async-ops replay)
 -- NOT VALID: new and updated rows are checked at once; rows already stored are not scanned, so this cannot fail on old data or hold a long lock.
 -- Run `ALTER TABLE <t> VALIDATE CONSTRAINT <name>` later, once the table is known clean.
 ALTER TABLE storefront_cart_recoveries ADD CONSTRAINT chk_cart_recoveries_status CHECK (status IN ('active', 'recovered', 'sent')) NOT VALID;
@@ -14,3 +16,5 @@ ALTER TABLE woocommerce_stock_waitlist ADD CONSTRAINT chk_woocommerce_waitlist_s
 ALTER TABLE wa_pending_orders ADD CONSTRAINT chk_wa_pending_orders_status CHECK (status IN ('pending', 'confirmed', 'cancelled')) NOT VALID;
 ALTER TABLE ai_training_sources ADD CONSTRAINT chk_ai_training_sources_kind CHECK (kind IN ('url', 'text', 'qa', 'file')) NOT VALID;
 ALTER TABLE ai_training_sources ADD CONSTRAINT chk_ai_training_sources_status CHECK (status IN ('ready', 'processing', 'failed')) NOT VALID;
+ALTER TABLE users ADD CONSTRAINT chk_users_status CHECK (status IN ('active', 'inactive')) NOT VALID;
+ALTER TABLE event_outbox ADD CONSTRAINT chk_event_outbox_status CHECK (status IN ('pending', 'processing', 'done', 'dead')) NOT VALID;
