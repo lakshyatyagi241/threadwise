@@ -54,5 +54,6 @@ const r = spawnSync(
 );
 const err = scrub(r.stderr || '');
 if (/Host key verification failed|REMOTE HOST IDENTIFICATION HAS CHANGED/.test(err)) fail(4, 'Host key verification failed. Do NOT bypass this: confirm the jump host fingerprint with its owner first.');
-process.stdout.write(scrub(r.stdout || ''));
+// the data is not run through the secret scrub (it would blank a business name that contains the Mongo user name): only a connection string is removed
+process.stdout.write(String(r.stdout || '').replace(/mongodb(\+srv)?:\/\/[^\s'"]+/g, '***'));
 if (r.status !== 0) fail(1, err.trim().slice(0, 500));

@@ -16,7 +16,7 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 
 const PHONE_ID = /^\d{5,32}$/;
-const DEFAULT_KIT = 'D:\\wadesk-vedant\\db-migration\\geta-mongodb-read-replica-prod\\geta-mongodb-read-replica-prod';
+const DEFAULT_KIT = path.resolve(__dirname, '..', '..', 'exporter');
 
 const asStr = (v) => (v === undefined || v === null ? '' : String(v?.$numberLong ?? v?.$numberInt ?? v).trim());
 
@@ -73,9 +73,6 @@ function buildMap({ botids, docs }, orgName) {
 
 function readWorkspace(ws) {
   const kit = process.env.GETA_MONGO_KIT || DEFAULT_KIT;
-  const expr =
-    'JSON.stringify({botids:db.chathistory.distinct("botid"),docs:db.chatbot_misc_config.find({config_key:"META_WHATSAPP_CONFIG"},' +
-    '{_id:0,chatbot_id:1,is_active:1,deleted_time:1,"config_value.phoneID":1,"config_value.display_number":1,"config_value.whatsapp_no":1,"config_value.display_name":1}).toArray()})';
   const r = spawnSync(process.execPath, [path.join(kit, 'bin', 'mongo-eval.cjs'), '--query', 'wa', '--workspace', ws], {
     encoding: 'utf8',
     timeout: 120000,

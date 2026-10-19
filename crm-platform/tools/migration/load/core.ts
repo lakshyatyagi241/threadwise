@@ -10,6 +10,7 @@ import { buildRolePlan } from '../transform/access-plan';
 import { docKeys, type Doc } from '../util';
 import { bumpRolesVersion, featureResolver, planRow } from './access';
 import { digest } from './baseline';
+import { DEFAULT_TIMEZONE } from './org';
 import { applySettings, planSettings, type WabooSettings } from './orgsettings';
 import { connect, sql, withPrivileged, withTenant } from './db';
 
@@ -269,7 +270,11 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
       if (tz) {
         await tx.execute(sql`
           UPDATE organizations SET settings = settings || ${JSON.stringify({ timezone: tz })}::jsonb, updated_at = now()
-          WHERE id = ${orgId} AND coalesce(settings ->> 'timezone', '') = ''`);
+          WHERE id = ${orgId}
+            AND (coalesce(settings ->> 'timezone', '') = ''
+                 OR (settings ->> 'timezone' = ${DEFAULT_TIMEZONE}
+                     AND EXISTS (SELECT 1 FROM migration.run_log WHERE source_client = ${o.client} AND collection = '_org' AND step = 'org'
+                                   AND counts ->> 'timezoneDefaulted' = 'true')))`);
         await tx.execute(sql`
           UPDATE workspace_settings SET timezone = ${tz}, updated_at = now(), row_version = row_version + 1
           WHERE org_id = ${orgId} AND timezone = 'UTC'`);
@@ -279,7 +284,11 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
     o.log(`  core  plan "${plan.slug}": ${planInserted === 'created' ? 'created' : planInserted === 'updated' ? 'already made by this tool: limits and features brought in line' : 'already existed (not made by this tool), left as it is'}; organization on it; plan ends ${periodEnd ?? 'n/a'}`);
 
     // --- subscription (tenant) -------------------------------------------------------------------------------------------------------
+    const istIso = (d?: string | null): string | null => (d ? new Date(`${d}T00:00:00+05:30`).toISOString() : null);
     const meta = {
+      // the plan card (subscription.service current()) reads these two
+      activatedAt: istIso(s.activation),
+      previousBillingAt: istIso(s.lastBilling),
       legacy: {
         waboo: {
           planCode: s.planCode, planName: s.name ?? null, subscriptionNumber: core.sub?.number ?? null, invoiceId: core.sub?.invoiceId ?? null,
@@ -361,6 +370,21 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
         );
       }
     }
+
+    // --- chat limits against open migrated chats: the app's routing skips an agent whose open assigned chats have reached chat_limit ------
+    await withPrivileged(owner.db, async (tx) => {
+      const rows = (
+        await tx.execute(sql`
+          SELECT u.full_name AS name, p.chat_limit AS lim,
+                 (SELECT count(*)::int FROM conversations c WHERE c.org_id = u.org_id AND c.assignee_user_id = u.id AND c.status = 'open' AND NOT c.archived) AS open_n
+          FROM users u JOIN user_profiles p ON p.org_id = u.org_id AND p.user_id = u.id
+          WHERE u.org_id = ${orgId} AND p.chat_limit IS NOT NULL ORDER BY u.id`)
+      ).rows as Array<{ name: string; lim: number; open_n: number }>;
+      for (const r of rows)
+        o.log(
+          `  core  chat limit: ${r.name} holds ${r.open_n} open chat(s) of a limit of ${r.lim}${r.open_n >= r.lim ? ' (AT THE LIMIT: the app\'s routing skips this agent until a chat is closed)' : ''}`,
+        );
+    });
 
     // --- the baseline: what this command changed is not an unexplained change to the verifier ------------------------------------
     await withPrivileged(owner.db, async (tx) => {

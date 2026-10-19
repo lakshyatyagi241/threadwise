@@ -124,6 +124,7 @@ export async function ensureOrg(env: OrgEnv): Promise<{ orgId: number; warnings:
     let planSlug: string | null = null;
     let billingCycle: string | null = null;
     let ownerMade = false;
+    let tzDefaultedNow = false;
     let checkOwnerAfter = false;
     let extraMade = false;
     if (found.rows[0]) {
@@ -174,6 +175,14 @@ export async function ensureOrg(env: OrgEnv): Promise<{ orgId: number; warnings:
       await tx.execute(
         sql`INSERT INTO workspace_settings (org_id) VALUES (${id}) ON CONFLICT DO NOTHING`,
       );
+      // the persona row the app's provisioning makes (provisionWorkspacePersona): with the backfill's values, so a migrated workspace is never
+      // offered the new-signup onboarding and never gets a lazily made row that the verifier would count as an extra
+      await tx.execute(sql`
+        INSERT INTO workspace_persona (org_id, persona_key, persona_version, solo_ui, onboarding)
+        SELECT ${id}, 'generic', 1, 'off', jsonb_build_object('completedAt', now(), 'backfilled', true, 'migrated', true)
+        WHERE to_regclass('public.workspace_persona') IS NOT NULL
+        ON CONFLICT (org_id) DO NOTHING`);
+      tzDefaultedNow = tzPick.defaulted;
       env.log(`  org                created organization ${id} (${slugUsed})`);
     }
 
@@ -303,6 +312,8 @@ export async function ensureOrg(env: OrgEnv): Promise<{ orgId: number; warnings:
     const expected = {
       ...was,
       slug: slugUsed,
+      // the zone was the tool's own IST default (no --timezone): core-load replaces it with the geta_core zone
+      timezoneDefaulted: Boolean(was.timezoneDefaulted ?? tzDefaultedNow),
       name: String(was.name ?? o.name),
       plan: String(was.plan ?? planSlug ?? planNow),
       status: 'active',
