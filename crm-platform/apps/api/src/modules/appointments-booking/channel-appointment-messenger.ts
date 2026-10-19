@@ -20,6 +20,7 @@ import { SendWindowService } from '../compliance-center';
 import { ConsentGate } from '../contact-consent';
 import { ContactsRepository } from '../crm';
 import { TemplatesRepository, tokensOf } from '../message-templates';
+import { AppointmentChannelsRepository } from './appointment-channels.repository';
 import {
   digitsOf,
   outcomeOfCode,
@@ -110,6 +111,7 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
     private readonly channels: ChannelsFacade,
     private readonly engines: EngineSenderRegistry,
     private readonly templates: TemplatesRepository,
+    private readonly channelSettings: AppointmentChannelsRepository,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
 
@@ -131,6 +133,12 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
       return { status: 'skipped', reason: 'no_channel' };
     }
     const channel = m.channel;
+    // The workspace owner decides which channels carry appointment messages (BL-350). Asked here, at send time, so switching a channel
+    // off also stops what was scheduled before; the run then falls to its next channel.
+    const gate = await this.db.txAs({ orgId: m.orgId, userId: null }, (tx) =>
+      this.channelSettings.gate(tx, m.orgId, channel),
+    );
+    if (!gate.enabled) return { status: 'skipped', reason: 'channel_disabled' };
     const phone = digitsOf(m.to.phone);
     if (channel === 'email' ? !m.to.email : phone === '') {
       return { status: 'skipped', reason: 'no_contact_point' };
@@ -144,7 +152,13 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
       return { status: 'skipped', reason: 'no_contact_point' };
 
     // Prepare first (it finds the sender and the template), so the quiet hours and the gate are asked about what will really be sent.
-    const prepared = await this.prepare(m, channel, phone, contact?.uuid ?? null);
+    const prepared = await this.prepare(
+      m,
+      channel,
+      phone,
+      contact?.uuid ?? null,
+      gate.defaultSenderId,
+    );
     if (prepared.kind === 'refused') return prepared.outcome;
 
     const quiet = await this.quietHours(m, contact?.id ?? null, phone);
@@ -199,20 +213,23 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
     channel: 'whatsapp' | 'sms' | 'email',
     phone: string,
     contactUuid: string | null,
+    preferredSenderId: number | null,
   ): Promise<
     | { kind: 'refused'; outcome: ChannelOutcome }
     | { kind: 'ready'; purpose: PurposeInput; deliver: () => Promise<ChannelOutcome> }
   > {
     const fallbackPurpose: PurposeInput =
       m.purpose === 'follow_up' ? 'marketing_messaging' : 'service_messaging';
-    if (channel === 'whatsapp') return this.whatsapp(m, contactUuid!, fallbackPurpose);
+    if (channel === 'whatsapp') {
+      return this.whatsapp(m, contactUuid!, fallbackPurpose, preferredSenderId);
+    }
 
     const engine = this.engines.get(channel);
     if (!engine) return refused({ status: 'skipped', reason: 'no_sender' });
 
     if (channel === 'sms') {
       const sender = await this.db.txAs({ orgId: m.orgId, userId: null }, (tx) =>
-        this.smsSender(tx, m.orgId),
+        this.smsSender(tx, m.orgId, preferredSenderId),
       );
       if (!sender) return refused({ status: 'skipped', reason: 'no_sender' });
       return {
@@ -242,7 +259,7 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
     }
 
     const mailbox = await this.db.txAs({ orgId: m.orgId, userId: null }, (tx) =>
-      this.mailbox(tx, m.orgId),
+      this.mailbox(tx, m.orgId, preferredSenderId),
     );
     if (!mailbox) return refused({ status: 'skipped', reason: 'no_sender' });
     return {
@@ -276,6 +293,7 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
     m: BookingMessage,
     contactUuid: string,
     fallbackPurpose: PurposeInput,
+    preferredSenderId: number | null,
   ): Promise<
     | { kind: 'refused'; outcome: ChannelOutcome }
     | { kind: 'ready'; purpose: PurposeInput; deliver: () => Promise<ChannelOutcome> }
@@ -357,7 +375,10 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
     }
 
     // Free text: allowed inside the 24 hour window on the Cloud API, anywhere on a QR number.
-    const cloudChannel = found.cloud.find((c) => c.status === 'connected');
+    // The owner's default number first, then any other connected Cloud API number.
+    const cloudChannel =
+      found.cloud.find((c) => c.status === 'connected' && c.wabaConfigId === preferredSenderId) ??
+      found.cloud.find((c) => c.status === 'connected');
     if (cloudChannel) {
       const open = await this.windowOpen(m, contactUuid, cloudChannel.uuid);
       if (open) {
@@ -437,12 +458,13 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
   private async smsSender(
     tx: Tx,
     orgId: number,
+    preferredId: number | null,
   ): Promise<{ id: number; label: string; phoneDigits: string } | undefined> {
     const res = await tx.execute(sql`
       SELECT id, phone_number, coalesce(nullif(display_label, ''), phone_number) AS label
       FROM wa_provider_configs
       WHERE org_id = ${orgId} AND provider = 'sms' AND status = 'connected'
-      ORDER BY is_primary DESC, id LIMIT 1`);
+      ORDER BY (id = ${preferredId ?? 0}) DESC, is_primary DESC, id LIMIT 1`);
     const r = res.rows[0] as Raw | undefined;
     return r
       ? {
@@ -457,12 +479,13 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
   private async mailbox(
     tx: Tx,
     orgId: number,
+    preferredId: number | null,
   ): Promise<{ id: number; label: string; address: string } | undefined> {
     const res = await tx.execute(sql`
       SELECT id, address::text AS address, coalesce(nullif(display_name, ''), address::text) AS label
       FROM mail_mailboxes
       WHERE org_id = ${orgId} AND status = 'connected' AND scope = 'shared'
-      ORDER BY created_at, id LIMIT 1`);
+      ORDER BY (id = ${preferredId ?? 0}) DESC, created_at, id LIMIT 1`);
     const r = res.rows[0] as Raw | undefined;
     return r
       ? { id: Number(r.id), label: r.label as string, address: r.address as string }

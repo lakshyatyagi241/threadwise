@@ -65,3 +65,18 @@ workspace vocabulary (`appointments.reminders` is a bound surface of `persona-vo
 - Creating a meeting from the contact with the Appointments add-on, and changing or cancelling a booking from its Meetings row (BL-282); persona wording of the nouns (BL-284).
 - Reminders (BL-283): a test-send to yourself (a real send to a phone cannot be made safe without choosing whose number); a per-contact language for the standard texts (they are English); a business-hours window for reminders (quiet hours only); leave-aware availability and reassignment (a separate task); real WhatsApp, SMS and email delivery has only been exercised against fakes.
 - Real-account verification of Google and Microsoft (BL-199): everything here is exercised against local stand-ins written from the vendors' documentation.
+
+## BL-350..BL-354 rows (owner-enabled channels and the message library)
+
+| Id | What | Fed by | Read by |
+| -- | ---- | ------ | ------- |
+| WIRE-APPT-019 | The owner's channel choice (`appointment_channel_settings`; existing workspaces seeded on, `legacy_default`) | `PUT /v2/appointment-channels/:channel` (`appointments.channels.manage`) | `GET /v2/appointment-channels`; the settings card "Message channels"; the editor's Messaging step; `ChannelAppointmentMessenger` (`gate`) |
+| WIRE-APPT-020 | The send-time gate and default sender | the messenger asks `AppointmentChannelsRepository.gate` first; `channel_disabled` is a skip reason (run, drawer, timeline) | reminder runs, lifecycle messages |
+| WIRE-APPT-021 | The message library (`appointment_message_templates`) and the built-in set | `POST .../adopt`, `POST`, `PATCH`, `DELETE /v2/appointment-message-templates` | the settings card "Message templates"; pickers in the editor |
+| WIRE-APPT-022 | WhatsApp message to Meta | `adopt` / `submit` call `TemplatesService.create` / `submit` (the template library's own lint, plan cap, Graph call); status is read live from `wa_templates` | `GET .../appointment-message-templates` (`status`, `rejectionReason`) |
+| WIRE-APPT-023 | A type's choice (`booking_templates.library_template_id`) | `PATCH /v2/booking-types/:id` `templates[].libraryTemplateId` (approved-only check, enabled-channel check) | `AppointmentMessageConsumer` and `AppointmentReminderService` read the library text, subject and WhatsApp template at send time |
+| WIRE-APPT-024 | Voice reserved | database checks only; `voice` is listed disabled "Coming with the Voice bot" | nothing sends on it |
+
+Not built: the Voice bot and the outbound reminder call; predefined texts in languages other than English; SMS library messages (an SMS uses the type's
+or rule's text); copying a WhatsApp library message into a reminder rule as its template (pick the approved template in the rule's own list); real Meta
+approval (exercised against a fake Graph edge only).

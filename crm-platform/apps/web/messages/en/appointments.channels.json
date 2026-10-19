@@ -1,0 +1,152 @@
+{
+  "appointments": {
+    "channels": {
+      "title": "Message channels",
+      "description": "Choose which channels may carry appointment messages to your contacts: confirmations, reminders, reschedule and cancellation notices, and after-visit follow-ups. A booking type can use a channel only when it is switched on here and connected.",
+      "loading": "Loading the channels...",
+      "undecidedOwner": "No channel is switched on yet, so no appointment message is sent. Switch on the channels your team may use.",
+      "undecidedMember": "No channel is switched on yet, so no appointment message is sent. Ask the workspace owner to choose the channels.",
+      "readOnly": "Only the workspace owner and admins can change these.",
+      "enableLabel": "Use {channel} for appointment messages",
+      "switchedOn": "{channel} is on for appointment messages.",
+      "switchedOff": "{channel} is off for appointment messages.",
+      "senderSaved": "The default {channel} sender is saved.",
+      "defaultSender": "Default sender",
+      "defaultSenderOf": "Default sender for {channel}",
+      "firstConnected": "The first connected one",
+      "sendsFrom": "Sends from {sender}",
+      "notConnected": "Nothing is connected for this channel yet.",
+      "connect": "Connect it in Settings",
+      "voiceSoon": "Coming with the Voice bot: an outbound reminder call you will be able to switch on for each booking type. It cannot be switched on yet.",
+      "names": {
+        "email": "Email",
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "voice": "Reminder call"
+      },
+      "about": {
+        "email": "From a shared mailbox of your workspace. Never from a personal mailbox.",
+        "whatsapp": "Free text inside the 24 hour window; outside it only an approved template.",
+        "sms": "Plain text from your connected SMS sender.",
+        "voice": "An automatic outbound call that reminds the contact."
+      },
+      "status": {
+        "usable": "On and connected",
+        "off": "Off",
+        "notChosen": "Not chosen yet",
+        "not_connected": "On, not connected",
+        "coming_soon": "Coming with the Voice bot"
+      },
+      "editorTitle": "Channels for this booking type",
+      "editorHint": "Only channels the workspace owner switched on and that are connected can be used. The rest are shown so you know why.",
+      "noneUsable": "No channel is available yet, so no message of this booking type can be sent.",
+      "openSettings": "Open the channel settings",
+      "offByOwner": "The workspace owner has not switched this channel on.",
+      "sendOn": "Send on",
+      "sendOnAuto": "No channel chosen: the first available channel is used, with the standard text.",
+      "sendOnEach": "The message goes out on every channel ticked here.",
+      "attachedButUnusable": "This channel is not available now, so this message is skipped on it. Untick it or ask the owner to switch it on."
+    },
+    "templates": {
+      "title": "Message templates",
+      "description": "Predefined messages for confirmations, reminders, reschedules, cancellations and after-visit follow-ups. Add one with a click and edit it. Email messages live here; WhatsApp messages are sent to Meta for approval and only an approved one can be used.",
+      "loading": "Loading the messages...",
+      "readOnly": "Only users who manage appointment templates can change these.",
+      "empty": "No message added yet. Add one from the predefined set below.",
+      "yours": "Your messages",
+      "status": {
+        "draft": "Draft",
+        "pending": "In review at Meta",
+        "approved": "Approved",
+        "rejected": "Rejected"
+      },
+      "kinds": {
+        "confirmation": "Booking confirmation",
+        "reminder": "Reminder",
+        "reschedule": "Rescheduled",
+        "cancellation": "Cancelled",
+        "follow_up": "After-visit follow-up"
+      },
+      "channels": {
+        "email": "Email",
+        "whatsapp": "WhatsApp"
+      },
+      "usedBy": "{count, plural, one {used by # booking type} other {used by # booking types}}",
+      "inactive": "switched off",
+      "submit": "Send to Meta for approval",
+      "submitting": "Sending...",
+      "submitted": "Sent to Meta. It is in review now.",
+      "metaRefused": "Saved, but Meta refused it. Open the message to see the reason.",
+      "refresh": "Check status",
+      "refreshing": "Checking...",
+      "refreshed": "Status updated.",
+      "edit": "Edit",
+      "view": "View",
+      "close": "Close",
+      "delete": "Remove",
+      "deleteTitle": "Remove \"{name}\"?",
+      "deleteWhatsapp": "It is removed from this list. The WhatsApp template stays in your WhatsApp templates; delete it there if you no longer need it.",
+      "deleteBody": "It is removed from your library. A booking type that uses it must choose another message first.",
+      "deleted": "Message removed.",
+      "cancel": "Cancel",
+      "rejectedBecause": "Meta rejected it: {reason}",
+      "pendingNote": "Meta is reviewing this template. Until it is approved it cannot be chosen or sent.",
+      "nameLabel": "Name",
+      "subjectLabel": "Subject",
+      "bodyLabel": "Message",
+      "textLocked": "A template that is in review or approved cannot be edited here.",
+      "placeholders": "You can use:",
+      "whatsappPlaceholders": "WhatsApp can fill only these, used in this order without skipping one:",
+      "activeLabel": "Available to choose",
+      "save": "Save",
+      "saving": "Saving...",
+      "saveAndSubmit": "Save and send to Meta",
+      "saved": "Message saved.",
+      "predefinedTitle": "Predefined messages",
+      "predefinedHint": "Adopt a message to copy it into your library, then edit it. A WhatsApp message is created as a draft first; you decide when to send it to Meta.",
+      "machineNote": "The predefined texts are written in English. Edit them to your language after adding them.",
+      "category": {
+        "UTILITY": "Utility",
+        "MARKETING": "Marketing"
+      },
+      "preview": "Preview",
+      "hidePreview": "Hide preview",
+      "inLibrary": "In your library: {status}",
+      "adopt": "Add to my messages",
+      "adopting": "Adding...",
+      "adoptDraft": "Add as a draft",
+      "adoptSubmit": "Add and send to Meta",
+      "adopted": "Added to your messages.",
+      "newEmail": "New email message",
+      "kindLabel": "Kind",
+      "create": "Create",
+      "created": "Message created.",
+      "chooseLabel": "Message to use",
+      "useText": "The text above",
+      "unknownMessage": "A message that is no longer available",
+      "noneYet": "No message of this kind yet.",
+      "openLibrary": "Add one in the settings",
+      "whatsappApprovedOnly": "Only templates Meta has approved can be chosen. Outside the 24 hour window WhatsApp sends nothing else."
+    },
+    "reminders": {
+      "channels": {
+        "voice": "Reminder call"
+      },
+      "voiceSoon": "Coming with the Voice bot: an outbound reminder call. It cannot be added yet.",
+      "voiceSoonShort": "coming with the Voice bot",
+      "channelUnusable": "not available now",
+      "noUsableChannel": "None of this rule's channels is available, so it cannot be switched on.",
+      "openChannels": "Open the channel settings",
+      "fromLibrary": "Use a message from the library",
+      "openLibrary": "Add messages in the settings",
+      "reasons": {
+        "channel_disabled": "The workspace has switched this channel off for appointment messages."
+      }
+    },
+    "editor": {
+      "problems": {
+        "templateNoChannel": "Choose at least one channel for this message, or clear its text."
+      }
+    }
+  }
+}

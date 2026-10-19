@@ -9,4 +9,5 @@ export * from './calendar';
 export * from './calendar-providers';
 export * from './calendar-feeds';
 export * from './booking-tools';
+export * from './channels';
 export * from './public';

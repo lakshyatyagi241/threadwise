@@ -1,0 +1,152 @@
+{
+  "appointments": {
+    "channels": {
+      "title": "Kanal pesan",
+      "description": "Pilih kanal mana yang boleh mengirim pesan janji temu ke kontak Anda: konfirmasi, pengingat, pemberitahuan perubahan jadwal dan pembatalan, serta tindak lanjut setelah kunjungan. Jenis pemesanan hanya dapat memakai kanal jika diaktifkan di sini dan terhubung.",
+      "loading": "Memuat kanal...",
+      "undecidedOwner": "Belum ada kanal yang aktif, jadi tidak ada pesan janji temu yang dikirim. Aktifkan kanal yang boleh dipakai tim Anda.",
+      "undecidedMember": "Belum ada kanal yang aktif, jadi tidak ada pesan janji temu yang dikirim. Minta pemilik ruang kerja memilih kanal.",
+      "readOnly": "Hanya pemilik ruang kerja dan admin yang dapat mengubah ini.",
+      "enableLabel": "Gunakan {channel} untuk pesan janji temu",
+      "switchedOn": "{channel} aktif untuk pesan janji temu.",
+      "switchedOff": "{channel} nonaktif untuk pesan janji temu.",
+      "senderSaved": "Pengirim default {channel} disimpan.",
+      "defaultSender": "Pengirim default",
+      "defaultSenderOf": "Pengirim default untuk {channel}",
+      "firstConnected": "Yang pertama terhubung",
+      "sendsFrom": "Mengirim dari {sender}",
+      "notConnected": "Belum ada yang terhubung untuk kanal ini.",
+      "connect": "Hubungkan di Pengaturan",
+      "voiceSoon": "Segera hadir dengan bot suara: panggilan pengingat keluar yang dapat Anda aktifkan untuk setiap jenis pemesanan. Belum dapat diaktifkan.",
+      "names": {
+        "email": "Email",
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "voice": "Panggilan pengingat"
+      },
+      "about": {
+        "email": "Dari kotak surat bersama ruang kerja Anda. Tidak pernah dari kotak surat pribadi.",
+        "whatsapp": "Teks bebas dalam jendela 24 jam; di luar itu hanya templat yang disetujui.",
+        "sms": "Teks biasa dari pengirim SMS Anda yang terhubung.",
+        "voice": "Panggilan keluar otomatis yang mengingatkan kontak."
+      },
+      "status": {
+        "usable": "Aktif dan terhubung",
+        "off": "Nonaktif",
+        "notChosen": "Belum dipilih",
+        "not_connected": "Aktif, belum terhubung",
+        "coming_soon": "Segera hadir dengan bot suara"
+      },
+      "editorTitle": "Kanal untuk jenis pemesanan ini",
+      "editorHint": "Hanya kanal yang diaktifkan pemilik dan terhubung yang dapat dipakai. Sisanya ditampilkan agar Anda tahu alasannya.",
+      "noneUsable": "Belum ada kanal tersedia, jadi tidak ada pesan jenis pemesanan ini yang dapat dikirim.",
+      "openSettings": "Buka pengaturan kanal",
+      "offByOwner": "Pemilik ruang kerja belum mengaktifkan kanal ini.",
+      "sendOn": "Kirim lewat",
+      "sendOnAuto": "Tidak ada kanal dipilih: kanal pertama yang tersedia dipakai dengan teks standar.",
+      "sendOnEach": "Pesan dikirim lewat setiap kanal yang dicentang di sini.",
+      "attachedButUnusable": "Kanal ini tidak tersedia sekarang, jadi pesan ini dilewati di kanal tersebut. Hapus centang atau minta pemilik mengaktifkannya."
+    },
+    "templates": {
+      "title": "Templat pesan",
+      "description": "Pesan bawaan untuk konfirmasi, pengingat, perubahan jadwal, pembatalan, dan tindak lanjut setelah kunjungan. Tambahkan dengan satu klik lalu ubah. Pesan email ada di sini; pesan WhatsApp dikirim ke Meta untuk persetujuan dan hanya yang disetujui yang dapat dipakai.",
+      "loading": "Memuat pesan...",
+      "readOnly": "Hanya pengguna yang mengelola templat janji temu yang dapat mengubah ini.",
+      "empty": "Belum ada pesan ditambahkan. Tambahkan dari set bawaan di bawah.",
+      "yours": "Pesan Anda",
+      "status": {
+        "draft": "Draf",
+        "pending": "Ditinjau di Meta",
+        "approved": "Disetujui",
+        "rejected": "Ditolak"
+      },
+      "kinds": {
+        "confirmation": "Konfirmasi pemesanan",
+        "reminder": "Pengingat",
+        "reschedule": "Dijadwalkan ulang",
+        "cancellation": "Dibatalkan",
+        "follow_up": "Tindak lanjut setelah kunjungan"
+      },
+      "channels": {
+        "email": "Email",
+        "whatsapp": "WhatsApp"
+      },
+      "usedBy": "{count, plural, other {dipakai oleh # jenis pemesanan}}",
+      "inactive": "dinonaktifkan",
+      "submit": "Kirim ke Meta untuk persetujuan",
+      "submitting": "Mengirim...",
+      "submitted": "Dikirim ke Meta. Sedang ditinjau.",
+      "metaRefused": "Disimpan, tetapi Meta menolaknya. Buka pesan untuk melihat alasannya.",
+      "refresh": "Periksa status",
+      "refreshing": "Memeriksa...",
+      "refreshed": "Status diperbarui.",
+      "edit": "Ubah",
+      "view": "Lihat",
+      "close": "Tutup",
+      "delete": "Hapus",
+      "deleteTitle": "Hapus \"{name}\"?",
+      "deleteWhatsapp": "Dihapus dari daftar ini. Templat WhatsApp tetap ada di templat WhatsApp Anda; hapus di sana jika tidak diperlukan lagi.",
+      "deleteBody": "Dihapus dari pustaka Anda. Jenis pemesanan yang memakainya harus memilih pesan lain dulu.",
+      "deleted": "Pesan dihapus.",
+      "cancel": "Batal",
+      "rejectedBecause": "Meta menolaknya: {reason}",
+      "pendingNote": "Meta sedang meninjau templat ini. Sebelum disetujui, templat tidak dapat dipilih atau dikirim.",
+      "nameLabel": "Nama",
+      "subjectLabel": "Subjek",
+      "bodyLabel": "Pesan",
+      "textLocked": "Templat yang sedang ditinjau atau disetujui tidak dapat diubah di sini.",
+      "placeholders": "Anda dapat memakai:",
+      "whatsappPlaceholders": "WhatsApp hanya dapat mengisi ini, dipakai dalam urutan ini tanpa melewatkan satu pun:",
+      "activeLabel": "Tersedia untuk dipilih",
+      "save": "Simpan",
+      "saving": "Menyimpan...",
+      "saveAndSubmit": "Simpan dan kirim ke Meta",
+      "saved": "Pesan disimpan.",
+      "predefinedTitle": "Pesan bawaan",
+      "predefinedHint": "Adopsi pesan untuk menyalinnya ke pustaka Anda, lalu ubah. Pesan WhatsApp dibuat dulu sebagai draf; Anda yang memutuskan kapan mengirimnya ke Meta.",
+      "machineNote": "Teks bawaan ditulis dalam bahasa Inggris. Ubah ke bahasa Anda setelah menambahkannya.",
+      "category": {
+        "UTILITY": "Utilitas",
+        "MARKETING": "Pemasaran"
+      },
+      "preview": "Pratinjau",
+      "hidePreview": "Sembunyikan pratinjau",
+      "inLibrary": "Di pustaka Anda: {status}",
+      "adopt": "Tambahkan ke pesan saya",
+      "adopting": "Menambahkan...",
+      "adoptDraft": "Tambahkan sebagai draf",
+      "adoptSubmit": "Tambahkan dan kirim ke Meta",
+      "adopted": "Ditambahkan ke pesan Anda.",
+      "newEmail": "Pesan email baru",
+      "kindLabel": "Jenis",
+      "create": "Buat",
+      "created": "Pesan dibuat.",
+      "chooseLabel": "Pesan yang dipakai",
+      "useText": "Teks di atas",
+      "unknownMessage": "Pesan yang sudah tidak tersedia",
+      "noneYet": "Belum ada pesan jenis ini.",
+      "openLibrary": "Tambahkan di pengaturan",
+      "whatsappApprovedOnly": "Hanya templat yang disetujui Meta yang dapat dipilih. Di luar jendela 24 jam WhatsApp tidak mengirim yang lain."
+    },
+    "reminders": {
+      "channels": {
+        "voice": "Panggilan pengingat"
+      },
+      "voiceSoon": "Segera hadir dengan bot suara: panggilan pengingat keluar. Belum dapat ditambahkan.",
+      "voiceSoonShort": "segera hadir dengan bot suara",
+      "channelUnusable": "tidak tersedia sekarang",
+      "noUsableChannel": "Tidak ada kanal aturan ini yang tersedia, jadi tidak dapat diaktifkan.",
+      "openChannels": "Buka pengaturan kanal",
+      "fromLibrary": "Gunakan pesan dari pustaka",
+      "openLibrary": "Tambahkan pesan di pengaturan",
+      "reasons": {
+        "channel_disabled": "Ruang kerja menonaktifkan kanal ini untuk pesan janji temu."
+      }
+    },
+    "editor": {
+      "problems": {
+        "templateNoChannel": "Pilih setidaknya satu kanal untuk pesan ini atau hapus teksnya."
+      }
+    }
+  }
+}

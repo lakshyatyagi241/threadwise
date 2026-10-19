@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 import { Alert, Button, Checkbox, Field, Input, Select, Textarea, cn } from '@crm/ui';
@@ -10,10 +11,21 @@ import {
   type QuestionType,
   type TemplateEvent,
 } from '../api/schemas';
-import { LIMITS, type QuestionDraft } from '../lib/booking-form';
+import {
+  LIMITS,
+  type QuestionDraft,
+  type TemplateChannel,
+  type TemplateDraft,
+} from '../lib/booking-form';
 import { PLACEHOLDERS, insertAtRange, moveItem, newQuestion } from '../lib/editor';
 import { REMINDER_MAX_RULES } from '../lib/reminder-rules';
-import { useWaTemplates } from '../api/hooks';
+import { useAppointmentChannels, useMessageLibrary, useWaTemplates } from '../api/hooks';
+import {
+  CHANNEL_ORDER,
+  CONNECT_HREF,
+  channelUse,
+  usableChannels,
+} from '../lib/channel-availability';
 import { ReminderRulesEditor } from './reminder-rules-editor';
 import { SectionCard, chipClass, iconButtonClass, useEditor } from './editor-shared';
 import { ChevronDownIcon, MinusIcon, PlusIcon } from './icons';
@@ -33,6 +45,7 @@ export function MessagingStep() {
   const { typeId } = useEditor();
   return (
     <div className="space-y-4">
+      <ChannelStrip />
       <LifecycleMessages />
       <Reminders />
       <Questionnaire />
@@ -43,14 +56,26 @@ export function MessagingStep() {
 
 function LifecycleMessages() {
   const t = useTranslations('appointments.editor.messages');
-  const { draft, update, fid, disabled } = useEditor();
+  const { draft, update, err, fid, disabled } = useEditor();
   const refs = useRef<Partial<Record<TemplateEvent, HTMLTextAreaElement | null>>>({});
   const [active, setActive] = useState<TemplateEvent>('confirmation');
+  const channelStates = useAppointmentChannels().data;
+  const library = useMessageLibrary().data;
+  const attachable = usableChannels(channelStates, TEMPLATE_CHANNELS);
 
+  // A text has to be attached to a channel to be sent: typing one into a message with no channel attaches the channels that are usable.
   const setBody = (event: TemplateEvent, plainBody: string) =>
+    update((d) => {
+      const cur = d.templates[event];
+      const channels =
+        cur.channels.length === 0 && plainBody.trim() !== '' ? attachable : cur.channels;
+      return { ...d, templates: { ...d.templates, [event]: { ...cur, plainBody, channels } } };
+    });
+
+  const patchEvent = (event: TemplateEvent, change: Partial<TemplateDraft>) =>
     update((d) => ({
       ...d,
-      templates: { ...d.templates, [event]: { ...d.templates[event], plainBody } },
+      templates: { ...d.templates, [event]: { ...d.templates[event], ...change } },
     }));
 
   function insert(token: string) {
@@ -137,6 +162,19 @@ function LifecycleMessages() {
                 >
                   {body.length} / {LIMITS.templateMax}
                 </div>
+                {err(`template:${event}`) && (
+                  <p role="alert" className="mt-1 text-xs text-danger">
+                    {err(`template:${event}`)}
+                  </p>
+                )}
+                <EventChannels
+                  event={event}
+                  draft={draft.templates[event]}
+                  states={channelStates}
+                  library={library}
+                  disabled={disabled}
+                  onChange={(change) => patchEvent(event, change)}
+                />
               </div>
             </div>
           );
@@ -149,10 +187,243 @@ function LifecycleMessages() {
   );
 }
 
+const TEMPLATE_CHANNELS = ['whatsapp', 'email'] as const satisfies readonly TemplateChannel[];
+
+type ChannelStates = ReturnType<typeof useAppointmentChannels>['data'];
+
+/** The channels this booking type can use right now: on in the owner's settings AND connected (BL-350). */
+function ChannelStrip() {
+  const t = useTranslations('appointments.channels');
+  const query = useAppointmentChannels();
+  const states = query.data;
+  const anyUsable = states === undefined || states.some((s) => s.usable);
+  return (
+    <SectionCard title={t('editorTitle')} hint={t('editorHint')}>
+      {query.isPending ? (
+        <p className="text-sm text-muted-foreground">{t('loading')}</p>
+      ) : (
+        <>
+          <ul className="grid gap-2 sm:grid-cols-2">
+            {CHANNEL_ORDER.map((channel) => (
+              <ChannelChip key={channel} channel={channel} states={states} />
+            ))}
+          </ul>
+          {!anyUsable && (
+            <Alert tone="warning" className="mt-3 text-xs">
+              {t('noneUsable')}{' '}
+              <Link href="/appointments/settings#channels" className="font-medium underline">
+                {t('openSettings')}
+              </Link>
+            </Alert>
+          )}
+        </>
+      )}
+    </SectionCard>
+  );
+}
+
+function ChannelChip({
+  channel,
+  states,
+}: {
+  channel: (typeof CHANNEL_ORDER)[number];
+  states: ChannelStates;
+}) {
+  const t = useTranslations('appointments.channels');
+  const use = channelUse(states, channel);
+  const href = CONNECT_HREF[channel];
+  return (
+    <li
+      className={cn(
+        'rounded-lg border px-3 py-2',
+        use === 'usable' ? 'border-success/40 bg-success/5' : 'border-border bg-muted/30',
+      )}
+    >
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <span className="text-sm font-medium">{t(`names.${channel}`)}</span>
+        <span className="text-xs text-muted-foreground">{t(`status.${use}`)}</span>
+      </div>
+      {use === 'not_connected' && href && (
+        <p className="mt-1 text-xs">
+          <Link href={href} className="font-medium text-primary underline-offset-2 hover:underline">
+            {t('connect')}
+          </Link>
+        </p>
+      )}
+      {use === 'off' && (
+        <p className="mt-1 text-xs text-muted-foreground">
+          {t('offByOwner')}{' '}
+          <Link
+            href="/appointments/settings#channels"
+            className="font-medium text-primary hover:underline"
+          >
+            {t('openSettings')}
+          </Link>
+        </p>
+      )}
+      {use === 'coming_soon' && (
+        <p className="mt-1 text-xs text-muted-foreground">{t('voiceSoon')}</p>
+      )}
+    </li>
+  );
+}
+
+/** Which channels one lifecycle message goes out on, and which library message each uses (BL-350, BL-351). */
+function EventChannels({
+  event,
+  draft,
+  states,
+  library,
+  disabled,
+  onChange,
+}: {
+  event: TemplateEvent;
+  draft: TemplateDraft;
+  states: ChannelStates;
+  library: ReturnType<typeof useMessageLibrary>['data'];
+  disabled: boolean;
+  onChange: (change: Partial<TemplateDraft>) => void;
+}) {
+  const t = useTranslations('appointments.channels');
+  const tl = useTranslations('appointments.templates');
+  return (
+    <fieldset className="mt-3 space-y-2">
+      <legend className="text-xs font-medium">{t('sendOn')}</legend>
+      <p className="text-xs text-muted-foreground">
+        {draft.channels.length === 0 ? t('sendOnAuto') : t('sendOnEach')}
+      </p>
+      <ul className="space-y-2">
+        {TEMPLATE_CHANNELS.map((channel) => (
+          <EventChannelRow
+            key={channel}
+            event={event}
+            channel={channel}
+            draft={draft}
+            states={states}
+            library={library}
+            disabled={disabled}
+            onChange={onChange}
+            t={t}
+            tl={tl}
+          />
+        ))}
+      </ul>
+    </fieldset>
+  );
+}
+
+function EventChannelRow({
+  event,
+  channel,
+  draft,
+  states,
+  library,
+  disabled,
+  onChange,
+  t,
+  tl,
+}: {
+  event: TemplateEvent;
+  channel: TemplateChannel;
+  draft: TemplateDraft;
+  states: ChannelStates;
+  library: ReturnType<typeof useMessageLibrary>['data'];
+  disabled: boolean;
+  onChange: (change: Partial<TemplateDraft>) => void;
+  t: ReturnType<typeof useTranslations>;
+  tl: ReturnType<typeof useTranslations>;
+}) {
+  const use = channelUse(states, channel);
+  const checked = draft.channels.includes(channel);
+  const href = CONNECT_HREF[channel];
+  const options = (library ?? []).filter((m) => m.channel === channel && m.kind === event);
+  const value = channel === 'whatsapp' ? draft.waLibraryId : draft.emailLibraryId;
+  return (
+    <li className="rounded-md border border-border px-2.5 py-2">
+      <label className="flex flex-wrap items-center gap-2 text-sm">
+        <input
+          type="checkbox"
+          checked={checked}
+          disabled={disabled || (use !== 'usable' && !checked)}
+          onChange={(e) =>
+            onChange({
+              channels: e.target.checked
+                ? [...draft.channels, channel]
+                : draft.channels.filter((c) => c !== channel),
+            })
+          }
+        />
+        <span className="font-medium">{t(`names.${channel}`)}</span>
+        {use !== 'usable' && (
+          <span className="text-xs text-muted-foreground">{t(`status.${use}`)}</span>
+        )}
+      </label>
+      {use === 'not_connected' && href && (
+        <p className="mt-1 text-xs">
+          <Link href={href} className="font-medium text-primary hover:underline">
+            {t('connect')}
+          </Link>
+        </p>
+      )}
+      {checked && use !== 'usable' && (
+        <p className="mt-1 text-xs text-warning">{t('attachedButUnusable')}</p>
+      )}
+      {checked && (
+        <div className="mt-2 space-y-1">
+          <label
+            className="block text-xs text-muted-foreground"
+            htmlFor={`tpl-${event}-${channel}`}
+          >
+            {tl('chooseLabel')}
+          </label>
+          <Select
+            id={`tpl-${event}-${channel}`}
+            value={value}
+            disabled={disabled}
+            onChange={(e) =>
+              onChange(
+                channel === 'whatsapp'
+                  ? { waLibraryId: e.target.value }
+                  : { emailLibraryId: e.target.value },
+              )
+            }
+          >
+            <option value="">{tl('useText')}</option>
+            {value !== '' && !options.some((m) => m.id === value) && (
+              <option value={value}>{tl('unknownMessage')}</option>
+            )}
+            {options.map((m) => (
+              <option key={m.id} value={m.id} disabled={!m.usable && m.id !== value}>
+                {m.usable ? m.name : `${m.name} (${tl(`status.${m.status}`)})`}
+              </option>
+            ))}
+          </Select>
+          {options.length === 0 && (
+            <p className="text-xs text-muted-foreground">
+              {tl('noneYet')}{' '}
+              <Link
+                href="/appointments/settings#templates"
+                className="font-medium text-primary hover:underline"
+              >
+                {tl('openLibrary')}
+              </Link>
+            </p>
+          )}
+          {channel === 'whatsapp' && (
+            <p className="text-xs text-muted-foreground">{tl('whatsappApprovedOnly')}</p>
+          )}
+        </div>
+      )}
+    </li>
+  );
+}
+
 function Reminders() {
   const t = useTranslations('appointments.reminders');
   const { draft, update, err, fid, disabled } = useEditor();
   const templates = useWaTemplates();
+  const channelStates = useAppointmentChannels().data;
+  const library = useMessageLibrary().data;
   return (
     <SectionCard title={t('title')} hint={t('hint', { max: REMINDER_MAX_RULES })}>
       <ReminderRulesEditor
@@ -162,6 +433,8 @@ function Reminders() {
         errorOf={err}
         typeName={draft.name}
         templates={templates.data ?? []}
+        channelStates={channelStates}
+        library={library}
         idPrefix={fid('reminders')}
       />
     </SectionCard>

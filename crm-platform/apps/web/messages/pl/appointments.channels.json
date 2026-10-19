@@ -1,0 +1,152 @@
+{
+  "appointments": {
+    "channels": {
+      "title": "Kanały wiadomości",
+      "description": "Wybierz, które kanały mogą wysyłać wiadomości o wizytach do Twoich kontaktów: potwierdzenia, przypomnienia, informacje o zmianie i odwołaniu oraz wiadomości po wizycie. Typ rezerwacji może używać kanału tylko wtedy, gdy jest tu włączony i połączony.",
+      "loading": "Wczytywanie kanałów...",
+      "undecidedOwner": "Żaden kanał nie jest jeszcze włączony, więc nie są wysyłane żadne wiadomości o wizytach. Włącz kanały, z których może korzystać Twój zespół.",
+      "undecidedMember": "Żaden kanał nie jest jeszcze włączony, więc nie są wysyłane żadne wiadomości o wizytach. Poproś właściciela przestrzeni o wybór kanałów.",
+      "readOnly": "Tylko właściciel przestrzeni i administratorzy mogą to zmienić.",
+      "enableLabel": "Używaj {channel} do wiadomości o wizytach",
+      "switchedOn": "{channel} jest włączony dla wiadomości o wizytach.",
+      "switchedOff": "{channel} jest wyłączony dla wiadomości o wizytach.",
+      "senderSaved": "Zapisano domyślnego nadawcę dla {channel}.",
+      "defaultSender": "Domyślny nadawca",
+      "defaultSenderOf": "Domyślny nadawca dla {channel}",
+      "firstConnected": "Pierwszy połączony",
+      "sendsFrom": "Wysyła z {sender}",
+      "notConnected": "Dla tego kanału nic nie jest jeszcze połączone.",
+      "connect": "Połącz go w Ustawieniach",
+      "voiceSoon": "Wkrótce z botem głosowym: wychodzące połączenie przypominające, które będzie można włączyć dla każdego typu rezerwacji. Nie można go jeszcze włączyć.",
+      "names": {
+        "email": "E-mail",
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "voice": "Połączenie przypominające"
+      },
+      "about": {
+        "email": "Ze współdzielonej skrzynki Twojej przestrzeni. Nigdy z osobistej skrzynki.",
+        "whatsapp": "Dowolny tekst w oknie 24 godzin; poza nim tylko zatwierdzony szablon.",
+        "sms": "Zwykły tekst z podłączonego nadawcy SMS.",
+        "voice": "Automatyczne połączenie wychodzące, które przypomina kontaktowi."
+      },
+      "status": {
+        "usable": "Włączony i połączony",
+        "off": "Wyłączony",
+        "notChosen": "Jeszcze nie wybrano",
+        "not_connected": "Włączony, niepołączony",
+        "coming_soon": "Wkrótce z botem głosowym"
+      },
+      "editorTitle": "Kanały dla tego typu rezerwacji",
+      "editorHint": "Można używać tylko kanałów włączonych przez właściciela i połączonych. Pozostałe są pokazane, abyś wiedział dlaczego.",
+      "noneUsable": "Żaden kanał nie jest jeszcze dostępny, więc nie można wysłać żadnej wiadomości tego typu rezerwacji.",
+      "openSettings": "Otwórz ustawienia kanałów",
+      "offByOwner": "Właściciel przestrzeni nie włączył tego kanału.",
+      "sendOn": "Wyślij przez",
+      "sendOnAuto": "Nie wybrano kanału: używany jest pierwszy dostępny kanał ze standardowym tekstem.",
+      "sendOnEach": "Wiadomość trafia na każdy zaznaczony tu kanał.",
+      "attachedButUnusable": "Ten kanał jest teraz niedostępny, więc wiadomość jest na nim pomijana. Odznacz go lub poproś właściciela o włączenie."
+    },
+    "templates": {
+      "title": "Szablony wiadomości",
+      "description": "Gotowe wiadomości dla potwierdzeń, przypomnień, zmian terminu, odwołań i wiadomości po wizycie. Dodaj jedną kliknięciem i edytuj. Wiadomości e-mail są tutaj; wiadomości WhatsApp wysyłane są do Meta do zatwierdzenia i można użyć tylko zatwierdzonej.",
+      "loading": "Wczytywanie wiadomości...",
+      "readOnly": "Tylko użytkownicy zarządzający szablonami wizyt mogą to zmienić.",
+      "empty": "Nie dodano jeszcze żadnej wiadomości. Dodaj jedną z zestawu poniżej.",
+      "yours": "Twoje wiadomości",
+      "status": {
+        "draft": "Wersja robocza",
+        "pending": "W trakcie weryfikacji w Meta",
+        "approved": "Zatwierdzony",
+        "rejected": "Odrzucony"
+      },
+      "kinds": {
+        "confirmation": "Potwierdzenie rezerwacji",
+        "reminder": "Przypomnienie",
+        "reschedule": "Zmieniony termin",
+        "cancellation": "Odwołane",
+        "follow_up": "Wiadomość po wizycie"
+      },
+      "channels": {
+        "email": "E-mail",
+        "whatsapp": "WhatsApp"
+      },
+      "usedBy": "{count, plural, other {używana przez # typów rezerwacji}}",
+      "inactive": "wyłączona",
+      "submit": "Wyślij do Meta do zatwierdzenia",
+      "submitting": "Wysyłanie...",
+      "submitted": "Wysłano do Meta. Jest teraz weryfikowany.",
+      "metaRefused": "Zapisano, ale Meta odrzuciła. Otwórz wiadomość, aby zobaczyć powód.",
+      "refresh": "Sprawdź status",
+      "refreshing": "Sprawdzanie...",
+      "refreshed": "Status zaktualizowany.",
+      "edit": "Edytuj",
+      "view": "Zobacz",
+      "close": "Zamknij",
+      "delete": "Usuń",
+      "deleteTitle": "Usunąć „{name}\"?",
+      "deleteWhatsapp": "Zostanie usunięta z tej listy. Szablon WhatsApp pozostaje w Twoich szablonach WhatsApp; usuń go tam, jeśli nie jest już potrzebny.",
+      "deleteBody": "Zostanie usunięta z biblioteki. Typ rezerwacji, który jej używa, musi najpierw wybrać inną wiadomość.",
+      "deleted": "Wiadomość usunięta.",
+      "cancel": "Anuluj",
+      "rejectedBecause": "Meta odrzuciła: {reason}",
+      "pendingNote": "Meta weryfikuje ten szablon. Do zatwierdzenia nie można go wybrać ani wysłać.",
+      "nameLabel": "Nazwa",
+      "subjectLabel": "Temat",
+      "bodyLabel": "Wiadomość",
+      "textLocked": "Szablonu w weryfikacji lub zatwierdzonego nie można tu edytować.",
+      "placeholders": "Możesz użyć:",
+      "whatsappPlaceholders": "WhatsApp może wypełnić tylko te, użyte w tej kolejności bez pomijania:",
+      "activeLabel": "Dostępna do wyboru",
+      "save": "Zapisz",
+      "saving": "Zapisywanie...",
+      "saveAndSubmit": "Zapisz i wyślij do Meta",
+      "saved": "Wiadomość zapisana.",
+      "predefinedTitle": "Gotowe wiadomości",
+      "predefinedHint": "Dodaj wiadomość, aby skopiować ją do biblioteki, a potem ją edytuj. Wiadomość WhatsApp powstaje najpierw jako wersja robocza; Ty decydujesz, kiedy wysłać ją do Meta.",
+      "machineNote": "Gotowe teksty są po angielsku. Po dodaniu zmień je na swój język.",
+      "category": {
+        "UTILITY": "Użytkowy",
+        "MARKETING": "Marketing"
+      },
+      "preview": "Podgląd",
+      "hidePreview": "Ukryj podgląd",
+      "inLibrary": "W Twojej bibliotece: {status}",
+      "adopt": "Dodaj do moich wiadomości",
+      "adopting": "Dodawanie...",
+      "adoptDraft": "Dodaj jako wersję roboczą",
+      "adoptSubmit": "Dodaj i wyślij do Meta",
+      "adopted": "Dodano do Twoich wiadomości.",
+      "newEmail": "Nowa wiadomość e-mail",
+      "kindLabel": "Rodzaj",
+      "create": "Utwórz",
+      "created": "Wiadomość utworzona.",
+      "chooseLabel": "Wiadomość do użycia",
+      "useText": "Tekst powyżej",
+      "unknownMessage": "Wiadomość, która nie jest już dostępna",
+      "noneYet": "Brak jeszcze wiadomości tego rodzaju.",
+      "openLibrary": "Dodaj ją w ustawieniach",
+      "whatsappApprovedOnly": "Można wybrać tylko szablony zatwierdzone przez Meta. Poza oknem 24 godzin WhatsApp nie wysyła nic innego."
+    },
+    "reminders": {
+      "channels": {
+        "voice": "Połączenie przypominające"
+      },
+      "voiceSoon": "Wkrótce z botem głosowym: wychodzące połączenie przypominające. Nie można go jeszcze dodać.",
+      "voiceSoonShort": "wkrótce z botem głosowym",
+      "channelUnusable": "obecnie niedostępny",
+      "noUsableChannel": "Żaden kanał tej reguły nie jest dostępny, więc nie można jej włączyć.",
+      "openChannels": "Otwórz ustawienia kanałów",
+      "fromLibrary": "Użyj wiadomości z biblioteki",
+      "openLibrary": "Dodaj wiadomości w ustawieniach",
+      "reasons": {
+        "channel_disabled": "Przestrzeń wyłączyła ten kanał dla wiadomości o wizytach."
+      }
+    },
+    "editor": {
+      "problems": {
+        "templateNoChannel": "Wybierz co najmniej jeden kanał dla tej wiadomości lub wyczyść jej tekst."
+      }
+    }
+  }
+}

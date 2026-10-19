@@ -237,6 +237,8 @@ export const bookingTemplateInputSchema = z.object({
   channel: bookingTemplateChannelSchema.default('whatsapp'),
   /** A WhatsApp template of the workspace, used instead of the plain body. */
   waTemplateId: uuidSchema.nullish(),
+  /** A message of the appointment library (email, or an APPROVED WhatsApp one); it is read when the message is sent, so editing it updates every type that chose it. */
+  libraryTemplateId: uuidSchema.nullish(),
   /** Variables: {{type}} {{slot}} {{name}} {{date}} {{time}} {{location}} {{manage_link}}. */
   plainBody: z.string().trim().max(2000).nullish(),
   variableMap: z.record(z.string().max(60), z.string().max(200)).nullish(),
@@ -390,6 +392,7 @@ export const bookingTemplateSchema = z.object({
   event: bookingTemplateEventSchema,
   channel: bookingTemplateChannelSchema,
   waTemplateId: uuidSchema.nullable(),
+  libraryTemplateId: uuidSchema.nullable(),
   plainBody: z.string().nullable(),
   variableMap: z.record(z.string()).nullable(),
 });
