@@ -3,7 +3,10 @@ import { sampleQueueDepth, type DepthQueue } from '../../../src/modules/platform
 
 const NOW = 1_700_000_000_000;
 
-function fake(counts: Record<string, number>, oldestTs?: number): DepthQueue & { getJobs: ReturnType<typeof vi.fn> } {
+function fake(
+  counts: Record<string, number>,
+  oldestTs?: number,
+): DepthQueue & { getJobs: ReturnType<typeof vi.fn> } {
   return {
     getJobCounts: vi.fn(async () => counts),
     getJobs: vi.fn(async () => (oldestTs === undefined ? [] : [{ timestamp: oldestTs }])),
@@ -13,7 +16,13 @@ function fake(counts: Record<string, number>, oldestTs?: number): DepthQueue & {
 describe('sampleQueueDepth', () => {
   it('reports the states apart and the age of the oldest waiting job in seconds', async () => {
     const q = fake({ waiting: 40, active: 8, delayed: 5, failed: 2 }, NOW - 12_500);
-    expect(await sampleQueueDepth(q, NOW)).toEqual({ waiting: 40, active: 8, delayed: 5, failed: 2, oldestWaitingSeconds: 12.5 });
+    expect(await sampleQueueDepth(q, NOW)).toEqual({
+      waiting: 40,
+      active: 8,
+      delayed: 5,
+      failed: 2,
+      oldestWaitingSeconds: 12.5,
+    });
     expect(q.getJobs).toHaveBeenCalledWith(['waiting'], 0, 0, true);
   });
 
@@ -38,6 +47,12 @@ describe('sampleQueueDepth', () => {
   });
 
   it('survives a missing state in the counts', async () => {
-    expect(await sampleQueueDepth(fake({}), NOW)).toEqual({ waiting: 0, active: 0, delayed: 0, failed: 0, oldestWaitingSeconds: 0 });
+    expect(await sampleQueueDepth(fake({}), NOW)).toEqual({
+      waiting: 0,
+      active: 0,
+      delayed: 0,
+      failed: 0,
+      oldestWaitingSeconds: 0,
+    });
   });
 });

@@ -83,6 +83,12 @@ describe('channel webhook tokens are looked up by hash (E3)', () => {
 
       await ins(legacy, false); // a row written before this change: plaintext only
       expect(await find(legacy)).toHaveLength(1);
+      // The trigger gave the row written by the previous release its hash at once.
+      const early = await pg.owner.query(
+        `SELECT webhook_token_hash AS h FROM ${c.table} WHERE webhook_token = $1`,
+        [legacy],
+      );
+      expect(early.rows[0].h).toBe(tokenHash(legacy));
 
       const target = SEAL_TARGETS.filter((t) => t.name === c.target);
       expect(target).toHaveLength(1);

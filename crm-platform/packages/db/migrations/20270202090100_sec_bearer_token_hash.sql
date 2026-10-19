@@ -12,7 +12,6 @@
 -- `--scrub` (sets the plaintext columns to NULL).
 ALTER TABLE orders
   ADD COLUMN IF NOT EXISTS return_token_hash text,
-  ADD COLUMN IF NOT EXISTS return_token_enc text,
   ALTER COLUMN return_token DROP NOT NULL;
 CREATE UNIQUE INDEX IF NOT EXISTS uq_orders_return_token_hash
   ON orders (return_token_hash) WHERE return_token_hash IS NOT NULL;

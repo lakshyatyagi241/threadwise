@@ -29,7 +29,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS uq_woocommerce_integrations_webhook_secret_has
 CREATE OR REPLACE FUNCTION ecom_fill_webhook_secret_hash() RETURNS trigger
 LANGUAGE plpgsql AS $$
 BEGIN
-  IF NEW.webhook_secret IS NOT NULL AND NEW.webhook_secret <> ''
+  -- Only routable secrets (16 characters or more; the receiver refuses shorter ones) get a hash, like the plaintext unique index, so a short
+  -- fixture secret or a duplicate that index tolerates cannot make this one fail.
+  IF NEW.webhook_secret IS NOT NULL AND length(NEW.webhook_secret) >= 16
      AND (NEW.webhook_secret_hash IS NULL
           OR (TG_OP = 'UPDATE' AND NEW.webhook_secret IS DISTINCT FROM OLD.webhook_secret
               AND NEW.webhook_secret_hash IS NOT DISTINCT FROM OLD.webhook_secret_hash)) THEN

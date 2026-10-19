@@ -95,6 +95,8 @@ export class PushSubscriptionsService {
         endpoint: input.endpoint,
         endpointHash,
         p256dh: input.keys.p256dh,
+        // Sealed on write with no legacy mirror. During a blue-green switch the previous release cannot open it, so a device subscribed in that
+        // window is skipped by the old slot (its failure count rises, and it is given up on after 10); re-subscribing on the new release repairs it.
         auth: this.crypto.encrypt(input.keys.auth, pushAuthContext(orgId, userId)),
         ua,
         label: deviceLabel(ua),

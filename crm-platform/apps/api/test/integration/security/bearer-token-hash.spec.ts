@@ -95,9 +95,9 @@ describe('bearer-link tokens are looked up by hash (E8)', () => {
     const t = tokenColumns(crypto, 'c'.repeat(32));
     delete process.env.SECRETS_LEGACY_PLAINTEXT_MIRROR;
     await pg.owner.query(
-      `INSERT INTO orders (org_id, order_number, kind, plan_slug, currency, amount, return_token, return_token_hash, return_token_enc)
-       VALUES ($1, 'ORD-NEW', 'plan', 'x', 'USD', 1, $2, $3, $4)`,
-      [org, t.plain, t.hash, t.enc],
+      `INSERT INTO orders (org_id, order_number, kind, plan_slug, currency, amount, return_token, return_token_hash)
+       VALUES ($1, 'ORD-NEW', 'plan', 'x', 'USD', 1, $2, $3)`,
+      [org, t.plain, t.hash],
     );
     expect((await privileged((tx) => repo.byReturnToken(tx, 'c'.repeat(32))))?.orderNumber).toBe(
       'ORD-NEW',

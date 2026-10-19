@@ -217,7 +217,6 @@ export const orders = pgTable(
     returnToken: text('return_token'),
     /** sha256 (hex) of the return token: what the return route matches. */
     returnTokenHash: text('return_token_hash'),
-    returnTokenEnc: text('return_token_enc'),
     walletTopupMinor: bigint('wallet_topup_minor', { mode: 'number' }),
     /** The wallet a top-up credits, fixed when the order is placed; null = the platform currency (older orders). */
     walletUnit: text('wallet_unit'),

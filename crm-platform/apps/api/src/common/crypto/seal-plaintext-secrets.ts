@@ -21,6 +21,8 @@ export interface SealTarget {
   inPlace?: boolean;
   hash?: string;
   enc?: string;
+  /** Rows whose plaintext is shorter are left alone (not routable, and not covered by the hash unique index). */
+  minLength?: number;
 }
 
 export const SEAL_TARGETS: SealTarget[] = [
@@ -66,6 +68,7 @@ export const SEAL_TARGETS: SealTarget[] = [
     plain: 'webhook_secret',
     hash: 'webhook_secret_hash',
     enc: 'webhook_secret_enc',
+    minLength: 16,
   })),
 ];
 
@@ -82,6 +85,9 @@ export interface SealReport {
 const PAGE = 500;
 const q = (id: string): string => `"${id}"`;
 
+const long = (t: SealTarget): string =>
+  t.minLength ? ` AND length(${q(t.plain)}) >= ${t.minLength}` : '';
+
 /** What still needs doing, as a WHERE clause. Sealed blobs start with `v1:`; an empty legacy column means "already scrubbed". */
 function pending(t: SealTarget): string {
   if (t.inPlace)
@@ -90,7 +96,7 @@ function pending(t: SealTarget): string {
   const missing = t.enc
     ? `(${q(t.hash!)} IS NULL OR ${q(t.enc)} IS NULL)`
     : `${q(t.hash!)} IS NULL`;
-  return `${missing} AND ${q(t.plain)} IS NOT NULL AND ${q(t.plain)} <> ''`;
+  return `${missing} AND ${q(t.plain)} IS NOT NULL AND ${q(t.plain)} <> ''${long(t)}`;
 }
 
 /**
@@ -111,7 +117,7 @@ export async function sealPlaintextSecrets(
 
     if (opts.scrub) {
       if (t.inPlace) continue; // nothing to blank: the column holds the sealed value
-      const where = `${q(t.hash!)} IS NOT NULL ${t.enc ? `AND ${q(t.enc)} IS NOT NULL` : ''} AND ${q(t.plain)} IS NOT NULL AND ${q(t.plain)} <> ''`;
+      const where = `${q(t.hash!)} IS NOT NULL ${t.enc ? `AND ${q(t.enc)} IS NOT NULL` : ''} AND ${q(t.plain)} IS NOT NULL AND ${q(t.plain)} <> ''${long(t)}`;
       if (opts.dryRun) {
         const c = await db.query(`SELECT count(*)::int AS n FROM ${q(t.table)} WHERE ${where}`);
         report.found = Number(c.rows[0]?.n ?? 0);
@@ -129,12 +135,19 @@ export async function sealPlaintextSecrets(
       report.found = Number(c.rows[0]?.n ?? 0);
       continue;
     }
+    const seen = new Set<string>();
     for (;;) {
       const page = await db.query(
         `SELECT ${pk}, ${q(t.plain)} AS value FROM ${q(t.table)} WHERE ${pending(t)} ORDER BY ${pk} LIMIT ${PAGE}`,
       );
       if (page.rows.length === 0) break;
-      report.found += page.rows.length;
+      for (const row of page.rows) {
+        const id = t.pk.map((c) => String(row[c])).join('/');
+        if (!seen.has(id)) {
+          seen.add(id);
+          report.found++;
+        }
+      }
       let progressed = 0;
       for (const row of page.rows) {
         const value = String(row.value);

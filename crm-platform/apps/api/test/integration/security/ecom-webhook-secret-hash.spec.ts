@@ -98,6 +98,19 @@ describe('store webhook secrets are looked up by hash (E2)', () => {
     });
   }
 
+  it('a short fixture secret is not hashed, so duplicates of it stay as tolerated as before (E2)', async () => {
+    for (const url of ['https://a.short.test', 'https://b.short.test']) {
+      await pg.owner.query(
+        `INSERT INTO woocommerce_integrations (org_id, store_url, consumer_key, consumer_secret, webhook_secret) VALUES ($1, $2, 'x', 'x', 'x')`,
+        [org, url],
+      );
+    }
+    const rows = await pg.owner.query(
+      `SELECT webhook_secret_hash AS h FROM woocommerce_integrations WHERE webhook_secret = 'x'`,
+    );
+    expect(rows.rows.map((r) => r.h)).toEqual([null, null]);
+  });
+
   it('the repository writes hash + sealed copy, and the row reads back the plaintext secret from the sealed copy', async () => {
     const repo = new StoresRepository();
     const secret = `woo-new-${'q'.repeat(32)}`;

@@ -15,6 +15,8 @@ const PATH_SECRETS = [
   /(\/public\/lead-hooks\/)[^/?#\s]+/i,
   // Bearer links sent to customers (invoice, proposal, booking management): the token in the path is the only credential.
   /(\/public\/(?:invoices|sales-docs|booking-manage)\/)[^/?#\s]+/i,
+  // The payment return address carries its token as `?o=<token>` (E8).
+  /(\/payments\/return\/[^/?#\s]+\?(?:[^#\s]*&)?o=)[^&#\s]+/i,
 ];
 
 export function maskSecretUrl(url: string): string;

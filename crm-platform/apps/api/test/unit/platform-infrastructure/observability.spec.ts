@@ -82,6 +82,8 @@ describe('secret path segments', () => {
     ['/v2/public/lead-hooks/tok_abc123', '/v2/public/lead-hooks/[secret]'],
     ['/public/lead-hooks/tok_abc123?a=b', '/public/lead-hooks/[secret]?a=b'],
     // Bearer links sent to customers: whoever holds the link can read the document or manage the booking (encryption audit E7).
+    ['/v2/payments/return/razorpay?o=abc123def&x=1', '/v2/payments/return/razorpay?o=[secret]&x=1'],
+    ['/v2/payments/return/stripe?x=1&o=abc123def', '/v2/payments/return/stripe?x=1&o=[secret]'],
     ['/v2/public/invoices/Ab-9_xTok', '/v2/public/invoices/[secret]'],
     ['/v2/public/invoices/Ab-9_xTok/pay?x=1', '/v2/public/invoices/[secret]/pay?x=1'],
     ['/v2/public/sales-docs/Ab-9_xTok/accept', '/v2/public/sales-docs/[secret]/accept'],

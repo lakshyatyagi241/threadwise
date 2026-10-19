@@ -114,3 +114,30 @@ BEGIN
   PERFORM set_config('app.privileged', coalesce(prior, 'off'), true);
 END;
 $$;
+
+-- A channel connected by the previous release (during a blue-green switch) inserts only the plaintext token: the trigger gives it its hash at
+-- once, so it resolves by hash from the moment the new release is live, same as the orders and store tables.
+CREATE OR REPLACE FUNCTION chan_fill_webhook_token_hash() RETURNS trigger
+LANGUAGE plpgsql AS $$
+BEGIN
+  IF NEW.webhook_token IS NOT NULL AND NEW.webhook_token <> ''
+     AND (NEW.webhook_token_hash IS NULL
+          OR (TG_OP = 'UPDATE' AND NEW.webhook_token IS DISTINCT FROM OLD.webhook_token
+              AND NEW.webhook_token_hash IS NOT DISTINCT FROM OLD.webhook_token_hash)) THEN
+    NEW.webhook_token_hash := encode(sha256(convert_to(NEW.webhook_token, 'UTF8')), 'hex');
+  END IF;
+  RETURN NEW;
+END;
+$$;
+DROP TRIGGER IF EXISTS trg_telegram_bots_webhook_token_hash ON telegram_bots;
+CREATE TRIGGER trg_telegram_bots_webhook_token_hash BEFORE INSERT OR UPDATE ON telegram_bots
+  FOR EACH ROW EXECUTE FUNCTION chan_fill_webhook_token_hash();
+DROP TRIGGER IF EXISTS trg_line_channels_webhook_token_hash ON line_channels;
+CREATE TRIGGER trg_line_channels_webhook_token_hash BEFORE INSERT OR UPDATE ON line_channels
+  FOR EACH ROW EXECUTE FUNCTION chan_fill_webhook_token_hash();
+DROP TRIGGER IF EXISTS trg_viber_channels_webhook_token_hash ON viber_channels;
+CREATE TRIGGER trg_viber_channels_webhook_token_hash BEFORE INSERT OR UPDATE ON viber_channels
+  FOR EACH ROW EXECUTE FUNCTION chan_fill_webhook_token_hash();
+DROP TRIGGER IF EXISTS trg_wechat_channels_webhook_token_hash ON wechat_channels;
+CREATE TRIGGER trg_wechat_channels_webhook_token_hash BEFORE INSERT OR UPDATE ON wechat_channels
+  FOR EACH ROW EXECUTE FUNCTION chan_fill_webhook_token_hash();
