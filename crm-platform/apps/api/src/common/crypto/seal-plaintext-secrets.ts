@@ -10,7 +10,7 @@ export interface SealDb {
  * A column that held a secret in plaintext (encryption audit E2, E3, E7, E8) and what to fill from it.
  *  - `inPlace`: the value is sealed in its own column (reads accept both forms).
  *  - otherwise `hash` (and `enc` where the value must be shown again) are filled from the legacy `plain` column, and `--scrub` then
- *    blanks the legacy column. Table and column names are constants of this file, never input.
+ *    blanks (NULLs) the legacy column. Table and column names are constants of this file, never input.
  */
 export interface SealTarget {
   name: string;
@@ -31,6 +31,17 @@ export const SEAL_TARGETS: SealTarget[] = [
     plain: 'auth',
     inPlace: true,
   },
+  // E3: routing tokens in the public webhook URLs (the provider holds the URL, so the value must stay readable: hash + sealed copy)
+  ...['telegram_bots', 'line_channels', 'viber_channels', 'wechat_channels'].map(
+    (table): SealTarget => ({
+      name: `${table}.webhook_token`,
+      table,
+      pk: ['org_id', 'id'],
+      plain: 'webhook_token',
+      hash: 'webhook_token_hash',
+      enc: 'webhook_token_enc',
+    }),
+  ),
 ];
 
 export interface SealReport {
@@ -77,7 +88,7 @@ export async function sealPlaintextSecrets(
         report.found = Number(c.rows[0]?.n ?? 0);
       } else {
         const r = await db.query(
-          `UPDATE ${q(t.table)} SET ${q(t.plain)} = '' WHERE ${where} RETURNING 1`,
+          `UPDATE ${q(t.table)} SET ${q(t.plain)} = NULL WHERE ${where} RETURNING 1`,
         );
         report.found = report.done = r.rows.length;
       }

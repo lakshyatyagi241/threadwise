@@ -8,6 +8,7 @@ import {
   type ConnectBotResponse,
   type SavePaymentSettingsInput,
 } from '@crm/contracts';
+import { tokenColumns, tokenOf } from '../../common/crypto/secret-columns';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
@@ -60,7 +61,10 @@ export class BotsService {
   }
 
   private url(row: BotRow): string {
-    return webhookUrl(this.config.get('APP_URL', { infer: true }), row.webhookToken);
+    return webhookUrl(
+      this.config.get('APP_URL', { infer: true }),
+      tokenOf(this.crypto, { enc: row.webhookTokenEnc, plain: row.webhookToken }),
+    );
   }
 
   /** What the API shows of a bot: never a token, only whether a payment token is saved. */
@@ -119,7 +123,7 @@ export class BotsService {
         : await this.repo.insert(tx, ctx.orgId, {
             ...values,
             botId: String(identity.id),
-            webhookToken: randomToken(),
+            webhookToken: tokenColumns(this.crypto, randomToken()),
           });
       await this.audit.record(tx, {
         module: MODULE_KEY,

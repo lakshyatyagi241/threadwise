@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import type { TokenColumns } from '../../common/crypto/secret-columns';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 
@@ -11,7 +12,9 @@ export interface ChannelRow {
   avatar: string | null;
   /** Encrypted. */
   authToken: string;
-  webhookToken: string;
+  webhookToken: string | null;
+  /** The token sealed with CryptoService (encryption audit E3); preferred over the legacy plaintext column. */
+  webhookTokenEnc: string | null;
   active: boolean;
   connectedAt: Date | null;
   lastInboundAt: Date | null;
@@ -27,7 +30,8 @@ interface Raw {
   bot_uri: string | null;
   bot_avatar: string | null;
   auth_token: string;
-  webhook_token: string;
+  webhook_token: string | null;
+  webhook_token_enc: string | null;
   active: boolean;
   connected_at: Date | string | null;
   last_inbound_at: Date | string | null;
@@ -36,7 +40,7 @@ interface Raw {
 }
 
 const COLUMNS = sql.raw(
-  `id, uuid, viber_id, bot_name, bot_uri, bot_avatar, auth_token, webhook_token, active, connected_at, last_inbound_at,
+  `id, uuid, viber_id, bot_name, bot_uri, bot_avatar, auth_token, webhook_token, webhook_token_enc, active, connected_at, last_inbound_at,
    last_error, row_version`,
 );
 
@@ -51,6 +55,7 @@ const toRow = (r: Raw): ChannelRow => ({
   avatar: r.bot_avatar,
   authToken: r.auth_token,
   webhookToken: r.webhook_token,
+  webhookTokenEnc: r.webhook_token_enc,
   active: r.active,
   connectedAt: date(r.connected_at),
   lastInboundAt: date(r.last_inbound_at),
@@ -115,13 +120,14 @@ export class ChannelsRepository {
       name: string;
       uri: string;
       avatar: string;
-      webhookToken: string;
+      webhookToken: TokenColumns;
     },
   ): Promise<ChannelRow> {
     const res = await tx.execute(sql`
-      INSERT INTO viber_channels (org_id, connected_by, auth_token, viber_id, bot_name, bot_uri, bot_avatar, webhook_token,
+      INSERT INTO viber_channels (org_id, connected_by, auth_token, viber_id, bot_name, bot_uri, bot_avatar, webhook_token, webhook_token_hash, webhook_token_enc,
                                   active, connected_at, last_error)
-      VALUES (${orgId}, ${v.connectedBy}, ${v.authToken}, ${v.viberId}, ${v.name}, ${v.uri}, ${v.avatar}, ${v.webhookToken},
+      VALUES (${orgId}, ${v.connectedBy}, ${v.authToken}, ${v.viberId}, ${v.name}, ${v.uri}, ${v.avatar}, ${v.webhookToken.plain},
+              ${v.webhookToken.hash}, ${v.webhookToken.enc},
               true, now(), NULL)
       RETURNING ${COLUMNS}`);
     return toRow((res.rows as unknown as Raw[])[0]!);

@@ -91,17 +91,19 @@ const ALLOW: Record<string, Reason> = {
   'conversation_media_uploads.media_key': 'public',
   'sales_doc_events.signature': 'public', // the signer's typed or drawn signature on an accepted proposal
 
+  // --- hash: lookup by sha256 + a sealed copy; the plaintext column is only the rollout mirror and is NULLed by the seal CLI --scrub ---
+  'telegram_bots.webhook_token': 'hash', // E3: webhook_token_hash / webhook_token_enc are authoritative
+  'line_channels.webhook_token': 'hash',
+  'viber_channels.webhook_token': 'hash',
+  'wechat_channels.webhook_token': 'hash',
+
   // --- hash: a digest, not the secret ---
   'webhook_forward_failures.signature_header': 'hash', // the HMAC the sender computed over the body, kept to replay the forward
 
   // --- accepted risks, open findings (docs/security/encryption-audit/Sheet3-35-encryption-audit-REPORT.html) ---
   'shopify_integrations.webhook_secret': 'E2', // the URL path secret and the lookup key; needs the hash + encrypted split
   'woocommerce_integrations.webhook_secret': 'E2', // as above, and the HMAC key given to the store plugin
-  'telegram_bots.webhook_token': 'E3', // random URL token used as the lookup key
-  'line_channels.webhook_token': 'E3',
-  'viber_channels.webhook_token': 'E3',
-  'wechat_channels.webhook_token': 'E3',
-  'incoming_webhooks.token': 'E3', // no service writes it yet
+  'incoming_webhooks.token': 'E3', // no service writes it yet: the writer must use tokenColumns() (hash + sealed copy)
   'crm_briefs.public_token': 'E8', // bearer links shown to customers or recipients, kept in clear as the lookup key
   'wa_link_clicks.token': 'E8',
   'wa_orders.recovery_token': 'E8',
