@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import type { FlowRunSource } from '@crm/contracts';
+import { flbCondRulesOf, flbIsCondGroup, type FlowRunSource } from '@crm/contracts';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { ContactsService, SegmentsService } from '../../crm';
-import { evalRule } from '../runtime/condition';
+import { evalRule, evaluateConditionTree } from '../runtime/condition';
 import { FlowLaunchService, KINDS_OF_PROVIDER } from '../runtime/launch.service';
 import { isOutsideBusinessHours } from './business-hours';
 import { matchKeywordFlow, type KeywordFlow } from './keyword-match';
@@ -214,6 +214,29 @@ export class FlowTriggerService {
       );
     }
     for (const f of await this.liveConfigured(orgId, 'field_match')) {
+      if (flbIsCondGroup(f.config.conditionGroup)) {
+        // A group of field rules: read each field once, then the whole tree decides. The reason is the values it saw, so a
+        // contact runs again only when one of them changes.
+        const tree = f.config.conditionGroup;
+        const bag: Record<string, string> = {};
+        for (const name of new Set(flbCondRulesOf(tree).map((r) => r.variable))) {
+          if (name === '') continue;
+          bag[name] = (await this.contacts.readFieldForFlow(orgId, contactId, name)) ?? '';
+        }
+        if (evaluateConditionTree(bag, tree)) {
+          started += await this.startFlows(
+            orgId,
+            [f.id],
+            contactId,
+            'field_match',
+            `field:${f.id}:${JSON.stringify(bag)}`,
+            {},
+            undefined,
+            hops,
+          );
+        }
+        continue;
+      }
       const field = typeof f.config.field === 'string' ? f.config.field : '';
       if (field === '') continue;
       const value = await this.contacts.readFieldForFlow(orgId, contactId, field);

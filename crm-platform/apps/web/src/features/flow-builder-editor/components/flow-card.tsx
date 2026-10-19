@@ -294,22 +294,12 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
       </ul>
 
       <div className="mt-4 flex items-center gap-2">
-        {/* Every card offers the builder, a manual-enroll flow too (its "Enroll contacts" link comes beside it, not instead of it). */}
         <Link
           href={openHref(actions.builderMode ?? 'advanced', flow.id, flow.flowType)}
           className="min-w-0 flex-1 rounded-full border border-border px-2 py-1.5 text-center text-[11.5px] font-medium whitespace-nowrap hover:bg-muted"
         >
           {t('openBuilder')}
         </Link>
-        {flow.triggerKind === 'manual_enroll' ? (
-          <Link
-            href={`/flow-runtime/flows/${flow.id}`}
-            data-flow-enroll={flow.id}
-            className="min-w-0 flex-1 rounded-full bg-brand px-2 py-1.5 text-center text-[11.5px] font-semibold text-brand-foreground hover:opacity-90"
-          >
-            {t('enroll')}
-          </Link>
-        ) : null}
         {actions.can.faqs && flow.flowType !== 'call' ? (
           // A flow's FAQs, its unanswered questions and the message sent when nothing matches are on the FAQs tab of its builder.
           <Link

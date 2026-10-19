@@ -72,6 +72,11 @@ export function flbCondRuleCount(g: FlbCondGroup): number {
   return g.items.reduce((n, i) => n + (flbIsCondGroup(i) ? flbCondRuleCount(i) : 1), 0);
 }
 
+/** Every rule of the tree in reading order, nested groups included. */
+export function flbCondRulesOf(g: FlbCondGroup): FlbCondRule[] {
+  return g.items.flatMap((i) => (flbIsCondGroup(i) ? flbCondRulesOf(i) : [i]));
+}
+
 /** Depth of the deepest group (a lone root is 1). */
 export function flbCondDepth(g: FlbCondGroup): number {
   return 1 + g.items.reduce((m, i) => (flbIsCondGroup(i) ? Math.max(m, flbCondDepth(i)) : m), 0);
