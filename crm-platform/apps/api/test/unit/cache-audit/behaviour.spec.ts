@@ -6,7 +6,10 @@ import { PartnerAgentStatusService } from '../../../src/modules/auth/sessions/pa
 import { EpochService } from '../../../src/modules/auth/sessions/epoch.service';
 import { AuthKeys, Ttl } from '../../../src/modules/auth/support/redis-keys';
 import { BookingPageThemesCache } from '../../../src/modules/appointments-booking/booking-page-themes.cache';
-import { RedisUploadedMediaCache, uploadCacheKey } from '../../../src/infra/providers/whatsapp/media/upload-cache';
+import {
+  RedisUploadedMediaCache,
+  uploadCacheKey,
+} from '../../../src/infra/providers/whatsapp/media/upload-cache';
 import { RateLimiter } from '../../../src/modules/platform-infrastructure/rate-limit/rate-limiter';
 import { NotificationPrefsResolver } from '../../../src/modules/notifications/notification-prefs.resolver';
 import { WebhookTargetsRepository } from '../../../src/modules/webhook-fanout/webhook-targets.repository';
@@ -43,7 +46,8 @@ async function measureStale(read: () => Promise<boolean>, capS = 700): Promise<n
 }
 
 const orgDb = (byOrg: Record<number, unknown>) => ({
-  txAs: async (ctx: { orgId: number }, fn: (tx: unknown) => unknown) => fn({ execute: async () => ({ rows: [byOrg[ctx.orgId]] }) }),
+  txAs: async (ctx: { orgId: number }, fn: (tx: unknown) => unknown) =>
+    fn({ execute: async () => ({ rows: [byOrg[ctx.orgId]] }) }),
 });
 
 function gate(redis: FakeRedis, states: Record<number, { suspended: boolean }>) {
@@ -62,10 +66,16 @@ describe('tenant isolation: workspace A then workspace B, same ids', () => {
 
   it('workspace suspended verdict and partner agent flag do not cross workspaces', async () => {
     const redis = redisAtNow();
-    const orgs = new OrgSuspensionService(orgDb({ 1: { status: 'suspended' }, 2: { status: 'active' } }) as never, redis as never);
+    const orgs = new OrgSuspensionService(
+      orgDb({ 1: { status: 'suspended' }, 2: { status: 'active' } }) as never,
+      redis as never,
+    );
     expect(await orgs.isSuspended(1)).toBe(true);
     expect(await orgs.isSuspended(2)).toBe(false);
-    const partners = new PartnerAgentStatusService(orgDb({ 1: { status: 'active' }, 2: { status: 'blocked' } }) as never, redis as never);
+    const partners = new PartnerAgentStatusService(
+      orgDb({ 1: { status: 'active' }, 2: { status: 'blocked' } }) as never,
+      redis as never,
+    );
     expect(await partners.isActive(1, 9)).toBe(true);
     expect(await partners.isActive(2, 9)).toBe(false);
   });
@@ -87,7 +97,14 @@ describe('tenant isolation: workspace A then workspace B, same ids', () => {
       (o, i) => AuthKeys.gate(o, i),
       (o, i) => AuthKeys.partnerStatus(o, i),
       (o, i) => summaryKey(o, 'campaign', String(i), 7, []),
-      (o, i) => uploadCacheKey({ orgId: o, channelUuid: String(i), phoneNumberId: 'p', sha256: 'h', mime: 'm' }),
+      (o, i) =>
+        uploadCacheKey({
+          orgId: o,
+          channelUuid: String(i),
+          phoneNumberId: 'p',
+          sha256: 'h',
+          mime: 'm',
+        }),
     ];
     for (const b of builders) {
       const keys = new Set<string>();
@@ -97,7 +114,10 @@ describe('tenant isolation: workspace A then workspace B, same ids', () => {
   });
 
   it('in-process caches: notification preferences of workspace 1 are not served to workspace 2', async () => {
-    const db = { txAs: async (c: { orgId: number }, fn: (tx: unknown) => unknown) => fn({ execute: async () => ({ rows: [{ prefs: { who: c.orgId } }] }) }) };
+    const db = {
+      txAs: async (c: { orgId: number }, fn: (tx: unknown) => unknown) =>
+        fn({ execute: async () => ({ rows: [{ prefs: { who: c.orgId } }] }) }),
+    };
     const r = new NotificationPrefsResolver(db as never);
     expect(await r.stored(1)).toEqual({ who: 1 });
     expect(await r.stored(2)).toEqual({ who: 2 });
@@ -110,7 +130,9 @@ describe('stale windows: how long a changed fact stays hidden (measured on a mov
     const { svc } = gate(redisAtNow(), states);
     await svc.stateFor(1, 7, { includeOrgSuspension: false });
     states[1].suspended = true; // changed in the database without an invalidate() call
-    const s = await measureStale(async () => (await svc.stateFor(1, 7, { includeOrgSuspension: false })).suspended);
+    const s = await measureStale(
+      async () => (await svc.stateFor(1, 7, { includeOrgSuspension: false })).suspended,
+    );
     console.log(`STALE gate ${s}`);
     expect(s).toBeLessThanOrEqual(Ttl.gateSeconds);
     expect(s).toBeGreaterThanOrEqual(Ttl.gateSeconds - 1);
@@ -150,16 +172,39 @@ describe('stale windows: how long a changed fact stays hidden (measured on a mov
 
   it('notification preferences (5 s) and webhook-forward target (10 s)', async () => {
     let prefs: unknown = { v: 1 };
-    const db = { txAs: async (_c: unknown, fn: (tx: unknown) => unknown) => fn({ execute: async () => ({ rows: [{ prefs }] }) }) };
+    const db = {
+      txAs: async (_c: unknown, fn: (tx: unknown) => unknown) =>
+        fn({ execute: async () => ({ rows: [{ prefs }] }) }),
+    };
     const r = new NotificationPrefsResolver(db as never);
     await r.stored(1);
     prefs = { v: 2 };
-    const s1 = await measureStale(async () => (r as never as { stored(o: number): Promise<{ v: number }> }).stored(1).then((x) => x.v === 2));
+    const s1 = await measureStale(async () =>
+      (r as never as { stored(o: number): Promise<{ v: number }> })
+        .stored(1)
+        .then((x) => x.v === 2),
+    );
     console.log(`STALE notificationPrefs ${s1}`);
     expect(s1).toBeLessThanOrEqual(5);
 
     let active = true;
-    const store = { tx: async (fn: (tx: unknown) => unknown) => fn({ execute: async () => ({ rows: [{ id: 1, is_active: active, url: 'https://x', field_filter: null, timeout_ms: 1, max_attempts: 1 }] }) }) };
+    const store = {
+      tx: async (fn: (tx: unknown) => unknown) =>
+        fn({
+          execute: async () => ({
+            rows: [
+              {
+                id: 1,
+                is_active: active,
+                url: 'https://x',
+                field_filter: null,
+                timeout_ms: 1,
+                max_attempts: 1,
+              },
+            ],
+          }),
+        }),
+    };
     const repo = new WebhookTargetsRepository(store as never, { decrypt: () => '' } as never);
     (repo as unknown as { toDelivery: unknown }).toDelivery = () => ({ ok: true });
     await repo.deliveryTarget(1);
@@ -187,16 +232,29 @@ describe('TTL expiry and Redis failure for each P0 cache', () => {
     redis.down = true;
     const { svc } = gate(redis, { 1: { suspended: true } });
     expect((await svc.stateFor(1, 7, { includeOrgSuspension: false })).suspended).toBe(true);
-    const p = new PartnerAgentStatusService(orgDb({ 1: { status: 'blocked' } }) as never, redis as never);
+    const p = new PartnerAgentStatusService(
+      orgDb({ 1: { status: 'blocked' } }) as never,
+      redis as never,
+    );
     expect(await p.isActive(1, 9)).toBe(false);
   });
 
   it('Redis down: a suspended workspace stays suspended (database answer); both stores down lets the request through (documented)', async () => {
     const redis = redisAtNow();
     redis.down = true;
-    const orgs = new OrgSuspensionService(orgDb({ 1: { status: 'suspended' } }) as never, redis as never);
+    const orgs = new OrgSuspensionService(
+      orgDb({ 1: { status: 'suspended' } }) as never,
+      redis as never,
+    );
     expect(await orgs.isSuspended(1)).toBe(true);
-    const broken = new OrgSuspensionService({ txAs: async () => { throw new Error('pg down'); } } as never, redis as never);
+    const broken = new OrgSuspensionService(
+      {
+        txAs: async () => {
+          throw new Error('pg down');
+        },
+      } as never,
+      redis as never,
+    );
     expect(await broken.isSuspended(1)).toBe(false);
   });
 
@@ -204,14 +262,20 @@ describe('TTL expiry and Redis failure for each P0 cache', () => {
     process.env.AUTH_REDIS_FAILURE_MODE = 'closed';
     const redis = redisAtNow();
     redis.down = true;
-    const p = new PartnerAgentStatusService(orgDb({ 1: { status: 'active' } }) as never, redis as never);
+    const p = new PartnerAgentStatusService(
+      orgDb({ 1: { status: 'active' } }) as never,
+      redis as never,
+    );
     await expect(p.isActive(1, 9)).rejects.toMatchObject({ status: 503 });
   });
 
   it('Redis down: the token epoch comes from Postgres, the rate limiter lets the request through and says so', async () => {
     const redis = redisAtNow();
     redis.down = true;
-    const epoch = new EpochService(redis as never, { get: async () => 4, set: async () => undefined } as never);
+    const epoch = new EpochService(
+      redis as never,
+      { get: async () => 4, set: async () => undefined } as never,
+    );
     expect(await epoch.current()).toBe(4);
     const limiter = new RateLimiter(redis as never);
     expect(await limiter.consume('k', 5, 60)).toMatchObject({ allowed: true, degraded: true });
@@ -244,17 +308,35 @@ describe('stampede: N parallel misses on a cold cache', () => {
   it('counts recomputations for the uncoalesced P0 and P1 caches', async () => {
     const N = 50;
     const { svc, compute } = gate(redisAtNow(), { 1: { suspended: false } });
-    await Promise.all(Array.from({ length: N }, () => svc.stateFor(1, 7, { includeOrgSuspension: false })));
+    await Promise.all(
+      Array.from({ length: N }, () => svc.stateFor(1, 7, { includeOrgSuspension: false })),
+    );
     console.log(`STAMPEDE gate ${compute.mock.calls.length}/${N}`);
 
     let reads = 0;
-    const db = { txAs: async (_c: unknown, fn: (tx: unknown) => unknown) => fn({ execute: async () => { reads++; return { rows: [{ status: 'active' }] }; } }) };
+    const db = {
+      txAs: async (_c: unknown, fn: (tx: unknown) => unknown) =>
+        fn({
+          execute: async () => {
+            reads++;
+            return { rows: [{ status: 'active' }] };
+          },
+        }),
+    };
     const orgs = new OrgSuspensionService(db as never, redisAtNow() as never);
     await Promise.all(Array.from({ length: N }, () => orgs.isSuspended(1)));
     console.log(`STAMPEDE orgSuspended ${reads}/${N}`);
 
     let loads = 0;
-    const pdb = { txAs: async (_c: unknown, fn: (tx: unknown) => unknown) => fn({ execute: async () => { loads++; return { rows: [{ prefs: {} }] }; } }) };
+    const pdb = {
+      txAs: async (_c: unknown, fn: (tx: unknown) => unknown) =>
+        fn({
+          execute: async () => {
+            loads++;
+            return { rows: [{ prefs: {} }] };
+          },
+        }),
+    };
     const r = new NotificationPrefsResolver(pdb as never);
     await Promise.all(Array.from({ length: N }, () => r.stored(1)));
     console.log(`STAMPEDE notificationPrefs ${loads}/${N}`);

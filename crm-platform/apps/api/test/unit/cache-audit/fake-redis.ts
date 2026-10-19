@@ -32,7 +32,8 @@ export class FakeRedis {
   private async enter(cmd: string): Promise<void> {
     this.calls.push(cmd);
     if (this.delayMs > 0) await new Promise((r) => setTimeout(r, this.delayMs));
-    if (this.down || this.failing.has(cmd)) throw new Error(`fake redis: ${cmd} failed (connection refused)`);
+    if (this.down || this.failing.has(cmd))
+      throw new Error(`fake redis: ${cmd} failed (connection refused)`);
   }
 
   private live(key: string): Entry | undefined {
@@ -81,7 +82,11 @@ export class FakeRedis {
     return this.live(key) ? 1 : 0;
   }
 
-  async set(key: string, value: string | Buffer, ...opts: Array<string | number>): Promise<'OK' | null> {
+  async set(
+    key: string,
+    value: string | Buffer,
+    ...opts: Array<string | number>
+  ): Promise<'OK' | null> {
     await this.enter('set');
     return this.setSync(key, value, opts);
   }
@@ -144,7 +149,9 @@ export class FakeRedis {
 
   async scan(cursor: string, _match: 'MATCH', pattern: string): Promise<[string, string[]]> {
     await this.enter('scan');
-    const re = new RegExp('^' + pattern.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*') + '$');
+    const re = new RegExp(
+      '^' + pattern.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*') + '$',
+    );
     return ['0', this.keysSync().filter((k) => re.test(k))];
   }
 
@@ -159,7 +166,10 @@ export class FakeRedis {
     return ops.map(([cmd, args]) => {
       if (cmd === 'incr') return [null, this.incrSync(args[0] as string)];
       if (cmd === 'expire')
-        return [null, this.expireSync(args[0] as string, args[1] as number, args[2] as string | undefined)];
+        return [
+          null,
+          this.expireSync(args[0] as string, args[1] as number, args[2] as string | undefined),
+        ];
       return [new Error(`fake redis: ${cmd} not supported in multi`), null];
     });
   }

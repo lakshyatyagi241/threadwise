@@ -19,7 +19,10 @@ import {
   MINOR_RULE_CACHE_MAX,
   ConsentPolicyService,
 } from '../../../src/modules/contact-consent/consent-policy.service';
-import { TrialGateGuard, TRIAL_VERDICT_CACHE_MAX } from '../../../src/modules/plans-subscriptions-trials/trial-gate.guard';
+import {
+  TrialGateGuard,
+  TRIAL_VERDICT_CACHE_MAX,
+} from '../../../src/modules/plans-subscriptions-trials/trial-gate.guard';
 import {
   WEBHOOK_TARGET_CACHE_MAX,
   WebhookTargetsRepository,
@@ -32,7 +35,8 @@ import {
  * newest entry.
  */
 const OVER = 250;
-const priv = <T>(o: unknown, field: string): Map<unknown, T> => (o as Record<string, Map<unknown, T>>)[field]!;
+const priv = <T>(o: unknown, field: string): Map<unknown, T> =>
+  (o as Record<string, Map<unknown, T>>)[field]!;
 
 describe('setCapped', () => {
   it('evicts the oldest key first, never on an update of a present key, and keeps the newest', () => {
@@ -59,7 +63,9 @@ describe('per-workspace in-process caches stay bounded (D-64-02)', () => {
 
   it('minor rule: one entry per workspace, capped', async () => {
     const db = { txAs: async (_c: unknown, fn: (tx: unknown) => unknown) => fn({}) };
-    const privacy = { complianceFacts: async () => ({ childrenPolicy: 'off', parentalConsentRequired: false }) };
+    const privacy = {
+      complianceFacts: async () => ({ childrenPolicy: 'off', parentalConsentRequired: false }),
+    };
     const svc = new ConsentPolicyService({} as never, db as never, privacy as never);
     for (let org = 1; org <= MINOR_RULE_CACHE_MAX + OVER; org++) await svc.minorRule(org);
     expect(priv(svc, 'minorRules').size).toBe(MINOR_RULE_CACHE_MAX);
@@ -68,8 +74,24 @@ describe('per-workspace in-process caches stay bounded (D-64-02)', () => {
   it('calendar connection rows (Google and Microsoft): one row per workspace, capped', async () => {
     const db = { txAs: async (_c: unknown, fn: (tx: unknown) => unknown) => fn({}) };
     const repo = { find: async () => null };
-    const g = new GoogleCalendarTokens(db as never, repo as never, {} as never, {} as never, {} as never, {} as never, {} as never);
-    const m = new MicrosoftCalendarTokens(db as never, repo as never, {} as never, {} as never, {} as never, {} as never, {} as never);
+    const g = new GoogleCalendarTokens(
+      db as never,
+      repo as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+    const m = new MicrosoftCalendarTokens(
+      db as never,
+      repo as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
     for (let org = 1; org <= CALENDAR_CONNECTION_CACHE_MAX + OVER; org++) {
       await g.connection(org);
       await m.connection(org);
@@ -79,7 +101,11 @@ describe('per-workspace in-process caches stay bounded (D-64-02)', () => {
   });
 
   it('calendar provider preference: one entry per workspace, capped', async () => {
-    const svc = new CalendarProviders({ txAs: async () => null } as never, {} as never, {} as never);
+    const svc = new CalendarProviders(
+      { txAs: async () => null } as never,
+      {} as never,
+      {} as never,
+    );
     (svc as unknown as { readPreference: () => Promise<null> }).readPreference = async () => null;
     for (let org = 1; org <= CALENDAR_PREFERENCE_CACHE_MAX + OVER; org++) await svc.preference(org);
     expect(priv(svc, 'preferences').size).toBe(CALENDAR_PREFERENCE_CACHE_MAX);
@@ -95,7 +121,9 @@ describe('per-workspace in-process caches stay bounded (D-64-02)', () => {
   });
 
   it('webhook forward targets: one entry per target id, capped', async () => {
-    const store = { tx: async (fn: (tx: unknown) => unknown) => fn({ execute: async () => ({ rows: [] }) }) };
+    const store = {
+      tx: async (fn: (tx: unknown) => unknown) => fn({ execute: async () => ({ rows: [] }) }),
+    };
     const repo = new WebhookTargetsRepository(store as never, {} as never);
     for (let id = 1; id <= WEBHOOK_TARGET_CACHE_MAX + OVER; id++) await repo.deliveryTarget(id);
     expect(priv(repo, 'cache').size).toBe(WEBHOOK_TARGET_CACHE_MAX);

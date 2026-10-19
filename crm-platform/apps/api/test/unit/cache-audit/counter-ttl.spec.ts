@@ -11,7 +11,13 @@ import { FakeRedis } from './fake-redis';
  * an immortal one locks the address out of the API for good. The two commands must reach Redis as one transaction.
  */
 function service(redis: FakeRedis): ApiKeyAccessService {
-  return new ApiKeyAccessService({} as never, redis as never, {} as never, {} as never, {} as never);
+  return new ApiKeyAccessService(
+    {} as never,
+    redis as never,
+    {} as never,
+    {} as never,
+    {} as never,
+  );
 }
 
 describe('failed-authentication counter keeps its expiry (D-64-01)', () => {
@@ -33,8 +39,11 @@ describe('failed-authentication counter keeps its expiry (D-64-01)', () => {
     const redis = new FakeRedis();
     redis.failing.add('expire');
     const svc = service(redis);
-    for (let i = 0; i < AUTH_FAILURES_PER_MINUTE; i++) await svc.recordAuthFailure('bearer', '203.0.113.7');
-    await expect(svc.assertNotLockedOut('bearer', '203.0.113.7')).rejects.toMatchObject({ status: 429 });
+    for (let i = 0; i < AUTH_FAILURES_PER_MINUTE; i++)
+      await svc.recordAuthFailure('bearer', '203.0.113.7');
+    await expect(svc.assertNotLockedOut('bearer', '203.0.113.7')).rejects.toMatchObject({
+      status: 429,
+    });
     redis.clock.advance(61_000);
     await expect(svc.assertNotLockedOut('bearer', '203.0.113.7')).resolves.toBeUndefined();
   });

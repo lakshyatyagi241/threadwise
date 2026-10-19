@@ -115,7 +115,8 @@ export class TrialGateGuard implements CanActivate {
       const e = await this.entitlements.forOrg(orgId);
       // Organizations the platform owns are never limited; a missing organization has nothing to gate.
       const expired = !!e && !e.platformOwned && e.state === 'free_trial_expired';
-      if (!expired) setCapped(this.openUntil, orgId, now + OPEN_VERDICT_TTL_MS, TRIAL_VERDICT_CACHE_MAX);
+      if (!expired)
+        setCapped(this.openUntil, orgId, now + OPEN_VERDICT_TTL_MS, TRIAL_VERDICT_CACHE_MAX);
       return expired;
     } catch (err) {
       this.logger.warn(

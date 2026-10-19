@@ -66,7 +66,8 @@ export function scanCollections(root: string = API_SRC): CollectionHit[] {
       const w = name.replace(/\$/g, '\\$');
       const direct = new RegExp(`\\b${w}\\.size\\s*(>=|>|<=|<|===|!==)`).test(text);
       const viaHelper =
-        (/\bstore\.size\s*>=/.test(text) && new RegExp(`remember\\(\\s*this\\.${w}\\b`).test(text)) ||
+        (/\bstore\.size\s*>=/.test(text) &&
+          new RegExp(`remember\\(\\s*this\\.${w}\\b`).test(text)) ||
         new RegExp(`setCapped\\(\\s*this\\.${w}\\b`).test(text);
       hits.push({
         file: rel(file),
@@ -110,9 +111,26 @@ export interface RedisCall {
 }
 
 const WRITE_METHODS = new Set([
-  'set', 'setex', 'psetex', 'setnx', 'getset', 'append', 'mset',
-  'incr', 'incrby', 'incrbyfloat', 'decr', 'hset', 'hmset', 'hincrby', 'sadd', 'zadd', 'rpush', 'lpush',
-  'eval', 'evalsha',
+  'set',
+  'setex',
+  'psetex',
+  'setnx',
+  'getset',
+  'append',
+  'mset',
+  'incr',
+  'incrby',
+  'incrbyfloat',
+  'decr',
+  'hset',
+  'hmset',
+  'hincrby',
+  'sadd',
+  'zadd',
+  'rpush',
+  'lpush',
+  'eval',
+  'evalsha',
 ]);
 const REDIS_RECEIVER = /(^|\.)(redis|client|conn|connection)$|redisClient|^(pub|sub)$/i;
 

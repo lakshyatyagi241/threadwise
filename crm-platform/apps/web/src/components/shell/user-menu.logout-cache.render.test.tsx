@@ -34,7 +34,10 @@ beforeEach(() => {
     configurable: true,
     value: { ...realLocation, assign },
   });
-  vi.stubGlobal('fetch', vi.fn(async () => new Response(null, { status: 204 })));
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async () => new Response(null, { status: 204 })),
+  );
   host = document.createElement('div');
   document.body.appendChild(host);
   root = createRoot(host);
@@ -63,7 +66,9 @@ describe('signing out of the staff app', () => {
     act(() => {
       (host.querySelector('[data-testid="user-menu"]') as HTMLElement).click();
     });
-    const logout = [...host.querySelectorAll('button')].find((b) => b.textContent?.includes('Log out'));
+    const logout = [...host.querySelectorAll('button')].find((b) =>
+      b.textContent?.includes('Log out'),
+    );
     expect(logout).toBeTruthy();
     await act(async () => {
       logout!.click();

@@ -8,7 +8,9 @@ import { describe, expect, it } from 'vitest';
  */
 const WEB = resolve(__dirname, '../..');
 const REPO = resolve(WEB, '../../..');
-const register = JSON.parse(readFileSync(join(REPO, 'docs/performance/cache/register.json'), 'utf8')) as {
+const register = JSON.parse(
+  readFileSync(join(REPO, 'docs/performance/cache/register.json'), 'utf8'),
+) as {
   caches: Array<{ id: string; location: string }>;
   webNextCacheUsers: Record<string, string>;
 };
@@ -21,7 +23,10 @@ function walk(dir: string, out: string[] = []): string[] {
   }
   return out;
 }
-const files = walk(WEB).map((f) => ({ file: relative(REPO, f).split('\\').join('/'), text: readFileSync(f, 'utf8') }));
+const files = walk(WEB).map((f) => ({
+  file: relative(REPO, f).split('\\').join('/'),
+  text: readFileSync(f, 'utf8'),
+}));
 
 /** Files that ask Next.js to cache a fetch or a page, and the rule they must follow. */
 export function nextCacheViolations(
@@ -31,16 +36,22 @@ export function nextCacheViolations(
   const out: string[] = [];
   const users = new Set<string>();
   for (const { file, text } of src) {
-    const uses = /unstable_cache|next:\s*\{\s*revalidate|export const revalidate|fetchCache\s*=|export const dynamic\s*=\s*['"]force-static/.test(text);
+    const uses =
+      /unstable_cache|next:\s*\{\s*revalidate|export const revalidate|fetchCache\s*=|export const dynamic\s*=\s*['"]force-static/.test(
+        text,
+      );
     if (!uses) continue;
     users.add(file);
-    if (!allowed[file]) out.push(`${file}: asks Next.js to cache but is not in register.json webNextCacheUsers.`);
+    if (!allowed[file])
+      out.push(`${file}: asks Next.js to cache but is not in register.json webNextCacheUsers.`);
     // A shared cache entry must not be made from a request that carries a person's credentials.
     const at = text.search(/next:\s*\{\s*revalidate|unstable_cache/);
     const block = at < 0 ? '' : text.slice(Math.max(0, at - 400), at + 200);
-    if (/cookie|authorization|credentials:\s*['"]include/i.test(block)) out.push(`${file}: a cached fetch forwards cookies or an Authorization header.`);
+    if (/cookie|authorization|credentials:\s*['"]include/i.test(block))
+      out.push(`${file}: a cached fetch forwards cookies or an Authorization header.`);
   }
-  for (const f of Object.keys(allowed)) if (!users.has(f)) out.push(`${f}: in webNextCacheUsers but no longer uses a Next.js cache.`);
+  for (const f of Object.keys(allowed))
+    if (!users.has(f)) out.push(`${f}: in webNextCacheUsers but no longer uses a Next.js cache.`);
   return out;
 }
 
@@ -50,8 +61,14 @@ export function softSignOutViolations(src: Array<{ file: string; text: string }>
   for (const { file, text } of src) {
     if (file.endsWith('shared/sign-out.ts')) continue;
     if (!/fetch\(\s*['"`][^'"`]*\/logout['"`]/.test(text)) continue;
-    const full = /window\.location\.(assign|replace)\(|from ['"][^'"]*shared\/sign-out['"]|queryClient\.clear\(\)/.test(text);
-    if (!full) out.push(`${file}: signs out with a fetch but never leaves the page: the client query cache of the old account survives. Use signOut() from auth-registration-security/shared/sign-out.`);
+    const full =
+      /window\.location\.(assign|replace)\(|from ['"][^'"]*shared\/sign-out['"]|queryClient\.clear\(\)/.test(
+        text,
+      );
+    if (!full)
+      out.push(
+        `${file}: signs out with a fetch but never leaves the page: the client query cache of the old account survives. Use signOut() from auth-registration-security/shared/sign-out.`,
+      );
   }
   return out;
 }
@@ -74,11 +91,19 @@ describe('web cache ratchets: the real code', () => {
   });
 
   it('a workspace switch clears the client cache', () => {
-    expect(readFileSync(join(WEB, 'features/auth-registration-security/account/workspace-switcher.tsx'), 'utf8')).toContain('queryClient.clear()');
+    expect(
+      readFileSync(
+        join(WEB, 'features/auth-registration-security/account/workspace-switcher.tsx'),
+        'utf8',
+      ),
+    ).toContain('queryClient.clear()');
   });
 
   it('the screens that show secrets never keep them in the cache (gcTime 0)', () => {
-    for (const f of ['features/whatsapp-devices-baileys/components/use-pairing-poll.ts', 'features/auth-registration-security/account/security/mfa-panel.tsx']) {
+    for (const f of [
+      'features/whatsapp-devices-baileys/components/use-pairing-poll.ts',
+      'features/auth-registration-security/account/security/mfa-panel.tsx',
+    ]) {
       expect(readFileSync(join(WEB, f), 'utf8'), f).toMatch(/gcTime:\s*0/);
     }
   });
@@ -91,22 +116,41 @@ describe('web cache ratchets: the real code', () => {
 
 describe('web cache ratchets: each rule fails on a bad example', () => {
   it('a new revalidate fetch that is not registered is reported', () => {
-    const bad = [{ file: 'apps/web/src/app/new/route.ts', text: "fetch(url, { next: { revalidate: 60 } })" }];
+    const bad = [
+      { file: 'apps/web/src/app/new/route.ts', text: 'fetch(url, { next: { revalidate: 60 } })' },
+    ];
     expect(nextCacheViolations(bad, {}).join()).toContain('not in register.json webNextCacheUsers');
   });
 
   it('a revalidate fetch that forwards the cookie is reported', () => {
-    const bad = [{ file: 'apps/web/src/app/new/route.ts', text: "fetch(url, { headers: { cookie: req.headers.get('cookie') }, next: { revalidate: 60 } })" }];
-    expect(nextCacheViolations(bad, { 'apps/web/src/app/new/route.ts': 'x'.repeat(40) }).join()).toContain('forwards cookies');
+    const bad = [
+      {
+        file: 'apps/web/src/app/new/route.ts',
+        text: "fetch(url, { headers: { cookie: req.headers.get('cookie') }, next: { revalidate: 60 } })",
+      },
+    ];
+    expect(
+      nextCacheViolations(bad, { 'apps/web/src/app/new/route.ts': 'x'.repeat(40) }).join(),
+    ).toContain('forwards cookies');
   });
 
   it('a sign-out that only calls router.replace is reported', () => {
-    const bad = [{ file: 'apps/web/src/components/menu.tsx', text: "await fetch('/api/auth/logout', { method: 'POST' }); router.replace('/login');" }];
+    const bad = [
+      {
+        file: 'apps/web/src/components/menu.tsx',
+        text: "await fetch('/api/auth/logout', { method: 'POST' }); router.replace('/login');",
+      },
+    ];
     expect(softSignOutViolations(bad).join()).toContain('never leaves the page');
   });
 
   it('a sign-out through the shared helper passes', () => {
-    const ok = [{ file: 'apps/web/src/components/menu.tsx', text: "import { signOut } from '@/features/auth-registration-security/shared/sign-out'; fetch('/api/auth/logout')" }];
+    const ok = [
+      {
+        file: 'apps/web/src/components/menu.tsx',
+        text: "import { signOut } from '@/features/auth-registration-security/shared/sign-out'; fetch('/api/auth/logout')",
+      },
+    ];
     expect(softSignOutViolations(ok)).toEqual([]);
   });
 });
