@@ -914,6 +914,71 @@
       "actionsFor": "Actions for {{name}}",
       "cancel": "Cancel",
       "dismiss": "Dismiss"
+    },
+    "teams": {
+      "title": "Teams",
+      "subtitle": "Group your agents by department. Conversations can be auto-assigned by team via routing rules.",
+      "create": "Create team",
+      "loading": "Loading teams",
+      "emptyTitle": "No teams yet",
+      "emptyMessage": "Create a team, add your agents to it and route conversations to it.",
+      "online": "{{count}} online",
+      "default": "Default",
+      "strategies": {
+        "manual": "Manual",
+        "round_robin": "Round robin",
+        "least_loaded": "Least loaded",
+        "sticky": "Sticky"
+      },
+      "howTitle": "How teams work",
+      "how": {
+        "one": "Name a team (for example Sales), pick a colour and add your agents to it.",
+        "two": "Use it three ways: assign a chat to the team by hand, route new chats to it with a routing rule, or read its performance in analytics.",
+        "three": "The team colour is the chip colour in the inbox queue, so you can tell each team's chats apart at a glance."
+      },
+      "editFor": "Edit team: {{name}}",
+      "editTitle": "Edit team",
+      "createTitle": "Create a team",
+      "name": "Team name",
+      "namePlaceholder": "e.g. Sales / Support / Billing",
+      "nameRequired": "Enter a team name.",
+      "nameTooLong": "The name can be at most {{max}} characters.",
+      "color": "Color",
+      "colorOption": "Colour {{color}}",
+      "strategy": "Auto-assignment strategy",
+      "strategyOptions": {
+        "manual": "Manual — a manager picks who gets it",
+        "round_robin": "Round robin — spread evenly",
+        "least_loaded": "Least loaded — fewest open first",
+        "sticky": "Sticky — last agent who replied to this contact"
+      },
+      "membersLabel": "Members",
+      "membersLoading": "Loading teammates",
+      "membersFailed": "Teammates could not be loaded.",
+      "membersNoneCreate": "No teammates yet — invite some first, then come back.",
+      "membersNoneEdit": "No teammates yet.",
+      "createSubmit": "Create team",
+      "save": "Save changes",
+      "delete": "Delete team",
+      "deleteTitle": "Delete this team?",
+      "deleteMessage": "Delete team \"{{name}}\"? Conversations assigned to this team will become unassigned.",
+      "deleteConfirm": "Delete team",
+      "createFailed": "Create team failed: {{reason}}",
+      "updateFailed": "Update failed: {{reason}}",
+      "deleteFailed": "Delete failed: {{reason}}",
+      "errors": {
+        "forbidden": "You do not have permission to do that.",
+        "notFound": "That no longer exists. Reload the page.",
+        "validation": "Some of the details are not valid. Check them and try again.",
+        "conflict": "Someone else changed this at the same time. Reload and try again.",
+        "nameTaken": "A team with that name already exists.",
+        "memberUnknown": "One of the people you picked is not in this workspace.",
+        "orgSuspended": "This workspace is suspended."
+      },
+      "members_one": "{{count}} member",
+      "members_other": "{{count}} members",
+      "devices_one": "{{count}} device",
+      "devices_other": "{{count}} devices"
     }
   },
   "inbox": {
@@ -2444,6 +2509,232 @@
       "payloadPurged": "The stored lead was deleted after its retention period, so there is nothing to retry.",
       "sourcePaused": "This source is paused. Resume it to send a test lead or retry a lead.",
       "notFound": "We could not find it. It may have been deleted."
+    }
+  },
+  "notificationPrefs": {
+    "title": "Notification preferences",
+    "description": "Choose how each event reaches you. These choices are yours alone; your workspace sets which events start out on.",
+    "loading": "Loading your preferences",
+    "failed": "Could not load your preferences.",
+    "saveFailed": "Could not save that change. It was undone.",
+    "dismiss": "Dismiss",
+    "resetRow": "Reset to default",
+    "resetRowFor": "Reset {{event}} to default",
+    "resetAll": "Reset everything to default",
+    "resetAllDone": "All preferences are back to the defaults.",
+    "customised": "Changed",
+    "toggleLabel": "{{event}}: {{channel}}",
+    "workspaceOff": "Turned off by your workspace",
+    "workspaceOffHelp": "Your workspace has this off; your choice still applies to you.",
+    "bellOffHelp": "Turn the bell on to choose a pop-up, sound or push.",
+    "notAvailable": "Not available",
+    "defaultSummary": "Default: {{bell}}, {{toast}}, {{sound}}",
+    "defaultSummaryPush": "Default: {{bell}}, {{toast}}, {{sound}}, {{push}}",
+    "on": "on",
+    "off": "off",
+    "channelNames": {
+      "bell": "bell",
+      "toast": "pop-up",
+      "sound": "sound",
+      "push": "push"
+    },
+    "columns": {
+      "bell": "Bell",
+      "toast": "Pop-up",
+      "sound": "Sound",
+      "push": "Push"
+    },
+    "groups": {
+      "conversations": "Chats",
+      "tasks": "Tasks",
+      "leads": "Leads and forms",
+      "documents": "Sales documents",
+      "wallet": "Wallet",
+      "devices": "WhatsApp numbers",
+      "broadcasts": "Broadcasts and campaigns",
+      "team_chat": "Team chat",
+      "whatsapp_groups": "WhatsApp groups",
+      "billing": "Billing and subscriptions",
+      "system": "System"
+    },
+    "empty": "There are no notification types to set up yet.",
+    "types": {
+      "new_chat": {
+        "label": "New chat",
+        "hint": "A conversation nobody owns yet gets its first message."
+      },
+      "new_message": {
+        "label": "New message on my chat",
+        "hint": "A customer writes on a chat assigned to you."
+      },
+      "chat_waiting": {
+        "label": "Chat still waiting for a reply",
+        "hint": "A chat nobody owns has had a customer message unanswered for a few minutes. You hear about it once."
+      },
+      "conversation_assigned": {
+        "label": "Chat assigned to me",
+        "hint": "A chat is assigned to you or to your team."
+      },
+      "mention": {
+        "label": "Mentioned in a note",
+        "hint": "A colleague mentions you in a conversation note."
+      },
+      "teamchat_mention": {
+        "label": "Mentioned in Team chat",
+        "hint": "A colleague mentions you in a team chat channel."
+      },
+      "teamchat_message": {
+        "label": "Direct message",
+        "hint": "A colleague writes to you in Team chat."
+      },
+      "device_connected": {
+        "label": "Number connected",
+        "hint": "A personal WhatsApp number finished connecting."
+      },
+      "device_disconnected": {
+        "label": "Number disconnected",
+        "hint": "A personal WhatsApp number lost its connection."
+      },
+      "device_logged_out": {
+        "label": "Number logged out",
+        "hint": "A personal WhatsApp number was logged out from the phone."
+      },
+      "broadcast_completed": {
+        "label": "Broadcast finished",
+        "hint": "A broadcast you started has gone out."
+      },
+      "broadcast_failed": {
+        "label": "Broadcast failed",
+        "hint": "A broadcast you started failed."
+      },
+      "campaign_completed": {
+        "label": "Campaign finished",
+        "hint": "A campaign you started has gone out."
+      },
+      "campaign_failed": {
+        "label": "Campaign failed",
+        "hint": "A campaign you started failed."
+      },
+      "scheduled_completed": {
+        "label": "Scheduled send went out",
+        "hint": "A scheduled send you set up was sent."
+      },
+      "scheduled_failed": {
+        "label": "Scheduled send failed",
+        "hint": "A scheduled send you set up failed."
+      },
+      "task_assigned": {
+        "label": "Task assigned to me",
+        "hint": "A task is assigned to you."
+      },
+      "task_due": {
+        "label": "Task due",
+        "hint": "A task of yours is due."
+      },
+      "task_completed": {
+        "label": "Task completed",
+        "hint": "A task you created was completed."
+      },
+      "new_lead": {
+        "label": "New lead",
+        "hint": "A lead arrived from a lead source."
+      },
+      "form_submission": {
+        "label": "Form submitted",
+        "hint": "Someone submitted one of your forms."
+      },
+      "form_needs_review": {
+        "label": "Form needs review",
+        "hint": "A submission needs a look."
+      },
+      "form_payment": {
+        "label": "Form payment received",
+        "hint": "A visitor paid on one of your forms."
+      },
+      "form_payment_duplicate": {
+        "label": "Form paid twice",
+        "hint": "A visitor paid a second time and the extra payment needs a refund."
+      },
+      "wallet_low_balance": {
+        "label": "Wallet balance low",
+        "hint": "The workspace wallet is running low."
+      },
+      "sales_doc_decided": {
+        "label": "Sales document decided",
+        "hint": "A quote or invoice was accepted or declined."
+      },
+      "email_bounced": {
+        "label": "Email not delivered",
+        "hint": "A reply you sent by email bounced or was delayed."
+      },
+      "wallet_credited": {
+        "label": "Wallet topped up",
+        "hint": "The workspace wallet was credited."
+      },
+      "waba_group_join_request": {
+        "label": "Request to join a group",
+        "hint": "People ask to join a WhatsApp group of your business number. Ten requests make one row."
+      },
+      "waba_group_suspended": {
+        "label": "Group suspended",
+        "hint": "WhatsApp suspended one of your groups."
+      },
+      "waba_group_suspension_cleared": {
+        "label": "Group active again",
+        "hint": "WhatsApp restored a group it had suspended. Only if you were told about the suspension."
+      },
+      "device_group_join_request": {
+        "label": "Request to join a personal-number group",
+        "hint": "People ask to join a group of a personal WhatsApp number you manage. Ten requests make one row."
+      },
+      "device_group_removed": {
+        "label": "Removed from a personal-number group",
+        "hint": "Someone removed one of your personal WhatsApp numbers from a group. It can be a sign the number was reported."
+      },
+      "billing_payment_failed": {
+        "label": "Subscription payment failed",
+        "hint": "A renewal charge did not go through and needs your attention."
+      },
+      "billing_subscription_canceled": {
+        "label": "Subscription cancelled",
+        "hint": "Your payment provider ended a subscription of this workspace."
+      },
+      "sla_breached": {
+        "label": "SLA breached",
+        "hint": "A conversation you own missed its first-reply or resolution target."
+      },
+      "member_leave_started": {
+        "label": "Member went on leave",
+        "hint": "A member of your team went on leave. Shows what they hold and a link to reassign it."
+      },
+      "assignment_blocked_by_leave": {
+        "label": "Chat nobody could take",
+        "hint": "Routing found nobody for a new chat because the people it chose are on leave. Assign it by hand."
+      },
+      "appointment_calendar_drift": {
+        "label": "Appointment out of sync with Google Calendar",
+        "hint": "An upcoming appointment's Google Calendar event was deleted, moved or had its guests changed. The appointment is not changed; you choose what to do."
+      },
+      "test": {
+        "label": "Test notification",
+        "hint": "The test you send from Browser notifications, so you can see the bell, the pop-up and the tab title work."
+      },
+      "snooze_wake": {
+        "label": "Snoozed chat comes back",
+        "hint": "A snoozed chat reopens at its time and goes to you or to your team."
+      },
+      "marketplace_renewal_due": {
+        "label": "Paid app renewal reminder",
+        "hint": "A paid app's period ends in a few days: it renews by card, is paid until a date, or was cancelled and ends."
+      },
+      "marketplace_payment_failed": {
+        "label": "Paid app payment failed",
+        "hint": "The card renewal of a paid app did not go through and needs your attention."
+      },
+      "marketplace_subscription_ended": {
+        "label": "Paid app subscription ended",
+        "hint": "A paid app's subscription ended and the app was paused."
+      }
     }
   }
 }

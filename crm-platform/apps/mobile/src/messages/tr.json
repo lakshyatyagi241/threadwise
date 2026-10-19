@@ -914,6 +914,71 @@
       "actionsFor": "{{name}} için eylemler",
       "cancel": "İptal",
       "dismiss": "Kapat"
+    },
+    "teams": {
+      "title": "Ekipler",
+      "subtitle": "Temsilcilerinizi departmana göre gruplayın. Görüşmeler yönlendirme kurallarıyla ekibe göre otomatik atanabilir.",
+      "create": "Ekip oluştur",
+      "loading": "Ekipler yükleniyor",
+      "emptyTitle": "Henüz ekip yok",
+      "emptyMessage": "Bir ekip oluşturun, temsilcilerinizi ekleyin ve görüşmeleri bu ekibe yönlendirin.",
+      "online": "{{count}} çevrimiçi",
+      "default": "Varsayılan",
+      "strategies": {
+        "manual": "Manuel",
+        "round_robin": "Sırayla dağıtım",
+        "least_loaded": "En az yüklü",
+        "sticky": "Sabit"
+      },
+      "howTitle": "Ekipler nasıl çalışır",
+      "how": {
+        "one": "Bir ekip adı verin (örneğin Satış), bir renk seçin ve temsilcilerinizi ekleyin.",
+        "two": "Üç şekilde kullanın: bir sohbeti elle ekibe atayın, yönlendirme kuralıyla yeni sohbetleri ekibe yönlendirin veya performansını analizlerde inceleyin.",
+        "three": "Ekip rengi, gelen kutusu kuyruğundaki etiket rengidir; böylece her ekibin sohbetlerini bir bakışta ayırt edebilirsiniz."
+      },
+      "editFor": "Ekibi düzenle: {{name}}",
+      "editTitle": "Ekibi düzenle",
+      "createTitle": "Ekip oluştur",
+      "name": "Ekip adı",
+      "namePlaceholder": "ör. Satış / Destek / Faturalandırma",
+      "nameRequired": "Bir ekip adı girin.",
+      "nameTooLong": "Ad en fazla {{max}} karakter olabilir.",
+      "color": "Renk",
+      "colorOption": "Renk {{color}}",
+      "strategy": "Otomatik atama stratejisi",
+      "strategyOptions": {
+        "manual": "Manuel — bir müdür kimin alacağını seçer",
+        "round_robin": "Sırayla dağıtım — eşit dağıt",
+        "least_loaded": "En az yüklü — en az açık işi olan önce",
+        "sticky": "Sabit — bu kişiye en son yanıt veren temsilci"
+      },
+      "membersLabel": "Üyeler",
+      "membersLoading": "Ekip arkadaşları yükleniyor",
+      "membersFailed": "Ekip arkadaşları yüklenemedi.",
+      "membersNoneCreate": "Henüz ekip arkadaşı yok — önce birkaç kişi davet edin, sonra geri dönün.",
+      "membersNoneEdit": "Henüz ekip arkadaşı yok.",
+      "createSubmit": "Ekip oluştur",
+      "save": "Değişiklikleri kaydet",
+      "delete": "Ekibi sil",
+      "deleteTitle": "Bu ekip silinsin mi?",
+      "deleteMessage": "\"{{name}}\" ekibi silinsin mi? Bu ekibe atanmış görüşmelerin ataması kaldırılacak.",
+      "deleteConfirm": "Ekibi sil",
+      "createFailed": "Ekip oluşturma başarısız: {{reason}}",
+      "updateFailed": "Güncelleme başarısız: {{reason}}",
+      "deleteFailed": "Silme başarısız: {{reason}}",
+      "errors": {
+        "forbidden": "Bunu yapmak için izniniz yok.",
+        "notFound": "Bu artık yok. Sayfayı yenileyin.",
+        "validation": "Bazı ayrıntılar geçerli değil. Kontrol edip yeniden deneyin.",
+        "conflict": "Bunu aynı anda başka biri değiştirdi. Yenileyip yeniden deneyin.",
+        "nameTaken": "Bu ada sahip bir ekip zaten var.",
+        "memberUnknown": "Seçtiğiniz kişilerden biri bu çalışma alanında değil.",
+        "orgSuspended": "Bu çalışma alanı askıya alındı."
+      },
+      "members_one": "{{count}} üye",
+      "members_other": "{{count}} üye",
+      "devices_one": "{{count}} cihaz",
+      "devices_other": "{{count}} cihaz"
     }
   },
   "inbox": {
@@ -2444,6 +2509,232 @@
       "payloadPurged": "Saklanan potansiyel müşteri, saklama süresinden sonra silindi; yeniden denenecek bir şey yok.",
       "sourcePaused": "Bu kaynak duraklatıldı. Test potansiyel müşterisi göndermek veya bir potansiyel müşteriyi yeniden denemek için devam ettirin.",
       "notFound": "Bulunamadı. Silinmiş olabilir."
+    }
+  },
+  "notificationPrefs": {
+    "title": "Bildirim tercihleri",
+    "description": "Her etkinliğin size nasıl ulaşacağını seçin. Bu tercihler yalnızca sizindir; çalışma alanınız hangi etkinliklerin başlangıçta açık olacağını belirler.",
+    "loading": "Tercihleriniz yükleniyor",
+    "failed": "Tercihleriniz yüklenemedi.",
+    "saveFailed": "Bu değişiklik kaydedilemedi. Geri alındı.",
+    "dismiss": "Kapat",
+    "resetRow": "Varsayılana sıfırla",
+    "resetRowFor": "{{event}} etkinliğini varsayılana sıfırla",
+    "resetAll": "Her şeyi varsayılana sıfırla",
+    "resetAllDone": "Tüm tercihler varsayılana döndü.",
+    "customised": "Değiştirildi",
+    "toggleLabel": "{{event}}: {{channel}}",
+    "workspaceOff": "Çalışma alanınız tarafından kapatıldı",
+    "workspaceOffHelp": "Çalışma alanınızda bu kapalı; yine de kendi seçiminiz sizin için geçerlidir.",
+    "bellOffHelp": "Açılır pencere, ses veya anlık bildirim seçmek için zili açın.",
+    "notAvailable": "Kullanılamıyor",
+    "defaultSummary": "Varsayılan: {{bell}}, {{toast}}, {{sound}}",
+    "defaultSummaryPush": "Varsayılan: {{bell}}, {{toast}}, {{sound}}, {{push}}",
+    "on": "açık",
+    "off": "kapalı",
+    "channelNames": {
+      "bell": "zil",
+      "toast": "açılır pencere",
+      "sound": "ses",
+      "push": "anlık bildirim"
+    },
+    "columns": {
+      "bell": "Zil",
+      "toast": "Açılır pencere",
+      "sound": "Ses",
+      "push": "Anlık bildirim"
+    },
+    "groups": {
+      "conversations": "Sohbetler",
+      "tasks": "Görevler",
+      "leads": "Potansiyel müşteriler ve formlar",
+      "documents": "Satış belgeleri",
+      "wallet": "Cüzdan",
+      "devices": "WhatsApp numaraları",
+      "broadcasts": "Toplu gönderimler ve kampanyalar",
+      "team_chat": "Ekip sohbeti",
+      "whatsapp_groups": "WhatsApp grupları",
+      "billing": "Faturalama ve abonelikler",
+      "system": "Sistem"
+    },
+    "empty": "Henüz ayarlanacak bildirim türü yok.",
+    "types": {
+      "new_chat": {
+        "label": "Yeni sohbet",
+        "hint": "Henüz sahibi olmayan bir konuşmaya ilk mesaj gelir."
+      },
+      "new_message": {
+        "label": "Sohbetimde yeni mesaj",
+        "hint": "Bir müşteri size atanmış bir sohbete yazar."
+      },
+      "chat_waiting": {
+        "label": "Sohbet hâlâ yanıt bekliyor",
+        "hint": "Kimseye atanmamış bir sohbette müşteri mesajı birkaç dakikadır yanıtsız kaldı. Bu bildirimi yalnızca bir kez alırsınız."
+      },
+      "conversation_assigned": {
+        "label": "Bana atanan sohbet",
+        "hint": "Bir sohbet size veya ekibinize atandı."
+      },
+      "mention": {
+        "label": "Bir notta anıldı",
+        "hint": "Bir iş arkadaşı sizi bir konuşma notunda anar."
+      },
+      "teamchat_mention": {
+        "label": "Ekip sohbetinde anıldı",
+        "hint": "Bir iş arkadaşı sizi bir ekip sohbeti kanalında anar."
+      },
+      "teamchat_message": {
+        "label": "Doğrudan mesaj",
+        "hint": "Bir iş arkadaşı Ekip sohbetinde size yazar."
+      },
+      "device_connected": {
+        "label": "Numara bağlandı",
+        "hint": "Kişisel bir WhatsApp numarasının bağlanması tamamlandı."
+      },
+      "device_disconnected": {
+        "label": "Numara bağlantısı kesildi",
+        "hint": "Kişisel bir WhatsApp numarasının bağlantısı koptu."
+      },
+      "device_logged_out": {
+        "label": "Numara oturumu kapatıldı",
+        "hint": "Kişisel bir WhatsApp numarasının oturumu telefondan kapatıldı."
+      },
+      "broadcast_completed": {
+        "label": "Toplu gönderim tamamlandı",
+        "hint": "Başlattığınız bir toplu gönderim gönderildi."
+      },
+      "broadcast_failed": {
+        "label": "Toplu gönderim başarısız",
+        "hint": "Başlattığınız bir toplu gönderim başarısız oldu."
+      },
+      "campaign_completed": {
+        "label": "Kampanya tamamlandı",
+        "hint": "Başlattığınız bir kampanya gönderildi."
+      },
+      "campaign_failed": {
+        "label": "Kampanya başarısız",
+        "hint": "Başlattığınız bir kampanya başarısız oldu."
+      },
+      "scheduled_completed": {
+        "label": "Zamanlanmış gönderim gönderildi",
+        "hint": "Ayarladığınız zamanlanmış bir gönderim gönderildi."
+      },
+      "scheduled_failed": {
+        "label": "Zamanlanmış gönderim başarısız",
+        "hint": "Ayarladığınız zamanlanmış bir gönderim başarısız oldu."
+      },
+      "task_assigned": {
+        "label": "Bana bir görev atandı",
+        "hint": "Size bir görev atandı."
+      },
+      "task_due": {
+        "label": "Görev süresi doluyor",
+        "hint": "Görevinizin süresi doluyor."
+      },
+      "task_completed": {
+        "label": "Görev tamamlandı",
+        "hint": "Oluşturduğunuz bir görev tamamlandı."
+      },
+      "new_lead": {
+        "label": "Yeni potansiyel müşteri",
+        "hint": "Bir potansiyel müşteri kaynağından potansiyel müşteri geldi."
+      },
+      "form_submission": {
+        "label": "Form gönderildi",
+        "hint": "Biri formlarınızdan birini gönderdi."
+      },
+      "form_needs_review": {
+        "label": "Form incelenmeli",
+        "hint": "Bir gönderim incelenmeli."
+      },
+      "wallet_low_balance": {
+        "label": "Cüzdan bakiyesi düşük",
+        "hint": "Çalışma alanı cüzdanının bakiyesi azalıyor."
+      },
+      "sales_doc_decided": {
+        "label": "Satış belgesi karara bağlandı",
+        "hint": "Bir teklif veya fatura kabul edildi ya da reddedildi."
+      },
+      "email_bounced": {
+        "label": "E-posta iletilemedi",
+        "hint": "Gönderdiğiniz bir e-posta geri döndü veya gecikti."
+      },
+      "wallet_credited": {
+        "label": "Cüzdana bakiye yüklendi",
+        "hint": "Çalışma alanı cüzdanına bakiye yüklendi."
+      },
+      "waba_group_join_request": {
+        "label": "Bir gruba katılma isteği",
+        "hint": "Kişiler, işletme numaranızın bir WhatsApp grubuna katılmak istiyor. On istek tek bir satır oluşturur."
+      },
+      "waba_group_suspended": {
+        "label": "Grup askıya alındı",
+        "hint": "WhatsApp gruplarınızdan birini askıya aldı."
+      },
+      "waba_group_suspension_cleared": {
+        "label": "Grup yeniden etkin",
+        "hint": "WhatsApp, askıya aldığı bir grubu geri yükledi. Yalnızca askıya alma hakkında bilgilendirildiyseniz."
+      },
+      "form_payment": {
+        "label": "Form ödemesi alındı",
+        "hint": "Bir ziyaretçi formlarınızdan birinde ödeme yaptı."
+      },
+      "form_payment_duplicate": {
+        "label": "Form iki kez ödendi",
+        "hint": "Bir ziyaretçi ikinci kez ödeme yaptı ve fazla ödemenin iade edilmesi gerekiyor."
+      },
+      "billing_payment_failed": {
+        "label": "Abonelik ödemesi başarısız",
+        "hint": "Bir yenileme tahsilatı gerçekleşmedi ve ilgilenmeniz gerekiyor."
+      },
+      "billing_subscription_canceled": {
+        "label": "Abonelik iptal edildi",
+        "hint": "Ödeme sağlayıcınız bu çalışma alanının bir aboneliğini sonlandırdı."
+      },
+      "device_group_join_request": {
+        "label": "Kişisel numara grubuna katılma isteği",
+        "hint": "Birileri yönettiğiniz bir kişisel WhatsApp numarasının grubuna katılmak istiyor. On istek tek satır olur."
+      },
+      "device_group_removed": {
+        "label": "Kişisel numara grubundan çıkarıldınız",
+        "hint": "Biri kişisel WhatsApp numaralarınızdan birini bir gruptan çıkardı. Numaranın şikayet edildiğinin işareti olabilir."
+      },
+      "sla_breached": {
+        "label": "SLA aşıldı",
+        "hint": "Sahibi olduğunuz bir görüşme ilk yanıt veya çözüm hedefini kaçırdı."
+      },
+      "member_leave_started": {
+        "label": "Bir üye izne çıktı",
+        "hint": "Ekibinizden bir üye izne çıktı. Üzerindeki işleri ve yeniden atama bağlantısını gösterir."
+      },
+      "assignment_blocked_by_leave": {
+        "label": "Kimsenin alamadığı sohbet",
+        "hint": "Seçilen kişiler izinde olduğu için yönlendirme yeni sohbet için kimseyi bulamadı. Elle atayın."
+      },
+      "test": {
+        "label": "Test bildirimi",
+        "hint": "Tarayıcı bildirimleri bölümünden gönderdiğiniz test; zilin, açılır pencerenin ve sekme başlığının çalıştığını görmenizi sağlar."
+      },
+      "appointment_calendar_drift": {
+        "label": "Randevu, Google Calendar ile senkronize değil",
+        "hint": "Yaklaşan bir randevunun Google Calendar etkinliği silindi, taşındı veya konukları değiştirildi. Randevu değiştirilmez; ne yapacağınıza siz karar verirsiniz."
+      },
+      "snooze_wake": {
+        "label": "Ertelenen sohbet geri döner",
+        "hint": "Ertelenen bir sohbet belirlenen saatte yeniden açılır ve size ya da ekibinize atanır."
+      },
+      "marketplace_renewal_due": {
+        "label": "Ücretli uygulama yenileme hatırlatması",
+        "hint": "Ücretli bir uygulamanın dönemi birkaç gün içinde bitiyor: kartla yenileniyor, belirli bir tarihe kadar ödenmiş durumda ya da iptal edilmiş olup sona eriyor."
+      },
+      "marketplace_payment_failed": {
+        "label": "Ücretli uygulama ödemesi başarısız",
+        "hint": "Ücretli bir uygulamanın kartla yenilenmesi gerçekleşmedi ve ilgilenmeniz gerekiyor."
+      },
+      "marketplace_subscription_ended": {
+        "label": "Ücretli uygulama aboneliği sona erdi",
+        "hint": "Ücretli bir uygulamanın aboneliği sona erdi ve uygulama duraklatıldı."
+      }
     }
   }
 }

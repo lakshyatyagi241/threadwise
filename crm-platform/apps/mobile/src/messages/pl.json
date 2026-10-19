@@ -952,6 +952,75 @@
       "actionsFor": "Akcje dla {{name}}",
       "cancel": "Anuluj",
       "dismiss": "Zamknij"
+    },
+    "teams": {
+      "title": "Zespoły",
+      "subtitle": "Grupuj agentów według działów. Rozmowy mogą być przypisywane automatycznie według zespołu za pomocą reguł routingu.",
+      "create": "Utwórz zespół",
+      "loading": "Wczytywanie zespołów",
+      "emptyTitle": "Brak zespołów",
+      "emptyMessage": "Utwórz zespół, dodaj do niego agentów i kieruj do niego rozmowy.",
+      "online": "{{count}} online",
+      "default": "Domyślny",
+      "strategies": {
+        "manual": "Ręczny",
+        "round_robin": "Round robin",
+        "least_loaded": "Najmniej obciążony",
+        "sticky": "Przypięty"
+      },
+      "howTitle": "Jak działają zespoły",
+      "how": {
+        "one": "Nazwij zespół (na przykład Sprzedaż), wybierz kolor i dodaj do niego agentów.",
+        "two": "Używaj go na trzy sposoby: przypisuj czat do zespołu ręcznie, kieruj nowe czaty do niego regułą routingu albo sprawdzaj jego wyniki w analityce.",
+        "three": "Kolor zespołu to kolor etykiety w kolejce Skrzynki, dzięki czemu od razu widzisz czaty każdego zespołu."
+      },
+      "editFor": "Edytuj zespół: {{name}}",
+      "editTitle": "Edytuj zespół",
+      "createTitle": "Utwórz zespół",
+      "name": "Nazwa zespołu",
+      "namePlaceholder": "np. Sprzedaż / Wsparcie / Rozliczenia",
+      "nameRequired": "Wpisz nazwę zespołu.",
+      "nameTooLong": "Nazwa może mieć maksymalnie {{max}} znaków.",
+      "color": "Kolor",
+      "colorOption": "Kolor {{color}}",
+      "strategy": "Strategia automatycznego przypisywania",
+      "strategyOptions": {
+        "manual": "Ręczna — manager wybiera, kto dostaje rozmowę",
+        "round_robin": "Round robin — równomiernie po kolei",
+        "least_loaded": "Najmniej obciążony — najpierw ten z najmniejszą liczbą otwartych",
+        "sticky": "Przypięty — ostatni agent, który odpisał temu kontaktowi"
+      },
+      "membersLabel": "Członkowie",
+      "membersLoading": "Wczytywanie współpracowników",
+      "membersFailed": "Nie udało się wczytać współpracowników.",
+      "membersNoneCreate": "Brak współpracowników — najpierw kogoś zaproś, a potem wróć.",
+      "membersNoneEdit": "Brak współpracowników.",
+      "createSubmit": "Utwórz zespół",
+      "save": "Zapisz zmiany",
+      "delete": "Usuń zespół",
+      "deleteTitle": "Usunąć ten zespół?",
+      "deleteMessage": "Usunąć zespół „{{name}}”? Rozmowy przypisane do tego zespołu staną się nieprzypisane.",
+      "deleteConfirm": "Usuń zespół",
+      "createFailed": "Tworzenie zespołu nie powiodło się: {{reason}}",
+      "updateFailed": "Aktualizacja nie powiodła się: {{reason}}",
+      "deleteFailed": "Usunięcie nie powiodło się: {{reason}}",
+      "errors": {
+        "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+        "notFound": "Nie istnieje już. Wczytaj stronę ponownie.",
+        "validation": "Niektóre dane są nieprawidłowe. Sprawdź je i spróbuj ponownie.",
+        "conflict": "Ktoś inny zmienił to w tym samym czasie. Wczytaj ponownie i spróbuj jeszcze raz.",
+        "nameTaken": "Zespół o tej nazwie już istnieje.",
+        "memberUnknown": "Jedna z wybranych osób nie jest w tej przestrzeni roboczej.",
+        "orgSuspended": "Ta przestrzeń robocza jest zawieszona."
+      },
+      "members_few": "{{count}} członkowie",
+      "members_many": "{{count}} członków",
+      "members_one": "{{count}} członek",
+      "members_other": "{{count}} członka",
+      "devices_few": "{{count}} urządzenia",
+      "devices_many": "{{count}} urządzeń",
+      "devices_one": "{{count}} urządzenie",
+      "devices_other": "{{count}} urządzenia"
     }
   },
   "inbox": {
@@ -2536,6 +2605,232 @@
       "payloadPurged": "Zapisany lead został usunięty po okresie przechowywania, więc nie ma czego ponawiać.",
       "sourcePaused": "To źródło jest wstrzymane. Wznów je, aby wysłać testowy lead lub ponowić lead.",
       "notFound": "Nie udało się go znaleźć. Mogło zostać usunięte."
+    }
+  },
+  "notificationPrefs": {
+    "title": "Preferencje powiadomień",
+    "description": "Wybierz, jak każde zdarzenie do Ciebie dociera. Wybory są tylko Twoje; przestrzeń robocza ustala, które zdarzenia są domyślnie włączone.",
+    "loading": "Wczytywanie Twoich preferencji",
+    "failed": "Nie udało się wczytać Twoich preferencji.",
+    "saveFailed": "Nie udało się zapisać tej zmiany. Cofnięto ją.",
+    "dismiss": "Odrzuć",
+    "resetRow": "Przywróć domyślne",
+    "resetRowFor": "Przywróć domyślne dla: {{event}}",
+    "resetAll": "Przywróć wszystko do domyślnych",
+    "resetAllDone": "Wszystkie preferencje wróciły do wartości domyślnych.",
+    "customised": "Zmienione",
+    "toggleLabel": "{{event}}: {{channel}}",
+    "workspaceOff": "Wyłączone przez Twoją przestrzeń roboczą",
+    "workspaceOffHelp": "Przestrzeń robocza ma to wyłączone; Twój wybór nadal dotyczy Ciebie.",
+    "bellOffHelp": "Włącz dzwonek, aby wybrać wyskakujące okno, dźwięk lub push.",
+    "notAvailable": "Niedostępne",
+    "defaultSummary": "Domyślnie: {{bell}}, {{toast}}, {{sound}}",
+    "defaultSummaryPush": "Domyślnie: {{bell}}, {{toast}}, {{sound}}, {{push}}",
+    "on": "włączony",
+    "off": "wyłączony",
+    "channelNames": {
+      "bell": "dzwonek",
+      "toast": "wyskakujące okno",
+      "sound": "dźwięk",
+      "push": "push"
+    },
+    "columns": {
+      "bell": "Dzwonek",
+      "toast": "Wyskakujące okno",
+      "sound": "Dźwięk",
+      "push": "Push"
+    },
+    "groups": {
+      "conversations": "Czaty",
+      "tasks": "Zadania",
+      "leads": "Leady i formularze",
+      "documents": "Dokumenty sprzedażowe",
+      "wallet": "Portfel",
+      "devices": "Numery WhatsApp",
+      "broadcasts": "Wiadomości masowe i kampanie",
+      "team_chat": "Czat zespołu",
+      "whatsapp_groups": "Grupy WhatsApp",
+      "billing": "Płatności i subskrypcje",
+      "system": "System"
+    },
+    "empty": "Nie ma jeszcze typów powiadomień do skonfigurowania.",
+    "types": {
+      "new_chat": {
+        "label": "Nowy czat",
+        "hint": "Rozmowa, której nikt jeszcze nie prowadzi, dostaje pierwszą wiadomość."
+      },
+      "new_message": {
+        "label": "Nowa wiadomość w moim czacie",
+        "hint": "Klient pisze w czacie przypisanym do Ciebie."
+      },
+      "chat_waiting": {
+        "label": "Czat nadal czeka na odpowiedź",
+        "hint": "Na czat, którego nikt nie prowadzi, od kilku minut nie odpowiedziano na wiadomość klienta. Dowiesz się o tym jeden raz."
+      },
+      "conversation_assigned": {
+        "label": "Czat przypisany do mnie",
+        "hint": "Czat jest przypisany do Ciebie lub do Twojego zespołu."
+      },
+      "mention": {
+        "label": "Wspomniano w notatce",
+        "hint": "Współpracownik wspomina o Tobie w notatce do rozmowy."
+      },
+      "teamchat_mention": {
+        "label": "Wspomniano w czacie zespołu",
+        "hint": "Współpracownik wspomina o Tobie w kanale czatu zespołu."
+      },
+      "teamchat_message": {
+        "label": "Wiadomość prywatna",
+        "hint": "Współpracownik pisze do Ciebie w czacie zespołu."
+      },
+      "device_connected": {
+        "label": "Numer połączony",
+        "hint": "Prywatny numer WhatsApp zakończył łączenie."
+      },
+      "device_disconnected": {
+        "label": "Numer rozłączony",
+        "hint": "Prywatny numer WhatsApp stracił połączenie."
+      },
+      "device_logged_out": {
+        "label": "Numer wylogowany",
+        "hint": "Prywatny numer WhatsApp został wylogowany z telefonu."
+      },
+      "broadcast_completed": {
+        "label": "Wiadomość masowa zakończona",
+        "hint": "Wiadomość masowa, którą uruchomiono, została wysłana."
+      },
+      "broadcast_failed": {
+        "label": "Wiadomość masowa nieudana",
+        "hint": "Wiadomość masowa, którą uruchomiono, nie powiodła się."
+      },
+      "campaign_completed": {
+        "label": "Kampania zakończona",
+        "hint": "Kampania, którą uruchomiono, została wysłana."
+      },
+      "campaign_failed": {
+        "label": "Kampania nieudana",
+        "hint": "Kampania, którą uruchomiono, nie powiodła się."
+      },
+      "scheduled_completed": {
+        "label": "Zaplanowana wysyłka wysłana",
+        "hint": "Zaplanowana przez Ciebie wysyłka została wysłana."
+      },
+      "scheduled_failed": {
+        "label": "Zaplanowana wysyłka nieudana",
+        "hint": "Zaplanowana przez Ciebie wysyłka nie powiodła się."
+      },
+      "task_assigned": {
+        "label": "Zadanie przypisane do mnie",
+        "hint": "Zadanie zostało przypisane do Ciebie."
+      },
+      "task_due": {
+        "label": "Zbliża się termin zadania",
+        "hint": "Termin Twojego zadania się zbliża."
+      },
+      "task_completed": {
+        "label": "Zadanie ukończone",
+        "hint": "Zadanie, które utworzyłeś, zostało ukończone."
+      },
+      "new_lead": {
+        "label": "Nowy lead",
+        "hint": "Lead wpłynął ze źródła leadów."
+      },
+      "form_submission": {
+        "label": "Formularz wysłany",
+        "hint": "Ktoś wysłał jeden z Twoich formularzy."
+      },
+      "form_needs_review": {
+        "label": "Formularz wymaga weryfikacji",
+        "hint": "Zgłoszenie wymaga sprawdzenia."
+      },
+      "wallet_low_balance": {
+        "label": "Niskie saldo portfela",
+        "hint": "Portfel przestrzeni roboczej się wyczerpuje."
+      },
+      "sales_doc_decided": {
+        "label": "Dokument sprzedażowy rozstrzygnięty",
+        "hint": "Oferta lub faktura została zaakceptowana albo odrzucona."
+      },
+      "email_bounced": {
+        "label": "E-mail niedostarczony",
+        "hint": "Wysłana przez Ciebie wiadomość e-mail wróciła lub jest opóźniona."
+      },
+      "wallet_credited": {
+        "label": "Portfel doładowany",
+        "hint": "Portfel przestrzeni roboczej został zasilony."
+      },
+      "waba_group_join_request": {
+        "label": "Prośba o dołączenie do grupy",
+        "hint": "Osoby proszą o dołączenie do grupy WhatsApp z numeru Twojej firmy. Dziesięć próśb tworzy jeden wiersz."
+      },
+      "waba_group_suspended": {
+        "label": "Grupa zawieszona",
+        "hint": "WhatsApp zawiesił jedną z Twoich grup."
+      },
+      "waba_group_suspension_cleared": {
+        "label": "Grupa znów aktywna",
+        "hint": "WhatsApp przywrócił grupę, którą wcześniej zawiesił. Tylko jeśli zostałeś o zawieszeniu poinformowany."
+      },
+      "form_payment": {
+        "label": "Otrzymano płatność z formularza",
+        "hint": "Odwiedzający zapłacił w jednym z Twoich formularzy."
+      },
+      "form_payment_duplicate": {
+        "label": "Formularz opłacony dwukrotnie",
+        "hint": "Odwiedzający zapłacił po raz drugi, a dodatkową płatność trzeba zwrócić."
+      },
+      "billing_payment_failed": {
+        "label": "Płatność za subskrypcję nie powiodła się",
+        "hint": "Opłata za odnowienie nie została zrealizowana i wymaga Twojej uwagi."
+      },
+      "billing_subscription_canceled": {
+        "label": "Subskrypcja anulowana",
+        "hint": "Twój operator płatności zakończył subskrypcję tego obszaru roboczego."
+      },
+      "device_group_join_request": {
+        "label": "Prośba o dołączenie do grupy numeru osobistego",
+        "hint": "Ktoś prosi o dołączenie do grupy osobistego numeru WhatsApp, którym zarządzasz. Dziesięć próśb tworzy jeden wiersz."
+      },
+      "device_group_removed": {
+        "label": "Usunięto z grupy numeru osobistego",
+        "hint": "Ktoś usunął jeden z Twoich osobistych numerów WhatsApp z grupy. Może to oznaczać, że numer został zgłoszony."
+      },
+      "sla_breached": {
+        "label": "Przekroczono SLA",
+        "hint": "Twoja rozmowa nie spełniła celu pierwszej odpowiedzi lub rozwiązania."
+      },
+      "member_leave_started": {
+        "label": "Członek zespołu poszedł na urlop",
+        "hint": "Członek Twojego zespołu poszedł na urlop. Pokazuje, czym się opiekuje, i link do przypisania od nowa."
+      },
+      "assignment_blocked_by_leave": {
+        "label": "Czat, którego nikt nie mógł przejąć",
+        "hint": "Routing nie znalazł nikogo dla nowego czatu, bo wybrane osoby są na urlopie. Przypisz go ręcznie."
+      },
+      "test": {
+        "label": "Powiadomienie testowe",
+        "hint": "Test wysyłany z sekcji Powiadomienia przeglądarki, dzięki któremu zobaczysz, jak działają dzwonek, wyskakujące okno i tytuł karty."
+      },
+      "appointment_calendar_drift": {
+        "label": "Wizyta niezsynchronizowana z Google Calendar",
+        "hint": "Wydarzenie w Google Calendar dotyczące nadchodzącej wizyty zostało usunięte, przeniesione lub zmieniono jego gości. Wizyta nie została zmieniona; to Ty decydujesz, co zrobić."
+      },
+      "snooze_wake": {
+        "label": "Odłożony czat wraca",
+        "hint": "Odłożony czat otwiera się ponownie o wyznaczonej porze i trafia do ciebie lub do zespołu."
+      },
+      "marketplace_renewal_due": {
+        "label": "Przypomnienie o odnowieniu płatnej aplikacji",
+        "hint": "Okres płatnej aplikacji kończy się za kilka dni: zostanie odnowiona kartą, jest opłacona do określonej daty albo została anulowana i się kończy."
+      },
+      "marketplace_payment_failed": {
+        "label": "Płatność za płatną aplikację nie powiodła się",
+        "hint": "Odnowienie płatnej aplikacji kartą nie powiodło się i wymaga Twojej uwagi."
+      },
+      "marketplace_subscription_ended": {
+        "label": "Subskrypcja płatnej aplikacji zakończona",
+        "hint": "Subskrypcja płatnej aplikacji zakończyła się, a aplikacja została wstrzymana."
+      }
     }
   }
 }

@@ -895,6 +895,69 @@
       "actionsFor": "{{name}} の操作",
       "cancel": "キャンセル",
       "dismiss": "閉じる"
+    },
+    "teams": {
+      "title": "チーム",
+      "subtitle": "エージェントを部署ごとにグループ化します。ルーティングルールにより、会話をチーム単位で自動割り当てできます。",
+      "create": "チームを作成",
+      "loading": "チームを読み込んでいます",
+      "emptyTitle": "まだチームがありません",
+      "emptyMessage": "チームを作成し、エージェントを追加して、会話をそのチームに振り分けます。",
+      "online": "{{count}} 名オンライン",
+      "default": "既定",
+      "strategies": {
+        "manual": "手動",
+        "round_robin": "ラウンドロビン",
+        "least_loaded": "最も負荷の少ない順",
+        "sticky": "固定"
+      },
+      "howTitle": "チームの仕組み",
+      "how": {
+        "one": "チーム名(例: 営業)を付け、色を選んで、エージェントを追加します。",
+        "two": "次の3つの方法で使えます。手動でチャットをチームに割り当てる、ルーティングルールで新しいチャットをチームに振り分ける、または分析でチームのパフォーマンスを確認する。",
+        "three": "チームの色は受信トレイのキューのチップの色になるため、各チームのチャットを一目で区別できます。"
+      },
+      "editFor": "チームを編集: {{name}}",
+      "editTitle": "チームを編集",
+      "createTitle": "チームを作成",
+      "name": "チーム名",
+      "namePlaceholder": "例: 営業 / サポート / 請求",
+      "nameRequired": "チーム名を入力してください。",
+      "nameTooLong": "チーム名は {{max}} 文字以内で入力してください。",
+      "color": "色",
+      "colorOption": "色 {{color}}",
+      "strategy": "自動割り当ての方式",
+      "strategyOptions": {
+        "manual": "手動 — マネージャーが担当者を選びます",
+        "round_robin": "ラウンドロビン — 均等に振り分け",
+        "least_loaded": "最も負荷の少ない順 — 未対応の件数が最も少ない担当者から",
+        "sticky": "固定 — この連絡先に最後に返信した担当者"
+      },
+      "membersLabel": "メンバー",
+      "membersLoading": "チームメイトを読み込んでいます",
+      "membersFailed": "チームメイトを読み込めませんでした。",
+      "membersNoneCreate": "まだチームメイトがいません。先に招待してから、戻ってきてください。",
+      "membersNoneEdit": "まだチームメイトがいません。",
+      "createSubmit": "チームを作成",
+      "save": "変更を保存",
+      "delete": "チームを削除",
+      "deleteTitle": "このチームを削除しますか?",
+      "deleteMessage": "チーム「{{name}}」を削除しますか? このチームに割り当てられた会話は、担当者未設定になります。",
+      "deleteConfirm": "チームを削除",
+      "createFailed": "チームの作成に失敗しました: {{reason}}",
+      "updateFailed": "更新に失敗しました: {{reason}}",
+      "deleteFailed": "削除に失敗しました: {{reason}}",
+      "errors": {
+        "forbidden": "その操作を行う権限がありません。",
+        "notFound": "その項目は存在しません。ページを再読み込みしてください。",
+        "validation": "一部の詳細が正しくありません。確認してから、もう一度お試しください。",
+        "conflict": "他の担当者が同時にこれを変更しました。再読み込みしてから、もう一度お試しください。",
+        "nameTaken": "同じ名前のチームが既に存在します。",
+        "memberUnknown": "選択した人の1人が、このワークスペースに所属していません。",
+        "orgSuspended": "このワークスペースは停止中です。"
+      },
+      "members_other": "{{count}} 名のメンバー",
+      "devices_other": "{{count}} 台のデバイス"
     }
   },
   "inbox": {
@@ -2398,6 +2461,232 @@
       "payloadPurged": "保存されていたリードは保持期間後に削除されたため、再試行できません。",
       "sourcePaused": "このソースは一時停止中です。テストリードの送信やリードの再試行の前に再開してください。",
       "notFound": "見つかりませんでした。削除された可能性があります。"
+    }
+  },
+  "notificationPrefs": {
+    "title": "通知の設定",
+    "description": "各イベントの通知方法を選択してください。この設定は個人ごとのものです。どのイベントを初期状態でオンにするかは、ワークスペースで設定されています。",
+    "loading": "設定を読み込み中",
+    "failed": "設定を読み込めませんでした。",
+    "saveFailed": "変更を保存できませんでした。変更は元に戻されました。",
+    "dismiss": "閉じる",
+    "resetRow": "初期値に戻す",
+    "resetRowFor": "{{event}}を初期値に戻す",
+    "resetAll": "すべてを初期値に戻す",
+    "resetAllDone": "すべての設定が初期値に戻りました。",
+    "customised": "変更済み",
+    "toggleLabel": "{{event}}：{{channel}}",
+    "workspaceOff": "ワークスペースによりオフにされています",
+    "workspaceOffHelp": "ワークスペースではこの設定がオフになっています。ただし、あなたの選択は引き続きあなたに適用されます。",
+    "bellOffHelp": "ポップアップ、音、プッシュを選択するには、ベルをオンにしてください。",
+    "notAvailable": "利用不可",
+    "defaultSummary": "初期値：{{bell}}、{{toast}}、{{sound}}",
+    "defaultSummaryPush": "初期値：{{bell}}、{{toast}}、{{sound}}、{{push}}",
+    "on": "オン",
+    "off": "オフ",
+    "channelNames": {
+      "bell": "ベル",
+      "toast": "ポップアップ",
+      "sound": "音",
+      "push": "プッシュ"
+    },
+    "columns": {
+      "bell": "ベル",
+      "toast": "ポップアップ",
+      "sound": "音",
+      "push": "プッシュ"
+    },
+    "groups": {
+      "conversations": "チャット",
+      "tasks": "タスク",
+      "leads": "リードとフォーム",
+      "documents": "販売書類",
+      "wallet": "ウォレット",
+      "devices": "WhatsApp番号",
+      "broadcasts": "一斉送信とキャンペーン",
+      "team_chat": "チームチャット",
+      "whatsapp_groups": "WhatsAppグループ",
+      "billing": "請求とサブスクリプション",
+      "system": "システム"
+    },
+    "empty": "設定できる通知の種類はまだありません。",
+    "types": {
+      "new_chat": {
+        "label": "新しいチャット",
+        "hint": "まだ担当者がいない会話に最初のメッセージが届いたとき。"
+      },
+      "new_message": {
+        "label": "自分のチャットに新着メッセージ",
+        "hint": "あなたに割り当てられたチャットに顧客がメッセージを送ったとき。"
+      },
+      "chat_waiting": {
+        "label": "返信待ちのチャット",
+        "hint": "担当者のいないチャットで、顧客のメッセージが数分間未返信のままの場合。通知は1回のみ届きます。"
+      },
+      "conversation_assigned": {
+        "label": "自分に割り当てられたチャット",
+        "hint": "あなたまたはあなたのチームにチャットが割り当てられたとき。"
+      },
+      "mention": {
+        "label": "メモでメンションされた",
+        "hint": "同僚が会話のメモであなたをメンションしたとき。"
+      },
+      "teamchat_mention": {
+        "label": "チームチャットでメンションされた",
+        "hint": "同僚がチームチャットのチャンネルであなたをメンションしたとき。"
+      },
+      "teamchat_message": {
+        "label": "ダイレクトメッセージ",
+        "hint": "同僚がチームチャットであなたにメッセージを送ったとき。"
+      },
+      "device_connected": {
+        "label": "番号の連携",
+        "hint": "個人のWhatsApp番号の連携が完了したとき。"
+      },
+      "device_disconnected": {
+        "label": "番号の連携解除",
+        "hint": "個人のWhatsApp番号の接続が切れたとき。"
+      },
+      "device_logged_out": {
+        "label": "番号のログアウト",
+        "hint": "スマートフォンから個人のWhatsApp番号がログアウトされたとき。"
+      },
+      "broadcast_completed": {
+        "label": "一斉送信完了",
+        "hint": "あなたが開始した一斉送信が送信されたとき。"
+      },
+      "broadcast_failed": {
+        "label": "一斉送信失敗",
+        "hint": "あなたが開始した一斉送信が失敗したとき。"
+      },
+      "campaign_completed": {
+        "label": "キャンペーン完了",
+        "hint": "あなたが開始したキャンペーンが送信されたとき。"
+      },
+      "campaign_failed": {
+        "label": "キャンペーン失敗",
+        "hint": "あなたが開始したキャンペーンが失敗したとき。"
+      },
+      "scheduled_completed": {
+        "label": "予約送信済み",
+        "hint": "あなたが設定した予約送信が送信されたとき。"
+      },
+      "scheduled_failed": {
+        "label": "予約送信失敗",
+        "hint": "あなたが設定した予約送信が失敗したとき。"
+      },
+      "task_assigned": {
+        "label": "自分に割り当てられたタスク",
+        "hint": "あなたにタスクが割り当てられたとき。"
+      },
+      "task_due": {
+        "label": "タスクの期限",
+        "hint": "あなたのタスクの期限が来たとき。"
+      },
+      "task_completed": {
+        "label": "タスク完了",
+        "hint": "あなたが作成したタスクが完了したとき。"
+      },
+      "new_lead": {
+        "label": "新規リード",
+        "hint": "リードソースからリードが届いたとき。"
+      },
+      "form_submission": {
+        "label": "フォームが送信されました",
+        "hint": "誰かがあなたのフォームを送信したとき。"
+      },
+      "form_needs_review": {
+        "label": "フォームの確認が必要",
+        "hint": "送信内容の確認が必要なとき。"
+      },
+      "wallet_low_balance": {
+        "label": "ウォレット残高が少ない",
+        "hint": "ワークスペースのウォレット残高が少なくなったとき。"
+      },
+      "sales_doc_decided": {
+        "label": "販売書類の結果が決定",
+        "hint": "見積書または請求書が承認または辞退されたとき。"
+      },
+      "email_bounced": {
+        "label": "メールが配信されませんでした",
+        "hint": "送信したメールが返送されたか、配信が遅れています。"
+      },
+      "wallet_credited": {
+        "label": "ウォレットにチャージ",
+        "hint": "ワークスペースのウォレットに入金されたとき。"
+      },
+      "waba_group_join_request": {
+        "label": "グループへの参加リクエスト",
+        "hint": "お客様の事業用番号のWhatsAppグループへの参加を希望する人がいます。10件のリクエストが1行にまとめられます。"
+      },
+      "waba_group_suspended": {
+        "label": "グループ停止",
+        "hint": "WhatsAppによってお客様のグループの1つが停止されました。"
+      },
+      "waba_group_suspension_cleared": {
+        "label": "グループ再開",
+        "hint": "WhatsAppが停止していたグループを復旧しました。停止の通知を受け取っていた場合のみ表示されます。"
+      },
+      "form_payment": {
+        "label": "フォームの支払いを受領",
+        "hint": "訪問者がいずれかのフォームで支払いました。"
+      },
+      "form_payment_duplicate": {
+        "label": "フォームの二重支払い",
+        "hint": "訪問者が2回支払ったため、追加分の返金が必要です。"
+      },
+      "billing_payment_failed": {
+        "label": "サブスクリプションの支払いに失敗しました",
+        "hint": "更新の請求が完了しませんでした。ご確認ください。"
+      },
+      "billing_subscription_canceled": {
+        "label": "サブスクリプションがキャンセルされました",
+        "hint": "決済プロバイダーがこのワークスペースのサブスクリプションを終了しました。"
+      },
+      "device_group_join_request": {
+        "label": "個人番号グループへの参加リクエスト",
+        "hint": "あなたが管理している個人WhatsApp番号のグループに、参加を希望する人がいます。10件のリクエストで1行にまとめられます。"
+      },
+      "device_group_removed": {
+        "label": "個人番号グループから削除されました",
+        "hint": "誰かがあなたの個人WhatsApp番号をグループから削除しました。番号が通報された兆候の可能性があります。"
+      },
+      "sla_breached": {
+        "label": "SLA違反",
+        "hint": "あなたが担当する会話が、初回返信または解決の目標を達成できませんでした。"
+      },
+      "member_leave_started": {
+        "label": "メンバーが休暇に入りました",
+        "hint": "チームのメンバーが休暇に入りました。担当している内容と再割り当てへのリンクを表示します。"
+      },
+      "assignment_blocked_by_leave": {
+        "label": "誰も引き受けられなかったチャット",
+        "hint": "選ばれた担当者が休暇中のため、新しいチャットの担当者が見つかりませんでした。手動で割り当ててください。"
+      },
+      "test": {
+        "label": "テスト通知",
+        "hint": "ブラウザ通知から送るテストです。ベル、ポップアップ、タブのタイトルが動作するか確認できます。"
+      },
+      "appointment_calendar_drift": {
+        "label": "予約がGoogle Calendarと同期されていません",
+        "hint": "今後の予約のGoogle Calendarイベントが削除、移動、またはゲスト変更されました。予約自体は変更されません。対応はお客様が選択できます。"
+      },
+      "snooze_wake": {
+        "label": "スヌーズしたチャットが戻る",
+        "hint": "スヌーズしたチャットは指定時刻に再開され、あなたまたはチームに届きます。"
+      },
+      "marketplace_renewal_due": {
+        "label": "有料アプリの更新リマインダー",
+        "hint": "有料アプリの期間があと数日で終わります。カードで更新される、期日まで支払い済み、または解約済みで終了のいずれかです。"
+      },
+      "marketplace_payment_failed": {
+        "label": "有料アプリの支払い失敗",
+        "hint": "有料アプリのカードでの更新が完了せず、ご確認が必要です。"
+      },
+      "marketplace_subscription_ended": {
+        "label": "有料アプリのサブスクリプション終了",
+        "hint": "有料アプリのサブスクリプションが終了し、アプリが一時停止されました。"
+      }
     }
   }
 }

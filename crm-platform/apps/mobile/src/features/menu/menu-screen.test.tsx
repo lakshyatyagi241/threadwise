@@ -215,6 +215,13 @@ describe('MenuScreen', () => {
       expect(mockNavigate).toHaveBeenCalledWith('/members');
     });
 
+    it('opens Teams for everyone: the list may be read by every member', async () => {
+      await show();
+      await press('Settings');
+      await press('Teams');
+      expect(mockNavigate).toHaveBeenCalledWith('/teams');
+    });
+
     it('shows the Settings lines a person may not open faded, and explains instead of opening them', async () => {
       await show();
       await press('Settings');
@@ -236,6 +243,12 @@ describe('MenuScreen', () => {
   });
 
   describe('Account and Preferences', () => {
+    it('opens the notification preferences', async () => {
+      await show();
+      await press('Notification preferences');
+      expect(mockNavigate).toHaveBeenCalledWith('/notification-preferences');
+    });
+
     it('opens the profile', async () => {
       await show();
       await press('Manage profile');

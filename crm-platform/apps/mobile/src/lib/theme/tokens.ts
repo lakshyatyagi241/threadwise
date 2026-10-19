@@ -115,3 +115,13 @@ export const LABEL_COLORS: readonly string[] = [
   '#475569',
 ];
 export const DEFAULT_LABEL_COLOR: string = LABEL_COLORS[0]!;
+
+/** The six colours a team can be given (the web's team colour picker, first one is the default); the chip colour in the inbox queue. */
+export const TEAM_COLORS: readonly string[] = [
+  '#075E54',
+  '#13478A',
+  '#5B3D8A',
+  '#7B5A14',
+  '#A1431F',
+  '#0C7A65',
+];

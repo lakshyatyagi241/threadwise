@@ -895,6 +895,69 @@
       "actionsFor": "{{name}} 的操作",
       "cancel": "取消",
       "dismiss": "忽略"
+    },
+    "teams": {
+      "title": "团队",
+      "subtitle": "按部门对客服人员进行分组。可通过路由规则按团队自动分配会话。",
+      "create": "创建团队",
+      "loading": "正在加载团队",
+      "emptyTitle": "暂无团队",
+      "emptyMessage": "创建团队，将客服人员加入其中，并将会话路由给该团队。",
+      "online": "{{count}} 人在线",
+      "default": "默认",
+      "strategies": {
+        "manual": "手动",
+        "round_robin": "轮询",
+        "least_loaded": "最少负载",
+        "sticky": "粘性"
+      },
+      "howTitle": "团队说明",
+      "how": {
+        "one": "为团队命名（例如“销售”），选择颜色并添加客服人员。",
+        "two": "团队有三种用法：手动将会话分配给团队、通过路由规则将新会话路由给团队，或在数据分析中查看其表现。",
+        "three": "团队颜色即收件箱队列中的标签颜色，便于一眼区分各团队的会话。"
+      },
+      "editFor": "编辑团队: {{name}}",
+      "editTitle": "编辑团队",
+      "createTitle": "创建团队",
+      "name": "团队名称",
+      "namePlaceholder": "例如 销售 / 支持 / 计费",
+      "nameRequired": "请输入团队名称。",
+      "nameTooLong": "名称最多 {{max}} 个字符。",
+      "color": "颜色",
+      "colorOption": "颜色 {{color}}",
+      "strategy": "自动分配策略",
+      "strategyOptions": {
+        "manual": "手动：由经理决定分配给谁",
+        "round_robin": "轮询：平均分配",
+        "least_loaded": "最少负载：优先分配给未关闭会话最少的人",
+        "sticky": "粘性：分配给最后回复该联系人的客服"
+      },
+      "membersLabel": "成员",
+      "membersLoading": "正在加载团队成员",
+      "membersFailed": "无法加载团队成员。",
+      "membersNoneCreate": "暂无团队成员。请先邀请一些成员，然后再回来。",
+      "membersNoneEdit": "暂无团队成员。",
+      "createSubmit": "创建团队",
+      "save": "保存更改",
+      "delete": "删除团队",
+      "deleteTitle": "删除此团队？",
+      "deleteMessage": "删除团队“{{name}}”？分配给该团队的会话将变为未分配状态。",
+      "deleteConfirm": "删除团队",
+      "createFailed": "创建团队失败：{{reason}}",
+      "updateFailed": "更新失败：{{reason}}",
+      "deleteFailed": "删除失败：{{reason}}",
+      "errors": {
+        "forbidden": "您没有执行该操作的权限。",
+        "notFound": "该内容已不存在。请刷新页面。",
+        "validation": "部分详细信息无效。请检查后重试。",
+        "conflict": "其他人同时修改了此内容。请刷新后重试。",
+        "nameTaken": "已存在同名团队。",
+        "memberUnknown": "您选择的某人不在此工作区中。",
+        "orgSuspended": "该工作区已暂停。"
+      },
+      "members_other": "{{count}} 位成员",
+      "devices_other": "{{count}} 台设备"
     }
   },
   "inbox": {
@@ -2398,6 +2461,232 @@
       "payloadPurged": "已保存的线索在保留期限后已被删除，因此无法重试。",
       "sourcePaused": "此来源已暂停。请先恢复，再发送测试线索或重试线索。",
       "notFound": "未找到该内容，可能已被删除。"
+    }
+  },
+  "notificationPrefs": {
+    "title": "通知偏好",
+    "description": "选择每个事件通知你的方式。这些选择仅属于你个人;工作区决定哪些事件默认开启。",
+    "loading": "正在加载你的偏好设置",
+    "failed": "无法加载你的偏好设置。",
+    "saveFailed": "无法保存此更改。已撤销。",
+    "dismiss": "关闭",
+    "resetRow": "恢复默认",
+    "resetRowFor": "将 {{event}} 恢复为默认",
+    "resetAll": "全部恢复为默认",
+    "resetAllDone": "所有偏好已恢复为默认值。",
+    "customised": "已更改",
+    "toggleLabel": "{{event}}:{{channel}}",
+    "workspaceOff": "已被你的工作区关闭",
+    "workspaceOffHelp": "你的工作区已关闭此项;你的选择对你仍然有效。",
+    "bellOffHelp": "开启铃铛后才能选择弹窗、声音或推送。",
+    "notAvailable": "不可用",
+    "defaultSummary": "默认:{{bell}}、{{toast}}、{{sound}}",
+    "defaultSummaryPush": "默认:{{bell}}、{{toast}}、{{sound}}、{{push}}",
+    "on": "开",
+    "off": "关",
+    "channelNames": {
+      "bell": "铃铛",
+      "toast": "弹窗",
+      "sound": "声音",
+      "push": "推送"
+    },
+    "columns": {
+      "bell": "铃铛",
+      "toast": "弹窗",
+      "sound": "声音",
+      "push": "推送"
+    },
+    "groups": {
+      "conversations": "聊天",
+      "tasks": "任务",
+      "leads": "线索与表单",
+      "documents": "销售单据",
+      "wallet": "钱包",
+      "devices": "WhatsApp 号码",
+      "broadcasts": "群发与营销活动",
+      "team_chat": "团队聊天",
+      "whatsapp_groups": "WhatsApp 群组",
+      "billing": "账单与订阅",
+      "system": "系统"
+    },
+    "empty": "暂无可设置的通知类型。",
+    "types": {
+      "new_chat": {
+        "label": "新聊天",
+        "hint": "尚无人负责的会话收到第一条消息时。"
+      },
+      "new_message": {
+        "label": "我的聊天有新消息",
+        "hint": "客户在分配给你的聊天中发来消息。"
+      },
+      "chat_waiting": {
+        "label": "聊天仍在等待回复",
+        "hint": "无人负责的聊天中,客户消息已有几分钟未回复。你只会收到一次提醒。"
+      },
+      "conversation_assigned": {
+        "label": "分配给我的聊天",
+        "hint": "聊天分配给你或你的团队时。"
+      },
+      "mention": {
+        "label": "在备注中被提及",
+        "hint": "同事在会话备注中提到你时。"
+      },
+      "teamchat_mention": {
+        "label": "在团队聊天中被提及",
+        "hint": "同事在团队聊天频道中提到你时。"
+      },
+      "teamchat_message": {
+        "label": "私信",
+        "hint": "同事在团队聊天中给你发消息时。"
+      },
+      "device_connected": {
+        "label": "号码已连接",
+        "hint": "个人 WhatsApp 号码完成连接时。"
+      },
+      "device_disconnected": {
+        "label": "号码已断开",
+        "hint": "个人 WhatsApp 号码失去连接时。"
+      },
+      "device_logged_out": {
+        "label": "号码已退出登录",
+        "hint": "个人 WhatsApp 号码在手机上被退出登录时。"
+      },
+      "broadcast_completed": {
+        "label": "群发已完成",
+        "hint": "你发起的群发已发出时。"
+      },
+      "broadcast_failed": {
+        "label": "群发失败",
+        "hint": "你发起的群发失败时。"
+      },
+      "campaign_completed": {
+        "label": "营销活动已完成",
+        "hint": "你发起的营销活动已发出时。"
+      },
+      "campaign_failed": {
+        "label": "营销活动失败",
+        "hint": "你发起的营销活动失败时。"
+      },
+      "scheduled_completed": {
+        "label": "定时发送已发出",
+        "hint": "你设置的定时发送已发出时。"
+      },
+      "scheduled_failed": {
+        "label": "定时发送失败",
+        "hint": "你设置的定时发送失败时。"
+      },
+      "task_assigned": {
+        "label": "分配给我的任务",
+        "hint": "任务分配给你时。"
+      },
+      "task_due": {
+        "label": "任务到期",
+        "hint": "你的任务到期时。"
+      },
+      "task_completed": {
+        "label": "任务已完成",
+        "hint": "你创建的任务已完成时。"
+      },
+      "new_lead": {
+        "label": "新线索",
+        "hint": "线索来源有新线索到达时。"
+      },
+      "form_submission": {
+        "label": "表单已提交",
+        "hint": "有人提交了你的表单时。"
+      },
+      "form_needs_review": {
+        "label": "表单需要审核",
+        "hint": "有提交内容需要查看时。"
+      },
+      "wallet_low_balance": {
+        "label": "钱包余额不足",
+        "hint": "工作区钱包余额即将用完时。"
+      },
+      "sales_doc_decided": {
+        "label": "销售单据已处理",
+        "hint": "报价单或发票被接受或拒绝时。"
+      },
+      "email_bounced": {
+        "label": "邮件未送达",
+        "hint": "您发送的邮件被退回或延迟送达。"
+      },
+      "wallet_credited": {
+        "label": "钱包已充值",
+        "hint": "工作区钱包已入账时。"
+      },
+      "waba_group_join_request": {
+        "label": "加入群组请求",
+        "hint": "有人申请加入你商务号码下的 WhatsApp 群组。每十条请求合并为一行。"
+      },
+      "waba_group_suspended": {
+        "label": "群组已暂停",
+        "hint": "WhatsApp 已暂停你的一个群组。"
+      },
+      "waba_group_suspension_cleared": {
+        "label": "群组已恢复正常",
+        "hint": "WhatsApp 已恢复一个此前被暂停的群组。仅当你曾收到暂停通知时才会显示。"
+      },
+      "form_payment": {
+        "label": "收到表单付款",
+        "hint": "有访客通过您的某个表单付款。"
+      },
+      "form_payment_duplicate": {
+        "label": "表单重复付款",
+        "hint": "访客第二次付款，多付的款项需要退款。"
+      },
+      "billing_payment_failed": {
+        "label": "订阅付款失败",
+        "hint": "一笔续订扣款未成功，需要您处理。"
+      },
+      "billing_subscription_canceled": {
+        "label": "订阅已取消",
+        "hint": "您的支付服务商已终止此工作区的一项订阅。"
+      },
+      "device_group_join_request": {
+        "label": "个人号码群组入群申请",
+        "hint": "有人申请加入您管理的个人 WhatsApp 号码的群组。每十条申请合并为一行。"
+      },
+      "device_group_removed": {
+        "label": "已被移出个人号码群组",
+        "hint": "有人将您的某个个人 WhatsApp 号码移出了群组。这可能意味着该号码被举报了。"
+      },
+      "sla_breached": {
+        "label": "SLA 已超时",
+        "hint": "您负责的会话错过了首次回复或解决目标。"
+      },
+      "member_leave_started": {
+        "label": "成员已开始休假",
+        "hint": "您团队的一名成员开始休假。显示其负责的内容和重新分配的链接。"
+      },
+      "assignment_blocked_by_leave": {
+        "label": "无人能接的聊天",
+        "hint": "由于所选人员正在休假，路由没有为新聊天找到负责人。请手动分配。"
+      },
+      "test": {
+        "label": "测试通知",
+        "hint": "你在“浏览器通知”中发送的测试，用来查看铃铛、弹窗和标签页标题是否正常。"
+      },
+      "appointment_calendar_drift": {
+        "label": "预约与 Google Calendar 不同步",
+        "hint": "即将到来的预约在 Google Calendar 中的日程被删除、改期或参与者被更改。预约本身不会改变，由您决定如何处理。"
+      },
+      "snooze_wake": {
+        "label": "已暂停的会话恢复",
+        "hint": "已暂停的会话会在设定时间重新打开，并分配给你或你的团队。"
+      },
+      "marketplace_renewal_due": {
+        "label": "付费应用续订提醒",
+        "hint": "付费应用的付费期限将在几天后结束：通过银行卡续订、已付费至某一日期，或已取消并将结束。"
+      },
+      "marketplace_payment_failed": {
+        "label": "付费应用付款失败",
+        "hint": "付费应用的银行卡续订扣款未成功，需要您处理。"
+      },
+      "marketplace_subscription_ended": {
+        "label": "付费应用订阅已结束",
+        "hint": "付费应用的订阅已结束，应用已被暂停。"
+      }
     }
   }
 }

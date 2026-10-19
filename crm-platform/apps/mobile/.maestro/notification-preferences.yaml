@@ -1,0 +1,23 @@
+# A person opens Menu > Notification preferences, turns the pop-up of one kind of notification off and back on, and resets it.
+#   maestro test apps/mobile/.maestro/notification-preferences.yaml -e APP_ID=ai.geta.crm.dev -e E2E_EMAIL=<seeded email> -e E2E_PASSWORD=<its password>
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Email'
+- inputText: ${E2E_EMAIL}
+- tapOn: 'Password'
+- inputText: ${E2E_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: 'sign-in-submit'
+- tapOn: 'Menu'
+- scrollUntilVisible:
+    element: 'Notification preferences'
+- tapOn: 'Notification preferences'
+- assertVisible: 'Chats'
+- tapOn: 'New message on my chat: pop-up'
+- assertVisible: 'Changed'
+- assertNotVisible: 'Could not save that change. It was undone.'
+- tapOn: 'Reset New message on my chat to default'
+- assertNotVisible: 'Changed'

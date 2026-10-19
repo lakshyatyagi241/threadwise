@@ -914,6 +914,71 @@
       "actionsFor": "Acties voor {{name}}",
       "cancel": "Annuleren",
       "dismiss": "Sluiten"
+    },
+    "teams": {
+      "title": "Teams",
+      "subtitle": "Groepeer je medewerkers per afdeling. Gesprekken kunnen per team automatisch worden toegewezen via routeringsregels.",
+      "create": "Team aanmaken",
+      "loading": "Teams laden",
+      "emptyTitle": "Nog geen teams",
+      "emptyMessage": "Maak een team aan, voeg je medewerkers toe en stuur gesprekken ernaartoe.",
+      "online": "{{count}} online",
+      "default": "Standaard",
+      "strategies": {
+        "manual": "Handmatig",
+        "round_robin": "Om de beurt",
+        "least_loaded": "Minst belast",
+        "sticky": "Vast"
+      },
+      "howTitle": "Hoe teams werken",
+      "how": {
+        "one": "Geef een team een naam (bijvoorbeeld Sales), kies een kleur en voeg je medewerkers toe.",
+        "two": "Je gebruikt het op drie manieren: wijs een chat handmatig aan het team toe, stuur nieuwe chats ernaartoe met een routeringsregel, of lees de prestaties ervan in de analyse.",
+        "three": "De teamkleur is de kleur van het label in de inbox-wachtrij, zodat je in één oogopslag de chats van elk team herkent."
+      },
+      "editFor": "Team bewerken: {{name}}",
+      "editTitle": "Team bewerken",
+      "createTitle": "Een team aanmaken",
+      "name": "Teamnaam",
+      "namePlaceholder": "bijv. Sales / Support / Facturatie",
+      "nameRequired": "Voer een teamnaam in.",
+      "nameTooLong": "De naam mag maximaal {{max}} tekens bevatten.",
+      "color": "Kleur",
+      "colorOption": "Kleur {{color}}",
+      "strategy": "Strategie voor automatisch toewijzen",
+      "strategyOptions": {
+        "manual": "Handmatig: een manager kiest wie het krijgt",
+        "round_robin": "Om de beurt: gelijkmatig verdelen",
+        "least_loaded": "Minst belast: eerst degene met de minste open gesprekken",
+        "sticky": "Vast: de laatste medewerker die dit contact heeft geantwoord"
+      },
+      "membersLabel": "Leden",
+      "membersLoading": "Teamgenoten laden",
+      "membersFailed": "Teamgenoten konden niet worden geladen.",
+      "membersNoneCreate": "Nog geen teamgenoten: nodig eerst mensen uit en kom dan terug.",
+      "membersNoneEdit": "Nog geen teamgenoten.",
+      "createSubmit": "Team aanmaken",
+      "save": "Wijzigingen opslaan",
+      "delete": "Team verwijderen",
+      "deleteTitle": "Dit team verwijderen?",
+      "deleteMessage": "Team \"{{name}}\" verwijderen? Gesprekken die aan dit team zijn toegewezen worden niet langer toegewezen.",
+      "deleteConfirm": "Team verwijderen",
+      "createFailed": "Team aanmaken mislukt: {{reason}}",
+      "updateFailed": "Bijwerken mislukt: {{reason}}",
+      "deleteFailed": "Verwijderen mislukt: {{reason}}",
+      "errors": {
+        "forbidden": "Je hebt geen toestemming om dit te doen.",
+        "notFound": "Dat bestaat niet meer. Laad de pagina opnieuw.",
+        "validation": "Sommige gegevens zijn niet geldig. Controleer ze en probeer het opnieuw.",
+        "conflict": "Iemand anders heeft dit tegelijkertijd gewijzigd. Laad opnieuw en probeer het opnieuw.",
+        "nameTaken": "Er bestaat al een team met die naam.",
+        "memberUnknown": "Een van de personen die je hebt gekozen zit niet in deze workspace.",
+        "orgSuspended": "Deze workspace is geschorst."
+      },
+      "members_one": "{{count}} lid",
+      "members_other": "{{count}} leden",
+      "devices_one": "{{count}} apparaat",
+      "devices_other": "{{count}} apparaten"
     }
   },
   "inbox": {
@@ -2444,6 +2509,232 @@
       "payloadPurged": "De opgeslagen lead is na de bewaartermijn verwijderd, dus er valt niets opnieuw te proberen.",
       "sourcePaused": "Deze bron is gepauzeerd. Hervat hem om een testlead te sturen of een lead opnieuw te proberen.",
       "notFound": "We konden hem niet vinden. Misschien is hij verwijderd."
+    }
+  },
+  "notificationPrefs": {
+    "title": "Meldingsvoorkeuren",
+    "description": "Kies hoe elke gebeurtenis je bereikt. Deze keuzes zijn alleen van jou; je workspace bepaalt welke gebeurtenissen standaard aanstaan.",
+    "loading": "Je voorkeuren laden",
+    "failed": "Je voorkeuren konden niet worden geladen.",
+    "saveFailed": "Die wijziging kon niet worden opgeslagen. Ze is ongedaan gemaakt.",
+    "dismiss": "Negeren",
+    "resetRow": "Terugzetten naar standaard",
+    "resetRowFor": "{{event}} terugzetten naar standaard",
+    "resetAll": "Alles terugzetten naar standaard",
+    "resetAllDone": "Alle voorkeuren staan weer op de standaardwaarden.",
+    "customised": "Gewijzigd",
+    "toggleLabel": "{{event}}: {{channel}}",
+    "workspaceOff": "Uitgeschakeld door je workspace",
+    "workspaceOffHelp": "Je workspace heeft dit uitgeschakeld; je keuze geldt voor jou nog steeds.",
+    "bellOffHelp": "Zet de bel aan om een pop-up, geluid of push te kiezen.",
+    "notAvailable": "Niet beschikbaar",
+    "defaultSummary": "Standaard: {{bell}}, {{toast}}, {{sound}}",
+    "defaultSummaryPush": "Standaard: {{bell}}, {{toast}}, {{sound}}, {{push}}",
+    "on": "aan",
+    "off": "uit",
+    "channelNames": {
+      "bell": "belletje",
+      "toast": "pop-up",
+      "sound": "geluid",
+      "push": "push"
+    },
+    "columns": {
+      "bell": "Belletje",
+      "toast": "Pop-up",
+      "sound": "Geluid",
+      "push": "Push"
+    },
+    "groups": {
+      "conversations": "Chats",
+      "tasks": "Taken",
+      "leads": "Leads en formulieren",
+      "documents": "Verkoopdocumenten",
+      "wallet": "Wallet",
+      "devices": "WhatsApp-nummers",
+      "broadcasts": "Broadcasts en campagnes",
+      "team_chat": "Teamchat",
+      "whatsapp_groups": "WhatsApp-groepen",
+      "billing": "Facturatie en abonnementen",
+      "system": "Systeem"
+    },
+    "empty": "Er zijn nog geen meldingstypen om in te stellen.",
+    "types": {
+      "new_chat": {
+        "label": "Nieuwe chat",
+        "hint": "Een gesprek dat nog niemand toebehoort, krijgt zijn eerste bericht."
+      },
+      "new_message": {
+        "label": "Nieuw bericht in mijn chat",
+        "hint": "Een klant schrijft in een chat die aan jou is toegewezen."
+      },
+      "chat_waiting": {
+        "label": "Chat wacht nog op antwoord",
+        "hint": "Een chat van niemand heeft al enkele minuten een onbeantwoord klantbericht. Je hoort hier één keer over."
+      },
+      "conversation_assigned": {
+        "label": "Chat aan mij toegewezen",
+        "hint": "Een chat is aan jou of aan je team toegewezen."
+      },
+      "mention": {
+        "label": "Genoemd in een notitie",
+        "hint": "Een collega noemt je in een notitie bij een gesprek."
+      },
+      "teamchat_mention": {
+        "label": "Genoemd in Teamchat",
+        "hint": "Een collega noemt je in een kanaal van de teamchat."
+      },
+      "teamchat_message": {
+        "label": "Direct bericht",
+        "hint": "Een collega schrijft je in de teamchat."
+      },
+      "device_connected": {
+        "label": "Nummer verbonden",
+        "hint": "Een persoonlijk WhatsApp-nummer is klaar met verbinden."
+      },
+      "device_disconnected": {
+        "label": "Nummer losgekoppeld",
+        "hint": "Een persoonlijk WhatsApp-nummer heeft zijn verbinding verloren."
+      },
+      "device_logged_out": {
+        "label": "Nummer uitgelogd",
+        "hint": "Een persoonlijk WhatsApp-nummer is op de telefoon uitgelogd."
+      },
+      "broadcast_completed": {
+        "label": "Broadcast afgerond",
+        "hint": "Een broadcast die je hebt gestart, is verstuurd."
+      },
+      "broadcast_failed": {
+        "label": "Broadcast mislukt",
+        "hint": "Een broadcast die je hebt gestart, is mislukt."
+      },
+      "campaign_completed": {
+        "label": "Campagne afgerond",
+        "hint": "Een campagne die je hebt gestart, is verstuurd."
+      },
+      "campaign_failed": {
+        "label": "Campagne mislukt",
+        "hint": "Een campagne die je hebt gestart, is mislukt."
+      },
+      "scheduled_completed": {
+        "label": "Geplande verzending verstuurd",
+        "hint": "Een geplande verzending die je hebt ingesteld, is verstuurd."
+      },
+      "scheduled_failed": {
+        "label": "Geplande verzending mislukt",
+        "hint": "Een geplande verzending die je hebt ingesteld, is mislukt."
+      },
+      "task_assigned": {
+        "label": "Taak aan mij toegewezen",
+        "hint": "Een taak is aan jou toegewezen."
+      },
+      "task_due": {
+        "label": "Taak verloopt",
+        "hint": "Een van je taken verloopt."
+      },
+      "task_completed": {
+        "label": "Taak voltooid",
+        "hint": "Een taak die je hebt aangemaakt, is voltooid."
+      },
+      "new_lead": {
+        "label": "Nieuwe lead",
+        "hint": "Er is een lead binnengekomen via een leadbron."
+      },
+      "form_submission": {
+        "label": "Formulier ingediend",
+        "hint": "Iemand heeft een van je formulieren ingediend."
+      },
+      "form_needs_review": {
+        "label": "Formulier moet worden bekeken",
+        "hint": "Een inzending moet worden bekeken."
+      },
+      "wallet_low_balance": {
+        "label": "Walletsaldo laag",
+        "hint": "Het walletsaldo van de workspace raakt op."
+      },
+      "sales_doc_decided": {
+        "label": "Verkoopdocument beslist",
+        "hint": "Een offerte of factuur is geaccepteerd of afgewezen."
+      },
+      "email_bounced": {
+        "label": "E-mail niet bezorgd",
+        "hint": "Een e-mail die je verstuurde is teruggekomen of vertraagd."
+      },
+      "wallet_credited": {
+        "label": "Wallet opgeladen",
+        "hint": "Het walletsaldo van de workspace is bijgeschreven."
+      },
+      "waba_group_join_request": {
+        "label": "Verzoek om een groep te joinen",
+        "hint": "Personen vragen om lid te worden van een WhatsApp-groep van je zakelijke nummer. Tien verzoeken vormen één rij."
+      },
+      "waba_group_suspended": {
+        "label": "Groep geschorst",
+        "hint": "WhatsApp heeft een van je groepen geschorst."
+      },
+      "waba_group_suspension_cleared": {
+        "label": "Groep weer actief",
+        "hint": "WhatsApp heeft een geschorste groep hersteld. Alleen als je over de schorsing bent geïnformeerd."
+      },
+      "form_payment": {
+        "label": "Formulierbetaling ontvangen",
+        "hint": "Een bezoeker heeft betaald via een van je formulieren."
+      },
+      "form_payment_duplicate": {
+        "label": "Formulier twee keer betaald",
+        "hint": "Een bezoeker heeft een tweede keer betaald en de extra betaling moet worden terugbetaald."
+      },
+      "billing_payment_failed": {
+        "label": "Abonnementsbetaling mislukt",
+        "hint": "Een verlengingsbetaling is niet doorgegaan en vraagt je aandacht."
+      },
+      "billing_subscription_canceled": {
+        "label": "Abonnement geannuleerd",
+        "hint": "Je betalingsprovider heeft een abonnement van deze werkruimte beëindigd."
+      },
+      "device_group_join_request": {
+        "label": "Verzoek om deel te nemen aan een groep van een persoonlijk nummer",
+        "hint": "Mensen vragen om deel te nemen aan een groep van een persoonlijk WhatsApp-nummer dat je beheert. Tien verzoeken vormen één rij."
+      },
+      "device_group_removed": {
+        "label": "Verwijderd uit een groep van een persoonlijk nummer",
+        "hint": "Iemand heeft een van je persoonlijke WhatsApp-nummers uit een groep verwijderd. Dit kan een teken zijn dat het nummer is gerapporteerd."
+      },
+      "sla_breached": {
+        "label": "SLA overschreden",
+        "hint": "Een gesprek van jou heeft het doel voor de eerste reactie of de oplossing gemist."
+      },
+      "member_leave_started": {
+        "label": "Teamlid is met verlof",
+        "hint": "Een teamlid is met verlof gegaan. Toont wat diegene beheert en een link om opnieuw toe te wijzen."
+      },
+      "assignment_blocked_by_leave": {
+        "label": "Chat die niemand kon oppakken",
+        "hint": "De routering vond niemand voor een nieuwe chat omdat de gekozen personen met verlof zijn. Wijs hem handmatig toe."
+      },
+      "test": {
+        "label": "Testmelding",
+        "hint": "De test die je verstuurt vanuit Browsermeldingen, zodat je ziet dat het belletje, de pop-up en de tabtitel werken."
+      },
+      "appointment_calendar_drift": {
+        "label": "Afspraak niet gesynchroniseerd met Google Calendar",
+        "hint": "Het Google Calendar-event van een aankomende afspraak is verwijderd, verplaatst of de gasten zijn gewijzigd. De afspraak zelf is niet gewijzigd; u kiest wat er gebeurt."
+      },
+      "snooze_wake": {
+        "label": "Gesnoozede chat komt terug",
+        "hint": "Een gesnoozede chat wordt op het gekozen moment weer geopend en aan jou of je team toegewezen."
+      },
+      "marketplace_renewal_due": {
+        "label": "Herinnering verlenging betaalde app",
+        "hint": "De periode van een betaalde app eindigt over een paar dagen: hij wordt per kaart verlengd, is betaald tot een bepaalde datum, of is opgezegd en loopt af."
+      },
+      "marketplace_payment_failed": {
+        "label": "Betaling betaalde app mislukt",
+        "hint": "De verlenging per kaart van een betaalde app is niet doorgegaan en vraagt je aandacht."
+      },
+      "marketplace_subscription_ended": {
+        "label": "Abonnement betaalde app beëindigd",
+        "hint": "Het abonnement op een betaalde app is beëindigd en de app is gepauzeerd."
+      }
     }
   }
 }

@@ -895,6 +895,69 @@
       "actionsFor": "Tindakan untuk {{name}}",
       "cancel": "Batal",
       "dismiss": "Tutup"
+    },
+    "teams": {
+      "title": "Tim",
+      "subtitle": "Kelompokkan agen Anda berdasarkan departemen. Percakapan dapat ditugaskan otomatis ke tim melalui aturan perutean.",
+      "create": "Buat tim",
+      "loading": "Memuat tim",
+      "emptyTitle": "Belum ada tim",
+      "emptyMessage": "Buat tim, tambahkan agen Anda ke dalamnya, dan arahkan percakapan ke tim tersebut.",
+      "online": "{{count}} online",
+      "default": "Default",
+      "strategies": {
+        "manual": "Manual",
+        "round_robin": "Round robin",
+        "least_loaded": "Paling sedikit beban",
+        "sticky": "Lengket"
+      },
+      "howTitle": "Cara kerja tim",
+      "how": {
+        "one": "Beri nama tim (misalnya Sales), pilih warna, dan tambahkan agen Anda ke dalamnya.",
+        "two": "Gunakan dengan tiga cara: tugaskan chat ke tim secara manual, arahkan chat baru ke tim dengan aturan perutean, atau lihat performanya di analitik.",
+        "three": "Warna tim adalah warna chip di antrean kotak masuk, sehingga Anda bisa membedakan chat tiap tim dengan sekilas."
+      },
+      "editFor": "Edit tim: {{name}}",
+      "editTitle": "Edit tim",
+      "createTitle": "Buat tim",
+      "name": "Nama tim",
+      "namePlaceholder": "mis. Sales / Support / Billing",
+      "nameRequired": "Masukkan nama tim.",
+      "nameTooLong": "Nama maksimal {{max}} karakter.",
+      "color": "Warna",
+      "colorOption": "Warna {{color}}",
+      "strategy": "Strategi penugasan otomatis",
+      "strategyOptions": {
+        "manual": "Manual — manajer memilih siapa yang menerimanya",
+        "round_robin": "Round robin — dibagi rata",
+        "least_loaded": "Paling sedikit beban — yang paling sedikit terbuka lebih dulu",
+        "sticky": "Lengket — agen terakhir yang membalas kontak ini"
+      },
+      "membersLabel": "Anggota",
+      "membersLoading": "Memuat rekan tim",
+      "membersFailed": "Rekan tim tidak dapat dimuat.",
+      "membersNoneCreate": "Belum ada rekan tim — undang dulu, lalu kembali.",
+      "membersNoneEdit": "Belum ada rekan tim.",
+      "createSubmit": "Buat tim",
+      "save": "Simpan perubahan",
+      "delete": "Hapus tim",
+      "deleteTitle": "Hapus tim ini?",
+      "deleteMessage": "Hapus tim \"{{name}}\"? Percakapan yang ditugaskan ke tim ini akan menjadi tidak ditugaskan.",
+      "deleteConfirm": "Hapus tim",
+      "createFailed": "Pembuatan tim gagal: {{reason}}",
+      "updateFailed": "Pembaruan gagal: {{reason}}",
+      "deleteFailed": "Penghapusan gagal: {{reason}}",
+      "errors": {
+        "forbidden": "Anda tidak memiliki izin untuk melakukan itu.",
+        "notFound": "Itu tidak ada lagi. Muat ulang halaman.",
+        "validation": "Sebagian detail tidak valid. Periksa lalu coba lagi.",
+        "conflict": "Orang lain mengubah ini pada waktu yang sama. Muat ulang dan coba lagi.",
+        "nameTaken": "Tim dengan nama itu sudah ada.",
+        "memberUnknown": "Salah satu orang yang Anda pilih tidak ada di workspace ini.",
+        "orgSuspended": "Workspace ini ditangguhkan."
+      },
+      "members_other": "{{count}} anggota",
+      "devices_other": "{{count}} perangkat"
     }
   },
   "inbox": {
@@ -2398,6 +2461,232 @@
       "payloadPurged": "Prospek tersimpan dihapus setelah masa retensinya, jadi tidak ada yang dapat dicoba ulang.",
       "sourcePaused": "Sumber ini dijeda. Lanjutkan untuk mengirim prospek uji atau mencoba ulang prospek.",
       "notFound": "Kami tidak dapat menemukannya. Mungkin sudah dihapus."
+    }
+  },
+  "notificationPrefs": {
+    "title": "Preferensi notifikasi",
+    "description": "Pilih cara setiap peristiwa sampai kepada Anda. Pilihan ini hanya milik Anda; workspace Anda menentukan peristiwa mana yang aktif sejak awal.",
+    "loading": "Memuat preferensi Anda",
+    "failed": "Preferensi Anda tidak dapat dimuat.",
+    "saveFailed": "Perubahan itu tidak dapat disimpan. Perubahan dibatalkan.",
+    "dismiss": "Tutup",
+    "resetRow": "Kembalikan ke default",
+    "resetRowFor": "Kembalikan {{event}} ke default",
+    "resetAll": "Kembalikan semuanya ke default",
+    "resetAllDone": "Semua preferensi kembali ke default.",
+    "customised": "Diubah",
+    "toggleLabel": "{{event}}: {{channel}}",
+    "workspaceOff": "Dimatikan oleh workspace Anda",
+    "workspaceOffHelp": "Workspace Anda mematikan ini; pilihan Anda tetap berlaku untuk Anda.",
+    "bellOffHelp": "Nyalakan lonceng untuk memilih pop-up, suara, atau push.",
+    "notAvailable": "Tidak tersedia",
+    "defaultSummary": "Default: {{bell}}, {{toast}}, {{sound}}",
+    "defaultSummaryPush": "Default: {{bell}}, {{toast}}, {{sound}}, {{push}}",
+    "on": "aktif",
+    "off": "nonaktif",
+    "channelNames": {
+      "bell": "lonceng",
+      "toast": "pop-up",
+      "sound": "suara",
+      "push": "push"
+    },
+    "columns": {
+      "bell": "Lonceng",
+      "toast": "Pop-up",
+      "sound": "Suara",
+      "push": "Push"
+    },
+    "groups": {
+      "conversations": "Chat",
+      "tasks": "Tugas",
+      "leads": "Prospek dan formulir",
+      "documents": "Dokumen penjualan",
+      "wallet": "Dompet",
+      "devices": "Nomor WhatsApp",
+      "broadcasts": "Broadcast dan kampanye",
+      "team_chat": "Team chat",
+      "whatsapp_groups": "Grup WhatsApp",
+      "billing": "Penagihan dan langganan",
+      "system": "Sistem"
+    },
+    "empty": "Belum ada jenis notifikasi untuk diatur.",
+    "types": {
+      "new_chat": {
+        "label": "Chat baru",
+        "hint": "Percakapan yang belum dimiliki siapa pun mendapat pesan pertama."
+      },
+      "new_message": {
+        "label": "Pesan baru di chat saya",
+        "hint": "Pelanggan menulis di chat yang ditugaskan kepada Anda."
+      },
+      "chat_waiting": {
+        "label": "Chat masih menunggu balasan",
+        "hint": "Sebuah chat yang belum dimiliki siapa pun belum dibalas pesan pelanggannya selama beberapa menit. Anda diberi tahu sekali."
+      },
+      "conversation_assigned": {
+        "label": "Chat ditugaskan kepada saya",
+        "hint": "Sebuah chat ditugaskan kepada Anda atau tim Anda."
+      },
+      "mention": {
+        "label": "Disebut dalam catatan",
+        "hint": "Rekan kerja menyebut Anda dalam catatan percakapan."
+      },
+      "teamchat_mention": {
+        "label": "Disebut di Team chat",
+        "hint": "Rekan kerja menyebut Anda di kanal team chat."
+      },
+      "teamchat_message": {
+        "label": "Pesan langsung",
+        "hint": "Rekan kerja menulis kepada Anda di Team chat."
+      },
+      "device_connected": {
+        "label": "Nomor terhubung",
+        "hint": "Sebuah nomor WhatsApp pribadi selesai terhubung."
+      },
+      "device_disconnected": {
+        "label": "Nomor terputus",
+        "hint": "Sebuah nomor WhatsApp pribadi kehilangan koneksinya."
+      },
+      "device_logged_out": {
+        "label": "Nomor keluar",
+        "hint": "Sebuah nomor WhatsApp pribadi keluar dari ponsel."
+      },
+      "broadcast_completed": {
+        "label": "Broadcast selesai",
+        "hint": "Sebuah broadcast yang Anda mulai telah terkirim."
+      },
+      "broadcast_failed": {
+        "label": "Broadcast gagal",
+        "hint": "Sebuah broadcast yang Anda mulai gagal."
+      },
+      "campaign_completed": {
+        "label": "Kampanye selesai",
+        "hint": "Sebuah kampanye yang Anda mulai telah terkirim."
+      },
+      "campaign_failed": {
+        "label": "Kampanye gagal",
+        "hint": "Sebuah kampanye yang Anda mulai gagal."
+      },
+      "scheduled_completed": {
+        "label": "Pengiriman terjadwal terkirim",
+        "hint": "Sebuah pengiriman terjadwal yang Anda atur telah terkirim."
+      },
+      "scheduled_failed": {
+        "label": "Pengiriman terjadwal gagal",
+        "hint": "Sebuah pengiriman terjadwal yang Anda atur gagal."
+      },
+      "task_assigned": {
+        "label": "Tugas ditugaskan kepada saya",
+        "hint": "Sebuah tugas ditugaskan kepada Anda."
+      },
+      "task_due": {
+        "label": "Tugas jatuh tempo",
+        "hint": "Sebuah tugas Anda jatuh tempo."
+      },
+      "task_completed": {
+        "label": "Tugas selesai",
+        "hint": "Sebuah tugas yang Anda buat telah selesai."
+      },
+      "new_lead": {
+        "label": "Prospek baru",
+        "hint": "Sebuah prospek masuk dari sumber prospek."
+      },
+      "form_submission": {
+        "label": "Formulir dikirim",
+        "hint": "Seseorang mengirim salah satu formulir Anda."
+      },
+      "form_needs_review": {
+        "label": "Formulir perlu ditinjau",
+        "hint": "Sebuah pengiriman perlu diperiksa."
+      },
+      "wallet_low_balance": {
+        "label": "Saldo dompet rendah",
+        "hint": "Saldo dompet workspace hampir habis."
+      },
+      "sales_doc_decided": {
+        "label": "Dokumen penjualan diputuskan",
+        "hint": "Sebuah penawaran atau faktur diterima atau ditolak."
+      },
+      "email_bounced": {
+        "label": "Email tidak terkirim",
+        "hint": "Email yang Anda kirim terpental atau tertunda."
+      },
+      "wallet_credited": {
+        "label": "Dompet diisi ulang",
+        "hint": "Dompet workspace telah dikreditkan."
+      },
+      "waba_group_join_request": {
+        "label": "Permintaan bergabung ke grup",
+        "hint": "Orang meminta bergabung ke grup WhatsApp dari nomor bisnis Anda. Sepuluh permintaan menjadi satu baris."
+      },
+      "waba_group_suspended": {
+        "label": "Grup ditangguhkan",
+        "hint": "WhatsApp menangguhkan salah satu grup Anda."
+      },
+      "waba_group_suspension_cleared": {
+        "label": "Grup aktif kembali",
+        "hint": "WhatsApp memulihkan grup yang sebelumnya ditangguhkan. Hanya jika Anda diberi tahu tentang penangguhan tersebut."
+      },
+      "form_payment": {
+        "label": "Pembayaran formulir diterima",
+        "hint": "Pengunjung melakukan pembayaran di salah satu formulir Anda."
+      },
+      "form_payment_duplicate": {
+        "label": "Formulir dibayar dua kali",
+        "hint": "Pengunjung membayar untuk kedua kalinya dan kelebihan pembayaran perlu dikembalikan."
+      },
+      "billing_payment_failed": {
+        "label": "Pembayaran langganan gagal",
+        "hint": "Penagihan perpanjangan tidak berhasil dan perlu Anda tangani."
+      },
+      "billing_subscription_canceled": {
+        "label": "Langganan dibatalkan",
+        "hint": "Penyedia pembayaran Anda mengakhiri langganan ruang kerja ini."
+      },
+      "device_group_join_request": {
+        "label": "Permintaan bergabung ke grup nomor pribadi",
+        "hint": "Orang meminta bergabung ke grup dari nomor WhatsApp pribadi yang Anda kelola. Sepuluh permintaan digabung menjadi satu baris."
+      },
+      "device_group_removed": {
+        "label": "Dikeluarkan dari grup nomor pribadi",
+        "hint": "Seseorang mengeluarkan salah satu nomor WhatsApp pribadi Anda dari sebuah grup. Ini bisa menjadi tanda bahwa nomor tersebut dilaporkan."
+      },
+      "sla_breached": {
+        "label": "SLA terlampaui",
+        "hint": "Percakapan yang Anda tangani melewati target balasan pertama atau penyelesaian."
+      },
+      "member_leave_started": {
+        "label": "Anggota mulai cuti",
+        "hint": "Seorang anggota tim Anda mulai cuti. Menampilkan apa yang dipegangnya dan tautan untuk menugaskan ulang."
+      },
+      "assignment_blocked_by_leave": {
+        "label": "Obrolan yang tidak bisa diambil siapa pun",
+        "hint": "Perutean tidak menemukan siapa pun untuk obrolan baru karena orang yang dipilih sedang cuti. Tugaskan secara manual."
+      },
+      "test": {
+        "label": "Notifikasi uji",
+        "hint": "Uji yang Anda kirim dari Notifikasi browser, agar Anda bisa melihat lonceng, pop-up, dan judul tab berfungsi."
+      },
+      "appointment_calendar_drift": {
+        "label": "Janji temu tidak sinkron dengan Google Calendar",
+        "hint": "Acara Google Calendar dari janji temu mendatang dihapus, dipindahkan, atau tamunya diubah. Janji temu tidak diubah; Anda yang memilih tindakan selanjutnya."
+      },
+      "snooze_wake": {
+        "label": "Chat yang ditunda kembali",
+        "hint": "Chat yang ditunda dibuka lagi pada waktunya dan diberikan kepada Anda atau tim Anda."
+      },
+      "marketplace_renewal_due": {
+        "label": "Pengingat perpanjangan aplikasi berbayar",
+        "hint": "Periode aplikasi berbayar berakhir dalam beberapa hari: diperpanjang dengan kartu, dibayar hingga tanggal tertentu, atau sudah dibatalkan dan akan berakhir."
+      },
+      "marketplace_payment_failed": {
+        "label": "Pembayaran aplikasi berbayar gagal",
+        "hint": "Perpanjangan aplikasi berbayar lewat kartu tidak berhasil dan perlu Anda tangani."
+      },
+      "marketplace_subscription_ended": {
+        "label": "Langganan aplikasi berbayar berakhir",
+        "hint": "Langganan aplikasi berbayar berakhir dan aplikasi dijeda."
+      }
     }
   }
 }

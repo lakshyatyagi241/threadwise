@@ -895,6 +895,69 @@
       "actionsFor": "Thao tác cho {{name}}",
       "cancel": "Hủy",
       "dismiss": "Bỏ qua"
+    },
+    "teams": {
+      "title": "Nhóm",
+      "subtitle": "Nhóm nhân viên theo phòng ban. Cuộc trò chuyện có thể được tự động phân công theo nhóm qua quy tắc định tuyến.",
+      "create": "Tạo nhóm",
+      "loading": "Đang tải nhóm",
+      "emptyTitle": "Chưa có nhóm nào",
+      "emptyMessage": "Tạo nhóm, thêm nhân viên vào nhóm và định tuyến cuộc trò chuyện tới nhóm.",
+      "online": "{{count}} trực tuyến",
+      "default": "Mặc định",
+      "strategies": {
+        "manual": "Thủ công",
+        "round_robin": "Luân phiên",
+        "least_loaded": "Ít việc nhất",
+        "sticky": "Gắn bó"
+      },
+      "howTitle": "Cách nhóm hoạt động",
+      "how": {
+        "one": "Đặt tên nhóm (ví dụ Kinh doanh), chọn màu và thêm nhân viên vào nhóm.",
+        "two": "Có ba cách dùng: phân công trò chuyện cho nhóm thủ công, định tuyến trò chuyện mới tới nhóm bằng quy tắc, hoặc xem hiệu suất của nhóm trong phân tích.",
+        "three": "Màu nhóm là màu nhãn trong hàng đợi hộp thư, giúp bạn phân biệt cuộc trò chuyện của từng nhóm chỉ bằng một cái nhìn."
+      },
+      "editFor": "Chỉnh sửa nhóm: {{name}}",
+      "editTitle": "Chỉnh sửa nhóm",
+      "createTitle": "Tạo nhóm",
+      "name": "Tên nhóm",
+      "namePlaceholder": "Ví dụ: Kinh doanh / Hỗ trợ / Thanh toán",
+      "nameRequired": "Nhập tên nhóm.",
+      "nameTooLong": "Tên tối đa {{max}} ký tự.",
+      "color": "Màu",
+      "colorOption": "Màu {{color}}",
+      "strategy": "Chiến lược tự động phân công",
+      "strategyOptions": {
+        "manual": "Thủ công — quản lý chọn người nhận",
+        "round_robin": "Luân phiên — chia đều",
+        "least_loaded": "Ít việc nhất — ưu tiên người có ít việc đang mở nhất",
+        "sticky": "Gắn bó — nhân viên trả lời liên hệ này gần nhất"
+      },
+      "membersLabel": "Thành viên",
+      "membersLoading": "Đang tải thành viên nhóm",
+      "membersFailed": "Không thể tải thành viên.",
+      "membersNoneCreate": "Chưa có thành viên — hãy mời trước, rồi quay lại.",
+      "membersNoneEdit": "Chưa có thành viên.",
+      "createSubmit": "Tạo nhóm",
+      "save": "Lưu thay đổi",
+      "delete": "Xóa nhóm",
+      "deleteTitle": "Xóa nhóm này?",
+      "deleteMessage": "Xóa nhóm \"{{name}}\"? Các cuộc trò chuyện được phân công cho nhóm này sẽ trở thành chưa được phân công.",
+      "deleteConfirm": "Xóa nhóm",
+      "createFailed": "Tạo nhóm thất bại: {{reason}}",
+      "updateFailed": "Cập nhật thất bại: {{reason}}",
+      "deleteFailed": "Xóa thất bại: {{reason}}",
+      "errors": {
+        "forbidden": "Bạn không có quyền thực hiện việc đó.",
+        "notFound": "Mục này không còn tồn tại. Tải lại trang.",
+        "validation": "Một số thông tin không hợp lệ. Kiểm tra và thử lại.",
+        "conflict": "Có người khác đã thay đổi mục này cùng lúc. Tải lại và thử lại.",
+        "nameTaken": "Đã có nhóm với tên này.",
+        "memberUnknown": "Một trong những người bạn chọn không có trong không gian làm việc này.",
+        "orgSuspended": "Không gian làm việc này đã bị tạm khóa."
+      },
+      "members_other": "{{count}} thành viên",
+      "devices_other": "{{count}} thiết bị"
     }
   },
   "inbox": {
@@ -2398,6 +2461,232 @@
       "payloadPurged": "Khách hàng tiềm năng đã lưu được xóa sau thời gian lưu giữ, nên không còn gì để thử lại.",
       "sourcePaused": "Nguồn này đang tạm dừng. Hãy tiếp tục nguồn để gửi khách hàng tiềm năng thử nghiệm hoặc thử lại.",
       "notFound": "Không tìm thấy nội dung này. Có thể đã bị xóa."
+    }
+  },
+  "notificationPrefs": {
+    "title": "Tùy chọn thông báo",
+    "description": "Chọn cách mỗi sự kiện đến với bạn. Các lựa chọn này chỉ của riêng bạn; không gian làm việc của bạn quyết định sự kiện nào được bật sẵn.",
+    "loading": "Đang tải tùy chọn của bạn",
+    "failed": "Không tải được tùy chọn của bạn.",
+    "saveFailed": "Không lưu được thay đổi. Đã hoàn tác.",
+    "dismiss": "Bỏ qua",
+    "resetRow": "Đặt lại mặc định",
+    "resetRowFor": "Đặt lại {{event}} về mặc định",
+    "resetAll": "Đặt lại tất cả về mặc định",
+    "resetAllDone": "Mọi tùy chọn đã được đặt lại mặc định.",
+    "customised": "Đã thay đổi",
+    "toggleLabel": "{{event}}: {{channel}}",
+    "workspaceOff": "Đã bị không gian làm việc của bạn tắt",
+    "workspaceOffHelp": "Không gian làm việc của bạn đã tắt mục này; lựa chọn của bạn vẫn áp dụng cho bạn.",
+    "bellOffHelp": "Bật chuông để chọn cửa sổ bật lên, âm thanh hoặc thông báo đẩy.",
+    "notAvailable": "Không khả dụng",
+    "defaultSummary": "Mặc định: {{bell}}, {{toast}}, {{sound}}",
+    "defaultSummaryPush": "Mặc định: {{bell}}, {{toast}}, {{sound}}, {{push}}",
+    "on": "bật",
+    "off": "tắt",
+    "channelNames": {
+      "bell": "chuông",
+      "toast": "cửa sổ bật lên",
+      "sound": "âm thanh",
+      "push": "đẩy"
+    },
+    "columns": {
+      "bell": "Chuông",
+      "toast": "Cửa sổ bật lên",
+      "sound": "Âm thanh",
+      "push": "Đẩy"
+    },
+    "groups": {
+      "conversations": "Chat",
+      "tasks": "Công việc",
+      "leads": "Khách hàng tiềm năng và biểu mẫu",
+      "documents": "Chứng từ bán hàng",
+      "wallet": "Ví",
+      "devices": "Số WhatsApp",
+      "broadcasts": "Gửi hàng loạt và chiến dịch",
+      "team_chat": "Chat nhóm",
+      "whatsapp_groups": "Nhóm WhatsApp",
+      "billing": "Thanh toán và gói đăng ký",
+      "system": "Hệ thống"
+    },
+    "empty": "Chưa có loại thông báo nào để thiết lập.",
+    "types": {
+      "new_chat": {
+        "label": "Chat mới",
+        "hint": "Cuộc hội thoại chưa có ai phụ trách sẽ nhận tin nhắn đầu tiên."
+      },
+      "new_message": {
+        "label": "Tin nhắn mới trong chat của tôi",
+        "hint": "Khách hàng nhắn trong chat được giao cho bạn."
+      },
+      "chat_waiting": {
+        "label": "Chat vẫn đang chờ trả lời",
+        "hint": "Chat chưa có ai phụ trách có tin nhắn của khách chưa được trả lời trong vài phút. Bạn chỉ được thông báo một lần."
+      },
+      "conversation_assigned": {
+        "label": "Chat được giao cho tôi",
+        "hint": "Chat được giao cho bạn hoặc nhóm của bạn."
+      },
+      "mention": {
+        "label": "Được nhắc đến trong ghi chú",
+        "hint": "Đồng nghiệp nhắc bạn trong ghi chú hội thoại."
+      },
+      "teamchat_mention": {
+        "label": "Được nhắc đến trong Chat nhóm",
+        "hint": "Đồng nghiệp nhắc bạn trong một kênh chat nhóm."
+      },
+      "teamchat_message": {
+        "label": "Tin nhắn trực tiếp",
+        "hint": "Đồng nghiệp nhắn cho bạn trong Chat nhóm."
+      },
+      "device_connected": {
+        "label": "Số đã kết nối",
+        "hint": "Một số WhatsApp cá nhân đã kết nối xong."
+      },
+      "device_disconnected": {
+        "label": "Số đã ngắt kết nối",
+        "hint": "Một số WhatsApp cá nhân đã mất kết nối."
+      },
+      "device_logged_out": {
+        "label": "Số đã đăng xuất",
+        "hint": "Một số WhatsApp cá nhân đã bị đăng xuất khỏi điện thoại."
+      },
+      "broadcast_completed": {
+        "label": "Gửi hàng loạt đã hoàn tất",
+        "hint": "Một chiến dịch Gửi hàng loạt bạn khởi tạo đã được gửi."
+      },
+      "broadcast_failed": {
+        "label": "Gửi hàng loạt thất bại",
+        "hint": "Một chiến dịch Gửi hàng loạt bạn khởi tạo đã thất bại."
+      },
+      "campaign_completed": {
+        "label": "Chiến dịch đã hoàn tất",
+        "hint": "Một chiến dịch bạn khởi tạo đã được gửi."
+      },
+      "campaign_failed": {
+        "label": "Chiến dịch thất bại",
+        "hint": "Một chiến dịch bạn khởi tạo đã thất bại."
+      },
+      "scheduled_completed": {
+        "label": "Lịch gửi đã được gửi",
+        "hint": "Một lịch gửi bạn thiết lập đã được gửi."
+      },
+      "scheduled_failed": {
+        "label": "Lịch gửi thất bại",
+        "hint": "Một lịch gửi bạn thiết lập đã thất bại."
+      },
+      "task_assigned": {
+        "label": "Công việc được giao cho tôi",
+        "hint": "Có một công việc được giao cho bạn."
+      },
+      "task_due": {
+        "label": "Công việc đến hạn",
+        "hint": "Có một công việc của bạn đến hạn."
+      },
+      "task_completed": {
+        "label": "Công việc đã hoàn thành",
+        "hint": "Một công việc bạn tạo đã hoàn thành."
+      },
+      "new_lead": {
+        "label": "Khách hàng tiềm năng mới",
+        "hint": "Có khách hàng tiềm năng mới từ một nguồn khách hàng."
+      },
+      "form_submission": {
+        "label": "Biểu mẫu đã gửi",
+        "hint": "Có người đã gửi một trong các biểu mẫu của bạn."
+      },
+      "form_needs_review": {
+        "label": "Biểu mẫu cần xem xét",
+        "hint": "Có một bài gửi cần xem xét."
+      },
+      "wallet_low_balance": {
+        "label": "Số dư ví thấp",
+        "hint": "Ví của không gian làm việc sắp hết tiền."
+      },
+      "sales_doc_decided": {
+        "label": "Chứng từ bán hàng đã có quyết định",
+        "hint": "Một báo giá hoặc hóa đơn đã được chấp nhận hoặc từ chối."
+      },
+      "email_bounced": {
+        "label": "Email chưa được gửi tới",
+        "hint": "Một email bạn đã gửi bị trả lại hoặc bị chậm."
+      },
+      "wallet_credited": {
+        "label": "Ví đã nạp tiền",
+        "hint": "Ví của không gian làm việc đã được cộng tiền."
+      },
+      "waba_group_join_request": {
+        "label": "Yêu cầu tham gia nhóm",
+        "hint": "Mọi người yêu cầu tham gia nhóm WhatsApp của số doanh nghiệp bạn. Mười yêu cầu gộp thành một dòng."
+      },
+      "waba_group_suspended": {
+        "label": "Nhóm bị tạm ngưng",
+        "hint": "WhatsApp đã tạm ngưng một trong các nhóm của bạn."
+      },
+      "waba_group_suspension_cleared": {
+        "label": "Nhóm hoạt động trở lại",
+        "hint": "WhatsApp đã khôi phục một nhóm trước đó bị tạm ngưng. Chỉ hiển thị nếu bạn đã được thông báo về việc tạm ngưng."
+      },
+      "form_payment": {
+        "label": "Đã nhận thanh toán biểu mẫu",
+        "hint": "Một khách truy cập đã thanh toán trên một trong các biểu mẫu của bạn."
+      },
+      "form_payment_duplicate": {
+        "label": "Biểu mẫu bị thanh toán hai lần",
+        "hint": "Một khách truy cập đã thanh toán lần thứ hai và khoản thanh toán thừa cần được hoàn tiền."
+      },
+      "billing_payment_failed": {
+        "label": "Thanh toán gói đăng ký thất bại",
+        "hint": "Một khoản thu gia hạn không thành công và cần bạn xử lý."
+      },
+      "billing_subscription_canceled": {
+        "label": "Đã hủy gói đăng ký",
+        "hint": "Nhà cung cấp thanh toán của bạn đã chấm dứt một gói đăng ký của không gian làm việc này."
+      },
+      "device_group_join_request": {
+        "label": "Yêu cầu tham gia nhóm của số cá nhân",
+        "hint": "Có người xin tham gia nhóm của một số WhatsApp cá nhân mà bạn quản lý. Mười yêu cầu gộp thành một dòng."
+      },
+      "device_group_removed": {
+        "label": "Bị xóa khỏi nhóm của số cá nhân",
+        "hint": "Ai đó đã xóa một trong các số WhatsApp cá nhân của bạn khỏi một nhóm. Đây có thể là dấu hiệu số đã bị báo cáo."
+      },
+      "sla_breached": {
+        "label": "SLA bị vi phạm",
+        "hint": "Một cuộc trò chuyện bạn phụ trách đã lỡ mục tiêu phản hồi đầu tiên hoặc giải quyết."
+      },
+      "member_leave_started": {
+        "label": "Một thành viên đã nghỉ phép",
+        "hint": "Một thành viên trong nhóm của bạn đã nghỉ phép. Hiển thị những gì họ phụ trách và liên kết để giao lại."
+      },
+      "assignment_blocked_by_leave": {
+        "label": "Cuộc trò chuyện không ai nhận được",
+        "hint": "Định tuyến không tìm được ai cho cuộc trò chuyện mới vì những người được chọn đang nghỉ phép. Hãy giao thủ công."
+      },
+      "test": {
+        "label": "Thông báo thử",
+        "hint": "Thông báo thử bạn gửi từ Thông báo trình duyệt, để xem chuông, cửa sổ bật lên và tiêu đề tab hoạt động."
+      },
+      "appointment_calendar_drift": {
+        "label": "Lịch hẹn không đồng bộ với Google Calendar",
+        "hint": "Sự kiện Google Calendar của một lịch hẹn sắp tới đã bị xóa, chuyển giờ hoặc thay đổi danh sách khách. Lịch hẹn không bị thay đổi; bạn sẽ chọn cách xử lý."
+      },
+      "snooze_wake": {
+        "label": "Cuộc trò chuyện hoãn quay lại",
+        "hint": "Cuộc trò chuyện hoãn mở lại đúng giờ và được giao cho bạn hoặc nhóm của bạn."
+      },
+      "marketplace_renewal_due": {
+        "label": "Nhắc gia hạn ứng dụng trả phí",
+        "hint": "Kỳ đã trả của một ứng dụng trả phí sắp kết thúc trong vài ngày: tự gia hạn bằng thẻ, đã trả đến một ngày nhất định, hoặc đã hủy và sắp kết thúc."
+      },
+      "marketplace_payment_failed": {
+        "label": "Thanh toán ứng dụng trả phí thất bại",
+        "hint": "Lần gia hạn bằng thẻ của một ứng dụng trả phí không thành công và cần bạn xử lý."
+      },
+      "marketplace_subscription_ended": {
+        "label": "Đăng ký ứng dụng trả phí đã kết thúc",
+        "hint": "Gói đăng ký của một ứng dụng trả phí đã kết thúc và ứng dụng đã bị tạm dừng."
+      }
     }
   }
 }

@@ -160,6 +160,12 @@ export function MenuScreen() {
       href: '/members',
       permission: OPEN,
     },
+    {
+      key: 'teams',
+      label: t('settings.teams.title'),
+      href: '/teams',
+      permission: OPEN,
+    },
   ];
   const settingsOpen = settingsChildren.some((child) => allowed(child.permission));
 
@@ -284,6 +290,11 @@ export function MenuScreen() {
             label={t('menu.appearance.title')}
             hint={t(`menu.appearance.${modeOf(user?.theme)}`)}
             onPress={() => router.navigate('/appearance')}
+          />
+          <Row
+            icon="notifications-outline"
+            label={t('notificationPrefs.title')}
+            onPress={() => router.navigate('/notification-preferences')}
           />
           <Row
             icon="phone-portrait-outline"

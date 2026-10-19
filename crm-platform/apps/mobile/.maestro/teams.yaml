@@ -1,0 +1,23 @@
+# A person opens the teams from Menu > Settings > Teams, starts creating a team and sees the name check.
+# Needs an account that may manage teams (an owner or admin).
+#   maestro test apps/mobile/.maestro/teams.yaml -e APP_ID=ai.geta.crm.dev -e E2E_EMAIL=<seeded email> -e E2E_PASSWORD=<its password>
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Email'
+- inputText: ${E2E_EMAIL}
+- tapOn: 'Password'
+- inputText: ${E2E_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: 'sign-in-submit'
+- tapOn: 'Menu'
+- tapOn: 'Settings'
+- tapOn: 'Teams'
+- assertVisible: 'How teams work'
+- tapOn: 'Create team'
+- assertVisible: 'Team name'
+- tapOn:
+    id: 'team-save'
+- assertVisible: 'Enter a team name.'

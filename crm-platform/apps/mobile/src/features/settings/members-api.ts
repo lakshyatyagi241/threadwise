@@ -25,12 +25,13 @@ export const fetchMembers = (
   filters: { q: string; tier: WspRoleTier | undefined },
   cursor: string | undefined,
   signal?: AbortSignal,
+  limit: number = MEMBERS_PAGE_SIZE,
 ) =>
   apiFetch('/v2/workspace/members', {
     query: {
       q: filters.q.trim() || undefined,
       tier: filters.tier,
-      limit: MEMBERS_PAGE_SIZE,
+      limit,
       cursor,
     },
     schema: memberListSchema,

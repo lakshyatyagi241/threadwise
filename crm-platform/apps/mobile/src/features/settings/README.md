@@ -3,13 +3,14 @@
 The workspace's own setup, opened from the **Settings** row of the Menu tab (it expands like Dashboard and Contacts, and is faded only when
 the person may open nothing in it; Team members opens for everyone, as on the web). Each line opens with the right that manages it, as on the web.
 
-| Line            | Route                                 | Right                                                          | API                                                                                                      | Web                                                  |
-| --------------- | ------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| Saved replies   | `/quick-replies`, `/quick-reply-form` | `inbox.savedreply.manage`                                      | `/v2/inbox/saved-replies` (list, one, create, update, delete, duplicate)                                 | TW-TIB1-024, Settings, Saved replies                 |
-| Labels          | `/labels`, `/label-form`              | `inbox.tag.manage`                                             | `/v2/inbox/labels` (list, create, update, delete)                                                        | Settings, Conversation tags                          |
-| Business hours  | `/business-hours`                     | `inbox.settings.read` to see, `inbox.routing.manage` to save   | `GET`/`PUT /v2/inbox/routing/business-hours`                                                             | Auto-assignment, Business hours dialog (TW-TIB2-004) |
-| Auto-assignment | `/auto-assignment`                    | `inbox.settings.read` to see, `inbox.routing.manage` to change | `/v2/inbox/routing/rules` (list, reorder, one, switch, copy, delete), `/settings`, `/v2/inbox/assignees` | Auto-assignment (TW-TIB2-001; Geta: Chat assignment) |
-| Team members    | `/members`, `/member-invite`          | everyone may open; `wsp.member.*` rights decide what shows     | `/v2/workspace/members` (list, summary, invite, resend-invite, reset-password, role, remove)             | Settings, Users (members screen, invite dialog)      |
+| Line            | Route                                 | Right                                                          | API                                                                                                      | Web                                                     |
+| --------------- | ------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| Saved replies   | `/quick-replies`, `/quick-reply-form` | `inbox.savedreply.manage`                                      | `/v2/inbox/saved-replies` (list, one, create, update, delete, duplicate)                                 | TW-TIB1-024, Settings, Saved replies                    |
+| Labels          | `/labels`, `/label-form`              | `inbox.tag.manage`                                             | `/v2/inbox/labels` (list, create, update, delete)                                                        | Settings, Conversation tags                             |
+| Business hours  | `/business-hours`                     | `inbox.settings.read` to see, `inbox.routing.manage` to save   | `GET`/`PUT /v2/inbox/routing/business-hours`                                                             | Auto-assignment, Business hours dialog (TW-TIB2-004)    |
+| Auto-assignment | `/auto-assignment`                    | `inbox.settings.read` to see, `inbox.routing.manage` to change | `/v2/inbox/routing/rules` (list, reorder, one, switch, copy, delete), `/settings`, `/v2/inbox/assignees` | Auto-assignment (TW-TIB2-001; Geta: Chat assignment)    |
+| Team members    | `/members`, `/member-invite`          | everyone may open; `wsp.member.*` rights decide what shows     | `/v2/workspace/members` (list, summary, invite, resend-invite, reset-password, role, remove)             | Settings, Users (members screen, invite dialog)         |
+| Teams           | `/teams`, `/team-form`                | everyone may read; `inbox.team.manage` to create, edit, delete | `/v2/workspace/teams` (list, create, update, delete), `/members` for the picker                          | Settings, Teams (teams screen, team dialog; TW-WSP-022) |
 
 ## Saved replies
 
@@ -123,6 +124,27 @@ what else shows, with the same rules as the web (`lib/roles.ts` is ported to `me
 | Leave or hand over (delegate) dialog | a separate flow with its own routes; recorded in the backlog      |
 | Editing a member's name or avatar    | the web does it on the profile page, which has its own app screen |
 
+## Teams
+
+The groups of agents the inbox routes conversations to (the web's Teams screen, TW-WSP-022). Every member may read the list; the summary's
+`canManageTeams` (the right `inbox.team.manage`) decides whether Create team and the pencils show, and the server stays the authority.
+
+- **The list**: a page of 50 at a time. Each team shows its colour, name, "Default" when it is the default team, how it assigns (Manual,
+  Round robin, Least loaded, Sticky), how many members it has, how many of them are online, and how many devices it is limited to. A short
+  "How teams work" note sits above it, as on the web.
+- **Create / edit** (`/team-form`, `?teamId=` to edit): name (up to 64 characters), one of six colours (a team's own other colour is kept as
+  a seventh), the assignment strategy, and a checkbox per workspace member with their presence. An edit sends the version it read, and the
+  member list replaces the old one. A taken name is said on the name field; a team changed by someone else is read again so the person can
+  review it and save again. Deleting asks first ("conversations assigned to it become unassigned").
+- The member picker pulls every page of `/v2/workspace/members` (200 at a time) until the list ends, as the web does.
+
+### In the web, not built here (recorded, not dropped)
+
+| What                                         | Why it waits                                                                                                                        |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Limiting a team to devices (channel lines)   | the web hides the picker too (the channels domain has no devices list yet: TW-WSP-022 device scoping); saves never send `deviceIds` |
+| The toast "Team created / updated / deleted" | the app goes back to the list, which shows the change; no separate message is shown                                                 |
+
 ## Not built yet
 
-Teams (`/v2/workspace/teams`), Notification preferences, then the rule editor for Auto-assignment.
+Notification preferences, then the rule editor for Auto-assignment.

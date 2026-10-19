@@ -914,6 +914,71 @@
       "actionsFor": "Aktionen für {{name}}",
       "cancel": "Abbrechen",
       "dismiss": "Schließen"
+    },
+    "teams": {
+      "title": "Teams",
+      "subtitle": "Gruppieren Sie Ihre Agenten nach Abteilung. Unterhaltungen können per Routing-Regeln automatisch nach Team zugewiesen werden.",
+      "create": "Team erstellen",
+      "loading": "Teams werden geladen",
+      "emptyTitle": "Noch keine Teams",
+      "emptyMessage": "Erstellen Sie ein Team, fügen Sie Ihre Agenten hinzu und leiten Sie Unterhaltungen an dieses Team weiter.",
+      "online": "{{count}} online",
+      "default": "Standard",
+      "strategies": {
+        "manual": "Manuell",
+        "round_robin": "Rundlauf",
+        "least_loaded": "Geringste Auslastung",
+        "sticky": "Fest"
+      },
+      "howTitle": "So funktionieren Teams",
+      "how": {
+        "one": "Benennen Sie ein Team (zum Beispiel Vertrieb), wählen Sie eine Farbe und fügen Sie Ihre Agenten hinzu.",
+        "two": "Nutzen Sie es auf drei Arten: Chats von Hand dem Team zuweisen, neue Chats mit einer Routing-Regel dorthin leiten oder seine Leistung in der Analyse lesen.",
+        "three": "Die Teamfarbe ist die Farbe des Kennzeichens in der Posteingangs-Warteschlange, sodass Sie die Chats jedes Teams auf einen Blick unterscheiden können."
+      },
+      "editFor": "Team bearbeiten: {{name}}",
+      "editTitle": "Team bearbeiten",
+      "createTitle": "Ein Team erstellen",
+      "name": "Teamname",
+      "namePlaceholder": "z. B. Vertrieb / Support / Abrechnung",
+      "nameRequired": "Geben Sie einen Teamnamen ein.",
+      "nameTooLong": "Der Name darf höchstens {{max}} Zeichen lang sein.",
+      "color": "Farbe",
+      "colorOption": "Farbe {{color}}",
+      "strategy": "Strategie für die automatische Zuweisung",
+      "strategyOptions": {
+        "manual": "Manuell – ein Manager wählt, wer zugewiesen wird",
+        "round_robin": "Rundlauf – gleichmäßig verteilen",
+        "least_loaded": "Geringste Auslastung – zuerst die mit den wenigsten offenen",
+        "sticky": "Fest – der zuletzt antwortende Agent für diesen Kontakt"
+      },
+      "membersLabel": "Mitglieder",
+      "membersLoading": "Teammitglieder werden geladen",
+      "membersFailed": "Teammitglieder konnten nicht geladen werden.",
+      "membersNoneCreate": "Noch keine Teammitglieder – laden Sie zuerst welche ein und kommen Sie dann zurück.",
+      "membersNoneEdit": "Noch keine Teammitglieder.",
+      "createSubmit": "Team erstellen",
+      "save": "Änderungen speichern",
+      "delete": "Team löschen",
+      "deleteTitle": "Dieses Team löschen?",
+      "deleteMessage": "Team „{{name}}“ löschen? Unterhaltungen, die diesem Team zugewiesen sind, werden danach nicht mehr zugewiesen sein.",
+      "deleteConfirm": "Team löschen",
+      "createFailed": "Team erstellen fehlgeschlagen: {{reason}}",
+      "updateFailed": "Aktualisierung fehlgeschlagen: {{reason}}",
+      "deleteFailed": "Löschen fehlgeschlagen: {{reason}}",
+      "errors": {
+        "forbidden": "Sie haben keine Berechtigung dafür.",
+        "notFound": "Das existiert nicht mehr. Laden Sie die Seite neu.",
+        "validation": "Einige Angaben sind ungültig. Prüfen Sie sie und versuchen Sie es erneut.",
+        "conflict": "Jemand anderes hat dies gleichzeitig geändert. Laden Sie neu und versuchen Sie es erneut.",
+        "nameTaken": "Ein Team mit diesem Namen existiert bereits.",
+        "memberUnknown": "Eine der ausgewählten Personen ist nicht in diesem Workspace.",
+        "orgSuspended": "Dieser Workspace ist gesperrt."
+      },
+      "members_one": "{{count}} Mitglied",
+      "members_other": "{{count}} Mitglieder",
+      "devices_one": "{{count}} Gerät",
+      "devices_other": "{{count}} Geräte"
     }
   },
   "inbox": {
@@ -2444,6 +2509,232 @@
       "payloadPurged": "Der gespeicherte Lead wurde nach Ablauf seiner Aufbewahrungsfrist gelöscht, daher gibt es nichts erneut zu versuchen.",
       "sourcePaused": "Diese Quelle ist pausiert. Setzen Sie sie fort, um einen Test-Lead zu senden oder einen Lead erneut zu versuchen.",
       "notFound": "Wir konnten es nicht finden. Es wurde möglicherweise gelöscht."
+    }
+  },
+  "notificationPrefs": {
+    "title": "Benachrichtigungseinstellungen",
+    "description": "Legen Sie fest, wie jedes Ereignis Sie erreicht. Diese Auswahl gilt nur für Sie; Ihr Workspace legt fest, welche Ereignisse standardmäßig aktiv sind.",
+    "loading": "Ihre Einstellungen werden geladen",
+    "failed": "Ihre Einstellungen konnten nicht geladen werden.",
+    "saveFailed": "Diese Änderung konnte nicht gespeichert werden. Sie wurde rückgängig gemacht.",
+    "dismiss": "Schließen",
+    "resetRow": "Auf Standard zurücksetzen",
+    "resetRowFor": "{{event}} auf Standard zurücksetzen",
+    "resetAll": "Alles auf Standard zurücksetzen",
+    "resetAllDone": "Alle Einstellungen sind auf die Standardwerte zurückgesetzt.",
+    "customised": "Geändert",
+    "toggleLabel": "{{event}}: {{channel}}",
+    "workspaceOff": "Von Ihrem Workspace ausgeschaltet",
+    "workspaceOffHelp": "Ihr Workspace hat dies ausgeschaltet; Ihre Auswahl gilt dennoch für Sie.",
+    "bellOffHelp": "Schalten Sie die Glocke ein, um Pop-up, Ton oder Push auszuwählen.",
+    "notAvailable": "Nicht verfügbar",
+    "defaultSummary": "Standard: {{bell}}, {{toast}}, {{sound}}",
+    "defaultSummaryPush": "Standard: {{bell}}, {{toast}}, {{sound}}, {{push}}",
+    "on": "an",
+    "off": "aus",
+    "channelNames": {
+      "bell": "Glocke",
+      "toast": "Pop-up",
+      "sound": "Ton",
+      "push": "Push"
+    },
+    "columns": {
+      "bell": "Glocke",
+      "toast": "Pop-up",
+      "sound": "Ton",
+      "push": "Push"
+    },
+    "groups": {
+      "conversations": "Chats",
+      "tasks": "Aufgaben",
+      "leads": "Leads und Formulare",
+      "documents": "Verkaufsdokumente",
+      "wallet": "Wallet",
+      "devices": "WhatsApp-Nummern",
+      "broadcasts": "Broadcasts und Kampagnen",
+      "team_chat": "Team-Chat",
+      "whatsapp_groups": "WhatsApp-Gruppen",
+      "billing": "Abrechnung und Abonnements",
+      "system": "System"
+    },
+    "empty": "Es gibt noch keine Benachrichtigungstypen zum Einrichten.",
+    "types": {
+      "new_chat": {
+        "label": "Neuer Chat",
+        "hint": "Eine Unterhaltung, die noch niemandem gehört, erhält ihre erste Nachricht."
+      },
+      "new_message": {
+        "label": "Neue Nachricht in meinem Chat",
+        "hint": "Ein Kunde schreibt in einem Chat, der Ihnen zugewiesen ist."
+      },
+      "chat_waiting": {
+        "label": "Chat wartet noch auf Antwort",
+        "hint": "Auf eine Kundennachricht in einem Chat ohne Zuständigen blieb einige Minuten lang keine Antwort. Sie werden einmal darüber informiert."
+      },
+      "conversation_assigned": {
+        "label": "Mir zugewiesener Chat",
+        "hint": "Ein Chat ist Ihnen oder Ihrem Team zugewiesen."
+      },
+      "mention": {
+        "label": "In einer Notiz erwähnt",
+        "hint": "Ein Kollege erwähnt Sie in einer Unterhaltungsnotiz."
+      },
+      "teamchat_mention": {
+        "label": "Im Team-Chat erwähnt",
+        "hint": "Ein Kollege erwähnt Sie in einem Team-Chat-Kanal."
+      },
+      "teamchat_message": {
+        "label": "Direktnachricht",
+        "hint": "Ein Kollege schreibt Ihnen im Team-Chat."
+      },
+      "device_connected": {
+        "label": "Nummer verbunden",
+        "hint": "Eine persönliche WhatsApp-Nummer wurde erfolgreich verbunden."
+      },
+      "device_disconnected": {
+        "label": "Nummer getrennt",
+        "hint": "Eine persönliche WhatsApp-Nummer hat ihre Verbindung verloren."
+      },
+      "device_logged_out": {
+        "label": "Nummer abgemeldet",
+        "hint": "Eine persönliche WhatsApp-Nummer wurde auf dem Telefon abgemeldet."
+      },
+      "broadcast_completed": {
+        "label": "Broadcast abgeschlossen",
+        "hint": "Ein von Ihnen gestarteter Broadcast wurde gesendet."
+      },
+      "broadcast_failed": {
+        "label": "Broadcast fehlgeschlagen",
+        "hint": "Ein von Ihnen gestarteter Broadcast ist fehlgeschlagen."
+      },
+      "campaign_completed": {
+        "label": "Kampagne abgeschlossen",
+        "hint": "Eine von Ihnen gestartete Kampagne wurde gesendet."
+      },
+      "campaign_failed": {
+        "label": "Kampagne fehlgeschlagen",
+        "hint": "Eine von Ihnen gestartete Kampagne ist fehlgeschlagen."
+      },
+      "scheduled_completed": {
+        "label": "Geplanter Versand gesendet",
+        "hint": "Ein von Ihnen eingerichteter geplanter Versand wurde gesendet."
+      },
+      "scheduled_failed": {
+        "label": "Geplanter Versand fehlgeschlagen",
+        "hint": "Ein von Ihnen eingerichteter geplanter Versand ist fehlgeschlagen."
+      },
+      "task_assigned": {
+        "label": "Mir zugewiesene Aufgabe",
+        "hint": "Eine Aufgabe ist Ihnen zugewiesen."
+      },
+      "task_due": {
+        "label": "Aufgabe fällig",
+        "hint": "Eine Ihrer Aufgaben ist fällig."
+      },
+      "task_completed": {
+        "label": "Aufgabe erledigt",
+        "hint": "Eine von Ihnen erstellte Aufgabe wurde erledigt."
+      },
+      "new_lead": {
+        "label": "Neuer Lead",
+        "hint": "Ein Lead ist aus einer Lead-Quelle eingegangen."
+      },
+      "form_submission": {
+        "label": "Formular abgeschickt",
+        "hint": "Jemand hat eines Ihrer Formulare abgeschickt."
+      },
+      "form_needs_review": {
+        "label": "Formular muss geprüft werden",
+        "hint": "Eine Einsendung muss geprüft werden."
+      },
+      "wallet_low_balance": {
+        "label": "Wallet-Guthaben niedrig",
+        "hint": "Das Wallet-Guthaben des Workspace wird knapp."
+      },
+      "sales_doc_decided": {
+        "label": "Verkaufsdokument entschieden",
+        "hint": "Ein Angebot oder eine Rechnung wurde angenommen oder abgelehnt."
+      },
+      "email_bounced": {
+        "label": "E-Mail nicht zugestellt",
+        "hint": "Eine von Ihnen gesendete E-Mail ist zurückgekommen oder verzögert sich."
+      },
+      "wallet_credited": {
+        "label": "Wallet aufgeladen",
+        "hint": "Das Wallet des Workspace wurde gutgeschrieben."
+      },
+      "waba_group_join_request": {
+        "label": "Anfrage zum Beitritt zu einer Gruppe",
+        "hint": "Personen bitten darum, einer WhatsApp-Gruppe Ihrer Geschäftsnummer beizutreten. Zehn Anfragen ergeben eine Zeile."
+      },
+      "waba_group_suspended": {
+        "label": "Gruppe gesperrt",
+        "hint": "WhatsApp hat eine Ihrer Gruppen gesperrt."
+      },
+      "waba_group_suspension_cleared": {
+        "label": "Gruppe wieder aktiv",
+        "hint": "WhatsApp hat eine zuvor gesperrte Gruppe wiederhergestellt. Nur, wenn Sie über die Sperre informiert wurden."
+      },
+      "form_payment": {
+        "label": "Formularzahlung eingegangen",
+        "hint": "Ein Besucher hat über eines Ihrer Formulare bezahlt."
+      },
+      "form_payment_duplicate": {
+        "label": "Formular doppelt bezahlt",
+        "hint": "Ein Besucher hat ein zweites Mal bezahlt und die zusätzliche Zahlung muss erstattet werden."
+      },
+      "billing_payment_failed": {
+        "label": "Zahlung für Abonnement fehlgeschlagen",
+        "hint": "Eine Verlängerungsbuchung ist nicht durchgegangen und erfordert Ihre Aufmerksamkeit."
+      },
+      "billing_subscription_canceled": {
+        "label": "Abonnement gekündigt",
+        "hint": "Ihr Zahlungsanbieter hat ein Abonnement dieses Arbeitsbereichs beendet."
+      },
+      "device_group_join_request": {
+        "label": "Beitrittsanfrage für eine Gruppe persönlicher Nummern",
+        "hint": "Personen möchten einer Gruppe einer persönlichen WhatsApp-Nummer beitreten, die Sie verwalten. Zehn Anfragen ergeben eine Zeile."
+      },
+      "device_group_removed": {
+        "label": "Aus einer Gruppe persönlicher Nummern entfernt",
+        "hint": "Jemand hat eine Ihrer persönlichen WhatsApp-Nummern aus einer Gruppe entfernt. Das kann ein Zeichen dafür sein, dass die Nummer gemeldet wurde."
+      },
+      "sla_breached": {
+        "label": "SLA verletzt",
+        "hint": "Eine Ihrer Unterhaltungen hat das Ziel für die erste Antwort oder die Lösung verfehlt."
+      },
+      "member_leave_started": {
+        "label": "Mitglied ist im Urlaub",
+        "hint": "Ein Mitglied deines Teams ist in den Urlaub gegangen. Zeigt, was es betreut, mit Link zum Neuzuweisen."
+      },
+      "assignment_blocked_by_leave": {
+        "label": "Chat, den niemand übernehmen konnte",
+        "hint": "Das Routing hat für einen neuen Chat niemanden gefunden, weil die gewählten Personen im Urlaub sind. Weise ihn manuell zu."
+      },
+      "test": {
+        "label": "Testbenachrichtigung",
+        "hint": "Der Test, den du unter Browser-Benachrichtigungen sendest, damit du siehst, dass Glocke, Pop-up und Tab-Titel funktionieren."
+      },
+      "appointment_calendar_drift": {
+        "label": "Termin nicht synchron mit Google Calendar",
+        "hint": "Der Google-Calendar-Eintrag eines bevorstehenden Termins wurde gelöscht, verschoben oder seine Gäste wurden geändert. Der Termin selbst bleibt unverändert; Sie entscheiden, was geschehen soll."
+      },
+      "snooze_wake": {
+        "label": "Zurückgestellter Chat kehrt zurück",
+        "hint": "Ein zurückgestellter Chat wird zur festgelegten Zeit wieder geöffnet und Ihnen oder Ihrem Team zugewiesen."
+      },
+      "marketplace_renewal_due": {
+        "label": "Erinnerung an Verlängerung einer kostenpflichtigen App",
+        "hint": "Der Zeitraum einer kostenpflichtigen App endet in einigen Tagen: Sie verlängert sich per Karte, ist bis zu einem Datum bezahlt oder wurde gekündigt und endet."
+      },
+      "marketplace_payment_failed": {
+        "label": "Zahlung für kostenpflichtige App fehlgeschlagen",
+        "hint": "Die Kartenverlängerung einer kostenpflichtigen App ist nicht durchgegangen und erfordert Ihre Aufmerksamkeit."
+      },
+      "marketplace_subscription_ended": {
+        "label": "Abonnement einer kostenpflichtigen App beendet",
+        "hint": "Das Abonnement einer kostenpflichtigen App wurde beendet und die App pausiert."
+      }
     }
   }
 }

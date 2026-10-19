@@ -933,6 +933,73 @@
       "actionsFor": "Ações para {{name}}",
       "cancel": "Cancelar",
       "dismiss": "Dispensar"
+    },
+    "teams": {
+      "title": "Equipes",
+      "subtitle": "Agrupe seus agentes por departamento. As conversas podem ser atribuídas automaticamente por equipe usando regras de roteamento.",
+      "create": "Criar equipe",
+      "loading": "Carregando equipes",
+      "emptyTitle": "Nenhuma equipe ainda",
+      "emptyMessage": "Crie uma equipe, adicione seus agentes a ela e roteie conversas para ela.",
+      "online": "{{count}} online",
+      "default": "Padrão",
+      "strategies": {
+        "manual": "Manual",
+        "round_robin": "Rodízio",
+        "least_loaded": "Menor carga",
+        "sticky": "Fixo"
+      },
+      "howTitle": "Como funcionam as equipes",
+      "how": {
+        "one": "Dê um nome à equipe (por exemplo, Vendas), escolha uma cor e adicione seus agentes a ela.",
+        "two": "Use de três formas: atribuir uma conversa à equipe manualmente, direcionar novas conversas para ela com uma regra de roteamento ou acompanhar o desempenho dela na análise.",
+        "three": "A cor da equipe é a cor da etiqueta na fila da caixa de entrada, para que você identifique as conversas de cada equipe de relance."
+      },
+      "editFor": "Editar equipe: {{name}}",
+      "editTitle": "Editar equipe",
+      "createTitle": "Criar uma equipe",
+      "name": "Nome da equipe",
+      "namePlaceholder": "ex.: Vendas / Suporte / Cobrança",
+      "nameRequired": "Informe um nome para a equipe.",
+      "nameTooLong": "O nome pode ter no máximo {{max}} caracteres.",
+      "color": "Cor",
+      "colorOption": "Cor {{color}}",
+      "strategy": "Estratégia de atribuição automática",
+      "strategyOptions": {
+        "manual": "Manual: um gerente escolhe quem atende",
+        "round_robin": "Rodízio: distribuição igual",
+        "least_loaded": "Menor carga: menos abertas primeiro",
+        "sticky": "Fixo: o último agente que respondeu a este contato"
+      },
+      "membersLabel": "Membros",
+      "membersLoading": "Carregando membros da equipe",
+      "membersFailed": "Não foi possível carregar os membros da equipe.",
+      "membersNoneCreate": "Nenhum membro da equipe ainda: convide algumas pessoas primeiro e depois volte aqui.",
+      "membersNoneEdit": "Nenhum membro da equipe ainda.",
+      "createSubmit": "Criar equipe",
+      "save": "Salvar alterações",
+      "delete": "Excluir equipe",
+      "deleteTitle": "Excluir esta equipe?",
+      "deleteMessage": "Excluir a equipe “{{name}}”? As conversas atribuídas a esta equipe ficarão sem atribuição.",
+      "deleteConfirm": "Excluir equipe",
+      "createFailed": "Falha ao criar a equipe: {{reason}}",
+      "updateFailed": "Falha na atualização: {{reason}}",
+      "deleteFailed": "Falha ao excluir: {{reason}}",
+      "errors": {
+        "forbidden": "Você não tem permissão para fazer isso.",
+        "notFound": "Isto não existe mais. Recarregue a página.",
+        "validation": "Alguns dos dados não são válidos. Confira-os e tente novamente.",
+        "conflict": "Outra pessoa alterou isto ao mesmo tempo. Recarregue e tente novamente.",
+        "nameTaken": "Já existe uma equipe com esse nome.",
+        "memberUnknown": "Uma das pessoas escolhidas não está neste espaço de trabalho.",
+        "orgSuspended": "Este espaço de trabalho está suspenso."
+      },
+      "members_many": "{{count}} membros",
+      "members_one": "{{count}} membro",
+      "members_other": "{{count}} membros",
+      "devices_many": "{{count}} dispositivos",
+      "devices_one": "{{count}} dispositivo",
+      "devices_other": "{{count}} dispositivos"
     }
   },
   "inbox": {
@@ -2490,6 +2557,232 @@
       "payloadPurged": "O lead armazenado foi excluído após o período de retenção, então não há o que reprocessar.",
       "sourcePaused": "Esta fonte está pausada. Retome-a para enviar um lead de teste ou reprocessar um lead.",
       "notFound": "Não encontramos. Pode ter sido excluído."
+    }
+  },
+  "notificationPrefs": {
+    "title": "Preferências de notificação",
+    "description": "Escolha como cada evento chega até você. Essas escolhas são somente suas; o seu espaço de trabalho define quais eventos começam ativados.",
+    "loading": "Carregando suas preferências",
+    "failed": "Não foi possível carregar suas preferências.",
+    "saveFailed": "Não foi possível salvar essa alteração. Ela foi desfeita.",
+    "dismiss": "Dispensar",
+    "resetRow": "Redefinir para o padrão",
+    "resetRowFor": "Redefinir {{event}} para o padrão",
+    "resetAll": "Redefinir tudo para o padrão",
+    "resetAllDone": "Todas as preferências voltaram ao padrão.",
+    "customised": "Alterado",
+    "toggleLabel": "{{event}}: {{channel}}",
+    "workspaceOff": "Desligado pelo seu espaço de trabalho",
+    "workspaceOffHelp": "Seu espaço de trabalho desligou isto; sua escolha continua valendo para você.",
+    "bellOffHelp": "Ligue o sino para escolher pop-up, som ou push.",
+    "notAvailable": "Indisponível",
+    "defaultSummary": "Padrão: {{bell}}, {{toast}}, {{sound}}",
+    "defaultSummaryPush": "Padrão: {{bell}}, {{toast}}, {{sound}}, {{push}}",
+    "on": "ligado",
+    "off": "desligado",
+    "channelNames": {
+      "bell": "sino",
+      "toast": "pop-up",
+      "sound": "som",
+      "push": "push"
+    },
+    "columns": {
+      "bell": "Sino",
+      "toast": "Pop-up",
+      "sound": "Som",
+      "push": "Push"
+    },
+    "groups": {
+      "conversations": "Chats",
+      "tasks": "Tarefas",
+      "leads": "Leads e formulários",
+      "documents": "Documentos de venda",
+      "wallet": "Carteira",
+      "devices": "Números do WhatsApp",
+      "broadcasts": "Transmissões e campanhas",
+      "team_chat": "Chat da equipe",
+      "whatsapp_groups": "Grupos do WhatsApp",
+      "billing": "Faturamento e assinaturas",
+      "system": "Sistema"
+    },
+    "empty": "Ainda não há tipos de notificação para configurar.",
+    "types": {
+      "new_chat": {
+        "label": "Novo chat",
+        "hint": "Uma conversa que ainda não tem responsável recebe a primeira mensagem."
+      },
+      "new_message": {
+        "label": "Nova mensagem no meu chat",
+        "hint": "Um cliente escreve em um chat atribuído a você."
+      },
+      "chat_waiting": {
+        "label": "Chat ainda aguardando resposta",
+        "hint": "Um chat sem responsável está com uma mensagem do cliente sem resposta há alguns minutos. Você é avisado uma vez."
+      },
+      "conversation_assigned": {
+        "label": "Chat atribuído a mim",
+        "hint": "Um chat é atribuído a você ou à sua equipe."
+      },
+      "mention": {
+        "label": "Mencionado em uma nota",
+        "hint": "Um colega menciona você em uma nota de conversa."
+      },
+      "teamchat_mention": {
+        "label": "Mencionado no Chat da equipe",
+        "hint": "Um colega menciona você em um canal do chat da equipe."
+      },
+      "teamchat_message": {
+        "label": "Mensagem direta",
+        "hint": "Um colega escreve para você no Chat da equipe."
+      },
+      "device_connected": {
+        "label": "Número conectado",
+        "hint": "Um número pessoal do WhatsApp terminou de conectar."
+      },
+      "device_disconnected": {
+        "label": "Número desconectado",
+        "hint": "Um número pessoal do WhatsApp perdeu a conexão."
+      },
+      "device_logged_out": {
+        "label": "Número desconectado da sessão",
+        "hint": "Um número pessoal do WhatsApp foi desconectado pelo celular."
+      },
+      "broadcast_completed": {
+        "label": "Transmissão concluída",
+        "hint": "Uma transmissão que você iniciou foi enviada."
+      },
+      "broadcast_failed": {
+        "label": "Transmissão falhou",
+        "hint": "Uma transmissão que você iniciou falhou."
+      },
+      "campaign_completed": {
+        "label": "Campanha concluída",
+        "hint": "Uma campanha que você iniciou foi enviada."
+      },
+      "campaign_failed": {
+        "label": "Campanha falhou",
+        "hint": "Uma campanha que você iniciou falhou."
+      },
+      "scheduled_completed": {
+        "label": "Envio agendado enviado",
+        "hint": "Um envio agendado por você foi enviado."
+      },
+      "scheduled_failed": {
+        "label": "Envio agendado falhou",
+        "hint": "Um envio agendado por você falhou."
+      },
+      "task_assigned": {
+        "label": "Tarefa atribuída a mim",
+        "hint": "Uma tarefa foi atribuída a você."
+      },
+      "task_due": {
+        "label": "Tarefa vencendo",
+        "hint": "Uma tarefa sua está vencendo."
+      },
+      "task_completed": {
+        "label": "Tarefa concluída",
+        "hint": "Uma tarefa criada por você foi concluída."
+      },
+      "new_lead": {
+        "label": "Novo lead",
+        "hint": "Um lead chegou de uma fonte de leads."
+      },
+      "form_submission": {
+        "label": "Formulário enviado",
+        "hint": "Alguém enviou um dos seus formulários."
+      },
+      "form_needs_review": {
+        "label": "Formulário precisa de revisão",
+        "hint": "Um envio precisa de atenção."
+      },
+      "wallet_low_balance": {
+        "label": "Saldo da carteira baixo",
+        "hint": "O saldo da carteira do espaço de trabalho está acabando."
+      },
+      "sales_doc_decided": {
+        "label": "Documento de venda decidido",
+        "hint": "Um orçamento ou fatura foi aceito ou recusado."
+      },
+      "email_bounced": {
+        "label": "E-mail não entregue",
+        "hint": "Um e-mail que você enviou foi devolvido ou atrasou."
+      },
+      "wallet_credited": {
+        "label": "Carteira recarregada",
+        "hint": "A carteira do espaço de trabalho recebeu um crédito."
+      },
+      "waba_group_join_request": {
+        "label": "Pedido para entrar em um grupo",
+        "hint": "Pessoas pedem para entrar em um grupo do WhatsApp do número da sua empresa. Dez pedidos formam uma linha."
+      },
+      "waba_group_suspended": {
+        "label": "Grupo suspenso",
+        "hint": "O WhatsApp suspendeu um dos seus grupos."
+      },
+      "waba_group_suspension_cleared": {
+        "label": "Grupo ativo novamente",
+        "hint": "O WhatsApp restaurou um grupo que havia suspendido. Apenas se você foi informado sobre a suspensão."
+      },
+      "form_payment": {
+        "label": "Pagamento de formulário recebido",
+        "hint": "Um visitante pagou em um dos seus formulários."
+      },
+      "form_payment_duplicate": {
+        "label": "Formulário pago duas vezes",
+        "hint": "Um visitante pagou uma segunda vez e o pagamento extra precisa ser reembolsado."
+      },
+      "billing_payment_failed": {
+        "label": "Falha no pagamento da assinatura",
+        "hint": "Uma cobrança de renovação não foi concluída e precisa da sua atenção."
+      },
+      "billing_subscription_canceled": {
+        "label": "Assinatura cancelada",
+        "hint": "Seu provedor de pagamento encerrou uma assinatura deste espaço de trabalho."
+      },
+      "device_group_join_request": {
+        "label": "Solicitação para entrar em um grupo de número pessoal",
+        "hint": "Pessoas pedem para entrar em um grupo de um número pessoal do WhatsApp que você gerencia. Dez solicitações formam uma linha."
+      },
+      "device_group_removed": {
+        "label": "Removido de um grupo de número pessoal",
+        "hint": "Alguém removeu um dos seus números pessoais do WhatsApp de um grupo. Pode ser sinal de que o número foi denunciado."
+      },
+      "sla_breached": {
+        "label": "SLA descumprido",
+        "hint": "Uma conversa sua não cumpriu a meta de primeira resposta ou de resolução."
+      },
+      "member_leave_started": {
+        "label": "Membro entrou de licença",
+        "hint": "Um membro da sua equipe entrou de licença. Mostra o que ele tem e um link para reatribuir."
+      },
+      "assignment_blocked_by_leave": {
+        "label": "Conversa que ninguém pôde assumir",
+        "hint": "O roteamento não encontrou ninguém para uma nova conversa porque as pessoas escolhidas estão de licença. Atribua manualmente."
+      },
+      "test": {
+        "label": "Notificação de teste",
+        "hint": "O teste que você envia em Notificações do navegador, para ver o sino, o pop-up e o título da aba funcionando."
+      },
+      "appointment_calendar_drift": {
+        "label": "Agendamento fora de sincronia com o Google Calendar",
+        "hint": "O evento do Google Calendar de um agendamento futuro foi excluído, movido ou teve os convidados alterados. O agendamento não é alterado; você escolhe o que fazer."
+      },
+      "snooze_wake": {
+        "label": "Chat adiado volta",
+        "hint": "Um chat adiado reabre na hora marcada e é enviado a você ou à sua equipe."
+      },
+      "marketplace_renewal_due": {
+        "label": "Lembrete de renovação de app pago",
+        "hint": "O período de um app pago termina em alguns dias: ele renova no cartão, está pago até uma data ou foi cancelado e termina."
+      },
+      "marketplace_payment_failed": {
+        "label": "Falha no pagamento de app pago",
+        "hint": "A renovação no cartão de um app pago não foi concluída e precisa da sua atenção."
+      },
+      "marketplace_subscription_ended": {
+        "label": "Assinatura de app pago encerrada",
+        "hint": "A assinatura de um app pago terminou e o app foi pausado."
+      }
     }
   }
 }
