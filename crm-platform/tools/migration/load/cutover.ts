@@ -647,11 +647,14 @@ export async function subscribeWaba(
         previousOverrideHost: hostOf(foreign),
       };
     let set = false;
+    // what Meta answered to the override (already scrubbed by GraphError): shown when the override is not confirmed
+    let metaSaid = '';
     try {
       await graph(d, token, { method: 'POST', path, json: body });
       set = true;
     } catch (e) {
       if (e instanceof GraphError && (e.status === 401 || e.status === 403)) throw e;
+      metaSaid = (e as Error).message;
     }
     if (!set) {
       await graph(d, token, { method: 'POST', path });
@@ -660,8 +663,8 @@ export async function subscribeWaba(
         try {
           await graph(d, token, { method: 'POST', path, json: body });
           set = true;
-        } catch {
-          /* retry */
+        } catch (e) {
+          metaSaid = (e as Error).message;
         }
       }
     }
@@ -675,7 +678,7 @@ export async function subscribeWaba(
         }
       : {
           ok: false,
-          text: 'subscribed, but Meta did not confirm the override (inbound would not reach this app): not marked connected; check the verify token and the public URL, or roll back',
+          text: `subscribed, but Meta did not confirm the override (inbound would not reach this app): not marked connected; check the verify token and the public URL, or roll back${metaSaid ? `. Meta said: ${metaSaid.slice(0, 300)}` : ''}`,
         };
   } catch (e) {
     return { ok: false, text: (e as Error).message };

@@ -418,6 +418,20 @@ describe('subscribeWaba', () => {
     );
     expect((await subscribeWaba(b.d, TOKEN, WABA, cb, true)).ok).toBe(true);
   });
+  it('says what Meta answered when the override never takes', async () => {
+    const { d } = fakeGraph((c) =>
+      c.method === 'GET'
+        ? { body: sub(undefined) }
+        : c.body !== undefined
+          ? { status: 400, body: { error: { message: 'Callback URL is not allowed for this app', code: 100 } } }
+          : { body: { success: true } },
+    );
+    const r = await subscribeWaba(d, TOKEN, WABA, cb, false);
+    expect(r.ok).toBe(false);
+    expect(r.text).toContain('Meta said:');
+    expect(r.text).toContain('code 100: Callback URL is not allowed for this app');
+    expect(r.text).not.toContain(TOKEN);
+  });
   it('falls back to a plain subscribe and retries the override, like the app', async () => {
     let n = 0;
     let wired = false;
