@@ -8,6 +8,7 @@ import type {
 } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { incrWithTtl } from '../../infra/redis/incr-with-ttl';
 import { FaqConfigService } from './faq-config.service';
 import { FaqEmbeddingService, FaqUnavailableError } from './faq-embedding.service';
 import { FaqSettingsService, type EffectiveSettings } from './faq-settings.service';
@@ -210,8 +211,7 @@ export class FaqMatchService {
   private async overCap(orgId: number, cap: number): Promise<boolean> {
     try {
       const key = `faq:rate:${orgId}:${hourBucket()}`;
-      const n = await this.redis.incr(key);
-      if (n === 1) await this.redis.expire(key, 3700);
+      const n = await incrWithTtl(this.redis, key, 3700);
       return n > cap;
     } catch {
       return false;

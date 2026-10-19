@@ -2,6 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { Redis } from 'ioredis';
 import type { FaqVerifyInfo } from '@crm/contracts';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { incrWithTtl } from '../../infra/redis/incr-with-ttl';
 import {
   FAQ_AI_PORT,
   FaqAiError,
@@ -126,8 +127,7 @@ export class FaqVerifyService {
   private async overCap(orgId: number, cap: number): Promise<boolean> {
     try {
       const key = `faq:verify:${orgId}:${hourBucket()}`;
-      const n = await this.redis.incr(key);
-      if (n === 1) await this.redis.expire(key, 3700);
+      const n = await incrWithTtl(this.redis, key, 3700);
       return n > cap;
     } catch {
       return false;

@@ -18,6 +18,7 @@ import { AppError } from '../../../common/errors/app-error';
 import type { Env } from '../../../config/env.schema';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
+import { incrWithTtl } from '../../../infra/redis/incr-with-ttl';
 import {
   INVOICE_PAYMENT_GATEWAYS,
   type InvoicePaymentGateways,
@@ -57,8 +58,7 @@ export class PublicRateLimiter {
     const redisKey = `invoicing:rl:${scope}:${key}:${bucket}`;
     let count = 0;
     try {
-      count = await this.redis.incr(redisKey);
-      if (count === 1) await this.redis.expire(redisKey, 120);
+      count = await incrWithTtl(this.redis, redisKey, 120);
     } catch (err) {
       this.logger.warn({ err }, 'public rate limit failed open');
       return;

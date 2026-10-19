@@ -7,6 +7,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { WECHAT_API, type WechatApi } from '../../infra/providers/channel-wechat/wechat.port';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { incrWithTtl } from '../../infra/redis/incr-with-ttl';
 import { ChannelsRepository, type ChannelRow } from './channels.repository';
 import { ChatInboxIngest } from './chat-inbox-ingest';
 import { WechatTokenService } from './wechat-token.service';
@@ -212,8 +213,7 @@ export class InboundService {
   private async rateLimit(token: string): Promise<void> {
     try {
       const key = `wechat_hits:${token}:${Math.floor(Date.now() / 60_000)}`;
-      const n = await this.redis.incr(key);
-      if (n === 1) await this.redis.expire(key, 120);
+      const n = await incrWithTtl(this.redis, key, 120);
       if (n > HITS_PER_MINUTE) {
         throw new AppError(
           ERROR_CODES.RATE_LIMITED,

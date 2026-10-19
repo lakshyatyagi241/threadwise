@@ -22,6 +22,25 @@ function fakeRedis(down = false) {
       expiries.set(k, s);
       return guard(1);
     },
+    // The counter is bumped and given its expiry in one MULTI (incrWithTtl); EXPIRE ... NX only sets the first one.
+    multi: () => {
+      const ops: Array<() => unknown> = [];
+      const tx = {
+        incr: (k: string) => {
+          ops.push(() => {
+            store.set(k, (store.get(k) ?? 0) + 1);
+            return store.get(k)!;
+          });
+          return tx;
+        },
+        expire: (k: string, s: number) => {
+          ops.push(() => (expiries.has(k) ? 0 : (expiries.set(k, s), 1)));
+          return tx;
+        },
+        exec: () => guard(ops.map((op) => [null, op()])),
+      };
+      return tx;
+    },
   };
 }
 

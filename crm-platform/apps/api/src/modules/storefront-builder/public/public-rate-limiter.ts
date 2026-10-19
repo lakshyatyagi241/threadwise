@@ -3,6 +3,7 @@ import type { Redis } from 'ioredis';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../../common/errors/app-error';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
+import { incrWithTtl } from '../../../infra/redis/incr-with-ttl';
 
 /** The per-client limits of the public routes (Reference's `throttle:N,1`), per minute. */
 export const PUBLIC_LIMITS = {
@@ -27,8 +28,7 @@ export class PublicRateLimiter {
   async hit(bucket: PublicBucket, ip: string): Promise<void> {
     try {
       const key = `store_rl:${bucket}:${ip}:${Math.floor(Date.now() / 60_000)}`;
-      const n = await this.redis.incr(key);
-      if (n === 1) await this.redis.expire(key, 120);
+      const n = await incrWithTtl(this.redis, key, 120);
       if (n > PUBLIC_LIMITS[bucket]) {
         throw new AppError(
           ERROR_CODES.RATE_LIMITED,

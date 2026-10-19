@@ -15,6 +15,7 @@ import {
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
+import { incrWithTtl } from '../../../infra/redis/incr-with-ttl';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { SecurityPolicyService } from '../platform/security-policy.service';
@@ -450,8 +451,7 @@ export class LoginService {
 
     // Bounded attempts per challenge: six digits are brute-forceable otherwise.
     const attemptsKey = AuthKeys.mfaAttempts(req.challengeToken);
-    const attempts = await this.redis.incr(attemptsKey);
-    if (attempts === 1) await this.redis.expire(attemptsKey, Ttl.mfaChallengeSeconds);
+    const attempts = await incrWithTtl(this.redis, attemptsKey, Ttl.mfaChallengeSeconds);
     if (attempts > Ttl.mfaMaxAttempts) {
       await this.redis.del(key);
       await this.audit.recordStandalone({

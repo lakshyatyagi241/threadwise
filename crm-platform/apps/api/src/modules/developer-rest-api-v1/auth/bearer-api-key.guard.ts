@@ -8,6 +8,7 @@ import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
+import { incrWithTtl } from '../../../infra/redis/incr-with-ttl';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { ApiKeyAccessService } from '../../public-api';
 import { SCOPE_PERMISSIONS, capGrantsToOwner, grantsForScopes } from './api-key-grants';
@@ -177,7 +178,6 @@ export class BearerApiKeyGuard implements CanActivate {
 
   private async recordFailure(ip: string): Promise<void> {
     const key = this.failureKey(ip);
-    const n = await this.redis.incr(key).catch(() => 0);
-    if (n === 1) await this.redis.expire(key, 60).catch(() => undefined);
+    await incrWithTtl(this.redis, key, 60).catch(() => undefined);
   }
 }
