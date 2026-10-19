@@ -361,6 +361,10 @@
     {
       "key": "apps/api/src/modules/team-inbox-routing-sla/routing-engine.service.ts await this.repo.findOrCreateTag(",
       "reason": "one per tag in a single routing rule action (a few), each with its own attach and conversation event; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/chrome-extension-sheets-addon/sheets-contacts.service.ts await this.repo.findByIdentity(",
+      "reason": "optimistic-lock retry loop: one lookup per attempt, not per item; reviewed 2026-10-15"
     }
   ],
   "36": [
@@ -1173,6 +1177,202 @@
     {
       "key": "waboo_migration_runs",
       "reason": "nullable on purpose: org_id is the workspace the load created, NULL for a dry run, and the FK is ON DELETE SET NULL; the table is platform-only (20261113100000_wmig_waboo_migration_runs.sql); reviewed 2026-10-18"
+    },
+    {
+      "key": "wa_provider_configs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_templates.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_templates.channel is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "flow_subscribers.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "shopify_integrations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "shopify_integration_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "woocommerce_integrations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "woocommerce_integration_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "shopify_cod_confirmations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "woocommerce_cod_confirmations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "meta_campaigns.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "meta_campaigns.type is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_chat_assistants.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_crm_actions.channel is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_crm_actions.kind is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_crm_actions.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "tiktok_accounts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "tiktok_posts.type is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "tiktok_posts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "tiktok_shops.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "hubspot_integrations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "hubspot_integration_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "slack_integrations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "slack_integration_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "trello_integrations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "trello_integration_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "workspace_email_accounts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "workspace_ig_accounts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "agent_statuses.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "broadcasts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_chat_links.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_forms.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "conversation_participants.role is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_call_assistants.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_call_logs.direction is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_call_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "projects.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "facebook_pages.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "facebook_posts.type is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "facebook_posts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "facebook_broadcasts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "telegram_broadcasts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "line_broadcasts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wechat_broadcast_recipients.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "viber_broadcasts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_coupons.type is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_orders.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "sales_doc_revisions.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "user_settings.state is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: nothing writes user_settings.state yet (no INSERT or UPDATE sets it), so there is no value set to constrain; add the CHECK when the feature that uses it ships (owner decision 2026-10-19); reviewed 2026-10-19"
     }
   ],
   "48": [
@@ -1189,6 +1389,42 @@
     {
       "key": "api_library_logs",
       "reason": "old rows are removed by apps/api/src/modules/api-library/api-library-retention.service.ts (daily cron, DELETE in batches of 1000 older than API_LIBRARY_LOG_RETENTION_DAYS, up to 50 batches a night); it deletes rows rather than dropping partitions, which is fine at this volume (a stream of API-call runs) and needs no archivable_streams() approval; reviewed 2026-10-18"
+    },
+    {
+      "key": "shopify_integration_events",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "woocommerce_integration_events",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "hubspot_integration_logs (partitioned)",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "trello_integration_logs (partitioned)",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "invoice_gateway_events",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "wallet_platform_log",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "contact_consent_events",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "privacy_request_events",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "translation_usage",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
     }
   ]
 }
