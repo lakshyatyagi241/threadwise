@@ -56,6 +56,29 @@
       "queued": "Nothing is waiting in the queue.",
       "failed": "No publish has failed.",
       "live": "No flow is live on the Geta console yet."
+    },
+    "tabs": {
+      "label": "Choose what to show",
+      "publishes": "Flow publishes",
+      "geta": "Geta console"
+    },
+    "publishes": {
+      "description": "Every flow publish: what the worker has queued, what it is handling now, and which publishes failed and why. Refreshes every few seconds.",
+      "stalledAlert": "{count} flow publish(es) have not moved for {minutes} minutes. The worker may have stopped draining the outbox.",
+      "truncated": "Showing the first {limit} publishes. Pick a status to see the rest.",
+      "notProcessed": "Not yet",
+      "cols": {
+        "attempts": "Attempts",
+        "queued": "Queued at",
+        "finished": "Finished at"
+      },
+      "status": {
+        "done": "Done"
+      },
+      "empty": {
+        "all": "No flow has been published yet.",
+        "done": "No publish has finished in the last 30 days."
+      }
     }
   }
 }

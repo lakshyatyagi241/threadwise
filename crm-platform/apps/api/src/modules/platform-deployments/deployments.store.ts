@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import { DEPLOYMENT_STALL_MINUTES, type DeploymentStatus } from '@crm/contracts';
+import {
+  DEPLOYMENT_STALL_MINUTES,
+  PUBLISH_DONE_WINDOW_DAYS,
+  type DeploymentStatus,
+  type PublishStatus,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { DatabaseService } from '../../infra/db/database.service';
 
@@ -70,6 +75,70 @@ export class DeploymentsStore {
         stalled: first.c_stalled,
       };
       return { rows: all.filter((r) => r.id !== null && r.id !== undefined), counts };
+    });
+  }
+
+  /**
+   * Flow publishes: the `flow.published` outbox events of every workspace. Queued is a pending event (attempts 0) or one that is
+   * waiting for a retry, running a processing one, failed a dead one (it ran out of retries), done a handled one. Done events older
+   * than the window are left out, so the list stays small as history grows; everything still in the queue or failed is always here.
+   */
+  listPublishes(
+    status: PublishStatus | null,
+    limit: number,
+  ): Promise<{ rows: Raw[]; counts: Raw }> {
+    return this.db.privileged(async (tx: Tx) => {
+      const events = sql`
+        WITH e AS (
+          SELECT g.uuid AS workspace_id, g.name AS workspace_name, f.uuid AS flow_id, f.flow_name,
+                 o.created_at AS queued_at, o.processed_at, o.attempts, o.last_error, o.status,
+                 CASE
+                   WHEN o.status = 'processing' THEN 'running'
+                   WHEN o.status = 'pending' THEN 'queued'
+                   WHEN o.status = 'dead' THEN 'failed'
+                   ELSE 'done'
+                 END AS publish_status,
+                 (o.status IN ('pending', 'processing')
+                   AND o.created_at < now() - make_interval(mins => ${DEPLOYMENT_STALL_MINUTES}::int)) AS stalled
+          FROM event_outbox o
+          JOIN organizations g ON g.id = o.org_id
+          JOIN flows f ON f.org_id = o.org_id AND f.id = o.aggregate_id
+          WHERE o.event_type = 'flow.published'
+            AND (o.status <> 'done' OR o.created_at >= now() - make_interval(days => ${PUBLISH_DONE_WINDOW_DAYS}::int))
+        )
+      `;
+      const res = await tx.execute(sql`
+        ${events},
+        c AS (
+          SELECT count(*) FILTER (WHERE publish_status = 'running')::int AS c_running,
+                 count(*) FILTER (WHERE publish_status = 'queued')::int AS c_queued,
+                 count(*) FILTER (WHERE publish_status = 'failed')::int AS c_failed,
+                 count(*) FILTER (WHERE publish_status = 'done')::int AS c_done,
+                 count(*) FILTER (WHERE stalled)::int AS c_stalled
+          FROM e
+        )
+        SELECT c.*, r.* FROM c
+        LEFT JOIN LATERAL (
+          SELECT * FROM e
+          ${status ? sql`WHERE publish_status = ${status}` : sql``}
+          ORDER BY CASE publish_status WHEN 'running' THEN 0 WHEN 'queued' THEN 1 WHEN 'failed' THEN 2 ELSE 3 END,
+                   queued_at DESC
+          LIMIT ${limit + 1}
+        ) r ON true
+      `);
+      const all = res.rows as Raw[];
+      const first = all[0] ?? {};
+      const counts: Raw = {
+        running: first.c_running,
+        queued: first.c_queued,
+        failed: first.c_failed,
+        done: first.c_done,
+        stalled: first.c_stalled,
+      };
+      return {
+        rows: all.filter((r) => r.workspace_id !== null && r.workspace_id !== undefined),
+        counts,
+      };
     });
   }
 }

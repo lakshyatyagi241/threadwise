@@ -1,6 +1,8 @@
 {
   "platform-deployments": {
-    "nav": { "item": "Deployments" },
+    "nav": {
+      "item": "Deployments"
+    },
     "eyebrow": "Betrieb",
     "title": "Deployments",
     "description": "Jeder Flow, der an die Geta-Konsole veröffentlicht wurde: was in der Warteschlange steht, was gerade läuft und was fehlgeschlagen ist, mit Grund. Aktualisiert sich alle paar Sekunden.",
@@ -54,6 +56,29 @@
       "queued": "In der Warteschlange wartet nichts.",
       "failed": "Keine Veröffentlichung ist fehlgeschlagen.",
       "live": "Noch kein Flow ist auf der Geta-Konsole live."
+    },
+    "tabs": {
+      "label": "Auswahl der Anzeige",
+      "publishes": "Flow-Veröffentlichungen",
+      "geta": "Geta-Konsole"
+    },
+    "publishes": {
+      "description": "Jede Flow-Veröffentlichung: was der Worker in die Warteschlange gestellt hat, was er gerade abarbeitet und welche Veröffentlichungen aus welchem Grund fehlgeschlagen sind. Aktualisiert sich alle paar Sekunden.",
+      "stalledAlert": "{count} Flow-Veröffentlichung(en) haben sich seit {minutes} Minuten nicht bewegt. Der Worker hat die Outbox womöglich nicht mehr abgearbeitet.",
+      "truncated": "Die ersten {limit} Veröffentlichungen werden angezeigt. Wählen Sie einen Status, um die übrigen zu sehen.",
+      "notProcessed": "Noch nicht",
+      "cols": {
+        "attempts": "Versuche",
+        "queued": "In Warteschlange seit",
+        "finished": "Abgeschlossen am"
+      },
+      "status": {
+        "done": "Fertig"
+      },
+      "empty": {
+        "all": "Noch kein Flow wurde veröffentlicht.",
+        "done": "In den letzten 30 Tagen wurde keine Veröffentlichung abgeschlossen."
+      }
     }
   }
 }
