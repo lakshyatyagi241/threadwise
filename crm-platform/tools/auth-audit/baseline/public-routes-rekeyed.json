@@ -1,0 +1,169 @@
+{
+  "note": "Evidence for the baseline update that followed the scanner fix (route versioning and multi-class files). Each entry maps a route key recorded in the previous public-routes.json to the key the fixed scanner now reports for the same method, file and handler. Keys the scanner no longer reports under the old name are listed in unmapped.",
+  "mapped": [
+    {
+      "old": "GET /v2/api/whatsapp-message-settings",
+      "new": "GET /api/whatsapp-message-settings",
+      "file": "apps/api/src/modules/node-bridge-runtime/node-internal.controller.ts",
+      "handler": "messageSettings"
+    },
+    {
+      "old": "GET /v2/docs/api.json",
+      "new": "GET /docs/api.json",
+      "file": "apps/api/src/modules/developer-rest-api-v1/docs/api-v1-docs.controller.ts",
+      "handler": "spec"
+    },
+    {
+      "old": "GET /v2/health",
+      "new": "GET /health",
+      "file": "apps/api/src/health/health.controller.ts",
+      "handler": "liveness"
+    },
+    {
+      "old": "GET /v2/l/:slug",
+      "new": "GET /l/:slug",
+      "file": "apps/api/src/modules/forms-links-groups/wa-chat-link-redirect.controller.ts",
+      "handler": "redirect"
+    },
+    {
+      "old": "GET /v2/platform/i18n/languages/languages",
+      "new": "GET /v2/i18n/languages",
+      "file": "apps/api/src/modules/localization-translation/languages.controller.ts",
+      "handler": "list"
+    },
+    {
+      "old": "GET /v2/public/booking/:token",
+      "new": "GET /v2/public/booking-manage/:token",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts",
+      "handler": "view"
+    },
+    {
+      "old": "POST /v2/public/booking/:token/cancel",
+      "new": "POST /v2/public/booking-manage/:token/cancel",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts",
+      "handler": "cancel"
+    },
+    {
+      "old": "GET /v2/public/booking/:token/ics",
+      "new": "GET /v2/public/booking-manage/:token/ics",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts",
+      "handler": "ics"
+    },
+    {
+      "old": "POST /v2/public/booking/:token/reschedule",
+      "new": "POST /v2/public/booking-manage/:token/reschedule",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts",
+      "handler": "reschedule"
+    },
+    {
+      "old": "GET /v2/public/booking/:token/slots",
+      "new": "GET /v2/public/booking-manage/:token/slots",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts",
+      "handler": "slots"
+    },
+    {
+      "old": "GET /v2/public/forms/:publicKey/embed.js",
+      "new": "GET /form-embed/:publicKey/embed.js",
+      "file": "apps/api/src/modules/forms-builder/public-forms.controller.ts",
+      "handler": "embed"
+    },
+    {
+      "old": "GET /v2/public/v1/flows",
+      "new": "GET /public/v1/flows",
+      "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime-public.controller.ts",
+      "handler": "list"
+    },
+    {
+      "old": "GET /v2/public/v1/flows/:id",
+      "new": "GET /public/v1/flows/:id",
+      "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime-public.controller.ts",
+      "handler": "get"
+    },
+    {
+      "old": "POST /v2/public/v1/flows/:id/enroll",
+      "new": "POST /public/v1/flows/:id/enroll",
+      "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime-public.controller.ts",
+      "handler": "enroll"
+    },
+    {
+      "old": "GET /v2/public/v1/flows/:id/subscribers",
+      "new": "GET /public/v1/flows/:id/subscribers",
+      "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime-public.controller.ts",
+      "handler": "subscribers"
+    },
+    {
+      "old": "POST /v2/public/v1/flows/ordering/cancel",
+      "new": "POST /public/v1/flows/ordering/cancel",
+      "file": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/ai/ordering.controller.ts",
+      "handler": "cancel"
+    },
+    {
+      "old": "POST /v2/public/v1/flows/ordering/confirm",
+      "new": "POST /public/v1/flows/ordering/confirm",
+      "file": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/ai/ordering.controller.ts",
+      "handler": "confirm"
+    },
+    {
+      "old": "POST /v2/public/v1/flows/ordering/parse",
+      "new": "POST /public/v1/flows/ordering/parse",
+      "file": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/ai/ordering.controller.ts",
+      "handler": "parse"
+    },
+    {
+      "old": "POST /v2/public/v1/flows/ordering/reply",
+      "new": "POST /public/v1/flows/ordering/reply",
+      "file": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/ai/ordering.controller.ts",
+      "handler": "reply"
+    },
+    {
+      "old": "POST /v2/public/v1/flows/ordering/shipping",
+      "new": "POST /public/v1/flows/ordering/shipping",
+      "file": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/ai/ordering.controller.ts",
+      "handler": "shipping"
+    },
+    {
+      "old": "POST /v2/public/v1/leads",
+      "new": "POST /public/v1/leads",
+      "file": "apps/api/src/modules/public-api/public-api.controller.ts",
+      "handler": "submitLead"
+    },
+    {
+      "old": "GET /v2/public/v1/leads/:id",
+      "new": "GET /public/v1/leads/:id",
+      "file": "apps/api/src/modules/public-api/public-api.controller.ts",
+      "handler": "getLead"
+    },
+    {
+      "old": "GET /v2/r/:token",
+      "new": "GET /r/:token",
+      "file": "apps/api/src/modules/broadcasts/tracking/link-redirect.controller.ts",
+      "handler": "go"
+    },
+    {
+      "old": "GET /v2/ready",
+      "new": "GET /ready",
+      "file": "apps/api/src/health/health.controller.ts",
+      "handler": "readiness"
+    }
+  ],
+  "unmapped": [],
+  "addedNotFromRekey": [
+    "GET /v2/public/appointments/calendar/microsoft/callback",
+    "GET /v2/public/appointments/feed/:file",
+    "GET /v2/public/booking-assets/:orgSlug/:assetId",
+    "GET /v2/public/conferencing/:provider/callback",
+    "POST /v2/public/webhooks/telephony/:connectionId",
+    "GET /widget-assets/:flowId/:slot",
+    "GET /widget-legacy/:id/output.js",
+    "GET /widget-legacy/output.js",
+    "GET /widget/:token",
+    "GET /widget/:token/api/config",
+    "POST /widget/:token/api/feedback",
+    "GET /widget/:token/api/history",
+    "GET /widget/:token/api/media/:id",
+    "POST /widget/:token/api/message",
+    "POST /widget/:token/api/restart",
+    "POST /widget/:token/api/upload",
+    "GET /widget/:token/chat"
+  ]
+}
