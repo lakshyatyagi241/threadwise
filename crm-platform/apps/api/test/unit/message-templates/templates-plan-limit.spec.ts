@@ -41,6 +41,7 @@ function build(assertCanAdd: ReturnType<typeof vi.fn>) {
     {} as never,
     { assertCanAdd } as never,
     {} as never,
+    {} as never,
   );
   const run = () =>
     RequestContextStore.run(

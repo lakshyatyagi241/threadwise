@@ -26,6 +26,8 @@ export interface TemplateRow {
   /** The Meta media handle of the header example (Reference kept the stored file's path here). */
   attachmentFile: string | null;
   headerSampleUrl: string | null;
+  /** Object-storage key of the stored header file the user uploaded (the preview copy; `attachmentFile` is Meta's handle). */
+  headerMediaKey: string | null;
   /** The pin of a `location` header (`{latitude, longitude, name, address}`). */
   headerLocation: unknown;
   parameterFormat: string;
@@ -81,6 +83,7 @@ function toRow(r: Raw): TemplateRow {
     attachmentType: (r.attachment_type as string | null) ?? null,
     attachmentFile: (r.attachment_file as string | null) ?? null,
     headerSampleUrl: (r.header_sample_url as string | null) ?? null,
+    headerMediaKey: (r.header_media_key as string | null) ?? null,
     headerLocation: r.header_location ?? null,
     parameterFormat: String(r.parameter_format),
     status: String(r.status),
@@ -134,6 +137,7 @@ export interface NewTemplate {
   attachmentType: string | null;
   attachmentFile: string | null;
   headerSampleUrl: string | null;
+  headerMediaKey?: string | null;
   headerLocation?: unknown;
   parameterFormat: string;
   status: string;
@@ -168,6 +172,7 @@ const COLUMN: Record<keyof TemplatePatch, string> = {
   attachmentType: 'attachment_type',
   attachmentFile: 'attachment_file',
   headerSampleUrl: 'header_sample_url',
+  headerMediaKey: 'header_media_key',
   headerLocation: 'header_location',
   parameterFormat: 'parameter_format',
   status: 'status',
@@ -367,12 +372,12 @@ export class TemplatesRepository {
     const res = await tx.execute(sql`
       INSERT INTO wa_templates (org_id, user_id, template_name, language, header, template_body, footer,
         code_expiration_minutes, buttons, variable_map, category, meta_category, template_type, attachment_type,
-        attachment_file, header_sample_url, header_location, parameter_format, status, meta_status, meta_template_id, quality_score,
+        attachment_file, header_sample_url, header_media_key, header_location, parameter_format, status, meta_status, meta_template_id, quality_score,
         rejection_reason_code, approved_at, paused_until, submitted_at, last_synced_at, provider_config_id, channel)
       VALUES (${orgId}, ${v.userId}, ${v.templateName}, ${v.language}, ${v.header}, ${v.templateBody}, ${v.footer},
         ${v.codeExpirationMinutes}, ${JSON.stringify(v.buttons)}::jsonb, ${JSON.stringify(v.variableMap ?? {})}::jsonb,
         ${v.category}, ${v.metaCategory}, ${v.templateType}, ${v.attachmentType}, ${v.attachmentFile},
-        ${v.headerSampleUrl}, ${v.headerLocation == null ? null : JSON.stringify(v.headerLocation)}::jsonb, ${v.parameterFormat}, ${v.status}, ${v.metaStatus ?? null}, ${v.metaTemplateId ?? null},
+        ${v.headerSampleUrl}, ${v.headerMediaKey ?? null}, ${v.headerLocation == null ? null : JSON.stringify(v.headerLocation)}::jsonb, ${v.parameterFormat}, ${v.status}, ${v.metaStatus ?? null}, ${v.metaTemplateId ?? null},
         ${v.qualityScore ?? null}, ${v.rejectionReasonCode ?? null}, ${v.approvedAt ?? null}, ${v.pausedUntil ?? null},
         ${v.submittedAt ?? null},
         ${v.lastSyncedAt ?? null}, ${v.providerConfigId}, 'waba')
