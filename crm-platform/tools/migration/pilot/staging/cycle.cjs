@@ -1199,7 +1199,7 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
     if (!MIG_STEPS.includes(rec.from)) refuse(`--from must be one of ${MIG_STEPS.join(', ')}`);
     if (flags['stop-after'] && !MIG_STEPS.includes(flags['stop-after']))
       refuse(`--stop-after must be one of ${MIG_STEPS.join(', ')}`);
-    if (rec.db && !/^[A-Za-z0-9_-]{1,64}$/.test(rec.db)) refuse('--db is not a plausible database name');
+    if (rec.db && !/^[A-Za-z0-9_+-]{1,128}$/.test(rec.db)) refuse('--db is not a plausible database name');
     if (flags['catch-up']) {
       if (flags.steps) refuse('--catch-up runs the fixed catch-up chain: do not combine it with --steps');
       if (flags['skip-export']) refuse('--catch-up needs a fresh export (that is its point): drop --skip-export');
@@ -1410,7 +1410,7 @@ function cmdNewClient(flags) {
   const plan = flags.plan || 'enterprise';
   if (!/^[a-z][a-z0-9_-]{1,30}$/.test(plan)) refuse('--plan must be a plan slug such as enterprise');
   const db = flags.db;
-  if (db !== undefined && !/^[A-Za-z0-9_-]{1,64}$/.test(db)) refuse('--db is not a plausible database name');
+  if (db !== undefined && !/^[A-Za-z0-9_+-]{1,128}$/.test(db)) refuse('--db is not a plausible database name');
   const dir = clientsDir();
   fs.mkdirSync(dir, { recursive: true });
   const file = path.join(dir, `${key}.json`);

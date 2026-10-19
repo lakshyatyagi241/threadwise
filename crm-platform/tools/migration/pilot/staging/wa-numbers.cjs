@@ -76,7 +76,7 @@ function readWorkspace(ws) {
   const expr =
     'JSON.stringify({botids:db.chathistory.distinct("botid"),docs:db.chatbot_misc_config.find({config_key:"META_WHATSAPP_CONFIG"},' +
     '{_id:0,chatbot_id:1,is_active:1,deleted_time:1,"config_value.phoneID":1,"config_value.display_number":1,"config_value.whatsapp_no":1,"config_value.display_name":1}).toArray()})';
-  const r = spawnSync(process.execPath, [path.join(kit, 'bin', 'mongo-eval.cjs'), ws, `"@@WA@@"+${expr}`], {
+  const r = spawnSync(process.execPath, [path.join(kit, 'bin', 'mongo-eval.cjs'), '--query', 'wa', '--workspace', ws], {
     encoding: 'utf8',
     timeout: 120000,
     env: { ...process.env, MSYS_NO_PATHCONV: '1' },
@@ -92,7 +92,7 @@ if (require.main === module) {
   const a = process.argv.slice(2);
   const flag = (n) => (a.includes(`--${n}`) ? a[a.indexOf(`--${n}`) + 1] : undefined);
   const ws = flag('workspace');
-  if (!ws || !/^[\w.-]+$/.test(ws)) {
+  if (!ws || !/^[\w.+-]+$/.test(ws)) {
     console.error('usage: wa-numbers.cjs --workspace <waboo db name> --name "Org name" [--out <file>]');
     process.exit(2);
   }

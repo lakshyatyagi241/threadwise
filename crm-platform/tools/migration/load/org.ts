@@ -124,6 +124,7 @@ export async function ensureOrg(env: OrgEnv): Promise<{ orgId: number; warnings:
     let planSlug: string | null = null;
     let billingCycle: string | null = null;
     let ownerMade = false;
+    let checkOwnerAfter = false;
     let extraMade = false;
     if (found.rows[0]) {
       id = Number((found.rows[0] as { id: number | string }).id);
@@ -215,15 +216,8 @@ export async function ensureOrg(env: OrgEnv): Promise<{ orgId: number; warnings:
         );
       }
     } else {
-      // the additional owner counts: with no --owner-email it is the workspace's Owner (no placeholder owner is made)
-      const owners = await tx.execute(
-        sql`SELECT 1 FROM user_roles ur JOIN roles r ON r.org_id = ur.org_id AND r.id = ur.role_id WHERE ur.org_id = ${id} AND r.name = 'Owner' LIMIT 1`,
-      );
-      if (owners.rows.length === 0) {
-        warnings.push(
-          'THE ORGANIZATION HAS NO OWNER. Nobody can sign in to it until a user with the Owner role exists (re-run with --owner-email / --owner-name).',
-        );
-      }
+      // checked below, after the additional owner is made: with no --owner-email that account is the workspace's Owner (no placeholder owner)
+      checkOwnerAfter = true;
     }
 
     if (additionalOwner) {
@@ -273,6 +267,17 @@ export async function ensureOrg(env: OrgEnv): Promise<{ orgId: number; warnings:
         extraMade = true;
         env.log(
           `  org                added additional owner ${additionalOwner} (${known ? 'existing account in another workspace linked' : 'invited, no password, no email sent'})`,
+        );
+      }
+    }
+
+    if (checkOwnerAfter) {
+      const owners = await tx.execute(
+        sql`SELECT 1 FROM user_roles ur JOIN roles r ON r.org_id = ur.org_id AND r.id = ur.role_id WHERE ur.org_id = ${id} AND r.name = 'Owner' LIMIT 1`,
+      );
+      if (owners.rows.length === 0) {
+        warnings.push(
+          'THE ORGANIZATION HAS NO OWNER. Nobody can sign in to it until a user with the Owner role exists (re-run with --owner-email / --owner-name).',
         );
       }
     }
