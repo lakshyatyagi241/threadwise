@@ -2,8 +2,10 @@ import { randomUUID } from 'node:crypto';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import {
   ERROR_CODES,
+  PHONE_COUNTS_AS,
   type CallLogEntry,
   type CallNudge,
+  type CallOutcome,
   type LogCallInput,
   type LogCallResult,
   type UpdateCallLogEntryInput,
@@ -39,6 +41,7 @@ import {
   type EntryRow,
   type NewEntry,
 } from './call-log-entries.repository';
+import { ActivityTypesService } from '../../crm/activity-types/activity-types.service';
 import { CallLoggingSettingsService } from './call-logging-settings.service';
 
 const MODULE = 'call_log_entries';
@@ -114,6 +117,7 @@ export class CallLogEntriesService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly leadHandling: ContactTouchService,
+    private readonly activityTypes: ActivityTypesService,
   ) {}
 
   // --- the one write -------------------------------------------------------------------------------------------------------------
@@ -239,10 +243,12 @@ export class CallLogEntriesService {
           ? e164Of(await this.repo.contactPhone(tx, ctx.orgId, found.contact.id), defaultCc)
           : null);
 
+      const picked = await this.pickOutcome(tx, ctx.orgId, input.outcomeOptionId, input.outcome);
       const { entry, created } = await this.write(tx, ctx.orgId, {
         source: input.source,
         direction: input.direction,
-        outcome: input.outcome,
+        outcome: picked.outcome,
+        outcomeOptionId: picked.optionId,
         startedAt,
         durationSec: input.durationSec,
         contactId: found.contact?.id ?? null,
@@ -280,7 +286,7 @@ export class CallLogEntriesService {
 
       const nudges: CallNudge[] = [];
       if (created && input.suggestStageNudge && found.contact) {
-        const nudge = await this.nudgeFor(tx, ctx.orgId, found.contact.id, input.outcome);
+        const nudge = await this.nudgeFor(tx, ctx.orgId, found.contact.id, picked.outcome);
         if (nudge) nudges.push(nudge);
       }
 
@@ -321,8 +327,15 @@ export class CallLogEntriesService {
             ? null
             : input.notes;
       const delta: Record<string, { old: unknown; new: unknown }> = {};
-      if (input.outcome !== undefined && input.outcome !== row.outcome) {
-        delta.outcome = { old: row.outcome, new: input.outcome };
+      const picked =
+        input.outcomeOptionId !== undefined || input.outcome !== undefined
+          ? await this.pickOutcome(tx, ctx.orgId, input.outcomeOptionId, input.outcome)
+          : undefined;
+      if (picked && picked.outcome !== row.outcome) {
+        delta.outcome = { old: row.outcome, new: picked.outcome };
+      }
+      if (picked && picked.optionId !== row.outcomeOptionId) {
+        delta.outcomeOption = { old: row.outcomeOption?.key ?? null, new: picked.optionKey };
       }
       if (input.direction !== undefined && input.direction !== row.direction) {
         delta.direction = { old: row.direction, new: input.direction };
@@ -340,7 +353,8 @@ export class CallLogEntriesService {
         return this.respond(row, ctx.userId, canManage, windowHours);
       }
       const ok = await this.repo.update(tx, ctx.orgId, row.id, input.rowVersion, {
-        outcome: input.outcome,
+        outcome: picked?.outcome,
+        outcomeOptionId: picked ? picked.optionId : undefined,
         direction: input.direction,
         startedAt,
         durationSec: input.durationSec,
@@ -494,6 +508,24 @@ export class CallLogEntriesService {
     return stageNudge(outcome, current, await this.repo.lifecycleStages(tx, orgId));
   }
 
+  /**
+   * The outcome a person chose. A list item of the Phone activity (Settings > Sales Activities) counts as one of the built-in outcomes
+   * (`countsAs`; a built-in item is its own); a bare built-in outcome names no list item.
+   */
+  private async pickOutcome(
+    tx: Tx,
+    orgId: number,
+    optionUuid: string | undefined,
+    outcome: CallOutcome | undefined,
+  ): Promise<{ outcome: CallOutcome; optionId: number | null; optionKey: string | null }> {
+    if (optionUuid === undefined) return { outcome: outcome!, optionId: null, optionKey: null };
+    const option = await this.activityTypes.resolveOption(tx, orgId, optionUuid, 'outcome', 'phone');
+    const builtIn =
+      option.countsAs ??
+      ((PHONE_COUNTS_AS as readonly string[]).includes(option.key) ? option.key : 'connected');
+    return { outcome: builtIn as CallOutcome, optionId: option.id, optionKey: option.key };
+  }
+
   /** The API shape of an entry for this viewer. */
   respond(
     r: EntryRow,
@@ -507,6 +539,7 @@ export class CallLogEntriesService {
       source: r.source,
       direction: r.direction,
       outcome: r.outcome,
+      outcomeOption: r.outcomeOption,
       startedAt: r.startedAt.toISOString(),
       durationSec: r.durationSec,
       contactId: r.contactUuid,

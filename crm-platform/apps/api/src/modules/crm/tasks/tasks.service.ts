@@ -25,6 +25,7 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { ActivityTypesService } from '../activity-types/activity-types.service';
 import { assertContactScope } from '../contacts/contact-scope';
 import { ContactsRepository } from '../contacts/contacts.repository';
 import { assertCompanyReadable } from '../companies/company-link';
@@ -107,6 +108,7 @@ export class TasksService {
     private readonly contacts: ContactsRepository,
     private readonly dealsRepo: DealsRepository,
     private readonly deals: DealsService,
+    private readonly activities: ActivityTypesService,
   ) {}
 
   // --- reads -----------------------------------------------------------------------------------------------------------
@@ -236,6 +238,9 @@ export class TasksService {
       ctx.grants ? this.rbac.can(ctx.grants, 'record.tasks.create').scope : 'all',
     );
     const links = await this.resolveLinks(tx, ctx.orgId, input, true);
+    const taskTypeId = input.taskTypeId
+      ? (await this.activities.resolveOption(tx, ctx.orgId, input.taskTypeId, 'type', 'task')).id
+      : null;
     const id = await this.repo.insert(tx, ctx.orgId, {
       title: input.title,
       notesCipher: input.notes ? this.crypto.encrypt(input.notes) : null,
@@ -247,6 +252,7 @@ export class TasksService {
       dealId: links.dealId ?? null,
       companyId: links.companyId ?? null,
       source,
+      taskTypeId,
     });
     return this.afterInsert(tx, ctx.orgId, ctx.userId, id);
   }
@@ -296,6 +302,35 @@ export class TasksService {
       }
       const links = await this.resolveLinks(tx, ctx.orgId, input, false);
       this.applyLinks(patch, row, links);
+      if (input.taskTypeId !== undefined) {
+        const next = input.taskTypeId
+          ? (await this.activities.resolveOption(tx, ctx.orgId, input.taskTypeId, 'type', 'task')).id
+          : null;
+        if (next !== row.taskTypeId) {
+          patch.task_type_id = next;
+          delta.taskType = { old: row.taskType?.key ?? null, new: next === null ? null : input.taskTypeId };
+        }
+      }
+      if (input.doneAt !== undefined) {
+        const next = new Date(input.doneAt);
+        if (row.status !== 'done') {
+          throw AppError.validation('Only a completed task has a completed date.', [{ path: 'doneAt', message: 'Task is not done' }]);
+        }
+        if (next.getTime() !== row.doneAt?.getTime()) {
+          if (!(await this.activities.settingsOf(tx, ctx.orgId, 'task')).allowEditCompleted) {
+            throw new AppError(
+              ERROR_CODES.ACTIVITY_EDIT_COMPLETED_DISABLED,
+              'Editing the completed date and time of a task is switched off in Sales Activities.',
+              HttpStatus.CONFLICT,
+            );
+          }
+          if (next.getTime() > Date.now() + 5 * 60_000) {
+            throw AppError.validation('A task cannot be completed in the future.', [{ path: 'doneAt', message: 'In the future' }]);
+          }
+          patch.done_at = next;
+          delta.doneAt = { old: row.doneAt?.toISOString() ?? null, new: next.toISOString() };
+        }
+      }
 
       if (Object.keys(patch).length > 0) {
         const ok = await this.repo.update(tx, ctx.orgId, row.id, input.rowVersion, patch);
@@ -370,9 +405,11 @@ export class TasksService {
   // --- bulk ------------------------------------------------------------------------------------------------------------
 
   bulkComplete(input: BulkTaskIdsInput, scope: RecordScope): Promise<TaskBulkResult> {
-    return this.bulk(input.ids, scope, (tx, row) =>
-      this.transition(tx, row, true).then(() => undefined),
-    );
+    const ctx = RequestContextStore.require();
+    return this.bulk(input.ids, scope, async (tx, row) => {
+      await this.assertCompletable(tx, ctx.orgId);
+      await this.transition(tx, row, true);
+    });
   }
 
   bulkReopen(input: BulkTaskIdsInput, scope: RecordScope): Promise<TaskBulkResult> {
@@ -486,6 +523,8 @@ export class TasksService {
         companyId: null,
         source: v.source,
         kind: 'follow_up',
+        // Typed like the follow-ups that were backfilled: the seeded "Follow up" task type.
+        taskTypeId: await this.activities.followUpTypeId(tx, orgId),
       });
       await this.afterInsert(tx, orgId, ctx.userId, id);
       return openOf((await this.repo.findById(tx, orgId, id, tz))!);
@@ -836,26 +875,48 @@ export class TasksService {
       if (input.rowVersion !== undefined && input.rowVersion !== row.rowVersion) {
         throw AppError.rowVersionConflict('Task');
       }
-      return this.toResponse(await this.transition(tx, row, done));
+      let outcomeId: number | null = null;
+      if (done && row.status !== 'done') {
+        const ctx = RequestContextStore.require();
+        await this.assertCompletable(tx, ctx.orgId);
+        if (input.outcomeId) {
+          outcomeId = (await this.activities.resolveOption(tx, ctx.orgId, input.outcomeId, 'outcome', 'task')).id;
+        }
+      }
+      return this.toResponse(await this.transition(tx, row, done, { outcomeId }));
     });
+  }
+
+  /** "Allow users to mark this activity as completed" (Sales Activities). Work the system finishes itself (a follow-up that was contacted) is not a user completing. */
+  private async assertCompletable(tx: Tx, orgId: number): Promise<void> {
+    if (!(await this.activities.settingsOf(tx, orgId, 'task')).allowComplete) {
+      throw new AppError(
+        ERROR_CODES.ACTIVITY_COMPLETION_DISABLED,
+        'Completing tasks is switched off in Sales Activities.',
+        HttpStatus.CONFLICT,
+      );
+    }
   }
 
   private async transition(
     tx: Tx,
     row: TaskRow,
     done: boolean,
-    opts: { syncActivity?: boolean } = {},
+    opts: { syncActivity?: boolean; outcomeId?: number | null } = {},
   ): Promise<TaskRow> {
     const ctx = RequestContextStore.require();
     const tz = await this.zone(tx, ctx.orgId);
     if ((row.status === 'done') === done) return row;
-    await this.repo.setDone(tx, ctx.orgId, row.id, done);
+    await this.repo.setDone(tx, ctx.orgId, row.id, done, opts.outcomeId ?? null);
     if (opts.syncActivity !== false) await this.repo.syncActivity(tx, ctx.orgId, row.id, { done });
     await this.audit.record(tx, {
       module: TASK_MODULE,
       recordId: row.id,
       action: 'update',
-      delta: { status: { old: row.status, new: done ? 'done' : 'open' } },
+      delta: {
+        status: { old: row.status, new: done ? 'done' : 'open' },
+        ...(done && opts.outcomeId ? { outcomeId: { old: null, new: opts.outcomeId } } : {}),
+      },
     });
     const after = (await this.repo.findById(tx, ctx.orgId, row.id, tz))!;
     await this.outbox.emit(tx, {

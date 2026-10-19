@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type {
+  ActivityOptionRef,
   RecordScope,
   TaskBucket,
   TaskDueFilter,
@@ -11,6 +12,7 @@ import type {
   TaskStatus,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { optionRefColumns, optionRefFrom } from '../activity-types/activity-option-ref';
 import { decodeTaskCursor } from './task-rules';
 
 /** One task as the SQL returns it, with the people and the linked records already joined (names only, never ids). */
@@ -50,6 +52,11 @@ export interface TaskRow {
   companyId: number | null;
   companyUuid: string | null;
   companyName: string | null;
+  /** Sales activities settings: the task type, and the outcome picked when it was completed (readable even after being removed from the lists). */
+  taskTypeId: number | null;
+  taskType: ActivityOptionRef | null;
+  outcomeId: number | null;
+  outcome: ActivityOptionRef | null;
 }
 
 type Raw = Record<string, unknown>;
@@ -92,6 +99,10 @@ const toRow = (r: Raw): TaskRow => ({
   companyId: n(r.company_id),
   companyUuid: s(r.company_uuid),
   companyName: s(r.company_name),
+  taskTypeId: n(r.task_type_id),
+  taskType: optionRefFrom(r, 'task_type'),
+  outcomeId: n(r.outcome_id),
+  outcome: optionRefFrom(r, 'outcome'),
 });
 
 const ISO = `'YYYY-MM-DD"T"HH24:MI:SS.US"Z"'`;
@@ -119,13 +130,19 @@ const selectSql = (tz: string) => sql`
          t.created_by, cu.uuid AS created_by_uuid, cu.full_name AS created_by_name,
          t.contact_id, c.uuid AS contact_uuid, c.name AS contact_name,
          t.deal_id, dl.uuid AS deal_uuid, dl.title AS deal_title,
-         t.company_id, co.uuid AS company_uuid, co.name AS company_name
+         t.company_id, co.uuid AS company_uuid, co.name AS company_name,
+         t.task_type_id, ${optionRefColumns('tto', 'tta', 'task_type')},
+         t.outcome_id, ${optionRefColumns('oo', 'oa', 'outcome')}
   FROM tasks t
   LEFT JOIN users au ON au.org_id = t.org_id AND au.id = t.assignee_id
   LEFT JOIN users cu ON cu.org_id = t.org_id AND cu.id = t.created_by
   LEFT JOIN contacts c ON c.org_id = t.org_id AND c.id = t.contact_id
   LEFT JOIN deals dl ON dl.org_id = t.org_id AND dl.id = t.deal_id
   LEFT JOIN companies co ON co.org_id = t.org_id AND co.id = t.company_id
+  LEFT JOIN activity_type_options tto ON tto.org_id = t.org_id AND tto.id = t.task_type_id
+  LEFT JOIN activity_types tta ON tta.org_id = tto.org_id AND tta.id = tto.activity_type_id
+  LEFT JOIN activity_type_options oo ON oo.org_id = t.org_id AND oo.id = t.outcome_id
+  LEFT JOIN activity_types oa ON oa.org_id = oo.org_id AND oa.id = oo.activity_type_id
 `;
 
 const escapeLike = (v: string) => v.replace(/[\\%_]/g, (c) => `\\${c}`);
@@ -224,6 +241,9 @@ export interface TaskPatch {
   contact_id?: number | null;
   deal_id?: number | null;
   company_id?: number | null;
+  task_type_id?: number | null;
+  /** The completed time of a done task (only when the Task activity allows editing it). */
+  done_at?: Date;
   /** Set when the due date moves: the reminder arms again. */
   clearReminder?: boolean;
 }
@@ -330,12 +350,13 @@ export class TasksRepository {
       companyId: number | null;
       source: TaskSource;
       kind?: TaskKind;
+      taskTypeId?: number | null;
     },
   ): Promise<number> {
     const res = await tx.execute(sql`
-      INSERT INTO tasks (org_id, title, notes, priority, due_at, assignee_id, created_by, contact_id, deal_id, company_id, source, kind)
+      INSERT INTO tasks (org_id, title, notes, priority, due_at, assignee_id, created_by, contact_id, deal_id, company_id, source, kind, task_type_id)
       VALUES (${orgId}, ${v.title}, ${v.notesCipher}, ${v.priority}, ${v.dueAt}, ${v.assigneeId}, ${v.createdBy},
-              ${v.contactId}, ${v.dealId}, ${v.companyId}, ${v.source}, ${v.kind ?? 'task'})
+              ${v.contactId}, ${v.dealId}, ${v.companyId}, ${v.source}, ${v.kind ?? 'task'}, ${v.taskTypeId ?? null})
       RETURNING id
     `);
     return Number((res.rows[0] as { id: number | string }).id);
@@ -377,6 +398,8 @@ export class TasksRepository {
     if (patch.contact_id !== undefined) add('contact_id', patch.contact_id);
     if (patch.deal_id !== undefined) add('deal_id', patch.deal_id);
     if (patch.company_id !== undefined) add('company_id', patch.company_id);
+    if (patch.task_type_id !== undefined) add('task_type_id', patch.task_type_id);
+    if (patch.done_at !== undefined) add('done_at', patch.done_at);
     if (patch.clearReminder) sets.push(sql`reminded_at = NULL`);
     if (sets.length === 0) sets.push(sql`updated_at = now()`);
     const res = await tx.execute(sql`
@@ -389,11 +412,12 @@ export class TasksRepository {
   }
 
   /** Done stamps and the status move together (the table has a CHECK that they agree). Reopening re-arms the reminder. */
-  async setDone(tx: Tx, orgId: number, id: number, done: boolean): Promise<void> {
+  async setDone(tx: Tx, orgId: number, id: number, done: boolean, outcomeId: number | null = null): Promise<void> {
     await tx.execute(
       done
-        ? sql`UPDATE tasks SET status = 'done', done_at = now() WHERE org_id = ${orgId} AND id = ${id}`
-        : sql`UPDATE tasks SET status = 'open', done_at = NULL, reminded_at = NULL WHERE org_id = ${orgId} AND id = ${id}`,
+        ? sql`UPDATE tasks SET status = 'done', done_at = now(), outcome_id = ${outcomeId} WHERE org_id = ${orgId} AND id = ${id}`
+        : // Reopening drops the outcome: it described the work that was finished.
+          sql`UPDATE tasks SET status = 'open', done_at = NULL, reminded_at = NULL, outcome_id = NULL WHERE org_id = ${orgId} AND id = ${id}`,
     );
   }
 

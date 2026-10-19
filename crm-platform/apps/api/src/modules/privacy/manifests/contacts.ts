@@ -116,6 +116,17 @@ export const contactsNotesFiles = defineHolder({
       pii: ['title', 'location', 'join_url'],
       retention: 'With the contact.',
     },
+    {
+      // The outcome and notes of a completed meeting (Settings > Sales Activities). The note is free text a person wrote about the contact.
+      table: 'contact_meeting_outcomes',
+      link: CONTACT,
+      disposition: 'cascade',
+      parent: 'contacts',
+      tier: 'core',
+      categories: ['content'],
+      pii: ['note'],
+      retention: 'With the contact.',
+    },
   ],
 });
 

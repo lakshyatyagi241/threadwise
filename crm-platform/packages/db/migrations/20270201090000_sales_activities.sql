@@ -111,17 +111,17 @@ DECLARE
 BEGIN
   FOR a IN
     SELECT * FROM (VALUES
-      ('task',     0, 'task',    'task',     true,  true),
-      ('meeting',  1, 'meeting', 'meeting',  true,  true),
-      ('phone',    2, 'phone',   'phone',    false, true),
-      ('email',    3, 'other',   'email',    false, false),
-      ('reminder', 4, 'other',   'reminder', false, false),
-      ('sms',      5, 'other',   'sms',      false, false),
-      ('chat',     6, 'other',   'chat',     false, false)
-    ) AS d(key, pos, behaves_as, icon, in_calendar, outcomes)
+      ('task',     0, 'task',    'task',     true,  true,  true),
+      ('meeting',  1, 'meeting', 'meeting',  true,  true,  true),
+      ('phone',    2, 'phone',   'phone',    false, true,  false),
+      ('email',    3, 'other',   'email',    false, false, false),
+      ('reminder', 4, 'other',   'reminder', false, false, false),
+      ('sms',      5, 'other',   'sms',      false, false, false),
+      ('chat',     6, 'other',   'chat',     false, false, false)
+    ) AS d(key, pos, behaves_as, icon, in_calendar, outcomes, completable)
   LOOP
-    INSERT INTO activity_types (org_id, key, name, is_default, behaves_as, icon, position, show_in_calendar, outcomes_enabled)
-    VALUES (p_org, a.key, NULL, true, a.behaves_as, a.icon, a.pos, a.in_calendar, a.outcomes)
+    INSERT INTO activity_types (org_id, key, name, is_default, behaves_as, icon, position, show_in_calendar, outcomes_enabled, allow_complete)
+    VALUES (p_org, a.key, NULL, true, a.behaves_as, a.icon, a.pos, a.in_calendar, a.outcomes, a.completable)
     ON CONFLICT (org_id, key) DO NOTHING;
   END LOOP;
 

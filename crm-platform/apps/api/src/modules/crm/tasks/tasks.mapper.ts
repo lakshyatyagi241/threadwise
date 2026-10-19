@@ -21,6 +21,8 @@ export function toTaskResponse(row: TaskRow, notes: string | null): TaskResponse
     company: row.companyUuid ? { id: row.companyUuid, name: row.companyName ?? '' } : null,
     source: row.source,
     kind: row.kind,
+    taskType: row.taskType,
+    outcome: row.outcome,
     rowVersion: row.rowVersion,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
@@ -42,5 +44,7 @@ export function taskEventPayload(row: TaskRow): Record<string, unknown> {
     companyId: row.companyUuid,
     source: row.source,
     kind: row.kind,
+    taskType: row.taskType?.key ?? null,
+    outcome: row.outcome?.key ?? null,
   };
 }

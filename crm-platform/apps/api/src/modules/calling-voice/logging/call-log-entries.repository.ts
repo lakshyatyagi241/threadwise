@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import type { CallEntrySource, CallOutcome } from '@crm/contracts';
+import type { ActivityOptionRef, CallEntrySource, CallOutcome } from '@crm/contracts';
+import { optionRefColumns, optionRefFrom } from '../../crm/activity-types/activity-option-ref';
 
 type Row = Record<string, unknown>;
 const rowsOf = (res: unknown): Row[] => (res as { rows: Row[] }).rows;
@@ -15,6 +16,9 @@ export interface EntryRow {
   source: CallEntrySource;
   direction: 'inbound' | 'outbound';
   outcome: CallOutcome;
+  /** The outcome as the Phone activity lists it (null on an entry logged before the lists existed or by a source that only knows the built-in outcome). */
+  outcomeOption: ActivityOptionRef | null;
+  outcomeOptionId: number | null;
   startedAt: Date;
   durationSec: number;
   contactId: number | null;
@@ -47,6 +51,8 @@ const toEntry = (r: Row): EntryRow => ({
   source: r.source as CallEntrySource,
   direction: r.direction as 'inbound' | 'outbound',
   outcome: r.outcome as CallOutcome,
+  outcomeOption: optionRefFrom(r, 'outcome_opt'),
+  outcomeOptionId: num(r.outcome_option_id),
   startedAt: new Date(r.started_at as string),
   durationSec: Number(r.duration_sec),
   contactId: num(r.contact_id),
@@ -74,18 +80,23 @@ const toEntry = (r: Row): EntryRow => ({
 
 const SELECT = sql`SELECT e.id, e.uuid, e.source, e.direction, e.outcome, e.started_at, e.duration_sec, e.contact_id, ct.uuid AS contact_uuid,
     coalesce(ct.name, ct.first_name) AS contact_name, e.customer_phone, e.our_phone, e.number_label, e.handler_user_id,
-    hu.uuid AS handler_uuid, hu.full_name AS handler_name, e.notes, e.external_id, e.recording_ref, (e.telephony_connection_id IS NOT NULL) AS via_connection, e.follow_up_task_id,
+    hu.uuid AS handler_uuid, hu.full_name AS handler_name, e.notes, e.external_id, e.recording_ref, (e.telephony_connection_id IS NOT NULL) AS via_connection, e.follow_up_task_id, e.outcome_option_id,
+    ${optionRefColumns('oo', 'oa', 'outcome_opt')},
     tk.uuid AS task_uuid, e.activity_id, e.created_by, cu.uuid AS created_by_uuid, e.created_at, e.updated_at, e.row_version
   FROM call_log_entries e
   LEFT JOIN contacts ct ON ct.org_id = e.org_id AND ct.id = e.contact_id
   LEFT JOIN users hu ON hu.org_id = e.org_id AND hu.id = e.handler_user_id
   LEFT JOIN users cu ON cu.org_id = e.org_id AND cu.id = e.created_by
-  LEFT JOIN tasks tk ON tk.org_id = e.org_id AND tk.id = e.follow_up_task_id`;
+  LEFT JOIN tasks tk ON tk.org_id = e.org_id AND tk.id = e.follow_up_task_id
+  LEFT JOIN activity_type_options oo ON oo.org_id = e.org_id AND oo.id = e.outcome_option_id
+  LEFT JOIN activity_types oa ON oa.org_id = oo.org_id AND oa.id = oo.activity_type_id`;
 
 export interface NewEntry {
   source: CallEntrySource;
   direction: 'inbound' | 'outbound';
   outcome: CallOutcome;
+  /** A current outcome of the Phone activity this entry was logged with; `outcome` is what it counts as. */
+  outcomeOptionId?: number | null;
   startedAt: Date;
   durationSec: number;
   contactId: number | null;
@@ -102,6 +113,8 @@ export interface NewEntry {
 
 export interface EntryPatch {
   outcome?: CallOutcome;
+  /** `null` clears it (the outcome was changed to a built-in one without naming a list item). */
+  outcomeOptionId?: number | null;
   direction?: 'inbound' | 'outbound';
   startedAt?: Date;
   durationSec?: number;
@@ -124,11 +137,11 @@ export class CallLogEntriesRepository {
       INSERT INTO call_log_entries (org_id, source, direction, outcome, started_at, duration_sec, contact_id, customer_phone, our_phone,
                                     number_label, handler_user_id, notes, external_id, telephony_connection_id, recording_ref,
                                     recording_stored_at, recording_consent_status, recording_consent_method, recording_notice_version,
-                                    created_by)
+                                    created_by, outcome_option_id)
       VALUES (${orgId}, ${e.source}, ${e.direction}, ${e.outcome}, ${e.startedAt.toISOString()}::timestamptz, ${e.durationSec},
               ${e.contactId}, ${e.customerPhone}, ${e.ourPhone}, ${e.numberLabel}, ${e.handlerUserId}, ${e.notes}, ${e.externalId},
               ${e.telephonyConnectionId}, ${e.recording?.ref ?? null}, ${e.recording ? sql`now()` : null},
-              ${e.recording ? 'granted' : null}, ${e.recording?.method ?? null}, ${e.recording?.noticeVersion ?? null}, ${e.createdBy})
+              ${e.recording ? 'granted' : null}, ${e.recording?.method ?? null}, ${e.recording?.noticeVersion ?? null}, ${e.createdBy}, ${e.outcomeOptionId ?? null})
       ON CONFLICT (org_id, source, external_id) DO NOTHING
       RETURNING id, uuid`);
     const r = rowsOf(res)[0];
@@ -193,6 +206,7 @@ export class CallLogEntriesRepository {
     const res = await tx.execute(sql`
       UPDATE call_log_entries
       SET outcome = ${p.outcome ?? sql`outcome`},
+          outcome_option_id = ${p.outcomeOptionId === undefined ? sql`outcome_option_id` : p.outcomeOptionId},
           direction = ${p.direction ?? sql`direction`},
           started_at = ${p.startedAt ? sql`${p.startedAt.toISOString()}::timestamptz` : sql`started_at`},
           duration_sec = ${p.durationSec ?? sql`duration_sec`},
