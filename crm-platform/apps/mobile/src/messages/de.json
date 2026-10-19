@@ -1854,5 +1854,124 @@
         "bodyNoActor": "Wenn du das lesen kannst, funktionieren Live-Benachrichtigungen."
       }
     }
+  },
+  "leads": {
+    "title": "Social Leads",
+    "page": {
+      "attention_one": "{{count}} Lead benötigt Aufmerksamkeit",
+      "attention_other": "{{count}} Leads benötigen Aufmerksamkeit"
+    },
+    "states": {
+      "noAccessTitle": "Sie haben keinen Zugriff auf Social Leads",
+      "noAccessBody": "Ihre Rolle enthält nicht die Berechtigung, die dieser Bildschirm benötigt ({{permission}}). Bitten Sie einen Workspace-Admin, sie Ihrer Rolle hinzuzufügen.",
+      "lockedTitle": "Social Leads ist nicht Teil Ihres Tarifs",
+      "lockedBody": "Ihr aktueller Tarif enthält keine Lead-Quellen, daher können Sie sie nicht ansehen oder erstellen. Upgraden Sie, um Anzeigen- und Landingpage-Leads in Ihre Kontakte zu übernehmen."
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Meta-Lead-Formulare",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "Marketplace-Verbindung"
+    },
+    "sourceStatus": {
+      "active": "Aktiv",
+      "paused": "Pausiert"
+    },
+    "eventStatus": {
+      "received": "Empfangen",
+      "created": "Kontakt erstellt",
+      "updated": "Kontakt aktualisiert",
+      "duplicate": "Doppelt",
+      "needs_review": "Prüfung nötig",
+      "failed": "Fehlgeschlagen"
+    },
+    "eventFilters": {
+      "all": "Alle Leads",
+      "needs_review": "Prüfung nötig",
+      "failed": "Fehlgeschlagen"
+    },
+    "reasons": {
+      "no_contact_point": "Keine E-Mail oder Telefonnummer",
+      "invalid_phone": "Telefonnummer konnte nicht gelesen werden",
+      "plan_limit_reached": "Kontaktlimit erreicht",
+      "source_paused": "Quelle war pausiert",
+      "internal_error": "Verarbeitungsfehler",
+      "identity_conflict": "E-Mail oder Telefonnummer gehört zu einem anderen Kontakt"
+    },
+    "guidance": {
+      "noContactPoint": "Der Lead hatte weder eine verwendbare E-Mail-Adresse noch eine Telefonnummer. Korrigieren Sie die Zuordnung oder die Standard-Ländervorwahl und versuchen Sie es erneut.",
+      "invalidPhone": "Eine Telefonnummer wurde gesendet, konnte aber nicht als solche gelesen werden, und es gab keine E-Mail-Adresse. Prüfen Sie die Zuordnung der Telefonnummer und die Standard-Ländervorwahl und versuchen Sie es erneut.",
+      "planLimit": "Das Kontaktlimit im Tarif ist erreicht, daher konnte aus diesem Lead kein Kontakt werden. Upgraden Sie den Tarif und versuchen Sie es erneut.",
+      "sourcePaused": "Die Quelle war pausiert. Setzen Sie sie fort und versuchen Sie es erneut.",
+      "internalError": "Bei der Verarbeitung dieses Leads ist ein Fehler aufgetreten. Versuchen Sie es erneut; schlägt es wieder fehl, teilen Sie die Referenz aus dem Fehler mit dem Support.",
+      "identityConflict": "Der Lead wurde einem bestehenden Kontakt zugeordnet, aber seine E-Mail-Adresse oder Telefonnummer gehört bereits zu einem anderen Kontakt, daher wurde diese Angabe nicht übernommen.",
+      "generic": "Dieser Lead muss geprüft werden. Prüfen Sie Grund und Fehler, korrigieren Sie bei Bedarf die Zuordnung oder die Standardwerte und versuchen Sie es erneut."
+    },
+    "sources": {
+      "emptyTitle": "Noch keine Quellen",
+      "empty": "Erstellen Sie eine Webhook-Quelle, um eine URL zu erhalten, die Sie in Zapier, Make oder Ihr Formulartool einfügen können. Leads, die dorthin gesendet werden, werden zu Kontakten.",
+      "emptyNoManage": "Es wurde noch keine Lead-Quelle erstellt. Bitten Sie jemanden, der Lead-Quellen verwalten kann, eine zu erstellen.",
+      "noEvents": "Noch keine Leads",
+      "needsAttention_one": "{{count}} Lead",
+      "needsAttention_other": "{{count}} Leads"
+    },
+    "detail": {
+      "pageTitle": "Lead-Quelle",
+      "lastEvent": "Letzter Lead",
+      "noEvents": "noch keiner",
+      "pause": "Pausieren",
+      "resume": "Fortsetzen",
+      "endsIn": "Das URL-Token endet auf {{hint}}",
+      "noHint": "Kein Token gespeichert.",
+      "secretYes": "Ein geheimer Schlüssel ist gesetzt: Absender müssen ihn im Header X-Webhook-Secret senden.",
+      "secretNo": "Kein geheimer Schlüssel gesetzt.",
+      "pausedNote": "Diese Quelle ist pausiert: Ihre URL antwortet mit 404, Absender sehen daher einen Fehler, bis Sie sie fortsetzen.",
+      "connector": "Über den Marketplace verbunden. Sie haben keine eigene URL oder kein eigenes Token; Leads kommen über die installierte App.",
+      "needsAttention_one": "{{count}} Lead benötigt Aufmerksamkeit",
+      "needsAttention_other": "{{count}} Leads benötigen Aufmerksamkeit",
+      "pausedToast": "Quelle pausiert",
+      "resumedToast": "Quelle fortgesetzt",
+      "confirm": {
+        "cancel": "Abbrechen",
+        "pause": {
+          "title": "Diese Quelle pausieren?",
+          "body": "Während sie pausiert ist, antwortet ihre URL mit 404 und an sie gesendete Leads werden nicht empfangen. Sie können sie jederzeit fortsetzen.",
+          "action": "Quelle pausieren"
+        }
+      }
+    },
+    "events": {
+      "title": "Empfangene Leads",
+      "filterStatus": "Anzeigen",
+      "emptyTitle": "Noch keine Leads",
+      "empty": "Senden Sie einen Test-Lead oder fügen Sie die URL in Ihr Tool ein.",
+      "emptyFilteredTitle": "Keine Leads gefunden",
+      "emptyFiltered": "Keine Leads entsprechen diesen Filtern.",
+      "test": "Test",
+      "retriedToast": "Wiederholt: jetzt {{status}}"
+    },
+    "event": {
+      "title": "Lead-Details",
+      "close": "Schließen",
+      "retry": "Diesen Lead erneut verarbeiten",
+      "received": "Empfangen",
+      "processed": "Verarbeitet",
+      "notProcessed": "noch nicht",
+      "attempts": "Versuche",
+      "reason": "Grund",
+      "openContact": "Kontakt öffnen",
+      "openDeal": "Deal öffnen",
+      "deliveredAgain_one": "Einmal erneut zugestellt",
+      "deliveredAgain_other": "{{count}} Mal erneut zugestellt"
+    },
+    "errors": {
+      "conflict": "Während Sie bearbeitet haben, hat eine andere Person diese Quelle geändert. Laden Sie neu, um deren Version zu sehen. Ihre nicht gespeicherten Änderungen würden verloren gehen.",
+      "notRetryable": "Nur Leads, die geprüft werden müssen oder fehlgeschlagen sind, können erneut versucht werden. Dieser ist bereits abgeschlossen oder wird gerade verarbeitet.",
+      "payloadPurged": "Der gespeicherte Lead wurde nach Ablauf seiner Aufbewahrungsfrist gelöscht, daher gibt es nichts erneut zu versuchen.",
+      "sourcePaused": "Diese Quelle ist pausiert. Setzen Sie sie fort, um einen Test-Lead zu senden oder einen Lead erneut zu versuchen.",
+      "notFound": "Wir konnten es nicht finden. Es wurde möglicherweise gelöscht."
+    }
   }
 }

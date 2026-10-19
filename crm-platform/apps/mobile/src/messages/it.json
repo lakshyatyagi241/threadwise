@@ -1887,5 +1887,128 @@
         "bodyNoActor": "Se riesci a leggere questo, le notifiche in tempo reale funzionano."
       }
     }
+  },
+  "leads": {
+    "title": "Lead social",
+    "page": {
+      "attention_many": "{{count}} lead da verificare",
+      "attention_one": "{{count}} lead da verificare",
+      "attention_other": "{{count}} lead da verificare"
+    },
+    "states": {
+      "noAccessTitle": "Non hai accesso ai Lead social",
+      "noAccessBody": "Il tuo ruolo non include il permesso necessario per questa schermata ({{permission}}). Chiedi a un amministratore dello spazio di lavoro di aggiungerlo al tuo ruolo.",
+      "lockedTitle": "I Lead social non fanno parte del tuo piano",
+      "lockedBody": "Il tuo piano attuale non include le fonti di lead, quindi non puoi vederle né crearle. Passa a un piano superiore per portare i lead di annunci e landing page nei tuoi contatti."
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Moduli lead di Meta",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "Connessione Marketplace"
+    },
+    "sourceStatus": {
+      "active": "Attiva",
+      "paused": "In pausa"
+    },
+    "eventStatus": {
+      "received": "Ricevuto",
+      "created": "Contatto creato",
+      "updated": "Contatto aggiornato",
+      "duplicate": "Duplicato",
+      "needs_review": "Da verificare",
+      "failed": "Non riuscito"
+    },
+    "eventFilters": {
+      "all": "Tutti i lead",
+      "needs_review": "Da verificare",
+      "failed": "Non riusciti"
+    },
+    "reasons": {
+      "no_contact_point": "Nessuna email o telefono",
+      "invalid_phone": "Telefono non leggibile",
+      "plan_limit_reached": "Limite di contatti raggiunto",
+      "source_paused": "Fonte in pausa",
+      "internal_error": "Errore di elaborazione",
+      "identity_conflict": "Email o telefono appartengono a un altro contatto"
+    },
+    "guidance": {
+      "noContactPoint": "Il lead non aveva né un'email utilizzabile né un numero di telefono. Correggi la mappatura o il prefisso predefinito, poi riprova.",
+      "invalidPhone": "È stato inviato un numero di telefono che non è stato possibile leggere, e non c'era alcuna email. Controlla la mappatura del telefono e il prefisso predefinito, poi riprova.",
+      "planLimit": "Hai raggiunto il limite di contatti del tuo piano, quindi questo lead non può diventare un contatto. Passa a un piano superiore, poi riprova.",
+      "sourcePaused": "La fonte era in pausa. Riprendila, poi riprova.",
+      "internalError": "Si è verificato un errore durante l'elaborazione di questo lead. Riprova; se fallisce di nuovo, condividi il riferimento dell'errore con l'assistenza.",
+      "identityConflict": "Il lead è stato unito a un contatto esistente, ma la sua email o il suo telefono appartengono già a un altro contatto, quindi quel dato non è stato spostato.",
+      "generic": "Questo lead va verificato. Controlla il motivo e l'errore, correggi la mappatura o i predefiniti se necessario, poi riprova."
+    },
+    "sources": {
+      "emptyTitle": "Nessuna fonte ancora",
+      "empty": "Crea una fonte webhook per ottenere un URL da incollare in Zapier, Make o nel tuo strumento di moduli. I lead inviati diventano contatti.",
+      "emptyNoManage": "Non è stata ancora creata alcuna fonte di lead. Chiedi a chi può gestire le fonti di lead di crearne una.",
+      "noEvents": "Nessun lead ancora",
+      "needsAttention_many": "{{count}} lead",
+      "needsAttention_one": "{{count}} lead",
+      "needsAttention_other": "{{count}} lead"
+    },
+    "detail": {
+      "pageTitle": "Fonte lead",
+      "lastEvent": "Ultimo lead",
+      "noEvents": "nessuno finora",
+      "pause": "Pausa",
+      "resume": "Riprendi",
+      "endsIn": "Il token dell’URL termina con {{hint}}",
+      "noHint": "Nessun token registrato.",
+      "secretYes": "È impostato un segreto condiviso: i mittenti devono inviarlo nell’intestazione X-Webhook-Secret.",
+      "secretNo": "Non è impostato alcun segreto condiviso.",
+      "pausedNote": "Questa fonte è in pausa: il suo URL risponde 404, quindi i mittenti vedono un errore finché non la riattivi.",
+      "connector": "Connessa tramite il Marketplace. Non ha un URL o un token propri; i lead arrivano tramite l’app installata.",
+      "needsAttention_many": "{{count}} lead richiedono attenzione",
+      "needsAttention_one": "{{count}} lead richiede attenzione",
+      "needsAttention_other": "{{count}} lead richiedono attenzione",
+      "pausedToast": "Fonte in pausa",
+      "resumedToast": "Fonte ripresa",
+      "confirm": {
+        "cancel": "Annulla",
+        "pause": {
+          "title": "Mettere in pausa questa fonte?",
+          "body": "Mentre è in pausa, il suo URL risponde 404 e i lead inviati non vengono ricevuti. Puoi riattivarla in qualsiasi momento.",
+          "action": "Metti in pausa la fonte"
+        }
+      }
+    },
+    "events": {
+      "title": "Lead ricevuti",
+      "filterStatus": "Mostra",
+      "emptyTitle": "Nessun lead ancora",
+      "empty": "Invia un lead di prova oppure incolla l’URL nel tuo strumento.",
+      "emptyFilteredTitle": "Nessun lead corrisponde",
+      "emptyFiltered": "Nessun lead corrisponde a questi filtri.",
+      "test": "Prova",
+      "retriedToast": "Riprovato: ora {{status}}"
+    },
+    "event": {
+      "title": "Dettagli del lead",
+      "close": "Chiudi",
+      "retry": "Riprova questo lead",
+      "received": "Ricevuto",
+      "processed": "Elaborato",
+      "notProcessed": "non ancora",
+      "attempts": "Tentativi",
+      "reason": "Motivo",
+      "openContact": "Apri il contatto",
+      "openDeal": "Apri la trattativa",
+      "deliveredAgain_many": "Consegnato di nuovo {{count}} volte",
+      "deliveredAgain_one": "Consegnato di nuovo una volta",
+      "deliveredAgain_other": "Consegnato di nuovo {{count}} volte"
+    },
+    "errors": {
+      "conflict": "Qualcun altro ha modificato questa fonte mentre la stavi modificando. Ricarica per vedere la sua versione; le modifiche non salvate andrebbero perse.",
+      "notRetryable": "Si possono riprovare solo i lead da verificare o non riusciti. Questo è già completato o in elaborazione.",
+      "payloadPurged": "Il lead salvato è stato eliminato dopo il periodo di conservazione, quindi non c'è nulla da riprovare.",
+      "sourcePaused": "Questa fonte è in pausa. Riprendila per inviare un lead di prova o riprovare un lead.",
+      "notFound": "Non l'abbiamo trovato. Potrebbe essere stato eliminato."
+    }
   }
 }

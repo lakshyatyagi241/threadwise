@@ -1854,5 +1854,124 @@
         "bodyNoActor": "If you can read this, live notifications are working."
       }
     }
+  },
+  "leads": {
+    "title": "Social leads",
+    "page": {
+      "attention_one": "{{count}} lead needs attention",
+      "attention_other": "{{count}} leads need attention"
+    },
+    "states": {
+      "noAccessTitle": "You do not have access to Social leads",
+      "noAccessBody": "Your role does not include the permission this screen needs ({{permission}}). Ask a workspace admin to add it to your role.",
+      "lockedTitle": "Social leads is not part of your plan",
+      "lockedBody": "Your current plan does not include lead sources, so you cannot view or create them. Upgrade to bring ad and landing-page leads into your contacts."
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Meta lead forms",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "Marketplace connection"
+    },
+    "sourceStatus": {
+      "active": "Active",
+      "paused": "Paused"
+    },
+    "eventStatus": {
+      "received": "Received",
+      "created": "Contact created",
+      "updated": "Contact updated",
+      "duplicate": "Duplicate",
+      "needs_review": "Needs review",
+      "failed": "Failed"
+    },
+    "eventFilters": {
+      "all": "All leads",
+      "needs_review": "Needs review",
+      "failed": "Failed"
+    },
+    "reasons": {
+      "no_contact_point": "No email or phone",
+      "invalid_phone": "Phone could not be read",
+      "plan_limit_reached": "Contact limit reached",
+      "source_paused": "Source was paused",
+      "internal_error": "Processing error",
+      "identity_conflict": "Email or phone belongs to another contact"
+    },
+    "guidance": {
+      "noContactPoint": "The lead had neither a usable email nor a phone number. Fix the mapping or the default country code, then retry.",
+      "invalidPhone": "A phone number was sent but could not be read as one, and there was no email. Check the phone mapping and the default country code, then retry.",
+      "planLimit": "Your plan's contact limit is reached, so this lead could not become a contact. Upgrade your plan, then retry.",
+      "sourcePaused": "The source was paused. Resume it, then retry.",
+      "internalError": "Something went wrong while processing this lead. Retry it; if it fails again, share the reference from the error with support.",
+      "identityConflict": "The lead joined an existing contact, but its email or phone already belongs to another contact, so that detail was not moved.",
+      "generic": "This lead needs a look. Check the reason and the error, fix the mapping or the defaults if needed, then retry."
+    },
+    "sources": {
+      "emptyTitle": "No sources yet",
+      "empty": "Create a webhook source to get a URL you can paste into Zapier, Make or your form tool. Leads sent to it become contacts.",
+      "emptyNoManage": "No lead source has been created yet. Ask someone who can manage lead sources to create one.",
+      "noEvents": "No leads yet",
+      "needsAttention_one": "{{count}} lead",
+      "needsAttention_other": "{{count}} leads"
+    },
+    "detail": {
+      "pageTitle": "Lead source",
+      "lastEvent": "Last lead",
+      "noEvents": "none yet",
+      "pause": "Pause",
+      "resume": "Resume",
+      "endsIn": "The URL token ends in {{hint}}",
+      "noHint": "No token on record.",
+      "secretYes": "A shared secret is set: senders must send it in the X-Webhook-Secret header.",
+      "secretNo": "No shared secret is set.",
+      "pausedNote": "This source is paused: its URL answers 404, so senders see an error until you resume it.",
+      "connector": "Connected through the Marketplace. It has no URL or token of its own; leads arrive through the installed app.",
+      "needsAttention_one": "{{count}} lead needs attention",
+      "needsAttention_other": "{{count}} leads need attention",
+      "pausedToast": "Source paused",
+      "resumedToast": "Source resumed",
+      "confirm": {
+        "cancel": "Cancel",
+        "pause": {
+          "title": "Pause this source?",
+          "body": "While it is paused, its URL answers 404 and leads sent to it are not received. Resume it any time.",
+          "action": "Pause source"
+        }
+      }
+    },
+    "events": {
+      "title": "Leads received",
+      "filterStatus": "Show",
+      "emptyTitle": "No leads yet",
+      "empty": "Send a test lead or paste the URL into your tool.",
+      "emptyFilteredTitle": "No leads match",
+      "emptyFiltered": "No leads match these filters.",
+      "test": "Test",
+      "retriedToast": "Retried: now {{status}}"
+    },
+    "event": {
+      "title": "Lead details",
+      "close": "Close",
+      "retry": "Retry this lead",
+      "received": "Received",
+      "processed": "Processed",
+      "notProcessed": "not yet",
+      "attempts": "Attempts",
+      "reason": "Reason",
+      "openContact": "Open the contact",
+      "openDeal": "Open the deal",
+      "deliveredAgain_one": "Delivered again once",
+      "deliveredAgain_other": "Delivered again {{count}} times"
+    },
+    "errors": {
+      "conflict": "Someone else changed this source while you were editing it. Reload to see their version; your unsaved edits would be lost.",
+      "notRetryable": "Only leads that need review or failed can be retried. This one is already done or being processed.",
+      "payloadPurged": "The stored lead was deleted after its retention period, so there is nothing to retry.",
+      "sourcePaused": "This source is paused. Resume it to send a test lead or retry a lead.",
+      "notFound": "We could not find it. It may have been deleted."
+    }
   }
 }

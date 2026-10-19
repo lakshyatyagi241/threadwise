@@ -1821,5 +1821,120 @@
         "bodyNoActor": "Jika Anda bisa membaca ini, notifikasi langsung berfungsi."
       }
     }
+  },
+  "leads": {
+    "title": "Prospek media sosial",
+    "page": {
+      "attention_other": "{{count}} prospek perlu perhatian"
+    },
+    "states": {
+      "noAccessTitle": "Anda tidak memiliki akses ke Prospek media sosial",
+      "noAccessBody": "Peran Anda tidak memiliki izin yang dibutuhkan layar ini ({{permission}}). Minta admin workspace untuk menambahkannya ke peran Anda.",
+      "lockedTitle": "Prospek media sosial tidak termasuk dalam paket Anda",
+      "lockedBody": "Paket Anda saat ini tidak mencakup sumber prospek, jadi Anda tidak dapat melihat atau membuatnya. Tingkatkan paket untuk memasukkan prospek iklan dan halaman landing ke kontak Anda."
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Formulir prospek Meta",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "Koneksi Marketplace"
+    },
+    "sourceStatus": {
+      "active": "Aktif",
+      "paused": "Dijeda"
+    },
+    "eventStatus": {
+      "received": "Diterima",
+      "created": "Kontak dibuat",
+      "updated": "Kontak diperbarui",
+      "duplicate": "Duplikat",
+      "needs_review": "Perlu ditinjau",
+      "failed": "Gagal"
+    },
+    "eventFilters": {
+      "all": "Semua prospek",
+      "needs_review": "Perlu ditinjau",
+      "failed": "Gagal"
+    },
+    "reasons": {
+      "no_contact_point": "Tidak ada email atau telepon",
+      "invalid_phone": "Telepon tidak dapat dibaca",
+      "plan_limit_reached": "Batas kontak tercapai",
+      "source_paused": "Sumber dijeda",
+      "internal_error": "Kesalahan pemrosesan",
+      "identity_conflict": "Email atau telepon milik kontak lain"
+    },
+    "guidance": {
+      "noContactPoint": "Prospek tidak memiliki email atau nomor telepon yang dapat digunakan. Perbaiki pemetaan atau kode negara default, lalu coba lagi.",
+      "invalidPhone": "Nomor telepon dikirim tetapi tidak dapat dibaca sebagai nomor telepon, dan tidak ada email. Periksa pemetaan telepon dan kode negara default, lalu coba lagi.",
+      "planLimit": "Batas kontak pada paket Anda sudah tercapai, sehingga prospek ini tidak dapat menjadi kontak. Tingkatkan paket, lalu coba lagi.",
+      "sourcePaused": "Sumber dijeda. Lanjutkan, lalu coba lagi.",
+      "internalError": "Terjadi kesalahan saat memproses prospek ini. Coba lagi; jika gagal lagi, bagikan referensi dari kesalahan tersebut kepada dukungan.",
+      "identityConflict": "Prospek bergabung dengan kontak yang sudah ada, tetapi email atau teleponnya sudah milik kontak lain, sehingga detail tersebut tidak dipindahkan.",
+      "generic": "Prospek ini perlu diperiksa. Periksa alasan dan kesalahannya, perbaiki pemetaan atau default jika perlu, lalu coba lagi."
+    },
+    "sources": {
+      "emptyTitle": "Belum ada sumber",
+      "empty": "Buat sumber webhook untuk mendapatkan URL yang dapat Anda tempel di Zapier, Make, atau alat formulir Anda. Prospek yang dikirim ke sana akan menjadi kontak.",
+      "emptyNoManage": "Belum ada sumber prospek yang dibuat. Minta seseorang yang dapat mengelola sumber prospek untuk membuatnya.",
+      "noEvents": "Belum ada prospek",
+      "needsAttention_other": "{{count}} prospek"
+    },
+    "detail": {
+      "pageTitle": "Sumber prospek",
+      "lastEvent": "Prospek terakhir",
+      "noEvents": "belum ada",
+      "pause": "Jeda",
+      "resume": "Lanjutkan",
+      "endsIn": "Token URL berakhir dengan {{hint}}",
+      "noHint": "Tidak ada token yang tercatat.",
+      "secretYes": "Rahasia bersama sudah diatur: pengirim harus mengirimkannya di header X-Webhook-Secret.",
+      "secretNo": "Rahasia bersama belum diatur.",
+      "pausedNote": "Sumber ini dijeda: URL-nya menjawab 404, jadi pengirim akan melihat error sampai Anda melanjutkannya.",
+      "connector": "Terhubung melalui Marketplace. Tidak memiliki URL atau token sendiri; prospek masuk melalui aplikasi yang terpasang.",
+      "needsAttention_other": "{{count}} prospek perlu perhatian",
+      "pausedToast": "Sumber dijeda",
+      "resumedToast": "Sumber dilanjutkan",
+      "confirm": {
+        "cancel": "Batal",
+        "pause": {
+          "title": "Jeda sumber ini?",
+          "body": "Selama dijeda, URL-nya menjawab 404 dan prospek yang dikirim ke sana tidak akan diterima. Anda dapat melanjutkannya kapan saja.",
+          "action": "Jeda sumber"
+        }
+      }
+    },
+    "events": {
+      "title": "Prospek diterima",
+      "filterStatus": "Tampilkan",
+      "emptyTitle": "Belum ada prospek",
+      "empty": "Kirim prospek uji atau tempel URL ke alat Anda.",
+      "emptyFilteredTitle": "Tidak ada prospek yang cocok",
+      "emptyFiltered": "Tidak ada prospek yang cocok dengan filter ini.",
+      "test": "Uji",
+      "retriedToast": "Dicoba ulang: sekarang {{status}}"
+    },
+    "event": {
+      "title": "Detail prospek",
+      "close": "Tutup",
+      "retry": "Coba ulang prospek ini",
+      "received": "Diterima",
+      "processed": "Diproses",
+      "notProcessed": "belum",
+      "attempts": "Percobaan",
+      "reason": "Alasan",
+      "openContact": "Buka kontak",
+      "openDeal": "Buka deal",
+      "deliveredAgain_other": "Dikirim ulang {{count}} kali"
+    },
+    "errors": {
+      "conflict": "Orang lain mengubah sumber ini saat Anda sedang mengeditnya. Muat ulang untuk melihat versinya; perubahan Anda yang belum disimpan akan hilang.",
+      "notRetryable": "Hanya prospek yang perlu ditinjau atau gagal yang dapat dicoba ulang. Prospek ini sudah selesai atau sedang diproses.",
+      "payloadPurged": "Prospek tersimpan dihapus setelah masa retensinya, jadi tidak ada yang dapat dicoba ulang.",
+      "sourcePaused": "Sumber ini dijeda. Lanjutkan untuk mengirim prospek uji atau mencoba ulang prospek.",
+      "notFound": "Kami tidak dapat menemukannya. Mungkin sudah dihapus."
+    }
   }
 }

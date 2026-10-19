@@ -1854,5 +1854,124 @@
         "bodyNoActor": "Bunu okuyabiliyorsanız canlı bildirimler çalışıyor."
       }
     }
+  },
+  "leads": {
+    "title": "Sosyal potansiyel müşteriler",
+    "page": {
+      "attention_one": "{{count}} potansiyel müşteri dikkat gerektiriyor",
+      "attention_other": "{{count}} potansiyel müşteri dikkat gerektiriyor"
+    },
+    "states": {
+      "noAccessTitle": "Sosyal potansiyel müşterilere erişiminiz yok",
+      "noAccessBody": "Rolünüz, bu ekranın ihtiyaç duyduğu izni ({{permission}}) içermiyor. Çalışma alanı yöneticisinden rolünüze eklemesini isteyin.",
+      "lockedTitle": "Sosyal potansiyel müşteriler planınıza dahil değil",
+      "lockedBody": "Mevcut planınız potansiyel müşteri kaynaklarını içermiyor, bu nedenle bunları göremez veya oluşturamazsınız. Reklam ve açılış sayfası potansiyel müşterilerini kişilerinize eklemek için planınızı yükseltin."
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Meta potansiyel müşteri formları",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "Pazar yeri bağlantısı"
+    },
+    "sourceStatus": {
+      "active": "Aktif",
+      "paused": "Duraklatıldı"
+    },
+    "eventStatus": {
+      "received": "Alındı",
+      "created": "Kişi oluşturuldu",
+      "updated": "Kişi güncellendi",
+      "duplicate": "Yinelenen",
+      "needs_review": "İnceleme gerekiyor",
+      "failed": "Başarısız"
+    },
+    "eventFilters": {
+      "all": "Tüm potansiyel müşteriler",
+      "needs_review": "İnceleme gerekiyor",
+      "failed": "Başarısız"
+    },
+    "reasons": {
+      "no_contact_point": "E-posta veya telefon yok",
+      "invalid_phone": "Telefon okunamadı",
+      "plan_limit_reached": "Kişi sınırına ulaşıldı",
+      "source_paused": "Kaynak duraklatıldı",
+      "internal_error": "İşleme hatası",
+      "identity_conflict": "E-posta veya telefon başka bir kişiye ait"
+    },
+    "guidance": {
+      "noContactPoint": "Potansiyel müşterinin kullanılabilir bir e-postası ya da telefon numarası yoktu. Eşleştirmeyi veya varsayılan ülke kodunu düzeltip yeniden deneyin.",
+      "invalidPhone": "Bir telefon numarası gönderildi ancak okunamadı ve e-posta yoktu. Telefon eşleştirmesini ve varsayılan ülke kodunu kontrol edip yeniden deneyin.",
+      "planLimit": "Planınızın kişi sınırına ulaşıldığı için bu potansiyel müşteri kişiye dönüştürülemedi. Planınızı yükseltin, sonra yeniden deneyin.",
+      "sourcePaused": "Kaynak duraklatıldı. Devam ettirin, sonra yeniden deneyin.",
+      "internalError": "Bu potansiyel müşteri işlenirken bir sorun oluştu. Yeniden deneyin; yine başarısız olursa hatadaki referansı destekle paylaşın.",
+      "identityConflict": "Potansiyel müşteri mevcut bir kişiye eklendi, ancak e-postası veya telefonu başka bir kişiye ait olduğu için bu bilgi taşınmadı.",
+      "generic": "Bu potansiyel müşterinin incelenmesi gerekiyor. Nedeni ve hatayı kontrol edin, gerekiyorsa eşleştirmeyi veya varsayılanları düzeltip yeniden deneyin."
+    },
+    "sources": {
+      "emptyTitle": "Henüz kaynak yok",
+      "empty": "Zapier, Make veya form aracınıza yapıştırabileceğiniz bir URL almak için bir webhook kaynağı oluşturun. Bu adrese gönderilen potansiyel müşteriler kişi olur.",
+      "emptyNoManage": "Henüz bir potansiyel müşteri kaynağı oluşturulmadı. Potansiyel müşteri kaynaklarını yönetebilen birinden bir tane oluşturmasını isteyin.",
+      "noEvents": "Henüz potansiyel müşteri yok",
+      "needsAttention_one": "{{count}} potansiyel müşteri",
+      "needsAttention_other": "{{count}} potansiyel müşteri"
+    },
+    "detail": {
+      "pageTitle": "Potansiyel müşteri kaynağı",
+      "lastEvent": "Son potansiyel müşteri",
+      "noEvents": "henüz yok",
+      "pause": "Duraklat",
+      "resume": "Devam ettir",
+      "endsIn": "URL belirteci {{hint}} ile biter",
+      "noHint": "Kayıtlı belirteç yok.",
+      "secretYes": "Paylaşılan bir gizli anahtar ayarlı: gönderenler bunu X-Webhook-Secret üstbilgisinde göndermelidir.",
+      "secretNo": "Paylaşılan bir gizli anahtar ayarlı değil.",
+      "pausedNote": "Bu kaynak duraklatıldı: URL'si 404 yanıtı verir, bu yüzden devam ettirene kadar gönderenler hata görür.",
+      "connector": "Pazar yeri üzerinden bağlı. Kendi URL'si veya belirteci yok; potansiyel müşteriler yüklü uygulama üzerinden gelir.",
+      "needsAttention_one": "{{count}} potansiyel müşteri ilgi bekliyor",
+      "needsAttention_other": "{{count}} potansiyel müşteri ilgi bekliyor",
+      "pausedToast": "Kaynak duraklatıldı",
+      "resumedToast": "Kaynak devam ettirildi",
+      "confirm": {
+        "cancel": "İptal",
+        "pause": {
+          "title": "Bu kaynak duraklatılsın mı?",
+          "body": "Duraklatılmış olduğu sürece URL'si 404 yanıtı verir ve ona gönderilen potansiyel müşteriler alınmaz. İstediğiniz zaman devam ettirebilirsiniz.",
+          "action": "Kaynağı duraklat"
+        }
+      }
+    },
+    "events": {
+      "title": "Alınan potansiyel müşteriler",
+      "filterStatus": "Göster",
+      "emptyTitle": "Henüz potansiyel müşteri yok",
+      "empty": "Bir test potansiyel müşterisi gönderin ya da URL'yi aracınıza yapıştırın.",
+      "emptyFilteredTitle": "Bu filtrelerle eşleşen potansiyel müşteri yok",
+      "emptyFiltered": "Bu filtrelere uyan potansiyel müşteri yok.",
+      "test": "Test",
+      "retriedToast": "Yeniden denendi: şimdi {{status}}"
+    },
+    "event": {
+      "title": "Potansiyel müşteri ayrıntıları",
+      "close": "Kapat",
+      "retry": "Bu potansiyel müşteriyi yeniden dene",
+      "received": "Alındı",
+      "processed": "İşlendi",
+      "notProcessed": "henüz değil",
+      "attempts": "Denemeler",
+      "reason": "Neden",
+      "openContact": "Kişiyi aç",
+      "openDeal": "Fırsatı aç",
+      "deliveredAgain_one": "Bir kez yeniden iletildi",
+      "deliveredAgain_other": "{{count}} kez yeniden teslim edildi"
+    },
+    "errors": {
+      "conflict": "Siz düzenlerken bu kaynağı başka biri değiştirdi. Onların sürümünü görmek için yenileyin; kaydedilmemiş düzenlemeleriniz kaybolur.",
+      "notRetryable": "Yalnızca inceleme gerektiren veya başarısız olan potansiyel müşteriler yeniden denenebilir. Bu zaten tamamlanmış veya işleniyor.",
+      "payloadPurged": "Saklanan potansiyel müşteri, saklama süresinden sonra silindi; yeniden denenecek bir şey yok.",
+      "sourcePaused": "Bu kaynak duraklatıldı. Test potansiyel müşterisi göndermek veya bir potansiyel müşteriyi yeniden denemek için devam ettirin.",
+      "notFound": "Bulunamadı. Silinmiş olabilir."
+    }
   }
 }

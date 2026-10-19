@@ -1821,5 +1821,120 @@
         "bodyNoActor": "Nếu bạn đọc được dòng này, thông báo trực tiếp đang hoạt động."
       }
     }
+  },
+  "leads": {
+    "title": "Khách hàng tiềm năng từ mạng xã hội",
+    "page": {
+      "attention_other": "{{count}} khách hàng tiềm năng cần xử lý"
+    },
+    "states": {
+      "noAccessTitle": "Bạn không có quyền truy cập Khách hàng tiềm năng từ mạng xã hội",
+      "noAccessBody": "Vai trò của bạn không có quyền cần cho màn hình này ({{permission}}). Hãy nhờ quản trị viên không gian làm việc thêm quyền này vào vai trò của bạn.",
+      "lockedTitle": "Khách hàng tiềm năng từ mạng xã hội không có trong gói của bạn",
+      "lockedBody": "Gói hiện tại của bạn không bao gồm nguồn khách hàng tiềm năng, nên bạn không thể xem hoặc tạo. Hãy nâng cấp để đưa khách hàng tiềm năng từ quảng cáo và trang đích vào danh sách liên hệ."
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Biểu mẫu khách hàng tiềm năng của Meta",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "Kết nối Marketplace"
+    },
+    "sourceStatus": {
+      "active": "Đang hoạt động",
+      "paused": "Tạm dừng"
+    },
+    "eventStatus": {
+      "received": "Đã nhận",
+      "created": "Đã tạo liên hệ",
+      "updated": "Đã cập nhật liên hệ",
+      "duplicate": "Trùng lặp",
+      "needs_review": "Cần xem xét",
+      "failed": "Lỗi"
+    },
+    "eventFilters": {
+      "all": "Tất cả khách hàng tiềm năng",
+      "needs_review": "Cần xem xét",
+      "failed": "Lỗi"
+    },
+    "reasons": {
+      "no_contact_point": "Không có email hoặc số điện thoại",
+      "invalid_phone": "Không đọc được số điện thoại",
+      "plan_limit_reached": "Đã đạt giới hạn liên hệ",
+      "source_paused": "Nguồn đã bị tạm dừng",
+      "internal_error": "Lỗi xử lý",
+      "identity_conflict": "Email hoặc số điện thoại thuộc liên hệ khác"
+    },
+    "guidance": {
+      "noContactPoint": "Khách hàng tiềm năng không có email hay số điện thoại dùng được. Hãy sửa ánh xạ hoặc mã quốc gia mặc định, rồi thử lại.",
+      "invalidPhone": "Đã gửi số điện thoại nhưng không đọc được đúng định dạng, và không có email. Hãy kiểm tra ánh xạ số điện thoại và mã quốc gia mặc định, rồi thử lại.",
+      "planLimit": "Gói của bạn đã đạt giới hạn liên hệ nên khách hàng tiềm năng này không thể thành liên hệ. Hãy nâng cấp gói, rồi thử lại.",
+      "sourcePaused": "Nguồn đã bị tạm dừng. Hãy tiếp tục nguồn, rồi thử lại.",
+      "internalError": "Đã xảy ra lỗi khi xử lý khách hàng tiềm năng này. Hãy thử lại; nếu vẫn lỗi, hãy gửi mã tham chiếu trong thông báo lỗi cho bộ phận hỗ trợ.",
+      "identityConflict": "Khách hàng tiềm năng đã được gộp vào một liên hệ hiện có, nhưng email hoặc số điện thoại của nó thuộc liên hệ khác, nên thông tin đó không được chuyển.",
+      "generic": "Khách hàng tiềm năng này cần được xem lại. Hãy kiểm tra lý do và lỗi, sửa ánh xạ hoặc mặc định nếu cần, rồi thử lại."
+    },
+    "sources": {
+      "emptyTitle": "Chưa có nguồn nào",
+      "empty": "Tạo nguồn webhook để lấy một URL có thể dán vào Zapier, Make hoặc công cụ biểu mẫu của bạn. Khách hàng tiềm năng gửi đến sẽ thành liên hệ.",
+      "emptyNoManage": "Chưa có nguồn khách hàng tiềm năng nào được tạo. Hãy nhờ người có quyền quản lý nguồn tạo một nguồn.",
+      "noEvents": "Chưa có khách hàng tiềm năng nào",
+      "needsAttention_other": "{{count}} khách hàng tiềm năng"
+    },
+    "detail": {
+      "pageTitle": "Nguồn khách hàng tiềm năng",
+      "lastEvent": "Khách hàng tiềm năng gần nhất",
+      "noEvents": "chưa có",
+      "pause": "Tạm dừng",
+      "resume": "Tiếp tục",
+      "endsIn": "Token của URL kết thúc bằng {{hint}}",
+      "noHint": "Không có token nào được ghi nhận.",
+      "secretYes": "Đã đặt khóa bí mật dùng chung: người gửi phải gửi khóa trong tiêu đề X-Webhook-Secret.",
+      "secretNo": "Chưa đặt khóa bí mật dùng chung.",
+      "pausedNote": "Nguồn này đang tạm dừng: URL của nó trả về 404, nên người gửi sẽ thấy lỗi cho đến khi bạn tiếp tục.",
+      "connector": "Kết nối qua Marketplace. Nguồn này không có URL hay token riêng; khách hàng tiềm năng đến qua ứng dụng đã cài đặt.",
+      "needsAttention_other": "{{count}} khách hàng tiềm năng cần xử lý",
+      "pausedToast": "Đã tạm dừng nguồn",
+      "resumedToast": "Đã tiếp tục nguồn",
+      "confirm": {
+        "cancel": "Hủy",
+        "pause": {
+          "title": "Tạm dừng nguồn này?",
+          "body": "Khi tạm dừng, URL của nguồn sẽ trả về 404 và khách hàng tiềm năng gửi đến sẽ không được nhận. Bạn có thể tiếp tục bất cứ lúc nào.",
+          "action": "Tạm dừng nguồn"
+        }
+      }
+    },
+    "events": {
+      "title": "Khách hàng tiềm năng đã nhận",
+      "filterStatus": "Hiển thị",
+      "emptyTitle": "Chưa có khách hàng tiềm năng",
+      "empty": "Gửi một khách hàng tiềm năng thử nghiệm hoặc dán URL vào công cụ của bạn.",
+      "emptyFilteredTitle": "Không có khách hàng tiềm năng phù hợp",
+      "emptyFiltered": "Không có khách hàng tiềm năng nào khớp với bộ lọc này.",
+      "test": "Thử nghiệm",
+      "retriedToast": "Đã thử lại: hiện là {{status}}"
+    },
+    "event": {
+      "title": "Chi tiết khách hàng tiềm năng",
+      "close": "Đóng",
+      "retry": "Thử lại khách hàng tiềm năng này",
+      "received": "Đã nhận",
+      "processed": "Đã xử lý",
+      "notProcessed": "chưa",
+      "attempts": "Số lần thử",
+      "reason": "Lý do",
+      "openContact": "Mở liên hệ",
+      "openDeal": "Mở thương vụ",
+      "deliveredAgain_other": "Đã gửi lại {{count}} lần"
+    },
+    "errors": {
+      "conflict": "Có người khác đã thay đổi nguồn này khi bạn đang chỉnh sửa. Hãy tải lại để xem phiên bản của họ; các chỉnh sửa chưa lưu của bạn sẽ bị mất.",
+      "notRetryable": "Chỉ có thể thử lại khách hàng tiềm năng cần xem xét hoặc bị lỗi. Mục này đã xong hoặc đang được xử lý.",
+      "payloadPurged": "Khách hàng tiềm năng đã lưu được xóa sau thời gian lưu giữ, nên không còn gì để thử lại.",
+      "sourcePaused": "Nguồn này đang tạm dừng. Hãy tiếp tục nguồn để gửi khách hàng tiềm năng thử nghiệm hoặc thử lại.",
+      "notFound": "Không tìm thấy nội dung này. Có thể đã bị xóa."
+    }
   }
 }

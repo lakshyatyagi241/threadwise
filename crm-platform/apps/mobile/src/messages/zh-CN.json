@@ -1821,5 +1821,120 @@
         "bodyNoActor": "如果你能看到这条消息，说明实时通知正常工作。"
       }
     }
+  },
+  "leads": {
+    "title": "社交线索",
+    "page": {
+      "attention_other": "{{count}} 条线索需要处理"
+    },
+    "states": {
+      "noAccessTitle": "您无权访问社交线索",
+      "noAccessBody": "您的角色不包含此页面所需的权限（{{permission}}）。请让工作区管理员为您的角色添加该权限。",
+      "lockedTitle": "您的套餐不包含社交线索",
+      "lockedBody": "您当前的套餐不包含线索来源，因此无法查看或创建。升级后即可将广告和落地页线索导入联系人。"
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Meta 线索表单",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "应用市场连接"
+    },
+    "sourceStatus": {
+      "active": "有效",
+      "paused": "已暂停"
+    },
+    "eventStatus": {
+      "received": "已接收",
+      "created": "已创建联系人",
+      "updated": "已更新联系人",
+      "duplicate": "重复",
+      "needs_review": "需要审核",
+      "failed": "失败"
+    },
+    "eventFilters": {
+      "all": "全部线索",
+      "needs_review": "需要审核",
+      "failed": "失败"
+    },
+    "reasons": {
+      "no_contact_point": "无邮箱或电话",
+      "invalid_phone": "无法识别电话",
+      "plan_limit_reached": "已达联系人上限",
+      "source_paused": "来源已暂停",
+      "internal_error": "处理错误",
+      "identity_conflict": "邮箱或电话属于其他联系人"
+    },
+    "guidance": {
+      "noContactPoint": "该线索既没有可用的邮箱，也没有电话号码。请修正字段映射或默认国家/地区代码后重试。",
+      "invalidPhone": "已发送电话号码，但无法识别，且没有邮箱。请检查电话字段映射和默认国家/地区代码后重试。",
+      "planLimit": "已达到套餐的联系人上限，因此该线索无法转为联系人。请升级套餐后重试。",
+      "sourcePaused": "来源已暂停。请恢复后重试。",
+      "internalError": "处理此线索时出错。请重试；如果仍然失败，请将错误中的参考号提供给支持团队。",
+      "identityConflict": "线索已关联到现有联系人，但其邮箱或电话已属于其他联系人，因此未转移该信息。",
+      "generic": "此线索需要检查。请查看原因和错误信息，如有需要请修正映射或默认设置，然后重试。"
+    },
+    "sources": {
+      "emptyTitle": "暂无来源",
+      "empty": "创建 Webhook 来源，即可获得可粘贴到 Zapier、Make 或表单工具中的网址。发送到该地址的线索将成为联系人。",
+      "emptyNoManage": "尚未创建任何线索来源。请联系有权管理线索来源的人员进行创建。",
+      "noEvents": "暂无线索",
+      "needsAttention_other": "{{count}} 条线索"
+    },
+    "detail": {
+      "pageTitle": "线索来源",
+      "lastEvent": "最近一条线索",
+      "noEvents": "暂无",
+      "pause": "暂停",
+      "resume": "恢复",
+      "endsIn": "网址令牌以 {{hint}} 结尾",
+      "noHint": "没有记录的令牌。",
+      "secretYes": "已设置共享密钥：发送方必须在 X-Webhook-Secret 请求头中发送该密钥。",
+      "secretNo": "未设置共享密钥。",
+      "pausedNote": "此来源已暂停：其网址返回 404，因此发送方会看到错误，直到您恢复它。",
+      "connector": "通过应用市场连接。它没有自己的网址或令牌；线索通过已安装的应用送达。",
+      "needsAttention_other": "{{count}} 条线索需要处理",
+      "pausedToast": "来源已暂停",
+      "resumedToast": "来源已恢复",
+      "confirm": {
+        "cancel": "取消",
+        "pause": {
+          "title": "暂停此来源？",
+          "body": "暂停期间，其网址返回 404，发送到该来源的线索不会被接收。您可随时恢复。",
+          "action": "暂停来源"
+        }
+      }
+    },
+    "events": {
+      "title": "已收到的线索",
+      "filterStatus": "显示",
+      "emptyTitle": "暂无线索",
+      "empty": "发送测试线索或将网址粘贴到您的工具中。",
+      "emptyFilteredTitle": "没有匹配的线索",
+      "emptyFiltered": "没有符合这些筛选条件的线索。",
+      "test": "测试",
+      "retriedToast": "已重试：现在为 {{status}}"
+    },
+    "event": {
+      "title": "线索详情",
+      "close": "关闭",
+      "retry": "重试此线索",
+      "received": "接收时间",
+      "processed": "处理时间",
+      "notProcessed": "尚未",
+      "attempts": "尝试次数",
+      "reason": "原因",
+      "openContact": "打开联系人",
+      "openDeal": "打开交易",
+      "deliveredAgain_other": "再次送达 {{count}} 次"
+    },
+    "errors": {
+      "conflict": "您编辑时，其他人修改了此来源。请重新加载查看其版本；您未保存的编辑将会丢失。",
+      "notRetryable": "只能重试需要审核或失败的线索。此线索已完成或正在处理中。",
+      "payloadPurged": "已保存的线索在保留期限后已被删除，因此无法重试。",
+      "sourcePaused": "此来源已暂停。请先恢复，再发送测试线索或重试线索。",
+      "notFound": "未找到该内容，可能已被删除。"
+    }
   }
 }

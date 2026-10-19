@@ -85,6 +85,7 @@ describe('MenuScreen', () => {
       'Notifications',
       'Tasks',
       'Deals',
+      'Social leads',
       'Manage profile',
       'Appearance',
       'Device permissions',
@@ -112,6 +113,12 @@ describe('MenuScreen', () => {
       await show({ ...session.permissions });
       await press('Notifications');
       expect(mockNavigate).toHaveBeenCalledWith('/notifications');
+    });
+
+    it('opens the lead sources for a person who may read them, and explains when they may not', async () => {
+      await show({ ...session.permissions, 'leads.sources.read': 'all' });
+      await press('Social leads');
+      expect(mockNavigate).toHaveBeenCalledWith('/leads');
     });
 
     it('opens the deals for a person who may read them, and explains when they may not', async () => {

@@ -18,7 +18,10 @@
     "menu.profileLabel",
     "signUp.orgNamePlaceholder",
     "signUp.orgSlugPlaceholder",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads"
   ],
   "mr": [
     "auth.emailPlaceholder",
@@ -96,7 +99,11 @@
     "menu.profileLabel",
     "signUp.orgNamePlaceholder",
     "signUp.orgSlugPlaceholder",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.webhook",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads"
   ],
   "de": [
     "calls.summary.purposes.demo",
@@ -184,7 +191,12 @@
     "tabs.dashboard",
     "tasks.details.status",
     "tasks.filter.group.status",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.webhook",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads",
+    "leads.events.test"
   ],
   "es": [
     "auth.emailPlaceholder",
@@ -227,7 +239,14 @@
     "menu.signOutNo",
     "signUp.orgNamePlaceholder",
     "signUp.orgSlugPlaceholder",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.webhook",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads",
+    "leads.sources.needsAttention_many",
+    "leads.sources.needsAttention_one",
+    "leads.sources.needsAttention_other"
   ],
   "fr": [
     "auth.emailPlaceholder",
@@ -317,7 +336,17 @@
     "tasks.form.contact",
     "notifications.types.mention.body",
     "notifications.title",
-    "notifications.bell.label"
+    "notifications.bell.label",
+    "leads.title",
+    "leads.kinds.webhook",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads",
+    "leads.sourceStatus.active",
+    "leads.events.test",
+    "leads.sources.needsAttention_many",
+    "leads.sources.needsAttention_one",
+    "leads.sources.needsAttention_other"
   ],
   "he": [
     "auth.emailPlaceholder",
@@ -345,7 +374,11 @@
     "menu.profileLabel",
     "signUp.orgNamePlaceholder",
     "signUp.orgSlugPlaceholder",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.webhook",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads"
   ],
   "id": [
     "auth.email",
@@ -422,7 +455,11 @@
     "tabs.menu",
     "tasks.details.status",
     "tasks.filter.group.status",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.webhook",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads"
   ],
   "it": [
     "auth.email",
@@ -501,7 +538,12 @@
     "tabs.dashboard",
     "tabs.inbox",
     "tabs.menu",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.webhook",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads",
+    "leads.sources.needsAttention_one"
   ],
   "ja": [
     "auth.emailPlaceholder",
@@ -521,7 +563,10 @@
     "inbox.channel.whatsapp",
     "signUp.orgNamePlaceholder",
     "signUp.orgSlugPlaceholder",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.webhook",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin"
   ],
   "ko": [
     "auth.emailPlaceholder",
@@ -547,7 +592,10 @@
     "menu.profileLabel",
     "signUp.orgNamePlaceholder",
     "signUp.orgSlugPlaceholder",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads"
   ],
   "nl": [
     "calls.monitor.contact",
@@ -658,7 +706,15 @@
     "tasks.filter.status.open",
     "tasks.form.contact",
     "tasks.status.open",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.title",
+    "leads.kinds.webhook",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads",
+    "leads.events.test",
+    "leads.sources.needsAttention_one",
+    "leads.sources.needsAttention_other"
   ],
   "pl": [
     "calls.summary.purposes.demo",
@@ -711,7 +767,13 @@
     "tabs.menu",
     "tasks.details.status",
     "tasks.filter.group.status",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.webhook",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads",
+    "leads.events.test",
+    "leads.sources.needsAttention_one"
   ],
   "pt": [
     "contactNotes.activity.source.bot",
@@ -761,7 +823,14 @@
     "tabs.menu",
     "tasks.details.status",
     "tasks.filter.group.status",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.webhook",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads",
+    "leads.sources.needsAttention_many",
+    "leads.sources.needsAttention_one",
+    "leads.sources.needsAttention_other"
   ],
   "ru": [
     "auth.emailPlaceholder",
@@ -790,7 +859,10 @@
     "inbox.time.pm",
     "menu.profileLabel",
     "signUp.orgSlugPlaceholder",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads"
   ],
   "th": [
     "auth.emailPlaceholder",
@@ -819,7 +891,10 @@
     "menu.profileLabel",
     "signUp.orgNamePlaceholder",
     "signUp.orgSlugPlaceholder",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads"
   ],
   "tr": [
     "auth.emailPlaceholder",
@@ -853,7 +928,12 @@
     "inbox.row.labelUnread",
     "inbox.status.spam",
     "menu.profileLabel",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.webhook",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads",
+    "leads.events.test"
   ],
   "ur": [
     "auth.emailPlaceholder",
@@ -876,7 +956,10 @@
     "inbox.channel.whatsapp",
     "signUp.orgNamePlaceholder",
     "signUp.orgSlugPlaceholder",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads"
   ],
   "vi": [
     "auth.email",
@@ -916,7 +999,11 @@
     "menu.profile.email",
     "menu.profileLabel",
     "tabs.menu",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.webhook",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads"
   ],
   "zh-CN": [
     "auth.emailPlaceholder",
@@ -938,6 +1025,10 @@
     "inbox.channel.whatsapp",
     "signUp.orgNamePlaceholder",
     "signUp.orgSlugPlaceholder",
-    "notifications.types.mention.body"
+    "notifications.types.mention.body",
+    "leads.kinds.webhook",
+    "leads.kinds.tiktok",
+    "leads.kinds.linkedin",
+    "leads.kinds.google_ads"
   ]
 }

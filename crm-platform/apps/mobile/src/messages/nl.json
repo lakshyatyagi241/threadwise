@@ -1854,5 +1854,124 @@
         "bodyNoActor": "Als je dit kunt lezen, werken livemeldingen."
       }
     }
+  },
+  "leads": {
+    "title": "Social leads",
+    "page": {
+      "attention_one": "{{count}} lead heeft aandacht nodig",
+      "attention_other": "{{count}} leads hebben aandacht nodig"
+    },
+    "states": {
+      "noAccessTitle": "Je hebt geen toegang tot Social leads",
+      "noAccessBody": "Je rol heeft niet de toestemming die dit scherm nodig heeft ({{permission}}). Vraag een workspace-beheerder die aan je rol toe te voegen.",
+      "lockedTitle": "Social leads zit niet in je abonnement",
+      "lockedBody": "Je huidige abonnement omvat geen leadbronnen, dus je kunt ze niet bekijken of aanmaken. Upgrade om advertentie- en landingspaginaleads in je contacten te krijgen."
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Meta-leadformulieren",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "Marketplace-verbinding"
+    },
+    "sourceStatus": {
+      "active": "Actief",
+      "paused": "Gepauzeerd"
+    },
+    "eventStatus": {
+      "received": "Ontvangen",
+      "created": "Contact aangemaakt",
+      "updated": "Contact bijgewerkt",
+      "duplicate": "Duplicaat",
+      "needs_review": "Controle nodig",
+      "failed": "Mislukt"
+    },
+    "eventFilters": {
+      "all": "Alle leads",
+      "needs_review": "Controle nodig",
+      "failed": "Mislukt"
+    },
+    "reasons": {
+      "no_contact_point": "Geen e-mail of telefoon",
+      "invalid_phone": "Telefoonnummer kon niet worden gelezen",
+      "plan_limit_reached": "Contactlimiet bereikt",
+      "source_paused": "Bron was gepauzeerd",
+      "internal_error": "Verwerkingsfout",
+      "identity_conflict": "E-mail of telefoon hoort bij een ander contact"
+    },
+    "guidance": {
+      "noContactPoint": "De lead had geen bruikbaar e-mailadres en geen telefoonnummer. Corrigeer de koppeling of de standaard landcode en probeer opnieuw.",
+      "invalidPhone": "Er is een telefoonnummer verstuurd dat niet als zodanig gelezen kon worden, en er was geen e-mail. Controleer de telefoonkoppeling en de standaard landcode en probeer opnieuw.",
+      "planLimit": "De contactlimiet van je abonnement is bereikt, dus deze lead kon geen contact worden. Upgrade je abonnement en probeer opnieuw.",
+      "sourcePaused": "De bron was gepauzeerd. Hervat hem en probeer opnieuw.",
+      "internalError": "Er ging iets mis bij het verwerken van deze lead. Probeer opnieuw; mislukt het weer, deel dan de referentie uit de fout met support.",
+      "identityConflict": "De lead is gekoppeld aan een bestaand contact, maar het e-mailadres of telefoonnummer hoort al bij een ander contact, dus dat gegeven is niet verplaatst.",
+      "generic": "Deze lead heeft aandacht nodig. Controleer de reden en de fout, corrigeer indien nodig de koppeling of standaardwaarden en probeer opnieuw."
+    },
+    "sources": {
+      "emptyTitle": "Nog geen bronnen",
+      "empty": "Maak een webhookbron aan om een URL te krijgen die je in Zapier, Make of je formuliertool kunt plakken. Leads die ernaar worden gestuurd, worden contacten.",
+      "emptyNoManage": "Er is nog geen leadbron aangemaakt. Vraag iemand die leadbronnen mag beheren er een aan te maken.",
+      "noEvents": "Nog geen leads",
+      "needsAttention_one": "{{count}} lead",
+      "needsAttention_other": "{{count}} leads"
+    },
+    "detail": {
+      "pageTitle": "Leadbron",
+      "lastEvent": "Laatste lead",
+      "noEvents": "nog geen",
+      "pause": "Pauzeren",
+      "resume": "Hervatten",
+      "endsIn": "Het URL-token eindigt op {{hint}}",
+      "noHint": "Geen token bekend.",
+      "secretYes": "Er is een gedeeld geheim ingesteld: verzenders moeten het meesturen in de header X-Webhook-Secret.",
+      "secretNo": "Er is geen gedeeld geheim ingesteld.",
+      "pausedNote": "Deze bron is gepauzeerd: de URL geeft 404, dus verzenders krijgen een fout tot je hem hervat.",
+      "connector": "Verbonden via de Marketplace. Hij heeft geen eigen URL of token; leads komen binnen via de geïnstalleerde app.",
+      "needsAttention_one": "{{count}} lead vraagt aandacht",
+      "needsAttention_other": "{{count}} leads vragen aandacht",
+      "pausedToast": "Bron gepauzeerd",
+      "resumedToast": "Bron hervat",
+      "confirm": {
+        "cancel": "Annuleren",
+        "pause": {
+          "title": "Deze bron pauzeren?",
+          "body": "Zolang hij gepauzeerd is, geeft de URL 404 en worden leads die ernaartoe worden gestuurd niet ontvangen. Je kunt hem altijd hervatten.",
+          "action": "Bron pauzeren"
+        }
+      }
+    },
+    "events": {
+      "title": "Ontvangen leads",
+      "filterStatus": "Tonen",
+      "emptyTitle": "Nog geen leads",
+      "empty": "Stuur een testlead of plak de URL in je tool.",
+      "emptyFilteredTitle": "Geen leads gevonden",
+      "emptyFiltered": "Geen leads voldoen aan deze filters.",
+      "test": "Test",
+      "retriedToast": "Opnieuw geprobeerd: nu {{status}}"
+    },
+    "event": {
+      "title": "Leaddetails",
+      "close": "Sluiten",
+      "retry": "Deze lead opnieuw proberen",
+      "received": "Ontvangen",
+      "processed": "Verwerkt",
+      "notProcessed": "nog niet",
+      "attempts": "Pogingen",
+      "reason": "Reden",
+      "openContact": "Open het contact",
+      "openDeal": "Open de deal",
+      "deliveredAgain_one": "Nogmaals afgeleverd, één keer",
+      "deliveredAgain_other": "Nogmaals afgeleverd, {{count}} keer"
+    },
+    "errors": {
+      "conflict": "Iemand anders heeft deze bron gewijzigd terwijl je hem bewerkte. Laad de pagina opnieuw om hun versie te zien; je niet-opgeslagen wijzigingen gaan verloren.",
+      "notRetryable": "Alleen leads die controle nodig hebben of mislukt zijn, kunnen opnieuw worden geprobeerd. Deze is al verwerkt of wordt verwerkt.",
+      "payloadPurged": "De opgeslagen lead is na de bewaartermijn verwijderd, dus er valt niets opnieuw te proberen.",
+      "sourcePaused": "Deze bron is gepauzeerd. Hervat hem om een testlead te sturen of een lead opnieuw te proberen.",
+      "notFound": "We konden hem niet vinden. Misschien is hij verwijderd."
+    }
   }
 }

@@ -1821,5 +1821,120 @@
         "bodyNoActor": "これが読めていれば、ライブ通知は動作しています。"
       }
     }
+  },
+  "leads": {
+    "title": "ソーシャルリード",
+    "page": {
+      "attention_other": "{{count}} 件のリードが要対応です"
+    },
+    "states": {
+      "noAccessTitle": "ソーシャルリードへのアクセス権がありません",
+      "noAccessBody": "現在のロールには、この画面に必要な権限（{{permission}}）がありません。ワークスペースの管理者に、ロールへの追加を依頼してください。",
+      "lockedTitle": "ソーシャルリードは現在のプランに含まれていません",
+      "lockedBody": "現在のプランにはリードソースが含まれていないため、表示や作成はできません。広告やランディングページのリードを連絡先に取り込むには、プランをアップグレードしてください。"
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Meta リードフォーム",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google 広告",
+      "connector": "マーケットプレイス連携"
+    },
+    "sourceStatus": {
+      "active": "有効",
+      "paused": "一時停止"
+    },
+    "eventStatus": {
+      "received": "受信済み",
+      "created": "連絡先を作成",
+      "updated": "連絡先を更新",
+      "duplicate": "重複",
+      "needs_review": "確認が必要",
+      "failed": "失敗"
+    },
+    "eventFilters": {
+      "all": "すべてのリード",
+      "needs_review": "確認が必要",
+      "failed": "失敗"
+    },
+    "reasons": {
+      "no_contact_point": "メールも電話もありません",
+      "invalid_phone": "電話番号を読み取れませんでした",
+      "plan_limit_reached": "連絡先の上限に達しました",
+      "source_paused": "ソースが一時停止されていました",
+      "internal_error": "処理エラー",
+      "identity_conflict": "メールまたは電話が別の連絡先に紐づいています"
+    },
+    "guidance": {
+      "noContactPoint": "リードに使用可能なメールも電話番号もありませんでした。マッピングまたは既定の国番号を修正してから、再試行してください。",
+      "invalidPhone": "電話番号が送信されましたが、正しく読み取れず、メールアドレスもありませんでした。電話のマッピングと既定の国番号を確認してから、再試行してください。",
+      "planLimit": "プランの連絡先上限に達しているため、このリードを連絡先にできませんでした。プランをアップグレードしてから、再試行してください。",
+      "sourcePaused": "ソースが一時停止されていました。再開してから、再試行してください。",
+      "internalError": "このリードの処理中にエラーが発生しました。再試行してください。再び失敗する場合は、エラーの参照番号をサポートに伝えてください。",
+      "identityConflict": "リードは既存の連絡先に追加されましたが、そのメールまたは電話は別の連絡先に紐づいているため、この情報は移動されませんでした。",
+      "generic": "このリードは確認が必要です。理由とエラーを確認し、必要に応じてマッピングまたは既定値を修正してから、再試行してください。"
+    },
+    "sources": {
+      "emptyTitle": "ソースはまだありません",
+      "empty": "Webhook ソースを作成すると、Zapier、Make、フォームツールに貼り付けられる URL が取得できます。送信されたリードは連絡先になります。",
+      "emptyNoManage": "まだリードソースが作成されていません。リードソースを管理できるユーザーに作成を依頼してください。",
+      "noEvents": "リードはまだありません",
+      "needsAttention_other": "{{count}} 件のリード"
+    },
+    "detail": {
+      "pageTitle": "リードソース",
+      "lastEvent": "最新のリード",
+      "noEvents": "まだありません",
+      "pause": "一時停止",
+      "resume": "再開",
+      "endsIn": "URLトークンの末尾は {{hint}} です",
+      "noHint": "トークンの記録がありません。",
+      "secretYes": "共有シークレットが設定されています。送信元は X-Webhook-Secret ヘッダーで送信する必要があります。",
+      "secretNo": "共有シークレットは設定されていません。",
+      "pausedNote": "このソースは一時停止中です。URLは404を返すため、再開するまで送信元にはエラーが表示されます。",
+      "connector": "マーケットプレイス経由で接続されています。独自のURLやトークンはなく、リードはインストールされたアプリを通じて届きます。",
+      "needsAttention_other": "{{count}}件のリードに対応が必要です",
+      "pausedToast": "ソースを一時停止しました",
+      "resumedToast": "ソースを再開しました",
+      "confirm": {
+        "cancel": "キャンセル",
+        "pause": {
+          "title": "このソースを一時停止しますか？",
+          "body": "一時停止中はURLが404を返し、送信されたリードは受信されません。いつでも再開できます。",
+          "action": "ソースを一時停止"
+        }
+      }
+    },
+    "events": {
+      "title": "受信したリード",
+      "filterStatus": "表示",
+      "emptyTitle": "まだリードはありません",
+      "empty": "テストリードを送信するか、URLをツールに貼り付けてください。",
+      "emptyFilteredTitle": "一致するリードはありません",
+      "emptyFiltered": "これらの条件に一致するリードはありません。",
+      "test": "テスト",
+      "retriedToast": "再試行済み: 現在 {{status}}"
+    },
+    "event": {
+      "title": "リードの詳細",
+      "close": "閉じる",
+      "retry": "このリードを再試行",
+      "received": "受信日時",
+      "processed": "処理日時",
+      "notProcessed": "まだ",
+      "attempts": "試行回数",
+      "reason": "理由",
+      "openContact": "連絡先を開く",
+      "openDeal": "案件を開く",
+      "deliveredAgain_other": "{{count}}回再配信済み"
+    },
+    "errors": {
+      "conflict": "編集中に他のユーザーがこのソースを変更しました。再読み込みして最新版を確認してください。未保存の編集内容は失われます。",
+      "notRetryable": "確認が必要なリードまたは失敗したリードのみ再試行できます。このリードはすでに完了しているか、処理中です。",
+      "payloadPurged": "保存されていたリードは保持期間後に削除されたため、再試行できません。",
+      "sourcePaused": "このソースは一時停止中です。テストリードの送信やリードの再試行の前に再開してください。",
+      "notFound": "見つかりませんでした。削除された可能性があります。"
+    }
   }
 }

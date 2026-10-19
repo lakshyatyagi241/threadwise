@@ -206,6 +206,12 @@ export function MenuScreen() {
             faded={faded('record.deals.read')}
             onPress={() => go('record.deals.read', '/deals')}
           />
+          <Row
+            icon="funnel-outline"
+            label={t('leads.title')}
+            faded={faded('leads.sources.read')}
+            onPress={() => go('leads.sources.read', '/leads')}
+          />
         </Section>
         {noAccess ? (
           <View style={styles.notice}>

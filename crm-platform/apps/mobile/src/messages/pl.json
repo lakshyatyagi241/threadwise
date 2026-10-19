@@ -1920,5 +1920,132 @@
         "bodyNoActor": "Jeśli możesz to przeczytać, powiadomienia na żywo działają."
       }
     }
+  },
+  "leads": {
+    "title": "Leady z mediów społecznościowych",
+    "page": {
+      "attention_few": "{{count}} leady wymagają uwagi",
+      "attention_many": "{{count}} leadów wymaga uwagi",
+      "attention_one": "{{count}} lead wymaga uwagi",
+      "attention_other": "{{count}} leada wymaga uwagi"
+    },
+    "states": {
+      "noAccessTitle": "Nie masz dostępu do leadów z mediów społecznościowych",
+      "noAccessBody": "Twoja rola nie obejmuje uprawnienia potrzebnego temu ekranowi ({{permission}}). Poproś administratora przestrzeni roboczej o dodanie go do Twojej roli.",
+      "lockedTitle": "Leady z mediów społecznościowych nie są częścią Twojego planu",
+      "lockedBody": "Twój obecny plan nie obejmuje źródeł leadów, więc nie możesz ich przeglądać ani tworzyć. Zmień plan, aby przenosić leady z reklam i stron docelowych do kontaktów."
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Formularze leadów Meta",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "Połączenie z Marketplace"
+    },
+    "sourceStatus": {
+      "active": "Aktywne",
+      "paused": "Wstrzymane"
+    },
+    "eventStatus": {
+      "received": "Odebrany",
+      "created": "Utworzono kontakt",
+      "updated": "Zaktualizowano kontakt",
+      "duplicate": "Duplikat",
+      "needs_review": "Wymaga weryfikacji",
+      "failed": "Nieudany"
+    },
+    "eventFilters": {
+      "all": "Wszystkie leady",
+      "needs_review": "Wymaga weryfikacji",
+      "failed": "Nieudane"
+    },
+    "reasons": {
+      "no_contact_point": "Brak e-maila lub telefonu",
+      "invalid_phone": "Nie udało się odczytać telefonu",
+      "plan_limit_reached": "Osiągnięto limit kontaktów",
+      "source_paused": "Źródło zostało wstrzymane",
+      "internal_error": "Błąd przetwarzania",
+      "identity_conflict": "E-mail lub telefon należy do innego kontaktu"
+    },
+    "guidance": {
+      "noContactPoint": "Lead nie miał użytecznego e-maila ani numeru telefonu. Popraw mapowanie lub domyślny kierunkowy kraju, a następnie ponów.",
+      "invalidPhone": "Wysłano numer telefonu, którego nie udało się odczytać, a nie było e-maila. Sprawdź mapowanie telefonu i domyślny kierunkowy kraju, a następnie ponów.",
+      "planLimit": "Osiągnięto limit kontaktów w Twoim planie, więc ten lead nie mógł stać się kontaktem. Zmień plan, a następnie ponów.",
+      "sourcePaused": "Źródło zostało wstrzymane. Wznów je, a następnie ponów.",
+      "internalError": "Podczas przetwarzania tego leada coś poszło nie tak. Ponów go; jeśli znowu się nie uda, przekaż referencję z błędu pomocy technicznej.",
+      "identityConflict": "Lead został dołączony do istniejącego kontaktu, ale jego e-mail lub telefon już należy do innego kontaktu, więc tych danych nie przeniesiono.",
+      "generic": "Ten lead wymaga sprawdzenia. Sprawdź przyczynę i błąd, w razie potrzeby popraw mapowanie lub ustawienia domyślne, a następnie ponów."
+    },
+    "sources": {
+      "emptyTitle": "Brak źródeł",
+      "empty": "Utwórz źródło webhook, aby dostać adres URL, który wkleisz do Zapier, Make lub narzędzia do formularzy. Leady wysłane tam staną się kontaktami.",
+      "emptyNoManage": "Nie utworzono jeszcze żadnego źródła leadów. Poproś osobę, która może zarządzać źródłami leadów, o utworzenie go.",
+      "noEvents": "Brak leadów",
+      "needsAttention_few": "{{count}} leady",
+      "needsAttention_many": "{{count}} leadów",
+      "needsAttention_one": "{{count}} lead",
+      "needsAttention_other": "{{count}} leada"
+    },
+    "detail": {
+      "pageTitle": "Źródło leadów",
+      "lastEvent": "Ostatni lead",
+      "noEvents": "jeszcze brak",
+      "pause": "Wstrzymaj",
+      "resume": "Wznów",
+      "endsIn": "Token w adresie URL kończy się na {{hint}}",
+      "noHint": "Brak zapisanego tokenu.",
+      "secretYes": "Ustawiony jest wspólny sekret: nadawcy muszą wysyłać go w nagłówku X-Webhook-Secret.",
+      "secretNo": "Nie ustawiono wspólnego sekretu.",
+      "pausedNote": "To źródło jest wstrzymane: jego adres URL zwraca 404, więc nadawcy widzą błąd, dopóki go nie wznowisz.",
+      "connector": "Połączone przez Marketplace. Nie ma własnego adresu URL ani tokenu; leady docierają przez zainstalowaną aplikację.",
+      "needsAttention_few": "{{count}} leady wymagają uwagi",
+      "needsAttention_many": "{{count}} leadów wymaga uwagi",
+      "needsAttention_one": "{{count}} lead wymaga uwagi",
+      "needsAttention_other": "{{count}} leadów wymaga uwagi",
+      "pausedToast": "Źródło wstrzymane",
+      "resumedToast": "Źródło wznowione",
+      "confirm": {
+        "cancel": "Anuluj",
+        "pause": {
+          "title": "Wstrzymać to źródło?",
+          "body": "Gdy jest wstrzymane, jego adres URL zwraca 404, a leady wysłane na niego nie są odbierane. Możesz je wznowić w dowolnym momencie.",
+          "action": "Wstrzymaj źródło"
+        }
+      }
+    },
+    "events": {
+      "title": "Otrzymane leady",
+      "filterStatus": "Pokaż",
+      "emptyTitle": "Jeszcze brak leadów",
+      "empty": "Wyślij lead testowy lub wklej adres URL do swojego narzędzia.",
+      "emptyFilteredTitle": "Brak pasujących leadów",
+      "emptyFiltered": "Żaden lead nie pasuje do tych filtrów.",
+      "test": "Test",
+      "retriedToast": "Ponowiono: teraz {{status}}"
+    },
+    "event": {
+      "title": "Szczegóły leada",
+      "close": "Zamknij",
+      "retry": "Ponów ten lead",
+      "received": "Otrzymano",
+      "processed": "Przetworzono",
+      "notProcessed": "jeszcze nie",
+      "attempts": "Próby",
+      "reason": "Powód",
+      "openContact": "Otwórz kontakt",
+      "openDeal": "Otwórz szansę sprzedaży",
+      "deliveredAgain_few": "Dostarczono ponownie {{count}} razy",
+      "deliveredAgain_many": "Dostarczono ponownie {{count}} razy",
+      "deliveredAgain_one": "Dostarczono ponownie raz",
+      "deliveredAgain_other": "Dostarczono ponownie {{count}} razy"
+    },
+    "errors": {
+      "conflict": "Ktoś inny zmienił to źródło, gdy je edytowałeś. Odśwież stronę, aby zobaczyć jego wersję; Twoje niezapisane zmiany zostaną utracone.",
+      "notRetryable": "Ponowić można tylko leady wymagające weryfikacji lub nieudane. Ten jest już zakończony lub właśnie przetwarzany.",
+      "payloadPurged": "Zapisany lead został usunięty po okresie przechowywania, więc nie ma czego ponawiać.",
+      "sourcePaused": "To źródło jest wstrzymane. Wznów je, aby wysłać testowy lead lub ponowić lead.",
+      "notFound": "Nie udało się go znaleźć. Mogło zostać usunięte."
+    }
   }
 }
