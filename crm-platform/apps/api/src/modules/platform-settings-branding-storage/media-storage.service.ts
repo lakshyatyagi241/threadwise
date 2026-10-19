@@ -37,6 +37,9 @@ export interface MediaDestination {
 
 const LOCAL_URL_ROOT = '/storage';
 
+/** Links a stored file by its key for a browser; null when the file has no link. See `MediaStorageService.linker`. */
+export type StoredLinker = (key: string) => Promise<string | null>;
+
 /** `storage/foo` and `/foo` both mean the object key `foo` (Reference's media_url strips a stray `storage/`). */
 export const normaliseKey = canonicalStorageKey;
 
@@ -245,11 +248,33 @@ export class MediaStorageService {
   async url(key: string, ttlSeconds = 3600): Promise<string> {
     if (key.trim() === '') return '';
     const d = await this.destination();
-    const k = normaliseKey(key);
-    if (d.disk !== 'cloud' || !d.target) return `${LOCAL_URL_ROOT}/${k}`;
-    const objectKey = this.fullKey(d, k);
+    if (d.disk !== 'cloud' || !d.target) return `${LOCAL_URL_ROOT}/${normaliseKey(key)}`;
+    return this.cloudUrl(d, d.target, key, ttlSeconds);
+  }
+
+  /**
+   * A function that links many stored files in one read. The storage destination is resolved once, on the first key asked for, so a
+   * page of links costs one settings read. A key with no link (empty, or on local disk where nothing serves the path) gives null.
+   */
+  async linker(ttlSeconds = 3600): Promise<StoredLinker> {
+    let destination: Promise<MediaDestination> | null = null;
+    return async (key) => {
+      if (key.trim() === '') return null;
+      destination ??= this.destination();
+      const d = await destination;
+      return d.disk === 'cloud' && d.target ? this.cloudUrl(d, d.target, key, ttlSeconds) : null;
+    };
+  }
+
+  private async cloudUrl(
+    d: MediaDestination,
+    target: StorageTarget,
+    key: string,
+    ttlSeconds: number,
+  ): Promise<string> {
+    const objectKey = this.fullKey(d, normaliseKey(key));
     if (d.cdnUrl) return `${d.cdnUrl.replace(/\/+$/, '')}/${objectKey}`;
-    const t = d.publicEndpoint ? { ...d.target, endpoint: d.publicEndpoint } : d.target;
+    const t = d.publicEndpoint ? { ...target, endpoint: d.publicEndpoint } : target;
     if (d.visibility === 'private') return presignS3Get(t, objectKey, ttlSeconds);
     const base = new URL(t.endpoint);
     return t.pathStyle

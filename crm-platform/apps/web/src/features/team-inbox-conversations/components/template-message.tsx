@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import type { MessageTemplate, MessageTemplateButton } from '@crm/contracts';
 import { templateButtonHref } from '../lib/template-button';
 import { BubbleButton, BubbleButtonList } from '@/components/whatsapp-button';
+import { DocumentMedia, ImageMedia, VideoMedia } from './media';
 import {
   CopyIcon,
   FileIcon,
@@ -62,7 +63,9 @@ export function TemplateMessage({
           {header.text}
         </p>
       )}
-      {header && header.format !== 'text' && <MediaMarker format={header.format} />}
+      {header && header.format !== 'text' && (
+        <MediaHeader format={header.format} mediaUrl={header.mediaUrl ?? null} />
+      )}
       {text ? (
         <p dir="auto" className="whitespace-pre-wrap break-words" data-testid="inbox-template-body">
           {text}
@@ -88,6 +91,26 @@ export function TemplateMessage({
       )}
     </div>
   );
+}
+
+/**
+ * A media header as the thread plays or shows it: the template's file through the same image, video and document parts a message's
+ * own media uses. Without a link (the template has no file left, or it is a location pin) it is the marker.
+ */
+function MediaHeader({
+  format,
+  mediaUrl,
+}: {
+  format: 'image' | 'video' | 'document' | 'location';
+  mediaUrl: string | null;
+}) {
+  const t = useTranslations('team-inbox-conversations.bubble');
+  if (!mediaUrl || format === 'location') return <MediaMarker format={format} />;
+  // The file's own type is not kept with the template, so the player takes the browser's guess.
+  const media = { url: mediaUrl, mime: '', sizeBytes: null, name: null };
+  if (format === 'image') return <ImageMedia media={media} alt={t('templateHeader.image')} />;
+  if (format === 'video') return <VideoMedia media={media} />;
+  return <DocumentMedia media={media} />;
 }
 
 function MediaMarker({ format }: { format: 'image' | 'video' | 'document' | 'location' }) {

@@ -173,13 +173,21 @@ export function previewButtonsOf(raw: unknown): MessageTemplateButton[] {
 
 const MEDIA_HEADERS: ReadonlySet<string> = new Set(['image', 'video', 'document', 'location']);
 
-/** The header as the bubble draws it: a media or location marker (never the file: it is not stored with the message), else its text, else none. */
+/**
+ * The header as the bubble draws it: a media or location marker, else its text, else none. A media header carries a link to its file
+ * when the template still has one (`mediaUrl`, minted by the caller): the file is read from the template, not stored with the message.
+ */
 export function previewHeaderOf(
   t: Pick<TemplateFacts, 'attachmentType' | 'header'>,
+  mediaUrl: string | null = null,
 ): MessageTemplateHeader | null {
   const attachment = headerFormatOf(t.attachmentType);
   if (MEDIA_HEADERS.has(attachment)) {
-    return { format: attachment as MessageTemplateHeader['format'], text: null };
+    return {
+      format: attachment as MessageTemplateHeader['format'],
+      text: null,
+      ...(mediaUrl ? { mediaUrl } : {}),
+    };
   }
   const text = t.header?.trim() ?? '';
   return text === '' ? null : { format: 'text', text };
@@ -188,10 +196,11 @@ export function previewHeaderOf(
 /** What the thread draws around a template message's body: read from the stored template, never from what was typed at send time. */
 export function templatePreviewOf(
   t: Pick<TemplateFacts, 'attachmentType' | 'header' | 'buttons'> & { footer: string | null },
+  mediaUrl: string | null = null,
 ): MessageTemplatePreview {
   const footer = t.footer?.trim() ?? '';
   return {
-    header: previewHeaderOf(t),
+    header: previewHeaderOf(t, mediaUrl),
     footer: footer === '' ? null : footer,
     buttons: previewButtonsOf(t.buttons),
   };

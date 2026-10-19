@@ -40,6 +40,7 @@ import type { FlowTemplate } from './flow-template';
 import { describeTemplateFailure, providerProblem } from './template-errors';
 import {
   detailWithMedia,
+  headerPreviewUrl,
   isTemplateMediaKey,
   MEDIA_PREVIEW_TTL_S,
   templateMediaFolder,
@@ -155,6 +156,15 @@ export class TemplatesService {
 
   async get(uuid: string): Promise<TemplateDetail> {
     return detailWithMedia(this.storage, await this.require(uuid));
+  }
+
+  /**
+   * Links the header files a team-inbox thread shows: the returned function links one template row. The storage destination is resolved
+   * once for the whole read, on the first stored file asked for.
+   */
+  async previewLinker(): Promise<(row: TemplateRow) => Promise<string | null>> {
+    const link = await this.storage.linker(MEDIA_PREVIEW_TTL_S);
+    return (row) => headerPreviewUrl(link, row);
   }
 
   /**
