@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Alert, Badge, Button, Spinner } from '@crm/ui';
+import { Alert, Badge, Button, Spinner, ToastProvider } from '@crm/ui';
 import { activityCapabilities, type SalesActivityType } from '@crm/contracts';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useActivityTypes } from '../api/activity-types';
@@ -33,7 +33,7 @@ function useSummary() {
  * Chat and any the business adds), each with an "Edit activity" drawer for its switches, task types and outcomes. Reading needs
  * `crm.activity_types.read`, changing `crm.activity_types.manage`. The same lists feed the pickers on tasks, meetings and logged calls.
  */
-export function SalesActivitiesScreen() {
+function Screen() {
   const t = useTranslations('sales-activities.list');
   const labels = useActivityLabels();
   const summary = useSummary();
@@ -134,5 +134,15 @@ export function SalesActivitiesScreen() {
         />
       )}
     </section>
+  );
+}
+
+/** The page brings its own toast host: the drawer and the dialog confirm what they saved with a toast. */
+export function SalesActivitiesScreen() {
+  const t = useTranslations('sales-activities.drawer');
+  return (
+    <ToastProvider dismissLabel={t('close')}>
+      <Screen />
+    </ToastProvider>
   );
 }
