@@ -52,8 +52,10 @@ ENV NODE_ENV=production
 # terminal to answer); --ignore-scripts skips the repository's husky `prepare` hook, which is not installed any more; --filter keeps only
 # the web app and what it depends on (the API's git-hosted packages are not in this stage's store, and the web app does not use them).
 # Take the fixed Alpine packages (OpenSSL etc.) that are newer than the node base image; see the API Dockerfile.
+# No --offline: the deps stage keeps its pnpm store in a BuildKit cache mount, which is not part of the image, so this stage has no store to
+# read from (it failed with ERR_PNPM_NO_OFFLINE_TARBALL on chalk@6.0.0). It downloads the production packages from the registry instead.
 RUN apk upgrade --no-cache
-RUN CI=true pnpm install --prod --frozen-lockfile --offline --ignore-scripts --filter "@crm/web..." \
+RUN CI=true pnpm install --prod --frozen-lockfile --ignore-scripts --filter "@crm/web..." \
  && rm -rf /root/.cache /root/.local/share/pnpm/store \
       /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
       /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /usr/local/bin/pnpm /usr/local/bin/pnpx \
