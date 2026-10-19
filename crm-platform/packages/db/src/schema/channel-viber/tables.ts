@@ -16,6 +16,7 @@ import {
   text,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { conversations } from '../chat-conversations/tables';
@@ -32,7 +33,12 @@ export const viberChannels = pgTable(
     connectedBy: idColumn('connected_by'),
     /** AES-GCM ciphertext (credential pattern); never plain text. */
     authToken: text('auth_token').notNull(),
-    webhookToken: text('webhook_token').notNull(),
+    /** Legacy plaintext routing token; NULL once the audit backfill has run (encryption audit E3). Read `webhookTokenEnc` first. */
+    webhookToken: text('webhook_token'),
+    /** sha256 (hex) of the routing token: what the public lookup function matches. */
+    webhookTokenHash: text('webhook_token_hash'),
+    /** The routing token sealed with CryptoService, so the webhook URL can be shown again. */
+    webhookTokenEnc: text('webhook_token_enc'),
     viberId: text('viber_id'),
     botName: text('bot_name'),
     botUri: text('bot_uri'),
@@ -54,6 +60,9 @@ export const viberChannels = pgTable(
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
     unique('uq_viber_channels_webhook_token').on(t.webhookToken),
+    uniqueIndex('uq_viber_channels_webhook_token_hash')
+      .on(t.webhookTokenHash)
+      .where(sql`${t.webhookTokenHash} IS NOT NULL`),
     foreignKey({
       name: 'fk_viber_channels_connected_by',
       columns: [t.orgId, t.connectedBy],

@@ -72,3 +72,4 @@ reports/tenancy-audit/
 reports/ssrf/
 reports/sast/
 reports/qa-suite/
+fuzz-result.json

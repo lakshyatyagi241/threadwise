@@ -188,6 +188,8 @@ export const salesInvoices = defineHolder({
         notes: 'null',
         meta_json: 'null',
         recovery_token: 'null',
+        recovery_token_hash: 'null',
+        recovery_token_enc: 'null',
       },
       tier: 'financial',
       categories: ['identifier', 'contact', 'financial', 'location'],

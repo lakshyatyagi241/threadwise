@@ -8,6 +8,8 @@
  */
 
 const MAX = 300;
+/** The patterns below are unanchored and quadratic on a long run of one kind of character (32 KB takes a second), so only this much is read. */
+const READ_LIMIT = 4096;
 
 const PATTERNS: ReadonlyArray<readonly [RegExp, string]> = [
   // Authorization headers and bearer/basic credentials.
@@ -38,11 +40,16 @@ export function sanitizeErrorText(input: unknown, max: number = MAX): string {
     try {
       text = JSON.stringify(input) ?? String(input);
     } catch {
-      text = String(input);
+      // A value too deep to stringify is too deep to print either (String() recurses too): keep nothing rather than throw.
+      try {
+        text = String(input);
+      } catch {
+        text = '';
+      }
     }
   }
   // Control characters and newlines would break one-line log and CSV use; a stack trace is dropped, never kept.
-  text = text.split('\n')[0] ?? '';
+  text = (text.split('\n')[0] ?? '').slice(0, READ_LIMIT);
   // eslint-disable-next-line no-control-regex
   text = text.replace(/[\u0000-\u001f\u007f]/g, ' ');
   for (const [re, to] of PATTERNS) text = text.replace(re, to);

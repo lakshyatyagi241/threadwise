@@ -15,6 +15,7 @@ import {
   text,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { conversations } from '../chat-conversations/tables';
@@ -36,7 +37,12 @@ export const wechatChannels = pgTable(
     verifyToken: text('verify_token').notNull(),
     encodingAesKey: text('encoding_aes_key'),
     encMode: text('enc_mode').notNull().default('compat'),
-    webhookToken: text('webhook_token').notNull(),
+    /** Legacy plaintext routing token; NULL once the audit backfill has run (encryption audit E3). Read `webhookTokenEnc` first. */
+    webhookToken: text('webhook_token'),
+    /** sha256 (hex) of the routing token: what the public lookup function matches. */
+    webhookTokenHash: text('webhook_token_hash'),
+    /** The routing token sealed with CryptoService, so the webhook URL can be shown again. */
+    webhookTokenEnc: text('webhook_token_enc'),
     wxId: text('wx_id'),
     accountName: text('account_name'),
     avatarUrl: text('avatar_url'),
@@ -60,6 +66,9 @@ export const wechatChannels = pgTable(
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
     unique('uq_wechat_channels_webhook_token').on(t.webhookToken),
+    uniqueIndex('uq_wechat_channels_webhook_token_hash')
+      .on(t.webhookTokenHash)
+      .where(sql`${t.webhookTokenHash} IS NOT NULL`),
     foreignKey({
       name: 'fk_wechat_channels_connected_by',
       columns: [t.orgId, t.connectedBy],

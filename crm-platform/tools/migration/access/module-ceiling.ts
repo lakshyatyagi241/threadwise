@@ -14,6 +14,8 @@ export const MODULE_CEILING: Record<string, string[]> = {
   appointments: ['record.appointments.', 'record.booking-types.'],
   forms: ['record.forms.', 'record.form-submissions.', 'wfl.', 'exam.'],
   'ai-crm': ['aicrm.', 'lsc.'],
+  // AI agents (trained assistants and their knowledge): Waboo had no such area, so a migrated workspace only has it when a Waboo permission maps into it
+  'ai-agents': ['aiag.'],
   email: ['mail.'],
   facebook: ['fb.'],
   instagram: ['ig.'],
@@ -28,4 +30,6 @@ export const MODULE_CEILING: Record<string, string[]> = {
   warmer: ['sched.'],
   'team-chat': ['tchat.'],
   'website-chat': ['wgt.'],
+  // the AI Studio start page: a Desk page that Waboo never had (always closed for a migrated workspace, see NEVER_KEPT)
+  'ai-studio': ['flb.ai_studio.'],
 };

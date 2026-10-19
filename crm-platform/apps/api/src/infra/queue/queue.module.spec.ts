@@ -38,4 +38,9 @@ describe('queue connections (RF-05)', () => {
       enableOfflineQueue: false,
     });
   });
+
+  it('rediss:// turns TLS on for the queue connection, redis:// leaves it off (E6)', () => {
+    expect(queueRedisOptions('rediss://:pw@h:6380/3')).toMatchObject({ host: 'h', tls: {} });
+    expect(queueRedisOptions('redis://:pw@h:6380/3')).not.toHaveProperty('tls');
+  });
 });

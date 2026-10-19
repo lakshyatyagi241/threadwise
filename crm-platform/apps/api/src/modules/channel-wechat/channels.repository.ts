@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import type { TokenColumns } from '../../common/crypto/secret-columns';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 
@@ -13,7 +14,9 @@ export interface ChannelRow {
   /** Encrypted. */
   encodingAesKey: string | null;
   encMode: 'plain' | 'compat' | 'safe';
-  webhookToken: string;
+  webhookToken: string | null;
+  /** The token sealed with CryptoService (encryption audit E3); preferred over the legacy plaintext column. */
+  webhookTokenEnc: string | null;
   wxId: string | null;
   accountName: string | null;
   /** Encrypted. */
@@ -34,7 +37,8 @@ interface Raw {
   verify_token: string;
   encoding_aes_key: string | null;
   enc_mode: string;
-  webhook_token: string;
+  webhook_token: string | null;
+  webhook_token_enc: string | null;
   wx_id: string | null;
   account_name: string | null;
   cached_access_token: string | null;
@@ -47,7 +51,7 @@ interface Raw {
 }
 
 const COLUMNS = sql.raw(
-  `id, uuid, app_id, app_secret, verify_token, encoding_aes_key, enc_mode, webhook_token, wx_id, account_name,
+  `id, uuid, app_id, app_secret, verify_token, encoding_aes_key, enc_mode, webhook_token, webhook_token_enc, wx_id, account_name,
    cached_access_token, token_expires_at, active, connected_at, last_inbound_at, last_error, row_version`,
 );
 
@@ -62,6 +66,7 @@ const toRow = (r: Raw): ChannelRow => ({
   encodingAesKey: r.encoding_aes_key,
   encMode: (['plain', 'compat', 'safe'] as const).find((m) => m === r.enc_mode) ?? 'compat',
   webhookToken: r.webhook_token,
+  webhookTokenEnc: r.webhook_token_enc,
   wxId: r.wx_id,
   accountName: r.account_name,
   cachedAccessToken: r.cached_access_token,
@@ -151,13 +156,13 @@ export class ChannelsRepository {
   async insert(
     tx: Tx,
     orgId: number,
-    v: ConnectValues & { webhookToken: string },
+    v: ConnectValues & { webhookToken: TokenColumns },
   ): Promise<ChannelRow> {
     const res = await tx.execute(sql`
-      INSERT INTO wechat_channels (org_id, connected_by, app_id, app_secret, verify_token, encoding_aes_key, enc_mode, webhook_token,
+      INSERT INTO wechat_channels (org_id, connected_by, app_id, app_secret, verify_token, encoding_aes_key, enc_mode, webhook_token, webhook_token_hash, webhook_token_enc,
                                    account_name, cached_access_token, token_expires_at, active, connected_at, last_error)
       VALUES (${orgId}, ${v.connectedBy}, ${v.appId}, ${v.appSecret}, ${v.verifyToken}, ${v.encodingAesKey}, ${v.encMode},
-              ${v.webhookToken}, ${v.accountName}, ${v.cachedAccessToken}, ${v.tokenExpiresAt}, true, now(), NULL)
+              ${v.webhookToken.plain}, ${v.webhookToken.hash}, ${v.webhookToken.enc}, ${v.accountName}, ${v.cachedAccessToken}, ${v.tokenExpiresAt}, true, now(), NULL)
       RETURNING ${COLUMNS}`);
     return toRow((res.rows as unknown as Raw[])[0]!);
   }

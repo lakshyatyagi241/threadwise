@@ -1,5 +1,6 @@
 /**
- * What a `CryptoService` blob looks like: `v1:<iv>:<tag>:<ciphertext>` with an optional trailing 8-hex key id. Used to FIND
+ * What a `CryptoService` blob looks like: `v1:<iv>:<tag>:<ciphertext>` with an optional trailing 8-hex key id, or the bound form
+ * `v2:<iv>:<tag>:<ciphertext>:<key id>:<32-hex context label>`. Used to FIND
  * ciphertext in the database without knowing which column holds it, so a domain that stores secrets cannot be forgotten by a
  * key rotation.
  *
@@ -7,7 +8,7 @@
  * rewritten), and the check is deliberately strict enough that ordinary text such as `v1:beta` does not.
  */
 const B64 = '[A-Za-z0-9+/]+={0,2}';
-export const ENVELOPE_SOURCE = `^v1:${B64}:${B64}:(?:${B64})?(?::[0-9a-f]{8})?$`;
+export const ENVELOPE_SOURCE = `^(?:v1:${B64}:${B64}:(?:${B64})?(?::[0-9a-f]{8})?|v2:${B64}:${B64}:(?:${B64})?:[0-9a-f]{8}:[0-9a-f]{32})$`;
 export const ENVELOPE = new RegExp(ENVELOPE_SOURCE);
 
 export const looksSealed = (value: unknown): value is string =>

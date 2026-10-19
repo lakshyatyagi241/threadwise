@@ -471,7 +471,7 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
               const ri = replyIndex(ci, bi);
               return (
                 <div key={bi} className="rounded-lg border border-border bg-background p-2">
-                  <div className="grid gap-2 sm:grid-cols-[9rem_1fr_1fr_auto]">
+                  <div className="grid grid-cols-[1fr_auto] items-center gap-2">
                     <Select
                       value={kind}
                       onChange={(e) => patchBtn(ci, bi, { type: e.target.value })}
@@ -482,27 +482,27 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
                         </option>
                       ))}
                     </Select>
-                    <Input
-                      value={str(b.label)}
-                      maxLength={FLB_CAROUSEL_LIMITS.label + 10}
-                      placeholder={t('carousel.label')}
-                      onChange={(e) => patchBtn(ci, bi, { label: e.target.value })}
-                    />
-                    {kind === 'reply' || kind === 'agent' ? (
-                      <span />
-                    ) : (
-                      <Input
-                        value={str(b.value)}
-                        placeholder={holder(kind)}
-                        onChange={(e) => patchBtn(ci, bi, { value: e.target.value })}
-                      />
-                    )}
                     <RemoveBtn
                       label={t('carousel.removeButton')}
                       onClick={() =>
                         patchCard(ci, { buttons: buttonsOf(c).filter((_, j) => j !== bi) })
                       }
                     />
+                    <Input
+                      className="col-span-2"
+                      value={str(b.label)}
+                      maxLength={FLB_CAROUSEL_LIMITS.label + 10}
+                      placeholder={t('carousel.label')}
+                      onChange={(e) => patchBtn(ci, bi, { label: e.target.value })}
+                    />
+                    {kind === 'reply' || kind === 'agent' ? null : (
+                      <Input
+                        className="col-span-2"
+                        value={str(b.value)}
+                        placeholder={holder(kind)}
+                        onChange={(e) => patchBtn(ci, bi, { value: e.target.value })}
+                      />
+                    )}
                   </div>
                   {kind === 'reply' ? (
                     <div className="mt-2">
