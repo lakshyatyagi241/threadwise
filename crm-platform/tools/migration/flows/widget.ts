@@ -346,6 +346,11 @@ export const FALLBACK_MAX = 1024;
  */
 export function fallbackOf(c: Doc, bot: Doc, soft: Soft[]): string | null {
   const dm = obj(c.default_messages);
+  // Waboo keeps the "did not understand" reply as default_messages.default.response: [{ type: 'text', value }]
+  const dflt = obj(dm.default);
+  const dfltText = (Array.isArray(dflt.response) ? dflt.response : [])
+    .map((r) => (typeof r === 'string' ? r : typeof obj(r).value === 'string' && /^(text)?$/i.test(String(obj(r).type ?? '')) ? (obj(r).value as string) : ''))
+    .find((v) => v.trim() !== '');
   const found = [
     c.fallback_message,
     c.fallbackMessage,
@@ -354,6 +359,7 @@ export function fallbackOf(c: Doc, bot: Doc, soft: Soft[]): string | null {
     dm.fallback_message,
     dm.not_understood,
     dm.no_match,
+    dfltText,
   ].find((v) => typeof v === 'string' && v.trim() !== '');
   if (typeof found !== 'string') return null;
   if (Array.from(found).length > FALLBACK_MAX) {
