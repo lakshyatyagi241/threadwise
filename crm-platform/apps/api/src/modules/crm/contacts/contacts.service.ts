@@ -1636,10 +1636,14 @@ export class ContactsService {
     tx: Tx,
     orgId: number,
     data: Record<string, unknown>,
-    scopeOf?: (rules: readonly RequiredRule[]) => ReadonlySet<string>,
+    scope?: ReadonlySet<string> | ((rules: readonly RequiredRule[]) => ReadonlySet<string>),
   ): Promise<void> {
     const rules = await this.repo.requiredRules(tx, orgId);
-    const missing = missingRequired(rules, data, scopeOf?.(rules));
+    const missing = missingRequired(
+      rules,
+      data,
+      typeof scope === 'function' ? scope(rules) : scope,
+    );
     if (missing.length > 0) throw requiredPropertiesError(missing);
   }
 
