@@ -1,0 +1,59 @@
+{
+  "platform-deployments": {
+    "nav": { "item": "Deployment" },
+    "eyebrow": "Operazioni",
+    "title": "Deployment",
+    "description": "Ogni flusso pubblicato sulla console Geta: cosa è in coda, cosa è in esecuzione ora e cosa è fallito e perché. Si aggiorna ogni pochi secondi.",
+    "updated": "In diretta. Aggiornato alle {time}",
+    "stale": "L’ultimo aggiornamento è fallito. Vengono mostrati i deployment precedenti.",
+    "stalledAlert": "{count} deployment non cambiano da {minutes} minuti. Il loro worker potrebbe essersi fermato.",
+    "truncated": "Vengono mostrati i primi {limit} deployment. Scegli uno stato per vedere gli altri.",
+    "kpi": {
+      "running": "In esecuzione",
+      "queued": "In coda",
+      "failed": "Falliti",
+      "live": "Attivi",
+      "stalled": "Bloccati"
+    },
+    "filter": {
+      "label": "Filtra per stato",
+      "all": "Tutti",
+      "running": "In esecuzione",
+      "queued": "In coda",
+      "failed": "Falliti",
+      "live": "Attivi"
+    },
+    "cols": {
+      "workspace": "Workspace",
+      "flow": "Flusso",
+      "status": "Stato",
+      "step": "Passo",
+      "attempted": "Ultimo tentativo",
+      "updated": "Ultima modifica",
+      "error": "Errore"
+    },
+    "status": {
+      "running": "In esecuzione",
+      "queued": "In coda",
+      "failed": "Fallito",
+      "live": "Attivo"
+    },
+    "steps": {
+      "configuration_update": "Aggiornamento configurazione",
+      "publish_bot": "Pubblicazione del bot"
+    },
+    "stalledBadge": "Bloccato",
+    "version": "Versione {version}",
+    "notStarted": "Non ancora avviato",
+    "failedAt": "Fallito al passo {step}",
+    "noDetail": "Nessun testo di errore è stato salvato.",
+    "empty": {
+      "title": "Niente da mostrare",
+      "all": "Nessun flusso è ancora stato pubblicato sulla console Geta.",
+      "running": "Nessuna pubblicazione è in esecuzione in questo momento.",
+      "queued": "Nulla è in attesa in coda.",
+      "failed": "Nessuna pubblicazione è fallita.",
+      "live": "Nessun flusso è ancora attivo sulla console Geta."
+    }
+  }
+}

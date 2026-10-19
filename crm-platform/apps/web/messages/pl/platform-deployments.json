@@ -1,0 +1,59 @@
+{
+  "platform-deployments": {
+    "nav": { "item": "Wdrożenia" },
+    "eyebrow": "Operacje",
+    "title": "Wdrożenia",
+    "description": "Każdy flow opublikowany w konsoli Geta: co czeka w kolejce, co działa teraz, a co się nie udało i dlaczego. Odświeża się co kilka sekund.",
+    "updated": "Na żywo. Zaktualizowano {time}",
+    "stale": "Ostatnie odświeżenie się nie powiodło. Pokazano poprzednie wdrożenia.",
+    "stalledAlert": "{count} wdrożeń nie zmieniło się od {minutes} minut. Ich worker mógł się zatrzymać.",
+    "truncated": "Pokazano pierwsze {limit} wdrożeń. Wybierz status, aby zobaczyć resztę.",
+    "kpi": {
+      "running": "W toku",
+      "queued": "W kolejce",
+      "failed": "Nieudane",
+      "live": "Aktywne",
+      "stalled": "Zablokowane"
+    },
+    "filter": {
+      "label": "Filtruj według statusu",
+      "all": "Wszystkie",
+      "running": "W toku",
+      "queued": "W kolejce",
+      "failed": "Nieudane",
+      "live": "Aktywne"
+    },
+    "cols": {
+      "workspace": "Obszar roboczy",
+      "flow": "Flow",
+      "status": "Status",
+      "step": "Krok",
+      "attempted": "Ostatnia próba",
+      "updated": "Ostatnia zmiana",
+      "error": "Błąd"
+    },
+    "status": {
+      "running": "W toku",
+      "queued": "W kolejce",
+      "failed": "Nieudane",
+      "live": "Aktywne"
+    },
+    "steps": {
+      "configuration_update": "Aktualizacja konfiguracji",
+      "publish_bot": "Publikacja bota"
+    },
+    "stalledBadge": "Zablokowane",
+    "version": "Wersja {version}",
+    "notStarted": "Nie rozpoczęto",
+    "failedAt": "Niepowodzenie na kroku: {step}",
+    "noDetail": "Nie zapisano treści błędu.",
+    "empty": {
+      "title": "Brak czego pokazać",
+      "all": "Żaden flow nie został jeszcze opublikowany w konsoli Geta.",
+      "running": "Obecnie nie trwa żadna publikacja.",
+      "queued": "W kolejce nic nie czeka.",
+      "failed": "Żadna publikacja nie zakończyła się niepowodzeniem.",
+      "live": "Żaden flow nie jest jeszcze aktywny w konsoli Geta."
+    }
+  }
+}

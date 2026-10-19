@@ -1,0 +1,59 @@
+{
+  "platform-deployments": {
+    "nav": { "item": "Déploiements" },
+    "eyebrow": "Exploitation",
+    "title": "Déploiements",
+    "description": "Chaque flux publié sur la console Geta : ce qui est en file d’attente, ce qui tourne maintenant, et ce qui a échoué et pourquoi. Se met à jour toutes les quelques secondes.",
+    "updated": "En direct. Mis à jour à {time}",
+    "stale": "La dernière actualisation a échoué. Affichage des déploiements précédents.",
+    "stalledAlert": "{count} déploiement(s) n’ont pas changé depuis {minutes} minutes. Leur worker s’est peut-être arrêté.",
+    "truncated": "Affichage des {limit} premiers déploiements. Choisissez un statut pour voir les autres.",
+    "kpi": {
+      "running": "En cours",
+      "queued": "En file",
+      "failed": "Échoués",
+      "live": "En ligne",
+      "stalled": "Bloqués"
+    },
+    "filter": {
+      "label": "Filtrer par statut",
+      "all": "Tous",
+      "running": "En cours",
+      "queued": "En file",
+      "failed": "Échoués",
+      "live": "En ligne"
+    },
+    "cols": {
+      "workspace": "Espace de travail",
+      "flow": "Flux",
+      "status": "Statut",
+      "step": "Étape",
+      "attempted": "Dernière tentative",
+      "updated": "Dernière modification",
+      "error": "Erreur"
+    },
+    "status": {
+      "running": "En cours",
+      "queued": "En file",
+      "failed": "Échoué",
+      "live": "En ligne"
+    },
+    "steps": {
+      "configuration_update": "Mise à jour de la configuration",
+      "publish_bot": "Publication du bot"
+    },
+    "stalledBadge": "Bloqué",
+    "version": "Version {version}",
+    "notStarted": "Pas encore démarré",
+    "failedAt": "Échec à l’étape {step}",
+    "noDetail": "Aucun texte d’erreur n’a été enregistré.",
+    "empty": {
+      "title": "Rien à afficher",
+      "all": "Aucun flux n’a encore été publié sur la console Geta.",
+      "running": "Aucune publication en cours pour le moment.",
+      "queued": "Rien n’attend dans la file.",
+      "failed": "Aucune publication n’a échoué.",
+      "live": "Aucun flux n’est encore en ligne sur la console Geta."
+    }
+  }
+}

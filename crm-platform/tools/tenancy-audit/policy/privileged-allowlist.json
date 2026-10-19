@@ -425,6 +425,11 @@
     "reason": "operator consumers + worker; one tenant-request use: BillingService.change runs a privileged tx (statements all keyed by ctx.orgId). Design decision TI-011",
     "reviewedOn": "2026-10-11"
   },
+  "modules/platform-deployments/deployments.store.ts": {
+    "status": "reviewed",
+    "reason": "platform operator data behind OperatorGuard (GET /v2/platform/deployments, any operator); read-only join of Geta publish syncs, flows and organizations across tenants by design; no tenant route reaches it; the only caller input is the status enum and a limit both validated by zod; returns mapped fields only, the Geta error cut to 300 characters",
+    "reviewedOn": "2026-10-19"
+  },
   "modules/platform-infrastructure/observability/worker-heartbeat.service.ts": {
     "status": "reviewed",
     "reason": "read-only count and lag on event_outbox; GET /ready exposes the platform-wide aggregate (no per-tenant data)",

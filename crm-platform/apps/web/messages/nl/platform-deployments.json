@@ -1,0 +1,51 @@
+{
+  "platform-deployments": {
+    "nav": { "item": "Deployments" },
+    "eyebrow": "Beheer",
+    "title": "Deployments",
+    "description": "Elke flow die naar de Geta-console is gepubliceerd: wat in de wachtrij staat, wat nu draait, en wat is mislukt en waarom. Ververst elke paar seconden.",
+    "updated": "Live. Bijgewerkt {time}",
+    "stale": "De laatste vernieuwing is mislukt. De vorige deployments worden getoond.",
+    "stalledAlert": "{count} deployment(s) zijn {minutes} minuten niet veranderd. Hun worker is mogelijk gestopt.",
+    "truncated": "De eerste {limit} deployments worden getoond. Kies een status om de rest te zien.",
+    "kpi": {
+      "running": "Actief",
+      "queued": "In wachtrij",
+      "failed": "Mislukt",
+      "live": "Live",
+      "stalled": "Vastgelopen"
+    },
+    "filter": {
+      "label": "Filteren op status",
+      "all": "Alle",
+      "running": "Actief",
+      "queued": "In wachtrij",
+      "failed": "Mislukt",
+      "live": "Live"
+    },
+    "cols": {
+      "workspace": "Werkruimte",
+      "flow": "Flow",
+      "status": "Status",
+      "step": "Stap",
+      "attempted": "Laatste poging",
+      "updated": "Laatste wijziging",
+      "error": "Fout"
+    },
+    "status": { "running": "Actief", "queued": "In wachtrij", "failed": "Mislukt", "live": "Live" },
+    "steps": { "configuration_update": "Configuratie-update", "publish_bot": "Bot publiceren" },
+    "stalledBadge": "Vastgelopen",
+    "version": "Versie {version}",
+    "notStarted": "Nog niet gestart",
+    "failedAt": "Mislukt bij {step}",
+    "noDetail": "Er is geen fouttekst opgeslagen.",
+    "empty": {
+      "title": "Niets om te tonen",
+      "all": "Er is nog geen flow naar de Geta-console gepubliceerd.",
+      "running": "Er draait nu geen publicatie.",
+      "queued": "Er wacht niets in de wachtrij.",
+      "failed": "Geen enkele publicatie is mislukt.",
+      "live": "Er staat nog geen flow live op de Geta-console."
+    }
+  }
+}
