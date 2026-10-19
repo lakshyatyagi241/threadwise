@@ -225,154 +225,6 @@
       "reason": "a column list that interpolates only the module constants APP_PRICING_COLUMNS_TEXT / SUBSCRIPTION_COLUMNS_TEXT, exported fixed text with no interpolation (marketplace/pricing-model.ts); reviewed 2026-10-18"
     }
   ],
-  "43": [
-    {
-      "key": "apps/api/src/modules/channel-email/drivers/google-mail.driver.ts await this.gmail.getMessage(",
-      "reason": "one Gmail API call per new message (external HTTP, no DB query), bounded by opts.maxMessages; Gmail offers no cheaper per-id read here; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/channel-email/drivers/google-mail.driver.ts await this.gmail.listHistory(",
-      "reason": "pagination: each page needs the previous page token, so it cannot be parallel or batched (external API, no DB query); reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/channel-email/drivers/google-mail.driver.ts await this.gmail.listMessages(",
-      "reason": "pagination: each page needs the previous page token (external API, no DB query); reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/developer-rest-api-v1/keys/api-keys.service.ts await this.repo.countActive(",
-      "reason": "retry loop on a key-hash collision: one count per attempt, not per item; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contacts/contacts.service.ts await this.repo.findByUuid(",
-      "reason": "optimistic-lock retry loop: one lookup per attempt, not per item; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/developer-rest-api-v1/resources/crm/deals/deals.service.ts await this.deals.get(",
-      "reason": "optimistic-lock retry loop: one read per attempt, not per item; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/message-templates/template-sync.service.ts await this.remote.list(",
-      "reason": "pagination: the next cursor comes from the previous page, bounded by MAX_PAGES (external API); reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/scheduled-queue-warmer/scheduled-due.service.ts await this.queue.getJob(",
-      "reason": "one Redis job lookup per stale running row, bounded by BATCH, background sweep; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/waboo-migration/remote-runner.ts await this.jobs.read(",
-      "reason": "a poll loop with a sleep between reads, not a per-item lookup; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/appointments-booking/appointment-lifecycle-sweep.service.ts await this.appts.findById(",
-      "reason": "one row per due candidate, each in its own transaction and locked FOR UPDATE with a re-check under the lock; the per-row read is the lock, so it cannot be batched; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/calling-voice/cli/demo-calls.ts await db.query",
-      "reason": "developer demo-data CLI, not a request or worker path; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/campaigns/campaign-sweeper.service.ts await this.repo.findById(",
-      "reason": "one campaign per distinct (workspace, campaign) pair, bounded by LIMIT 25 in the sweep query; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/chrome-extension-sheets-addon/sheets-contacts.service.ts await this.repo.findByIdentity(",
-      "reason": "optimistic-lock retry loop: one lookup per attempt, not per item; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/crm/invoicing/recurring-invoices.service.ts await this.repo.findById(",
-      "reason": "catch-up loop must re-read the profile each step for the advanced next run date; bounded by RECURRING_CATCH_UP_MAX; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/crm/segments/segment-actions.service.ts await this.repo.findByUuid(",
-      "reason": "chunked copy job: the segment is re-read in each chunk transaction so a deletion mid-job is noticed; one read per chunk, not per contact; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/crm/segments/segment-count-sweep.service.ts await this.repo.findById(",
-      "reason": "one due segment per transaction, each count timed and bounded; the read is the segment being counted; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/developer-rest-api-v1/resources/automation/templates/templates.v1.service.ts await this.repo.list(",
-      "reason": "pagination loop bounded by MAX_SCAN_BATCHES; the cursor comes from the previous page; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contact-groups/contact-groups.service.ts await this.groups.list(",
-      "reason": "pagination loop bounded by MAX_PAGES; the cursor comes from the previous page; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/growth-pilot/growth.service.ts await this.enrichment.lookup(",
-      "reason": "one external enrichment HTTP call per candidate, bounded by the batch limit; not a database query; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/platform-support-desk/playbooks.service.ts await this.actions.resolveAgent(",
-      "reason": "one small agent lookup per playbook step that assigns; playbooks have a handful of steps; reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/campaigns/campaign-sweeper.service.ts await this.settings.get(",
-      "reason": "read once per workspace and memoised for the rest of the sweep (attemptsByOrg), so the call count is the number of workspaces, not campaigns; fixed and reviewed 2026-10-15"
-    },
-    {
-      "key": "apps/api/src/modules/catalog-products/catalog-sync.service.ts await this.repo.findByRetailerIds(",
-      "reason": "the only per-item lookup left in the import: it runs only when the same retailer id appears twice in one Meta listing and the first copy was created in this run (a few rows at most), so the second can update it; every other product is read once for the whole listing (findByRetailerIds + one variants read); proven by test/unit/catalog-products/catalog-import-lookup.spec.ts; reviewed 2026-10-17"
-    },
-    {
-      "key": "apps/api/src/modules/appointments-booking/calendar-reconcile.service.ts await this.calendar.readEvent(",
-      "reason": "one Google Calendar API call per appointment checked, an external call with no batch form here, bounded by RECONCILE_BATCH = 100 per run; reviewed 2026-10-18"
-    },
-    {
-      "key": "apps/api/src/modules/campaigns/wizard/wizard-audience.service.ts await this.segmentsRepo.findByUuid(",
-      "reason": "one read per segment the user picked in the broadcast wizard, capped at WIZARD_SOURCES_MAX = 100 by the contract; a one-off step, not a hot path; reviewed 2026-10-18"
-    },
-    {
-      "key": "apps/api/src/modules/campaigns/wizard/wizard-audience.service.ts await this.resolver.findOrCreateByPhone(",
-      "reason": "csv.newNumbers returns only numbers that are NOT contacts yet, so every row is a create (plan cap, audit, outbox); there is nothing already known to prefetch; reviewed 2026-10-18"
-    },
-    {
-      "key": "apps/api/src/modules/company-briefs/company-briefs.service.ts await this.keys.resolve(",
-      "reason": "at most one read per AI vendor (6), memoised so the second priority pass reuses the first; proven by test/unit/ai-copilot-lead-finder/provider-resolution.spec.ts; reviewed 2026-10-18"
-    },
-    {
-      "key": "apps/api/src/modules/crm/contact-import/contact-import.engine.ts await this.tags.findOrCreateByName(",
-      "reason": "only tags that do not exist yet reach this call: existing ones are prefetched once (findManyByNames); a create carries the plan tag cap, audit and outbox per tag; reviewed 2026-10-18"
-    },
-    {
-      "key": "apps/api/src/modules/crm/pipelines/pipelines.service.ts await this.dealsRepo.findById(",
-      "reason": "sequential by design: each deal moves to the top of the target stage, so the next iteration reads minOrder that the previous one changed; a batch read would be stale; reviewed 2026-10-18"
-    },
-    {
-      "key": "apps/api/src/modules/developer-rest-api-v1/resources/crm/companies/companies.service.ts await this.companies.get(",
-      "reason": "optimistic-lock retry loop: one read per attempt, not per item; reviewed 2026-10-18"
-    },
-    {
-      "key": "apps/api/src/modules/forms-builder/form-submit.service.ts await this.tags.countAll(",
-      "reason": "counted at most once per submission and only when a tag has to be made (total is kept locally after that); proven by test/unit/forms-builder/form-submit-tags.spec.ts; reviewed 2026-10-18"
-    },
-    {
-      "key": "apps/api/src/modules/leads/lead-sync.service.ts await this.registry.resolve(",
-      "reason": "one small read per lead source of the workspace (a handful), only in the provider whose source kind matches (meta-lead-pull.provider, marketplace lead-pull.provider); the Sources settings page, not a hot path; reviewed 2026-10-18"
-    },
-    {
-      "key": "apps/api/src/modules/notifications/device-group-notification.consumer.ts await this.publisher.read(",
-      "reason": "one unread count and one realtime emit per user whose notification rows were cleared; the count is personal to each user; reviewed 2026-10-18"
-    },
-    {
-      "key": "apps/api/src/modules/notifications/device-notification.consumer.ts await this.publisher.read(",
-      "reason": "one unread count and one realtime emit per user whose notification rows were cleared; the count is personal to each user; reviewed 2026-10-18"
-    },
-    {
-      "key": "apps/api/src/modules/notifications/waba-group-notification.consumer.ts await this.publisher.read(",
-      "reason": "one unread count and one realtime emit per user whose notification rows were cleared; the count is personal to each user; reviewed 2026-10-18"
-    },
-    {
-      "key": "apps/api/src/modules/team-inbox-routing-sla/routing-engine.service.ts await this.repo.findOrCreateTag(",
-      "reason": "one per tag in a single routing rule action (a few), each with its own attach and conversation event; reviewed 2026-10-18"
-    }
-  ],
-  "36": [
-    {
-      "key": "google-account: 4 mutating route(s), 0 audit calls (apps/api/src/modules/google-account/google-account.controller.ts)",
-      "reason": "the controller only delegates to GoogleCalendarConnectService / GoogleConsentService in appointments-booking, which write the audit rows: disconnect (google-calendar-connect.service.ts, audit.record action delete), confirm (google-consent.service.ts, audit.record), calendar select; connect/begin only returns a consent URL and changes no state; reviewed 2026-10-16"
-    }
-  ],
   "31": [
     {
       "key": "apps/web/src/app/(site)/blog/[slug]/page.tsx dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\\\u003c') }}",
@@ -481,6 +333,12 @@
     {
       "key": "apps/web/src/features/marketing-site-cms/site/preview-bridge.tsx if (type === 'richtext') el.innerHTML = before;",
       "reason": "restores the element's own earlier content; reviewed 2026-10-17"
+    }
+  ],
+  "36": [
+    {
+      "key": "google-account: 4 mutating route(s), 0 audit calls (apps/api/src/modules/google-account/google-account.controller.ts)",
+      "reason": "the controller only delegates to GoogleCalendarConnectService / GoogleConsentService in appointments-booking, which write the audit rows: disconnect (google-calendar-connect.service.ts, audit.record action delete), confirm (google-consent.service.ts, audit.record), calendar select; connect/begin only returns a consent URL and changes no state; reviewed 2026-10-16"
     }
   ],
   "40": [
@@ -1045,6 +903,148 @@
       "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
     }
   ],
+  "43": [
+    {
+      "key": "apps/api/src/modules/channel-email/drivers/google-mail.driver.ts await this.gmail.getMessage(",
+      "reason": "one Gmail API call per new message (external HTTP, no DB query), bounded by opts.maxMessages; Gmail offers no cheaper per-id read here; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/channel-email/drivers/google-mail.driver.ts await this.gmail.listHistory(",
+      "reason": "pagination: each page needs the previous page token, so it cannot be parallel or batched (external API, no DB query); reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/channel-email/drivers/google-mail.driver.ts await this.gmail.listMessages(",
+      "reason": "pagination: each page needs the previous page token (external API, no DB query); reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/keys/api-keys.service.ts await this.repo.countActive(",
+      "reason": "retry loop on a key-hash collision: one count per attempt, not per item; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contacts/contacts.service.ts await this.repo.findByUuid(",
+      "reason": "optimistic-lock retry loop: one lookup per attempt, not per item; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/resources/crm/deals/deals.service.ts await this.deals.get(",
+      "reason": "optimistic-lock retry loop: one read per attempt, not per item; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/message-templates/template-sync.service.ts await this.remote.list(",
+      "reason": "pagination: the next cursor comes from the previous page, bounded by MAX_PAGES (external API); reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/scheduled-queue-warmer/scheduled-due.service.ts await this.queue.getJob(",
+      "reason": "one Redis job lookup per stale running row, bounded by BATCH, background sweep; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/waboo-migration/remote-runner.ts await this.jobs.read(",
+      "reason": "a poll loop with a sleep between reads, not a per-item lookup; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/appointments-booking/appointment-lifecycle-sweep.service.ts await this.appts.findById(",
+      "reason": "one row per due candidate, each in its own transaction and locked FOR UPDATE with a re-check under the lock; the per-row read is the lock, so it cannot be batched; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/calling-voice/cli/demo-calls.ts await db.query",
+      "reason": "developer demo-data CLI, not a request or worker path; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/campaign-sweeper.service.ts await this.repo.findById(",
+      "reason": "one campaign per distinct (workspace, campaign) pair, bounded by LIMIT 25 in the sweep query; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/chrome-extension-sheets-addon/sheets-contacts.service.ts await this.repo.findByIdentity(",
+      "reason": "optimistic-lock retry loop: one lookup per attempt, not per item; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/crm/invoicing/recurring-invoices.service.ts await this.repo.findById(",
+      "reason": "catch-up loop must re-read the profile each step for the advanced next run date; bounded by RECURRING_CATCH_UP_MAX; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/crm/segments/segment-actions.service.ts await this.repo.findByUuid(",
+      "reason": "chunked copy job: the segment is re-read in each chunk transaction so a deletion mid-job is noticed; one read per chunk, not per contact; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/crm/segments/segment-count-sweep.service.ts await this.repo.findById(",
+      "reason": "one due segment per transaction, each count timed and bounded; the read is the segment being counted; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/resources/automation/templates/templates.v1.service.ts await this.repo.list(",
+      "reason": "pagination loop bounded by MAX_SCAN_BATCHES; the cursor comes from the previous page; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contact-groups/contact-groups.service.ts await this.groups.list(",
+      "reason": "pagination loop bounded by MAX_PAGES; the cursor comes from the previous page; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/growth-pilot/growth.service.ts await this.enrichment.lookup(",
+      "reason": "one external enrichment HTTP call per candidate, bounded by the batch limit; not a database query; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/platform-support-desk/playbooks.service.ts await this.actions.resolveAgent(",
+      "reason": "one small agent lookup per playbook step that assigns; playbooks have a handful of steps; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/campaign-sweeper.service.ts await this.settings.get(",
+      "reason": "read once per workspace and memoised for the rest of the sweep (attemptsByOrg), so the call count is the number of workspaces, not campaigns; fixed and reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/catalog-products/catalog-sync.service.ts await this.repo.findByRetailerIds(",
+      "reason": "the only per-item lookup left in the import: it runs only when the same retailer id appears twice in one Meta listing and the first copy was created in this run (a few rows at most), so the second can update it; every other product is read once for the whole listing (findByRetailerIds + one variants read); proven by test/unit/catalog-products/catalog-import-lookup.spec.ts; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/appointments-booking/calendar-reconcile.service.ts await this.calendar.readEvent(",
+      "reason": "one Google Calendar API call per appointment checked, an external call with no batch form here, bounded by RECONCILE_BATCH = 100 per run; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/wizard/wizard-audience.service.ts await this.segmentsRepo.findByUuid(",
+      "reason": "one read per segment the user picked in the broadcast wizard, capped at WIZARD_SOURCES_MAX = 100 by the contract; a one-off step, not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/wizard/wizard-audience.service.ts await this.resolver.findOrCreateByPhone(",
+      "reason": "csv.newNumbers returns only numbers that are NOT contacts yet, so every row is a create (plan cap, audit, outbox); there is nothing already known to prefetch; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/company-briefs/company-briefs.service.ts await this.keys.resolve(",
+      "reason": "at most one read per AI vendor (6), memoised so the second priority pass reuses the first; proven by test/unit/ai-copilot-lead-finder/provider-resolution.spec.ts; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contact-import/contact-import.engine.ts await this.tags.findOrCreateByName(",
+      "reason": "only tags that do not exist yet reach this call: existing ones are prefetched once (findManyByNames); a create carries the plan tag cap, audit and outbox per tag; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/pipelines/pipelines.service.ts await this.dealsRepo.findById(",
+      "reason": "sequential by design: each deal moves to the top of the target stage, so the next iteration reads minOrder that the previous one changed; a batch read would be stale; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/resources/crm/companies/companies.service.ts await this.companies.get(",
+      "reason": "optimistic-lock retry loop: one read per attempt, not per item; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/forms-builder/form-submit.service.ts await this.tags.countAll(",
+      "reason": "counted at most once per submission and only when a tag has to be made (total is kept locally after that); proven by test/unit/forms-builder/form-submit-tags.spec.ts; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/leads/lead-sync.service.ts await this.registry.resolve(",
+      "reason": "one small read per lead source of the workspace (a handful), only in the provider whose source kind matches (meta-lead-pull.provider, marketplace lead-pull.provider); the Sources settings page, not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/device-group-notification.consumer.ts await this.publisher.read(",
+      "reason": "one unread count and one realtime emit per user whose notification rows were cleared; the count is personal to each user; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/device-notification.consumer.ts await this.publisher.read(",
+      "reason": "one unread count and one realtime emit per user whose notification rows were cleared; the count is personal to each user; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/waba-group-notification.consumer.ts await this.publisher.read(",
+      "reason": "one unread count and one realtime emit per user whose notification rows were cleared; the count is personal to each user; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/team-inbox-routing-sla/routing-engine.service.ts await this.repo.findOrCreateTag(",
+      "reason": "one per tag in a single routing rule action (a few), each with its own attach and conversation event; reviewed 2026-10-18"
+    }
+  ],
   "47": [
     {
       "key": "team_members",
@@ -1177,6 +1177,202 @@
     {
       "key": "waboo_migration_runs",
       "reason": "nullable on purpose: org_id is the workspace the load created, NULL for a dry run, and the FK is ON DELETE SET NULL; the table is platform-only (20261113100000_wmig_waboo_migration_runs.sql); reviewed 2026-10-18"
+    },
+    {
+      "key": "wa_provider_configs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_templates.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_templates.channel is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "flow_subscribers.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "shopify_integrations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "shopify_integration_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "woocommerce_integrations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "woocommerce_integration_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "shopify_cod_confirmations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "woocommerce_cod_confirmations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "meta_campaigns.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "meta_campaigns.type is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_chat_assistants.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_crm_actions.channel is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_crm_actions.kind is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_crm_actions.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "tiktok_accounts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "tiktok_posts.type is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "tiktok_posts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "tiktok_shops.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "hubspot_integrations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "hubspot_integration_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "slack_integrations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "slack_integration_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "trello_integrations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "trello_integration_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "workspace_email_accounts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "workspace_ig_accounts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "agent_statuses.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "broadcasts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_chat_links.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_forms.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "conversation_participants.role is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_call_assistants.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_call_logs.direction is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_call_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "projects.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "facebook_pages.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "facebook_posts.type is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "facebook_posts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "facebook_broadcasts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "telegram_broadcasts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "line_broadcasts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wechat_broadcast_recipients.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "viber_broadcasts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_coupons.type is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_orders.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "sales_doc_revisions.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "user_settings.state is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: nothing writes user_settings.state yet (no INSERT or UPDATE sets it), so there is no value set to constrain; add the CHECK when the feature that uses it ships (owner decision 2026-10-19); reviewed 2026-10-19"
     }
   ],
   "48": [
@@ -1193,6 +1389,42 @@
     {
       "key": "api_library_logs",
       "reason": "old rows are removed by apps/api/src/modules/api-library/api-library-retention.service.ts (daily cron, DELETE in batches of 1000 older than API_LIBRARY_LOG_RETENTION_DAYS, up to 50 batches a night); it deletes rows rather than dropping partitions, which is fine at this volume (a stream of API-call runs) and needs no archivable_streams() approval; reviewed 2026-10-18"
+    },
+    {
+      "key": "shopify_integration_events",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "woocommerce_integration_events",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "hubspot_integration_logs (partitioned)",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "trello_integration_logs (partitioned)",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "invoice_gateway_events",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "wallet_platform_log",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "contact_consent_events",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "privacy_request_events",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "translation_usage",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
     }
   ]
 }
