@@ -106,6 +106,7 @@ const ALLOW: Record<string, Reason> = {
   'web_form_submissions.receipt_token': 'public', // form-key.ts: "a handle for the thank-you page, not a credential"; shows a payment status only
   'wa_form_submissions.flow_token': 'public', // 'form-<id>-<run uuid>', echoed back by WhatsApp to match a reply to a run
   'wa_link_clicks.token': 'public', // the short link printed in the message to its recipient; resolves to a URL they already hold
+  'wa_templates.header_media_key': 'public', // the object-storage path of an uploaded template header image, not a credential; templates.service.ts checks it belongs to the organisation (assertOwnMedia)
 
   // --- hash: a digest, not the secret ---
   'webhook_forward_failures.signature_header': 'hash', // the HMAC the sender computed over the body, kept to replay the forward
