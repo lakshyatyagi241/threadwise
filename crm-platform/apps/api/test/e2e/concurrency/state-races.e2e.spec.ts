@@ -287,18 +287,7 @@ describe('CC-CPN: coupon redemption counter', () => {
       ]),
     ).toBe(12);
   });
-
-  // OPEN (D-06): the limit is only checked when the buyer previews the price, not when an order is paid, so buyers racing for the
-  // last use all get it. The code comments call this a kept Reference gap. `it.fails` documents it: this passes while the gap exists.
-  it.fails(
-    'CC-CPN-03 a coupon with 3 uses left, 8 buyers paying at once: uses never pass max_uses',
-    async () => {
-      const c = await mkCoupon(3);
-      const orders = await Promise.all(Array.from({ length: 8 }, () => mkOrder(c)));
-      await race(8, (i) => redeem(orders[i]!));
-      expect(await used(c.id)).toBeLessThanOrEqual(3);
-    },
-  );
+  // D-06 (the last uses of a coupon handed out twice) is enforced when the order is placed: see coupon-limit.e2e.spec.ts.
 });
 
 // --- sessions ------------------------------------------------------------------------------------------------------------------------
