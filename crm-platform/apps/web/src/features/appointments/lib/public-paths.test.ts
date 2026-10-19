@@ -140,3 +140,41 @@ describe('slotsQuery', () => {
     );
   });
 });
+
+describe('matchPublicPath: booking page pictures', () => {
+  const ID = '0f8fad5b-d9cb-469f-a165-70867728950e';
+
+  it('relays a picture to the API under its own name, as an asset', () => {
+    expect(matchPublicPath('GET', ['assets', 'acme', ID])).toEqual({
+      ok: true,
+      path: `booking-assets/acme/${ID}`,
+      method: 'GET',
+      hasQuery: false,
+      asset: true,
+    });
+    expect(matchPublicPath('GET', ['assets', 'acme', 'brand-logo'])).toMatchObject({
+      ok: true,
+      path: 'booking-assets/acme/brand-logo',
+      asset: true,
+    });
+  });
+
+  it('never marks the JSON routes as assets', () => {
+    expect(matchPublicPath('GET', ['booking', 'acme'])).not.toHaveProperty('asset');
+  });
+
+  it('refuses anything that is not a picture id, a write, or a longer path', () => {
+    expect(matchPublicPath('GET', ['assets', 'acme', 'logo'])).toEqual({ ok: false, status: 404 });
+    expect(matchPublicPath('GET', ['assets', 'acme', '..'])).toEqual({ ok: false, status: 404 });
+    expect(matchPublicPath('GET', ['assets', 'acme', `${ID}/x`])).toEqual({
+      ok: false,
+      status: 404,
+    });
+    expect(matchPublicPath('GET', ['assets', 'acme'])).toEqual({ ok: false, status: 404 });
+    expect(matchPublicPath('POST', ['assets', 'acme', ID])).toEqual({ ok: false, status: 405 });
+    expect(matchPublicPath('GET', ['booking-assets', 'acme', ID])).toEqual({
+      ok: false,
+      status: 404,
+    });
+  });
+});

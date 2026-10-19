@@ -11,3 +11,4 @@ export * from './calendar-feeds';
 export * from './booking-tools';
 export * from './channels';
 export * from './public';
+export * from './booking-page';

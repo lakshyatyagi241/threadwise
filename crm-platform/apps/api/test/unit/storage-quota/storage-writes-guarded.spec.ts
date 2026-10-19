@@ -293,6 +293,12 @@ describe('storage writes are guarded: Postgres blobs', () => {
       category: 'system_asset',
       reason: 'logo and favicon, one row per slot',
     },
+    booking_page_assets: {
+      how: 'exempt',
+      category: 'system_asset',
+      reason:
+        'logo and cover of the public booking page, one row per slot of a theme, replaced in place, 1 MB and 3 MB at most',
+    },
     flow_widget_assets: {
       how: 'exempt',
       category: 'system_asset',

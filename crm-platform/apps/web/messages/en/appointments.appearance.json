@@ -1,0 +1,190 @@
+{
+  "appointments": {
+    "appearance": {
+      "title": "Booking page appearance",
+      "subtitle": "Make the page your customers use to book an appointment look like your business.",
+      "backToSettings": "Appointment settings",
+      "loading": "Loading the booking page theme",
+      "forbidden": "You do not have permission to view the booking page appearance.",
+      "notAvailable": "The booking page appearance is not available on this server yet.",
+      "readOnly": "You can look at the appearance but not change it. Changing it needs permission to edit booking types.",
+      "fixFirst": "Fix the highlighted fields first.",
+      "issues": "{count, plural, one {# field needs attention before you can save.} other {# fields need attention before you can save.}}",
+      "saved": "Booking page appearance saved",
+      "saving": "Saving...",
+      "unsaved": "Unsaved changes",
+      "allSaved": "All changes saved",
+      "discard": "Discard changes",
+      "save": "Save appearance",
+      "conflict": {
+        "message": "The appearance was changed by someone else while you were editing.",
+        "reload": "Reload latest"
+      },
+      "leave": {
+        "title": "Leave without saving?",
+        "message": "Your changes to the booking page appearance have not been saved.",
+        "leave": "Leave",
+        "stay": "Keep editing"
+      },
+      "tile": {
+        "label": "Booking page appearance",
+        "description": "Logo, colours, fonts and welcome text of the page customers book on",
+        "keywords": "branding, logo, colours, theme, booking page, look and feel, fonts, white label"
+      },
+      "card": {
+        "title": "Booking page appearance",
+        "description": "Add your logo and colours, write a welcome message and choose fonts and corners for the page customers book on. You see a live preview as you edit.",
+        "open": "Open booking page appearance"
+      },
+      "editorLink": {
+        "link": "Page appearance",
+        "saveFirst": "Save the booking type first, then open its page appearance."
+      },
+      "typesList": {
+        "menu": "Page appearance"
+      },
+      "pictures": {
+        "title": "Logo and cover image",
+        "description": "Shown at the top of the page. Leave them empty to use what is set higher up.",
+        "logo": "Logo",
+        "logoHint": "PNG, JPG, WebP or GIF, up to {mb} MB. A wide logo on a transparent background works best.",
+        "cover": "Cover image",
+        "coverHint": "PNG, JPG, WebP or GIF, up to {mb} MB. Shown as a banner when the background is set to cover image.",
+        "useBrand": "Use my Branding logo and colours when empty",
+        "useBrandHint": "Anything you leave empty here is taken from Settings, Branding, so the booking page matches the rest of your brand."
+      },
+      "fields": {
+        "picker": "{name}: choose a colour",
+        "clear": "Clear",
+        "noPicture": "No picture",
+        "upload": "Upload",
+        "replace": "Replace",
+        "remove": "Remove",
+        "inheritedPicture": "Using the one set higher up.",
+        "inheritedColour": "Empty uses {colour}.",
+        "productColour": "Empty uses the default colour.",
+        "pictureType": "Use a PNG, JPG, WebP or GIF image.",
+        "pictureSize": "The picture is too large. The limit is {mb} MB.",
+        "pictureRejected": "That picture was not accepted. Use a PNG, JPG, WebP or GIF image within the size limit."
+      },
+      "colours": {
+        "title": "Colours and background",
+        "description": "Text colours are chosen for you so that everything stays readable.",
+        "primary": "Primary colour",
+        "typeHint": "Empty uses the workspace colour.",
+        "button": "Button colour",
+        "buttonHint": "The colour of buttons and selected times. Empty uses the primary colour.",
+        "background": "Page background",
+        "backgroundHint": "Solid colour, a soft tint of your primary colour, or your cover image as a banner.",
+        "sameAsWorkspace": "Same as the workspace",
+        "backgrounds": {
+          "solid": "Solid colour",
+          "tint": "Soft tint",
+          "image": "Cover image"
+        },
+        "backgroundColour": "Background colour",
+        "needCover": "Upload a cover image to use this background.",
+        "invalid": "Use a colour like #1a73e8."
+      },
+      "checks": {
+        "title": "Readability checks",
+        "autoText": "Text on your buttons is black or white, whichever reads better, and your primary colour is darkened or lightened where it is used as text.",
+        "primaryText": "Your primary colour has a contrast of {ratio}:1 on the page, below {min}:1, so it is adjusted where it is used as text.",
+        "button": "Button text has a contrast of {ratio}:1 on your button colour, below {min}:1.",
+        "buttonEdge": "Your button colour has a contrast of {ratio}:1 against the page, below {min}:1, so buttons may be hard to see.",
+        "inDark": "(dark mode)"
+      },
+      "wording": {
+        "title": "Wording",
+        "description": "Plain text only. Customers see it in the language you write it in.",
+        "pageTitle": "Page title",
+        "pageTitleHint": "Shown at the top of the page and in the browser tab. Empty uses your business name.",
+        "welcome": "Welcome message",
+        "welcomeHint": "{count} of {max} characters. Shown above the booking form.",
+        "button": "Confirm button label",
+        "buttonHint": "The text on the final button, for example Reserve my spot. Requests that need approval keep their own label.",
+        "buttonDefault": "Confirm booking",
+        "tooLong": "Use at most {max} characters."
+      },
+      "style": {
+        "title": "Fonts and corners",
+        "description": "A small set of safe choices that work on every device.",
+        "font": "Font",
+        "fontHint": "These use fonts already on the customer's device, so the page loads quickly.",
+        "fonts": {
+          "default": "Product default",
+          "system": "System",
+          "serif": "Serif",
+          "rounded": "Rounded",
+          "humanist": "Humanist"
+        },
+        "corners": "Corners",
+        "cornerStyles": {
+          "square": "Square",
+          "rounded": "Rounded",
+          "pill": "Pill"
+        },
+        "mode": "Light or dark",
+        "modes": {
+          "light": "Light",
+          "dark": "Dark",
+          "auto": "Follow the device"
+        }
+      },
+      "options": {
+        "title": "Page options",
+        "description": "What else appears around the booking form.",
+        "language": "Show the language switch",
+        "languageHint": "Lets customers change the language of the page.",
+        "poweredBy": "Show \"Powered by\" at the bottom",
+        "poweredByHint": "Switch it off to show only your own brand.",
+        "poweredByLocked": "Removing \"Powered by\" is part of white-label branding, which your plan does not include."
+      },
+      "links": {
+        "title": "Page address",
+        "description": "Where customers open the page. Changes show there as soon as you save.",
+        "page": "Booking page address",
+        "open": "Open page",
+        "copy": "Copy",
+        "copied": "Copied",
+        "later": "Using your own domain, and placing the page inside another website, are not available yet."
+      },
+      "type": {
+        "title": "Page appearance: {name}",
+        "subtitle": "Give this booking type its own logo, colours or welcome message. Anything you leave empty uses the workspace appearance.",
+        "back": "Back to the booking type",
+        "notFoundTitle": "Booking type not found",
+        "notFound": "This booking type no longer exists.",
+        "resetTitle": "Use the workspace appearance",
+        "resetDescription": "Removes everything set for this booking type, including its pictures.",
+        "reset": "Use workspace appearance",
+        "resetConfirmTitle": "Use the workspace appearance?",
+        "resetConfirmMessage": "The logo, cover image, colours and wording set for this booking type will be removed.",
+        "resetDone": "This booking type now uses the workspace appearance"
+      },
+      "preview": {
+        "title": "Live preview",
+        "device": "Device",
+        "desktop": "Desktop",
+        "mobile": "Mobile",
+        "page": "Page",
+        "servicePage": "Booking page",
+        "serviceList": "Service list",
+        "scheme": "Colour mode",
+        "asSet": "As set",
+        "light": "Light",
+        "dark": "Dark",
+        "direction": "Direction",
+        "ltr": "Left to right",
+        "rtl": "Right to left",
+        "frameTitle": "Preview of the booking page",
+        "note": "This is the real page with sample times. Nothing you do here is booked.",
+        "sampleName": "Introductory call",
+        "sampleName2": "Full session",
+        "sampleDescription": "A short call to understand what you need and answer your questions.",
+        "sampleIntro": "Please arrive a few minutes early.",
+        "sampleQuestion": "Anything we should know beforehand?"
+      }
+    }
+  }
+}

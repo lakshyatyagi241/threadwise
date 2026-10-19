@@ -1,0 +1,190 @@
+{
+  "appointments": {
+    "appearance": {
+      "title": "Uiterlijk van de boekingspagina",
+      "subtitle": "Laat de pagina waarop je klanten een afspraak boeken eruitzien als je bedrijf.",
+      "backToSettings": "Afspraakinstellingen",
+      "loading": "Thema van de boekingspagina laden",
+      "forbidden": "Je hebt geen toestemming om het uiterlijk van de boekingspagina te bekijken.",
+      "notAvailable": "Het uiterlijk van de boekingspagina is nog niet beschikbaar op deze server.",
+      "readOnly": "Je kunt het uiterlijk bekijken maar niet wijzigen. Wijzigen vereist toestemming om boekingstypen te bewerken.",
+      "fixFirst": "Los eerst de gemarkeerde velden op.",
+      "issues": "{count, plural, one {# veld heeft aandacht nodig voordat je kunt opslaan.} other {# velden hebben aandacht nodig voordat je kunt opslaan.}}",
+      "saved": "Uiterlijk van de boekingspagina opgeslagen",
+      "saving": "Opslaan...",
+      "unsaved": "Niet-opgeslagen wijzigingen",
+      "allSaved": "Alle wijzigingen opgeslagen",
+      "discard": "Wijzigingen verwerpen",
+      "save": "Uiterlijk opslaan",
+      "conflict": {
+        "message": "Het uiterlijk is door iemand anders gewijzigd terwijl je bezig was met bewerken.",
+        "reload": "Nieuwste laden"
+      },
+      "leave": {
+        "title": "Verlaten zonder op te slaan?",
+        "message": "Je wijzigingen in het uiterlijk van de boekingspagina zijn niet opgeslagen.",
+        "leave": "Verlaten",
+        "stay": "Verder bewerken"
+      },
+      "tile": {
+        "label": "Uiterlijk van de boekingspagina",
+        "description": "Logo, kleuren, lettertypen en welkomsttekst van de pagina waarop klanten boeken",
+        "keywords": "branding, logo, kleuren, thema, boekingspagina, uiterlijk, lettertypen, white label"
+      },
+      "card": {
+        "title": "Uiterlijk van de boekingspagina",
+        "description": "Voeg je logo en kleuren toe, schrijf een welkomstbericht en kies lettertypen en hoeken voor de pagina waarop klanten boeken. Tijdens het bewerken zie je een live voorbeeld.",
+        "open": "Uiterlijk van de boekingspagina openen"
+      },
+      "editorLink": {
+        "link": "Uiterlijk van de pagina",
+        "saveFirst": "Sla eerst het boekingstype op en open daarna het uiterlijk van de pagina."
+      },
+      "typesList": {
+        "menu": "Uiterlijk van de pagina"
+      },
+      "pictures": {
+        "title": "Logo en omslagafbeelding",
+        "description": "Getoond bovenaan de pagina. Laat leeg om te gebruiken wat een niveau hoger is ingesteld.",
+        "logo": "Logo",
+        "logoHint": "PNG, JPG, WebP of GIF, maximaal {mb} MB. Een breed logo op een transparante achtergrond werkt het best.",
+        "cover": "Omslagafbeelding",
+        "coverHint": "PNG, JPG, WebP of GIF, maximaal {mb} MB. Getoond als banner wanneer de achtergrond is ingesteld op omslagafbeelding.",
+        "useBrand": "Gebruik mijn logo en kleuren uit Branding als dit leeg is",
+        "useBrandHint": "Alles wat je hier leeg laat, wordt overgenomen uit Instellingen, Branding, zodat de boekingspagina past bij de rest van je merk."
+      },
+      "fields": {
+        "picker": "{name}: kies een kleur",
+        "clear": "Wissen",
+        "noPicture": "Geen afbeelding",
+        "upload": "Uploaden",
+        "replace": "Vervangen",
+        "remove": "Verwijderen",
+        "inheritedPicture": "Gebruikt de afbeelding die een niveau hoger is ingesteld.",
+        "inheritedColour": "Leeg gebruikt {colour}.",
+        "productColour": "Leeg gebruikt de standaardkleur.",
+        "pictureType": "Gebruik een PNG-, JPG-, WebP- of GIF-afbeelding.",
+        "pictureSize": "De afbeelding is te groot. De limiet is {mb} MB.",
+        "pictureRejected": "Die afbeelding is niet geaccepteerd. Gebruik een PNG-, JPG-, WebP- of GIF-afbeelding binnen de groottelimiet."
+      },
+      "colours": {
+        "title": "Kleuren en achtergrond",
+        "description": "Tekstkleuren worden voor je gekozen zodat alles leesbaar blijft.",
+        "primary": "Primaire kleur",
+        "typeHint": "Leeg gebruikt de kleur van de werkruimte.",
+        "button": "Knopkleur",
+        "buttonHint": "De kleur van knoppen en geselecteerde tijden. Leeg gebruikt de primaire kleur.",
+        "background": "Paginaachtergrond",
+        "backgroundHint": "Effen kleur, een zachte tint van je primaire kleur, of je omslagafbeelding als banner.",
+        "sameAsWorkspace": "Hetzelfde als de werkruimte",
+        "backgrounds": {
+          "solid": "Effen kleur",
+          "tint": "Zachte tint",
+          "image": "Omslagafbeelding"
+        },
+        "backgroundColour": "Achtergrondkleur",
+        "needCover": "Upload een omslagafbeelding om deze achtergrond te gebruiken.",
+        "invalid": "Gebruik een kleur zoals #1a73e8."
+      },
+      "checks": {
+        "title": "Leesbaarheidscontroles",
+        "autoText": "Tekst op je knoppen is zwart of wit, afhankelijk van wat beter leest, en je primaire kleur wordt donkerder of lichter gemaakt waar die als tekst wordt gebruikt.",
+        "primaryText": "Je primaire kleur heeft een contrast van {ratio}:1 op de pagina, lager dan {min}:1, dus wordt aangepast waar die als tekst wordt gebruikt.",
+        "button": "Knoptekst heeft een contrast van {ratio}:1 op je knopkleur, lager dan {min}:1.",
+        "buttonEdge": "Je knopkleur heeft een contrast van {ratio}:1 met de pagina, lager dan {min}:1, dus knoppen zijn mogelijk moeilijk te zien.",
+        "inDark": "(donkere modus)"
+      },
+      "wording": {
+        "title": "Teksten",
+        "description": "Alleen platte tekst. Klanten zien het in de taal waarin je het schrijft.",
+        "pageTitle": "Paginatitel",
+        "pageTitleHint": "Getoond bovenaan de pagina en in het browsertabblad. Leeg gebruikt de naam van je bedrijf.",
+        "welcome": "Welkomstbericht",
+        "welcomeHint": "{count} van {max} tekens. Getoond boven het boekingsformulier.",
+        "button": "Label van de bevestigingsknop",
+        "buttonHint": "De tekst op de laatste knop, bijvoorbeeld Reserveer mijn plek. Aanvragen die goedkeuring nodig hebben, houden hun eigen label.",
+        "buttonDefault": "Boeking bevestigen",
+        "tooLong": "Gebruik maximaal {max} tekens."
+      },
+      "style": {
+        "title": "Lettertypen en hoeken",
+        "description": "Een kleine set veilige keuzes die op elk apparaat werken.",
+        "font": "Lettertype",
+        "fontHint": "Deze gebruiken lettertypen die al op het apparaat van de klant staan, zodat de pagina snel laadt.",
+        "fonts": {
+          "default": "Productstandaard",
+          "system": "Systeem",
+          "serif": "Serif",
+          "rounded": "Afgerond",
+          "humanist": "Humanistisch"
+        },
+        "corners": "Hoeken",
+        "cornerStyles": {
+          "square": "Vierkant",
+          "rounded": "Afgerond",
+          "pill": "Pil"
+        },
+        "mode": "Licht of donker",
+        "modes": {
+          "light": "Licht",
+          "dark": "Donker",
+          "auto": "Volg het apparaat"
+        }
+      },
+      "options": {
+        "title": "Pagina-opties",
+        "description": "Wat er verder rond het boekingsformulier verschijnt.",
+        "language": "Taalwisselaar tonen",
+        "languageHint": "Laat klanten de taal van de pagina wijzigen.",
+        "poweredBy": "\"Powered by\" onderaan tonen",
+        "poweredByHint": "Schakel uit om alleen je eigen merk te tonen.",
+        "poweredByLocked": "Het verwijderen van \"Powered by\" hoort bij white-label branding, die niet in je abonnement zit."
+      },
+      "links": {
+        "title": "Paginaadres",
+        "description": "Waar klanten de pagina openen. Wijzigingen verschijnen daar zodra je opslaat.",
+        "page": "Adres van de boekingspagina",
+        "open": "Pagina openen",
+        "copy": "Kopiëren",
+        "copied": "Gekopieerd",
+        "later": "Een eigen domein gebruiken en de pagina in een andere website insluiten zijn nog niet beschikbaar."
+      },
+      "type": {
+        "title": "Uiterlijk van de pagina: {name}",
+        "subtitle": "Geef dit boekingstype een eigen logo, eigen kleuren of een eigen welkomstbericht. Alles wat je leeg laat, gebruikt het uiterlijk van de werkruimte.",
+        "back": "Terug naar het boekingstype",
+        "notFoundTitle": "Boekingstype niet gevonden",
+        "notFound": "Dit boekingstype bestaat niet meer.",
+        "resetTitle": "Uiterlijk van de werkruimte gebruiken",
+        "resetDescription": "Verwijdert alles wat voor dit boekingstype is ingesteld, inclusief de afbeeldingen.",
+        "reset": "Uiterlijk van de werkruimte gebruiken",
+        "resetConfirmTitle": "Uiterlijk van de werkruimte gebruiken?",
+        "resetConfirmMessage": "Het logo, de omslagafbeelding, de kleuren en de teksten die voor dit boekingstype zijn ingesteld, worden verwijderd.",
+        "resetDone": "Dit boekingstype gebruikt nu het uiterlijk van de werkruimte"
+      },
+      "preview": {
+        "title": "Live voorbeeld",
+        "device": "Apparaat",
+        "desktop": "Computer",
+        "mobile": "Mobiel",
+        "page": "Pagina",
+        "servicePage": "Boekingspagina",
+        "serviceList": "Dienstenlijst",
+        "scheme": "Kleurmodus",
+        "asSet": "Zoals ingesteld",
+        "light": "Licht",
+        "dark": "Donker",
+        "direction": "Richting",
+        "ltr": "Van links naar rechts",
+        "rtl": "Van rechts naar links",
+        "frameTitle": "Voorbeeld van de boekingspagina",
+        "note": "Dit is de echte pagina met voorbeeldtijden. Niets wat je hier doet wordt geboekt.",
+        "sampleName": "Kennismakingsgesprek",
+        "sampleName2": "Volledige sessie",
+        "sampleDescription": "Een kort gesprek om te begrijpen wat je nodig hebt en je vragen te beantwoorden.",
+        "sampleIntro": "Kom graag een paar minuten eerder.",
+        "sampleQuestion": "Is er iets wat we vooraf moeten weten?"
+      }
+    }
+  }
+}

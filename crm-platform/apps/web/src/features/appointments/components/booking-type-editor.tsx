@@ -134,6 +134,7 @@ function LoadingState() {
 
 function EditorForm({ type }: { type: BookingType | null }) {
   const t = useTranslations('appointments.editor');
+  const ta = useTranslations('appointments.appearance.editorLink');
   const te = useTranslations('appointments.editor.problems');
   const errorText = useErrorText();
   const router = useRouter();
@@ -378,11 +379,26 @@ function EditorForm({ type }: { type: BookingType | null }) {
             {t('header.draft')}
           </span>
         ) : (
-          dirty && (
-            <span className="inline-flex items-center rounded-full bg-warning/15 px-2.5 py-1 text-xs font-medium text-warning">
-              {t('header.unsaved')}
-            </span>
-          )
+          <div className="flex flex-wrap items-center gap-2">
+            {dirty && (
+              <span className="inline-flex items-center rounded-full bg-warning/15 px-2.5 py-1 text-xs font-medium text-warning">
+                {t('header.unsaved')}
+              </span>
+            )}
+            {/* The booking page's own look (logo, colours, welcome text) is a screen of its own, with a live preview. */}
+            <Link
+              href={`/appointments/types/${loaded.id}/appearance`}
+              onClick={(e) => {
+                if (dirty && !busy) {
+                  e.preventDefault();
+                  toast(ta('saveFirst'), 'danger');
+                }
+              }}
+              className="inline-flex h-9 items-center rounded-md border border-border px-3 text-sm font-medium outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              {ta('link')}
+            </Link>
+          </div>
         )}
       </header>
 

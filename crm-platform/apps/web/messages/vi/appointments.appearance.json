@@ -1,0 +1,190 @@
+{
+  "appointments": {
+    "appearance": {
+      "title": "Giao diện trang đặt lịch",
+      "subtitle": "Làm cho trang khách hàng dùng để đặt lịch hẹn trông giống doanh nghiệp của bạn.",
+      "backToSettings": "Cài đặt lịch hẹn",
+      "loading": "Đang tải giao diện trang đặt lịch",
+      "forbidden": "Bạn không có quyền xem giao diện trang đặt lịch.",
+      "notAvailable": "Giao diện trang đặt lịch chưa khả dụng trên máy chủ này.",
+      "readOnly": "Bạn có thể xem giao diện nhưng không thể thay đổi. Để thay đổi cần có quyền chỉnh sửa loại đặt lịch.",
+      "fixFirst": "Hãy sửa các trường được đánh dấu trước.",
+      "issues": "{count, plural, other {Có # trường cần xử lý trước khi bạn có thể lưu.}}",
+      "saved": "Đã lưu giao diện trang đặt lịch",
+      "saving": "Đang lưu...",
+      "unsaved": "Thay đổi chưa lưu",
+      "allSaved": "Đã lưu mọi thay đổi",
+      "discard": "Hủy thay đổi",
+      "save": "Lưu giao diện",
+      "conflict": {
+        "message": "Giao diện đã được người khác thay đổi trong khi bạn đang chỉnh sửa.",
+        "reload": "Tải bản mới nhất"
+      },
+      "leave": {
+        "title": "Rời đi mà không lưu?",
+        "message": "Các thay đổi của bạn đối với giao diện trang đặt lịch chưa được lưu.",
+        "leave": "Rời đi",
+        "stay": "Tiếp tục chỉnh sửa"
+      },
+      "tile": {
+        "label": "Giao diện trang đặt lịch",
+        "description": "Logo, màu sắc, phông chữ và lời chào của trang khách hàng đặt lịch",
+        "keywords": "thương hiệu, logo, màu sắc, giao diện, trang đặt lịch, diện mạo, phông chữ, white label"
+      },
+      "card": {
+        "title": "Giao diện trang đặt lịch",
+        "description": "Thêm logo và màu sắc, viết lời chào, chọn phông chữ và kiểu bo góc cho trang khách hàng đặt lịch. Bạn sẽ thấy bản xem trước trực tiếp khi chỉnh sửa.",
+        "open": "Mở giao diện trang đặt lịch"
+      },
+      "editorLink": {
+        "link": "Giao diện trang",
+        "saveFirst": "Hãy lưu loại đặt lịch trước, sau đó mở giao diện trang của nó."
+      },
+      "typesList": {
+        "menu": "Giao diện trang"
+      },
+      "pictures": {
+        "title": "Logo và ảnh bìa",
+        "description": "Hiển thị ở đầu trang. Để trống để dùng thiết lập ở cấp cao hơn.",
+        "logo": "Logo",
+        "logoHint": "PNG, JPG, WebP hoặc GIF, tối đa {mb} MB. Logo ngang với nền trong suốt cho kết quả tốt nhất.",
+        "cover": "Ảnh bìa",
+        "coverHint": "PNG, JPG, WebP hoặc GIF, tối đa {mb} MB. Hiển thị dưới dạng biểu ngữ khi nền được đặt là ảnh bìa.",
+        "useBrand": "Dùng logo và màu sắc trong Thương hiệu của tôi khi để trống",
+        "useBrandHint": "Mọi mục bạn để trống ở đây sẽ lấy từ Cài đặt, Thương hiệu, để trang đặt lịch đồng nhất với phần còn lại của thương hiệu."
+      },
+      "fields": {
+        "picker": "{name}: chọn màu",
+        "clear": "Xóa",
+        "noPicture": "Không có ảnh",
+        "upload": "Tải lên",
+        "replace": "Thay thế",
+        "remove": "Gỡ bỏ",
+        "inheritedPicture": "Đang dùng thiết lập ở cấp cao hơn.",
+        "inheritedColour": "Để trống sẽ dùng {colour}.",
+        "productColour": "Để trống sẽ dùng màu mặc định.",
+        "pictureType": "Hãy dùng ảnh PNG, JPG, WebP hoặc GIF.",
+        "pictureSize": "Ảnh quá lớn. Giới hạn là {mb} MB.",
+        "pictureRejected": "Ảnh này không được chấp nhận. Hãy dùng ảnh PNG, JPG, WebP hoặc GIF trong giới hạn dung lượng."
+      },
+      "colours": {
+        "title": "Màu sắc và nền",
+        "description": "Màu chữ được chọn tự động để mọi thứ luôn dễ đọc.",
+        "primary": "Màu chính",
+        "typeHint": "Để trống sẽ dùng màu của không gian làm việc.",
+        "button": "Màu nút",
+        "buttonHint": "Màu của các nút và khung giờ đã chọn. Để trống sẽ dùng màu chính.",
+        "background": "Nền trang",
+        "backgroundHint": "Màu đơn sắc, sắc nhạt từ màu chính của bạn, hoặc ảnh bìa làm biểu ngữ.",
+        "sameAsWorkspace": "Giống không gian làm việc",
+        "backgrounds": {
+          "solid": "Màu đơn sắc",
+          "tint": "Sắc nhạt",
+          "image": "Ảnh bìa"
+        },
+        "backgroundColour": "Màu nền",
+        "needCover": "Hãy tải lên ảnh bìa để dùng nền này.",
+        "invalid": "Hãy dùng màu dạng #1a73e8."
+      },
+      "checks": {
+        "title": "Kiểm tra độ dễ đọc",
+        "autoText": "Chữ trên nút của bạn là màu đen hoặc trắng, tùy màu nào dễ đọc hơn, và màu chính được làm tối hoặc sáng hơn khi dùng làm màu chữ.",
+        "primaryText": "Màu chính của bạn có độ tương phản {ratio}:1 trên trang, thấp hơn {min}:1, nên được điều chỉnh khi dùng làm màu chữ.",
+        "button": "Chữ trên nút có độ tương phản {ratio}:1 với màu nút của bạn, thấp hơn {min}:1.",
+        "buttonEdge": "Màu nút của bạn có độ tương phản {ratio}:1 so với trang, thấp hơn {min}:1, nên các nút có thể khó nhìn thấy.",
+        "inDark": "(chế độ tối)"
+      },
+      "wording": {
+        "title": "Nội dung chữ",
+        "description": "Chỉ văn bản thuần. Khách hàng thấy nội dung bằng ngôn ngữ bạn viết.",
+        "pageTitle": "Tiêu đề trang",
+        "pageTitleHint": "Hiển thị ở đầu trang và trên thẻ trình duyệt. Để trống sẽ dùng tên doanh nghiệp của bạn.",
+        "welcome": "Lời chào",
+        "welcomeHint": "{count} trên {max} ký tự. Hiển thị phía trên biểu mẫu đặt lịch.",
+        "button": "Nhãn nút xác nhận",
+        "buttonHint": "Chữ trên nút cuối cùng, ví dụ Giữ chỗ cho tôi. Các yêu cầu cần phê duyệt giữ nhãn riêng của chúng.",
+        "buttonDefault": "Xác nhận đặt lịch",
+        "tooLong": "Dùng tối đa {max} ký tự."
+      },
+      "style": {
+        "title": "Phông chữ và bo góc",
+        "description": "Một số lựa chọn an toàn hoạt động tốt trên mọi thiết bị.",
+        "font": "Phông chữ",
+        "fontHint": "Dùng các phông chữ có sẵn trên thiết bị của khách hàng nên trang tải nhanh.",
+        "fonts": {
+          "default": "Mặc định của sản phẩm",
+          "system": "Hệ thống",
+          "serif": "Có chân",
+          "rounded": "Bo tròn",
+          "humanist": "Nhân văn"
+        },
+        "corners": "Góc",
+        "cornerStyles": {
+          "square": "Vuông",
+          "rounded": "Bo tròn",
+          "pill": "Viên thuốc"
+        },
+        "mode": "Sáng hoặc tối",
+        "modes": {
+          "light": "Sáng",
+          "dark": "Tối",
+          "auto": "Theo thiết bị"
+        }
+      },
+      "options": {
+        "title": "Tùy chọn trang",
+        "description": "Những gì khác xuất hiện quanh biểu mẫu đặt lịch.",
+        "language": "Hiện nút chuyển ngôn ngữ",
+        "languageHint": "Cho phép khách hàng đổi ngôn ngữ của trang.",
+        "poweredBy": "Hiện \"Powered by\" ở cuối trang",
+        "poweredByHint": "Tắt để chỉ hiển thị thương hiệu của riêng bạn.",
+        "poweredByLocked": "Gỡ bỏ \"Powered by\" là một phần của thương hiệu white-label, không có trong gói của bạn."
+      },
+      "links": {
+        "title": "Địa chỉ trang",
+        "description": "Nơi khách hàng mở trang. Thay đổi hiển thị ở đó ngay khi bạn lưu.",
+        "page": "Địa chỉ trang đặt lịch",
+        "open": "Mở trang",
+        "copy": "Sao chép",
+        "copied": "Đã sao chép",
+        "later": "Dùng tên miền riêng và nhúng trang vào website khác hiện chưa khả dụng."
+      },
+      "type": {
+        "title": "Giao diện trang: {name}",
+        "subtitle": "Đặt logo, màu sắc hoặc lời chào riêng cho loại đặt lịch này. Mục nào để trống sẽ dùng giao diện của không gian làm việc.",
+        "back": "Quay lại loại đặt lịch",
+        "notFoundTitle": "Không tìm thấy loại đặt lịch",
+        "notFound": "Loại đặt lịch này không còn tồn tại.",
+        "resetTitle": "Dùng giao diện của không gian làm việc",
+        "resetDescription": "Xóa mọi thiết lập của loại đặt lịch này, bao gồm cả hình ảnh.",
+        "reset": "Dùng giao diện không gian làm việc",
+        "resetConfirmTitle": "Dùng giao diện của không gian làm việc?",
+        "resetConfirmMessage": "Logo, ảnh bìa, màu sắc và nội dung chữ đã đặt cho loại đặt lịch này sẽ bị xóa.",
+        "resetDone": "Loại đặt lịch này hiện dùng giao diện của không gian làm việc"
+      },
+      "preview": {
+        "title": "Xem trước trực tiếp",
+        "device": "Thiết bị",
+        "desktop": "Máy tính",
+        "mobile": "Di động",
+        "page": "Trang",
+        "servicePage": "Trang đặt lịch",
+        "serviceList": "Danh sách dịch vụ",
+        "scheme": "Chế độ màu",
+        "asSet": "Theo thiết lập",
+        "light": "Sáng",
+        "dark": "Tối",
+        "direction": "Hướng",
+        "ltr": "Trái sang phải",
+        "rtl": "Phải sang trái",
+        "frameTitle": "Xem trước trang đặt lịch",
+        "note": "Đây là trang thật với các khung giờ mẫu. Mọi thao tác của bạn ở đây sẽ không tạo lịch đặt nào.",
+        "sampleName": "Cuộc gọi làm quen",
+        "sampleName2": "Buổi đầy đủ",
+        "sampleDescription": "Một cuộc gọi ngắn để hiểu nhu cầu của bạn và giải đáp thắc mắc.",
+        "sampleIntro": "Vui lòng đến sớm vài phút.",
+        "sampleQuestion": "Có điều gì chúng tôi nên biết trước không?"
+      }
+    }
+  }
+}

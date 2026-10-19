@@ -258,7 +258,7 @@ export function WhereRow({ where }: { where: Where | null }) {
             href={where.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-8 items-center gap-1.5 font-medium text-brand hover:underline dark:text-primary"
+            className="inline-flex min-h-8 items-center gap-1.5 font-medium text-primary hover:underline"
           >
             {t('join')}
             <ExternalIcon className="size-3.5" />
