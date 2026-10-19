@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useRef, useState, type FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
@@ -68,6 +68,7 @@ export function SupportScreen() {
   const ts = useTranslations(`${NS}.status`);
   const tr = useTranslations(`${NS}.reason`);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const formRef = useRef<HTMLFormElement>(null);
   const [reason, setReason] = useState<SuppTicketReason>('bug');
@@ -378,7 +379,7 @@ export function SupportScreen() {
                           </p>
                         </div>
                         <span className="shrink-0 font-mono text-xs text-muted-foreground">
-                          {formatWhen(tk.createdAt, locale)}
+                          {formatWhen(tk.createdAt, locale, timeZone)}
                         </span>
                       </div>
                     </Link>
