@@ -24,6 +24,7 @@ import {
   type AssistantRow,
   type AssistantWrite,
 } from './assistants.repository';
+import { KbIndexService } from '../knowledge-base';
 import { SourcesRepository } from './sources.repository';
 import { SOURCE_REQUESTED } from './source-events';
 import { toAssistant, toPickerItem } from './training.mapper';
@@ -66,6 +67,7 @@ export class AssistantsService {
     private readonly sources: SourcesRepository,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly kb: KbIndexService,
     @Inject(TRAINING_FILE_STORE) private readonly files: TrainingFileStore,
   ) {}
 
@@ -165,6 +167,7 @@ export class AssistantsService {
             error: s.error,
           });
           if (s.status === 'processing') pendingIds.push(newId);
+          else await this.kb.indexSource(tx, ctx.orgId, newId);
         }
         const withCount = (await this.repo.findById(tx, ctx.orgId, id))!;
         await this.record(tx, withCount, 'insert', 'ai_assistant.created', undefined, {

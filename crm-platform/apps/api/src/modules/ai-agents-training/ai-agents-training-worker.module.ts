@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { KnowledgeBaseModule } from '../knowledge-base';
 import { SourcesRepository } from './sources.repository';
 import { SourceIngestConsumer } from './source-ingest.consumer';
 import { TRAINING_URL_FETCHER } from '../../infra/providers/ai-agents-training/training-url-fetcher.port';
@@ -10,6 +11,7 @@ import { HttpTrainingUrlFetcher } from '../../infra/providers/ai-agents-training
  * writes the events.
  */
 @Module({
+  imports: [KnowledgeBaseModule],
   providers: [
     SourcesRepository,
     SourceIngestConsumer,

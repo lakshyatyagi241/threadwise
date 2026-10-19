@@ -98,15 +98,13 @@ describe('ai-agents-training messages', () => {
       ...['name', 'greeting', 'model', 'tokens', 'temperature'].map(
         (p) => `${ROOT}.builder.problem.${p}`,
       ),
-      ...['url', 'text', 'qa', 'file'].flatMap((k) => [
+      ...['url', 'text', 'faq', 'file'].flatMap((k) => [
         `${ROOT}.knowledge.add.${k}.title`,
         `${ROOT}.knowledge.add.${k}.body`,
         `${ROOT}.knowledge.panel.${k}`,
-        `${ROOT}.knowledge.placeholder.label.${k}`,
         `${ROOT}.knowledge.submit.${k}`,
-        `${ROOT}.knowledge.kind.${k}`,
       ]),
-      ...['ready', 'processing', 'failed'].map((s) => `${ROOT}.knowledge.state.${s}`),
+      ...['url', 'text', 'file'].map((k) => `${ROOT}.knowledge.placeholder.label.${k}`),
       ...[
         'label',
         'url',

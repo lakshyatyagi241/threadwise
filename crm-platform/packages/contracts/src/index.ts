@@ -107,7 +107,7 @@ export * from './meeting-conferencing';
 export * from './ai-copilot-lead-finder';
 export * from './google-account';
 export * from './api-library';
-export * from './faq-knowledge';
+export * from './knowledge-base';
 export * from './lead-scoring';
 export * from './growth';
 export * from './contact-consent';

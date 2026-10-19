@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { LocalTrainingFileStore } from '../../infra/providers/ai-agents-training/local-training-file-store.adapter';
 import { TRAINING_FILE_STORE } from '../../infra/providers/ai-agents-training/training-file-store.port';
+import { KnowledgeBaseModule } from '../knowledge-base';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { TeamInboxConversationsModule } from '../team-inbox-conversations';
 import { AgentSavedRepliesService } from './agent-saved-replies.service';
@@ -17,7 +18,7 @@ import { SourcesService } from './sources.service';
  * writes them. URL entries are read in the worker (`AiAgentsTrainingWorkerModule`). Registered in app.module.ts.
  */
 @Module({
-  imports: [PlansCoreModule, TeamInboxConversationsModule],
+  imports: [PlansCoreModule, TeamInboxConversationsModule, KnowledgeBaseModule],
   controllers: [AiTrainingController],
   providers: [
     AssistantsService,

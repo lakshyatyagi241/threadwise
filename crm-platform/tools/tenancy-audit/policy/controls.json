@@ -676,9 +676,9 @@
     "title": "Tenant-scope knowledge base and vector retrieval",
     "priority": "P0",
     "status": "NOT_RUN",
-    "basis": "executed e2e suites: faq, ai-training",
+    "basis": "executed e2e suites: ai-training",
     "evidence": "e2e",
-    "e2e": ["faq", "ai-training"]
+    "e2e": ["ai-training"]
   },
   "MT-087": {
     "title": "Prevent cross-tenant conversation memory leakage",
