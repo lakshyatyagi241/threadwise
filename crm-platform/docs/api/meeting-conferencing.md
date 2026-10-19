@@ -10,27 +10,27 @@ nothing, or one quiet "Connect video conferencing" link. Wiring map: [meeting-co
 
 ## Where each option comes from
 
-| Option | Marketplace listing         | Whose account                      | How the room is made                                                     |
-| ------ | --------------------------- | ---------------------------------- | ------------------------------------------------------------------------ |
-| Zoom   | `zoom` (installed)          | the person's own Zoom account      | Zoom REST `POST /users/me/meetings`                                      |
-| Teams  | `microsoft-teams` (installed) | the person's own Microsoft account | Graph `POST /me/onlineMeetings/createOrGet` (idempotent on the meeting)  |
-| Teams  | none                        | the workspace's Microsoft calendar | an Outlook event with `isOnlineMeeting` (only when the person has no Teams connection) |
-| Meet   | none                        | the workspace's Google Calendar    | a Google event with `conferenceData` (the same code appointments use)    |
+| Option | Marketplace listing           | Whose account                      | How the room is made                                                                   |
+| ------ | ----------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------- |
+| Zoom   | `zoom` (installed)            | the person's own Zoom account      | Zoom REST `POST /users/me/meetings`                                                    |
+| Teams  | `microsoft-teams` (installed) | the person's own Microsoft account | Graph `POST /me/onlineMeetings/createOrGet` (idempotent on the meeting)                |
+| Teams  | none                          | the workspace's Microsoft calendar | an Outlook event with `isOnlineMeeting` (only when the person has no Teams connection) |
+| Meet   | none                          | the workspace's Google Calendar    | a Google event with `conferenceData` (the same code appointments use)                  |
 
 The listings are seeded as **draft**, free, connector type `client` (like Email): the sign-in and the calls are built into the product, so installing records the workspace's consent (new scope
 `meetings.write`) and issues nothing. The operator publishes them once the OAuth apps exist.
 
 ## Routes (`/v2`)
 
-| Method and path                                              | Permission              | Notes |
-| ------------------------------------------------------------ | ----------------------- | ----- |
-| `GET /conferencing/capabilities`                             | `record.contacts.update` | What the form may offer THIS person: `video[{provider, via}]` (installed AND connected), `calendar` (workspace calendar: provider, account, calendar name) or null, `canInstall`, `connectable[]` (installed, this person not connected), `installable`. |
-| `GET /conferencing/connections`                              | `record.contacts.update` | The person's cards: `status` is `connected`, `needs_reconnect`, `disconnected`, `not_installed` or `unavailable` (no platform OAuth app). |
-| `POST /conferencing/:provider/start`                         | `record.contacts.update` | `{ returnTo? }` -> `{ url, expiresInSeconds }`. `409 CONF_APP_NOT_INSTALLED`, `422 CONF_NOT_CONFIGURED`. |
-| `GET /public/conferencing/:provider/callback`                | the signed `state`      | The provider's redirect. Exchanges nothing; `302` to the connection page with `?video=confirm&provider=&ticket=` or `?video=denied\|failed\|expired\|not_configured`. |
-| `POST /conferencing/:provider/confirm`                       | `record.contacts.update` | `{ ticket }`. Exchanges the code, only for the person who pressed Connect in that workspace (`403 CONF_CONFIRM_NOT_YOURS`, `422 CONF_CONFIRM_INVALID`). |
-| `DELETE /conferencing/:provider`                             | `record.contacts.update` | Deletes the stored tokens; idempotent. Rooms already made stay. |
-| `POST /contacts/:contactId/meetings/:id/conferencing/retry`  | `record.contacts.update` | Runs the failed step again, the caller hosting a room still to be made. Returns the meeting. |
+| Method and path                                             | Permission               | Notes                                                                                                                                                                                                                                                    |
+| ----------------------------------------------------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /conferencing/capabilities`                            | `record.contacts.update` | What the form may offer THIS person: `video[{provider, via}]` (installed AND connected), `calendar` (workspace calendar: provider, account, calendar name) or null, `canInstall`, `connectable[]` (installed, this person not connected), `installable`. |
+| `GET /conferencing/connections`                             | `record.contacts.update` | The person's cards: `status` is `connected`, `needs_reconnect`, `disconnected`, `not_installed` or `unavailable` (no platform OAuth app).                                                                                                                |
+| `POST /conferencing/:provider/start`                        | `record.contacts.update` | `{ returnTo? }` -> `{ url, expiresInSeconds }`. `409 CONF_APP_NOT_INSTALLED`, `422 CONF_NOT_CONFIGURED`.                                                                                                                                                 |
+| `GET /public/conferencing/:provider/callback`               | the signed `state`       | The provider's redirect. Exchanges nothing; `302` to the connection page with `?video=confirm&provider=&ticket=` or `?video=denied\|failed\|expired\|not_configured`.                                                                                    |
+| `POST /conferencing/:provider/confirm`                      | `record.contacts.update` | `{ ticket }`. Exchanges the code, only for the person who pressed Connect in that workspace (`403 CONF_CONFIRM_NOT_YOURS`, `422 CONF_CONFIRM_INVALID`).                                                                                                  |
+| `DELETE /conferencing/:provider`                            | `record.contacts.update` | Deletes the stored tokens; idempotent. Rooms already made stay.                                                                                                                                                                                          |
+| `POST /contacts/:contactId/meetings/:id/conferencing/retry` | `record.contacts.update` | Runs the failed step again, the caller hosting a room still to be made. Returns the meeting.                                                                                                                                                             |
 
 Meetings (`/contacts/:contactId/meetings`, create and update) accept an optional `conferencing`:
 

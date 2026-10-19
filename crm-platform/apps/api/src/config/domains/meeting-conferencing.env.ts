@@ -56,7 +56,9 @@ const schema = z.object({
 
 export type MeetingConferencingEnv = z.output<typeof schema>;
 
-export function meetingConferencingEnv(env: NodeJS.ProcessEnv = process.env): MeetingConferencingEnv {
+export function meetingConferencingEnv(
+  env: NodeJS.ProcessEnv = process.env,
+): MeetingConferencingEnv {
   const parsed = schema.safeParse(env);
   if (!parsed.success) {
     const details = parsed.error.issues

@@ -14,16 +14,8 @@ import { Alert, Badge, Button, ConfirmDialog, Spinner, cn, useToast } from '@crm
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
 import { KEYS, conferencingApi, useConferencingConnections } from '../api/conferencing';
-import {
-  MARKETPLACE_INTEGRATIONS,
-  VIDEO_MEETINGS_PATH,
-} from '../lib/form-model';
-import {
-  readOutcome,
-  safeConsentUrl,
-  withoutOutcome,
-  type Outcome,
-} from '../lib/screen-model';
+import { MARKETPLACE_INTEGRATIONS, VIDEO_MEETINGS_PATH } from '../lib/form-model';
+import { readOutcome, safeConsentUrl, withoutOutcome, type Outcome } from '../lib/screen-model';
 
 const CARD = 'rounded-2xl border border-border bg-background p-4 shadow-sm sm:p-5';
 const TONE = {

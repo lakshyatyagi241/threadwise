@@ -40,8 +40,7 @@ export interface ConferencingTicket {
 }
 
 export type TokenCheck<T> =
-  | { ok: true; value: T }
-  | { ok: false; reason: 'malformed' | 'signature' | 'expired' };
+  { ok: true; value: T } | { ok: false; reason: 'malformed' | 'signature' | 'expired' };
 
 export function deriveStateKey(credentialsKeyBase64: string): Buffer {
   return Buffer.from(

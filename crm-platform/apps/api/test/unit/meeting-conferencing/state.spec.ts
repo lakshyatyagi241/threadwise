@@ -19,7 +19,10 @@ const NOW = 1_800_000_000_000;
 
 describe('connect state and ticket', () => {
   it('round-trips a state and binds it to its provider', () => {
-    const s = newState({ orgId: 4, userId: 9, provider: 'zoom', returnTo: '/settings/video-meetings' }, NOW);
+    const s = newState(
+      { orgId: 4, userId: 9, provider: 'zoom', returnTo: '/settings/video-meetings' },
+      NOW,
+    );
     const out = verifyState(signState(s, KEY), KEY, NOW + 1000);
     expect(out).toMatchObject({ ok: true, value: { orgId: 4, userId: 9, provider: 'zoom' } });
   });
@@ -35,20 +38,33 @@ describe('connect state and ticket', () => {
   });
 
   it('a state is not a ticket and a ticket is not a state', () => {
-    const s = signState(newState({ orgId: 1, userId: 2, provider: 'zoom', returnTo: '/' }, NOW), KEY);
+    const s = signState(
+      newState({ orgId: 1, userId: 2, provider: 'zoom', returnTo: '/' }, NOW),
+      KEY,
+    );
     expect(verifyTicket(s, KEY, NOW).ok).toBe(false);
     const t = signTicket(
-      { orgId: 1, userId: 2, provider: 'zoom', returnTo: '/', sealedCode: 'sealed', expiresAt: NOW + 5000 },
+      {
+        orgId: 1,
+        userId: 2,
+        provider: 'zoom',
+        returnTo: '/',
+        sealedCode: 'sealed',
+        expiresAt: NOW + 5000,
+      },
       KEY,
     );
     expect(verifyState(t, KEY, NOW).ok).toBe(false);
-    expect(verifyTicket(t, KEY, NOW)).toMatchObject({ ok: true, value: { userId: 2, sealedCode: 'sealed' } });
+    expect(verifyTicket(t, KEY, NOW)).toMatchObject({
+      ok: true,
+      value: { userId: 2, sealedCode: 'sealed' },
+    });
   });
 
   it('returns only to a path inside the app', () => {
-    expect(returnUrl('https://app.example/', '/settings/video-meetings', { video: 'confirm' })).toBe(
-      'https://app.example/settings/video-meetings?video=confirm',
-    );
+    expect(
+      returnUrl('https://app.example/', '/settings/video-meetings', { video: 'confirm' }),
+    ).toBe('https://app.example/settings/video-meetings?video=confirm');
     expect(returnUrl('https://app.example', '//evil.example', { video: 'failed' })).toBe(
       'https://app.example/settings/video-meetings?video=failed',
     );

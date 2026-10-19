@@ -4,29 +4,29 @@ An owner-requested extension (Freshsales' Add meeting drawer: video conferencing
 meeting. API and rules: [docs/api/meeting-conferencing.md](../../api/meeting-conferencing.md); operator setup: [video-conferencing-setup.md](../../runbooks/video-conferencing-setup.md). This file is
 the inventory and the wiring map in one.
 
-| What             | Where |
-| ---------------- | ----- |
+| What             | Where                                                                                                                                                                                                                                                                                                                                        |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Route (web)      | `/settings/video-meetings` (Settings tile `video-meetings`, section Integrations, shown on the Marketplace Integrations tab; gate `record.contacts.update`); the video and calendar fields inside the contact's **Schedule meeting** row (`meetings-section.tsx`, also the compose box); the status line and Join button on each meeting row |
-| Route (API)      | `/v2/conferencing/*`, `/v2/public/conferencing/:provider/callback`, `/v2/contacts/:contactId/meetings/:id/conferencing/retry`; the meeting create/update bodies gain `conferencing` |
-| Permissions      | none new. Everything is `record.contacts.update` (the key the form needs); installing is the Marketplace's `market.apps.install`; the public callback is authenticated by its signed state |
-| Plan             | none of its own. The Marketplace is plan-gated (`marketplace`, installed-apps cap), so Zoom/Teams inherit that; Meet and the calendar entry need only the calendar connection the appointments app already has |
-| Tables           | `conferencing_connections` (a person's grant per provider, RLS, sealed tokens), `contact_meeting_conferencing` (one row per meeting: request, provider ids, problem codes, RLS); `contact_meetings.join_url` (existing) holds the address; `workspace_app_installations` / `marketplace_apps` are read to know a listing is installed |
-| Settings         | env only: `ZOOM_CLIENT_ID`, `ZOOM_CLIENT_SECRET`, `ZOOM_REDIRECT_URI`, `TEAMS_CLIENT_ID/_SECRET/_TENANT/_REDIRECT_URI` (else the console's Microsoft Calendar app), `CONFERENCING_HTTP_TIMEOUT_MS`, `_RETRIES`, `_RETRY_BASE_MS`, `_RETRY_AFTER_CAP_SECONDS`, `CONFERENCING_FAKE` (development only). No console page yet (BL-368) |
-| Upstream feeders | the Marketplace installation; the operator's Zoom app and Entra app; the workspace's connected Google Calendar / Outlook (appointments); the contact's email for an invitation |
-| Downstream       | the provider rooms and calendar events; audit module `conferencing_connection`; outbox `conferencing.*` and `contact_meeting.conferencing_release`; privacy registry (`contact_meeting_conferencing` under `contacts.*`, `conferencing_connections` allow-listed as staff data) |
+| Route (API)      | `/v2/conferencing/*`, `/v2/public/conferencing/:provider/callback`, `/v2/contacts/:contactId/meetings/:id/conferencing/retry`; the meeting create/update bodies gain `conferencing`                                                                                                                                                          |
+| Permissions      | none new. Everything is `record.contacts.update` (the key the form needs); installing is the Marketplace's `market.apps.install`; the public callback is authenticated by its signed state                                                                                                                                                   |
+| Plan             | none of its own. The Marketplace is plan-gated (`marketplace`, installed-apps cap), so Zoom/Teams inherit that; Meet and the calendar entry need only the calendar connection the appointments app already has                                                                                                                               |
+| Tables           | `conferencing_connections` (a person's grant per provider, RLS, sealed tokens), `contact_meeting_conferencing` (one row per meeting: request, provider ids, problem codes, RLS); `contact_meetings.join_url` (existing) holds the address; `workspace_app_installations` / `marketplace_apps` are read to know a listing is installed        |
+| Settings         | env only: `ZOOM_CLIENT_ID`, `ZOOM_CLIENT_SECRET`, `ZOOM_REDIRECT_URI`, `TEAMS_CLIENT_ID/_SECRET/_TENANT/_REDIRECT_URI` (else the console's Microsoft Calendar app), `CONFERENCING_HTTP_TIMEOUT_MS`, `_RETRIES`, `_RETRY_BASE_MS`, `_RETRY_AFTER_CAP_SECONDS`, `CONFERENCING_FAKE` (development only). No console page yet (BL-368)           |
+| Upstream feeders | the Marketplace installation; the operator's Zoom app and Entra app; the workspace's connected Google Calendar / Outlook (appointments); the contact's email for an invitation                                                                                                                                                               |
+| Downstream       | the provider rooms and calendar events; audit module `conferencing_connection`; outbox `conferencing.*` and `contact_meeting.conferencing_release`; privacy registry (`contact_meeting_conferencing` under `contacts.*`, `conferencing_connections` allow-listed as staff data)                                                              |
 
 ## Every consumer
 
-| Consumer | Here |
-| -------- | ---- |
+| Consumer                                                           | Here                                                                                                                                                                 |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Add / Edit meeting form (contact Meetings tab and the compose box) | `MeetingConferencingFields`: video chips, "Add to my calendar (account, calendar)", "Send a calendar invitation"; offered only from `GET /conferencing/capabilities` |
-| Meetings list / timeline row | `MeetingVideoStatus`: provider chip, **Join** button, problem sentence + **Try again**, "On your calendar" |
-| Settings, Integrations | tile **Video meetings** and its page (cards for Zoom and Teams: connect, reconnect, disconnect) |
-| Marketplace | listings `zoom`, `microsoft-teams` (category Calendar and meetings, connector `client`, scope `meetings.write`); `APP_HOME` opens the Video meetings page |
-| Appointments calendar | `MeetingCalendarGateway` (exported seam) over `CalendarProviders`: same connection, tokens, refresh and health; meeting events are not reconciled (BL-366) |
-| Outbox worker | `ConferencingReleaseConsumer` removes rooms and events after a delete, a change of provider or taking the meeting off the calendar |
-| Persona vocabulary | the three UI prefixes `meeting-conferencing.form|row|page` are bound surfaces (default nouns meeting, contact) |
-| Help | guide `video-meetings`; `contact-meetings` gains a section |
+| Meetings list / timeline row                                       | `MeetingVideoStatus`: provider chip, **Join** button, problem sentence + **Try again**, "On your calendar"                                                           |
+| Settings, Integrations                                             | tile **Video meetings** and its page (cards for Zoom and Teams: connect, reconnect, disconnect)                                                                      |
+| Marketplace                                                        | listings `zoom`, `microsoft-teams` (category Calendar and meetings, connector `client`, scope `meetings.write`); `APP_HOME` opens the Video meetings page            |
+| Appointments calendar                                              | `MeetingCalendarGateway` (exported seam) over `CalendarProviders`: same connection, tokens, refresh and health; meeting events are not reconciled (BL-366)           |
+| Outbox worker                                                      | `ConferencingReleaseConsumer` removes rooms and events after a delete, a change of provider or taking the meeting off the calendar                                   |
+| Persona vocabulary                                                 | the three UI prefixes `meeting-conferencing.form                                                                                                                     | row | page` are bound surfaces (default nouns meeting, contact) |
+| Help                                                               | guide `video-meetings`; `contact-meetings` gains a section                                                                                                           |
 
 ## Decisions
 

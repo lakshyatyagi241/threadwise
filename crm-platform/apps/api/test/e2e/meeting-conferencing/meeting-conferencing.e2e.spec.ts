@@ -1,6 +1,9 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import request from 'supertest';
-import { FakeVideoProvider, VIDEO_PROVIDER_ADAPTERS } from '../../../src/infra/providers/meeting-conferencing';
+import {
+  FakeVideoProvider,
+  VIDEO_PROVIDER_ADAPTERS,
+} from '../../../src/infra/providers/meeting-conferencing';
 import type { OutboxEvent } from '../../../src/kernel/outbox/outbox-subscribers';
 import { ConferencingReleaseConsumer } from '../../../src/modules/meeting-conferencing/conferencing-release.consumer';
 import { MeetingConferencingWorkerModule } from '../../../src/modules/meeting-conferencing';
@@ -50,15 +53,18 @@ beforeAll(async () => {
   Object.assign(process.env, fakeGoogle.env(), {
     CONFERENCING_FAKE: '1',
     CONFERENCING_RETRIES: '0',
-    GOOGLE_CALENDAR_CLIENT_ID: 'client-id',
-    GOOGLE_CALENDAR_CLIENT_SECRET: 'client-secret',
+    GOOGLE_CALENDAR_CLIENT_ID: 'test-client',
+    GOOGLE_CALENDAR_CLIENT_SECRET: 'test-secret',
     GOOGLE_RETRIES: '0',
     GOOGLE_RETRY_BASE_MS: '1',
     GOOGLE_BUSY_CACHE_SECONDS: '0',
   });
   h = await startHarness({ loadModules: async () => [MeetingConferencingWorkerModule] });
   api = new Api(h);
-  const adapters = h.app.get(VIDEO_PROVIDER_ADAPTERS) as { zoom: FakeVideoProvider; teams: FakeVideoProvider };
+  const adapters = h.app.get(VIDEO_PROVIDER_ADAPTERS) as {
+    zoom: FakeVideoProvider;
+    teams: FakeVideoProvider;
+  };
   zoom = adapters.zoom;
   teams = adapters.teams;
   expect(zoom).toBeInstanceOf(FakeVideoProvider);
@@ -213,31 +219,51 @@ describe('nothing is offered before the integration is installed and connected',
   });
 
   it('a request for a link on a workspace with nothing installed saves the meeting and records why there is no link', async () => {
-    const res = await create(a.admin, contact, meetingBody({ conferencing: { videoProvider: 'zoom' } }));
+    const res = await create(
+      a.admin,
+      contact,
+      meetingBody({ conferencing: { videoProvider: 'zoom' } }),
+    );
     expect(res.status, JSON.stringify(res.body)).toBe(201);
     const m = res.body as Meeting;
     expect(m.joinUrl ?? null).toBeNull();
-    expect(m.conferencing).toMatchObject({ videoProvider: 'zoom', videoStatus: 'failed', videoError: 'not_installed' });
+    expect(m.conferencing).toMatchObject({
+      videoProvider: 'zoom',
+      videoStatus: 'failed',
+      videoError: 'not_installed',
+    });
   });
 
   it('a meeting with a link or a calendar entry but no start time is refused and nothing is saved', async () => {
-    const before = await h.owner.query(`SELECT count(*)::int AS n FROM contact_meetings WHERE org_id = $1`, [a.orgId]);
-    const res = await create(a.admin, contact, { title: 'No time', conferencing: { videoProvider: 'zoom' } });
+    const before = await h.owner.query(
+      `SELECT count(*)::int AS n FROM contact_meetings WHERE org_id = $1`,
+      [a.orgId],
+    );
+    const res = await create(a.admin, contact, {
+      title: 'No time',
+      conferencing: { videoProvider: 'zoom' },
+    });
     expect(res.status).toBe(422);
-    const after = await h.owner.query(`SELECT count(*)::int AS n FROM contact_meetings WHERE org_id = $1`, [a.orgId]);
+    const after = await h.owner.query(
+      `SELECT count(*)::int AS n FROM contact_meetings WHERE org_id = $1`,
+      [a.orgId],
+    );
     expect(after.rows[0].n).toBe(before.rows[0].n);
   });
 });
 
-describe('connecting a person\'s own Zoom account', () => {
-  it('installing makes it connectable, and only that person\'s confirmation connects it', async () => {
+describe("connecting a person's own Zoom account", () => {
+  it("installing makes it connectable, and only that person's confirmation connects it", async () => {
     await install(a, 'zoom');
     const c = await caps(a.admin);
     expect(c.video).toEqual([]);
     expect(c.connectable).toEqual(['zoom']);
 
     // Another member of the workspace cannot finish a consent the admin started.
-    const colleague = await api.member(a, 'colleague', [['record.contacts.update'], ['record.contacts.read']]);
+    const colleague = await api.member(a, 'colleague', [
+      ['record.contacts.update'],
+      ['record.contacts.read'],
+    ]);
     const start = await api.as(a.admin).post('/v2/conferencing/zoom/start').send({});
     const state = new URL(start.body.url as string).searchParams.get('state')!;
     const cb = await request(h.app.getHttpServer())
@@ -245,16 +271,31 @@ describe('connecting a person\'s own Zoom account', () => {
       .query({ code: 'ana@example.com', state })
       .redirects(0);
     const ticket = new URL(cb.headers.location as string).searchParams.get('ticket')!;
-    const stolen = await api.as(colleague.token).post('/v2/conferencing/zoom/confirm').send({ ticket });
+    const stolen = await api
+      .as(colleague.token)
+      .post('/v2/conferencing/zoom/confirm')
+      .send({ ticket });
     expect(stolen.status).toBe(403);
     expect(code(stolen)).toBe('CONF_CONFIRM_NOT_YOURS');
-    expect((await h.owner.query(`SELECT 1 FROM conferencing_connections WHERE org_id = $1`, [a.orgId])).rows).toHaveLength(0);
+    expect(
+      (await h.owner.query(`SELECT 1 FROM conferencing_connections WHERE org_id = $1`, [a.orgId]))
+        .rows,
+    ).toHaveLength(0);
 
     const ok = await api.as(a.admin).post('/v2/conferencing/zoom/confirm').send({ ticket });
     expect(ok.status, JSON.stringify(ok.body)).toBe(200);
-    expect(ok.body).toMatchObject({ provider: 'zoom', status: 'connected', account: 'ana@example.com' });
+    expect(ok.body).toMatchObject({
+      provider: 'zoom',
+      status: 'connected',
+      account: 'ana@example.com',
+    });
     // The tokens are stored sealed, never as the provider sent them.
-    const row = (await h.owner.query(`SELECT refresh_token_enc, access_token_enc FROM conferencing_connections WHERE org_id = $1`, [a.orgId])).rows[0];
+    const row = (
+      await h.owner.query(
+        `SELECT refresh_token_enc, access_token_enc FROM conferencing_connections WHERE org_id = $1`,
+        [a.orgId],
+      )
+    ).rows[0];
     expect(row.refresh_token_enc).not.toContain('fake-refresh');
     expect(row.access_token_enc).not.toContain('fake-access');
     expect(await api.auditCount(a.orgId, 'conferencing_connection', 'insert')).toBe(1);
@@ -282,19 +323,35 @@ describe('connecting a person\'s own Zoom account', () => {
           sealedCode: crypto_.encrypt('ana@example.com'),
           expiresAt: over.expiresAt ?? Date.now() + TICKET_TTL_SECONDS * 1000,
         },
-        // The harness derives its key from its own credentials key; a ticket signed with another key must be refused.
+        // The harness runs with the same credentials key as the other calendar tests, so this key signs a ticket the app accepts.
         STATE_KEY,
       );
-    const bad = await api.as(a.admin).post('/v2/conferencing/zoom/confirm').send({ ticket: make({}) });
-    expect([422, 403]).toContain(bad.status);
-    const expired = await api.as(a.admin).post('/v2/conferencing/zoom/confirm').send({ ticket: make({ expiresAt: Date.now() - 1 }) });
+    // A ticket made for Zoom does not connect Teams.
+    const wrongProvider = await api
+      .as(a.admin)
+      .post('/v2/conferencing/teams/confirm')
+      .send({ ticket: make({}) });
+    expect(wrongProvider.status).toBe(422);
+    expect(code(wrongProvider)).toBe('CONF_CONFIRM_INVALID');
+    const forged = await api
+      .as(a.admin)
+      .post('/v2/conferencing/zoom/confirm')
+      .send({ ticket: 'not.a-ticket-at-all' });
+    expect(forged.status).toBe(422);
+    const expired = await api
+      .as(a.admin)
+      .post('/v2/conferencing/zoom/confirm')
+      .send({ ticket: make({ expiresAt: Date.now() - 1 }) });
     expect(expired.status).toBe(422);
   });
 
   it('another workspace cannot see the connection or the option', async () => {
     expect((await caps(b.admin)).video).toEqual([]);
     const list = await api.as(b.admin).get('/v2/conferencing/connections');
-    expect(list.body.data.map((c: { status: string }) => c.status)).toEqual(['not_installed', 'not_installed']);
+    expect(list.body.data.map((c: { status: string }) => c.status)).toEqual([
+      'not_installed',
+      'not_installed',
+    ]);
   });
 });
 
@@ -302,11 +359,19 @@ describe('a Zoom link made, moved and removed with the meeting', () => {
   let m: Meeting;
 
   it('creates the room when the meeting is saved and returns the join link', async () => {
-    const res = await create(a.admin, contact, meetingBody({ conferencing: { videoProvider: 'zoom', timeZone: 'Asia/Kolkata' } }));
+    const res = await create(
+      a.admin,
+      contact,
+      meetingBody({ conferencing: { videoProvider: 'zoom', timeZone: 'Asia/Kolkata' } }),
+    );
     expect(res.status, JSON.stringify(res.body)).toBe(201);
     m = res.body as Meeting;
     expect(m.joinUrl).toMatch(/^https:\/\/zoom\.fake\.test\/j\/zoom-room-/);
-    expect(m.conferencing).toMatchObject({ videoProvider: 'zoom', videoStatus: 'ready', videoError: null });
+    expect(m.conferencing).toMatchObject({
+      videoProvider: 'zoom',
+      videoStatus: 'ready',
+      videoError: null,
+    });
     expect(zoom.rooms.size).toBeGreaterThan(0);
     const room = [...zoom.rooms.values()].at(-1)!;
     expect(room.request.timezone).toBe('Asia/Kolkata');
@@ -318,7 +383,12 @@ describe('a Zoom link made, moved and removed with the meeting', () => {
     const res = await api
       .as(a.admin)
       .patch(`/v2/contacts/${contact}/meetings/${m.id}`)
-      .send({ title: 'Moved call', startsAt: newStart, endsAt: when(48.5), rowVersion: m.rowVersion });
+      .send({
+        title: 'Moved call',
+        startsAt: newStart,
+        endsAt: when(48.5),
+        rowVersion: m.rowVersion,
+      });
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     const next = res.body as Meeting;
     expect(next.joinUrl).toBe(m.joinUrl);
@@ -343,20 +413,33 @@ describe('a Zoom link made, moved and removed with the meeting', () => {
   });
 
   it('deleting a meeting removes its room, even though the row is gone', async () => {
-    const made = await create(a.admin, contact, meetingBody({ conferencing: { videoProvider: 'zoom' } }));
+    const made = await create(
+      a.admin,
+      contact,
+      meetingBody({ conferencing: { videoProvider: 'zoom' } }),
+    );
     const roomsBefore = zoom.rooms.size;
-    const del = await api.as(a.admin).delete(`/v2/contacts/${contact}/meetings/${(made.body as Meeting).id}`);
+    const del = await api
+      .as(a.admin)
+      .delete(`/v2/contacts/${contact}/meetings/${(made.body as Meeting).id}`);
     expect(del.status).toBe(204);
     expect(await drainReleases(a)).toBe(1);
     expect(zoom.rooms.size).toBe(roomsBefore - 1);
     // Running the same release again is harmless (the provider says the room is gone).
     expect(
-      (await h.owner.query(`SELECT count(*)::int AS n FROM contact_meeting_conferencing WHERE org_id = $1`, [a.orgId])).rows[0].n,
+      (
+        await h.owner.query(
+          `SELECT count(*)::int AS n FROM contact_meeting_conferencing WHERE org_id = $1`,
+          [a.orgId],
+        )
+      ).rows[0].n,
     ).toBeGreaterThanOrEqual(0);
   });
 
   it('a room somebody deleted at Zoom is made again when the meeting is next saved', async () => {
-    const made = (await create(a.admin, contact, meetingBody({ conferencing: { videoProvider: 'zoom' } }))).body as Meeting;
+    const made = (
+      await create(a.admin, contact, meetingBody({ conferencing: { videoProvider: 'zoom' } }))
+    ).body as Meeting;
     const id = [...zoom.rooms.keys()].at(-1)!;
     zoom.rooms.delete(id);
     const res = await api
@@ -372,15 +455,26 @@ describe('a Zoom link made, moved and removed with the meeting', () => {
 describe('a provider that fails does not lose the meeting', () => {
   it('saves the meeting with a problem, and Try again makes the link', async () => {
     zoom.failNext('server', 'create');
-    const res = await create(a.admin, contact, meetingBody({ title: 'Flaky', conferencing: { videoProvider: 'zoom' } }));
+    const res = await create(
+      a.admin,
+      contact,
+      meetingBody({ title: 'Flaky', conferencing: { videoProvider: 'zoom' } }),
+    );
     expect(res.status, JSON.stringify(res.body)).toBe(201);
     const m = res.body as Meeting;
     expect(m.conferencing).toMatchObject({ videoStatus: 'failed', videoError: 'provider_failed' });
     expect(m.joinUrl ?? null).toBeNull();
 
-    const retry = await api.as(a.admin).post(`/v2/contacts/${contact}/meetings/${m.id}/conferencing/retry`).set('Idempotency-Key', crypto.randomUUID()).send({});
+    const retry = await api
+      .as(a.admin)
+      .post(`/v2/contacts/${contact}/meetings/${m.id}/conferencing/retry`)
+      .set('Idempotency-Key', crypto.randomUUID())
+      .send({});
     expect(retry.status, JSON.stringify(retry.body)).toBe(200);
-    expect((retry.body as Meeting).conferencing).toMatchObject({ videoStatus: 'ready', videoError: null });
+    expect((retry.body as Meeting).conferencing).toMatchObject({
+      videoStatus: 'ready',
+      videoError: null,
+    });
     expect((retry.body as Meeting).joinUrl).toMatch(/zoom\.fake\.test/);
   });
 
@@ -391,9 +485,16 @@ describe('a provider that fails does not lose the meeting', () => {
       `UPDATE conferencing_connections SET refresh_token_enc = $2, access_token_enc = NULL, access_token_expires_at = NULL WHERE org_id = $1`,
       [a.orgId, crypto_.encrypt('revoked-by-user')],
     );
-    const res = await create(a.admin, contact, meetingBody({ title: 'Revoked', conferencing: { videoProvider: 'zoom' } }));
+    const res = await create(
+      a.admin,
+      contact,
+      meetingBody({ title: 'Revoked', conferencing: { videoProvider: 'zoom' } }),
+    );
     expect(res.status).toBe(201);
-    expect((res.body as Meeting).conferencing).toMatchObject({ videoStatus: 'failed', videoError: 'needs_reconnect' });
+    expect((res.body as Meeting).conferencing).toMatchObject({
+      videoStatus: 'failed',
+      videoError: 'needs_reconnect',
+    });
     const list = await api.as(a.admin).get('/v2/conferencing/connections');
     expect(list.body.data[0]).toMatchObject({ provider: 'zoom', status: 'needs_reconnect' });
     expect((await caps(a.admin)).video).toEqual([]);
@@ -408,7 +509,10 @@ describe('a provider that fails does not lose the meeting', () => {
     const res = await api.as(a.admin).delete('/v2/conferencing/zoom');
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('disconnected');
-    expect((await h.owner.query(`SELECT 1 FROM conferencing_connections WHERE org_id = $1`, [a.orgId])).rows).toHaveLength(0);
+    expect(
+      (await h.owner.query(`SELECT 1 FROM conferencing_connections WHERE org_id = $1`, [a.orgId]))
+        .rows,
+    ).toHaveLength(0);
     expect((await caps(a.admin)).video).toEqual([]);
     expect((await caps(a.admin)).connectable).toEqual(['zoom']);
     // Idempotent.
@@ -424,21 +528,28 @@ describe('a provider that fails does not lose the meeting', () => {
   });
 });
 
-describe('Microsoft Teams in the person\'s own account', () => {
+describe("Microsoft Teams in the person's own account", () => {
   it('is offered once installed and connected, and makes a room keyed by the meeting', async () => {
     await install(a, 'microsoft-teams');
     await connect(a, a.admin, 'teams', 'ana@contoso.example');
     expect((await caps(a.admin)).video.map((v) => v.provider)).toContain('teams');
-    const res = await create(a.admin, contact, meetingBody({ title: 'Teams call', conferencing: { videoProvider: 'teams' } }));
+    const res = await create(
+      a.admin,
+      contact,
+      meetingBody({ title: 'Teams call', conferencing: { videoProvider: 'teams' } }),
+    );
     expect(res.status).toBe(201);
     expect((res.body as Meeting).joinUrl).toMatch(/teams\.fake\.test/);
     expect(teams.rooms.size).toBe(1);
   });
 });
 
-describe('Google Meet and the calendar entry through the workspace\'s connected Google Calendar', () => {
+describe("Google Meet and the calendar entry through the workspace's connected Google Calendar", () => {
   const connectGoogle = async (t: Tenant, email: string) => {
-    const start = await api.as(t.admin).post('/v2/appointments/calendar/google/start').send({ returnTo: '/appointments/settings' });
+    const start = await api
+      .as(t.admin)
+      .post('/v2/appointments/calendar/google/start')
+      .send({ returnTo: '/appointments/settings' });
     expect(start.status, JSON.stringify(start.body)).toBe(200);
     const state = new URL(start.body.url as string).searchParams.get('state')!;
     fakeGoogle.grant('meet-code', fakeGoogle.account(email), {});
@@ -446,7 +557,9 @@ describe('Google Meet and the calendar entry through the workspace\'s connected 
       .get('/v2/public/appointments/calendar/google/callback')
       .query({ code: 'meet-code', state })
       .redirects(0);
-    const m = /\/google-account\/confirm\?request=([0-9a-f-]{36})$/.exec(cb.headers.location as string);
+    const m = /\/google-account\/confirm\?request=([0-9a-f-]{36})$/.exec(
+      cb.headers.location as string,
+    );
     expect(m, String(cb.headers.location)).not.toBeNull();
     const done = await api.as(t.admin).post(`/v2/google-account/consent/${m![1]}/confirm`).send({});
     expect(done.status, JSON.stringify(done.body)).toBe(200);
@@ -461,32 +574,77 @@ describe('Google Meet and the calendar entry through the workspace\'s connected 
   });
 
   it('a Meet link puts the meeting on the calendar and takes its room from the event', async () => {
-    const res = await create(a.admin, contact, meetingBody({ title: 'Meet call', conferencing: { videoProvider: 'meet', timeZone: 'UTC' } }));
+    const res = await create(
+      a.admin,
+      contact,
+      meetingBody({ title: 'Meet call', conferencing: { videoProvider: 'meet', timeZone: 'UTC' } }),
+    );
     expect(res.status, JSON.stringify(res.body)).toBe(201);
     const m = res.body as Meeting;
-    expect(m.conferencing).toMatchObject({ videoProvider: 'meet', videoStatus: 'ready', calendarProvider: 'google', calendarStatus: 'synced' });
+    expect(m.conferencing).toMatchObject({
+      videoProvider: 'meet',
+      videoStatus: 'ready',
+      calendarProvider: 'google',
+      calendarStatus: 'synced',
+    });
     expect(m.joinUrl).toBeTruthy();
     const events = [...fakeGoogle.events.values()].flatMap((s) => [...s.values()]);
     expect(events.some((e) => e.summary === 'Meet call')).toBe(true);
   });
 
   it('adds a plain calendar entry; the contact is invited only when asked', async () => {
-    const plain = (await create(a.admin, contact, meetingBody({ title: 'Quiet entry', conferencing: { addToCalendar: true } }))).body as Meeting;
-    const quiet = [...fakeGoogle.events.values()].flatMap((s) => [...s.values()]).find((e) => e.summary === 'Quiet entry')!;
+    const plain = (
+      await create(
+        a.admin,
+        contact,
+        meetingBody({ title: 'Quiet entry', conferencing: { addToCalendar: true } }),
+      )
+    ).body as Meeting;
+    const quiet = [...fakeGoogle.events.values()]
+      .flatMap((s) => [...s.values()])
+      .find((e) => e.summary === 'Quiet entry')!;
     expect(quiet.attendees ?? []).toEqual([]);
     expect(plain.conferencing).toMatchObject({ calendarStatus: 'synced', invited: false });
 
-    const invited = (await create(a.admin, contact, meetingBody({ title: 'Invite entry', conferencing: { addToCalendar: true, sendInvitation: true } }))).body as Meeting;
-    const ev = [...fakeGoogle.events.values()].flatMap((s) => [...s.values()]).find((e) => e.summary === 'Invite entry')!;
+    const invited = (
+      await create(
+        a.admin,
+        contact,
+        meetingBody({
+          title: 'Invite entry',
+          conferencing: { addToCalendar: true, sendInvitation: true },
+        }),
+      )
+    ).body as Meeting;
+    const ev = [...fakeGoogle.events.values()]
+      .flatMap((s) => [...s.values()])
+      .find((e) => e.summary === 'Invite entry')!;
     expect(ev.attendees?.map((x) => x.email)).toEqual(['priya@example.test']);
     expect(invited.conferencing?.invited).toBe(true);
   });
 
   it('moving the meeting moves the event, and deleting the meeting removes it', async () => {
-    const m = (await create(a.admin, contact, meetingBody({ title: 'Event to move', conferencing: { addToCalendar: true } }))).body as Meeting;
-    const find = () => [...fakeGoogle.events.values()].flatMap((s) => [...s.values()]).find((e) => e.summary === 'Event to move' || e.summary === 'Event moved');
+    const m = (
+      await create(
+        a.admin,
+        contact,
+        meetingBody({ title: 'Event to move', conferencing: { addToCalendar: true } }),
+      )
+    ).body as Meeting;
+    const find = () =>
+      [...fakeGoogle.events.values()]
+        .flatMap((s) => [...s.values()])
+        .find((e) => e.summary === 'Event to move' || e.summary === 'Event moved');
     const start = when(72);
-    const res = await api.as(a.admin).patch(`/v2/contacts/${contact}/meetings/${m.id}`).send({ title: 'Event moved', startsAt: start, endsAt: when(72.5), rowVersion: m.rowVersion });
+    const res = await api
+      .as(a.admin)
+      .patch(`/v2/contacts/${contact}/meetings/${m.id}`)
+      .send({
+        title: 'Event moved',
+        startsAt: start,
+        endsAt: when(72.5),
+        rowVersion: m.rowVersion,
+      });
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(find()?.summary).toBe('Event moved');
     expect(new Date(find()!.start.dateTime).toISOString()).toBe(start);
@@ -499,12 +657,23 @@ describe('Google Meet and the calendar entry through the workspace\'s connected 
   });
 
   it('unticking the calendar removes the event', async () => {
-    const m = (await create(a.admin, contact, meetingBody({ title: 'Untick me', conferencing: { addToCalendar: true } }))).body as Meeting;
-    const res = await api.as(a.admin).patch(`/v2/contacts/${contact}/meetings/${m.id}`).send({ conferencing: { addToCalendar: false }, rowVersion: m.rowVersion });
+    const m = (
+      await create(
+        a.admin,
+        contact,
+        meetingBody({ title: 'Untick me', conferencing: { addToCalendar: true } }),
+      )
+    ).body as Meeting;
+    const res = await api
+      .as(a.admin)
+      .patch(`/v2/contacts/${contact}/meetings/${m.id}`)
+      .send({ conferencing: { addToCalendar: false }, rowVersion: m.rowVersion });
     expect(res.status).toBe(200);
     expect((res.body as Meeting).conferencing).toBeNull();
     await drainReleases(a);
-    const ev = [...fakeGoogle.events.values()].flatMap((s) => [...s.values()]).find((e) => e.summary === 'Untick me');
+    const ev = [...fakeGoogle.events.values()]
+      .flatMap((s) => [...s.values()])
+      .find((e) => e.summary === 'Untick me');
     expect(ev === undefined || ev.status === 'cancelled').toBe(true);
   });
 
@@ -513,7 +682,10 @@ describe('Google Meet and the calendar entry through the workspace\'s connected 
     const [c2] = await api.seedContacts(b, [{ name: 'Someone' }]);
     const res = await create(b.admin, c2!, meetingBody({ conferencing: { addToCalendar: true } }));
     expect(res.status).toBe(201);
-    expect((res.body as Meeting).conferencing).toMatchObject({ calendarStatus: 'failed', calendarError: 'calendar_not_connected' });
+    expect((res.body as Meeting).conferencing).toMatchObject({
+      calendarStatus: 'failed',
+      calendarError: 'calendar_not_connected',
+    });
   });
 });
 
@@ -523,11 +695,15 @@ describe('permissions', () => {
     for (const path of ['/v2/conferencing/capabilities', '/v2/conferencing/connections']) {
       expect((await api.as(reader.token).get(path)).status).toBe(403);
     }
-    expect((await api.as(reader.token).post('/v2/conferencing/zoom/start').send({})).status).toBe(403);
+    expect((await api.as(reader.token).post('/v2/conferencing/zoom/start').send({})).status).toBe(
+      403,
+    );
   });
 
   it('the public callback needs no session but a valid state', async () => {
-    const res = await request(h.app.getHttpServer()).get('/v2/public/conferencing/teams/callback').redirects(0);
+    const res = await request(h.app.getHttpServer())
+      .get('/v2/public/conferencing/teams/callback')
+      .redirects(0);
     expect(res.status).toBe(302);
     expect(new URL(res.headers.location as string).searchParams.get('video')).toBe('failed');
   });

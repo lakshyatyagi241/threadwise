@@ -36,7 +36,8 @@ export function MeetingVideoStatus({
   const pending = c.videoStatus === 'pending' && !failedVideo;
   const own = !meeting.id.startsWith('pending-');
 
-  const problemText = failedVideo && c.videoError ? t(`problem.${c.videoError}`, { provider }) : null;
+  const problemText =
+    failedVideo && c.videoError ? t(`problem.${c.videoError}`, { provider }) : null;
   const calendarText = failedCalendar
     ? c.calendarError === 'calendar_not_connected' || c.calendarError === 'provider_failed'
       ? t(`calendarProblem.${c.calendarError}`)

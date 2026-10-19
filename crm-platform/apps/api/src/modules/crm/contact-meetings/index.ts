@@ -6,10 +6,7 @@ export type {
   MeetingConferencingRow,
   MeetingConferencingValues,
 } from './contact-meeting-conferencing.repository';
-export {
-  CONFERENCING_RELEASE_EVENT,
-  MEETING_CONFERENCING,
-} from './meeting-conferencing.port';
+export { CONFERENCING_RELEASE_EVENT, MEETING_CONFERENCING } from './meeting-conferencing.port';
 export type { MeetingConferencingPort } from './meeting-conferencing.port';
 export { releaseAll } from './meeting-conferencing.rules';
 export type { ReleaseSnapshot } from './meeting-conferencing.rules';

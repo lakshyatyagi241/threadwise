@@ -108,9 +108,7 @@ export interface MeetingFormValues {
 
 /** The request part for video and calendar: the browser's zone goes with it, because a calendar event and a Zoom meeting need one. */
 const conferencingPart = (v: MeetingFormValues, timeZone?: string) =>
-  v.conferencing
-    ? { conferencing: { ...v.conferencing, ...(timeZone ? { timeZone } : {}) } }
-    : {};
+  v.conferencing ? { conferencing: { ...v.conferencing, ...(timeZone ? { timeZone } : {}) } } : {};
 
 export const MEETING_TITLE_MAX = 255;
 export const MEETING_LOCATION_MAX = 255;

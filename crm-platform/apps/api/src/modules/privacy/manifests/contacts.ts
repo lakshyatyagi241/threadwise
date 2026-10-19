@@ -120,7 +120,13 @@ export const contactsNotesFiles = defineHolder({
       // The video link and calendar entry asked for on a typed-in meeting (BL-361, BL-362): the provider's ids of the room and the event.
       // The room and the event themselves live at Zoom, Teams, Google or Outlook and are removed by the worker when the meeting is deleted.
       table: 'contact_meeting_conferencing',
-      link: { by: 'via', column: 'meeting_id', table: 'contact_meetings', key: 'id', link: CONTACT },
+      link: {
+        by: 'via',
+        column: 'meeting_id',
+        table: 'contact_meetings',
+        key: 'id',
+        link: CONTACT,
+      },
       disposition: 'cascade',
       parent: 'contact_meetings',
       tier: 'core',

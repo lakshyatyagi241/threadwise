@@ -11,15 +11,13 @@ import { MeetingConferencingService } from './meeting-conferencing.service';
 export function snapshotOf(payload: Record<string, unknown>): ReleaseSnapshot | null {
   const video = payload.video as { provider?: unknown; id?: unknown } | null | undefined;
   const calendar = payload.calendar as
-    | { provider?: unknown; calendarId?: unknown; eventId?: unknown }
-    | null
-    | undefined;
+    { provider?: unknown; calendarId?: unknown; eventId?: unknown } | null | undefined;
   const okVideo =
     video &&
     (video.provider === 'zoom' || video.provider === 'teams') &&
     typeof video.id === 'string' &&
     video.id !== ''
-      ? { provider: video.provider, id: video.id }
+      ? { provider: video.provider as 'zoom' | 'teams', id: video.id }
       : null;
   const okCalendar =
     calendar &&
@@ -27,7 +25,7 @@ export function snapshotOf(payload: Record<string, unknown>): ReleaseSnapshot | 
     typeof calendar.eventId === 'string' &&
     calendar.eventId !== ''
       ? {
-          provider: calendar.provider,
+          provider: calendar.provider as 'google' | 'microsoft',
           calendarId: typeof calendar.calendarId === 'string' ? calendar.calendarId : null,
           eventId: calendar.eventId,
         }

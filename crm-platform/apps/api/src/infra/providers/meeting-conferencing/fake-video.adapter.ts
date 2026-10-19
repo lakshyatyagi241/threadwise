@@ -30,7 +30,10 @@ export class FakeVideoProvider implements VideoProviderAdapter {
   readonly rooms = new Map<string, { request: VideoMeetingRequest; joinUrl: string }>();
   /** The accounts the fake knows, by the access token it issued. */
   private readonly accounts = new Map<string, VideoAccount>();
-  private readonly failures: Array<{ op: FakeVideoCall['op'] | '*'; kind: ConferencingFailureKind }> = [];
+  private readonly failures: Array<{
+    op: FakeVideoCall['op'] | '*';
+    kind: ConferencingFailureKind;
+  }> = [];
   private sequence = 0;
   /** Set false to make a provider the platform has not set up (nobody can connect). */
   isConfigured = true;
@@ -52,7 +55,8 @@ export class FakeVideoProvider implements VideoProviderAdapter {
   }
 
   private checkToken(accessToken: string): void {
-    if (this.expiredTokens.has(accessToken)) throw new ConferencingError('auth', 401, 'fake_expired');
+    if (this.expiredTokens.has(accessToken))
+      throw new ConferencingError('auth', 401, 'fake_expired');
   }
 
   async configured(): Promise<boolean> {
@@ -68,19 +72,26 @@ export class FakeVideoProvider implements VideoProviderAdapter {
   private issue(email: string | null): VideoTokens {
     this.sequence += 1;
     const accessToken = `fake-access-${this.sequence}`;
-    this.accounts.set(accessToken, { id: `${this.provider}-acct-${email ?? this.sequence}`, email });
+    this.accounts.set(accessToken, {
+      id: `${this.provider}-acct-${email ?? this.sequence}`,
+      email,
+    });
     return {
       accessToken,
       refreshToken: `fake-refresh-${this.sequence}:${email ?? ''}`,
       expiresInSeconds: 3600,
-      scope: this.provider === 'teams' ? 'OnlineMeetings.ReadWrite User.Read offline_access' : 'meeting:write',
+      scope:
+        this.provider === 'teams'
+          ? 'OnlineMeetings.ReadWrite User.Read offline_access'
+          : 'meeting:write',
     };
   }
 
   async exchangeCode(code: string): Promise<VideoTokens> {
     this.calls.push({ op: 'exchangeCode' });
     this.maybeFail('exchangeCode');
-    if (code === 'bad-code') throw new ConferencingError('invalid_grant', 400, 'fake_invalid_grant');
+    if (code === 'bad-code')
+      throw new ConferencingError('invalid_grant', 400, 'fake_invalid_grant');
     return this.issue(code.includes('@') ? code : null);
   }
 

@@ -13,7 +13,9 @@ describe('the meeting request with a video link and a calendar entry', () => {
   it('says nothing about video or calendar when nothing was asked, exactly as before', () => {
     const body = toCreateMeeting(valuesOf(draft()), 'Asia/Kolkata');
     expect(body).not.toHaveProperty('conferencing');
-    expect(toUpdateMeeting(valuesOf(draft()), 3, 'Asia/Kolkata')).not.toHaveProperty('conferencing');
+    expect(toUpdateMeeting(valuesOf(draft()), 3, 'Asia/Kolkata')).not.toHaveProperty(
+      'conferencing',
+    );
   });
 
   it('carries what was asked, with the zone the times were typed in', () => {

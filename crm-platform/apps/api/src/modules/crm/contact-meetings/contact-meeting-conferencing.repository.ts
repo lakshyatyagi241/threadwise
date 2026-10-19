@@ -94,19 +94,46 @@ export class ContactMeetingConferencingRepository {
     return new Map(rows.map((r) => [r.meetingId, r]));
   }
 
-  /** Creates the row, or sets the given columns of the one that exists. */
+  /** Sets the given columns of the meeting's row, which must exist. Returns whether it did. */
+  async patch(
+    tx: Tx,
+    orgId: number,
+    meetingId: number,
+    values: MeetingConferencingValues,
+  ): Promise<boolean> {
+    const done = await tx
+      .update(contactMeetingConferencing)
+      .set({ ...values, updatedAt: sql`now()` })
+      .where(
+        and(
+          eq(contactMeetingConferencing.orgId, orgId),
+          eq(contactMeetingConferencing.meetingId, meetingId),
+        ),
+      )
+      .returning({ id: contactMeetingConferencing.id });
+    return done.length > 0;
+  }
+
+  /**
+   * Creates the row, or sets the given columns of the one that exists. An UPDATE first, then an INSERT: a single INSERT .. ON CONFLICT
+   * checks the table's CHECK constraints against the row it WOULD insert (a status with no provider, because only the changed columns
+   * are given), which fails even when the row exists and the update would have been fine.
+   */
   async upsert(
     tx: Tx,
     orgId: number,
     meetingId: number,
     values: MeetingConferencingValues,
   ): Promise<void> {
-    await tx
+    if (await this.patch(tx, orgId, meetingId, values)) return;
+    const made = await tx
       .insert(contactMeetingConferencing)
       .values({ orgId, meetingId, ...values })
-      .onConflictDoUpdate({
+      .onConflictDoNothing({
         target: [contactMeetingConferencing.orgId, contactMeetingConferencing.meetingId],
-        set: { ...values, updatedAt: sql`now()` },
-      });
+      })
+      .returning({ id: contactMeetingConferencing.id });
+    // Another writer made the row between the two statements: its row stands, ours is applied on top.
+    if (made.length === 0) await this.patch(tx, orgId, meetingId, values);
   }
 }

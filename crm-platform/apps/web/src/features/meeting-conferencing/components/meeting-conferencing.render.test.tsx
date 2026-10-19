@@ -53,6 +53,8 @@ const en = JSON.parse(
   readFileSync(join(process.cwd(), 'messages', 'en', 'meeting-conferencing.json'), 'utf8'),
 ) as Record<string, unknown>;
 
+/** The toast region the provider draws is not part of what is under test. */
+const TOAST_REGION = new RegExp('<div aria-live="polite"[^>]*></div>');
 const html = (el: ReactElement) =>
   renderToStaticMarkup(
     <NextIntlClientProvider locale="en" messages={en} timeZone="UTC">
@@ -60,7 +62,7 @@ const html = (el: ReactElement) =>
         <ToastProvider dismissLabel="Dismiss">{el}</ToastProvider>
       </QueryClientProvider>
     </NextIntlClientProvider>,
-  );
+  ).replace(TOAST_REGION, '');
 
 const caps = (over: Partial<ConferencingCapabilities> = {}): ConferencingCapabilities => ({
   video: [],
@@ -71,7 +73,10 @@ const caps = (over: Partial<ConferencingCapabilities> = {}): ConferencingCapabil
   ...over,
 });
 
-const fields = (value?: Parameters<typeof MeetingConferencingFields>[0]['value'], hasStart = true) =>
+const fields = (
+  value?: Parameters<typeof MeetingConferencingFields>[0]['value'],
+  hasStart = true,
+) =>
   html(<MeetingConferencingFields value={value} onChange={() => undefined} hasStart={hasStart} />);
 
 beforeEach(() => {
@@ -127,7 +132,9 @@ describe('the video and calendar fields of the meeting form', () => {
 
   it('show the connected calendar by name, and the invitation only once the calendar is ticked', () => {
     state.caps = {
-      data: caps({ calendar: { provider: 'google', account: 'ana@gmail.example', calendarName: 'Sales' } }),
+      data: caps({
+        calendar: { provider: 'google', account: 'ana@gmail.example', calendarName: 'Sales' },
+      }),
     };
     const off = fields();
     expect(off).toContain('Add to my calendar (ana@gmail.example, Sales)');
@@ -145,7 +152,9 @@ describe('the video and calendar fields of the meeting form', () => {
     };
     const out = fields({ videoProvider: 'meet' });
     expect(out).toContain('part of a calendar event');
-    expect(out).toMatch(/type="checkbox"[^>]*checked=""[^>]*disabled=""|type="checkbox"[^>]*disabled=""[^>]*checked=""/);
+    expect(out).toMatch(
+      /type="checkbox"[^>]*checked=""[^>]*disabled=""|type="checkbox"[^>]*disabled=""[^>]*checked=""/,
+    );
   });
 
   it('lock everything and say so while the meeting has no start time', () => {
@@ -156,7 +165,10 @@ describe('the video and calendar fields of the meeting form', () => {
   });
 });
 
-const meeting = (conf: ContactMeetingResponse['conferencing'], over: Partial<ContactMeetingResponse> = {}): ContactMeetingResponse => ({
+const meeting = (
+  conf: ContactMeetingResponse['conferencing'],
+  over: Partial<ContactMeetingResponse> = {},
+): ContactMeetingResponse => ({
   id: '11111111-1111-4111-8111-111111111111',
   contactId: '22222222-2222-4222-8222-222222222222',
   title: 'Intro call',
@@ -202,7 +214,11 @@ describe('the status line of a meeting', () => {
   });
 
   it('says what went wrong in words and offers Try again to a person who may edit', () => {
-    const failed = { ...base, videoStatus: 'failed' as const, videoError: 'needs_reconnect' as const };
+    const failed = {
+      ...base,
+      videoStatus: 'failed' as const,
+      videoError: 'needs_reconnect' as const,
+    };
     const out = status(meeting(failed));
     expect(out).toContain('Your Zoom connection needs to be renewed');
     expect(out).toContain('Try again');
@@ -211,10 +227,22 @@ describe('the status line of a meeting', () => {
   });
 
   it('shows the calendar entry and whether the contact was invited', () => {
-    const synced = { ...base, videoProvider: null, videoStatus: null, calendarProvider: 'google' as const, calendarStatus: 'synced' as const };
+    const synced = {
+      ...base,
+      videoProvider: null,
+      videoStatus: null,
+      calendarProvider: 'google' as const,
+      calendarStatus: 'synced' as const,
+    };
     expect(status(meeting(synced))).toContain('On your calendar');
-    expect(status(meeting({ ...synced, invited: true }))).toContain('sent the contact an invitation');
-    const failedCal = { ...synced, calendarStatus: 'failed' as const, calendarError: 'calendar_not_connected' as const };
+    expect(status(meeting({ ...synced, invited: true }))).toContain(
+      'sent the contact an invitation',
+    );
+    const failedCal = {
+      ...synced,
+      calendarStatus: 'failed' as const,
+      calendarError: 'calendar_not_connected' as const,
+    };
     expect(status(meeting(failedCal))).toContain('no calendar is connected');
   });
 });
@@ -228,7 +256,12 @@ const card = (over: Partial<ConferencingConnection>): ConferencingConnection => 
   ...over,
 });
 const screen = (cards: ConferencingConnection[], canInstall = false) => {
-  state.conns = { data: { data: cards, canInstall }, isPending: false, isError: false, error: null };
+  state.conns = {
+    data: { data: cards, canInstall },
+    isPending: false,
+    isError: false,
+    error: null,
+  };
   return html(<VideoMeetingsScreen />);
 };
 
@@ -240,7 +273,10 @@ describe('the Video meetings page', () => {
   });
 
   it('offers Install to a person who may install, and says to ask an admin otherwise', () => {
-    const cards = [card({ status: 'not_installed' }), card({ provider: 'teams', status: 'not_installed' })];
+    const cards = [
+      card({ status: 'not_installed' }),
+      card({ provider: 'teams', status: 'not_installed' }),
+    ];
     const can = screen(cards, true);
     expect(can).toContain('Install in the Marketplace');
     expect(can).toContain('href="/marketplace/integrations"');
@@ -252,18 +288,28 @@ describe('the Video meetings page', () => {
   it('shows Connect when not connected, the account when connected, and Reconnect when it needs renewing', () => {
     const out = screen([
       card({ status: 'disconnected' }),
-      card({ provider: 'teams', status: 'connected', account: 'ana@contoso.example', connectedAt: '2027-01-02T00:00:00.000Z' }),
+      card({
+        provider: 'teams',
+        status: 'connected',
+        account: 'ana@contoso.example',
+        connectedAt: '2027-01-02T00:00:00.000Z',
+      }),
     ]);
     expect(out).toContain('>Connect<');
     expect(out).toContain('Account: ana@contoso.example');
     expect(out).toContain('>Disconnect<');
-    const renew = screen([card({ status: 'needs_reconnect', account: 'ana@example.com' }), card({ provider: 'teams', status: 'unavailable' })]);
+    const renew = screen([
+      card({ status: 'needs_reconnect', account: 'ana@example.com' }),
+      card({ provider: 'teams', status: 'unavailable' }),
+    ]);
     expect(renew).toContain('>Reconnect<');
     expect(renew).toContain('has not been set up for this platform yet');
   });
 
   it('shows the outcome the provider left in the address', () => {
     state.search = 'video=denied&provider=zoom';
-    expect(screen([card({}), card({ provider: 'teams' })])).toContain('Zoom was not connected because the sign-in was cancelled');
+    expect(screen([card({}), card({ provider: 'teams' })])).toContain(
+      'Zoom was not connected because the sign-in was cancelled',
+    );
   });
 });

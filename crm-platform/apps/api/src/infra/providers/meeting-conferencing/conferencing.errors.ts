@@ -1,4 +1,7 @@
-import { aadstsOf, classifyMicrosoftTokenError } from '../appointments-booking/microsoft-calendar.errors';
+import {
+  aadstsOf,
+  classifyMicrosoftTokenError,
+} from '../appointments-booking/microsoft-calendar.errors';
 
 /**
  * What can go wrong talking to a video provider (Zoom, Microsoft Graph), reduced to the few cases the caller treats differently. The

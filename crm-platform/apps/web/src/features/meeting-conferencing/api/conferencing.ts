@@ -36,7 +36,10 @@ export const conferencingApi = {
       schema: conferencingConnectionSchema,
     }),
   disconnect: (provider: ConnectedVideoProvider) =>
-    apiFetch(`/conferencing/${provider}`, { method: 'DELETE', schema: conferencingConnectionSchema }),
+    apiFetch(`/conferencing/${provider}`, {
+      method: 'DELETE',
+      schema: conferencingConnectionSchema,
+    }),
   retry: (contactId: string, meetingId: string) =>
     apiFetch(`/contacts/${contactId}/meetings/${meetingId}/conferencing/retry`, {
       method: 'POST',

@@ -2,7 +2,10 @@ import { z } from 'zod';
 import { appointmentStatusSchema } from '../appointments/appointment';
 import { uuidSchema } from '../common/ids';
 import { paginationQuerySchema } from '../common/pagination';
-import { meetingConferencingInputSchema, meetingConferencingSchema } from '../meeting-conferencing/conferencing';
+import {
+  meetingConferencingInputSchema,
+  meetingConferencingSchema,
+} from '../meeting-conferencing/conferencing';
 
 /** Where a meeting row came from: typed in on the contact, or mirrored from a booking (an appointment). */
 export const CONTACT_MEETING_SOURCES = ['manual', 'booking'] as const;

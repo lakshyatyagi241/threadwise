@@ -190,6 +190,8 @@ export class ContactMeetingsService {
           : existing.startsAt;
       const plan = this.conferencingPlan(held ?? null, input.conferencing, { startsAt });
       if (plan.clearJoinUrl) values.joinUrl = null;
+      // A request that changes only the video link or the calendar entry still takes the row's version (and checks the one the person saw).
+      if (Object.keys(values).length === 0) values.updatedAt = new Date();
 
       const updated = await this.repo.updateWithVersion(
         tx,

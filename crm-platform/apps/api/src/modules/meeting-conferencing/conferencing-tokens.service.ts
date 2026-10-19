@@ -126,7 +126,9 @@ export class ConferencingTokens {
       // Cheap path: the stamp "used just now" is the only write, and the SQL guards it to once a minute.
       void this.db
         .txAs({ orgId, userId: null }, (tx) => this.repo.touchUsed(tx, orgId, conn.id))
-        .catch((err: unknown) => this.logger.debug({ err, orgId }, 'could not stamp the connection'));
+        .catch((err: unknown) =>
+          this.logger.debug({ err, orgId }, 'could not stamp the connection'),
+        );
       return;
     }
     this.health.set(conn.id, code);

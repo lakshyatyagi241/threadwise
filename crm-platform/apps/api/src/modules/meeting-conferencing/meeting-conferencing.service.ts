@@ -94,7 +94,8 @@ export class MeetingConferencingService implements MeetingConferencingPort {
       this.db.tx(async (tx) => ({
         installed: await this.connections.installedApps(tx, ctx.orgId, slugs),
         published: await this.connections.publishedApps(tx, slugs),
-        mine: ctx.userId === null ? [] : await this.connections.listForUser(tx, ctx.orgId, ctx.userId),
+        mine:
+          ctx.userId === null ? [] : await this.connections.listForUser(tx, ctx.orgId, ctx.userId),
       })),
       this.calendar.options(ctx.orgId),
     ]);
@@ -145,9 +146,17 @@ export class MeetingConferencingService implements MeetingConferencingPort {
     const run = before
       .catch(() => undefined)
       .then(() => this.provisionNow(orgId, meetingId))
-      .catch((err: unknown) =>
-        this.logger.error({ err: String(err), meetingId }, 'meeting conferencing failed unexpectedly'),
-      );
+      .catch(async (err: unknown) => {
+        this.logger.error(
+          { err: String(err), meetingId },
+          'meeting conferencing failed unexpectedly',
+        );
+        // Never leave a request "pending" for ever: say it did not work, so the person can try again.
+        await this.write(orgId, meetingId, {
+          videoStatus: 'failed',
+          videoError: 'provider_failed',
+        }).catch(() => undefined);
+      });
     this.running.set(meetingId, run);
     try {
       await run;
@@ -169,7 +178,8 @@ export class MeetingConferencingService implements MeetingConferencingPort {
           ? {
               email: contact.email,
               name:
-                contact.name ?? ([contact.firstName, contact.lastName].filter(Boolean).join(' ') || null),
+                contact.name ??
+                ([contact.firstName, contact.lastName].filter(Boolean).join(' ') || null),
             }
           : null,
       };
@@ -183,7 +193,7 @@ export class MeetingConferencingService implements MeetingConferencingPort {
     joinUrl?: string | null,
   ): Promise<void> {
     await this.db.txAs({ orgId, userId: null }, async (tx) => {
-      await this.confs.upsert(tx, orgId, meetingId, values);
+      await this.confs.patch(tx, orgId, meetingId, values);
       if (joinUrl !== undefined) await this.meetings.setJoinUrl(tx, orgId, meetingId, joinUrl);
     });
   }
@@ -191,7 +201,7 @@ export class MeetingConferencingService implements MeetingConferencingPort {
   private async provisionNow(orgId: number, meetingId: number): Promise<void> {
     const work = await this.load(orgId, meetingId);
     if (!work) return;
-    const { meeting, conf, contact } = work;
+    const { meeting, conf } = work;
     const asked = conf.videoProvider !== null || conf.addToCalendar;
     if (!asked) return;
     const startsAt = meeting.startsAt;
@@ -201,7 +211,8 @@ export class MeetingConferencingService implements MeetingConferencingPort {
       }
       return;
     }
-    const endsAt = meeting.endsAt ?? new Date(startsAt.getTime() + DEFAULT_MEETING_MINUTES * 60_000);
+    const endsAt =
+      meeting.endsAt ?? new Date(startsAt.getTime() + DEFAULT_MEETING_MINUTES * 60_000);
     const timeZone = conf.timeZone ?? 'UTC';
 
     // --- which way the room is made ---
@@ -230,19 +241,27 @@ export class MeetingConferencingService implements MeetingConferencingPort {
       };
       try {
         if (conf.hostUserId === null) throw new VideoNotConnectedError('none');
-        const made = await this.tokens.withToken(orgId, conf.hostUserId, provider, async (token, a) => {
-          if (conf.videoMeetingId) {
-            try {
-              const up = await a.updateMeeting(token, conf.videoMeetingId, request);
-              return { providerMeetingId: up.providerMeetingId, joinUrl: up.joinUrl };
-            } catch (err) {
-              // The room was removed on the provider's side: a new one takes its place.
-              if (!(err instanceof ConferencingError) || err.kind !== 'not_found') throw err;
+        const made = await this.tokens.withToken(
+          orgId,
+          conf.hostUserId,
+          provider,
+          async (token, a) => {
+            if (conf.videoMeetingId) {
+              try {
+                const up = await a.updateMeeting(token, conf.videoMeetingId, request);
+                return { providerMeetingId: up.providerMeetingId, joinUrl: up.joinUrl };
+              } catch (err) {
+                // The room was removed on the provider's side: a new one takes its place.
+                if (!(err instanceof ConferencingError) || err.kind !== 'not_found') throw err;
+              }
             }
-          }
-          const created = await a.createMeeting(token, request);
-          return { providerMeetingId: created.providerMeetingId, joinUrl: created.joinUrl as string | null };
-        });
+            const created = await a.createMeeting(token, request);
+            return {
+              providerMeetingId: created.providerMeetingId,
+              joinUrl: created.joinUrl as string | null,
+            };
+          },
+        );
         joinUrl = made.joinUrl ?? undefined;
         await this.write(
           orgId,
@@ -310,7 +329,8 @@ export class MeetingConferencingService implements MeetingConferencingPort {
         conf.hostUserId === null || !installed.has(slug)
           ? null
           : await this.tokens.connection(orgId, conf.hostUserId, 'teams');
-      if (conn && conn.status === 'active') return { problem: null, via: 'app', calendarTarget: null };
+      if (conn && conn.status === 'active')
+        return { problem: null, via: 'app', calendarTarget: null };
       if (heldBy !== 'app' && microsoft) {
         return { problem: null, via: 'calendar', calendarTarget: 'microsoft' };
       }
@@ -341,7 +361,8 @@ export class MeetingConferencingService implements MeetingConferencingPort {
       });
     };
     try {
-      const target = a.calendarTarget ?? conf.calendarProvider ?? (await this.calendar.writeProvider(orgId));
+      const target =
+        a.calendarTarget ?? conf.calendarProvider ?? (await this.calendar.writeProvider(orgId));
       if (!target) return await fail('calendar_not_connected', a.createRoom);
       let existingEventId = conf.calendarEventId;
       let calendarId = conf.calendarId;
@@ -350,7 +371,10 @@ export class MeetingConferencingService implements MeetingConferencingPort {
         await this.calendar
           .remove(conf.calendarProvider, orgId, conf.calendarId, existingEventId)
           .catch((err: unknown) =>
-            this.logger.warn({ err: String(err), meeting: meeting.uuid }, 'could not remove the event from the previous calendar'),
+            this.logger.warn(
+              { err: String(err), meeting: meeting.uuid },
+              'could not remove the event from the previous calendar',
+            ),
           );
         existingEventId = null;
         calendarId = null;
@@ -366,7 +390,7 @@ export class MeetingConferencingService implements MeetingConferencingPort {
         endsAt: a.endsAt,
         timezone: a.timeZone,
         attendeeEmail: invitee,
-        attendeeName: invitee ? contact?.name ?? null : null,
+        attendeeName: invitee ? (contact?.name ?? null) : null,
         createMeet: a.createRoom,
         existingEventId,
       });
@@ -385,7 +409,13 @@ export class MeetingConferencingService implements MeetingConferencingPort {
           await this.write(
             orgId,
             meeting.id,
-            { ...values, videoVia: 'calendar', videoStatus: 'ready', videoError: null, videoMeetingId: null },
+            {
+              ...values,
+              videoVia: 'calendar',
+              videoStatus: 'ready',
+              videoError: null,
+              videoMeetingId: null,
+            },
             result.joinUrl,
           );
           return;
@@ -401,7 +431,10 @@ export class MeetingConferencingService implements MeetingConferencingPort {
       }
       await this.write(orgId, meeting.id, values);
     } catch (err) {
-      this.logger.warn({ err: String(err), meeting: meeting.uuid }, 'could not write the calendar entry');
+      this.logger.warn(
+        { err: String(err), meeting: meeting.uuid },
+        'could not write the calendar entry',
+      );
       await fail('provider_failed', false).catch(() => undefined);
     }
   }
@@ -429,10 +462,15 @@ export class MeetingConferencingService implements MeetingConferencingPort {
           { path: 'meeting', message: 'nothing_asked' },
         ]);
       }
-      const roomMissing = conf.videoProvider !== null && conf.videoMeetingId === null && conf.videoVia !== 'calendar';
-      await this.confs.upsert(tx, ctx.orgId, meeting.id, {
+      const roomMissing =
+        conf.videoProvider !== null && conf.videoMeetingId === null && conf.videoVia !== 'calendar';
+      await this.confs.patch(tx, ctx.orgId, meeting.id, {
         ...(conf.videoStatus === 'failed'
-          ? { videoStatus: 'pending' as const, videoError: null, ...(roomMissing ? { hostUserId: ctx.userId } : {}) }
+          ? {
+              videoStatus: 'pending' as const,
+              videoError: null,
+              ...(roomMissing ? { hostUserId: ctx.userId } : {}),
+            }
           : {}),
         ...(conf.calendarStatus === 'failed' ? { calendarStatus: null, calendarError: null } : {}),
       });
@@ -474,7 +512,10 @@ export class MeetingConferencingService implements MeetingConferencingPort {
             (err.kind === 'forbidden' || err.kind === 'bad_request')
           ) {
             // The provider refused the delete (a tenant policy, an API that does not offer it): retrying will not change that.
-            this.logger.warn({ provider, kind: err.kind, reason: err.reason }, 'a video room could not be deleted and was left');
+            this.logger.warn(
+              { provider, kind: err.kind, reason: err.reason },
+              'a video room could not be deleted and was left',
+            );
           } else throw err;
         }
       }

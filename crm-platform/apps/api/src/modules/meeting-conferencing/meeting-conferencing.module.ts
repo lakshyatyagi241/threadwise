@@ -43,7 +43,10 @@ import { MeetingConferencingService } from './meeting-conferencing.service';
     {
       provide: VIDEO_PROVIDER_ADAPTERS,
       inject: [ZoomCredentialsSource, TeamsCredentialsSource],
-      useFactory: (zoom: ZoomCredentialsSource, teams: TeamsCredentialsSource): VideoProviderAdapters =>
+      useFactory: (
+        zoom: ZoomCredentialsSource,
+        teams: TeamsCredentialsSource,
+      ): VideoProviderAdapters =>
         meetingConferencingEnv().CONFERENCING_FAKE === '1'
           ? { zoom: new FakeVideoProvider('zoom'), teams: new FakeVideoProvider('teams') }
           : { zoom: new ZoomAdapter(zoom), teams: new TeamsAdapter(teams) },

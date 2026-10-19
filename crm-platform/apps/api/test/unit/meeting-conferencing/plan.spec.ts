@@ -55,9 +55,9 @@ describe('planConferencing', () => {
   });
 
   it('refuses a link or a calendar entry for a meeting with no start time', () => {
-    expect(
-      planConferencing(null, { videoProvider: 'zoom' }, { ...facts, startsAt: null }),
-    ).toEqual({ ok: false, problem: 'needs_start_time' });
+    expect(planConferencing(null, { videoProvider: 'zoom' }, { ...facts, startsAt: null })).toEqual(
+      { ok: false, problem: 'needs_start_time' },
+    );
     expect(planConferencing(null, { addToCalendar: true }, { ...facts, startsAt: null })).toEqual({
       ok: false,
       problem: 'needs_start_time',
@@ -159,10 +159,14 @@ describe('planConferencing', () => {
     expect(validZone('Asia/Kolkata')).toBe('Asia/Kolkata');
     expect(validZone('Mars/Olympus')).toBeNull();
     expect(validZone('')).toBeNull();
-    const r = planConferencing(null, { videoProvider: 'zoom', timeZone: 'nope' }, {
-      ...facts,
-      timeZone: 'nope',
-    });
+    const r = planConferencing(
+      null,
+      { videoProvider: 'zoom', timeZone: 'nope' },
+      {
+        ...facts,
+        timeZone: 'nope',
+      },
+    );
     if (!r.ok) throw new Error('refused');
     expect(r.plan.next?.timeZone).toBeNull();
   });

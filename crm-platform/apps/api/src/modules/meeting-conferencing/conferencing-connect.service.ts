@@ -187,7 +187,8 @@ export class ConferencingConnectService {
       });
     }
     const { userId, returnTo } = checked.value;
-    const done = (outcome: string) => returnUrl(this.webUrl, returnTo, { video: outcome, provider });
+    const done = (outcome: string) =>
+      returnUrl(this.webUrl, returnTo, { video: outcome, provider });
     if (query.error) return done('denied');
     if (!query.code || userId === null) return done('failed');
     if (!(await this.tokens.adapter(provider).configured())) return done('not_configured');

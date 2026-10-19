@@ -89,7 +89,10 @@ export class ZoomAdapter implements VideoProviderAdapter {
 
   async refresh(refreshToken: string): Promise<VideoTokens> {
     const c = await this.creds();
-    return this.token(c, new URLSearchParams({ grant_type: 'refresh_token', refresh_token: refreshToken }));
+    return this.token(
+      c,
+      new URLSearchParams({ grant_type: 'refresh_token', refresh_token: refreshToken }),
+    );
   }
 
   private async token(

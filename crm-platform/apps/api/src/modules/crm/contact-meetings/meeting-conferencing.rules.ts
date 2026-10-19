@@ -76,7 +76,9 @@ export const hasHeld = (s: ConferencingState | null): boolean =>
 export function releaseAll(s: ConferencingState | null): ReleaseSnapshot | null {
   if (!s) return null;
   const video =
-    s.videoVia === 'app' && s.videoMeetingId && (s.videoProvider === 'zoom' || s.videoProvider === 'teams')
+    s.videoVia === 'app' &&
+    s.videoMeetingId &&
+    (s.videoProvider === 'zoom' || s.videoProvider === 'teams')
       ? { provider: s.videoProvider, id: s.videoMeetingId }
       : null;
   const calendar =
@@ -128,36 +130,45 @@ export function planConferencing(
       ? {
           hostUserId: cur.hostUserId,
           video:
-            dropVideo && cur.videoMeetingId && (cur.videoProvider === 'zoom' || cur.videoProvider === 'teams')
+            dropVideo &&
+            cur.videoMeetingId &&
+            (cur.videoProvider === 'zoom' || cur.videoProvider === 'teams')
               ? { provider: cur.videoProvider, id: cur.videoMeetingId }
               : null,
           calendar:
             dropCalendar && cur.calendarEventId && cur.calendarProvider
-              ? { provider: cur.calendarProvider, calendarId: cur.calendarId, eventId: cur.calendarEventId }
+              ? {
+                  provider: cur.calendarProvider,
+                  calendarId: cur.calendarId,
+                  eventId: cur.calendarEventId,
+                }
               : null,
         }
       : null;
 
   const nothingAsked = provider === null && !calendar;
   // The row stays (with nothing asked) while something is held that the release still has to remove; with nothing held it goes quiet.
-  const next = nothingAsked && !cur
-    ? null
-    : {
-        // Whoever sets or changes the provider hosts the room: it is made in THEIR account. Other edits leave the host alone.
-        hostUserId:
-          providerChanged && provider !== null ? facts.actorUserId : (cur?.hostUserId ?? facts.actorUserId),
-        videoProvider: provider,
-        videoMeetingId: providerChanged || dropVideo ? null : (cur?.videoMeetingId ?? null),
-        videoVia: providerChanged ? null : (cur?.videoVia ?? null),
-        resetVideo: providerChanged && provider !== null,
-        addToCalendar: calendar,
-        sendInvitation: invite,
-        calendarProvider: dropCalendar || calendarOff ? null : (cur?.calendarProvider ?? null),
-        calendarId: dropCalendar || calendarOff ? null : (cur?.calendarId ?? null),
-        calendarEventId: dropCalendar || calendarOff ? null : (cur?.calendarEventId ?? null),
-        resetCalendar: dropCalendar || calendarOff,
-        timeZone: validZone(facts.timeZone) ?? cur?.timeZone ?? null,
-      };
+  const next =
+    nothingAsked && !cur
+      ? null
+      : {
+          // Whoever sets or changes the provider hosts the room: it is made in THEIR account. Other edits leave the host alone.
+          hostUserId:
+            providerChanged && provider !== null
+              ? facts.actorUserId
+              : (cur?.hostUserId ?? facts.actorUserId),
+          videoProvider: provider,
+          videoMeetingId: providerChanged || dropVideo ? null : (cur?.videoMeetingId ?? null),
+          videoVia: providerChanged ? null : (cur?.videoVia ?? null),
+          resetVideo: providerChanged && provider !== null,
+          addToCalendar: calendar,
+          sendInvitation: invite,
+          calendarProvider: dropCalendar || calendarOff ? null : (cur?.calendarProvider ?? null),
+          calendarId: dropCalendar || calendarOff ? null : (cur?.calendarId ?? null),
+          calendarEventId: dropCalendar || calendarOff ? null : (cur?.calendarEventId ?? null),
+          resetCalendar: dropCalendar || calendarOff,
+          timeZone: validZone(facts.timeZone) ?? cur?.timeZone ?? null,
+        };
 
   return {
     ok: true,

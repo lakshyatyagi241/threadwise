@@ -15,7 +15,10 @@ export interface MeetingCalendarOption {
 }
 
 /** A meeting event: the appointment calendar's request with the meeting's uuid as the stable key. */
-export type MeetingEventRequest = Omit<CalendarEventRequest, 'appointmentId' | 'calendarId'> & {
+export type MeetingEventRequest = Omit<
+  CalendarEventRequest,
+  'appointmentId' | 'calendarId' | 'orgId'
+> & {
   meetingKey: string;
   calendarId: string | null;
 };

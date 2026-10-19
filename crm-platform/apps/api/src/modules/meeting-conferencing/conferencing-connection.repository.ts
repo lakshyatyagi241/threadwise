@@ -8,6 +8,13 @@ const s = (v: unknown): string | null => (v === null || v === undefined ? null :
 const d = (v: unknown): Date | null =>
   v === null || v === undefined ? null : v instanceof Date ? v : new Date(v as string);
 
+/** A list of values as `$1, $2`: drizzle spreads a JS array into a tuple, which `= ANY(...)` cannot take. */
+const inList = (values: string[]) =>
+  sql.join(
+    values.map((v) => sql`${v}`),
+    sql`, `,
+  );
+
 export type ConnectionState = 'active' | 'needs_reconnect';
 
 export interface ConferencingConnectionRow {
@@ -169,7 +176,9 @@ export class ConferencingConnectionRepository {
   }
 
   async remove(tx: Tx, orgId: number, id: number): Promise<void> {
-    await tx.execute(sql`DELETE FROM conferencing_connections WHERE org_id = ${orgId} AND id = ${id}`);
+    await tx.execute(
+      sql`DELETE FROM conferencing_connections WHERE org_id = ${orgId} AND id = ${id}`,
+    );
   }
 
   /** Which of the two apps the workspace has installed and running (the Marketplace listing is the gate for every video option). */
@@ -177,14 +186,14 @@ export class ConferencingConnectionRepository {
     const res = await tx.execute(sql`
       SELECT a.slug FROM workspace_app_installations i
         JOIN marketplace_apps a ON a.id = i.app_id
-       WHERE i.org_id = ${orgId} AND i.status = 'active' AND a.slug = ANY(${slugs}::text[])`);
+       WHERE i.org_id = ${orgId} AND i.status = 'active' AND a.slug IN (${inList(slugs)})`);
     return new Set((res.rows as Raw[]).map((r) => r.slug as string));
   }
 
   /** Whether the app listing exists and is published at all (so "install it" is something a person can do). */
   async publishedApps(tx: Tx, slugs: string[]): Promise<Set<string>> {
     const res = await tx.execute(sql`
-      SELECT slug FROM marketplace_apps WHERE slug = ANY(${slugs}::text[]) AND status = 'published'`);
+      SELECT slug FROM marketplace_apps WHERE slug IN (${inList(slugs)}) AND status = 'published'`);
     return new Set((res.rows as Raw[]).map((r) => r.slug as string));
   }
 }
