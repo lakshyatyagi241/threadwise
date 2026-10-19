@@ -80,6 +80,16 @@ export const BOUND_SURFACES: readonly BoundSurface[] = [
     prefixes: ['appointments.appearance'],
   },
   {
+    // The video link and calendar fields of the Add meeting form, the status line of a meeting, and the Video meetings page (BL-360).
+    // Written with the default nouns (meeting, contact) so a workspace that says Visit or Patient reads its own words.
+    id: 'meeting-conferencing',
+    prefixes: [
+      'meeting-conferencing.form',
+      'meeting-conferencing.row',
+      'meeting-conferencing.page',
+    ],
+  },
+  {
     id: 'deals',
     prefixes: [
       'deals-pipelines.nav',

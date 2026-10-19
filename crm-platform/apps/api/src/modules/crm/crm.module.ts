@@ -54,6 +54,7 @@ import { ContactFilesController } from './contact-files/contact-files.controller
 import { ContactFilesRepository } from './contact-files/contact-files.repository';
 import { ContactFilesService } from './contact-files/contact-files.service';
 import { ContactMeetingsController } from './contact-meetings/contact-meetings.controller';
+import { ContactMeetingConferencingRepository } from './contact-meetings/contact-meeting-conferencing.repository';
 import { ContactMeetingsRepository } from './contact-meetings/contact-meetings.repository';
 import { ContactMeetingsService } from './contact-meetings/contact-meetings.service';
 import { ContactNotesController } from './contact-notes/contact-notes.controller';
@@ -332,6 +333,7 @@ import { TagsService } from './tags/tags.service';
     ContactMessageStatsRepository,
     ContactMeetingsService,
     ContactMeetingsRepository,
+    ContactMeetingConferencingRepository,
     CompaniesRepository,
     CompaniesService,
     CompaniesCsvService,
@@ -434,6 +436,7 @@ import { TagsService } from './tags/tags.service';
     ContactMeetingsService,
     // The appointments module mirrors every booking into the contact's Meetings (AppointmentMeetingMirror), in the booking's transaction.
     ContactMeetingsRepository,
+    ContactMeetingConferencingRepository,
     CompaniesService,
     CompaniesRepository,
     DealsService,

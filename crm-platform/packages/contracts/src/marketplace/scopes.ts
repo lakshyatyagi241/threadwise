@@ -161,6 +161,14 @@ export const MARKET_SCOPES = [
     permissions: ['dash.analytics.read'],
   },
   {
+    id: 'meetings.write',
+    label: 'Add video links to meetings',
+    description:
+      'Create, move and remove Zoom or Microsoft Teams meeting links for the meetings your team schedules, using the account each person connects themselves.',
+    risk: 'medium',
+    permissions: ['record.contacts.update'],
+  },
+  {
     id: 'webhooks.manage',
     label: 'Manage webhooks and API keys',
     description: 'Create and remove webhooks and API keys for your workspace.',

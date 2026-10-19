@@ -11,6 +11,8 @@ export const APP_HOME: Readonly<Record<string, string>> = {
   appointments: '/appointments',
   forms: '/forms',
   email: '/email',
+  zoom: '/settings/video-meetings',
+  'microsoft-teams': '/settings/video-meetings',
   sms: '/sms',
   'lead-scoring': '/lead-scoring',
   'ai-crm-copilot': '/ai-crm',

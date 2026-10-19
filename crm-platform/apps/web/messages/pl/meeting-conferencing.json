@@ -1,0 +1,132 @@
+{
+  "settings": {
+    "tiles": {
+      "video-meetings": {
+        "label": "Spotkania wideo",
+        "description": "Połącz własne konto Zoom lub Microsoft Teams, aby dodawać linki wideo do spotkań.",
+        "keywords": "zoom, teams, microsoft teams, wideo, rozmowa wideo, link do spotkania, link dołączania, wideokonferencja, google meet"
+      }
+    }
+  },
+  "meeting-conferencing": {
+    "common": {
+      "dismiss": "Zamknij"
+    },
+    "form": {
+      "label": "Wideokonferencja",
+      "add": {
+        "zoom": "Dodaj link Zoom",
+        "teams": "Dodaj link Teams",
+        "meet": "Dodaj link Google Meet"
+      },
+      "chosen": {
+        "zoom": "Link Zoom",
+        "teams": "Link Teams",
+        "meet": "Link Google Meet"
+      },
+      "remove": "Usuń link wideo",
+      "needsStart": "Ustaw godzinę rozpoczęcia, aby dodać link wideo lub wpis w kalendarzu.",
+      "meetNote": "Link Google Meet jest częścią wydarzenia w kalendarzu, więc to spotkanie zostanie też dodane do Twojego kalendarza.",
+      "teamsViaCalendar": "Ten link Teams tworzy Twój kalendarz Microsoft 365, więc to spotkanie zostanie też do niego dodane.",
+      "calendar": "Dodaj do mojego kalendarza ({account})",
+      "calendarNamed": "Dodaj do mojego kalendarza ({account}, {calendar})",
+      "invite": "Wyślij kontaktowi zaproszenie z kalendarza",
+      "inviteHint": "Twój kalendarz wyśle zaproszenie na adres e-mail kontaktu. Nasze własne zaproszenie e-mail pozostaje bez zmian.",
+      "connectLink": "Połącz wideokonferencje"
+    },
+    "row": {
+      "join": "Dołącz",
+      "joinAria": "Dołącz do spotkania {provider} {title}",
+      "provider": {
+        "zoom": "Zoom",
+        "teams": "Microsoft Teams",
+        "meet": "Google Meet"
+      },
+      "pending": "Dodawanie linku wideo...",
+      "onCalendar": "W Twoim kalendarzu",
+      "invited": "Kalendarz wysłał kontaktowi zaproszenie",
+      "retry": "Spróbuj ponownie",
+      "retrying": "Ponawianie...",
+      "retried": "Link wideo i wpis w kalendarzu zostały sprawdzone ponownie.",
+      "retryFailed": "To się nie udało. Spotkanie jest zapisane; możesz spróbować ponownie.",
+      "problem": {
+        "not_installed": "Integracja {provider} nie jest zainstalowana w tym obszarze roboczym.",
+        "not_connected": "Twoje konto {provider} nie jest połączone. Połącz je w sekcji Ustawienia, Spotkania wideo.",
+        "needs_reconnect": "Połączenie z {provider} wymaga odnowienia. Połącz je ponownie w sekcji Ustawienia, Spotkania wideo.",
+        "not_configured": "{provider} nie został jeszcze skonfigurowany dla tej platformy. Skontaktuj się z administratorem platformy.",
+        "calendar_not_connected": "Kalendarz nie jest połączony, więc nie udało się dodać do niego spotkania.",
+        "provider_failed": "{provider} nie odpowiedział. Spotkanie jest zapisane; spróbuj ponownie.",
+        "no_start_time": "Link wideo wymaga ustawienia godziny rozpoczęcia spotkania."
+      },
+      "calendarProblem": {
+        "calendar_not_connected": "Nie udało się dodać spotkania do kalendarza, ponieważ żaden kalendarz nie jest połączony.",
+        "provider_failed": "Kalendarz nie odpowiedział, więc spotkania jeszcze w nim nie ma. Spotkanie jest zapisane; spróbuj ponownie.",
+        "other": "Nie udało się dodać spotkania do kalendarza."
+      }
+    },
+    "page": {
+      "eyebrow": "Ustawienia",
+      "title": "Spotkania wideo",
+      "subtitle": "Połącz własne konto Zoom lub Microsoft Teams. Formularz dodawania spotkania zaoferuje wtedy link wideo, utworzony na Twoim koncie i wyświetlany przy spotkaniu z przyciskiem Dołącz.",
+      "loading": "Wczytywanie połączeń wideo...",
+      "forbidden": {
+        "title": "Nie możesz korzystać z tej strony",
+        "body": "Poproś administratora obszaru roboczego o nadanie Twojej roli dostępu do edycji kontaktów."
+      },
+      "failure": {
+        "generic": "Nie udało się wczytać połączeń wideo."
+      },
+      "retry": "Spróbuj ponownie",
+      "providers": {
+        "zoom": {
+          "name": "Zoom",
+          "about": "Tworzy spotkanie Zoom na Twoim koncie Zoom dla każdego zaplanowanego spotkania, przenosi je razem ze spotkaniem i usuwa je, gdy usuniesz spotkanie."
+        },
+        "teams": {
+          "name": "Microsoft Teams",
+          "about": "Tworzy spotkanie Teams na Twoim służbowym lub szkolnym koncie Microsoft dla każdego zaplanowanego spotkania oraz aktualizuje je lub usuwa razem ze spotkaniem."
+        }
+      },
+      "status": {
+        "connected": "Połączono",
+        "needs_reconnect": "Wymaga ponownego połączenia",
+        "disconnected": "Nie połączono",
+        "not_installed": "Nie zainstalowano",
+        "unavailable": "Niedostępne"
+      },
+      "account": "Konto: {account}",
+      "connectedOn": "Połączono {when}",
+      "lastError": {
+        "forbidden": "Dostawca odrzucił ostatnie żądanie. Twoje konto może nie mieć uprawnień do tworzenia spotkań.",
+        "rate_limited": "Dostawca ogranicza teraz liczbę żądań.",
+        "unavailable": "Dostawca nie odpowiedział na ostatnie żądanie."
+      },
+      "actions": {
+        "connect": "Połącz",
+        "reconnect": "Połącz ponownie",
+        "disconnect": "Rozłącz",
+        "install": "Zainstaluj w Marketplace"
+      },
+      "notInstalled": {
+        "canInstall": "Twój obszar roboczy nie ma jeszcze zainstalowanego {provider}. Zainstaluj go w Marketplace, a potem połącz tutaj swoje konto.",
+        "cannotInstall": "Twój obszar roboczy nie ma jeszcze zainstalowanego {provider}. Poproś administratora obszaru roboczego o zainstalowanie go w Marketplace."
+      },
+      "unavailable": "{provider} nie został jeszcze skonfigurowany dla tej platformy. Skontaktuj się z administratorem platformy.",
+      "outcome": {
+        "connected": "{provider} jest połączony.",
+        "denied": "{provider} nie został połączony, ponieważ logowanie zostało anulowane.",
+        "failed": "Nie udało się połączyć {provider}. Spróbuj ponownie.",
+        "expired": "To logowanie trwało zbyt długo. Naciśnij Połącz jeszcze raz.",
+        "not_configured": "{provider} nie został jeszcze skonfigurowany dla tej platformy.",
+        "notYours": "To logowanie rozpoczęła inna osoba, więc nic nie zostało połączone."
+      },
+      "confirming": "Kończenie łączenia...",
+      "disconnected": "Rozłączono {provider}.",
+      "disconnectTitle": "Rozłączyć {provider}?",
+      "disconnectBody": "Spotkania, które mają już link {provider}, zachowują go, ale przenoszenie lub usuwanie tych spotkań nie będzie już zmieniać pokoju. Możesz połączyć się ponownie w dowolnej chwili.",
+      "disconnectConfirm": "Rozłącz",
+      "keep": "Pozostaw połączone",
+      "calendarNote": "Linki Google Meet i Teams tworzone przez kalendarz nie wymagają tutaj połączenia: korzystają z kalendarza, który Twój obszar roboczy już połączył."
+    }
+  }
+}

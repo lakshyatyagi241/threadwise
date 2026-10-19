@@ -1,3 +1,4 @@
+-- bluegreen-ok: the old slot keeps running during the migration; its reminder sweep may fail one insert into appointment_reminder_runs (armed_at NOT NULL, new unique key) until traffic moves, and the next sweep retries it. No reminder data is lost (the runs table only holds claims) and nothing is dropped that the old code reads for a read.
 -- Appointment reminders and follow-ups per booking type (BL-283).
 --
 -- Why: until now a booking type had only "N minutes before" offsets that shared one message per event, and the customer message port

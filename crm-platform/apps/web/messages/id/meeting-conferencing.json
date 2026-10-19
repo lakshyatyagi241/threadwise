@@ -1,0 +1,132 @@
+{
+  "settings": {
+    "tiles": {
+      "video-meetings": {
+        "label": "Rapat video",
+        "description": "Hubungkan akun Zoom atau Microsoft Teams Anda sendiri untuk menambahkan tautan video ke rapat Anda.",
+        "keywords": "zoom, teams, microsoft teams, video, panggilan video, tautan rapat, tautan bergabung, konferensi, google meet"
+      }
+    }
+  },
+  "meeting-conferencing": {
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "form": {
+      "label": "Konferensi video",
+      "add": {
+        "zoom": "Tambahkan tautan Zoom",
+        "teams": "Tambahkan tautan Teams",
+        "meet": "Tambahkan tautan Google Meet"
+      },
+      "chosen": {
+        "zoom": "Tautan Zoom",
+        "teams": "Tautan Teams",
+        "meet": "Tautan Google Meet"
+      },
+      "remove": "Hapus tautan video",
+      "needsStart": "Tetapkan waktu mulai untuk menambahkan tautan video atau entri kalender.",
+      "meetNote": "Tautan Google Meet adalah bagian dari acara kalender, sehingga rapat ini juga ditambahkan ke kalender Anda.",
+      "teamsViaCalendar": "Tautan Teams ini dibuat oleh kalender Microsoft 365 Anda, sehingga rapat ini juga ditambahkan ke sana.",
+      "calendar": "Tambahkan ke kalender saya ({account})",
+      "calendarNamed": "Tambahkan ke kalender saya ({account}, {calendar})",
+      "invite": "Kirim undangan kalender ke kontak",
+      "inviteHint": "Kalender Anda mengirim undangan ke alamat email kontak. Undangan email kami sendiri tidak terpengaruh.",
+      "connectLink": "Hubungkan konferensi video"
+    },
+    "row": {
+      "join": "Gabung",
+      "joinAria": "Gabung ke rapat {provider} {title}",
+      "provider": {
+        "zoom": "Zoom",
+        "teams": "Microsoft Teams",
+        "meet": "Google Meet"
+      },
+      "pending": "Menambahkan tautan video...",
+      "onCalendar": "Ada di kalender Anda",
+      "invited": "Kalender mengirim undangan ke kontak",
+      "retry": "Coba lagi",
+      "retrying": "Mencoba lagi...",
+      "retried": "Tautan video dan entri kalender sudah diperiksa ulang.",
+      "retryFailed": "Itu tidak berhasil. Rapat sudah tersimpan; Anda dapat mencoba lagi.",
+      "problem": {
+        "not_installed": "Integrasi {provider} belum dipasang untuk ruang kerja ini.",
+        "not_connected": "Akun {provider} Anda belum terhubung. Hubungkan di Pengaturan, Rapat video.",
+        "needs_reconnect": "Koneksi {provider} Anda perlu diperbarui. Hubungkan ulang di Pengaturan, Rapat video.",
+        "not_configured": "{provider} belum disiapkan untuk platform ini. Hubungi administrator platform Anda.",
+        "calendar_not_connected": "Kalender belum terhubung, sehingga rapat tidak dapat ditambahkan ke sana.",
+        "provider_failed": "{provider} tidak merespons. Rapat sudah tersimpan; coba lagi.",
+        "no_start_time": "Tautan video membutuhkan waktu mulai pada rapat."
+      },
+      "calendarProblem": {
+        "calendar_not_connected": "Rapat tidak dapat ditambahkan ke kalender karena belum ada kalender yang terhubung.",
+        "provider_failed": "Kalender tidak merespons, sehingga rapat belum ada di sana. Rapat sudah tersimpan; coba lagi.",
+        "other": "Rapat tidak dapat ditambahkan ke kalender."
+      }
+    },
+    "page": {
+      "eyebrow": "Pengaturan",
+      "title": "Rapat video",
+      "subtitle": "Hubungkan akun Zoom atau Microsoft Teams Anda sendiri. Formulir Tambah rapat kemudian menawarkan tautan video yang dibuat di akun Anda dan ditampilkan pada rapat dengan tombol Gabung.",
+      "loading": "Memuat koneksi video Anda...",
+      "forbidden": {
+        "title": "Anda tidak dapat menggunakan halaman ini",
+        "body": "Minta admin ruang kerja untuk memberi peran Anda akses mengedit kontak."
+      },
+      "failure": {
+        "generic": "Koneksi video Anda tidak dapat dimuat."
+      },
+      "retry": "Coba lagi",
+      "providers": {
+        "zoom": {
+          "name": "Zoom",
+          "about": "Membuat rapat Zoom di akun Zoom Anda untuk setiap rapat yang Anda jadwalkan, memindahkannya saat Anda memindahkan rapat, dan menghapusnya saat Anda menghapus rapat."
+        },
+        "teams": {
+          "name": "Microsoft Teams",
+          "about": "Membuat rapat Teams di akun kerja atau sekolah Microsoft Anda untuk setiap rapat yang Anda jadwalkan, serta memperbarui atau menghapusnya bersama rapat."
+        }
+      },
+      "status": {
+        "connected": "Terhubung",
+        "needs_reconnect": "Perlu dihubungkan ulang",
+        "disconnected": "Tidak terhubung",
+        "not_installed": "Belum dipasang",
+        "unavailable": "Tidak tersedia"
+      },
+      "account": "Akun: {account}",
+      "connectedOn": "Terhubung {when}",
+      "lastError": {
+        "forbidden": "Penyedia menolak permintaan terakhir. Akun Anda mungkin tidak diizinkan membuat rapat.",
+        "rate_limited": "Penyedia sedang membatasi permintaan saat ini.",
+        "unavailable": "Penyedia tidak merespons permintaan terakhir."
+      },
+      "actions": {
+        "connect": "Hubungkan",
+        "reconnect": "Hubungkan ulang",
+        "disconnect": "Putuskan",
+        "install": "Pasang di Marketplace"
+      },
+      "notInstalled": {
+        "canInstall": "Ruang kerja Anda belum memasang {provider}. Pasang dari Marketplace, lalu hubungkan akun Anda di sini.",
+        "cannotInstall": "Ruang kerja Anda belum memasang {provider}. Minta admin ruang kerja untuk memasangnya dari Marketplace."
+      },
+      "unavailable": "{provider} belum disiapkan untuk platform ini. Hubungi administrator platform Anda.",
+      "outcome": {
+        "connected": "{provider} terhubung.",
+        "denied": "{provider} tidak terhubung karena proses masuk dibatalkan.",
+        "failed": "{provider} tidak dapat dihubungkan. Coba lagi.",
+        "expired": "Proses masuk itu terlalu lama. Tekan Hubungkan lagi.",
+        "not_configured": "{provider} belum disiapkan untuk platform ini.",
+        "notYours": "Proses masuk itu dimulai oleh orang lain, jadi tidak ada yang terhubung."
+      },
+      "confirming": "Menyelesaikan koneksi...",
+      "disconnected": "{provider} diputuskan.",
+      "disconnectTitle": "Putuskan {provider}?",
+      "disconnectBody": "Rapat yang sudah memiliki tautan {provider} tetap menyimpannya, tetapi memindahkan atau menghapus rapat tersebut tidak lagi dapat mengubah ruangannya. Anda dapat menghubungkan lagi kapan saja.",
+      "disconnectConfirm": "Putuskan",
+      "keep": "Tetap terhubung",
+      "calendarNote": "Tautan Google Meet dan Teams yang dibuat melalui kalender Anda tidak memerlukan koneksi di sini: tautan itu memakai kalender yang sudah dihubungkan oleh ruang kerja Anda."
+    }
+  }
+}

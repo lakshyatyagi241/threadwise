@@ -1,0 +1,132 @@
+{
+  "settings": {
+    "tiles": {
+      "video-meetings": {
+        "label": "פגישות וידאו",
+        "description": "חברו את חשבון Zoom או Microsoft Teams שלכם כדי להוסיף קישורי וידאו לפגישות.",
+        "keywords": "zoom, teams, microsoft teams, וידאו, שיחת וידאו, קישור לפגישה, קישור הצטרפות, ועידת וידאו, google meet"
+      }
+    }
+  },
+  "meeting-conferencing": {
+    "common": {
+      "dismiss": "סגירה"
+    },
+    "form": {
+      "label": "ועידת וידאו",
+      "add": {
+        "zoom": "הוספת קישור Zoom",
+        "teams": "הוספת קישור Teams",
+        "meet": "הוספת קישור Google Meet"
+      },
+      "chosen": {
+        "zoom": "קישור Zoom",
+        "teams": "קישור Teams",
+        "meet": "קישור Google Meet"
+      },
+      "remove": "הסרת קישור הווידאו",
+      "needsStart": "הגדירו שעת התחלה כדי להוסיף קישור וידאו או רשומה ביומן.",
+      "meetNote": "קישור Google Meet הוא חלק מאירוע ביומן, ולכן הפגישה הזו תתווסף גם ליומן שלכם.",
+      "teamsViaCalendar": "קישור Teams הזה נוצר על ידי יומן Microsoft 365 שלכם, ולכן הפגישה הזו תתווסף גם אליו.",
+      "calendar": "הוספה ליומן שלי ({account})",
+      "calendarNamed": "הוספה ליומן שלי ({account}, {calendar})",
+      "invite": "שליחת הזמנה מהיומן לאיש הקשר",
+      "inviteHint": "היומן שלכם שולח את ההזמנה לכתובת האימייל של איש הקשר. ההזמנה שלנו באימייל אינה מושפעת.",
+      "connectLink": "חיבור ועידת וידאו"
+    },
+    "row": {
+      "join": "הצטרפות",
+      "joinAria": "הצטרפות לפגישת {provider} {title}",
+      "provider": {
+        "zoom": "Zoom",
+        "teams": "Microsoft Teams",
+        "meet": "Google Meet"
+      },
+      "pending": "קישור הווידאו מתווסף...",
+      "onCalendar": "ביומן שלכם",
+      "invited": "היומן שלח לאיש הקשר הזמנה",
+      "retry": "ניסיון חוזר",
+      "retrying": "מנסים שוב...",
+      "retried": "קישור הווידאו והרשומה ביומן נבדקו שוב.",
+      "retryFailed": "זה לא הצליח. הפגישה נשמרה; אפשר לנסות שוב.",
+      "problem": {
+        "not_installed": "האינטגרציה של {provider} לא מותקנת בסביבת העבודה הזו.",
+        "not_connected": "חשבון {provider} שלכם אינו מחובר. חברו אותו בהגדרות, פגישות וידאו.",
+        "needs_reconnect": "יש לחדש את החיבור שלכם ל-{provider}. חברו אותו מחדש בהגדרות, פגישות וידאו.",
+        "not_configured": "{provider} עדיין לא הוגדר עבור הפלטפורמה הזו. פנו למנהל הפלטפורמה.",
+        "calendar_not_connected": "היומן אינו מחובר, ולכן לא ניתן היה להוסיף אליו את הפגישה.",
+        "provider_failed": "{provider} לא הגיב. הפגישה נשמרה; נסו שוב.",
+        "no_start_time": "קישור וידאו דורש שעת התחלה לפגישה."
+      },
+      "calendarProblem": {
+        "calendar_not_connected": "לא ניתן היה להוסיף את הפגישה ליומן כי אין יומן מחובר.",
+        "provider_failed": "היומן לא הגיב, ולכן הפגישה עדיין לא נמצאת בו. הפגישה נשמרה; נסו שוב.",
+        "other": "לא ניתן היה להוסיף את הפגישה ליומן."
+      }
+    },
+    "page": {
+      "eyebrow": "הגדרות",
+      "title": "פגישות וידאו",
+      "subtitle": "חברו את חשבון Zoom או Microsoft Teams שלכם. טופס הוספת הפגישה יציע אז קישור וידאו, שנוצר בחשבון שלכם ומוצג בפגישה עם כפתור הצטרפות.",
+      "loading": "טוענים את חיבורי הווידאו שלכם...",
+      "forbidden": {
+        "title": "אין לכם אפשרות להשתמש בדף הזה",
+        "body": "בקשו ממנהל סביבת העבודה לתת לתפקיד שלכם גישה לעריכת אנשי קשר."
+      },
+      "failure": {
+        "generic": "לא ניתן היה לטעון את חיבורי הווידאו שלכם."
+      },
+      "retry": "ניסיון חוזר",
+      "providers": {
+        "zoom": {
+          "name": "Zoom",
+          "about": "יוצר פגישת Zoom בחשבון Zoom שלכם לכל פגישה שתתזמנו, מזיז אותה כשאתם מזיזים את הפגישה ומסיר אותה כשאתם מוחקים את הפגישה."
+        },
+        "teams": {
+          "name": "Microsoft Teams",
+          "about": "יוצר פגישת Teams בחשבון Microsoft לעבודה או ללימודים שלכם לכל פגישה שתתזמנו, ומעדכן או מסיר אותה יחד עם הפגישה."
+        }
+      },
+      "status": {
+        "connected": "מחובר",
+        "needs_reconnect": "נדרש חיבור מחדש",
+        "disconnected": "לא מחובר",
+        "not_installed": "לא מותקן",
+        "unavailable": "לא זמין"
+      },
+      "account": "חשבון: {account}",
+      "connectedOn": "חובר {when}",
+      "lastError": {
+        "forbidden": "הספק דחה את הבקשה האחרונה. ייתכן שלחשבון שלכם אין הרשאה ליצור פגישות.",
+        "rate_limited": "הספק מגביל כרגע בקשות.",
+        "unavailable": "הספק לא הגיב לבקשה האחרונה."
+      },
+      "actions": {
+        "connect": "חיבור",
+        "reconnect": "חיבור מחדש",
+        "disconnect": "ניתוק",
+        "install": "התקנה ב-Marketplace"
+      },
+      "notInstalled": {
+        "canInstall": "סביבת העבודה שלכם עדיין לא התקינה את {provider}. התקינו אותו מה-Marketplace ואז חברו כאן את החשבון שלכם.",
+        "cannotInstall": "סביבת העבודה שלכם עדיין לא התקינה את {provider}. בקשו ממנהל סביבת העבודה להתקין אותו מה-Marketplace."
+      },
+      "unavailable": "{provider} עדיין לא הוגדר עבור הפלטפורמה הזו. פנו למנהל הפלטפורמה.",
+      "outcome": {
+        "connected": "{provider} מחובר.",
+        "denied": "{provider} לא חובר כי ההתחברות בוטלה.",
+        "failed": "לא ניתן היה לחבר את {provider}. נסו שוב.",
+        "expired": "ההתחברות הזו ארכה זמן רב מדי. לחצו שוב על חיבור.",
+        "not_configured": "{provider} עדיין לא הוגדר עבור הפלטפורמה הזו.",
+        "notYours": "ההתחברות הזו הותחלה על ידי מישהו אחר, ולכן לא חובר דבר."
+      },
+      "confirming": "מסיימים את החיבור...",
+      "disconnected": "{provider} נותק.",
+      "disconnectTitle": "לנתק את {provider}?",
+      "disconnectBody": "פגישות שכבר יש להן קישור {provider} שומרות אותו, אך הזזה או מחיקה של הפגישות האלה לא תשנה עוד את החדר. אפשר להתחבר שוב בכל עת.",
+      "disconnectConfirm": "ניתוק",
+      "keep": "להשאיר מחובר",
+      "calendarNote": "קישורי Google Meet ו-Teams שנוצרים דרך היומן שלכם אינם דורשים חיבור כאן: הם משתמשים ביומן שסביבת העבודה שלכם כבר חיברה."
+    }
+  }
+}
