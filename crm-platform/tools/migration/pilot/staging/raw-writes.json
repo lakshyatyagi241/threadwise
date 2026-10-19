@@ -49,7 +49,16 @@
       "message_id",
       "org_id"
     ],
-    "messages": ["delivered_at", "failure_code", "failure_reason", "meta", "read_at", "status"],
+    "messages": [
+      "body",
+      "delivered_at",
+      "failure_code",
+      "failure_reason",
+      "kind",
+      "meta",
+      "read_at",
+      "status"
+    ],
     "org_plan_state": [
       "billing_cycle",
       "org_id",
@@ -126,7 +135,7 @@
     "usage_charges": ["org_id"],
     "user_profiles": ["org_id", "user_id"],
     "user_roles": ["org_id", "role_id", "user_id"],
-    "user_security": ["email_verified_at", "org_id", "user_id"],
+    "user_security": ["email_verified_at", "last_login_at", "org_id", "user_id"],
     "users": [
       "auth_subject",
       "email",
@@ -160,6 +169,7 @@
       "uuid"
     ],
     "wallets": ["balance", "org_id", "reserved", "row_version", "unit", "updated_at"],
+    "workspace_persona": ["onboarding", "org_id", "persona_key", "persona_version", "solo_ui"],
     "workspace_settings": ["org_id", "row_version", "timezone", "updated_at"],
     "wpcampaigns": ["template_id"]
   },

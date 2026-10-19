@@ -294,6 +294,10 @@ async function main(argv, env) {
   const token = env.WABOO_RUNNER_TOKEN;
   if (!url || !/^https?:\/\/[^/\s]+/i.test(url))
     throw new Error('WABOO_RUNNER_URL must be the WaDesk address, e.g. https://desk.wabo.ai');
+  if (!/^https:\/\//i.test(url) && !/^http:\/\/(localhost|127\.0\.0\.1|\[::1\])(:|\/|$)/i.test(url))
+    throw new Error(
+      'WABOO_RUNNER_URL must be https (plain http only for localhost): the runner token would cross the network in the clear',
+    );
   if (!token || token.length < MIN_TOKEN)
     throw new Error(
       `WABOO_RUNNER_TOKEN must be set (${MIN_TOKEN}+ characters, the same value as on the API)`,
