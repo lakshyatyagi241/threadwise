@@ -54,6 +54,7 @@ export class WidgetPublicErrorFilter implements ExceptionFilter {
  * of the new embed apply unchanged. A wrong, unknown or paused id answers the same 404 script as the new embed.
  */
 @ApiExcludeController()
+@Public()
 @Controller({ path: 'widget-legacy', version: VERSION_NEUTRAL })
 export class WidgetLegacyEmbedController {
   constructor(

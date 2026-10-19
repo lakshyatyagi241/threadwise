@@ -52,6 +52,10 @@ export interface FormState {
   headerFileName: string;
   /** The sample already stored on an existing template (kept when no new file is chosen). */
   headerSampleUrl: string;
+  /** Object-storage key of the uploaded header file (sent back on save; the server keeps the stored one when this is empty). */
+  headerMediaKey: string;
+  /** A link to the stored header file, for the phone preview and the picker (not sent). */
+  headerPreviewUrl: string;
   body: string;
   bodySlots: SlotInputs;
   footer: string;
@@ -77,6 +81,8 @@ export function initialState(connectionId = ''): FormState {
     headerHandle: '',
     headerFileName: '',
     headerSampleUrl: '',
+    headerMediaKey: '',
+    headerPreviewUrl: '',
     body: '',
     bodySlots: {},
     footer: '',
@@ -126,6 +132,8 @@ export function withHeaderKind(s: FormState, headerKind: HeaderKind): FormState 
     headerHandle: '',
     headerFileName: '',
     headerSampleUrl: '',
+    headerMediaKey: '',
+    headerPreviewUrl: '',
     latitude: '',
     longitude: '',
     locationName: '',
@@ -137,7 +145,7 @@ type Fields = Omit<CreateTemplateInput, 'connectionId' | 'submit'>;
 
 /** True when the header is a media header that has its sample (just uploaded, or kept from the saved template). */
 export const hasHeaderFile = (s: FormState): boolean =>
-  isMediaKind(s.headerKind) && Boolean(s.headerHandle || s.headerSampleUrl);
+  isMediaKind(s.headerKind) && Boolean(s.headerHandle || s.headerSampleUrl || s.headerPreviewUrl);
 
 /** The coordinates as numbers, or null while they are empty, not numbers, or out of the range WhatsApp accepts. */
 export function locationOf(
@@ -203,6 +211,7 @@ export function toFields(s: FormState): Fields {
     attachmentType,
     headerHandle: media && s.headerHandle ? s.headerHandle : null,
     headerSampleUrl: media && s.headerSampleUrl ? s.headerSampleUrl : null,
+    headerMediaKey: media && s.headerMediaKey ? s.headerMediaKey : null,
     headerLocation: s.headerKind === 'location' ? locationOf(s) : null,
     body: normalizePlaceholders(s.body),
     footer: s.footer.trim() ? s.footer.trim() : null,
@@ -258,6 +267,8 @@ export function stateFromDetail(d: TemplateDetail): FormState {
     headerHandle: '',
     headerFileName: '',
     headerSampleUrl: d.headerSampleUrl ?? '',
+    headerMediaKey: '',
+    headerPreviewUrl: d.headerMediaUrl ?? '',
     body: d.body,
     bodySlots: slotsFromMap(d.body, d.variableMap.body),
     footer: d.footer ?? '',
@@ -289,7 +300,8 @@ export function previewOf(s: FormState): PreviewModel {
     language: s.language,
     headerKind: s.headerKind,
     headerText: s.headerKind === 'text' ? fillSamples(s.headerText, s.headerSlots) : '',
-    headerImageUrl: s.headerKind === 'image' && s.headerSampleUrl ? s.headerSampleUrl : null,
+    headerImageUrl:
+      s.headerKind === 'image' ? s.headerPreviewUrl || s.headerSampleUrl || null : null,
     body: fillSamples(s.body, s.bodySlots),
     footer: s.footer,
     buttons: s.buttons.map((b) => ({
