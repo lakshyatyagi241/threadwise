@@ -101,6 +101,7 @@ export * from './developer-rest-api-v1';
 export * from './outbound-webhooks';
 export * from './forms-builder';
 export * from './forms-links-groups';
+export * from './meeting-conferencing';
 export * from './ai-copilot-lead-finder';
 export * from './google-account';
 export * from './api-library';

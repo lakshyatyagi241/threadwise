@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { appointmentStatusSchema } from '../appointments/appointment';
 import { uuidSchema } from '../common/ids';
 import { paginationQuerySchema } from '../common/pagination';
+import { meetingConferencingInputSchema, meetingConferencingSchema } from '../meeting-conferencing/conferencing';
 
 /** Where a meeting row came from: typed in on the contact, or mirrored from a booking (an appointment). */
 export const CONTACT_MEETING_SOURCES = ['manual', 'booking'] as const;
@@ -36,6 +37,8 @@ export const contactMeetingResponseSchema = z.object({
   joinUrl: z.string().nullable().optional(),
   /** Whether the caller may change the booking itself (`record.appointments.update` for this appointment). False on typed-in rows. */
   canManageBooking: z.boolean().optional(),
+  /** The video link and calendar entry asked for on this meeting (BL-360); null or absent when none was. */
+  conferencing: meetingConferencingSchema.nullable().optional(),
 });
 export type ContactMeetingResponse = z.infer<typeof contactMeetingResponseSchema>;
 
@@ -44,6 +47,8 @@ export const createContactMeetingSchema = z.object({
   startsAt: z.string().datetime().optional(),
   endsAt: z.string().datetime().optional(),
   location: z.string().max(255).optional(),
+  /** Video link and calendar entry for this meeting; left out, the meeting is saved as it always was. */
+  conferencing: meetingConferencingInputSchema.optional(),
 });
 export type CreateContactMeetingInput = z.infer<typeof createContactMeetingSchema>;
 
@@ -52,6 +57,7 @@ export const updateContactMeetingSchema = z.object({
   startsAt: z.string().datetime().nullish(),
   endsAt: z.string().datetime().nullish(),
   location: z.string().max(255).nullish(),
+  conferencing: meetingConferencingInputSchema.optional(),
   rowVersion: z.number().int().positive(),
 });
 export type UpdateContactMeetingInput = z.infer<typeof updateContactMeetingSchema>;
